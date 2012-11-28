@@ -125,11 +125,12 @@ end
 class SeparateCompiler
 	super GlobalCompiler # TODO better separation of concerns
 
-	private var undead_types: Set[MClassType] = new HashSet[MClassType]
-	protected var typeids: HashMap[MClassType, Int] = new HashMap[MClassType, Int]
+	private var undead_types: Set[MType] = new HashSet[MType]
+	protected var typeids: HashMap[MType, Int] = new HashMap[MType, Int]
 
-	private var type_colors: Map[MClassType, Int] = typeids
-	private var type_tables: nullable Map[MClassType, Array[nullable MClassType]] = null
+	private var type_colors: Map[MType, Int] = typeids
+	private var type_tables: nullable Map[MType, Array[nullable MType]] = null
+
 	private var livetypes_colors: nullable Map[MType, Int]
 	private var livetypes_tables: nullable Map[MClass, Array[nullable Object]]
 	private var livetypes_tables_sizes: nullable Map[MClass, Array[Int]]
@@ -177,7 +178,7 @@ class SeparateCompiler
 	private fun compile_class_names do
 
 		# Build type names table
-		var type_array = new Array[nullable MClassType]
+		var type_array = new Array[nullable MType]
 		for t, i in typeids do
 			if i >= type_array.length then
 				type_array[i] = null
@@ -199,46 +200,39 @@ class SeparateCompiler
 	end
 
 	# colorize live types of the program
-	private fun do_global_type_coloring: Set[MClassType] do
-		var mtypes = new HashSet[MClassType]
-		#print "undead types:"
-		#for t in self.undead_types do
-		#	print t
-		#end
-		#print "live types:"
-		#for t in runtime_type_analysis.live_types do
-		#	print t
-		#end
-		#print "cast types:"
-		#for t in runtime_type_analysis.live_cast_types do
-		#	print t
-		#end
-		#print "--"
+	private fun do_global_type_coloring: Set[MType] do
+		var mtypes = new HashSet[MType]
 		mtypes.add_all(self.runtime_type_analysis.live_types)
 		mtypes.add_all(self.runtime_type_analysis.live_cast_types)
 		mtypes.add_all(self.undead_types)
 
-		for mtype in self.runtime_type_analysis.live_types do
+		self.undead_types.clear
+		for mtype in mtypes do
 			# add formal types arguments to mtypes
 			if mtype isa MGenericType then
 				for ft in mtype.arguments do
-					if ft isa MNullableType then ft = ft.mtype
 					if ft.need_anchor then
 						print("Why do we need anchor here ?")
 						abort
 					end
-					mtypes.add(ft.as(MClassType))
+					self.undead_types.add(ft)
 				end
 			end
+			var mclass_type: MClassType
+			if mtype isa MNullableType then
+				mclass_type = mtype.mtype.as(MClassType)
+			else
+				mclass_type = mtype.as(MClassType)
+			end
 			# add virtual types to mtypes
-			for vt in self.vt_tables[mtype.mclass] do
+			for vt in self.vt_tables[mclass_type.mclass] do
 				if vt != null then
-					var anchored = vt.bound.anchor_to(self.mainmodule, mtype)
-					if anchored isa MNullableType then anchored = anchored.mtype
-					mtypes.add(anchored.as(MClassType))
+					var anchored = vt.bound.anchor_to(self.mainmodule, mclass_type)
+					self.undead_types.add(anchored)
 				end
 			end
 		end
+		mtypes.add_all(self.undead_types)
 
 		# set type unique id
 		for mtype in mtypes do
@@ -251,8 +245,9 @@ class SeparateCompiler
 		self.livetypes_colors = entries_coloring.colorize(mtypes)
 		self.livetypes_tables = entries_coloring.build_livetype_tables(mtypes)
 		self.livetypes_tables_sizes = entries_coloring.livetypes_tables_sizes
-		# colorize
-		var type_coloring = new TypeColoring(self.mainmodule, self.runtime_type_analysis)
+
+		# colorize types
+		var type_coloring = new TypeColoring(self.mainmodule, mtypes)
 		self.type_colors = type_coloring.colorize(mtypes)
 		self.type_tables = type_coloring.build_type_tables(mtypes, type_colors)
 
@@ -319,17 +314,26 @@ class SeparateCompiler
 	end
 
 	# Globaly compile the type structure of a live type
-	fun compile_type_to_c(mtype: MClassType)
+	fun compile_type_to_c(mtype: MType)
 	do
 		var c_name = mtype.c_name
 		var v = new SeparateCompilerVisitor(self)
 		v.add_decl("/* runtime type {mtype} */")
+
+		var mclass_type: MClassType
+		if mtype isa MNullableType then
+			mclass_type = mtype.mtype.as(MClassType)
+		else
+			mclass_type = mtype.as(MClassType)
+		end
 
 		# extern const struct type_X
 		self.header.add_decl("extern const struct type_{c_name} type_{c_name};")
 		self.header.add_decl("struct type_{c_name} \{")
 		self.header.add_decl("int id;")
 		self.header.add_decl("int color;")
+		self.header.add_decl("int livecolor;")
+		self.header.add_decl("short int is_nullable;")
 		self.header.add_decl("const struct vts_table_{c_name} *vts_table;")
 		self.header.add_decl("const struct fts_table_{c_name} *fts_table;")
 		self.header.add_decl("int table_size;")
@@ -339,19 +343,25 @@ class SeparateCompiler
 		# extern const struct vts_table_X vts_table_X
 		self.header.add_decl("extern const struct vts_table_{c_name} vts_table_{c_name};")
 		self.header.add_decl("struct vts_table_{c_name} \{")
-		self.header.add_decl("struct type *vts[{self.vt_tables[mtype.mclass].length}];")
+		self.header.add_decl("struct type *vts[{self.vt_tables[mclass_type.mclass].length}];")
 		self.header.add_decl("\};")
 
 		# extern const struct fst_table_X fst_table_X
 		self.header.add_decl("extern const struct fts_table_{c_name} fts_table_{c_name};")
 		self.header.add_decl("struct fts_table_{c_name} \{")
-		self.header.add_decl("struct type *fts[{self.ft_tables[mtype.mclass].length}];")
+		self.header.add_decl("struct type *fts[{self.ft_tables[mclass_type.mclass].length}];")
 		self.header.add_decl("\};")
 
 		# const struct type_X
 		v.add_decl("const struct type_{c_name} type_{c_name} = \{")
 		v.add_decl("{self.typeids[mtype]},")
 		v.add_decl("{self.type_colors[mtype]},")
+		v.add_decl("{self.livetypes_colors[mtype]},")
+		if mtype isa MNullableType then
+			v.add_decl("1,")
+		else
+			v.add_decl("0,")
+		end
 		v.add_decl("&vts_table_{c_name},")
 		v.add_decl("&fts_table_{c_name},")
 		v.add_decl("{self.type_tables[mtype].length},")
@@ -371,23 +381,29 @@ class SeparateCompiler
 	end
 
 	# const struct fst_table_X fst_table_X
-	private fun build_fts_table(mtype: MClassType, v: SeparateCompilerVisitor) do
+	private fun build_fts_table(mtype: MType, v: SeparateCompilerVisitor) do
 		v.add_decl("const struct fts_table_{mtype.c_name} fts_table_{mtype.c_name} = \{")
 		v.add_decl("\{")
-		for ft in self.ft_tables[mtype.mclass] do
+
+		var mclass_type: MClassType
+		if mtype isa MNullableType then
+			mclass_type = mtype.mtype.as(MClassType)
+		else
+			mclass_type = mtype.as(MClassType)
+		end
+
+		for ft in self.ft_tables[mclass_type.mclass] do
 			if ft == null then
 				v.add_decl("NULL, /* empty */")
 			else
 				var ntype: MType
-				if ft.mclass == mtype.mclass then
-					ntype = mtype.arguments[ft.rank]
+				if ft.mclass == mclass_type.mclass then
+					ntype = mclass_type.arguments[ft.rank]
 				else
-					ntype = ft.anchor_to(self.mainmodule, mtype)
+					ntype = ft.anchor_to(self.mainmodule, mclass_type)
 				end
-				if ntype isa MNullableType then ntype = ntype.mtype
-				var ftype = ntype.as(MClassType)
-				if self.typeids.has_key(ftype) then
-					v.add_decl("(struct type*)&type_{ftype.c_name}, /* {ft} ({ftype}) */")
+				if self.typeids.has_key(ntype) then
+					v.add_decl("(struct type*)&type_{ntype.c_name}, /* {ft} ({ntype}) */")
 				else
 					v.add_decl("NULL, /* empty ({ft} not a live type) */")
 				end
@@ -398,10 +414,18 @@ class SeparateCompiler
 	end
 
 	# const struct vts_table_X vts_table_X
-	private fun build_vts_table(mtype: MClassType, v: SeparateCompilerVisitor) do
+	private fun build_vts_table(mtype: MType, v: SeparateCompilerVisitor) do
 		v.add_decl("const struct vts_table_{mtype.c_name} vts_table_{mtype.c_name} = \{")
 		v.add_decl("\{")
-		for vt in self.vt_tables[mtype.mclass] do
+
+		var mclass_type: MClassType
+		if mtype isa MNullableType then
+			mclass_type = mtype.mtype.as(MClassType)
+		else
+			mclass_type = mtype.as(MClassType)
+		end
+
+		for vt in self.vt_tables[mclass_type.mclass] do
 			if vt == null then
 				v.add_decl("NULL, /* empty */")
 			else
@@ -411,25 +435,24 @@ class SeparateCompiler
 					print "No bound found for virtual type {vt} ?"
 					abort
 				else
-					print "{mtype}: {bound}<{bound.inspect}>"
-					if bound isa MNullableType then bound = bound.mtype
-
-					if bound isa MVirtualType then
-						bound = bound.anchor_to(self.mainmodule, mtype)
-					else if bound isa MParameterType then
-						bound = bound.anchor_to(self.mainmodule, mtype)
-					else if bound isa MGenericType and bound.need_anchor then
-						bound = bound.anchor_to(self.mainmodule, mtype)
-					else if bound isa MClassType then
+					var ntype = bound
+					if ntype isa MNullableType then ntype = ntype.mtype
+					if ntype isa MVirtualType then
+						bound = ntype.anchor_to(self.mainmodule, mclass_type)
+					else if ntype isa MParameterType then
+						bound = ntype.anchor_to(self.mainmodule, mclass_type)
+					else if ntype isa MGenericType and bound.need_anchor then
+						bound = ntype.anchor_to(self.mainmodule, mclass_type)
+					else if ntype isa MClassType then
 					else
-						print "NOT YET IMPLEMENTED: mtype_to_livetype with type: {bound}"
+						print "NOT YET IMPLEMENTED: mtype_to_livetype with type: {ntype}"
 						abort
 					end
 
-					if self.typeids.has_key(bound.as(MClassType)) then
-						v.add_decl("(struct type*)&type_{bound.c_name}, /* {bound} */")
+					if self.typeids.has_key(bound) then
+						v.add_decl("(struct type*)&type_{bound.c_name}, /* {ntype} */")
 					else
-						v.add_decl("NULL, /* dead type {bound} */")
+						v.add_decl("NULL, /* dead type {ntype} */")
 					end
 				end
 			end
@@ -927,27 +950,29 @@ class SeparateCompilerVisitor
 	#ENSURE: mtype.need_anchor
 	fun retrieve_anchored_livetype(mtype: MGenericType, buffer: Buffer) do
 		assert mtype.need_anchor
-
 		var compiler = self.compiler.as(SeparateCompiler)
 		for ft in mtype.arguments do
-			if ft isa MParameterType then
-				var ftcolor = compiler.ft_colors[ft]
-				buffer.append("[self->type->fts_table->fts[{ftcolor}]->id]")
-			else if ft isa MVirtualType then
-				var vtcolor = compiler.vt_colors[ft.mproperty.as(MVirtualTypeProp)]
-				buffer.append("[self->type->vts_table->vts[{vtcolor}]->id]")
-			else if ft isa MGenericType and ft.need_anchor then
+
+			var ntype = ft
+			var s: String = ""
+			if ntype isa MNullableType then
+				ntype = ntype.mtype
+			end
+
+			if ntype isa MParameterType then
+				var ftcolor = compiler.ft_colors[ntype]
 				buffer.append("[self->type->fts_table->fts[{ftcolor}]->livecolor]")
+			else if ntype isa MVirtualType then
+				var vtcolor = compiler.vt_colors[ntype.mproperty.as(MVirtualTypeProp)]
 				buffer.append("[self->type->vts_table->vts[{vtcolor}]->livecolor]")
+			else if ntype isa MGenericType and ntype.need_anchor then
 				var bbuff = new Buffer
-				retrieve_anchored_livetype(ft, bbuff)
-				buffer.append("[livetypes_{ft.mclass.c_name}{bbuff.to_s}->id]")
-			else if ft isa MClassType then
-				var typecolor = compiler.type_colors[ft]
-				buffer.append("[{typecolor}]")
+				retrieve_anchored_livetype(ntype, bbuff)
+				buffer.append("[livetypes_{ntype.mclass.c_name}{bbuff.to_s}->livecolor]")
+			else if ntype isa MClassType then
 				buffer.append("[type_{ft.c_name}.livecolor]")
 			else
-				self.add("printf(\"NOT YET IMPLEMENTED: init_instance(%s, {mtype}).\\n\", \"{ft.inspect}\"); exit(1);")
+				self.add("printf(\"NOT YET IMPLEMENTED: init_instance(%s, {mtype}).\\n\", \"{ft}\"); exit(1);")
 			end
 		end
 	end
@@ -974,42 +999,51 @@ class SeparateCompilerVisitor
 		self.add_decl("short int {cltype};")
 		var idtype = self.get_name("idtype")
 		self.add_decl("short int {idtype};")
+		var is_nullable = self.get_name("is_nullable")
+		self.add_decl("short int {is_nullable};")
 
 		var boxed = self.autobox(value, self.object_type)
 
-		var s: String
-		if mtype isa MNullableType then
-			mtype = mtype.mtype
-			s = "{boxed} == NULL ||"
-		else
-			s = "{boxed} != NULL &&"
+		var ntype = mtype
+		var s: String = ""
+		if ntype isa MNullableType then
+			ntype = ntype.mtype
 		end
-		if mtype isa MParameterType then
-			var ftcolor = compiler.ft_colors[mtype]
+
+		if ntype isa MParameterType then
+			var ftcolor = compiler.ft_colors[ntype]
 			self.add("{cltype} = self->type->fts_table->fts[{ftcolor}]->color;")
 			self.add("{idtype} = self->type->fts_table->fts[{ftcolor}]->id;")
-		else if mtype isa MGenericType and mtype.need_anchor then
+			self.add("{is_nullable} = self->type->fts_table->fts[{ftcolor}]->is_nullable;")
+		else if ntype isa MGenericType and ntype.need_anchor then
 			var buff = new Buffer
-			retrieve_anchored_livetype(mtype, buff)
-			self.add("{cltype} = livetypes_{mtype.mclass.c_name}{buff.to_s}->color;")
-			self.add("{idtype} = livetypes_{mtype.mclass.c_name}{buff.to_s}->id;")
-		else if mtype isa MClassType then
+			retrieve_anchored_livetype(ntype, buff)
+			self.add("{cltype} = livetypes_{ntype.mclass.c_name}{buff.to_s}->color;")
+			self.add("{idtype} = livetypes_{ntype.mclass.c_name}{buff.to_s}->id;")
+			self.add("{is_nullable} = livetypes_{ntype.mclass.c_name}{buff.to_s}->is_nullable;")
+		else if ntype isa MClassType then
 			compiler.undead_types.add(mtype)
 			self.add("{cltype} = type_{mtype.c_name}.color;")
 			self.add("{idtype} = type_{mtype.c_name}.id;")
-		else if mtype isa MVirtualType then
-			var vtcolor = compiler.vt_colors[mtype.mproperty.as(MVirtualTypeProp)]
+			self.add("{is_nullable} = type_{mtype.c_name}.is_nullable;")
+		else if ntype isa MVirtualType then
+			var vtcolor = compiler.vt_colors[ntype.mproperty.as(MVirtualTypeProp)]
 			self.add("{cltype} = self->type->vts_table->vts[{vtcolor}]->color;")
 			self.add("{idtype} = self->type->vts_table->vts[{vtcolor}]->id;")
+			self.add("{is_nullable} = self->type->vts_table->vts[{vtcolor}]->is_nullable;")
 		else
 			self.add("printf(\"NOT YET IMPLEMENTED: type_test(%s, {mtype}).\\n\", \"{boxed.inspect}\"); exit(1);")
 		end
 
 		# check color is in table
-		self.add("if({boxed} != NULL && {cltype} >= {boxed}->type->table_size) \{")
+		self.add("if({boxed} == NULL) \{")
+		self.add("{res} = {is_nullable};")
+		self.add("\} else \{")
+		self.add("if({cltype} >= {boxed}->type->table_size) \{")
 		self.add("{res} = 0;")
 		self.add("\} else \{")
-		self.add("{res} = {s} {boxed}->type->type_table[{cltype}] == {idtype};")
+		self.add("{res} = {boxed}->type->type_table[{cltype}] == {idtype};")
+		self.add("\}")
 		self.add("\}")
 
 		return res
