@@ -122,7 +122,7 @@ function process_result()
 		else
 			echo "[fixme] out/$pattern.res $FIXME"
 		fi
-		ok="$ok $pattern"
+		todos="$todos $pattern"
 	elif [ -n "$SOSO" ]; then
 		if [ -n "$tap" ]; then
 			echo "ok - $description # SOSO"
@@ -143,7 +143,7 @@ function process_result()
 		else
 			echo "[fixme soso] out/$pattern.res $SOSOF"
 		fi
-		ok="$ok $pattern"
+		todos="$todos $pattern"
 	elif [ -n "$NSAV" ]; then
 		if [ -n "$tap" ]; then
 			echo "not ok - $description"
@@ -173,7 +173,7 @@ function process_result()
 need_skip()
 {
 	test "$noskip" = true && return 1
-	if grep "$engine" "sav/$1.skip" >/dev/null 2>&1 || echo "$1" | grep -f "$engine.skip" >/dev/null 2>&1; then
+	if echo "$1" | grep -f "$engine.skip" >/dev/null 2>&1; then
 		((tapcount=tapcount+1))
 		if [ -n "$tap" ]; then
 			echo "ok - $2 # skip"
@@ -398,7 +398,7 @@ if [ -n "$tap" ]; then
 	echo "# ok:" `echo $ok | wc -w`
 	echo "# not ok:" `echo $nok | wc -w`
 	echo "# no sav:" `echo $nos | wc -w`
-	echo "# todos:" `echo $todos | wc -w`
+	echo "# todo/fixme:" `echo $todos | wc -w`
 	exit
 fi
 
@@ -412,7 +412,7 @@ if [ -n "$nos" ]; then
 	echo "no sav: $nos"
 fi
 if [ -n "$todos" ]; then
-	echo "todos: $todos"
+	echo "todo/fixme: $todos"
 fi
 
 # write $ERRLIST
