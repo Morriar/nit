@@ -58,7 +58,7 @@ redef class ModelBuilder
 		# Class abstract representation
 		v.add_decl("struct class \{ nitmethod_t vft[1]; \}; /* general C type representing a Nit class. */")
 		# Type abstract representation
-		v.add_decl("struct type \{ int id; int color; struct vts_table *vts_table; struct fts_table *fts_table; int table_size; int type_table[1]; \}; /* general C type representing a Nit type. */")
+		v.add_decl("struct type \{ int id; int color; int livecolor; short int is_nullable; struct vts_table *vts_table; struct fts_table *fts_table; int table_size; int type_table[1]; \}; /* general C type representing a Nit type. */")
 		v.add_decl("struct fts_table \{ struct type *fts[1]; \}; /* fts list of a C type representation. */")
 		v.add_decl("struct vts_table \{ struct type *vts[1]; \}; /* vts list of a C type representation. */")
 		# Instance abstract representation
@@ -130,6 +130,7 @@ class SeparateCompiler
 
 	private var type_colors: Map[MClassType, Int] = typeids
 	private var type_tables: nullable Map[MClassType, Array[nullable MClassType]] = null
+	private var livetypes_colors: nullable Map[MType, Int]
 	private var livetypes_tables: nullable Map[MClass, Array[nullable Object]]
 	private var livetypes_tables_sizes: nullable Map[MClass, Array[Int]]
 
@@ -244,29 +245,12 @@ class SeparateCompiler
 			self.typeids[mtype] = self.typeids.length
 		end
 
-		# build livetypes tables
-		self.livetypes_tables = new HashMap[MClass, Array[nullable Object]]
-		self.livetypes_tables_sizes = new HashMap[MClass, Array[Int]]
-		for mtype in self.runtime_type_analysis.live_types do
-			if mtype isa MGenericType then
-				var table: Array[nullable Object]
-				var sizes: Array[Int]
-				if livetypes_tables.has_key(mtype.mclass) then
-					table = livetypes_tables[mtype.mclass]
-				else
-					table = new Array[nullable Object]
-					self.livetypes_tables[mtype.mclass] = table
-				end
-				if livetypes_tables_sizes.has_key(mtype.mclass) then
-					sizes = livetypes_tables_sizes[mtype.mclass]
-				else
-					sizes = new Array[Int]
-					self.livetypes_tables_sizes[mtype.mclass] = sizes
-				end
-				build_livetype_table(mtype, 0, table, sizes)
-			end
-		end
 
+		# colorize live entries
+		var entries_coloring = new LiveEntryColoring
+		self.livetypes_colors = entries_coloring.colorize(mtypes)
+		self.livetypes_tables = entries_coloring.build_livetype_tables(mtypes)
+		self.livetypes_tables_sizes = entries_coloring.livetypes_tables_sizes
 		# colorize
 		var type_coloring = new TypeColoring(self.mainmodule, self.runtime_type_analysis)
 		self.type_colors = type_coloring.colorize(mtypes)
@@ -275,61 +259,7 @@ class SeparateCompiler
 		return mtypes
 	end
 
-	# build live gentype table recursively
-	private fun build_livetype_table(mtype: MGenericType, current_rank: Int, table: Array[nullable Object], sizes: Array[Int]) do
-		var ft = mtype.arguments[current_rank]
-		if ft isa MNullableType then ft = ft.mtype
-		var id = self.typeids[ft.as(MClassType)]
 
-		if current_rank >= sizes.length then
-			sizes[current_rank] = id + 1
-		else if id >= sizes[current_rank] then
-			sizes[current_rank] = id + 1
-		end
-
-		if id > table.length then
-			for i in [table.length .. id[ do table[i] = null
-		end
-
-		if current_rank == mtype.arguments.length - 1 then
-			table[id] = mtype
-		else
-			var ft_table: Array[nullable Object]
-			if id < table.length and table[id] != null then
-				ft_table = table[id].as(Array[nullable Object])
-			else
-				ft_table = new Array[nullable Object]
-			end
-			table[id] = ft_table
-			build_livetype_table(mtype, current_rank + 1, ft_table, sizes)
-		end
-	end
-
-	private fun add_to_livetypes_table(table: Array[nullable Object], ft: MClassType) do
-		var id = self.typeids[ft]
-		for i in [table.length .. id[ do
-			table[i] = null
-		end
-		table[id] = ft
-	end
-
-	private fun compile_livetype_table(table: Array[nullable Object], buffer: Buffer, depth: Int, max: Int) do
-		for obj in table do
-			if obj == null then
-				if depth == max then
-					buffer.append("NULL,\n")
-				else
-					buffer.append("\{\},\n")
-				end
-			else if obj isa MClassType then
-				buffer.append("(struct type*) &type_{obj.c_name}, /* {obj} */\n")
-			else if obj isa Array[nullable Object] then
-				buffer.append("\{\n")
-				compile_livetype_table(obj, buffer, depth + 1, max)
-				buffer.append("\},\n")
-			end
-		end
-	end
 
 	# declare live generic types tables selection
 	private fun compile_live_gentype_to_c(mclass: MClass) do
@@ -349,6 +279,24 @@ class SeparateCompiler
 				var v = new SeparateCompilerVisitor(self)
 				self.header.add_decl("extern const struct type *livetypes_{mclass.c_name}[{sign.join("][")}];")
 				v.add_decl("const struct type *livetypes_{mclass.c_name}[{sign.join("][")}];")
+			end
+		end
+	end
+
+	private fun compile_livetype_table(table: Array[nullable Object], buffer: Buffer, depth: Int, max: Int) do
+		for obj in table do
+			if obj == null then
+				if depth == max then
+					buffer.append("NULL,\n")
+				else
+					buffer.append("\{\},\n")
+				end
+			else if obj isa MClassType then
+				buffer.append("(struct type*) &type_{obj.c_name}, /* {obj} */\n")
+			else if obj isa Array[nullable Object] then
+				buffer.append("\{\n")
+				compile_livetype_table(obj, buffer, depth + 1, max)
+				buffer.append("\},\n")
 			end
 		end
 	end
@@ -989,12 +937,15 @@ class SeparateCompilerVisitor
 				var vtcolor = compiler.vt_colors[ft.mproperty.as(MVirtualTypeProp)]
 				buffer.append("[self->type->vts_table->vts[{vtcolor}]->id]")
 			else if ft isa MGenericType and ft.need_anchor then
+				buffer.append("[self->type->fts_table->fts[{ftcolor}]->livecolor]")
+				buffer.append("[self->type->vts_table->vts[{vtcolor}]->livecolor]")
 				var bbuff = new Buffer
 				retrieve_anchored_livetype(ft, bbuff)
 				buffer.append("[livetypes_{ft.mclass.c_name}{bbuff.to_s}->id]")
 			else if ft isa MClassType then
 				var typecolor = compiler.type_colors[ft]
 				buffer.append("[{typecolor}]")
+				buffer.append("[type_{ft.c_name}.livecolor]")
 			else
 				self.add("printf(\"NOT YET IMPLEMENTED: init_instance(%s, {mtype}).\\n\", \"{ft.inspect}\"); exit(1);")
 			end
