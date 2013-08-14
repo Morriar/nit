@@ -208,6 +208,10 @@ abstract class AbstractString
 end
 
 # Immutable strings of characters.
+# 
+# et oui
+# 
+# 
 class String
 	super Comparable
 	super AbstractString
