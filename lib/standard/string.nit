@@ -978,6 +978,8 @@ class NativeString
 end
 
 # StringCapable objects can create native strings
+# 
+# test
 interface StringCapable
 	protected fun calloc_string(size: Int): NativeString is intern
 end
