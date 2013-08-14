@@ -421,7 +421,7 @@ class String
 	# Creates a new Nit String from an existing CString
 	# Pretty much equals to from_cstring but copies instead
 	# of passing a reference
-	# Avoids manual/automatic dealloc problems when dealing with native C code
+	# 
 	init copy_from_native(str: NativeString)
 	do
 		var temp_length = str.cstring_length
