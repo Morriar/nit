@@ -209,6 +209,7 @@ abstract class NitdocPage
 		append("<script type='text/javascript' src='scripts/github.js'></script>")
 		append("<script type='text/javascript' src='scripts/js-facilities.js'></script>")
 		append("<link rel='stylesheet' href='styles/main.css' type='text/css' media='screen'/>")
+		append("<link rel='stylesheet' href='styles/github.css' type='text/css' media='screen'/>")
 		var title = ""
 		if ctx.opt_custom_title.value != null then
 			title = " | {ctx.opt_custom_title.value.to_s}"
@@ -616,7 +617,7 @@ class NitdocModule
 		# comment
 		var nmodule = ctx.mbuilder.mmodule2nmodule[mmodule]
 		append("<section class='description'>")
-		if not nmodule.full_comment.is_empty then append("<pre>{nmodule.full_comment}</pre>")
+		if not nmodule.full_comment.is_empty then append("<pre data-comment-location='{nmodule.n_moduledecl.n_doc.location.to_s}'>{nmodule.full_comment}</pre>")
 		process_generate_dot
 		append("</section>")
 		# classes
@@ -907,7 +908,11 @@ class NitdocClass
 		# comment
 		var nclass = ctx.mbuilder.mclassdef2nclassdef[mclass.intro]
 		append("<section class='description'>")
-		if nclass isa AStdClassdef and not nclass.full_comment.is_empty then append("<pre>{nclass.full_comment}</pre>")
+		if nclass isa AStdClassdef and not nclass.full_comment.is_empty	then
+			append("<pre data-comment-location='{nclass.n_doc.location.to_s}'>{nclass.full_comment}</pre>")
+		else
+			append("<pre class='noComment'>No comment</p>")
+		end
 		process_generate_dot
 		append("</section>")
 		# concerns
@@ -1196,11 +1201,16 @@ redef class MModule
 
 	# Return the full comment of the module decorated with html
 	fun html_full_comment(page: NitdocPage) do
+		page.append("<div id='description'>")
 		if page.ctx.mbuilder.mmodule2nmodule.has_key(self) then
-			page.append("<div id='description'>")
-			page.append("<pre>{page.ctx.mbuilder.mmodule2nmodule[self].full_comment}</pre>")
-			page.append("</div>")
+			var node = page.ctx.mbuilder.mmodule2nmodule[self] 
+			if node.full_comment != "" then
+				page.append("<pre data-comment-location='{node.n_moduledecl.n_doc.location.to_s}'>{node.full_comment}</pre>")
+			else
+				page.append("<pre class=\"noComment\"> No comment</pre>")
+			end
 		end
+		page.append("</div>")
 	end
 
 	private fun has_mclassdef_for(mclass: MClass): Bool do
@@ -1380,7 +1390,7 @@ redef class MClass
 						page.append("<p class='info inheritance'>")
 						page.append("<span class=\"noComment\">no comment for </span>")
 					else
-						page.append("<pre>{nclass.full_comment}</pre>")
+						page.append("<pre data-comment-location='{nclass.n_doc.location.to_s}'>{nclass.full_comment}</pre>")
 						page.append("<p class='info inheritance'>")
 					end
 					if mclassdef.is_intro then
@@ -1538,7 +1548,7 @@ redef class MPropDef
 					page.append("<p class='info inheritance'>")
 					page.append("<span class=\"noComment\">no comment for </span>")
 				else
-					page.append("<pre>{intro_nprop.full_comment}</pre>")
+					page.append("<pre data-comment-location='{intro_nprop.n_doc.location.to_s}'>{intro_nprop.full_comment}</pre>")
 					page.append("<p class='info inheritance'>")
 				end
 				page.append("introduction in ")
@@ -1552,7 +1562,7 @@ redef class MPropDef
 				page.append("<p class='info inheritance'>")
 				page.append("<span class=\"noComment\">no comment for </span>")
 			else
-				page.append("<pre>{nprop.full_comment}</pre>")
+				page.append("<pre data-comment-location='{nprop.n_doc.location.to_s}'>{nprop.full_comment}</pre>")
 				page.append("<p class='info inheritance'>")
 			end
 			if is_intro then
@@ -1676,54 +1686,63 @@ end
 # Nodes redefs
 #
 
+redef class ADoc
+	private fun short_comment: String do
+		return n_comment.first.text.substring_from(2).replace("\n", "").html_escape
+	end
+
+	private fun full_comment: String do
+		var res = new Buffer
+		for t in n_comment do
+			var text = t.text
+			text = text.replace("# ", "")
+			text = text.replace("#", "")
+			res.append(text.html_escape)
+		end
+		return res.to_s
+	end
+end
+
 redef class AModule
 	private fun short_comment: String do
 		if n_moduledecl != null and n_moduledecl.n_doc != null then
-			return n_moduledecl.n_doc.n_comment.first.text.substring_from(2).replace("\n", "").html_escape
+			return n_moduledecl.n_doc.short_comment
 		end
 		return ""
 	end
 
 	private fun full_comment: String do
-		var res = new Buffer
 		if n_moduledecl != null and n_moduledecl.n_doc != null then
-			for t in n_moduledecl.n_doc.n_comment do
-				res.append(t.text.substring_from(1).html_escape)
-			end
+			return n_moduledecl.n_doc.full_comment
 		end
-		return res.to_s
+		return ""
 	end
 end
 
 redef class AStdClassdef
 	private fun short_comment: String do
-		if n_doc != null then return n_doc.n_comment.first.text.substring_from(2).replace("\n", "").html_escape
+		if n_doc != null then return n_doc.short_comment
 		return ""
 	end
 
 	private fun full_comment: String do
-		var res = new Buffer
-		if n_doc != null then
-			for t in n_doc.n_comment do res.append(t.text.substring_from(1).html_escape)
-		end
-		return res.to_s
+		if n_doc != null then return n_doc.full_comment
+		return ""
 	end
 end
 
 redef class APropdef
 	private fun short_comment: String do
-		if n_doc != null then return n_doc.n_comment.first.text.substring_from(2).replace("\n", "").html_escape
+		if n_doc != null then return n_doc.short_comment
 		return ""
 	end
 
 	private fun full_comment: String do
-		var res = new Buffer
-		if n_doc != null then
-			for t in n_doc.n_comment do res.append(t.text.substring_from(1).html_escape)
-		end
-		return res.to_s
+		if n_doc != null then return n_doc.full_comment
+		return ""
 	end
 end
+
 
 var nitdoc = new NitdocContext
 nitdoc.generate_nitdoc
