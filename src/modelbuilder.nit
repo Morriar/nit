@@ -411,6 +411,10 @@ class ModelBuilder
 			if sup == null then continue # Skip error
 			imported_modules.add(sup)
 			var mvisibility = aimport.n_visibility.mvisibility
+			if mvisibility == protected_visibility then
+				error(aimport.n_visibility, "Error: only properties can be protected.")
+				return
+			end
 			mmodule.set_visibility_for(sup, mvisibility)
 		end
 		if stdimport then
@@ -447,7 +451,7 @@ class ModelBuilder
 	end
 
 	# Force to get the primitive method named `name' on the type `recv' or do a fatal error on `n'
-	fun force_get_primitive_method(n: ANode, name: String, recv: MType, mmodule: MModule): MMethod
+	fun force_get_primitive_method(n: ANode, name: String, recv: MClass, mmodule: MModule): MMethod
 	do
 		var res = mmodule.try_get_primitive_method(name, recv)
 		if res == null then
