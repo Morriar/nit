@@ -393,7 +393,7 @@ interface SequenceRead[E]
 
 	# Return the index of the first occurrence of `item'.
 	# Return -1 if `item' is not found
-	# Comparison is done with ==
+	# Comparison is done with ==sadas
 	fun index_of(item: E): Int
 	do
 		var i = iterator
