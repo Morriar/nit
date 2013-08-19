@@ -153,7 +153,7 @@ abstract class AbstractArrayRead[E]
 	end
 end
 
-# Resizable one dimension array of objects.
+# Resizable one dimension array of objects.werwerw
 abstract class AbstractArray[E]
 	super AbstractArrayRead[E]
 	super Sequence[E]
