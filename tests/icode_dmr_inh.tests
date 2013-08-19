@@ -1,3 +1,0 @@
-A,icode_dmr_inh::B::foo,has,CALL file::Object::print
-A,icode_dmr_inh::B::foo,no,ABORT
-B,no-file
