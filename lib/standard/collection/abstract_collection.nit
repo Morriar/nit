@@ -39,7 +39,7 @@ import kernel
 # This abstract class implements its others methods with an iterator.
 # Subclasses may redefine them with an efficient implementation.
 interface Collection[E]
-	# Get a new iterator on the collection.
+	# Get a new iterator on the collection 
 	fun iterator: Iterator[E] is abstract
 
 	# Iterate over each element of the collection
