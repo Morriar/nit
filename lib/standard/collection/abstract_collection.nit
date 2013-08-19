@@ -65,7 +65,7 @@ interface Collection[E]
 
 	# Is the collection contain only `item' ?
 	# Comparisons are done with ==
-	# Return true if the collection is empty.
+	# Return true if the collection is empty.sdsada
 	fun has_only(item: E): Bool is abstract
 
 	# How many occurrences of `item' are in the collection ?
