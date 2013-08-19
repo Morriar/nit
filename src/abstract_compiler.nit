@@ -20,6 +20,7 @@ module abstract_compiler
 import literal
 import typing
 import auto_super_init
+import frontend
 
 # Add compiling options
 redef class ToolContext
@@ -344,11 +345,11 @@ abstract class AbstractCompiler
 			var mainmodule = v.compiler.mainmodule
 			var glob_sys = v.init_instance(main_type)
 			v.add("glob_sys = {glob_sys};")
-			var main_init = mainmodule.try_get_primitive_method("init", main_type)
+			var main_init = mainmodule.try_get_primitive_method("init", main_type.mclass)
 			if main_init != null then
 				v.send(main_init, [glob_sys])
 			end
-			var main_method = mainmodule.try_get_primitive_method("main", main_type)
+			var main_method = mainmodule.try_get_primitive_method("main", main_type.mclass)
 			if main_method != null then
 				v.send(main_method, [glob_sys])
 			end
@@ -547,7 +548,8 @@ abstract class AbstractCompilerVisitor
 	# Force to get the primitive property named `name' in the instance `recv' or abort
 	fun get_property(name: String, recv: MType): MMethod
 	do
-		return self.compiler.modelbuilder.force_get_primitive_method(self.current_node.as(not null), name, recv, self.compiler.mainmodule)
+		assert recv isa MClassType
+		return self.compiler.modelbuilder.force_get_primitive_method(self.current_node.as(not null), name, recv.mclass, self.compiler.mainmodule)
 	end
 
 	fun compile_callsite(callsite: CallSite, args: Array[RuntimeVariable]): nullable RuntimeVariable
@@ -1810,6 +1812,15 @@ redef class ABlockExpr
 	do
 		for e in self.n_expr do v.stmt(e)
 	end
+	redef fun expr(v)
+	do
+		var last = self.n_expr.last
+		for e in self.n_expr do
+			if e == last then break
+			v.stmt(e)
+		end
+		return v.expr(last, null)
+	end
 end
 
 redef class AVardeclExpr
@@ -1839,6 +1850,13 @@ redef class AVarAssignExpr
 		var variable = self.variable.as(not null)
 		var i = v.expr(self.n_value, variable.declared_type)
 		v.assign(v.variable(variable), i)
+	end
+	redef fun expr(v)
+	do
+		var variable = self.variable.as(not null)
+		var i = v.expr(self.n_value, variable.declared_type)
+		v.assign(v.variable(variable), i)
+		return i
 	end
 end
 
@@ -1892,6 +1910,18 @@ redef class AIfExpr
 		v.add("\} else \{")
 		v.stmt(self.n_else)
 		v.add("\}")
+	end
+
+	redef fun expr(v)
+	do
+		var res = v.new_var(self.mtype.as(not null))
+		var cond = v.expr_bool(self.n_expr)
+		v.add("if ({cond})\{")
+		v.assign(res, v.expr(self.n_then.as(not null), null))
+		v.add("\} else \{")
+		v.assign(res, v.expr(self.n_else.as(not null), null))
+		v.add("\}")
+		return res
 	end
 end
 
@@ -2095,15 +2125,15 @@ redef class AEeExpr
 end
 
 redef class AIntExpr
-	redef fun expr(v) do return v.new_expr("{self.n_number.text}", self.mtype.as(not null))
+	redef fun expr(v) do return v.new_expr("{self.value.to_s}", self.mtype.as(not null))
 end
 
 redef class AFloatExpr
-	redef fun expr(v) do return v.new_expr("{self.n_float.text}", self.mtype.as(not null))
+	redef fun expr(v) do return v.new_expr("{self.n_float.text}", self.mtype.as(not null)) # FIXME use value, not n_float
 end
 
 redef class ACharExpr
-	redef fun expr(v) do return v.new_expr("{self.n_char.text}", self.mtype.as(not null))
+	redef fun expr(v) do return v.new_expr("'{self.value.to_s.escape_to_c}'", self.mtype.as(not null))
 end
 
 redef class AArrayExpr
@@ -2384,208 +2414,25 @@ redef class Array[E]
 end
 
 redef class MModule
-
-	# Return a linearization of a set of mtypes
-	fun linearize_mtypes(mtypes: Set[MType]): Array[MType] do
-		var lin = new Array[MType].from(mtypes)
-		var sorter = new TypeSorter(self)
-		sorter.sort(lin)
-		return lin
-	end
-
-	# Return a reverse linearization of a set of mtypes
-	fun reverse_linearize_mtypes(mtypes: Set[MType]): Array[MType] do
-		var lin = new Array[MType].from(mtypes)
-		var sorter = new ReverseTypeSorter(self)
-		sorter.sort(lin)
-		return lin
-	end
-
-	# Return super types of a `mtype` in `self`
-	fun super_mtypes(mtype: MType, mtypes: Set[MType]): Set[MType] do
-		if not self.super_mtypes_cache.has_key(mtype) then
-			var supers = new HashSet[MType]
-			for otype in mtypes do
-				if otype == mtype then continue
-				if mtype.is_subtype(self, null, otype) then
-					supers.add(otype)
-				end
-			end
-			self.super_mtypes_cache[mtype] = supers
-		end
-		return self.super_mtypes_cache[mtype]
-	end
-
-	private var super_mtypes_cache: Map[MType, Set[MType]] = new HashMap[MType, Set[MType]]
-
-	# Return all sub mtypes (directs and indirects) of a `mtype` in `self`
-	fun sub_mtypes(mtype: MType, mtypes: Set[MType]): Set[MType] do
-		if not self.sub_mtypes_cache.has_key(mtype) then
-			var subs = new HashSet[MType]
-			for otype in mtypes do
-				if otype == mtype then continue
-				if otype.is_subtype(self, null, mtype) then
-					subs.add(otype)
-				end
-			end
-			self.sub_mtypes_cache[mtype] = subs
-		end
-		return self.sub_mtypes_cache[mtype]
-	end
-
-	private var sub_mtypes_cache: Map[MType, Set[MType]] = new HashMap[MType, Set[MType]]
-
-	# Return a linearization of a set of mclasses
-	fun linearize_mclasses_2(mclasses: Set[MClass]): Array[MClass] do
-		var lin = new Array[MClass].from(mclasses)
-		var sorter = new ClassSorter(self)
-		sorter.sort(lin)
-		return lin
-	end
-
-	# Return a reverse linearization of a set of mtypes
-	fun reverse_linearize_mclasses(mclasses: Set[MClass]): Array[MClass] do
-		var lin = new Array[MClass].from(mclasses)
-		var sorter = new ReverseClassSorter(self)
-		sorter.sort(lin)
-		return lin
-	end
-
-	# Return all super mclasses (directs and indirects) of a `mclass` in `self`
-	fun super_mclasses(mclass: MClass): Set[MClass] do
-		if not self.super_mclasses_cache.has_key(mclass) then
-			var supers = new HashSet[MClass]
-			if self.flatten_mclass_hierarchy.has(mclass) then
-				for sup in self.flatten_mclass_hierarchy[mclass].greaters do
-					if sup == mclass then continue
-					supers.add(sup)
-				end
-			end
-			self.super_mclasses_cache[mclass] = supers
-		end
-		return self.super_mclasses_cache[mclass]
-	end
-
-	private var super_mclasses_cache: Map[MClass, Set[MClass]] = new HashMap[MClass, Set[MClass]]
-
-	# Return all parents of a `mclass` in `self`
-	fun parent_mclasses(mclass: MClass): Set[MClass] do
-		if not self.parent_mclasses_cache.has_key(mclass) then
-			var parents = new HashSet[MClass]
-			if self.flatten_mclass_hierarchy.has(mclass) then
-				for sup in self.flatten_mclass_hierarchy[mclass].direct_greaters do
-					if sup == mclass then continue
-					parents.add(sup)
-				end
-			end
-			self.parent_mclasses_cache[mclass] = parents
-		end
-		return self.parent_mclasses_cache[mclass]
-	end
-
-	private var parent_mclasses_cache: Map[MClass, Set[MClass]] = new HashMap[MClass, Set[MClass]]
-
-	# Return all sub mclasses (directs and indirects) of a `mclass` in `self`
-	fun sub_mclasses(mclass: MClass): Set[MClass] do
-		if not self.sub_mclasses_cache.has_key(mclass) then
-			var subs = new HashSet[MClass]
-			if self.flatten_mclass_hierarchy.has(mclass) then
-				for sub in self.flatten_mclass_hierarchy[mclass].smallers do
-					if sub == mclass then continue
-					subs.add(sub)
-				end
-			end
-			self.sub_mclasses_cache[mclass] = subs
-		end
-		return self.sub_mclasses_cache[mclass]
-	end
-
-	private var sub_mclasses_cache: Map[MClass, Set[MClass]] = new HashMap[MClass, Set[MClass]]
-
 	# All 'mproperties' associated to all 'mclassdefs' of `mclass`
 	fun properties(mclass: MClass): Set[MProperty] do
 		if not self.properties_cache.has_key(mclass) then
 			var properties = new HashSet[MProperty]
-			var parents = self.super_mclasses(mclass)
+			var parents = new Array[MClass]
+			if self.flatten_mclass_hierarchy.has(mclass) then
+				parents.add_all(mclass.in_hierarchy(self).direct_greaters)
+			end
 			for parent in parents do
 				properties.add_all(self.properties(parent))
 			end
-
 			for mclassdef in mclass.mclassdefs do
-				for mpropdef in mclassdef.mpropdefs do
-					properties.add(mpropdef.mproperty)
+				for mprop in mclassdef.intro_mproperties do
+					properties.add(mprop)
 				end
 			end
 			self.properties_cache[mclass] = properties
 		end
 		return properties_cache[mclass]
 	end
-
 	private var properties_cache: Map[MClass, Set[MProperty]] = new HashMap[MClass, Set[MProperty]]
-end
-
-# A sorter for linearize list of types
-private class TypeSorter
-	super AbstractSorter[MType]
-
-	private var mmodule: MModule
-
-	init(mmodule: MModule) do self.mmodule = mmodule
-
-	redef fun compare(a, b) do
-		if a == b then
-			return 0
-		else if a.is_subtype(self.mmodule, null, b) then
-			return -1
-		end
-		return 1
-	end
-end
-
-# A sorter for reverse linearization
-private class ReverseTypeSorter
-	super TypeSorter
-
-	init(mmodule: MModule) do end
-
-	redef fun compare(a, b) do
-		if a == b then
-			return 0
-		else if a.is_subtype(self.mmodule, null, b) then
-			return 1
-		end
-		return -1
-	end
-end
-
-# A sorter for linearize list of classes
-private class ClassSorter
-	super AbstractSorter[MClass]
-
-	var mmodule: MModule
-
-	redef fun compare(a, b) do
-		if a == b then
-			return 0
-		else if self.mmodule.flatten_mclass_hierarchy.has(a) and self.mmodule.flatten_mclass_hierarchy[a].greaters.has(b) then
-			return -1
-		end
-		return 1
-	end
-end
-
-# A sorter for reverse linearization
-private class ReverseClassSorter
-	super AbstractSorter[MClass]
-
-	var mmodule: MModule
-
-	redef fun compare(a, b) do
-		if a == b then
-			return 0
-		else if self.mmodule.flatten_mclass_hierarchy.has(a) and self.mmodule.flatten_mclass_hierarchy[a].greaters.has(b) then
-			return 1
-		end
-		return -1
-	end
 end
