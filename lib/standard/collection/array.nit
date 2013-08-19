@@ -713,7 +713,7 @@ end
 
 # Native classes ##############################################################
 
-# Subclasses of this class can create native arrays
+# Subclasses of this class can create native arrays retest
 interface ArrayCapable[E]
 	# Get a new array of `size' elements.
 	protected fun calloc_array(size: Int): NativeArray[E] is intern
