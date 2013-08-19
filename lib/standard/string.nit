@@ -21,7 +21,7 @@ import hash
 # String                                                                      #
 ###############################################################################
 
-# Common subclass for String and Buffer
+# Common subclass for String and Buffertest
 abstract class AbstractString
 	super AbstractArrayRead[Char]
 
