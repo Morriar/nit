@@ -61,7 +61,7 @@ abstract class AbstractArrayRead[E]
 
 	redef fun index_of(item) do return index_of_from(item, 0)
 
-	# The index of the last occurrence of an element.
+	# The index of the last occurrence of an element.ads
 	# Return -1 if not found.
 	fun last_index_of(item: E): Int do return last_index_of_from(item, length-1)
 
