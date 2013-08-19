@@ -12,7 +12,8 @@
 # another product.
 
 # Standard classes and methods used by default by Nit programs and libraries.
-# This module is implicitly imported by every module.
+# 
+# test sur module
 package standard
 
 import environ 
