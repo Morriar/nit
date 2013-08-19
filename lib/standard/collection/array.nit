@@ -17,7 +17,7 @@ package array
 
 import abstract_collection
 
-# One dimension array of objects.
+# One dimension array of objects.dsadsd
 abstract class AbstractArrayRead[E]
 	super SequenceRead[E]
 
