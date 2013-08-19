@@ -51,6 +51,13 @@ redef class ModelBuilder
 			nvisibility = nclassdef.n_visibility
 			mvisibility = nvisibility.mvisibility
 			arity = nclassdef.n_formaldefs.length
+			if mvisibility == protected_visibility then
+				error(nvisibility, "Error: only properties can be protected.")
+				return
+			else if mvisibility == intrude_visibility then
+				error(nvisibility, "Error: intrude is not a legal visibility for classes.")
+				return
+			end
 		else if nclassdef isa ATopClassdef then
 			name = "Object"
 			nkind = null
@@ -198,6 +205,7 @@ redef class ModelBuilder
 	# REQUIRE: classes of imported modules are already build. (let `phase' do the job)
 	private fun build_classes(nmodule: AModule)
 	do
+		var errcount = toolcontext.error_count
 		# Force building recursively
 		if nmodule.build_classes_is_done then return
 		nmodule.build_classes_is_done = true
@@ -207,24 +215,28 @@ redef class ModelBuilder
 			build_classes(mmodule2nmodule[imp])
 		end
 
+		if errcount != toolcontext.error_count then return
+
 		# Create all classes
 		for nclassdef in nmodule.n_classdefs do
 			self.build_a_mclass(nmodule, nclassdef)
 		end
+
+		if errcount != toolcontext.error_count then return
 
 		# Create all classdefs
 		for nclassdef in nmodule.n_classdefs do
 			self.build_a_mclassdef(nmodule, nclassdef)
 		end
 
-		for nclassdef in nmodule.n_classdefs do
-			if nclassdef.mclassdef == null then return # forward error
-		end
+		if errcount != toolcontext.error_count then return
 
 		# Create inheritance on all classdefs
 		for nclassdef in nmodule.n_classdefs do
 			self.collect_a_mclassdef_inheritance(nmodule, nclassdef)
 		end
+
+		if errcount != toolcontext.error_count then return
 
 		# Create the mclassdef hierarchy
 		for nclassdef in nmodule.n_classdefs do
@@ -232,10 +244,14 @@ redef class ModelBuilder
 			mclassdef.add_in_hierarchy
 		end
 
+		if errcount != toolcontext.error_count then return
+
 		# Check inheritance
 		for nclassdef in nmodule.n_classdefs do
 			self.check_supertypes(nmodule, nclassdef)
 		end
+
+		if errcount != toolcontext.error_count then return
 
 		# Check unchecked ntypes
 		for nclassdef in nmodule.n_classdefs do
@@ -257,12 +273,67 @@ redef class ModelBuilder
 					end
 				end
 			end
-
 		end
+
+		if errcount != toolcontext.error_count then return
+
+		# Check clash of ancestors
+		for nclassdef in nmodule.n_classdefs do
+			var mclassdef = nclassdef.mclassdef.as(not null)
+			var superclasses = new HashMap[MClass, MClassType]
+			for scd in mclassdef.in_hierarchy.greaters do
+				for st in scd.supertypes do
+					if not superclasses.has_key(st.mclass) then
+						superclasses[st.mclass] = st
+					else if superclasses[st.mclass] != st then
+						var st1 = superclasses[st.mclass].resolve_for(mclassdef.mclass.mclass_type, mclassdef.bound_mtype, mmodule, false)
+						var st2 = st.resolve_for(mclassdef.mclass.mclass_type, mclassdef.bound_mtype, mmodule, false)
+						if st1 != st2 then
+							error(nclassdef, "Error: Incompatibles ancestors for {mclassdef.mclass}: {st1}, {st2}")
+						end
+					end
+				end
+			end
+		end
+
+		if errcount != toolcontext.error_count then return
 
 		# TODO: Check that the super-class is not intrusive
 
-		# TODO: Check that the super-class is not already known (by transitivity)
+		# Check that the superclasses are not already known (by transitivity)
+		for nclassdef in nmodule.n_classdefs do
+			if not nclassdef isa AStdClassdef then continue
+			var mclassdef = nclassdef.mclassdef.as(not null)
+
+			# Get the direct superclasses
+			# Since we are a mclassdef, just look at the mclassdef hierarchy
+			var parents = new Array[MClass]
+			for sup in mclassdef.in_hierarchy.direct_greaters do
+				parents.add(sup.mclass)
+			end
+
+			# Used to track duplicates of superclasses
+			var seen_parents = new ArrayMap[MClass, AType]
+
+			# The Object class
+			var objectclass = try_get_mclass_by_name(nmodule, mmodule, "Object")
+
+			# Check each declared superclass to see if it belong to the direct superclass
+			for nsc in nclassdef.n_superclasses do
+				var ntype = nsc.n_type
+				var mtype = ntype.mtype
+				if mtype == null then continue
+				assert mtype isa MClassType
+				var sc = mtype.mclass
+				if not parents.has(sc) or sc == objectclass then
+					warning(ntype, "Warning: superfluous super-class {mtype} in class {mclassdef.mclass}.")
+				else if not seen_parents.has_key(sc) then
+					seen_parents[sc] = ntype
+				else
+					warning(ntype, "Warning: duplicated super-class {mtype} in class {mclassdef.mclass}.")
+				end
+			end
+		end
 	end
 
 	# Register the nclassdef associated to each mclassdef
