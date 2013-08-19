@@ -17,7 +17,7 @@ package array
 
 import abstract_collection
 
-# One dimension array of objects.
+# One dimension array of objects.asdda
 abstract class AbstractArrayRead[E]
 	super SequenceRead[E]
 
