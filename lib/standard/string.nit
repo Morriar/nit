@@ -566,7 +566,7 @@ class String
 	end
 end
 
-# Mutable strings of characters.
+# Mutable strings of characters. testBuffer
 class Buffer
 	super AbstractString
 	super Comparable
