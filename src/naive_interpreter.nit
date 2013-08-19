@@ -20,6 +20,7 @@ module naive_interpreter
 import literal
 import typing
 import auto_super_init
+import frontend
 
 redef class ToolContext
 	# --discover-call-trace
@@ -57,12 +58,12 @@ redef class ModelBuilder
 		var mainobj = new MutableInstance(sys_type)
 		interpreter.mainobj = mainobj
 		interpreter.init_instance(mainobj)
-		var initprop = mainmodule.try_get_primitive_method("init", sys_type)
+		var initprop = mainmodule.try_get_primitive_method("init", sys_type.mclass)
 		if initprop != null then
 			interpreter.send(initprop, [mainobj])
 		end
 		interpreter.check_init_instance(mainobj)
-		var mainprop = mainmodule.try_get_primitive_method("main", sys_type)
+		var mainprop = mainmodule.try_get_primitive_method("main", sys_type.mclass)
 		if mainprop != null then
 			interpreter.send(mainprop, [mainobj])
 		end
@@ -102,7 +103,8 @@ private class NaiveInterpreter
 
 	fun force_get_primitive_method(name: String, recv: MType): MMethod
 	do
-		return self.modelbuilder.force_get_primitive_method(self.frame.current_node, name, recv, self.mainmodule)
+		assert recv isa MClassType
+		return self.modelbuilder.force_get_primitive_method(self.frame.current_node, name, recv.mclass, self.mainmodule)
 	end
 
 	# Is a return executed?
@@ -886,6 +888,8 @@ redef class AExternMethPropdef
 			if pname == "rand" then
 				var res = recvval.rand
 				return v.int_instance(res)
+			else if pname == "native_int_to_s" then
+				return v.native_string_instance(recvval.to_s)
 			end
 		else if cname == "NativeFile" then
 			var recvval = args.first.val
@@ -1005,8 +1009,7 @@ redef class AAttrPropdef
 			return
 		end
 		var mtype = self.mpropdef.static_mtype.as(not null)
-		# TODO The needinit info is statically computed, move it to modelbuilder or whatever
-		mtype = mtype.resolve_for(self.mpropdef.mclassdef.bound_mtype, self.mpropdef.mclassdef.bound_mtype, self.mpropdef.mclassdef.mmodule, true)
+		mtype = mtype.anchor_to(v.mainmodule, recv.mtype.as(MClassType))
 		if mtype isa MNullableType then
 			recv.attributes[self.mpropdef.mproperty] = v.null_instance
 		end
@@ -1069,6 +1072,17 @@ redef class AExpr
 end
 
 redef class ABlockExpr
+	redef fun expr(v)
+	do
+		var last = self.n_expr.last
+		for e in self.n_expr do
+			if e == last then break
+			v.stmt(e)
+			if v.is_escaping then return null
+		end
+		return last.expr(v)
+	end
+
 	redef fun stmt(v)
 	do
 		for e in self.n_expr do
@@ -1098,11 +1112,12 @@ redef class AVarExpr
 end
 
 redef class AVarAssignExpr
-	redef fun stmt(v)
+	redef fun expr(v)
 	do
 		var i = v.expr(self.n_value)
-		if i == null then return
+		if i == null then return null
 		v.frame.map[self.variable.as(not null)] = i
+		return i
 	end
 end
 
@@ -1173,6 +1188,17 @@ redef class AAbortExpr
 end
 
 redef class AIfExpr
+	redef fun expr(v)
+	do
+		var cond = v.expr(self.n_expr)
+		if cond == null then return null
+		if cond.is_true then
+			return v.expr(self.n_then.as(not null))
+		else
+			return v.expr(self.n_else.as(not null))
+		end
+	end
+
 	redef fun stmt(v)
 	do
 		var cond = v.expr(self.n_expr)

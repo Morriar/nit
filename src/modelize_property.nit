@@ -201,19 +201,19 @@ redef class APropdef
 	# The associated propdef once build by a `ModelBuilder'
 	var mpropdef: nullable MPROPDEF writable
 
-	private fun build_property(modelbuilder: ModelBuilder, nclassdef: AClassdef)
-	do
-	end
-	private fun build_signature(modelbuilder: ModelBuilder, nclassdef: AClassdef)
-	do
-	end
-	private fun check_signature(modelbuilder: ModelBuilder, nclassdef: AClassdef)
-	do
-	end
+	private fun build_property(modelbuilder: ModelBuilder, nclassdef: AClassdef) is abstract
+	private fun build_signature(modelbuilder: ModelBuilder, nclassdef: AClassdef) is abstract
+	private fun check_signature(modelbuilder: ModelBuilder, nclassdef: AClassdef) is abstract
 	private fun new_property_visibility(modelbuilder: ModelBuilder, nclassdef: AClassdef, nvisibility: nullable AVisibility): MVisibility
 	do
 		var mvisibility = public_visibility
-		if nvisibility != null then mvisibility = nvisibility.mvisibility
+		if nvisibility != null then
+			mvisibility = nvisibility.mvisibility
+			if mvisibility == intrude_visibility then
+				modelbuilder.error(nvisibility, "Error: intrude is not a legal visibility for properties.")
+				mvisibility = public_visibility
+			end
+		end
 		if nclassdef.mclassdef.mclass.visibility == private_visibility then
 			if mvisibility == protected_visibility then
 				assert nvisibility != null
@@ -476,6 +476,7 @@ redef class AMethPropdef
 
 		msignature = new MSignature(mparameters, ret_type)
 		mpropdef.msignature = msignature
+		mpropdef.is_abstract = self isa ADeferredMethPropdef
 
 		if nsig != null then
 			for nclosure in nsig.n_closure_decls do
