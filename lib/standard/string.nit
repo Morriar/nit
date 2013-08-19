@@ -649,7 +649,9 @@ class Buffer
 		end
 	end
 
-	# Create a new empty string.
+	# Create a new empty string. test init
+	# 
+	# teste
 	init
 	do
 		with_capacity(5)
