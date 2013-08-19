@@ -18,6 +18,8 @@ package array
 import abstract_collection
 
 # One dimension array of objects.
+# 
+# Rajouté une ligne ici
 abstract class AbstractArrayRead[E]
 	super SequenceRead[E]
 
