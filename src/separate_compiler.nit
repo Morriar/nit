@@ -70,6 +70,7 @@ redef class ModelBuilder
 		compiler.do_property_coloring
 		for m in mainmodule.in_importation.greaters do
 			for mclass in m.intro_mclasses do
+				if mclass.kind == abstract_kind or mclass.kind == interface_kind then continue
 				compiler.compile_class_to_c(mclass)
 			end
 		end
@@ -233,8 +234,11 @@ class SeparateCompiler
 		#	method_layout_builder = new MMethodHasher(new PHAndOperator, self.mainmodule)
 		#	attribute_layout_builder = new MAttributeHasher(new PHAndOperator, self.mainmodule)
 		#else
-		method_layout_builder = new MMethodColorer(self.mainmodule)
-		attribute_layout_builder = new MAttributeColorer(self.mainmodule)
+
+		var class_layout_builder = new MClassColorer(self.mainmodule)
+		class_layout_builder.build_layout(mclasses)
+		method_layout_builder = new MMethodColorer(self.mainmodule, class_layout_builder)
+		attribute_layout_builder = new MAttributeColorer(self.mainmodule, class_layout_builder)
 		#end
 
 		# methods coloration
@@ -255,9 +259,13 @@ class SeparateCompiler
 		for mclass in mclasses do
 			var table = new Array[nullable MPropDef]
 			# first, fill table from parents by reverse linearization order
-			var parents = self.mainmodule.super_mclasses(mclass)
-			var lin = self.mainmodule.reverse_linearize_mclasses(parents)
-			for parent in lin do
+			var parents = new Array[MClass]
+			if mainmodule.flatten_mclass_hierarchy.has(mclass) then
+				parents = mclass.in_hierarchy(mainmodule).greaters.to_a
+				self.mainmodule.linearize_mclasses(parents)
+			end
+			for parent in parents do
+				if parent == mclass then continue
 				for mproperty in self.mainmodule.properties(parent) do
 					if not mproperty isa MMethod then continue
 					var color = layout.pos[mproperty]
@@ -299,9 +307,13 @@ class SeparateCompiler
 		for mclass in mclasses do
 			var table = new Array[nullable MPropDef]
 			# first, fill table from parents by reverse linearization order
-			var parents = self.mainmodule.super_mclasses(mclass)
-			var lin = self.mainmodule.reverse_linearize_mclasses(parents)
-			for parent in lin do
+			var parents = new Array[MClass]
+			if mainmodule.flatten_mclass_hierarchy.has(mclass) then
+				parents = mclass.in_hierarchy(mainmodule).greaters.to_a
+				self.mainmodule.linearize_mclasses(parents)
+			end
+			for parent in parents do
+				if parent == mclass then continue
 				for mproperty in self.mainmodule.properties(parent) do
 					if not mproperty isa MAttribute then continue
 					var color = layout.pos[mproperty]
@@ -339,7 +351,7 @@ class SeparateCompiler
 	end
 
 	# colorize live types of the program
-	private fun do_type_coloring: Set[MType] do
+	private fun do_type_coloring: POSet[MType] do
 		var mtypes = new HashSet[MType]
 		mtypes.add_all(self.runtime_type_analysis.live_types)
 		mtypes.add_all(self.runtime_type_analysis.live_cast_types)
@@ -367,24 +379,22 @@ class SeparateCompiler
 
 		# colorize types
 		self.type_layout = layout_builder.build_layout(mtypes)
-		self.type_tables = self.build_type_tables(mtypes)
+		var poset = layout_builder.poset.as(not null)
+		self.type_tables = self.build_type_tables(poset)
 
 		# VT and FT are stored with other unresolved types in the big resolution_tables
 		self.compile_resolution_tables(mtypes)
 
-		return mtypes
+		return poset
 	end
 
 	# Build type tables
-	fun build_type_tables(mtypes: Set[MType]): Map[MType, Array[nullable MType]] do
+	fun build_type_tables(mtypes: POSet[MType]): Map[MType, Array[nullable MType]] do
 		var tables = new HashMap[MType, Array[nullable MType]]
 		var layout = self.type_layout
 		for mtype in mtypes do
 			var table = new Array[nullable MType]
-			var supers = new HashSet[MType]
-			supers.add_all(self.mainmodule.super_mtypes(mtype, mtypes))
-			supers.add(mtype)
-			for sup in supers do
+			for sup in mtypes[mtype].greaters do
 				var color: Int
 				if layout isa PHLayout[MType, MType] then
 					color = layout.hashes[mtype][sup]
@@ -631,26 +641,30 @@ class SeparateCompiler
 		var attrs = self.attr_tables[mclass]
 		var v = new_visitor
 
+		var is_dead = not runtime_type_analysis.live_classes.has(mclass) and mtype.ctype == "val*" and mclass.name != "NativeArray"
+
 		v.add_decl("/* runtime class {c_name} */")
 
 		# Build class vft
-		self.provide_declaration("class_{c_name}", "extern const struct class class_{c_name};")
-		v.add_decl("const struct class class_{c_name} = \{")
-		v.add_decl("{self.box_kind_of(mclass)}, /* box_kind */")
-		v.add_decl("\{")
-		for i in [0 .. vft.length[ do
-			var mpropdef = vft[i]
-			if mpropdef == null then
-				v.add_decl("NULL, /* empty */")
-			else
-				assert mpropdef isa MMethodDef
-				var rf = mpropdef.virtual_runtime_function
-				v.require_declaration(rf.c_name)
-				v.add_decl("(nitmethod_t){rf.c_name}, /* pointer to {mclass.intro_mmodule}:{mclass}:{mpropdef} */")
+		if not is_dead then
+			self.provide_declaration("class_{c_name}", "extern const struct class class_{c_name};")
+			v.add_decl("const struct class class_{c_name} = \{")
+			v.add_decl("{self.box_kind_of(mclass)}, /* box_kind */")
+			v.add_decl("\{")
+			for i in [0 .. vft.length[ do
+				var mpropdef = vft[i]
+				if mpropdef == null then
+					v.add_decl("NULL, /* empty */")
+				else
+					assert mpropdef isa MMethodDef
+					var rf = mpropdef.virtual_runtime_function
+					v.require_declaration(rf.c_name)
+					v.add_decl("(nitmethod_t){rf.c_name}, /* pointer to {mclass.intro_mmodule}:{mclass}:{mpropdef} */")
+				end
 			end
+			v.add_decl("\}")
+			v.add_decl("\};")
 		end
-		v.add_decl("\}")
-		v.add_decl("\};")
 
 		if mtype.ctype != "val*" then
 			#Build instance struct
@@ -705,15 +719,19 @@ class SeparateCompiler
 		self.provide_declaration("NEW_{c_name}", "{mtype.ctype} NEW_{c_name}(const struct type* type);")
 		v.add_decl("/* allocate {mtype} */")
 		v.add_decl("{mtype.ctype} NEW_{c_name}(const struct type* type) \{")
-		var res = v.new_named_var(mtype, "self")
-		res.is_exact = true
-		v.add("{res} = nit_alloc(sizeof(struct instance) + {attrs.length}*sizeof(nitattribute_t));")
-		v.add("{res}->type = type;")
-		hardening_live_type(v, "type")
-		v.require_declaration("class_{c_name}")
-		v.add("{res}->class = &class_{c_name};")
-		self.generate_init_attr(v, res, mtype)
-		v.add("return {res};")
+		if is_dead then
+			v.add_abort("{mclass} is DEAD")
+		else
+			var res = v.new_named_var(mtype, "self")
+			res.is_exact = true
+			v.add("{res} = nit_alloc(sizeof(struct instance) + {attrs.length}*sizeof(nitattribute_t));")
+			v.add("{res}->type = type;")
+			hardening_live_type(v, "type")
+			v.require_declaration("class_{c_name}")
+			v.add("{res}->class = &class_{c_name};")
+			self.generate_init_attr(v, res, mtype)
+			v.add("return {res};")
+		end
 		v.add("\}")
 
 		generate_check_init_instance(mtype)
@@ -742,7 +760,11 @@ class SeparateCompiler
 		self.provide_declaration("CHECK_NEW_{c_name}", "void CHECK_NEW_{c_name}({mtype.ctype});")
 		v.add_decl("/* allocate {mtype} */")
 		v.add_decl("void CHECK_NEW_{c_name}({mtype.ctype} {res}) \{")
-		self.generate_check_attr(v, res, mtype)
+		if runtime_type_analysis.live_classes.has(mtype.mclass) then
+			self.generate_check_attr(v, res, mtype)
+		else
+			v.add_abort("{mtype.mclass} is DEAD")
+		end
 		v.add("\}")
 	end
 
