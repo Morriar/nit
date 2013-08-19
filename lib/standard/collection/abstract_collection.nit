@@ -53,7 +53,7 @@ interface Collection[E]
 		end
 	end
 
-	# Is there no item in the collection ?
+	# Is there no item in the collection ?c
 	fun is_empty: Bool is abstract 
 
 	# Number of items in the collection.
