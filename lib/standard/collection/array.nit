@@ -66,7 +66,7 @@ abstract class AbstractArrayRead[E]
 	fun last_index_of(item: E): Int do return last_index_of_from(item, length-1)
 
 	# The index of the first occurrence of an element starting from pos.
-	# Return -1 if not found.
+	# Return -1 if not found. 
 	fun index_of_from(item: E, pos: Int): Int
 	do
 		var i = pos
