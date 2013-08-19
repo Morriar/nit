@@ -36,7 +36,7 @@ interface Object
 	fun is_same_type(other: Object): Bool is intern
 
 	# Have `self' and `other' the same value?
-	##
+	# sdad
 	# The exact meaning of "same value" is let to the subclasses.
 	# Implicitly, the default implementation, is `is'
 	fun ==(other: nullable Object): Bool do return self is other
