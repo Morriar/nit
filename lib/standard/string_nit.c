@@ -1,7 +1,5 @@
 /* This file is part of NIT ( http://www.nitlanguage.org ).
  *
- * Copyright 2012 Alexis Laferrière <alexis.laf@xymus.net>
- *
  * This file is free software, which comes along with NIT.  This software is
  * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without  even  the implied warranty of  MERCHANTABILITY or  FITNESS FOR A
@@ -11,14 +9,11 @@
  * another product.
  */
 
-#ifndef EXTERN_METHODS_NIT_H
-#define EXTERN_METHODS_NIT_H
+#include "string_nit.h"
 
-#include <extern_methods._nitni.h>
-
-bigint Int_fib___impl( bigint recv );
-void Int_sleep___impl( bigint recv );
-float Int_atan_with___impl( bigint recv, bigint x );
-void Int_foo___impl( bigint recv );
-
-#endif
+// Integer to NativeString method
+char* native_int_to_s(int recv, int len){
+	char* str = malloc(len + 1);
+	sprintf(str, "%d", recv);
+	return str;
+}
