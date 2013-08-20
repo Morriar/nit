@@ -69,7 +69,7 @@ interface Collection[E]
 	fun has_only(item: E): Bool is abstract
 
 	# How many occurrences of `item' are in the collection ?
-	# Comparisons are done with ==
+	# Comparisons are done with ==retest
 	fun count(item: E): Int is abstract
 
 	# Return one the item of the collection
