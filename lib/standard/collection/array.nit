@@ -628,63 +628,7 @@ class ArrayMapKeys[K: Object, E]
 	redef fun remove_all(key) do self.remove(key)
 end
 
-class ArrayMapValues[K: Object, E]
-	super RemovableCollection[E]
-	# The original map
-	var map: ArrayMap[K, E]
-	redef fun first do return self.map._items.first.second
-	redef fun is_empty do return self.map.is_empty
-	redef fun length do return self.map.length
-	redef fun iterator do return new MapValuesIterator[K, E](self.map.iterator)
-
-	# O(n)
-	redef fun has(item)
-	do
-		for i in self.map._items do if i.second == item then return true
-		return false
-	end
-
-	# O(n)
-	redef fun has_only(item)
-	do
-		for i in self.map._items do if i.second != item then return false
-		return true
-	end
-
-	# O(n)
-	redef fun count(item)
-	do
-		var nb = 0
-		for i in self.map._items do if i.second == item then nb += 1
-		return nb
-	end
-
-	redef fun clear do self.map.clear
-
-	redef fun remove(item)
-	do
-		var map = self.map
-		var i = map._items.length - 1
-		while i >= 0 do
-			if map._items[i].second == item then
-				map.remove_at_index(i)
-				return
-			end
-			i -= 1
-		end
-	end
-
-	redef fun remove_all(item)
-	do
-		var map = self.map
-		var i = map._items.length - 1
-		while i >= 0 do
-			if map._items[i].second == item then
-				map.remove_at_index(i)
-			end
-			i -= 1
-		end
-	end
+# asdsadad
 end
 
 
