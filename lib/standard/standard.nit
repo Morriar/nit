@@ -11,8 +11,7 @@
 # You  are  allowed  to  redistribute it and sell it, alone or is a part of
 # another product.
 
-# Standard classes and methods used by default by Nit programs and libraries.
-# This module is implicitly imported by every module.
+# dasdsda
 package standard
 
 import environ 
