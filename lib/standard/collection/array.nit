@@ -503,7 +503,12 @@ class ArraySet[E: Object]
 	init with_capacity(i: Int) do _array = new Array[E].with_capacity(i)
 end
 
-# Iterators on sets implemented with arrays.
+# Iterators on sets implemented with arrays.asds
+# a
+# sdasd
+# ada
+# 
+# asd
 class ArraySetIterator[E: Object]
 	super Iterator[E]
 
