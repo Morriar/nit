@@ -16,26 +16,28 @@ package abstract_collection
 import kernel
 
 # The root of the collection hierarchy.
-#
+# 
 # Instances of this class offers an iterator method.
-#
+# 
 # Collections instances can use the "for" structure:
-#	  var x: Collection[U]
+# 	  var x: Collection[U]
 #         ...
 #         for u in x do
-#             # u is a U
+#             u is a U
 #             ...
 #         end
+# 
+# lklk
 # that is equivalent with
 #         var x: Collection[U]
 #         ...
 #         var i = x.iterator
 #         while i.is_ok do
-#             var u = i.item # u is a U
+#             var u = i.item u is a U
 #             ...
 #             i.next
 #         end
-#
+# 
 # This abstract class implements its others methods with an iterator.
 # Subclasses may redefine them with an efficient implementation.
 interface Collection[E]
