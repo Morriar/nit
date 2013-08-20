@@ -60,7 +60,7 @@ interface Collection[E]
 	fun length: Int is abstract
 
 	# Is `item' in the collection ?
-	# Comparisons are done with ==
+	# Comparisons are done with == test
 	fun has(item: E): Bool is abstract
 
 	# Is the collection contain only `item' ?
