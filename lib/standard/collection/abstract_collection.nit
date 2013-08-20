@@ -72,7 +72,7 @@ interface Collection[E]
 	# Comparisons are done with ==
 	fun count(item: E): Int is abstract
 
-	# Return one the item of the collection
+	# Return one the item of the collection   sfd
 	fun first: E is abstract
 end
 
