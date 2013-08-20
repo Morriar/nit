@@ -619,6 +619,7 @@ class ArrayMapKeys[K: Object, E]
 	redef fun is_empty do return self.map.is_empty
 	redef fun length do return self.map.length
 	redef fun iterator do return new MapKeysIterator[K, E](self.map.iterator)
+	# test
 	redef fun clear do self.map.clear
 	redef fun remove(key)
 	do
