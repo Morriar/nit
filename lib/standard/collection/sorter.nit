@@ -19,6 +19,8 @@ import array
 
 # This abstract class generalizes ways to sort an array
 # TODO: rename `AbstractSorter` to `Comparator`
+# 
+# test
 interface AbstractSorter[E]
 	# Compare `a` and `b`.
 	# Returns:
