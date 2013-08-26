@@ -609,6 +609,7 @@ class ArrayMap[K: Object, E]
 	end
 end
 
+# test
 class ArrayMapKeys[K: Object, E]
 	super RemovableCollection[K]
 	# The original map
