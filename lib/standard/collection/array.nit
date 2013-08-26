@@ -276,6 +276,7 @@ class Array[E]
 		end
 	end
 
+	# test
 	redef fun [](index)
 	do
 		assert index: index >= 0 and index < _length
