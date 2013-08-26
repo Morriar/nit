@@ -609,24 +609,7 @@ class ArrayMap[K: Object, E]
 	end
 end
 
-class ArrayMapKeys[K: Object, E]
-	super RemovableCollection[K]
-	# The original map
-	var map: ArrayMap[K, E]
-	redef fun count(k) do if self.has(k) then return 1 else return 0
-	redef fun first do return self.map._items.first.first
-	redef fun has(k) do return self.map.index(k) >= 0
-	redef fun has_only(k) do return (self.has(k) and self.length == 1) or self.is_empty
-	redef fun is_empty do return self.map.is_empty
-	redef fun length do return self.map.length
-	redef fun iterator do return new MapKeysIterator[K, E](self.map.iterator)
-	redef fun clear do self.map.clear
-	redef fun remove(key)
-	do
-		var i = self.map.index(key)
-		if i >= 0 then self.map.remove_at_index(i)
-	end
-	redef fun remove_all(key) do self.remove(key)
+# test
 end
 
 class ArrayMapValues[K: Object, E]
