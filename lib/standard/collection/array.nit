@@ -455,7 +455,7 @@ end
 
 # Others collections ##########################################################
 
-# A set implemented with an Array.
+# A set implemented with an Array.test
 class ArraySet[E: Object]
 	super Set[E]
 
