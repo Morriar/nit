@@ -154,100 +154,13 @@ abstract class AbstractArrayRead[E]
 end
 
 # Resizable one dimension array of objects.
-abstract class AbstractArray[E]
-	super AbstractArrayRead[E]
-	super Sequence[E]
-
-	# Force the capacity to be at least `cap'.
-	# The capacity of the array is an internal information.
-	# However, this method can be used to prepare a large amount of add
-	fun enlarge(cap: Int) is abstract
-
-	redef fun push(item) do add(item)
-
-	redef fun pop
-	do
-		assert not_empty: not is_empty
-		var r = last
-		_length -= 1
-		return r
-	end
-
-	redef fun shift
-	do
-		assert not_empty: not is_empty
-		var r = first
-		var i = 1
-		var l = length
-		while i < l do
-			self[i-1] = self[i]
-			i += 1
-		end
-		_length = l - 1
-		return r
-	end
-
-	redef fun unshift(item)
-	do
-		var i = length - 1
-		while i > 0 do
-			self[i+1] = self[i]
-			i -= 1
-		end
-		self[0] = item
-	end
-
-	# Insert an element at a given position, following elements are shifted.
-	#
-	#     var a= [10, 20, 30, 40]
-	#     a.insert(100, 2)
-	#     a # -> [10, 20, 100, 30, 40]
-	fun insert(item: E, pos: Int)
-	do
-		enlarge(length + 1)
-		copy_to(pos, length-pos, self, pos + 1)
-		self[pos] = item
-	end
-
-	redef fun add(item) do self[length] = item
-
-	redef fun clear do _length = 0
-
-	redef fun remove(item) do remove_at(index_of(item))
-
-	redef fun remove_all(item)
-	do
-		var i = index_of(item)
-		while i >= 0 do
-			remove_at(i)
-			i = index_of_from(item, i)
-		end
-	end
-
-	redef fun remove_at(i)
-	do
-		var l = length
-		if i >= 0 and i < l then
-			var j = i + 1
-			while j < l do
-				self[j-1] = self[j]
-				j += 1
-			end
-			_length = l - 1
-		end
-	end
-
-	# Invert two elements in the array
-	#
-	#     var a = [10, 20, 30, 40]
-	#     a.swap_at(1, 3)
-	#     a # -> [10, 40, 30, 20]
-	fun swap_at(a: Int,b: Int)
-	do
-	    var e = self[a]
-	    self[a] = b
-	    self[b] = e
-	end
+# 
+# test
+# * 1
+# * 2
+# 
+# test
+# 
 end
 
 # Resizable one dimension array of objects.
