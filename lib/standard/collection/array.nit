@@ -629,6 +629,7 @@ class ArrayMapKeys[K: Object, E]
 	redef fun remove_all(key) do self.remove(key)
 end
 
+# test
 class ArrayMapValues[K: Object, E]
 	super RemovableCollection[E]
 	# The original map
