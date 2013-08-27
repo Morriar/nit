@@ -251,13 +251,13 @@ abstract class AbstractArray[E]
 end
 
 # Resizable one dimension array of objects.
-#
+# 
 # Arrays have a literal representation.
 #     var a = [12, 32, 8]
 #     # is equivalent with:
 #     var b = new Array[Int]
 #     b.push(12)
-#     b.push(32)
+#     b.push(32)sdsasda
 #     b.push(8)
 #     assert a == b
 class Array[E]
