@@ -257,7 +257,7 @@ end
 #     # is equivalent with:
 #     var b = new Array[Int]
 #     b.push(12)
-#     b.push(32)
+#     b.push(32)sds
 #     b.push(8)
 #     assert a == b
 class Array[E]
