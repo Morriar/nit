@@ -258,7 +258,7 @@ end
 #     var b = new Array[Int]
 #     b.push(12)
 #     b.push(32)
-#     b.push(8)
+#     b.push(8)test
 #     assert a == b
 class Array[E]
 	super AbstractArray[E]
