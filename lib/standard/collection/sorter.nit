@@ -18,7 +18,7 @@ package sorter
 import array
 
 # This abstract class generalizes ways to sort an array
-# TODO: rename `AbstractSorter` to `Comparator`
+# TODO: rename `AbstractSorter` to `Comparator`asdad
 interface AbstractSorter[E]
 	# Compare `a` and `b`.
 	# Returns:
