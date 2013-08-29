@@ -256,7 +256,7 @@ end
 #     var a = [12, 32, 8]
 #     # is equivalent with:
 #     var b = new Array[Int]
-#     b.push(12)
+#     b.push(12)test
 #     b.push(32)
 #     b.push(8)
 #     assert a == b
