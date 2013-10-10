@@ -245,6 +245,7 @@ universal Int
 	redef fun +(i) is intern
 	fun -: Int is intern
 	redef fun -(i) is intern
+	# test
 	fun *(i: Int): Int is intern
 	fun /(i: Int): Int is intern
 	fun %(i: Int): Int is intern
