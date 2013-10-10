@@ -247,6 +247,7 @@ universal Int
 	redef fun -(i) is intern
 	fun *(i: Int): Int is intern
 	fun /(i: Int): Int is intern
+	# e
 	fun %(i: Int): Int is intern
 
 	# `i` bits shift fo the left (aka <<)
