@@ -227,7 +227,7 @@ universal Float
 	fun to_i: Int is intern
 end
 
-# Native integer numbers.
+# Native integer numbers.testttt
 # Correspond to C int.
 universal Int
 	super Discrete
