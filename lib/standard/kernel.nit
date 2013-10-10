@@ -41,9 +41,6 @@ interface Object
 	# Implicitly, the default implementation, is `is`
 	fun ==(other: nullable Object): Bool do return self is other
 
-	# Have `self` and `other` different values?
-	##
-	# != is equivalent with "not ==".
 	fun !=(other: nullable Object): Bool do return not (self == other)
 
 	# Display self on stdout (debug only).
