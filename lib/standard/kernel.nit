@@ -228,7 +228,7 @@ universal Float
 end
 
 # Native integer numbers.
-# Correspond to C int.
+# Correspond to C int.huuu
 universal Int
 	super Discrete
 	redef type OTHER: Int
