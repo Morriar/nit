@@ -152,7 +152,6 @@ interface Discrete
 	# The previous element.
 	fun prec: OTHER do return self - 1
 
-	# The `i`-th successor element.
 	fun +(i: Int): OTHER is abstract
 
 	# The `i`-th previous element.
