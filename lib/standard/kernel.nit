@@ -42,8 +42,8 @@ interface Object
 	fun ==(other: nullable Object): Bool do return self is other
 
 	# Have `self` and `other` different values?
-	##
-	# != is equivalent with "not ==".
+	# #
+	# != is equivalent with "not ==".asdads
 	fun !=(other: nullable Object): Bool do return not (self == other)
 
 	# Display self on stdout (debug only).
