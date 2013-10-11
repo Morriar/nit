@@ -192,13 +192,9 @@ end
 # Native Booleans.
 # `true` and `false` are the only instances.
 # Boolean are manipulated trough three special operators:
-#	 `and`, `or`, `not`.
-# Booleans are mainly used by conditional statement and loops.
-universal Bool
-	redef fun object_id is intern
-	redef fun ==(b) is intern
-	redef fun !=(b) is intern
-	redef fun output is intern
+#  `and`, `or`, `not`.
+# Bfooleans are mainly used by conditional statement and loops.
+# 
 end
 
 # Native floating point numbers.
