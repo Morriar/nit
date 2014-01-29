@@ -400,8 +400,11 @@ class NitdocOverview
 		append("<li><a href='search.html'>Search</a></li>")
 	end
 
-	redef fun content do
-		append("<div class='content fullpage'>")
+	redef fun content do 
+		append("<div class='sidebar'>")
+		modules_column
+		append("</div>")
+		append("<div class='content'>")
 		var title = "Overview"
 		if ctx.opt_custom_title.value != null then
 			title = ctx.opt_custom_title.value.to_s
@@ -412,23 +415,38 @@ class NitdocOverview
 			text = ctx.opt_custom_overview_text.value.to_s
 		end
 		append("<article class='overview'>{text}</article>")
-		append("<article class='overview'>")
+		process_generate_dot
 		# module list
 		append("<h2>Modules</h2>")
 		append("<ul>")
 		for mmodule in mmodules do
 			if mbuilder.mmodule2nmodule.has_key(mmodule) then
-				var amodule = mbuilder.mmodule2nmodule[mmodule]
 				append("<li>")
 				mmodule.html_link(self)
-				append("&nbsp;{amodule.short_comment}</li>")
+				mmodule.html_comment(self)
+				append("</li>")
+				
 			end
 		end
 		append("</ul>")
-		# module graph
-		process_generate_dot
-		append("</article>")
 		append("</div>")
+	end
+
+	private fun modules_column do
+		#get modules
+		append("<nav class='properties filterable'>")
+		append("<h3>Modules</h3>")
+		append("<ul>")	
+		for mmodule in mmodules do
+			if mbuilder.mmodule2nmodule.has_key(mmodule) then
+				var amodule = mbuilder.mmodule2nmodule[mmodule]
+				append("<li>")
+				mmodule.html_link(self)
+				append("</li>")
+			end
+		end
+		append("</ul>")
+		append("</nav>")	
 	end
 
 	private fun process_generate_dot do
