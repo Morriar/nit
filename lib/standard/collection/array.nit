@@ -139,7 +139,7 @@ abstract class AbstractArrayRead[E]
 	redef fun iterator: ArrayIterator[E] do return new ArrayIterator[E](self)
 end
 
-# Resizable one dimension array of objects.
+# Resizable one dimension array of objects.test
 abstract class AbstractArray[E]
 	super AbstractArrayRead[E]
 	super Sequence[E]
