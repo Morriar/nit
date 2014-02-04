@@ -122,8 +122,10 @@ Nitdoc.UI = function() {
 		box.find("li").each(function() {
 			var span = $(this).find("span:first");
 			if(!types[span.html()]) types[span.html()] = {
-				title: span.attr("title"),
-				class: $(this).attr("class")
+				if (span != null){
+					title: span.attr("title"),
+					class: $(this).attr("class")
+				}
 			}
 		});
 
