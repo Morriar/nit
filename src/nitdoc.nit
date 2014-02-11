@@ -401,7 +401,29 @@ class NitdocOverview
 	end
 
 	redef fun content do
-		append("<div class='content fullpage'>")
+		append("<div class='sidebar'>")
+		modules_column
+		append("</div>")
+		append("<div class='content'>")
+		modules_doc
+		append("</div>")
+	end
+
+	private fun modules_column do
+		append("<nav class='properties filterable'>")
+		append("<h3>Modules</h3>")
+		append("<ul>")
+		for sidemmodule in mmodules do
+			if mbuilder.mmodule2nmodule.has_key(sidemmodule) then
+				var onemodule = mbuilder.mmodule2nmodule[sidemmodule]
+				append ("<li><a title='{onemodule.short_comment}' href='\#{sidemmodule.anchor}'>{sidemmodule.full_name}</a></li>")
+			end
+		end
+		append("</ul>")
+		append("</nav>")
+	end
+
+	private fun modules_doc do
 		var title = "Overview"
 		if ctx.opt_custom_title.value != null then
 			title = ctx.opt_custom_title.value.to_s
@@ -412,23 +434,14 @@ class NitdocOverview
 			text = ctx.opt_custom_overview_text.value.to_s
 		end
 		append("<article class='overview'>{text}</article>")
-		append("<article class='overview'>")
-		# module list
-		append("<h2>Modules</h2>")
-		append("<ul>")
-		for mmodule in mmodules do
-			if mbuilder.mmodule2nmodule.has_key(mmodule) then
-				var amodule = mbuilder.mmodule2nmodule[mmodule]
-				append("<li>")
-				mmodule.html_link(self)
-				append("&nbsp;{amodule.short_comment}</li>")
-			end
-		end
-		append("</ul>")
-		# module graph
 		process_generate_dot
-		append("</article>")
-		append("</div>")
+		# modules list
+		append("<h2>Modules</h2>")
+		append("<section class='modules'>")
+		for mmodule in mmodules do
+			if mbuilder.mmodule2nmodule.has_key(mmodule) then mmodule.html_full_desc(self)
+		end
+		append ("</section>")
 	end
 
 	private fun process_generate_dot do
@@ -1223,6 +1236,17 @@ redef class MModule
 			html_link(page)
 		end
 		page.append("</span>")
+	end
+
+	#Return the full description of the module decorated with html
+	private fun html_full_desc(page: NitdocPage) do
+		page.append("<article class='{self}' id='{anchor}'>")
+		page.append("<h3 class='signature' data-untyped-signature='{html_name}'>")
+		page.append("<span>")
+		self.html_link(page)
+		page.append("</span></h3>")
+		self.html_comment(page)
+		page.append("</article>")
 	end
 
 	# Return the full comment of the module decorated with html

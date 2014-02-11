@@ -121,31 +121,35 @@ Nitdoc.UI = function() {
 
 		box.find("li").each(function() {
 			var span = $(this).find("span:first");
-			if(!types[span.html()]) types[span.html()] = {
-				title: span.attr("title"),
-				class: $(this).attr("class")
+			if(span != null && !types[span.html()]) {
+				types[span.html()] = {
+					title: span.attr("title"),
+					class: $(this).attr("class")
+				}
 			}
 		});
 
 		for(var type in types) {
-			var a = $(document.createElement("a"))
-			.addClass("nitdoc-ui-filter-link")
-			.html(type)
-			.attr("title", "Hide " + types[type].title)
-			.attr("data-filter-class", types[type].class)
-			.toggle(
-				function() {
-					var hclass = $(this).attr("data-filter-class");
-					$(this).parents(filterSelector).find("li." + hclass).hide();
-					$(this).addClass("nitdoc-ui-filter-hidden")
-				},
-				function() {
-					var hclass = $(this).attr("data-filter-class");
-					$(this).parents(filterSelector).find("li." + hclass).show();
-					$(this).removeClass("nitdoc-ui-filter-hidden")
-				}
-			)
-			$(filterSelector).find(".nitdoc-ui-filter").append(a);
+			if (type != "null"){
+				var a = $(document.createElement("a"))
+				.addClass("nitdoc-ui-filter-link")
+				.html(type)
+				.attr("title", "Hide " + types[type].title)
+				.attr("data-filter-class", types[type].class)
+				.toggle(
+					function() {
+						var hclass = $(this).attr("data-filter-class");
+						$(this).parents(filterSelector).find("li." + hclass).hide();
+						$(this).addClass("nitdoc-ui-filter-hidden")
+					},
+					function() {
+						var hclass = $(this).attr("data-filter-class");
+						$(this).parents(filterSelector).find("li." + hclass).show();
+						$(this).removeClass("nitdoc-ui-filter-hidden")
+					}
+				)
+				$(filterSelector).find(".nitdoc-ui-filter").append(a);
+			}
 		}
 	}
 
