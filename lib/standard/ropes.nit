@@ -692,6 +692,7 @@ class CharRopeView
 		return tuple.curr_node.value[tuple.corrected_pos]
 	end
 
+	# test3
 	redef fun first do return self[0]
 
 	redef fun index_of(char)
