@@ -675,6 +675,7 @@ end
 #            Rope view classes             #
 ############################################
 
+# test
 class CharRopeView
 	super SequenceRead[Char]
 
