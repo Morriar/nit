@@ -236,7 +236,7 @@ abstract class AbstractArray[E]
 	end
 end
 
-# Resizable one dimension array of objects.
+# fooResizable one dimension array of objects.
 #
 # Arrays have a literal representation.
 #     var a = [12, 32, 8]
