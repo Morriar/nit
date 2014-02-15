@@ -1026,7 +1026,7 @@ redef class Collection[E]
 end
 
 redef class Array[E]
-	# Fast implementation
+	# Fast implementationtest
 	redef fun to_s
 	do
 		var s = new Buffer
