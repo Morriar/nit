@@ -224,6 +224,7 @@ end
 abstract class NitdocPage
 
 	var doc_header = new DocHeader
+	var doc_footer = new DocFooter
 	var ctx: NitdocContext
 	var shareurl = "."
 
@@ -252,12 +253,6 @@ abstract class NitdocPage
 	protected fun title: String is abstract
 
 	protected fun content is abstract
-
-	protected fun footer do
-		if ctx.opt_custom_footer_text.value != null then
-			append("<footer>{ctx.opt_custom_footer_text.value.to_s}</footer>")
-		end
-	end
 
 	# Generate a clickable graphviz image using a dot content
 	protected fun generate_dot(dot: String, name: String, alt: String) do
@@ -313,7 +308,10 @@ abstract class NitdocPage
 		append("<div class='page {footed}'>")
 		content
 		append("</div>")
-		footer
+		if ctx.opt_custom_footer_text.value != null then
+			doc_footer.text = ctx.opt_custom_footer_text.value.to_s
+		end
+		append(doc_footer.html)
 		append("<script data-main=\"{shareurl}/js/nitdoc\" src=\"{shareurl}/js/lib/require.js\"></script>")
 
 		# piwik tracking

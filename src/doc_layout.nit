@@ -34,7 +34,7 @@ end
 # menu of the html page
 class DocMenu
 	var items = new Array[String]
-	
+
 	# return html menu
 	fun html: String do
 		var buffer = new Buffer
@@ -43,6 +43,20 @@ class DocMenu
 		for item in items do buffer.append(item)
 		buffer.append("</ul>")
 		buffer.append("</nav>")
+		return buffer.to_s
+	end
+end
+
+# footer of the html page
+class DocFooter
+	var text writable = new String
+
+	# return html footer
+	fun html: String do
+		var buffer = new Buffer
+		buffer.append("<footer>")
+		buffer.append(text)
+		buffer.append("</footer>")
 		return buffer.to_s
 	end
 end
