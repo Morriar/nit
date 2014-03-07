@@ -19,6 +19,7 @@ module nitdoc
 import model_utils
 import modelize_property
 import markdown
+import doc_layout
 
 # The NitdocContext contains all the knowledge used for doc generation
 class NitdocContext
@@ -222,12 +223,16 @@ end
 # Nitdoc base page
 abstract class NitdocPage
 
+	var doc_header = new DocHeader
 	var ctx: NitdocContext
 	var shareurl = "."
 
 	init(ctx: NitdocContext) do
 		self.ctx = ctx
 		if ctx.opt_shareurl.value != null then shareurl = ctx.opt_shareurl.value.as(not null)
+		if ctx.opt_custom_menu_items.value != null then
+			doc_header.menu.items.add(ctx.opt_custom_menu_items.value.to_s)
+		end
 	end
 
 	protected fun head do
@@ -244,23 +249,7 @@ abstract class NitdocPage
 		append("<title>{self.title}{title}</title>")
 	end
 
-	protected fun menu do
-		if ctx.opt_custom_menu_items.value != null then
-			append(ctx.opt_custom_menu_items.value.to_s)
-		end
-	end
-
 	protected fun title: String is abstract
-
-	protected fun header do
-		append("<header>")
-		append("<nav class='main'>")
-		append("<ul>")
-		menu
-		append("</ul>")
-		append("</nav>")
-		append("</header>")
-	end
 
 	protected fun content is abstract
 
@@ -318,7 +307,7 @@ abstract class NitdocPage
 			append(" data-github-base-sha1='{ctx.opt_github_base_sha1.value.as(not null)}'")
 		end
 		append(">")
-		header
+		append(doc_header.html)
 		var footed = ""
 		if ctx.opt_custom_footer_text.value != null then footed = "footed"
 		append("<div class='page {footed}'>")
@@ -370,6 +359,9 @@ class NitdocOverview
 	init(ctx: NitdocContext) do
 		super(ctx)
 		self.mbuilder = ctx.mbuilder
+		# init menu
+		doc_header.menu.items.add("<li class='current'>Overview</li>")
+		doc_header.menu.items.add("<li><a href='search.html'>Search</a></li>")
 		# get modules
 		var mmodules = new HashSet[MModule]
 		for mmodule in mbuilder.model.mmodule_importation_hierarchy do
@@ -388,12 +380,6 @@ class NitdocOverview
 	end
 
 	redef fun title do return "Overview"
-
-	redef fun menu do
-		super
-		append("<li class='current'>Overview</li>")
-		append("<li><a href='search.html'>Search</a></li>")
-	end
 
 	redef fun content do
 		append("<div class='sidebar'>")
@@ -472,15 +458,12 @@ class NitdocSearch
 
 	init(ctx: NitdocContext) do
 		super(ctx)
+		# init menu
+		doc_header.menu.items.add("<li><a href='index.html'>Overview</a></li>")
+		doc_header.menu.items.add("<li class='current'>Search</li>")
 	end
 
 	redef fun title do return "Search"
-
-	redef fun menu do
-		super
-		append("<li><a href='index.html'>Overview</a></li>")
-		append("<li class='current'>Search</li>")
-	end
 
 	redef fun content do
 		append("<div class='content fullpage'>")
@@ -564,6 +547,10 @@ class NitdocModule
 		super(ctx)
 		self.mmodule = mmodule
 		self.mbuilder = ctx.mbuilder
+		# init menu
+		doc_header.menu.items.add("<li><a href='index.html'>Overview</a></li>")
+		doc_header.menu.items.add("<li class='current'>{mmodule.html_name}</li>")
+		doc_header.menu.items.add("<li><a href='search.html'>Search</a></li>")
 		# get local mclasses
 		for m in mmodule.in_nesting.greaters do
 			for mclassdef in m.mclassdefs do
@@ -586,13 +573,6 @@ class NitdocModule
 		else
 			return "{mmodule.html_name} module"
 		end
-	end
-
-	redef fun menu do
-		super
-		append("<li><a href='index.html'>Overview</a></li>")
-		append("<li class='current'>{mmodule.html_name}</li>")
-		append("<li><a href='search.html'>Search</a></li>")
 	end
 
 	redef fun content do
@@ -755,6 +735,16 @@ class NitdocClass
 	init(mclass: MClass, ctx: NitdocContext) do
 		super(ctx)
 		self.mclass = mclass
+		# init menu
+		doc_header.menu.items.add("<li><a href='index.html'>Overview</a></li>")
+		var public_owner = mclass.public_owner
+		if public_owner == null then
+			doc_header.menu.items.add("<li>{mclass.intro_mmodule.html_link_str(self)}</li>")
+		else
+			doc_header.menu.items.add("<li>{public_owner.html_link_str(self)}</li>")
+		end
+		doc_header.menu.items.add("<li class='current'>{mclass.html_name}</li>")
+		doc_header.menu.items.add("<li><a href='search.html'>Search</a></li>")
 		# load properties
 		var locals = new HashSet[MProperty]
 		for mclassdef in mclass.mclassdefs do
@@ -801,23 +791,6 @@ class NitdocClass
 		else
 			return "{mclass.html_name} class"
 		end
-	end
-
-	redef fun menu do
-		super
-		append("<li><a href='index.html'>Overview</a></li>")
-		var public_owner = mclass.public_owner
-		if public_owner == null then
-			append("<li>")
-			mclass.intro_mmodule.html_link(self)
-			append("</li>")
-		else
-			append("<li>")
-			public_owner.html_link(self)
-			append("</li>")
-		end
-		append("<li class='current'>{mclass.html_name}</li>")
-		append("<li><a href='search.html'>Search</a></li>")
 	end
 
 	redef fun content do
@@ -1181,7 +1154,7 @@ redef class MModule
 
 	# Return a link (html a tag) to the nitdoc module page
 	#	<a href="url" title="short_comment">html_name</a>
-	private fun html_link(page: NitdocPage) do
+	private fun html_link_str(page: NitdocPage): String do
 		if html_link_cache == null then
 			var res = new Buffer
 			if page.ctx.mbuilder.mmodule2nmodule.has_key(self) then
@@ -1191,7 +1164,11 @@ redef class MModule
 			end
 			html_link_cache = res.to_s
 		end
-		page.append(html_link_cache.as(not null))
+		return html_link_cache.as(not null)
+	end
+
+	private fun html_link(page: NitdocPage) do
+		page.append(html_link_str(page))
 	end
 	private var html_link_cache: nullable String
 
