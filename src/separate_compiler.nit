@@ -1230,7 +1230,7 @@ class SeparateCompilerVisitor
 			self.add("{res} = {recv}->attrs[{a.const_color}]; /* {a} on {recv.inspect} */")
 
 			# Check for Uninitialized attribute
-			if not ret isa MNullableType and not self.compiler.modelbuilder.toolcontext.opt_no_check_initialization.value then
+			if not ret isa MNullableType and not self.compiler.modelbuilder.toolcontext.opt_no_check_attr_isset.value then
 				self.add("if ({res} == NULL) \{")
 				self.add_abort("Uninitialized attribute {a.name}")
 				self.add("\}")
@@ -1244,7 +1244,7 @@ class SeparateCompilerVisitor
 			self.add("{res} = {recv}->attrs[{a.const_color}].{ret.ctypename}; /* {a} on {recv.inspect} */")
 
 			# Check for Uninitialized attribute
-			if ret.ctype == "val*" and not ret isa MNullableType and not self.compiler.modelbuilder.toolcontext.opt_no_check_initialization.value then
+			if ret.ctype == "val*" and not ret isa MNullableType and not self.compiler.modelbuilder.toolcontext.opt_no_check_attr_isset.value then
 				self.add("if ({res} == NULL) \{")
 				self.add_abort("Uninitialized attribute {a.name}")
 				self.add("\}")
