@@ -865,6 +865,9 @@ class SeparateCompiler
 		if self.modelbuilder.toolcontext.opt_tables_metrics.value then
 			display_sizes
 		end
+		if self.modelbuilder.toolcontext.opt_isset_checks_metrics.value then
+			display_isset_checks
+		end
 	end
 
 	fun display_sizes
@@ -908,6 +911,16 @@ class SeparateCompiler
 			for e in table do if e == null then holes += 1
 		end
 		print "\t{total}\t{holes}"
+	end
+
+	protected var isset_checks_count = 0
+	protected var attr_read_count = 0
+
+	fun display_isset_checks do
+		print "# total number of compiled attribute reads"
+		print "\t{attr_read_count}"
+		print "# total number of compiled isset-checks"
+		print "\t{isset_checks_count}"
 	end
 
 	redef fun compile_nitni_structs
@@ -1220,6 +1233,11 @@ class SeparateCompilerVisitor
 		var intromclassdef = a.intro.mclassdef
 		ret = ret.resolve_for(intromclassdef.bound_mtype, intromclassdef.bound_mtype, intromclassdef.mmodule, true)
 
+		if self.compiler.modelbuilder.toolcontext.opt_isset_checks_metrics.value then
+			self.compiler.attr_read_count += 1
+			self.add("count_attr_reads++;")
+		end
+
 		self.require_declaration(a.const_color)
 		if self.compiler.modelbuilder.toolcontext.opt_no_union_attribute.value then
 			# Get the attribute or a box (ie. always a val*)
@@ -1234,6 +1252,11 @@ class SeparateCompilerVisitor
 				self.add("if ({res} == NULL) \{")
 				self.add_abort("Uninitialized attribute {a.name}")
 				self.add("\}")
+
+				if self.compiler.modelbuilder.toolcontext.opt_isset_checks_metrics.value then
+					self.compiler.isset_checks_count += 1
+					self.add("count_isset_checks++;")
+				end
 			end
 
 			# Return the attribute or its unboxed version
@@ -1248,6 +1271,10 @@ class SeparateCompilerVisitor
 				self.add("if ({res} == NULL) \{")
 				self.add_abort("Uninitialized attribute {a.name}")
 				self.add("\}")
+				if self.compiler.modelbuilder.toolcontext.opt_isset_checks_metrics.value then
+					self.compiler.isset_checks_count += 1
+					self.add("count_isset_checks++;")
+				end
 			end
 
 			return res
