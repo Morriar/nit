@@ -206,6 +206,34 @@ redef class MClassDef
 	private var propdef_names = new HashSet[String]
 end
 
+redef class MAttribute
+	# The linked getter if any
+	var getter: nullable MMethod
+	# The linked setter if any
+	var setter: nullable MMethod
+end
+
+redef class MAttributeDef
+	# The linked getter if any
+	var getter: nullable MMethodDef
+	# The linked setter if any
+	var setter: nullable MMethodDef
+end
+
+redef class MMethod
+	# The linked MAttribute if self is an automatic getter
+	var getter_for: nullable MAttribute
+	# The linked MAttribute if self is an automatic setter
+	var setter_for: nullable MAttribute
+end
+
+redef class MMethodDef
+	# The linked MAttributeDef if self is an automatic getter
+	var getter_for: nullable MAttributeDef
+	# The linked MAttributeDef if self is an automatic setter
+	var setter_for: nullable MAttributeDef
+end
+
 redef class MPropDef
 	# Does the MPropDef contains a call to super or a call of a super-constructor?
 	# Subsequent phases of the frontend (esp. typing) set it if required
@@ -677,6 +705,12 @@ redef class AAttrPropdef
 				self.mreadpropdef = mreadpropdef
 				modelbuilder.mpropdef2npropdef[mreadpropdef] = self
 				mreadpropdef.mdoc = mpropdef.mdoc
+
+				# link getter to attribute
+				mreadprop.getter_for = mpropdef.mproperty
+				mpropdef.mproperty.getter = mreadprop
+				mreadpropdef.getter_for = mpropdef
+				mpropdef.getter = mreadpropdef
 			end
 
 			var nwritable = self.n_writable
@@ -697,6 +731,12 @@ redef class AAttrPropdef
 				self.mwritepropdef = mwritepropdef
 				modelbuilder.mpropdef2npropdef[mwritepropdef] = self
 				mwritepropdef.mdoc = mpropdef.mdoc
+
+				# link setter to attribute
+				mwriteprop.setter_for = mpropdef.mproperty
+				mpropdef.mproperty.setter = mwriteprop
+				mwritepropdef.setter_for = mpropdef
+				mpropdef.setter = mwritepropdef
 			end
 		else
 			# New attribute style
@@ -724,6 +764,12 @@ redef class AAttrPropdef
 			modelbuilder.mpropdef2npropdef[mreadpropdef] = self
 			mreadpropdef.mdoc = mpropdef.mdoc
 
+			# link getter to attribute
+			mreadprop.getter_for = mpropdef.mproperty
+			mpropdef.mproperty.getter = mreadprop
+			mreadpropdef.getter_for = mpropdef
+			mpropdef.getter = mreadpropdef
+
 			var writename = name + "="
 			var nwritable = self.n_writable
 			var mwriteprop = modelbuilder.try_get_mproperty_by_name(nid2, mclassdef, writename).as(nullable MMethod)
@@ -750,6 +796,12 @@ redef class AAttrPropdef
 			self.mwritepropdef = mwritepropdef
 			modelbuilder.mpropdef2npropdef[mwritepropdef] = self
 			mwritepropdef.mdoc = mpropdef.mdoc
+
+			# link setter to attribute
+			mwriteprop.setter_for = mpropdef.mproperty
+			mpropdef.mproperty.setter = mwriteprop
+			mwritepropdef.setter_for = mpropdef
+			mpropdef.setter = mwritepropdef
 		end
 	end
 
