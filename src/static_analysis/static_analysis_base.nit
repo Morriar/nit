@@ -24,10 +24,10 @@ class StaticAnalysis
 	type FLOW: FlowSet
 
 	# the in set for the currently visited node
-	var current_inset: FLOW protected writable
+	var current_inset: FLOW writable
 
 	# the out set for the currently visited node
-	var current_outset: FLOW protected writable
+	var current_outset: FLOW writable
 
 	# sets at the entry of each node
 	var insets = new HashMap[ANode, FLOW]
@@ -180,7 +180,7 @@ redef class ALoopExpr
 	end
 end
 
-redef class AConcreteMethPropdef
+redef class AMethPropdef
 	redef fun accept_forward_analysis(v) do
 		if not v.no_inter and v.insets.has_key(self) then
 			v.current_inset = v.insets[self]
