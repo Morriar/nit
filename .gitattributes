@@ -4,6 +4,4 @@ parser_prod.nit		-diff
 lexer.nit		-diff
 tables_nit.c		-diff
 c_src/**		-diff
-sfdsf
 tests/sav/**/*.res	-whitespace
-sdfsdf
