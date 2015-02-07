@@ -6,4 +6,3 @@ tables_nit.c		-diff
 c_src/**		-diff
 sfdsf
 tests/sav/**/*.res	-whitespace
-sdfsdf
