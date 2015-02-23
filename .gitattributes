@@ -6,4 +6,3 @@ tables_nit.c		-diff
 c_src/**		-diff
 
 tests/sav/**/*.res	-whitespace
-LOL
