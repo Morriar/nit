@@ -15,9 +15,9 @@
 # Analyze a python library
 module analyzer
 
-import parse_py
+# import parse_py
 import parse_rst
-import metrics
+# import metrics
 import opts
 import template
 
@@ -37,12 +37,15 @@ class Analyzer
 	# --batch
 	var opt_batch = new OptionBool("Explore pylib/ recursively looking for libraries", "--batch")
 
+	# --compile
+	var opt_compile = new OptionBool("Try to compile generated files with nitc", "--compile")
+
 	# Option Context
 	var opts = new OptionContext
 
 	init do
 		opts.options.add_all(
-			[opt_py_metrics, opt_rst_metrics, opt_gen_nit, opt_gen_md, opt_gen_doc, opt_batch])
+			[opt_py_metrics, opt_rst_metrics, opt_gen_nit, opt_gen_md, opt_gen_doc, opt_batch, opt_compile])
 	end
 
 	# Start the analisys for `args`
@@ -68,51 +71,51 @@ class Analyzer
 	end
 
 	private fun batch_mode(python_dir, nit_dir: String) do
-		var pym = py_csv
-		var rstm = rst_csv
+		# var pym = py_csv
+		# var rstm = rst_csv
 		var libs = new Array[PyLib]
 		for name in python_dir.files do
 			var pylib = file_mode(python_dir / name, nit_dir / name)
-			pylib.py.csv_record(pym)
-			pylib.rst.csv_record(rstm)
+			# pylib.py.csv_record(pym)
+			# pylib.rst.csv_record(rstm)
 			libs.add pylib
 		end
-		if opt_py_metrics.value then
-			print "## in .py\n"
-			var headers = ["LOC", "LOD", "NBC", "NBCC", "NBM", "NBCM", "NBF", "NBCF"]
-			print "| --------------|{"-------|" * headers.length}"
-			print "| name\t\t| {headers.join("\t| ")}\t|"
-			print "| --------------|{"-------|" * headers.length}"
-			for lib in libs do
-				var p = lib.py
-				var n = lib.name
-				var l = [p.loc, p.lod, p.nbc, p.nbcc, p.nbm, p.nbcm, p.nbf, p.nbcf: Object]
-				var space = "\t"
-				if n.length < 5 then space = space * 2
-				print "| {lib.name}{space}| {l.join("\t| ")}\t|"
-			end
-			print "| --------------|{"-------|" * headers.length}\n"
-		end
-		if opt_rst_metrics.value then
-			print "## in .rst\n"
-			var headers = ["LOD", "NBCC", "NBCM", "NBCF"]
-			print "| --------------|{"-------|" * headers.length}"
-			print "| name\t\t| {headers.join("\t| ")}\t|"
-			print "| --------------|{"-------|" * headers.length}"
-			for lib in libs do
-				var r = lib.rst
-				var n = lib.name
-				var l = [r.lod, r.nbcc, r.nbcm, r.nbcf: Object]
-				var space = "\t"
-				if n.length < 5 then space = space * 2
-				print "| {lib.name}{space}| {l.join("\t| ")}\t|"
-			end
-			print "| --------------|{"-------|" * headers.length}\n"
-
-			print ""
-		end
-		pym.write_to_file("report_python.csv")
-		rstm.write_to_file("report_rst.csv")
+		# if opt_py_metrics.value then
+			# print "## in .py\n"
+			# var headers = ["LOC", "LOD", "NBC", "NBCC", "NBM", "NBCM", "NBF", "NBCF"]
+			# print "| --------------|{"-------|" * headers.length}"
+			# print "| name\t\t| {headers.join("\t| ")}\t|"
+			# print "| --------------|{"-------|" * headers.length}"
+			# for lib in libs do
+				# var p = lib.py
+				# var n = lib.name
+				# var l = [p.loc, p.lod, p.nbc, p.nbcc, p.nbm, p.nbcm, p.nbf, p.nbcf: Object]
+				# var space = "\t"
+				# if n.length < 5 then space = space * 2
+				# print "| {lib.name}{space}| {l.join("\t| ")}\t|"
+			# end
+			# print "| --------------|{"-------|" * headers.length}\n"
+		# end
+		# if opt_rst_metrics.value then
+		#	print "## in .rst\n"
+		#	var headers = ["LOD", "NBCC", "NBCM", "NBCF"]
+		#	print "| --------------|{"-------|" * headers.length}"
+		#	print "| name\t\t| {headers.join("\t| ")}\t|"
+		#	print "| --------------|{"-------|" * headers.length}"
+		#	for lib in libs do
+		#		var r = lib.rst
+		#		var n = lib.name
+		#		var l = [r.lod, r.nbcc, r.nbcm, r.nbcf: Object]
+		#		var space = "\t"
+		#		if n.length < 5 then space = space * 2
+		#		print "| {lib.name}{space}| {l.join("\t| ")}\t|"
+		#	end
+		#	print "| --------------|{"-------|" * headers.length}\n"
+        #
+		#	print ""
+		# end
+		# pym.write_to_file("report_python.csv")
+		# rstm.write_to_file("report_rst.csv")
 	end
 
 	private fun file_mode(python_dir, nit_dir: String): PyLib do
@@ -125,6 +128,9 @@ class Analyzer
 		end
 		if opt_gen_md.value then
 			nitlib.md = pylib.rst.to_md_file("{nitlib.path}/README.md")
+		end
+		if opt_compile.value then
+			nitlib.nit.compile_to("{nitlib.nit.path}.o")
 		end
 		if opt_gen_doc.value then
 			nitlib.nitdoc

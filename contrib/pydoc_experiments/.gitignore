@@ -1,5 +1,6 @@
 nit/
 python/
-nit/
-python/
+Python-2.7.10
+nit_compile/
 *.csv
+py_builtins

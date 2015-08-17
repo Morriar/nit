@@ -1,18 +1,39 @@
 #!/usr/bin/env python
 
-# Translate python API to nit.
+""" Translate python API to nit. """
 
 import inspect, types
 import os, sys
 
-INDENT=0
+from os import listdir, mkdir
+from os.path import isfile, isdir, basename
 
-def wi(*args):
+from StringIO import StringIO
+
+from modulefinder import ModuleFinder
+
+# utils
+
+INDENT = 0
+
+NIT_KWS = [
+    'true', 'false', 'type', 'package', 'module', 'new', 'label', 'and',
+    'abort', 'or', 'end', 'loop', 'in', 'self', 'isset'
+]
+
+BUILTIN = ['readline', 'gettext', 'datetime', 'base64', 'socket', 'main']
+
+BUILTIN_CLASSES = [
+    "Sys", "Object", "Tuple", "Dict", "Set", "List", 'Random',
+    'BaseError', 'Exception', 'Error', 'PyError', 'ValueError', 'IOError',
+    'Type', 'Module', 'Class', 'Property', 'Instancemethod', 'Local']
+
+def wi(out, *args):
     """ Function to print lines indented according to level """
 
-    if INDENT: print ' '*INDENT,
-    for arg in args: print arg,
-    print
+    if INDENT: out.write(' '*INDENT)
+    for arg in args: out.write(arg)
+    out.write('\n')
 
 def indent():
     """ Increase indentation """
@@ -26,185 +47,381 @@ def dedent():
     global INDENT
     INDENT -= 4
 
-def describe_builtin(obj):
-    """ Describe a builtin function """
+# Python model
 
-    name = nit_method_name(obj.__name__)
-    sign = ''
-# Built-in functions cannot be inspected by
-# inspect.getargspec. We have to try and parse
-# the __doc__ attribute of the function.
-    docstr = obj.__doc__
-    args = []
+class PyModel:
+    """ A container for a set of PyModule """
 
-    if docstr:
-        items = docstr.split('\n')
-        if items:
-            func_descr = items[0]
-            s = func_descr.replace(obj.__name__,'')
-            idx1 = s.find('(')
-            idx2 = s.find(')',idx1)
-            if idx1 != -1 and idx2 != -1 and (idx2>idx1+1):
-                args.append(s[idx1+1:idx2])
+    # Modules contained by this model associated to their names
+    modules = dict()
 
-    for arg in args:
-        sign += nit_param_name(arg)
-        if arg != args[-1]: sign += ', '
+class PyEntity(object):
+    """ A Python entity that have a name and a doc string """
 
-    nit_comment(obj)
-    wi('fun %s%s is abstract' % (name, sign))
+    def nit_doc(self, out):
+        """ Translate a python DocString to a nit MDoc """
 
-    print
-
-def describe_func(obj):
-    """ Describe the function object passed as argument.
-    If this is a method object, the second argument will
-    be passed as True """
-
-    try:
-        arginfo = inspect.getargspec(obj)
-    except TypeError:
-        print
-        return
-
-    name = nit_method_name(obj.__name__)
-    sign = ''
-    args = arginfo[0]
-    argsvar = arginfo[1]
-
-    if args:
-        sign = '('
-        if args[0] == 'self':
-            args.pop(0)
-
-        for arg in args:
-            sign += nit_param_name(arg)
-            if arg != args[-1]: sign += ', '
-
-        if len(args) > 0:
-            sign += ': Object'
-
-        sign += ')'
-
-# if arginfo[1]:
-#     wi('\t-Positional Args Param: %s' % arginfo[1])
-# if arginfo[2]:
-#     wi('\t-Keyword Args Param: %s' % arginfo[2])
-
-    nit_comment(obj)
-    if name == "init":
-        wi('init%s do end' % sign)
-    else:
-        wi('fun %s%s is abstract' % (name, sign))
-
-    print
-
-def describe_klass(obj):
-    """ Describe the class object passed as argument,
-    including its methods """
-
-    name = nit_class_name(obj.__name__)
-
-    nit_comment(obj)
-    wi('class %s' % name)
-
-    indent()
-
-    bases = obj.__bases__
-    for base in bases:
-        base = nit_class_name(base.__name__)
-        if base != "Object":
-            wi('super %s' % base)
-    if len(bases) > 0: wi('')
-
-    count = 0
-
-    for name in obj.__dict__:
-        item = getattr(obj, name)
-        if inspect.ismethod(item):
-            count += 1
-            describe_func(item)
-
-    dedent()
-    wi('end')
-
-    print
-
-def describe(module):
-    """ Describe the module object passed as argument
-    including its classes and functions """
-
-    nit_comment(module)
-    wi('module %s\n' % module.__name__)
-
-    # imports
-    # for name, val in globals().items():
-        # if isinstance(val, types.ModuleType):
-            # print "import %s" % nit_method_name(val.__name__)
-    # print ""
-
-    count = 0
-    classes = set()
-
-    for name in dir(module):
-        obj = getattr(module, name)
-        if inspect.isclass(obj):
-            if obj.__name__ not in classes:
-                count += 1; describe_klass(obj); classes.add(obj.__name__)
-        if inspect.ismethod(obj):
-            count +=1 ; describe_func(obj)
-
-    for name in dir(module):
-        obj = getattr(module, name)
-        if inspect.isfunction(obj):
-            count +=1 ; describe_func(obj)
-        # elif inspect.isbuiltin(obj):
-            # count += 1; describe_builtin(obj)
-
-    if count==0:
-        wi('# no members')
-
-def nit_comment(obj):
-    """ Translate a python DocString to a nit MDoc """
-
-    doc = obj.__doc__
-    if doc:
-        lines = doc.split('\n')
-        if not lines[0]: lines.pop(0)
-        if not lines[-1]: lines.pop(len(lines) - 1)
+        if not self.doc or not isinstance(self.doc, basestring): return
+        lines = self.doc.split('\n')
+        i = 0
         for line in lines:
-            wi('# %s' % line.strip())
+            if i == 0 or i == len(lines - 1):
+                line = line.strip()
+                if not line: continue
+            wi(out, '# %s' % line.strip())
 
-def nit_class_name(name):
-    """ Translate a python class name into a valid nit class name """
-    name = name[0].upper() + name[1:]
-    if name == "Error": return "PyError"
-    return name
+    def _nit_name(self):
+        """ Translate a python name to a nit valid one """
+        name = self.name
+        if name.startswith("__"): name = name[2:]
+        if name.endswith("__"): name = name[0:-2]
+        if name.startswith("_"): name = "private" + name
+        if name.startswith("<"): name = name[1:]
+        if name.endswith(">"): name = name[0:-1]
+        name = name.lower()
+        name = name.replace('-', '_')
+        if name in NIT_KWS: return 'py_' + name
+        if name in BUILTIN: return 'py_' + name
+        return name
 
-def nit_method_name(name):
-    """ Translate a python method name into a valid nit method name """
-    if name.startswith("__"): name = name[2:]
-    if name.endswith("__"): name = name[0:-2]
-    if name.startswith("_"): name = name[1:]
-    return name
+class PyPackage(PyEntity):
+    """ A Python package (dir containing modules and other packages """
 
-def nit_param_name(name):
-    """ Translate a python parameter name into a valid nit one """
-    if name == "type": return "ttype"
-    if name == "true": return "ttrue"
-    if name == "false": return "ffalse"
-    if name.startswith("_"): name = name[1:]
-    return name
+    def __init__(self, model, path):
+        self.path = path
+        self.model = model
+        self.name = basename(path)
+        self.nit_name = self._nit_name()
+
+    def subpackages(self):
+        path = self.path
+        packages = dict()
+	for d in sorted(listdir(path)):
+            if d == "test" or d == "tests": continue
+            p = path + "/" + d
+            if not isdir(p): continue
+            pack = PyPackage(model, p)
+            packages[pack.name] = pack
+        return packages
+
+    def submodules(self):
+	modules = dict()
+        path = self.path
+	for f in sorted(listdir(path)):
+            p = path + "/" + f
+            if not isfile(p): continue
+            name, ext = os.path.splitext(p)
+            if ext != '.py': continue
+            name = basename(name)
+            if name == "__init__": continue
+            mod = PyModule(model, name)
+            modules[mod.name] = mod
+        return modules
+
+    def to_nit(self, out_dir):
+        pack_outdir = out_dir + '/' + self.nit_name
+        if not isdir(pack_outdir):
+            mkdir(pack_outdir)
+        for name, mod in sorted(self.submodules().iteritems()):
+            INDENT = 0
+            mod.load_imports()
+            nit = mod.to_nit()
+            f = open(pack_outdir + '/' + mod.nit_name + '.nit', 'w')
+            f.write(nit.getvalue())
+            f.close()
+            nit.close()
+        for name, pack in self.subpackages().iteritems():
+            pack.to_nit(pack_outdir)
+        if not self.has_mainmodule():
+            f = open(pack_outdir + '/' + self.nit_name + '.nit', 'w')
+            f.write("module %s # autogenerated" % self.nit_name)
+            f.close()
+
+    def has_mainmodule(self):
+        for name in self.submodules():
+            if name == self.name: return True
+        return False
+
+class PyModule(PyEntity):
+    """ A Python module (file.py) extracted from python """
+
+    def __init__(self, model, name):
+        """ Inspect `module` object to build self """
+
+        self.model = model
+        # self.path = path
+        self.imports = dict()
+        self.classes = dict()
+        self.name = name
+        self.doc = ""
+        self.nit_name = self._nit_name()
+
+        # if not name:
+            # sys.path.append(path)
+            # name = basename(path).replace('.py','')
+
+        try:
+            module = __import__(name)
+        except Exception:
+            return
+
+        module = __import__(name)
+        self.name = module.__name__
+        self.doc = module.__doc__
+        self.obj = module
+
+        sys = PyClass(self, None, 'Sys')
+        self.classes[sys.nit_name] = sys
+
+        for name in dir(module):
+            obj = getattr(module, name)
+            if inspect.isclass(obj):
+                klass = PyClass(self, obj)
+                self.classes[klass.nit_name] = klass
+            if inspect.isfunction(obj):
+                fun = PyFunction(obj, sys)
+
+    def load_imports(self):
+        """ Load module imports """
+
+        if not hasattr(self, 'obj'): return
+        for name, mod in inspect.getmembers(self.obj, inspect.ismodule):
+            if name == self.name: continue
+            if name.startswith('_'): continue
+            if name in model.modules:
+                self.imports[name] = model.modules[name]
+                continue
+            mmod = PyModule(model, name)
+            model.modules[name] = mmod
+            self.imports[name] = mmod
+
+    def to_nit(self):
+        """ Describe the module object passed as argument
+        including its classes and functions """
+
+        print "Process %s" % self.name
+
+        out = StringIO()
+
+        self.nit_doc(out)
+        wi(out, 'module %s\n' % self.nit_name)
+
+        # imports
+        nit_imports = set()
+        for val in self.imports.values():
+            wi(out, 'import %s' % (val.nit_name))
+        wi(out, 'import builtins')
+        wi(out, '')
+
+        for val in self.classes.values():
+            val.to_nit(out)
+            wi(out, '')
+
+        return out
+
+    def has_class(self, cls):
+        """ Is there a class declared with `name` in self or its ancestors? """
+
+        for name in self.classes:
+            if cls.nit_name == name: return True
+        for mod in self.imports.values():
+            if mod.has_class(cls): return True
+        return False
+
+class PyClass(PyEntity):
+    """ A Python class extracted from python """
+
+    def __init__(self, py_module, klass=None, builtin_name=None):
+        """ Inspect `klass` object to build self """
+
+        self.py_module = py_module
+        self.bases = dict()
+        self.methods = dict()
+        self.doc = ""
+
+        if not klass:
+            self.name = builtin_name
+            self.nit_name = self._nit_name()
+            return
+
+        self.name = klass.__name__
+        self.nit_name = self._nit_name()
+        self.doc = klass.__doc__
+
+        for val in klass.__bases__:
+            sklass = PyClass(py_module, val)
+            self.bases[sklass.nit_name] = sklass
+
+        for name in klass.__dict__:
+            if name == "__abstractmethods__": continue
+            obj = getattr(klass, name)
+            if inspect.ismethod(obj):
+                meth = PyFunction(obj, self)
+                self.methods[meth.nit_name] = meth
+
+    def _nit_name(self):
+        """ Translate a python class name into a valid nit class name """
+        name = self.name
+        if name.startswith("_"): return 'Priv' + name
+        name = name[0].upper() + name[1:]
+        return name
+
+    def to_nit(self, out):
+        """ Describe the class object passed as argument,
+        including its methods """
+
+        redef = self.kw_redef()
+        vis = ''
+        if not redef: vis = self.kw_visibility()
+
+        self.nit_doc(out)
+        wi(out, '%sclass %s' % (redef, self.nit_name))
+        indent()
+
+        if not redef:
+            for name in self.bases:
+                if name == "Object": continue
+                if name == self.nit_name: continue
+                wi(out, 'super %s' % name)
+
+        wi(out, '')
+
+        for val in self.methods.values():
+            val.to_nit(out)
+            wi(out, '')
+
+        dedent()
+        wi(out, 'end')
+
+    def has_method(self, method):
+        """ Is there a method declared with `name` in self or its ancestors? """
+
+        for name in self.methods:
+            if method.nit_name == name: return True
+        for base in self.bases.values():
+            if base.has_method(method): return True
+        return False
+
+    def next_method_definition(self, method):
+        for base in self.bases.values():
+            if method.nit_name in base.methods.keys(): return base
+            nex = base.next_method_definition(method)
+            if nex != None: return nex
+        return None
+
+    def kw_redef(self):
+        if self.nit_name in BUILTIN_CLASSES:
+            return 'redef '
+        for mod in self.py_module.imports.values():
+            if mod.has_class(self): return 'redef '
+        return ''
+
+    def kw_visibility(self):
+        if not self.name.startswith('__') and self.name.startswith('_'):
+            return 'private '
+        return ''
+
+class PyFunction(PyEntity):
+    """ A Python function extracted from python"""
+
+    def __init__(self, func, py_class=None):
+        """ Describe the function object passed as argument.
+        If this is a method object, the second argument will
+        be passed as True """
+        # TODO differenciate function and methods
+        # TODO builtins
+        # TODO varargs
+
+        self.name = func.__name__
+        self.doc = func.__doc__
+        self.py_class = py_class
+        self.params = dict()
+        self.nit_name = self._nit_name()
+
+        try:
+            arginfo = inspect.getargspec(func)
+        except TypeError:
+            return
+        args = arginfo[0]
+        if args:
+            for arg in args:
+                self.params[arg] = arg
+
+    def nit_param_name(self, name):
+        """ Translate a python parameter name into a valid nit one """
+        if name.startswith("__"): name = name[2:]
+        if name.endswith("__"): name = name[0:-2]
+        if name.startswith("_"): name = name[1:]
+        name = name.lower()
+        if name in NIT_KWS: return 'py_' + name
+        return name
+
+    def to_nit(self, out):
+        """ Describe the function object passed as argument.
+        If this is a method object, the second argument will
+        be passed as True """
+
+        self.nit_doc(out)
+
+        if self.nit_name == "init":
+            wi(out, 'init do end')
+            return
+
+        nit_params = set()
+        for param in self.params:
+            if param == "self": continue
+            nit_params.add(self.nit_param_name(param))
+
+        sign = ''
+        if self.is_intro():
+            if self.is_private: sign += 'private '
+            sign += 'fun '
+            sign += self.nit_name
+            if nit_params: sign += '(' + ', '.join(nit_params) + ': Object)'
+        else:
+            sign += 'redef fun '
+            sign += self.nit_name
+            sign += '(' + ', '.join(nit_params) + ')'
+
+        wi(out, '%s is abstract' % sign)
+
+    def next_definition(self):
+        return self.py_class.next_method_definition(self)
+
+    def has_next_definition(self):
+        return self.next_definition() != None
+
+    def is_intro(self):
+        return not self.has_next_definition()
+
+    def is_private(self):
+        return not self.name.startswith('__') and self.name.startswith('_')
 
 if __name__ == "__main__":
     import sys
     from os import path
 
     if len(sys.argv)<2:
-        sys.exit('Usage: %s <module>' % sys.argv[0])
+        sys.exit('Usage: %s <py_path> <nit_path>' % sys.argv[0])
 
-    path = sys.argv[1]
-    sys.path.append(path)
-    name = os.path.basename(path).replace('.py','')
-    mod = __import__(name)
-    describe(mod)
+    model = PyModel()
+
+    if len(sys.argv)==2:
+        py_file = sys.argv[1]
+        name, ext = os.path.splitext(py_file)
+        if ext != '.py':
+            sys.exit('Accept only .py file')
+
+        name = basename(name)
+        mod = PyModule(model, name)
+        mod.load_imports()
+        nit = mod.to_nit()
+        # print nit.getvalue()
+        nit.close()
+
+    else:
+        py_path = sys.argv[1]
+        nit_path = sys.argv[2]
+
+        root = PyPackage(model, py_path)
+        root.to_nit(nit_path)

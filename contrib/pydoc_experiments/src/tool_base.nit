@@ -93,9 +93,21 @@ end
 # Python source file representation
 class PyFile
 	super DocFile
+
+	# Generate a NitFile containing `self` API translated to nit.
+	fun to_nit_file(path: String): NitFile do
+		var nit = new NitFile(path)
+		sys.system "./model.py {self.path} > {path}"
+		return nit
+	end
 end
 
 # Nit source file representation
 class NitFile
 	super DocFile
+
+	# Compile this file with nitc
+	fun compile_to(path: String) do
+		sys.system "nitc {self.path} -o {path}"
+	end
 end
