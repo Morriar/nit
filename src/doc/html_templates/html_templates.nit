@@ -578,11 +578,11 @@ end
 
 redef class ReadmeSection
 	redef var html_id is lazy do
-		return markdown_processor.emitter.decorator.strip_id(html_title.as(not null).to_s)
+		return doc.model.nitdoc_md_processor.emitter.decorator.strip_id(html_title.as(not null).to_s)
 	end
 
 	redef var html_title is lazy do
-		return markdown_processor.process(title.as(not null))
+		return doc.model.nitdoc_inline_processor.process(title.as(not null))
 	end
 end
 
@@ -592,7 +592,7 @@ redef class ReadmeArticle
 	redef var is_toc_hidden = true
 
 	redef fun render_body do
-		add markdown_processor.process(md.trim.write_to_string)
+		add doc.model.nitdoc_md_processor.process(md.write_to_string)
 	end
 end
 
