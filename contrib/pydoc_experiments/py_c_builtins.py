@@ -16,6 +16,7 @@ for d in sorted(listdir(py_path)):
 	name = basename(name)
 	if name.startswith('_'): continue
 	if name.endswith('module'): name = name[0:-6]
+	name = name.lower()
 	f = open(nit_path + '/' + name + '.nit', 'w')
 	f.write("module %s\n" % name)
 	f.write("import end\n")

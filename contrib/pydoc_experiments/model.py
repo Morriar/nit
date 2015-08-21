@@ -6,6 +6,7 @@ import inspect, types
 import os, sys
 import imp
 import importlib
+import warnings
 
 from os import listdir, mkdir
 from os.path import isfile, isdir, basename
@@ -23,12 +24,15 @@ NIT_KWS = [
     'abort', 'or', 'end', 'loop', 'in', 'self', 'isset'
 ]
 
-BUILTIN = ['gettext', 'datetime', 'base64', 'socket', 'main']
+# will produce conflicts with nit...
+BUILTIN = ['gettext', 'base64', 'socket', 'codecs', 'traceback', 'symbol']
 
 BUILTIN_CLASSES = [
     "Sys", "Object", "Tuple", "Dict", "Set", "List", 'Random',
     'BaseError', 'Exception', 'Error', 'PyError', 'ValueError', 'IOError', 'DBError',
     'Type', 'Module', 'Class', 'Property', 'Instancemethod', 'Local', 'Profiler']
+
+SKIP_MODULES = ['lib-tk', 'test', 'tests', 'idlelib']
 
 def wi(out, *args):
     """ Function to print lines indented according to level """
@@ -54,8 +58,35 @@ def dedent():
 class PyModel:
     """ A container for a set of PyModule """
 
-    # Modules contained by this model associated to their names
+    def __init__(self, base_path):
+        self.base_path = base_path
+
+    # List of packages contained in self associated to their name
+    packages = dict()
+
+    # Modules contained by this model associated to their name
     modules = dict()
+
+    def load_package(self, path, parent=None):
+        """ Load all packages from base_path recursively """
+        root = PyPackage(self, path, parent)
+
+        for d in sorted(listdir(path)):
+            p = path + "/" + d
+            if not isdir(p): continue
+            if d.startswith("plat-"): continue
+            if d in SKIP_MODULES: continue
+            pack = self.load_package(p, root)
+
+        return root
+
+    def load_module(self, path, package):
+        "Load a the module at `path` inside as a submodule of `package`"
+        return PyModule(self, path, package)
+
+    def parse_modules(self):
+        for mod in self.modules.values():
+            mod.parse()
 
     def check_importation_loops(self):
         for mod1 in self.modules.values():
@@ -117,30 +148,39 @@ class PyPackage(PyEntity):
     """ A Python package (dir containing modules and other packages """
 
     def __init__(self, model, path, parent=None):
+
         self.path = path
         self.model = model
         self.name = basename(path)
-        self.nit_name = self._nit_name()
         self.parent = parent
-        self.subpackages = self._subpackages()
-        self.submodules = self._submodules()
+        self.nit_name = self._nit_name()
+        self.nit_import_name = self.nit_name
+        self.subpackages = dict()
+        self.submodules = dict()
 
-    def _subpackages(self):
-        path = self.path
-        packages = dict()
-	for d in sorted(listdir(path)):
-            if d == "test" or d == "tests": continue
-            if d.startswith("plat-"): continue
-            p = path + "/" + d
-            if not isdir(p): continue
-            pack = PyPackage(model, p, self)
-            packages[pack.name] = pack
-        return packages
+        print "Load package %s" % self.qual_name()
 
-    def _submodules(self):
-	modules = dict()
+        model.packages[self.qual_name()] = self
+        if parent != None: parent.subpackages[self.name] = self
 
-        print "load modules for %s" % self.nit_name
+        # Load source object
+        self.obj = self._load_object()
+
+        # Load sub modules
+        self._load_submodules()
+
+    def _load_object(self):
+        if self.is_root(): return None
+        try:
+            f, p, d = imp.find_module(self.name, [self.parent.path])
+            mod = imp.load_module(self.name, f, p, d)
+            return mod
+        except Exception as e:
+            print "Warning: Can't load package %s at %s" % (self.qual_name(), self.path)
+            # print "Cause: %s" % e
+
+    def _load_submodules(self):
+        """ Load all modules in `self` """
 
         path = self.path
 	for f in sorted(listdir(path)):
@@ -149,14 +189,14 @@ class PyPackage(PyEntity):
             name, ext = os.path.splitext(p)
             if ext != '.py': continue
             name = basename(name)
+            if name == "test": continue
+            if name.startswith("test_"): continue
             if name == "__init__": continue
             if name == "__main__": continue
-            name = self.qual_name() + '.' + name
-            mod = PyModule(model, name)
-            modules[mod.name] = mod
-        return modules
+            self.model.load_module(p, self)
 
     def to_nit(self, out_dir):
+        # print "Generate API for package %s" % self.qual_name()
         pack_outdir = out_dir + '/' + self.nit_name
         if not isdir(pack_outdir):
             mkdir(pack_outdir)
@@ -164,7 +204,6 @@ class PyPackage(PyEntity):
             pack.to_nit(pack_outdir)
         for name, mod in sorted(self.submodules.iteritems()):
             INDENT = 0
-            mod.load_imports()
             nit = mod.to_nit()
             f = open(pack_outdir + '/' + mod.nit_name + '.nit', 'w')
             f.write(nit.getvalue())
@@ -180,98 +219,157 @@ class PyPackage(PyEntity):
                 f.write("import %s\n" % mod.nit_name)
             f.close()
 
+    def is_root(self):
+        """ Does self has parent? """
+        return self.parent == None
+
     def has_mainmodule(self):
+        """ Does self has a mainmodule? (a module with the same name than self) """
         for name in self.submodules:
             if name == self.name: return True
         return False
 
     def qual_name(self):
-        if self.parent == None:
-            return self.name
-        if self.parent.parent == None:
-            return self.name
+        """ Get the qualified name of self (python.dotted.notation) """
+        if self.is_root(): return self.name
+        if self.parent.is_root(): return self.name
         return self.parent.qual_name() + "." + self.name
 
     def __str__(self):
-        return "<package:%s>" % nit_name
+        return "<package:%s>" % self.nit_name
 
 class PyModule(PyEntity):
     """ A Python module (file.py) extracted from python """
 
-    def __init__(self, model, name):
+    def __init__(self, model, path, py_package):
         """ Inspect `module` object to build self """
 
         self.model = model
-        # self.path = path
-        self.imports = dict()
-        self.classes = dict()
-        self.name = name
-        self.doc = ""
+        self.path = path
+        self.py_package = py_package
+        self.name = self._module_name()
+        self.shortname = self.name.split('.')[-1]
         self.nit_name = self._nit_name()
+        self.nit_import_name = self._nit_import_name()
+        self.classes = dict()
+        self.imports = dict()
 
-        # if not name:
-            # sys.path.append(path)
-            # name = basename(path).replace('.py','')
+        # print "Load module %s" % self.name
 
-        name = 'encodings.aliases'
-        # path = './Python-2.7.10/Lib/encodings/aliases.py'
-        print path
-        # print imp.find_module('aliases.py', path)
+        model.modules[self.name] = self
+        py_package.submodules[self.name] = self
+
+    def _module_name(self):
+        """ Extract the full name of the from its `path` """
+        name, ext = os.path.splitext(self.path)
+        if self.py_package != None and not self.py_package.is_root():
+            return "%s.%s" % (self.py_package.qual_name(), basename(name))
+        return basename(name)
+
+    def parse(self):
+        """ Parse `self` to extract imports and classes """
+        self.obj = self._load_object()
+        self.doc = self.obj.__doc__
+        self.imports = self._load_imports()
+
+        # sys = PyClass(self, None, 'Sys')
+        # self.classes[sys.nit_name] = sys
+        #
+        # for name in dir(self.obj):
+        #     obj = getattr(self.obj, name)
+        #     if inspect.isclass(obj):
+        #         klass = PyClass(self, obj)
+        #         self.classes[klass.nit_name] = klass
+        #     if inspect.isfunction(obj):
+        #         fun = PyFunction(obj, sys)
+
+    def _load_object(self):
+        """ Load a module by its `path`. `name` is used as the module key and not for import. """
+        name = self.shortname
+        path = self.py_package.path
         try:
-            module = imp.load_source(name, path)
-            # module = __import__(name)
-            # module = importlib.import_module(name, 'Lib')
-            print module
-        except ImportError:
-            print "Warning: Can't load module %s" % name
-            return
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                f, p, d = imp.find_module(name, [path])
+                mod = imp.load_module(self.name, f, p, d)
+                f.close()
+                return mod
+        except Exception as e:
+            print "Warning: can't load module %s at %s" % (name, path)
+            # print "Cause: %s" % e
+            return None
 
-        module = __import__(name)
-        self.name = module.__name__
-        self.doc = module.__doc__
-        self.obj = module
+    def _nit_name(self):
+        return self._to_nit_name(self.shortname)
 
-        sys = PyClass(self, None, 'Sys')
-        self.classes[sys.nit_name] = sys
+    def _nit_import_name(self):
+        parts = self.name.split('.')
+        qual = list()
+        for part in parts:
+            qual.append(self._to_nit_name(part))
+        return '::'.join(qual)
 
-        for name in dir(module):
-            obj = getattr(module, name)
-            if inspect.isclass(obj):
-                klass = PyClass(self, obj)
-                self.classes[klass.nit_name] = klass
-            if inspect.isfunction(obj):
-                fun = PyFunction(obj, sys)
+    def _to_nit_name(self, name):
 
-    def load_imports(self):
+        # Nitifiy
+        if name.startswith("_"): name = "private_" + name
+        name = name.lower()
+        name = name.replace('-', '_')
+
+        # Avoid conflicts with nit
+        if name in NIT_KWS: return 'py_' + name
+        if name in BUILTIN: return 'py_' + name
+
+        # Avoid modules with same names
+        names = set()
+        for p in self.model.modules.values(): names.add(p.shortname)
+        tmp = name
+        i = 0
+        while tmp in names:
+            i += 1
+            tmp = "%s%d" % (name, i)
+        if i > 0: name = tmp
+
+        return name
+
+    def _load_imports(self):
         """ Load module imports """
 
-        if self.name in self.model.modules.keys(): return
-        self.model.modules[self.name] = self
+        imports = dict()
 
         # print "load imports for %s" % self.name
         if not hasattr(self, 'obj'): return
 
+        pcks = self.model.packages
+        mods = self.model.modules
+        # print sorted(mods.keys())
         for import_name, mod in inspect.getmembers(self.obj, inspect.ismodule):
             name = mod.__name__
-            if name == self.name: continue
-            if name.startswith('_'): continue
-            # if self.py_package.parent != None:
-                # name = self.py_package.qual_name() + '.' + name
-            # print name
-            if name in model.modules:
-                self.imports[name] = model.modules[name]
-                continue
-            mmod = PyModule(model, name)
-            model.modules[name] = mmod
-            if not name in mmod.imports.keys():
-                self.imports[name] = mmod
-            mmod.load_imports()
+            if name in pcks.keys():
+                opck = pcks[name]
+                # Avoid dependency loop with parent packages
+                path = self.py_package.qual_name().split('.')
+                if name in path: continue
+                imports[name] = opck
+            elif name in mods.keys():
+                omod = mods[name]
+                # Avoid dependency loop with other modules
+                if self in omod.all_imports(): continue
+                imports[name] = omod
+            else:
+                print "Warning: can't get module %s from model" % name
+                imports[name] = None
+        return imports
+
+    def _name_to_path(self, name):
+        """ Try to translate a qualified module name to a valid file path """
+        return self.model.base_path + '/' + name.replace('.', '/') + '.py'
 
     def to_nit(self):
         """ Describe the module object passed as argument
         including its classes and functions """
 
-        print "Process %s" % self.name
+        # print "Process %s" % self.name
 
         out = StringIO()
 
@@ -280,8 +378,16 @@ class PyModule(PyEntity):
 
         # imports
         nit_imports = set()
-        for val in self.imports.values():
-            wi(out, 'import %s' % (val.nit_name))
+        for key, val in self.imports.iteritems():
+            if val == None:
+                if key.startswith('_'): continue
+                name = key.lower()
+                name = name.replace('.', '::')
+                if name in NIT_KWS: name = 'py_' + name
+                if name in BUILTIN: name = 'py_' + name
+                wi(out, 'import %s # unknown %s' % (name, key))
+                continue
+            wi(out, 'import %s # %s' % (val.nit_import_name, val.name))
         wi(out, 'import builtins')
         wi(out, '')
 
@@ -322,23 +428,17 @@ class PyModule(PyEntity):
         for mod in self.imports.values(): todos.add(mod)
         while len(todos) > 0:
             mod = todos.pop()
+            if mod == None: continue
             if mod in done: continue
+            if isinstance(mod, PyPackage): continue
             done.add(mod)
             for modd in mod.imports.values(): todos.add(modd)
 
         return done
 
-    def _nit_name(self):
-        name = self.name
-        name = name.split('.')[-1]
-        if name.startswith("_"): name = "private_" + name
-        name = name.lower()
-        name = name.replace('-', '_')
-        if name in NIT_KWS: return 'py_' + name
-        if name in BUILTIN: return 'py_' + name
-        return name
-
     def __str__(self):
+        if self.py_package != None:
+            return "<module:%s.%s>" % (self.py_package.qual_name(), self.nit_name)
         return "<module:%s>" % self.nit_name
 
 class PyClass(PyEntity):
@@ -366,7 +466,7 @@ class PyClass(PyEntity):
             self.bases[sklass.nit_name] = sklass
 
         for name in klass.__dict__:
-            if name == "__abstractmethods__": continue
+            if not hasattr(klass, name): continue
             obj = getattr(klass, name)
             if inspect.ismethod(obj):
                 meth = PyFunction(obj, self)
@@ -400,9 +500,9 @@ class PyClass(PyEntity):
 
         wi(out, '')
 
-        for val in self.methods.values():
-            val.to_nit(out)
-            wi(out, '')
+        # for val in self.methods.values():
+        #     val.to_nit(out)
+        #     wi(out, '')
 
         dedent()
         wi(out, 'end')
@@ -579,15 +679,28 @@ if __name__ == "__main__":
     if len(sys.argv)<2:
         sys.exit('Usage: %s <py_path> <nit_path>' % sys.argv[0])
 
-    model = PyModel()
+    # f, p, d = imp.find_module("zipfile", ["Python-2.7.10/Lib/"])
+    # print imp.load_module("zipfile", f, p, d)
+
+    # f, p, d = imp.find_module("idlelib", ["Python-2.7.10/Lib/"])
+    # print imp.load_module("idlelib", f, p, d)
+    # f, p, d = imp.find_module("TreeWidget", ["Python-2.7.10/Lib/idlelib"])
+    # print f, p, d
+    # print imp.load_module("Python-2.7.10/Lib/idlelib", f, p, d)
+    # f, p, d = imp.find_module("codecs", ["Python-2.7.10/Lib/"])
+    # print imp.load_module("codecs", f, p, d)
+
+    # f, p, d = imp.find_module("md5", ["Python-2.7.10/Lib/"])
+    # print f, p, d
+    # print imp.load_module("md5", f, p, d)
+    # print imp.load_source("md5", "Python-2.7.10/Lib/")
 
     if len(sys.argv)==2:
         py_file = sys.argv[1]
-        name = py_file.rstrip('.py')
-        name = basename(name)
-        mod = PyModule(model, name)
-        mod.load_imports()
-        model.check_importation_loops()
+        py_dir = os.path.dirname(py_file)
+        model = PyModel(py_dir)
+        mod = PyModule(model, py_file)
+        # model.check_importation_loops()
         nit = mod.to_nit()
         print nit.getvalue()
         nit.close()
@@ -596,5 +709,18 @@ if __name__ == "__main__":
         py_path = sys.argv[1].rstrip("/")
         nit_path = sys.argv[2].rstrip("/")
 
-        root = PyPackage(model, py_path)
+        model = PyModel(py_path)
+
+        root = model.load_package(py_path)
+        model.parse_modules()
+        # print root.subpackages.keys()
+
+        # for p in sorted(model.packages.keys()):
+        #     pck = model.packages[p]
+        #     print pck.qual_name(), ': ', pck.obj != None
+        #
+        # for p in sorted(model.modules.keys()):
+        #     pck = model.modules[p]
+        #     print pck.name, ': ', pck.obj != None
+
         root.to_nit(nit_path)

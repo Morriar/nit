@@ -14,4 +14,4 @@ for dirname, dirs, files in os.walk(path):
 		p = dirname + '/' + f
 		if f.endswith('.nit'):
 			print p
-			call(['nitc', p, '--no-cc', '-I', 'py_builtins', '-I', path, '-I', dirname])
+			call(['nitc', p, '--no-cc', '-I', 'py_libs/builtins', '-I', 'py_libs/modules', '-I', 'py_libs/python','-I', dirname, '--ignore-visibility'])

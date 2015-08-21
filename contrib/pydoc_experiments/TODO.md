@@ -1,9 +1,12 @@
 # Python
 
-* do not load kernel
-* load private modules
-* redef good parameters
+* check classes
+	* gen
+	* supers
+	* redefs
+
 * check redefs
+* redef good parameters
 
 * module phello__.foo
 * main wrong args (see timeit)
