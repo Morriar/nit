@@ -89,7 +89,7 @@ class ReadmeMdEmitter
 	#
 	# Called from `add_headline`.
 	private fun open_section(lvl: Int, title: String) do
-		var section = new ReadmeSection(title.escape_to_c, title, lvl, processor)
+		var section = new ReadmeSection(title.escape_to_c, title, lvl, phase.doc)
 		if current_section == null then
 			page.root.add_child(section)
 		else
@@ -132,7 +132,7 @@ class ReadmeMdEmitter
 	private fun open_article do
 		var section: DocComposite = page.root
 		if current_section != null then section = current_section.as(not null)
-		var article = new ReadmeArticle("mdarticle-{section.children.length}", null, processor)
+		var article = new ReadmeArticle("mdarticle-{section.children.length}", null, phase.doc)
 		section.add_child(article)
 		context.add article
 		push_article article
@@ -276,8 +276,8 @@ class ReadmeSection
 	# The depth is based on the markdown headline depth.
 	redef var depth
 
-	# Markdown processor used to process the section title.
-	var markdown_processor: MarkdownProcessor
+	# DocModel used to contextualize content.
+	var doc: DocModel
 
 	redef var is_hidden = false
 end
@@ -288,8 +288,8 @@ end
 class ReadmeArticle
 	super DocArticle
 
-	# Markdown processor used to process the article content.
-	var markdown_processor: MarkdownProcessor
+	# DocModel used to contextualize content.
+	var doc: DocModel
 
 	# Markdown content of this article extracted from the README file.
 	var md = new FlatBuffer
