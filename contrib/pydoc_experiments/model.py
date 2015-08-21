@@ -272,16 +272,16 @@ class PyModule(PyEntity):
         self.doc = self.obj.__doc__
         self.imports = self._load_imports()
 
-        # sys = PyClass(self, None, 'Sys')
-        # self.classes[sys.nit_name] = sys
-        #
-        # for name in dir(self.obj):
-        #     obj = getattr(self.obj, name)
-        #     if inspect.isclass(obj):
-        #         klass = PyClass(self, obj)
-        #         self.classes[klass.nit_name] = klass
-        #     if inspect.isfunction(obj):
-        #         fun = PyFunction(obj, sys)
+        sys = PyClass(self, None, 'Sys')
+        self.classes[sys.nit_name] = sys
+
+        for name in dir(self.obj):
+            obj = getattr(self.obj, name)
+            if inspect.isclass(obj):
+                klass = PyClass(self, obj)
+                self.classes[klass.nit_name] = klass
+            if inspect.isfunction(obj):
+                fun = PyFunction(obj, sys)
 
     def _load_object(self):
         """ Load a module by its `path`. `name` is used as the module key and not for import. """
@@ -391,9 +391,9 @@ class PyModule(PyEntity):
         wi(out, 'import builtins')
         wi(out, '')
 
-        # for val in self.classes.values():
-        #     val.to_nit(out)
-        #     wi(out, '')
+        for val in self.classes.values():
+            val.to_nit(out)
+            wi(out, '')
 
         return out
 
@@ -535,13 +535,14 @@ class PyClass(PyEntity):
         todos = set()
         # look in direct imports
         for mod in self.py_module.imports.values():
-            if mod.nit_name == self.py_module.nit_name: continue
+            if not isinstance(mod, PyModule): continue
             # print " direct %s" % mod
             if mod.has_class_definition(self): return mod.class_definition(self)
             todos = todos.union(mod.imports.values())
         # look in transitive imports
         for mod in todos:
             # print " undirect: %s" % mod
+            if not isinstance(mod, PyModule): continue
             if mod.has_class_definition(self): return mod.class_definition(self)
         return None
 
