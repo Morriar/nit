@@ -1,0 +1,4 @@
+module tkcommondialog
+
+import builtins
+

@@ -1,0 +1,4 @@
+module rstripextension
+
+import builtins
+

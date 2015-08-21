@@ -1,0 +1,4 @@
+module tkinter
+
+import builtins
+

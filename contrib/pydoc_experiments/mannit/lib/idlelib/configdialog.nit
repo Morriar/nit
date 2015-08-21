@@ -1,0 +1,4 @@
+module configdialog
+
+import builtins
+

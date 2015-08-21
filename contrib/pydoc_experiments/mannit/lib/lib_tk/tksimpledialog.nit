@@ -1,0 +1,4 @@
+module tksimpledialog
+
+import builtins
+

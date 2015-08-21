@@ -1,0 +1,4 @@
+module colordelegator
+
+import builtins
+

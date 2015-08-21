@@ -1,0 +1,4 @@
+module objectbrowser
+
+import builtins
+

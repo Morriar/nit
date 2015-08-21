@@ -1,0 +1,4 @@
+module delegator
+
+import builtins
+

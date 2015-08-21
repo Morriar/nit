@@ -1,0 +1,4 @@
+module searchdialogbase
+
+import builtins
+

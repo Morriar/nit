@@ -1,0 +1,4 @@
+module classbrowser
+
+import builtins
+

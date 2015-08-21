@@ -1,0 +1,4 @@
+module scrolledtext
+
+import builtins
+

@@ -1,0 +1,4 @@
+module pyshell
+
+import builtins
+

@@ -1,0 +1,4 @@
+module tkconstants
+
+import builtins
+

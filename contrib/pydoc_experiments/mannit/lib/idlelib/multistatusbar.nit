@@ -1,0 +1,4 @@
+module multistatusbar
+
+import builtins
+

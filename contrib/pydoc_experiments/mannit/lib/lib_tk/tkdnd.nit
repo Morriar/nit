@@ -1,0 +1,4 @@
+module tkdnd
+
+import builtins
+
