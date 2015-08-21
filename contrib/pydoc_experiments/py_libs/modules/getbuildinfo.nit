@@ -1,0 +1,2 @@
+module getbuildinfo
+import end

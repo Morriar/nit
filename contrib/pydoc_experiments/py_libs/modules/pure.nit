@@ -1,0 +1,2 @@
+module pure
+import end

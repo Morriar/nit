@@ -1,0 +1,2 @@
+module resource
+import end

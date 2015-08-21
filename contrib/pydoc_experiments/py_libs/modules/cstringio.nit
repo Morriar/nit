@@ -1,0 +1,2 @@
+module cstringio
+import end

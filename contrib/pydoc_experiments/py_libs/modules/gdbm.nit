@@ -1,0 +1,2 @@
+module gdbm
+import end

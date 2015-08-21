@@ -1,0 +1,2 @@
+module getnameinfo
+import end

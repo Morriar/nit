@@ -1,0 +1,2 @@
+module strop
+import end

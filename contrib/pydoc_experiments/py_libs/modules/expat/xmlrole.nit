@@ -1,0 +1,2 @@
+module xmlrole
+import end

@@ -1,0 +1,2 @@
+module syslog
+import end
