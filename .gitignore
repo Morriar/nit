@@ -55,3 +55,5 @@ nitunit.xml
 
 .metadata/*
 .github_data
+
+pydoc_experiments
