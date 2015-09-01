@@ -106,3 +106,6 @@ end
 
 class Profiler
 end
+
+class NoneType
+end

@@ -226,10 +226,20 @@ redef class ArticleCommand
 				"Try to include documentation of unknown entity `{args.first}`")
 			return
 		end
+		var selected = res.first
 		if res.length > 1 then
-			v.phase.warning(token.location, v.page, "conflicting article for `{args.first}` (choices : {res.join(", ")})")
+			var nb_intros = 0
+			for r in res do
+				if (r isa MClassDef and r.is_intro) or (r isa MPropDef and r.is_intro) then
+					nb_intros += 1
+					selected = r
+				end
+			end
+			if nb_intros > 1 then
+				v.phase.warning(token.location, v.page, "conflicting article for `{args.first}` (choices : {res.join(", ")})")
+			end
 		end
-		v.add_article new DocumentationArticle("readme", "Readme", res.first)
+		v.add_article new DocumentationArticle("readme", "Readme", selected)
 	end
 
 	private fun filter_results(res: Array[MEntity]): Array[MEntity] do
