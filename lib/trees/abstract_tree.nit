@@ -25,7 +25,7 @@ abstract class TreeMap[K: Comparable, E]
 	super Map[K, E]
 
 	# Type of nodes used in this tree implementation
-	type N: TreeNode[K, E]
+	type N: TreeMapNode[K, E]
 
 	# The `root` node of the tree (null if tree is empty)
 	protected var root: nullable N = null is protected writable
@@ -36,13 +36,14 @@ abstract class TreeMap[K: Comparable, E]
 	fun show_dot is abstract
 end
 
-# Node used in Tree implementation
-# nodes are used to store values
+# Node used in `TreeMap` implementation.
+#
+# Nodes are used to store values:
 # * `E`: type of value
-class TreeNode[K: Comparable, E]
+abstract class TreeMapNode[K: Comparable, E]
 
 	# TreeNode type
-	type N: TreeNode[K, E]
+	type N: TreeMapNode[K, E]
 
 	# `key` for this node
 	var key: K
