@@ -36,10 +36,14 @@ abstract class TreeMap[K: Comparable, E]
 	fun show_dot is abstract
 end
 
-# Node used in `TreeMap` implementation.
+# Abstract node structure used in `TreeMap` implementation
 #
-# Nodes are used to store values:
-# * `E`: type of value
+# Nodes are defined recursively each node (except the root one) pointing to a parent.
+# Nodes can be used to store data with the `TreeMapNode::value` attribute.
+#
+# Formal parameters:
+# * `K`: key type (a `Comparable` one so nodes can be sorted by their keys)
+# * `E`: value type (to store your data)
 abstract class TreeMapNode[K: Comparable, E]
 	super Comparable
 
@@ -52,7 +56,9 @@ abstract class TreeMapNode[K: Comparable, E]
 	# `value` stored in the node
 	var value: E
 
-	# Direct parent of this node (null if the node is root)
+	# Direct parent of this node (`null` if the node is root)
+	#
+	# See `TreeMap::root`.
 	var parent: nullable N = null is writable
 
 	# Depth in tree (length of the path from `self` to `root`)
@@ -69,7 +75,8 @@ abstract class TreeMapNode[K: Comparable, E]
 	redef fun to_s do return "\{{value or else ""}\}"
 
 	# Return dot representation of this node
-	# Used for debugging by `AbstractTree::show_dot`
+	#
+	# See `TreeMap::show_dot`.
 	fun to_dot: String do
 		var res = new FlatBuffer
 		res.append "\"{self}\";\n"
