@@ -1,0 +1,26 @@
+<div class='alert' ng-if='message' ng-class='"alert-" + message.status'>{{message.message}}</div>
+
+<h1>Site details</h1>
+<form ng-submit='siteCtrl.editSite()'>
+	<div class='form-group'>
+		<label for='name'>Name</label>
+		<input type='text' class='form-control' id='name' placeholder='Name' ng-model='site.name'>
+	</div>
+	<div class='form-group'>
+		<label for='url'>Url</label>
+		<input type='text' class='form-control' id='url' placeholder='http://example.com' ng-model='site.url'>
+	</div>
+	<button type='submit' class='btn btn-default'>Save</button>
+</form>
+
+<h1>Site status
+<button type='button' class='btn btn-primary' ng-click='siteCtrl.checkSite()'>Check now</button>
+</h1>
+<p ng-if='!statuses || statuses.length == 0'>No status yet...</p>
+<table class='table'>
+	<tr ng-repeat='status in statuses'>
+		<td width='25%'>{{status.timestamp * 1000 | date: "d MMM, yy h:mm:ss a"}}</td>
+		<td width='5%'>{{status.code}}</td>
+		<td>{{status.text}}</td>
+	</tr>
+</table>

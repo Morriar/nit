@@ -1,0 +1,11 @@
+<div class='col-xs-4 text-center' ng-class='statuses[0].code == 200 ? "status-success" : "status-danger"'>
+	<br>
+	<a ng-href='{{site.url}}'>
+		<div class='thumbnail-container'>
+			<div class='thumbnail'>
+				<iframe src='{{url}}' frameborder='0' onload="this.style.opacity = 1"></iframe>
+			</div>
+		</div>
+	</a>
+	<p><a ng-href='/user/sites/{{site._id}}'>{{site.name}}</a></p>
+</div>

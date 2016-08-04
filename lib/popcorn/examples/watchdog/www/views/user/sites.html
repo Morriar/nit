@@ -1,0 +1,26 @@
+<div class='alert' ng-if='message' ng-class='"alert-" + message.status'>{{message.message}}</div>
+<h1>User sites</h1>
+<table class='table'>
+	<tr ng-repeat='site in sites'>
+		<td><a ng-href='/user/sites/{{site._id}}'>{{site.name}}</a></td>
+		<td><a ng-href='{{site.url}}'>{{site.url}}</a></td>
+		<td>
+			<a class='btn btn-xs btn-danger' ng-click='sitesCtrl.removeSite(site._id)'>
+				<span class='glyphicon glyphicon-remove' /> delete
+			</a>
+		</td>
+	</tr>
+</table>
+
+<h1>New site</h1>
+<form ng-submit='sitesCtrl.createSite()'>
+	<div class='form-group'>
+		<label for='name'>Name</label>
+		<input type='text' class='form-control' id='name' placeholder='Name' ng-model='site.name'>
+	</div>
+	<div class='form-group'>
+		<label for='url'>Url</label>
+		<input type='text' class='form-control' id='url' placeholder='http://example.com' ng-model='site.url'>
+	</div>
+	<button type='submit' class='btn btn-default'>Create</button>
+</form>

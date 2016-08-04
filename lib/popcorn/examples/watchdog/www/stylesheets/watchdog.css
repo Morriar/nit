@@ -1,0 +1,60 @@
+/* Body */
+
+body {
+	margin-top: 70px;
+	margin-bottom: 70px;
+}
+
+.thumbnail iframe {
+	width: 1440px;
+	height: 900px;
+	opacity: 0;
+	transition: all 300ms ease-in-out;
+}
+
+.thumbnail {
+	position: relative;
+	-ms-zoom: 0.25;
+	-moz-transform: scale(0.25);
+	-moz-transform-origin: 0 0;
+	-o-transform: scale(0.25);
+	-o-transform-origin: 0 0;
+	-webkit-transform: scale(0.25);
+	-webkit-transform-origin: 0 0;
+}
+
+.thumbnail:after {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+.thumbnail-container {
+	width: 100%;
+	height: 150px;
+	display: inline-block;
+	overflow: hidden;
+	position: relative;
+	border: 2px solid green;
+    border-radius: 3px;
+}
+
+.status-success .thumbnail-container {
+	border-color: #00B300;
+}
+
+.status-success a {
+	color: #007900;
+}
+
+.status-danger .thumbnail-container {
+	border-color: red;
+}
+
+.status-danger a {
+	color: red;
+}

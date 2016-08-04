@@ -1,0 +1,31 @@
+<div class='alert' ng-if='message' ng-class='"alert-" + message.status'>{{message.message}}</div>
+
+<h1>Users</h1>
+<table class='table'>
+	<tr ng-repeat='user in users'>
+		<td><a ng-href='/users/{{user.login}}'>{{user.login}}</a></td>
+		<td>{{user.email}}</td>
+		<td>
+			<a class='btn btn-xs btn-danger' ng-click='usersCtrl.removeUser(user.login)'>
+				<span class='glyphicon glyphicon-remove' /> delete
+			</a>
+		</td>
+	</tr>
+</table>
+
+<h1>New user</h1>
+<form ng-submit='usersCtrl.createUser()'>
+	<div class='form-group'>
+		<label for='login'>Login</label>
+		<input type='text' class='form-control' id='login' placeholder='Login' ng-model='user.login'>
+	</div>
+	<div class='form-group'>
+		<label for='email'>Email</label>
+		<input type='email' class='form-control' id='email' placeholder='Email' ng-model='user.email'>
+	</div>
+	<div class='form-group'>
+		<label for='password'>Password</label>
+		<input type='password' class='form-control' id='password' placeholder='Password' ng-model='user.password'>
+	</div>
+	<button type='submit' class='btn btn-default'>Create</button>
+</form>

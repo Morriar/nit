@@ -1,0 +1,12 @@
+<div class='alert' ng-if='message' ng-class='"alert-" + message.status'>{{message.message}}</div>
+<form ng-submit='authCtrl.loginUser()'>
+	<div class='form-group'>
+		<label for='login'>Login</label>
+		<input type='text' class='form-control' id='login' placeholder='Login' ng-model='user.login'>
+	</div>
+	<div class='form-group'>
+		<label for='password'>Password</label>
+		<input type='password' class='form-control' id='password' placeholder='Password' ng-model='user.password'>
+	</div>
+	<button type='submit' class='btn btn-default'>Login</button>
+</form>

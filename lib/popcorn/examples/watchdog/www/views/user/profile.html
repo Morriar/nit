@@ -1,0 +1,21 @@
+<div class='alert' ng-if='message' ng-class='"alert-" + message.status'>{{message.message}}</div>
+<h1>User details</h1>
+<form ng-submit='authCtrl.editCurrentUser()'>
+	<div class='form-group'>
+		<label for='login'>Login</label>
+		<input type='text' class='form-control' id='login' ng-model='user.login' readonly='readonly'>
+	</div>
+	<div class='form-group'>
+		<label for='email'>Email</label>
+		<input type='email' class='form-control' id='email' placeholder='Email' ng-model='user.email'>
+	</div>
+	<div class='form-group'>
+		<label for='password'>Password</label>
+		<input type='password' class='form-control' id='password' placeholder='Password' ng-model='user.password'>
+	</div>
+	<div class='form-group'>
+		<label for='password2'>Repeat password</label>
+		<input type='password' class='form-control' id='password2' placeholder='Password' ng-model='user.password2'>
+	</div>
+	<button type='submit' class='btn btn-default'>Save</button>
+</form>

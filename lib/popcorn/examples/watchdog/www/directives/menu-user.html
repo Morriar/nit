@@ -1,0 +1,8 @@
+<ul class='nav navbar-nav navbar-right'>
+	<li ng-if='!user'><a ng-href='/signin'>Signin</a></li>
+	<li ng-if='!user'><a ng-href='/login'>Login</a></li>
+	<li ng-if='user'><a ng-href='/user'>{{user.login}}</a></li>
+	<li ng-if='user'><a ng-href='/user/sites'>Sites</a></li>
+	<li ng-if='user'><a ng-href='/user/profile'>Profile</a></li>
+	<li ng-if='user'><a ng-href='/logout'>Logout</a></li>
+</ul>
