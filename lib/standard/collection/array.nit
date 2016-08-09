@@ -239,7 +239,7 @@ abstract class AbstractArray[E]
 	end
 end
 
-# Resizable one dimension array of objects.
+# barResizable one dimension array of objects.
 #
 # Arrays have a literal representation.
 #
