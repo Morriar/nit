@@ -15,10 +15,10 @@
 # limitations under the License.
 
 # Compile to JavaScript using the Emscripten SDK
-module emscripten_platform
+module emscripten
 
 import platform
-import abstract_compiler
+import compiler::abstract_compiler
 
 redef class ToolContext
 	redef fun platform_from_name(name)
@@ -33,6 +33,7 @@ class EmscriptenPlatform
 
 	redef fun supports_libunwind do return false
 	redef fun supports_libgc do return false
+	redef fun supports_linker_script do return false
 	redef fun toolchain(toolcontext) do return new EnscriptenToolchain(toolcontext)
 end
 

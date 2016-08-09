@@ -32,6 +32,27 @@ end
 
 redef class MModule
 	private var objc_file: nullable ObjCCompilationUnit = null
+
+	private var has_public_objc_header = false
+
+	# Imported modules with public Objective-C code blocks
+	var objc_imported_headers: HashSet[MModule] is lazy do
+		var dep = new HashSet[MModule]
+
+		# gather from importation
+		for m in in_importation.direct_greaters do
+			# does the super module has inherited dependencies?
+			var import_dep = m.objc_imported_headers
+			if not import_dep.is_empty then
+				dep.add_all import_dep
+			end
+
+			# does the super module itself has a public header?
+			if m.has_public_objc_header then dep.add(m)
+		end
+
+		return dep
+	end
 end
 
 # The Objective-C langugage visitor
@@ -47,6 +68,8 @@ class ObjCLanguage
 		if block.is_objc_header then
 			mmodule.objc_file.header_custom.add block.location.as_line_pragma
 			mmodule.objc_file.header_custom.add block.code
+
+			mmodule.has_public_objc_header = true
 		else if block.is_objc_body then
 			mmodule.objc_file.body_custom.add block.location.as_line_pragma
 			mmodule.objc_file.body_custom.add block.code
@@ -77,9 +100,15 @@ class ObjCLanguage
 		var objc_file = mmodule.objc_file
 		assert objc_file != null
 
+		# Import public Objective-C header of imported modules
+		var dep = mmodule.objc_imported_headers
+		for mod in dep do
+			objc_file.header_custom.add "#include \"{mod.c_name}._ffi_m.h\"\n"
+		end
+
 		# write .m and _m.h file
 		mmodule.objc_file.header_c_types.add """
-	#include "{{{mmodule.cname}}}._ffi.h"
+	#include "{{{mmodule.c_name}}}._ffi.h"
 """
 
 		var file = objc_file.write_to_files(mmodule, compdir)
@@ -114,10 +143,10 @@ private class ObjCCompilationUnit
 	# Write this compilation unit to Objective-C source files
 	fun write_to_files(mmodule: MModule, compdir: String): ExternObjCFile
 	do
-		var base_name = "{mmodule.cname}._ffi"
+		var base_name = "{mmodule.c_name}._ffi"
 
 		var h_file = "{base_name}_m.h"
-		var guard = "{mmodule.cname.to_s.to_upper}_NIT_OBJC_H"
+		var guard = "{mmodule.c_name.to_upper}_NIT_OBJC_H"
 		write_header_to_file(mmodule, compdir/h_file, new Array[String], guard)
 
 		var c_file = "{base_name}.m"
@@ -210,6 +239,13 @@ end
 
 private class FromObjCCallContext
 	super ObjCCallContext
+
+	redef fun cast_to(mtype, name)
+	do
+		if mtype isa MClassType and mtype.mclass.ftype isa ForeignObjCType then
+			return "(__bridge void*)({name})"
+		else return name
+	end
 
 	redef fun cast_from(mtype, name)
 	do

@@ -1092,15 +1092,19 @@ class FlatString
 			from = 0
 		end
 
-		var realFrom = index_from + from
+		var new_from = index_from + from
 
-		if (realFrom + count) > index_to then return new FlatString.with_infos(items, index_to - realFrom + 1, realFrom, index_to)
+		if (new_from + count) > index_to then
+			var new_len = index_to - new_from + 1
+			if new_len <= 0 then return empty
+			return new FlatString.with_infos(items, new_len, new_from, index_to)
+		end
 
-		if count == 0 then return empty
+		if count <= 0 then return empty
 
-		var to = realFrom + count - 1
+		var to = new_from + count - 1
 
-		return new FlatString.with_infos(items, to - realFrom + 1, realFrom, to)
+		return new FlatString.with_infos(items, to - new_from + 1, new_from, to)
 	end
 
 	redef fun empty do return "".as(FlatString)
@@ -2174,7 +2178,7 @@ redef class Map[K,V]
 		var i = iterator
 		var k = i.key
 		var e = i.item
-		s.append("{k}{couple_sep}{e or else "<null>"}")
+		s.append("{k or else "<null>"}{couple_sep}{e or else "<null>"}")
 
 		# Concat other items
 		i.next
@@ -2182,7 +2186,7 @@ redef class Map[K,V]
 			s.append(sep)
 			k = i.key
 			e = i.item
-			s.append("{k}{couple_sep}{e or else "<null>"}")
+			s.append("{k or else "<null>"}{couple_sep}{e or else "<null>"}")
 			i.next
 		end
 		return s.to_s

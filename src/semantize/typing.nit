@@ -609,6 +609,10 @@ redef class AAttrPropdef
 		var nblock = self.n_block
 		if nblock != null then
 			v.visit_stmt(nblock)
+			if not nblock.after_flow_context.is_unreachable then
+				# We reach the end of the init without having a return, it is bad
+				v.error(self, "Control error: Reached end of block (a 'return' with a value was expected).")
+			end
 		end
 	end
 end
@@ -975,7 +979,7 @@ redef class AForExpr
 			is_col = true
 		end
 
-		if mapit_cla != null and v.is_subtype(ittype, mapit_cla.get_mtype([objcla.mclass_type, objcla.mclass_type.as_nullable])) then
+		if mapit_cla != null and v.is_subtype(ittype, mapit_cla.get_mtype([objcla.mclass_type.as_nullable, objcla.mclass_type.as_nullable])) then
 			# Map Iterator
 			var coltype = ittype.supertype_to(v.mmodule, v.anchor, mapit_cla)
 			var variables = self.variables

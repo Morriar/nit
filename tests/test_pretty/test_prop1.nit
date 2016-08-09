@@ -35,6 +35,11 @@ class B
 	end # comment 5
 	protected fun baz2 do end
 	fun other: String do return "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+	fun foo1(arr: Array[String], len: Int, ind: Int): String
+	do
+		return "Hello World!"
+	end
 end
 
 # end
