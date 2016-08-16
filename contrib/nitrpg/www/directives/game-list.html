@@ -1,0 +1,33 @@
+<div class='panel panel-default' ng-init='gamesCtrl.loadGames(0, 10)'>
+	<div class='panel-heading'>
+		<h4 class='panel-title'>
+			<span class='glyphicon glyphicon-gift' />
+			<a href='/games/'>Games</a>
+		</h4>
+	</div>
+	<div class='panel-body' ng-if='games.empty'>
+		<em>No game yet...</em>
+	</div>
+	<table class='table table-striped table-hover' ng-if='!games.empty && !short'>
+		<tr>
+			<th>Game</th>
+			<th>Players</th>
+			<th>Achievements</th>
+		</tr>
+		<tr ng-repeat='stats in games.items.__items'>
+			<td><game-link game='stats.game' /></td>
+			<td>{{stats.players}}</td>
+			<td>{{stats.achievements}}</td>
+		</tr>
+	</table>
+	<div class='panel-body' ng-if='!games.complete && !short'>
+		<ui-pagination total='games.total' skip='0' limit='10' load='gamesCtrl.loadGames' />
+	</div>
+	<div class='panel-body' ng-if='!games.empty && short'>
+		<ul class='list-unstyled'>
+			<li ng-repeat='stats in games.items.__items'>
+				<game-link game='stats.game' />&nbsp;({{stats.players}} players)
+			</li>
+		</ul>
+	</div>
+</div>

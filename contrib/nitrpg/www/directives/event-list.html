@@ -1,0 +1,34 @@
+<div class='panel panel-default' ng-init='eventsCtrl.loadEvents(0, 10)'>
+	<div class='panel-heading'>
+		<h4 class='panel-title'>
+			<span class='glyphicon glyphicon-flash' />
+			<a href='/players/{{playerId}}/events' ng-if='playerId'>Last events</a>
+			<a href='/games/{{gameId}}/events' ng-if='gameId'>Last events</a>
+			<a href='/events/' ng-if='!gameId && !playerId'>Last events</a>
+		</h4>
+	</div>
+	<div class='panel-body' ng-if='events.empty'>
+		<em>No event yet...</em>
+	</div>
+	<div class='panel-body' ng-if='!events.empty'>
+		<div class='media' ng-repeat='event in events.items.__items'>
+			<a class='media-left' href='/players/{{event.player._id}}'>
+				<span class='badge progress-bar-success' style='position: absolute' ng-if='event.reward'>
+					+{{event.reward}}
+				</span>
+				<img class='img-circle' style='width:50px' ng-src='{{event.player.user.avatar_url}}' alt='{{player._id}}' />
+			</a>
+			<div class='media-body'>
+				<h4 class='media-heading'><event-title event='event'></h4>
+				<span class='text-muted'>
+					<event-link event='event' />
+					at {{event.timestamp * 1000 | date: "hh:mm a MMM, d yyyy"}}
+				</span>
+			</div>
+		</div>
+		<div ng-if='!events.complete'>
+			<hr />
+			<ui-pagination total='events.total' skip='0' limit='10' load='eventsCtrl.loadEvents' />
+		</div>
+	</div>
+</div>

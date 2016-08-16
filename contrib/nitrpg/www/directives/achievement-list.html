@@ -1,0 +1,35 @@
+<div class='panel panel-default' ng-init='achievementsCtrl.loadAchievements(0, 10)'>
+	<div class='panel-heading'>
+		<h4 class='panel-title'>
+			<span class='glyphicon glyphicon-check' />
+			<a href='/players/{{playerId}}/achievements' ng-if='playerId'>Achievements</a>
+			<a href='/games/{{gameId}}/achievements' ng-if='gameId'>Achievements</a>
+			<a href='/achievements/' ng-if='!gameId && !playerId'>Achievements</a>
+		</h4>
+	</div>
+	<div class='panel-body' ng-if='achievements.empty'>
+		<em>No achievement yet...</em>
+	</div>
+	<div class='panel-body' ng-if='!achievements.empty'>
+		<div class='media' ng-repeat='achievement in achievements.items.__items'>
+			<div class='media-left' style='min-width: 65px'>
+				<span class='glyphicon glyphicon-check'></span>
+				<span class='badge progress-bar-success'
+					style='position: absolute; margin-top: 10px; margin-left: -5px;'>
+					+{{achievement.reward}}
+				</span>
+			</div>
+			<div class='media-body'>
+				<h4 class='media-heading'>
+					<achievement-link achievement='achievement' />
+				</h4>
+				<span class='text-muted'>{{achievement.desc}}</span>
+			</div>
+		</div>
+		<div ng-if='!achievements.complete'>
+			<hr />
+			<ui-pagination total='achievements.total' skip='0' limit='10'
+				load='achievementsCtrl.loadAchievements' />
+		</div>
+	</div>
+</div>

@@ -1,0 +1,17 @@
+<div class='pagination-box text-center'>
+	<ul class='pagination' style='margin: 0'>
+		<li ng-class='{disabled: !hasPrev()}'>
+			<a href='#' ng-click='prev()' aria-label='Previous'>
+				<span aria-hidden='true'>&laquo;</span>
+			</a>
+		</li>
+		<li ng-repeat='i in range()' ng-class='{active: i == currentPage()}'>
+			<a ng-click='refresh((i - 1) * limit, limit)' href='#'>{{i}}</a>
+		</li>
+		<li ng-class='{disabled: !hasNext()}'>
+			<a href='#' ng-click='next()' aria-label='Next'>
+				<span aria-hidden='true'>&raquo;</span>
+			</a>
+		</li>
+	</ul>
+</div>

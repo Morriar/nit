@@ -1,0 +1,39 @@
+<div class='panel panel-default' ng-init='playersCtrl.loadPlayers(0, 10)'>
+	<div class='panel-heading'>
+		<h4 class='panel-title'>
+			<span class='glyphicon glyphicon-user' />
+			<a href='/games/{{gameId}}/players' ng-if='gameId'>Players</a>
+			<a href='/players/' ng-if='!gameId'>Players</a>
+		</h4>
+	</div>
+	<div class='panel-body' ng-if='players.empty'>
+		<em>No player yet...</em>
+	</div>
+	<table class='table table-striped table-hover' ng-if='!players.empty && !short'>
+		<tr>
+			<th>#</th>
+			<th>Player</th>
+			<th>Nitcoins</th>
+		</tr>
+		<tr ng-repeat='stats in players.items.__items'>
+			<td>{{$index + 1}}</td>
+			<td><player-link player='stats.player' /></td>
+			<td>{{stats.nitcoins}}</td>
+		</tr>
+	</table>
+	<div class='panel-body' ng-if='!players.complete && !short'>
+		<ui-pagination total='players.total' skip='0' limit='10' load='playersCtrl.loadPlayers' />
+	</div>
+	<div class='panel-body' ng-if='!players.empty && short'>
+		<table width='100%'>
+			<tr ng-repeat='stats in players.items.__items'>
+				<td>{{$index + 1}}</td>
+				<td><player-link player='stats.player' /></td>
+				<td class='text-right text-muted'>
+ 					<small>{{stats.nitcoins}}
+					<span class='glyphicon glyphicon-cd' title='nitcoins' /></small>
+				</td>
+			</tr>
+		</ul>
+	</div>
+</div>

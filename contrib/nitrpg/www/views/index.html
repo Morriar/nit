@@ -1,0 +1,42 @@
+<div class='container-fluid'>
+	<div class='col-xs-3'>
+		<games-list short='true' />
+		<players-list short='true' />
+	</div>
+	<div class='col-xs-9'>
+		<div class='panel panel-default'>
+			<div class='panel-body'>
+				<h1>Welcom to NitRPG!</h1>
+
+				<p>NitRPG is a Role Playing Game that takes place on <a href='https://github.com/'>Github</a>.</p>
+
+				<p>In NitRPG, GitHub users are represented by players that battle on repo for
+		nitcoins and glory.</p>
+			</div>
+		</div>
+
+		<div class='panel panel-default'>
+			<div class='panel-heading'>
+				<h3 class='panel-title'>How to install</h3>
+			</div>
+			<div class='panel-body'>
+				<h3>Configuring the GitHub hook</h3>
+
+				<p>NitRPG needs you to add a new GitHub hook on your repo to keep the game
+				<code>listener</code> up-to-date automatically.</p>
+
+				<p>Hook configuration:</p>
+				<ul>
+					<li><strong>Payload URL</strong>: URL and port to the listener (ex: <code>http://yourdomain.com:8080/listener</code>)</li>
+					<li><strong>Content type</strong>: <code>application/json</code></li>
+					<li><strong>Wich events</strong>: <code>Send me everything</code></li>
+				</ul>
+
+				<p>Be sure to set the hook as <code>Active</code> in the GitHub admin panel.</p>
+			</div>
+		</div>
+
+		<events-list />
+		<achievements-list />
+	</div>
+</div>

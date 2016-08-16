@@ -1,0 +1,29 @@
+<div class='panel panel-default' ng-init='gameCtrl.loadGame()'>
+	<div class='panel-heading'>
+		<h3 class='panel-title'>
+			<span class='glyphicon glyphicon-home'></span>&nbsp;&nbsp;
+			<game-link game='game' />
+		</h3>
+	</div>
+	<div class='panel-body' ng-init='gameCtrl.loadStats()'>
+		<strong class='text-success'>{{stats.players}}</strong>
+		<a href='/games/{{game.repo.full_name}}/players'>players</a>
+		<br>
+		<strong class='text-success'>{{stats.achievements}}</strong>
+		<a href='/games/{{game.repo.full_name}}/achievements'>achievements</a>
+		<br>
+		<strong class='text-success'>{{stats.nitcoins}}</strong> nitcoins
+		<br><br>
+		<strong class='text-success'>{{stats.pulls}}</strong> pulls
+		(<strong>{{stats.pulls_open}}</strong> open)
+		<br>
+		<strong class='text-success'>{{stats.issues}}</strong> issues
+		(<strong>{{stats.issues_open}}</strong> open)
+		<br>
+		<strong class='text-success'>{{stats.commits}}</strong> commits
+		<br>
+		<strong class='text-success'>{{stats.comments}}</strong> comments
+		<br>
+		<strong class='text-success'>{{stats.reviews}}</strong> reviews
+	</div>
+</div>

@@ -1,0 +1,31 @@
+<div class='panel panel-default' ng-init='playerCtrl.loadPlayer()'>
+	<div class='panel-heading'>
+		<h3 class='panel-title'>
+			<img class='img-circle' style='width: 30px' 
+				ng-src='{{player.user.avatar_url}}' alt='{{player.user.login}}' />&nbsp;&nbsp;
+			<player-link player='player' />
+		</h3>
+	</div>
+	<div class='panel-body' ng-init='playerCtrl.loadStats()'>
+		<p class='lead'>ranked <span class='text-success'># {{stats.rank}}</span></p>
+
+		<strong class='text-success'>{{stats.nitcoins}}</strong> nitcoins
+		<br>
+		<strong class='text-success'>{{stats.achievements}}</strong>
+		<a href='/players/{{player.user.login}}/achievements'>achievements</a>
+		<br><br>
+		<strong class='text-success'>{{stats.pulls}}</strong> pulls
+		(<strong>{{stats.pulls_open}}</strong> open)
+		<br>
+		<strong class='text-success'>{{stats.issues}}</strong> issues
+		(<strong>{{stats.issues_open}}</strong> open)
+		<br>
+		<strong class='text-success'>{{stats.commits}}</strong> commits
+		<br>
+		<strong class='text-success'>{{stats.comments}}</strong> comments
+		<br>
+		<strong class='text-success'>{{stats.reviews}}</strong> reviews
+		<br>
+		<strong class='text-success'>{{stats.games}}</strong> games
+	</div>
+</div>

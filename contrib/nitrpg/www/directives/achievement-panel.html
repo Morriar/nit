@@ -1,0 +1,36 @@
+<div class='panel panel-default' ng-init='achievementCtrl.loadAchievement()'>
+	<div class='panel-heading'>
+		<h4 class='panel-title'>
+			<span class='glyphicon glyphicon-flash' />&nbsp;Achievement
+		</h4>
+	</div>
+	<div class='panel-body'>
+		<div class='media'>
+			<div class='media-left' style='min-width: 65px'>
+				<span class='glyphicon glyphicon-check'></span>
+				<span class='badge progress-bar-success'
+					style='position: absolute; margin-top: 10px; margin-left: -5px;'>
+					+{{achievement.reward}}
+				</span>
+			</div>
+			<div class='media-body'>
+				<h4 class='media-heading'>
+					<achievement-link achievement='achievement' />
+				</h4>
+				<span class='text-muted'>{{achievement.desc}}</span>
+			</div>
+		</div>
+	</div>
+	<div class='panel-body' ng-init='achievementCtrl.loadStats()'>
+		<div ng-if='!stats.players'>
+			<h1 class='text-center text-danger'>Achievement never unlocked!</h1>
+		</div>
+		<div ng-if='stats.players'>
+			<strong class='text-success'>{{stats.games}}</strong> games
+			<br>
+			<strong class='text-success'>{{stats.players}}</strong> players
+			<br>
+			<strong class='text-success'>{{stats.nitcoins}}</strong> nitcoins
+		</div>
+	</div>
+</div>

@@ -1,0 +1,28 @@
+<div class='panel panel-default' ng-init='eventCtrl.loadEvent()'>
+	<div class='panel-heading'>
+		<h3 class='panel-title'>
+			<span class='glyphicon glyphicon-flash'></span>&nbsp;&nbsp;
+			<event-title event='event' />
+		</h3>
+	</div>
+	<div class='panel-body'>
+		<h5>Event data</h5>
+		<dl class='dl-horizontal'>
+			<dt>id</dt>
+			<dd>{{event._id}}</dd>
+			<dt>date</dt>
+			<dd>{{event.timestamp | date: "hh:mm a MMM, d yyyy"}}</dd>
+			<dt>game</dt>
+			<dd><game-link game='event.game'></dd>
+			<dt>player</dt>
+			<dd><player-link player='event.player'></dd>
+			<dt>action</dt>
+			<dd>{{event.action}}</dd>
+			<dt>reward</dt>
+			<dd class='text-success'>{{event.reward}}</dd>
+		</dl>
+
+		<h5>JSON</h5>
+		<pre><code>{{event | json}}</code></pre>
+	</div>
+</div>

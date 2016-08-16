@@ -1,0 +1,22 @@
+<span ng-switch='event.__class'>
+	<span ng-switch-when='PlayerPullRequestEvent'>
+		<player-link player='event.player' /> {{event.gh_event.action}}
+		<a ng-href='{{event.gh_event.pull.html_url}}'>#{{event.gh_event.pull.number}}</a>
+		<span ng-if='event.gh_event.action == "closed" && event.gh_event.pull.merged'>
+			(merged {{event.gh_event.pull.commits}} commit<span ng-if='event.gh_event.pull.commits > 1'>s</span>)
+		</span>
+	</span>
+	<span ng-switch-when='PlayerIssueEvent'>
+		<player-link player='event.player' /> {{event.gh_event.action}}
+		<a ng-href='{{event.gh_event.issue.html_url}}'>#{{event.gh_event.issue.number}}</a>
+	</span>
+	<span ng-switch-when='PlayerIssueCommentEvent'>
+		<player-link player='event.player' /> reviewed
+		<a ng-href='{{event.gh_event.issue.html_url}}'>#{{event.gh_event.issue.number}}</a>
+	</span>
+	<span ng-switch-when='AchievementUnlockedEvent'>
+		<player-link player='event.player' /> unlocked
+		<achievement-link achievement='event.achievement' />
+	</span>
+	<span ng-switch-default>{{event}}</span>
+</span>

@@ -1,0 +1,29 @@
+<div class='panel panel-default' ng-init='todosCtrl.loadReviews(0, 5)'>
+	<div class='panel-heading'>
+		<h4 class='panel-title'>
+			<span class='glyphicon glyphicon-eye-open' />
+			Review pull requests and comment issues to gain nitcoins!
+		</h4>
+	</div>
+	<div class='panel-body' ng-if='!reviews.items'>
+		<em>Nothing to do yet...</em>
+	</div>
+	<div class='panel-body' ng-if='reviews.items'>
+		<div class='media' ng-repeat='issue in reviews.items'>
+			<a class='media-left' ng-href='{{issue.html_url}}'>
+				<img class='img-circle' style='width:50px' ng-src='{{issue.user.avatar_url}}' alt='{{issue.user.login}}' />
+			</a>
+			<div class='media-body'>
+				<h4 class='media-heading'>
+					<a href='{{issue.html_url}}'>#{{issue.number}}: {{issue.title}}</a>
+				</h4>
+				<span class="text-muted">opened by </span>
+				<a href='{{issue.user.html_url}}'>{{issue.user.login}}</a>
+			</div>
+		</div>
+		<div ng-if='!reviews.complete'>
+			<hr />
+			<ui-pagination total='reviews.total' skip='0' limit='5' load='todosCtrl.loadReviews' />
+		</div>
+	</div>
+</div>
