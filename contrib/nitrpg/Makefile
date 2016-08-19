@@ -15,6 +15,7 @@
 # limitations under the License.
 
 NITC=nitc
+NITU=nitunit
 
 build:
 	mkdir -p bin/
@@ -26,6 +27,16 @@ run:
 loader:
 	mkdir -p bin/
 	$(NITC) src/loader.nit -o bin/loader
+
+check:
+	$(NITU) tests/test_games.nit
+	$(NITU) tests/test_events.nit
+	$(NITU) tests/test_achievements.nit
+	$(NITU) tests/test_stats.nit
+	$(NITU) tests/test_rules_issues.nit
+	$(NITU) tests/test_rules_pull_requests.nit
+	$(NITU) tests/test_rules_commits.nit
+	$(NITU) tests/test_rules_issue_comments.nit
 
 clean:
 	rm -rf bin/app
