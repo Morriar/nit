@@ -294,3 +294,34 @@ entity-list:hover .btn-filter {
 .nitcode .nc_v { font-style: italic; } /* local variable or parameter */
 .nitcode .nc_vt { font-style: italic; } /* virtual type or formal type */
 .nitcode .nc_error { border: 1px red solid;} /* not used */
+
+/*
+ * d3js
+ */
+
+.chart {
+	display: block;
+	overflow: hidden;
+	font-size: 10px;
+	height: 100%;
+}
+
+.chart .axis path,
+.chart .axis line { fill: none; }
+
+.chart .axis .tick {
+    stroke: #777;
+    stroke-opacity: 0.3;
+    shape-rendering: crispEdges;
+}
+
+.chart .axis text { fill: #777; }
+
+.chart .line {
+	fill: none;
+	stroke-width: 2px;
+}
+
+.line.red { stroke: red; }
+.line.blue { stroke: steelblue; }
+.area.blue { fill: #A0B8CC; }

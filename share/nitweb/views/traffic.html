@@ -1,0 +1,120 @@
+<div class='container-fluid'>
+	<div class='page-header'>
+		<h2>API Traffic</h2>
+	</div>
+	<div class='col-xs-6'>
+		<div class='card'>
+			<div class='card-heading'>
+				<h4 class='card-title'>Visits</h4>
+			</div>
+			<div class='card-body text-center'>
+				<chart-services-visit class='chart' data='times' />
+			</div>
+		</div>
+		<div class='card'>
+			<div class='card-heading'>
+				<h4 class='card-title'>Browsers</h4>
+			</div>
+			<div class='card-body text-center'>
+				<div>
+					<chart-browsers chart-id='api-browsers' chart-values='browsers' />
+				</div>
+				<div>
+					<a class='btn btn-link' data-toggle='collapse' data-target='#visitsTable'>
+						show table
+					</a>
+					<div class='collapse' id='visitsTable'>
+						<table class='table table-hover text-left'>
+							<thead>
+								<tr>
+									<th width='70%'>Browser</th>
+									<th>Visits</th>
+								</tr>
+							<thead>
+							<tbody>
+								<tr ng-repeat='browser in browsers'>
+									<td>{{browser.browser}}</td>
+									<td><b>{{browser.count}}<b></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class='card'>
+			<div class='card-heading'>
+				<h4 class='card-title'>API requests</h4>
+			</div>
+			<div class='card-body'>
+				<table class='table table-hover'>
+					<thead>
+						<tr>
+							<th width='70%'>URI</th>
+							<th>Visits</th>
+							<th>Uniq</th>
+							<th>Avg. time</th>
+						</tr>
+					<thead>
+					<tbody>
+						<tr ng-repeat='page in pages'>
+							<td><a href='{{page._id}}'>{{page._id}}</a></td>
+							<td><b>{{page.visits}}<b></td>
+							<td><b>{{page.uniq.length}}<b></td>
+							<td>{{page.response_time}}</td>
+						</tr>
+					</tbody>
+				</table>
+				<p ng-if='pages.length >= limit' class='text-center'>
+					<a ng-click='trafficCtrl.showMore()'>Show more...</a>
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class='col-xs-6'>
+		<div class='card'>
+			<div class='card-heading'>
+				<h4 class='card-title'>API response time</h4>
+			</div>
+			<div class='card-body text-center'>
+				<chart-services-time class='chart' data='times' />
+			</div>
+		</div>
+		<div class='card'>
+			<div class='card-heading'>
+				<h4 class='card-title'>Services usage</h4>
+			</div>
+			<div class='card-body text-center'>
+				<div>
+					<chart-services-usage chart-id='api-services-usage' chart-values='services' />
+				</div>
+				<div>
+
+					<a class='btn btn-link' data-toggle='collapse' data-target='#timesTable'>
+						show table
+					</a>
+					<div class='collapse' id='timesTable'>
+						<table class='table table-hover text-left'>
+						<thead>
+							<tr>
+								<th width='70%'>Service</th>
+								<th>Visits</th>
+								<th>Uniq</th>
+								<th>Avg. time</th>
+							</tr>
+						<thead>
+						<tbody>
+							<tr ng-repeat='service in services'>
+								<td>{{service._id}}</td>
+								<td><b>{{service.visits}}<b></td>
+								<td><b>{{service.uniq.length}}<b></td>
+								<td>{{service.response_time}}</td>
+							</tr>
+						</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -139,4 +139,29 @@
 				}
 			}
 		}])
+
+		.factory('Traffic', [ '$http', function($http) {
+			return {
+				loadAPIQueries: function(limit, cb, cbErr) {
+					$http.get(apiUrl + '/traffic/queries?limit=' + limit)
+						.success(cb)
+						.error(cbErr);
+				},
+				loadAPIServices: function(limit, cb, cbErr) {
+					$http.get(apiUrl + '/traffic/services?limit=' + limit)
+						.success(cb)
+						.error(cbErr);
+				},
+				loadAPITimes: function(cb, cbErr) {
+					$http.get(apiUrl + '/traffic/times')
+						.success(cb)
+						.error(cbErr);
+				},
+				loadAPIBrowsers: function(cb, cbErr) {
+					$http.get(apiUrl + '/traffic/browsers')
+						.success(cb)
+						.error(cbErr);
+				}
+			}
+		}])
 })();

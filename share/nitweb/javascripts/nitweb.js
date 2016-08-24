@@ -15,7 +15,7 @@
  */
 
 (function() {
-	angular.module('nitweb', ['ngRoute', 'ngSanitize', 'angular-loading-bar', 'entities', 'docdown', 'index', 'metrics', 'users'])
+	angular.module('nitweb', ['ngRoute', 'ngSanitize', 'angular-loading-bar', 'entities', 'docdown', 'index', 'metrics', 'users', 'traffic'])
 	.config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
 		cfpLoadingBarProvider.includeSpinner = false;
 	}])
@@ -47,6 +47,11 @@
 					window.location.replace('/logout');
 				},
 			    template : "<div></div>"
+			})
+			.when('/traffic', {
+				templateUrl: 'views/traffic.html',
+				controller: 'TrafficCtrl',
+				controllerAs: 'trafficCtrl'
 			})
 			.when('/doc/:id', {
 				templateUrl: 'views/doc.html',
