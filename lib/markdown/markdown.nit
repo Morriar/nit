@@ -1121,7 +1121,7 @@ class MDBlock
 				if kind isa LineList then
 					line.value = kind.extract_value(line)
 				else
-					line.value = line.value.substring_from(line.leading.min(4))
+					line.value = line.value.substring_from(line.leading.min(3))
 				end
 				line.leading = line.process_leading
 			end

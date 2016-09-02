@@ -661,6 +661,7 @@ inside a list item.</p>
 </ul>
 """
 		var res = test.md_to_html.write_to_string
+		print res
 		assert res == exp
 	end
 
@@ -668,7 +669,7 @@ inside a list item.</p>
 		var test = """
 *   A list item with a code block:
 
-        <code goes here>
+       <code goes here>
 """
 		var exp = """
 <ul>
