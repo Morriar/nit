@@ -60,69 +60,134 @@
 		</div>
 	</div>
 	<div role='tabpanel' class='tab-pane fade' id='metrics'>
-		<div class='card'>
-			<div class='card-heading'>
-				<h3 class='card-title'>Module importation</h3>
-			</div>
-			<div class='card-body container-fluid'>
-				<div class='col-sm-6'>
-					<h4>
-						Importation metrics
-					</h4>
-					<dl class='dl-horizontal'>
-						<dt>{{metrics.mmodule.mnoa.values[mentity.full_name].value}}</dt>
-						<dd>ancestors</dd>
-						<dt>{{metrics.mmodule.mnop.values[mentity.full_name].value}}</dt>
-						<dd>direct parents</dd>
-						<dt>{{metrics.mmodule.mnoc.values[mentity.full_name].value}}</dt>
-						<dd>direct children</dd>
-						<dt>{{metrics.mmodule.mnod.values[mentity.full_name].value}}</dt>
-						<dd>descendants</dd>
-					</dl>
-					<dl class='dl-horizontal'>
-						<dt>{{metrics.mmodule.mdit.values[mentity.full_name].value}}</dt>
-						<dd>Depth in Inheritance Tree</dd>
-					</dl>
+		<table width='100%' class='text-center'>
+			<tr>
+				<td width='50%'>
+					<h5>
+						<strong>{{metrics.mmodule.MNBIC.sum}}</strong>
+						&nbsp;<span>classes</span>
+					</h5>
+				</td>
+				<td width='50%'>
+					<h5>
+						<strong>{{metrics.mmodule.MNBIP.sum}}</strong>
+						&nbsp;<span>properties</span>
+					</h5>
+				</td>
+			</tr>
+		</table>
+		<div class='col-xs-12'>
+			<div class='card' ng-init='mlimit = 15'>
+				<div class='card-body'>
+					<h4 class='card-heading'>Number of introduced properties by classes</h4>
+					<bar-chart chart-limit='mlimit' chart-data='[
+						{
+							"label": "Properties",
+							"values": metrics.mclasses.CNBIP.values,
+							"color": "#28B463"
+						}
+					]' />
+					<p class='text-center'>
+						<button class='btn btn-link' ng-click='mlimit = mlimit > 0? -1 : 15'>Show all</button>
+					</p>
 				</div>
 			</div>
 		</div>
-		<div class='card'>
-			<div class='card-heading'>
-				<h3 class='card-title'>Module definitions</h3>
-			</div>
-			<div class='card-body container-fluid'>
-				<div class='col-sm-6'>
-					<h4>
-						Class definition kinds
-						<small>({{metrics.mmodule['mnbi'].values[mentity.full_name].value +
-							metrics.mclass['mnbc'].values[mentity.full_name].value}}
-						class definitions)</small>
-					</h4>
-					<chart-module-definitions-kind chart-id='chartDefinitionsKind'
-						chart-metrics='metrics.mmodule' />
-				</div>
-				<div class='col-sm-6'>
-					<h4>
-						Class definition inheritance
-						<small>({{metrics.mmodule['mnbd'].values[mentity.full_name].value}}
-						accessible definitions)</small>
-					</h4>
-					<chart-module-definitions-inh chart-id='chartDefinitionsInh'
-						chart-metrics='metrics.mmodule' />
+<div class='col-xs-6'>
+			<div class='card'>
+				<div class='card-body'>
+					<h4 class='card-heading'>Class introductions vs. redefs</h4>
+					<pie-chart chart-data='[
+						{
+							"label": "Introductions",
+							"value": metrics.mmodule.MNBIC.sum,
+							"color": "#3498DB"
+						},
+						{
+							"label": "Redefinitions",
+							"value": metrics.mmodule.MNBRC.sum,
+							"color": "#99A3A4"
+						}
+					]' />
 				</div>
 			</div>
 		</div>
-		<metrics-list
-			list-id='classes_inheritance'
-			list-title='Classes inheritance'
-			list-metrics='metrics.mclasses'
-			list-metrics-names='["cdit", "cnoa", "cnop", "cnoc", "cnod"]'
-			list-metrics-default='"cdit"' />
-		<metrics-list
-			list-id='classes_properties'
-			list-title='Classes properties'
-			list-metrics='metrics.mclasses'
-			list-metrics-names='["cnbp", "cnba", "cnbip", "cnbrp", "cnbhp", "cnblp"]'
-			list-metrics-default='"cnbp"' />
+		<div class='col-xs-6'>
+			<div class='card'>
+				<div class='card-body'>
+					<h4 class='card-heading'>Property introductions vs. redefs</h4>
+					<pie-chart chart-data='[
+						{
+							"label": "Introductions",
+							"value": metrics.mclasses.CNBIP.sum,
+							"color": "#28B463"
+						},
+						{
+							"label": "Redefinitions",
+							"value": metrics.mclasses.CNBRP.sum,
+							"color": "#99A3A4"
+						}
+					]' />
+				</div>
+			</div>
+		</div>
+		<div class='col-xs-6'>
+			<div class='card'>
+				<div class='card-body'>
+					<h4 class='card-heading'>Class kinds</h4>
+					<pie-chart chart-data='[
+						{
+							"label": "Concrete classes",
+							"value": metrics.mmodule.MNBICC.sum,
+							"color": "#3498DB"
+						},
+						{
+							"label": "Abstract classes",
+							"value": metrics.mmodule.MNBIAC.sum,
+							"color": "#8E44AD"
+						},
+						{
+							"label": "Interfaces",
+							"value": metrics.mmodule.MNBII.sum,
+							"color": "#D35400"
+						},
+						{
+							"label": "Enums",
+							"value": metrics.mmodule.MNBIE.sum,
+							"color": "#E74C3C"
+						}
+					]' />
+				</div>
+			</div>
+		</div>
+		<div class='col-xs-6'>
+			<div class='card'>
+				<div class='card-body'>
+					<h4 class='card-heading'>Property kinds</h4>
+					<pie-chart chart-data='[
+						{
+							"label": "Attributes",
+							"value": metrics.mclasses.CNBIPA.sum,
+							"color": "#8E44AD"
+						},
+						{
+							"label": "Inits",
+							"value": metrics.mclasses.CNBIPI.sum,
+							"color": "#D35400"
+						},
+						{
+							"label": "Methods",
+							"value": metrics.mclasses.CNBIPM.sum,
+							"color": "#28B463"
+						},
+						{
+							"label": "Virtual Types",
+							"value": metrics.mclasses.CNBIPVT.sum,
+							"color": "#E74C3C"
+						}
+					]' />
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
