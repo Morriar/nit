@@ -41,6 +41,11 @@
 				controller: 'GradesCtrl',
 				controllerAs: 'gradesCtrl'
 			})
+			.when('/metrics', {
+				templateUrl: 'views/metrics.html',
+				controller: 'MetricsCtrl',
+				controllerAs: 'metricsCtrl'
+			})
 			.when('/login', {
 				controller : function(){
 					window.location.replace('/login');

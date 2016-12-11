@@ -148,6 +148,11 @@
 
 		.factory('Metrics', [ '$http', function($http) {
 			return {
+				loadModelMetrics: function(cb, cbErr) {
+					$http.get(apiUrl + '/metrics/structural/')
+						.success(cb)
+						.error(cbErr);
+				},
 				loadStructuralMetrics: function(id, cb, cbErr) {
 					$http.get(apiUrl + '/metrics/structural/' + id)
 						.success(cb)

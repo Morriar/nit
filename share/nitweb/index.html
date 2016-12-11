@@ -20,9 +20,6 @@
 
 		<link href='/stylesheets/nitweb_bootstrap.css' rel='stylesheet'>
 		<link href='/stylesheets/nitweb.css' rel='stylesheet'>
-
-		<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js"></script>
-		<script src="/vendors/d3pie.min.js"></script>
 	</head>
 	<body>
 		<nav class='navbar navbar-default navbar-fixed-top'>
@@ -36,6 +33,7 @@
 							<ul class='dropdown-menu'>
 								<li><a href='/docdown?edit'><span class='glyphicon glyphicon-edit'></span> DocDown</a></li>
 								<li><a href='/grades'><span class='glyphicon glyphicon-stats'></span> Grades</a></li>
+								<li><a href='/metrics'><span class='glyphicon glyphicon-scale'></span> Metrics</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -67,6 +65,10 @@
 		</script>
 		<script src='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.js'>
 		</script>
+		<script src='//cdnjs.cloudflare.com/ajax/libs/angular-drag-and-drop-lists/1.4.0/angular-drag-and-drop-lists.min.js'>
+		</script>
+		<script src='https://d3js.org/d3.v4.min.js'></script>
+		<script src="/vendors/d3pie.min.js"></script>
 
 		<script src='/javascripts/nitweb.js'></script>
 		<script src='/javascripts/model.js'></script>
