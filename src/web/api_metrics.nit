@@ -20,6 +20,7 @@ import metrics
 redef class APIRouter
 	redef init do
 		super
+		use("/metrics/structural", new APIModelMetrics(config))
 		use("/metrics/structural/:id", new APIStructuralMetrics(config))
 	end
 end
@@ -38,12 +39,16 @@ class APIStructuralMetrics
 		metrics.register(new CNOAA(mainmodule, config.view))
 		metrics.register(new CNOAI(mainmodule, config.view))
 		metrics.register(new CDIT(mainmodule, config.view))
-		metrics.register(new CNBP(mainmodule, config.view))
-		metrics.register(new CNBA(mainmodule, config.view))
-		metrics.register(new CNBM(mainmodule, config.view))
-		metrics.register(new CNBI(mainmodule, config.view))
-		metrics.register(new CNBV(mainmodule, config.view))
+		metrics.register(new CNBAP(mainmodule, config.view))
+		metrics.register(new CNBAPA(mainmodule, config.view))
+		metrics.register(new CNBAPM(mainmodule, config.view))
+		metrics.register(new CNBAPI(mainmodule, config.view))
+		metrics.register(new CNBAPVT(mainmodule, config.view))
 		metrics.register(new CNBIP(mainmodule, config.view))
+		metrics.register(new CNBIPA(mainmodule, config.view))
+		metrics.register(new CNBIPM(mainmodule, config.view))
+		metrics.register(new CNBIPI(mainmodule, config.view))
+		metrics.register(new CNBIPVT(mainmodule, config.view))
 		metrics.register(new CNBRP(mainmodule, config.view))
 		metrics.register(new CNBHP(mainmodule, config.view))
 		metrics.register(new CNBLP(mainmodule, config.view))
@@ -53,16 +58,45 @@ class APIStructuralMetrics
 	private fun mmodules_metrics: MetricSet do
 		var mainmodule = config.mainmodule
 		var metrics = new MetricSet
-		metrics.register(new MNOA(mainmodule, config.view))
-		metrics.register(new MNOP(mainmodule, config.view))
-		metrics.register(new MNOC(mainmodule, config.view))
-		metrics.register(new MNOD(mainmodule, config.view))
-		metrics.register(new MDIT(mainmodule, config.view))
-		metrics.register(new MNBD(mainmodule, config.view))
-		metrics.register(new MNBI(mainmodule, config.view))
-		metrics.register(new MNBR(mainmodule, config.view))
-		metrics.register(new MNBCC(mainmodule, config.view))
-		metrics.register(new MNBAC(mainmodule, config.view))
+		metrics.register(new MNBIC(mainmodule, config.view))
+		metrics.register(new MNBRC(mainmodule, config.view))
+		metrics.register(new MNBICC(mainmodule, config.view))
+		metrics.register(new MNBIAC(mainmodule, config.view))
+		metrics.register(new MNBII(mainmodule, config.view))
+		metrics.register(new MNBIE(mainmodule, config.view))
+		metrics.register(new MNBIP(mainmodule, config.view))
+		metrics.register(new MNBRP(mainmodule, config.view))
+		metrics.register(new MNBIPA(mainmodule, config.view))
+		metrics.register(new MNBIPI(mainmodule, config.view))
+		metrics.register(new MNBIPM(mainmodule, config.view))
+		metrics.register(new MNBIPVT(mainmodule, config.view))
+		return metrics
+	end
+
+	private fun mpackages_metrics: MetricSet do
+		var metrics = new MetricSet
+		metrics.register(new PNBM(config.view))
+		metrics.register(new PNBIC(config.view))
+		metrics.register(new PNBRC(config.view))
+		metrics.register(new PNBICC(config.view))
+		metrics.register(new PNBIAC(config.view))
+		metrics.register(new PNBII(config.view))
+		metrics.register(new PNBIE(config.view))
+		metrics.register(new PNBIP(config.view))
+		metrics.register(new PNBRP(config.view))
+		metrics.register(new PNBIPA(config.view))
+		metrics.register(new PNBIPI(config.view))
+		metrics.register(new PNBIPM(config.view))
+		metrics.register(new PNBIPVT(config.view))
+		return metrics
+	end
+
+	private fun model_metrics: MetricSet do
+		var metrics = new MetricSet
+		metrics.register(new NBP(config.view))
+		metrics.register(new NBM(config.view))
+		metrics.register(new NBIC(config.view))
+		metrics.register(new NBIP(config.view))
 		return metrics
 	end
 
@@ -78,48 +112,61 @@ class APIStructuralMetrics
 	end
 end
 
+class APIModelMetrics
+	super APIStructuralMetrics
+
+	redef fun get(req, res) do
+		var metrics = config.model.collect_metrics(self)
+		if metrics == null then
+			res.api_error(404, "No metric for this model")
+			return
+		end
+		res.json metrics
+	end
+end
+
 redef class MEntity
 	private fun collect_metrics(h: APIStructuralMetrics): nullable JsonObject do return null
 end
 
-redef class MPackage
+redef class Model
 	redef fun collect_metrics(h) do
-		var mclasses = new HashSet[MClass]
-		for mgroup in self.mgroups do
-			for mmodule in mgroup.mmodules do mclasses.add_all mmodule.intro_mclasses
-		end
+		var mpackages = collect_mpackages(h.config.view)
+		var mpackages_metrics = h.mpackages_metrics
+		mpackages_metrics.collect(mpackages)
 
-		var mclasses_metrics = h.mclasses_metrics
-		mclasses_metrics.collect(new HashSet[MClass].from(mclasses))
-
-		var mmodules = new HashSet[MModule]
-		for mgroup in self.mgroups do
-			mmodules.add_all mgroup.mmodules
-		end
-
-		var mmodules_metrics = h.mmodules_metrics
-		mmodules_metrics.collect(new HashSet[MModule].from(mmodules))
+		var model_metrics = h.model_metrics
+		model_metrics.collect(new HashSet[Model].from([self]))
 
 		var metrics = new JsonObject
-		metrics["mclasses"] = mclasses_metrics
+		metrics["mpackages"] = mpackages_metrics
+		metrics["model"] = model_metrics
+		return metrics
+	end
+end
+
+redef class MPackage
+	redef fun collect_metrics(h) do
+		var mmodules = collect_mmodules(h.config.view)
+		var mmodules_metrics = h.mmodules_metrics
+		mmodules_metrics.collect(mmodules)
+
+		var mpackage_metrics = h.mpackages_metrics
+		mpackage_metrics.collect(new HashSet[MPackage].from([self]))
+
+		var metrics = new JsonObject
 		metrics["mmodules"] = mmodules_metrics
+		metrics["mpackage"] = mpackage_metrics
 		return metrics
 	end
 end
 
 redef class MGroup
 	redef fun collect_metrics(h) do
-		var mclasses = new HashSet[MClass]
-		for mmodule in self.mmodules do mclasses.add_all mmodule.intro_mclasses
-
-		var mclasses_metrics = h.mclasses_metrics
-		mclasses_metrics.collect(new HashSet[MClass].from(mclasses))
-
 		var mmodules_metrics = h.mmodules_metrics
 		mmodules_metrics.collect(new HashSet[MModule].from(mmodules))
 
 		var metrics = new JsonObject
-		metrics["mclasses"] = mclasses_metrics
 		metrics["mmodules"] = mmodules_metrics
 		return metrics
 	end
@@ -127,8 +174,9 @@ end
 
 redef class MModule
 	redef fun collect_metrics(h) do
+		var mclasses = collect_intro_mclasses(h.config.view)
 		var mclasses_metrics = h.mclasses_metrics
-		mclasses_metrics.collect(new HashSet[MClass].from(intro_mclasses))
+		mclasses_metrics.collect(mclasses)
 
 		var mmodule_metrics = h.mmodules_metrics
 		mmodule_metrics.collect(new HashSet[MModule].from([self]))
@@ -188,14 +236,27 @@ redef class FloatMetric
 	end
 end
 
+redef class MPackageMetric
+	redef fun core_serialize_to(v) do
+		super
+		if values.not_empty then v.serialize_attribute("min", min.full_name)
+		if values.not_empty then v.serialize_attribute("max", max.full_name)
+		var values = new JsonArray
+		for value in sort do
+			values.add new MetricEntry(value, self[value].as(Jsonable))
+		end
+		v.serialize_attribute("values", values)
+	end
+end
+
 redef class MModuleMetric
 	redef fun core_serialize_to(v) do
 		super
-		if values.not_empty then v.serialize_attribute("min", min)
-		if values.not_empty then v.serialize_attribute("max", max)
-		var values = new JsonObject
+		if values.not_empty then v.serialize_attribute("min", min.full_name)
+		if values.not_empty then v.serialize_attribute("max", max.full_name)
+		var values = new JsonArray
 		for value in sort do
-			values[value.full_name] = new MetricEntry(value, self[value])
+			values.add new MetricEntry(value, self[value].as(Jsonable))
 		end
 		v.serialize_attribute("values", values)
 	end
@@ -204,11 +265,11 @@ end
 redef class MClassMetric
 	redef fun core_serialize_to(v) do
 		super
-		if values.not_empty then v.serialize_attribute("min", min)
-		if values.not_empty then v.serialize_attribute("max", max)
-		var values = new JsonObject
+		if values.not_empty then v.serialize_attribute("min", min.full_name)
+		if values.not_empty then v.serialize_attribute("max", max.full_name)
+		var values = new JsonArray
 		for value in sort do
-			values[value.full_name] = new MetricEntry(value, self[value])
+			values.add new MetricEntry(value, self[value].as(Jsonable))
 		end
 		v.serialize_attribute("values", values)
 	end
@@ -218,10 +279,10 @@ private class MetricEntry
 	super Jsonable
 
 	var mentity: MEntity
-	var value: Object
+	var value: Jsonable
 
 	redef fun core_serialize_to(v) do
-		v.serialize_attribute("mentity", mentity)
-		v.serialize_attribute("value", if value isa JsonObject then value else value.to_s)
+		v.serialize_attribute("mentity", mentity.full_name)
+		v.serialize_attribute("value", value)
 	end
 end
