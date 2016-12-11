@@ -18,132 +18,165 @@
 	angular
 		.module('metrics', ['model'])
 
-		.directive('metricsList', function() {
-			return {
-				restrict: 'E',
-				scope: {
-					listId: '@',
-					listTitle: '@',
-					listMetrics: '=',
-					listMetricsNames: '=',
-					listMetricsDefault: '='
-				},
-				templateUrl: '/directives/metrics/metrics_list.html'
-			};
+		.controller('MetricsCtrl', function(Metrics) {
+			var $ctrl = this;
+
+			this.loadModelMetrics = function() {
+				Metrics.loadModelMetrics(
+					function(data) {
+						$ctrl.metrics = data;
+					}, function(err) {
+						$ctrl.error = err;
+					});
+			}
+
+			this.loadModelMetrics();
 		})
 
-		.directive('chartModuleDefinitionsKind', function() {
+		.directive('barChart', function() {
 			return {
 				restrict: 'E',
 				scope: {
-					chartId: '@',
-					chartMetrics: '='
+					chartData: '=',
+					chartLimit: '='
 				},
-				templateUrl: '/directives/metrics/chart_properties.html',
+				template: '<div />',
 				link: function ($scope, element, attrs) {
-					$scope.loadChart = function() {
-						if($scope.chart) { return; }
-						$scope.chart = new d3pie($scope.chartId, {
-							"header": {
-								"title": {
-									"fontSize": 24,
-									"font": "open sans"
-								},
-								"subtitle": {
-									"color": "#999999",
-									"fontSize": 12,
-									"font": "open sans"
-								},
-								"titleSubtitlePadding": 9
-							},
-							"size": {
-								"canvasHeight": 200,
-								"canvasWidth": 350,
-								"pieOuterRadius": "80%"
-							},
-							"data": {
-								"sortOrder": "value-asc",
-								"content": [
-									{
-										"label": "Concrete classes",
-										"value": $scope.chartMetrics.mnbcc.avg,
-										"color": "#228835"
-									},
-									{
-										"label": "Abstract classes",
-										"value": $scope.chartMetrics.mnbac.avg,
-										"color": "#103EB8"
-									},
-									{
-										"label": "Interfaces",
-										"value": $scope.chartMetrics.mnbic.avg,
-										"color": "#e65314"
-									}
-								]
-							},
-							"labels": {
-								"outer": {
-									"format": "label-value2",
-									"pieDistance": 20
-								},
-								"inner": {
-									"hideWhenLessThanPercentage": 3
-								},
-								"mainLabel": {
-									"fontSize": 11
-								},
-								"percentage": {
-									"color": "#ffffff",
-									"decimalPlaces": 0
-								},
-								"value": {
-									"color": "#adadad",
-									"fontSize": 11
-								},
-								"lines": {
-									"enabled": true,
-									"style": "straight"
-								},
-								"truncation": {
-									"enabled": true
-								}
-							}
-						});
-					};
+					$scope.loadBarChart = function() {
+						element.empty();
+						var data = $scope.chartData;
+						if(data.length == 0 || !data[0].values) return;
 
-					$scope.$watch('chartMetrics', function(nv, ov) {
+						// Sort data (descending data.value)
+						data[0].values.sort(function(x, y){
+							return d3.descending(x.value, y.value);
+						})
+
+						// Extract keys list
+						var values = data[0].values;
+						if($scope.chartLimit && $scope.chartLimit >= 0) {
+							values = values.slice(0, $scope.chartLimit);
+						}
+						var keys = values.map(function(i) {
+							return i.mentity;
+						});
+
+						//  Graph size and scale
+						var margin = {top: 5, right: 10, bottom: 10, left: 100};
+						var width = element.parent().width() - 30;
+						var height = data.length * (keys.length * 22) + 20;
+
+						var svg = d3.select(element[0])
+							.append("svg")
+								.attr("width", width)
+								.attr("height", height);
+
+						var g = svg.append("g")
+							.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+						// Graph axis
+						var y = d3.scaleBand().rangeRound([0, height - 10]).paddingInner(0.3);
+						y.domain(keys);
+
+						g.append("g")
+							.attr("class", "axis axis--y")
+							.call(d3.axisLeft(y)
+								.tickPadding(10)
+								.tickSize(0))
+
+						d3.selectAll("path")
+							.style("display", "none");
+
+						d3.selectAll("text")
+							.filter(function(d){ return typeof(d) == "string"; })
+							.style("cursor", "pointer")
+							.on("click", function(d){
+								document.location.href = "/doc/" + d;
+							});
+
+						// Series
+						for(i in data) {
+							var serie = data[i];
+
+							var values = serie.values;
+							if($scope.chartLimit && $scope.chartLimit >= 0) {
+								values = values.slice(0, $scope.chartLimit);
+							}
+
+							// Bars
+							var x = d3.scaleLinear().rangeRound([0, width - 250]);
+							x.domain([0, d3.max(serie.values, function(d) { return d.value })]);
+
+							g.selectAll(".bar.serie-" + i)
+								.data(values)
+								.enter().append("rect")
+									.attr("class", "bar serie-" + i)
+									.attr("x", function(d) { return 0; })
+									.attr("y", function(d) { return y(d.mentity) + 22 * i; })
+									.attr("width", function(d) { return x(d.value); })
+									.attr("height", 20)
+									.style("fill", function(d) { return serie.color; })
+
+
+							// Bars labels
+							g.selectAll(".label.serie-" + i)
+								.data(values)
+								.enter().append("text")
+									.attr("class", "label serie-" + i)
+									.attr("x", function(d) { return x(d.value) + 15; })
+									.attr("y", function(d) { return y(d.mentity) + 22 * i + 15; })
+									.attr("text-anchor", "middle")
+								.text(function(d) { return d.value; });
+						}
+
+						// Add series legend
+						var legend = svg.selectAll(".legend")
+							.data(data)
+								.enter().append("g")
+								.attr("class", "legend")
+								.attr("transform", function(d, i) {
+									return "translate(0," + i * 20 + ")"; 
+								});
+
+						legend.append("rect")
+							.attr("x", width - 18)
+							.attr("width", 18)
+							.attr("height", 18)
+							.style("fill", function(d) { return d.color; });
+
+						legend.append("text")
+							.attr("x", width - 24)
+							.attr("y", 9)
+							.attr("dy", ".35em")
+							.style("text-anchor", "end")
+							.text(function(d) { return d.label; });
+      
+					};
+					$scope.$watch('chartLimit', function(nv, ov) {
 						if(nv) {
-							setTimeout($scope.loadChart, 100);
+							setTimeout($scope.loadBarChart, 100);
+						}
+					});
+					$scope.$watch('chartData', function(nv, ov) {
+						if(nv) {
+							setTimeout($scope.loadBarChart, 100);
 						}
 					});
 				}
 			};
 		})
 
-		.directive('chartModuleDefinitionsInh', function() {
+		.directive('pieChart', function() {
 			return {
 				restrict: 'E',
 				scope: {
-					chartId: '@',
-					chartMetrics: '='
+					chartData: '='
 				},
-				templateUrl: '/directives/metrics/chart_properties.html',
+				template: '<div />',
 				link: function ($scope, element, attrs) {
-					$scope.loadChart = function() {
-						if($scope.chart) { return; }
-						$scope.chart = new d3pie($scope.chartId, {
-							"header": {
-								"title": {
-									"fontSize": 24,
-									"font": "open sans"
-								},
-								"subtitle": {
-									"color": "#999999",
-									"fontSize": 12,
-									"font": "open sans"
-								},
-								"titleSubtitlePadding": 9
-							},
+					$scope.loadPieChart = function() {
+						element.empty();
+						new d3pie(element[0], {
 							"size": {
 								"canvasHeight": 200,
 								"canvasWidth": 350,
@@ -151,23 +184,7 @@
 							},
 							"data": {
 								"sortOrder": "value-asc",
-								"content": [
-									{
-										"label": "Inherited",
-										"value": $scope.chartMetrics.mnbd.avg - $scope.chartMetrics.mnbr.avg - $scope.chartMetrics.mnbi.avg,
-										"color": "#999999"
-									},
-									{
-										"label": "Introduced",
-										"value": $scope.chartMetrics.mnbi.avg,
-										"color": "#228835"
-									},
-									{
-										"label": "Redefined",
-										"value": $scope.chartMetrics.mnbr.avg,
-										"color": "#e65314"
-									}
-								]
+								"content": $scope.chartData
 							},
 							"labels": {
 								"outer": {
@@ -199,278 +216,9 @@
 						});
 					};
 
-					$scope.$watch('chartMetrics', function(nv, ov) {
+					$scope.$watch('chartData', function(nv, ov) {
 						if(nv) {
-							setTimeout($scope.loadChart, 100);
-						}
-					});
-				}
-			};
-		})
-
-		.directive('chartClassPropertiesInh', function() {
-			return {
-				restrict: 'E',
-				scope: {
-					chartId: '@',
-					chartMetrics: '='
-				},
-				templateUrl: '/directives/metrics/chart_properties.html',
-				link: function ($scope, element, attrs) {
-					$scope.loadChart = function() {
-						if($scope.chart) { return; }
-						$scope.chart = new d3pie($scope.chartId, {
-							"header": {
-								"title": {
-									"fontSize": 24,
-									"font": "open sans"
-								},
-								"subtitle": {
-									"color": "#999999",
-									"fontSize": 12,
-									"font": "open sans"
-								},
-								"titleSubtitlePadding": 9
-							},
-							"size": {
-								"canvasHeight": 200,
-								"canvasWidth": 350,
-								"pieOuterRadius": "80%"
-							},
-							"data": {
-								"sortOrder": "value-asc",
-								"content": [
-									{
-										"label": "Inherited",
-										"value": $scope.chartMetrics.cnbhp.avg - $scope.chartMetrics.cnbrp.avg,
-										"color": "#999999"
-									},
-									{
-										"label": "Introduced",
-										"value": $scope.chartMetrics.cnbip.avg,
-										"color": "#228835"
-									},
-									{
-										"label": "Redefined",
-										"value": $scope.chartMetrics.cnbrp.avg,
-										"color": "#e65314"
-									}
-								]
-							},
-							"labels": {
-								"outer": {
-									"format": "label-value2",
-									"pieDistance": 20
-								},
-								"inner": {
-									"hideWhenLessThanPercentage": 3
-								},
-								"mainLabel": {
-									"fontSize": 11
-								},
-								"percentage": {
-									"color": "#ffffff",
-									"decimalPlaces": 0
-								},
-								"value": {
-									"color": "#adadad",
-									"fontSize": 11
-								},
-								"lines": {
-									"enabled": true,
-									"style": "straight"
-								},
-								"truncation": {
-									"enabled": true
-								}
-							}
-						});
-					};
-
-					$scope.$watch('chartMetrics', function(nv, ov) {
-						if(nv) {
-							setTimeout($scope.loadChart, 100);
-						}
-					});
-				}
-			};
-		})
-
-		.directive('chartClassPropertiesKind', function() {
-			return {
-				restrict: 'E',
-				scope: {
-					chartId: '@',
-					chartMetrics: '='
-				},
-				templateUrl: '/directives/metrics/chart_properties.html',
-				link: function ($scope, element, attrs) {
-					$scope.loadChart = function() {
-						if($scope.chart) { return; }
-						$scope.chart = new d3pie($scope.chartId, {
-							"header": {
-								"title": {
-									"fontSize": 24,
-									"font": "open sans"
-								},
-								"subtitle": {
-									"color": "#999999",
-									"fontSize": 12,
-									"font": "open sans"
-								},
-								"titleSubtitlePadding": 9
-							},
-							"size": {
-								"canvasHeight": 200,
-								"canvasWidth": 350,
-								"pieOuterRadius": "80%"
-							},
-							"data": {
-								"sortOrder": "value-asc",
-								"content": [
-									{
-										"label": "Attributes",
-										"value": $scope.chartMetrics.cnba.avg,
-										"color": "#228835"
-									},
-									{
-										"label": "Methods",
-										"value": $scope.chartMetrics.cnbm.avg - $scope.chartMetrics.cnbi.avg,
-										"color": "#999999"
-									},
-									{
-										"label": "Constructors",
-										"value": $scope.chartMetrics.cnbi.avg,
-										"color": "#e65314"
-									},
-									{
-										"label": "Virtual Types",
-										"value": $scope.chartMetrics.cnbv.avg,
-										"color": "#103EB8"
-									}
-								]
-							},
-							"labels": {
-								"outer": {
-									"format": "label-value2",
-									"pieDistance": 20
-								},
-								"inner": {
-									"hideWhenLessThanPercentage": 3
-								},
-								"mainLabel": {
-									"fontSize": 11
-								},
-								"percentage": {
-									"color": "#ffffff",
-									"decimalPlaces": 0
-								},
-								"value": {
-									"color": "#adadad",
-									"fontSize": 11
-								},
-								"lines": {
-									"enabled": true,
-									"style": "straight"
-								},
-								"truncation": {
-									"enabled": true
-								}
-							}
-						});
-					};
-
-					$scope.$watch('chartMetrics', function(nv, ov) {
-						if(nv) {
-							setTimeout($scope.loadChart, 100);
-						}
-					});
-				}
-			};
-		})
-
-		.directive('chartClassInheritanceKind', function() {
-			return {
-				restrict: 'E',
-				scope: {
-					chartId: '@',
-					chartMetrics: '='
-				},
-				templateUrl: '/directives/metrics/chart_properties.html',
-				link: function ($scope, element, attrs) {
-					$scope.loadChart = function() {
-						if($scope.chart) { return; }
-						$scope.chart = new d3pie($scope.chartId, {
-							"header": {
-								"title": {
-									"fontSize": 24,
-									"font": "open sans"
-								},
-								"subtitle": {
-									"color": "#999999",
-									"fontSize": 12,
-									"font": "open sans"
-								},
-								"titleSubtitlePadding": 9
-							},
-							"size": {
-								"canvasHeight": 200,
-								"canvasWidth": 350,
-								"pieOuterRadius": "80%"
-							},
-							"data": {
-								"sortOrder": "value-asc",
-								"content": [
-									{
-										"label": "Interfaces",
-										"value": $scope.chartMetrics.cnoai.avg,
-										"color": "#228835"
-									},
-									{
-										"label": "Abstract classes",
-										"value": $scope.chartMetrics.cnoaa.avg,
-										"color": "#103EB8"
-									},
-									{
-										"label": "Concrete classes",
-										"value": $scope.chartMetrics.cnoac.avg - $scope.chartMetrics.cnoaa.avg,
-										"color": "#e65314"
-									}
-								]
-							},
-							"labels": {
-								"outer": {
-									"format": "label-value2",
-									"pieDistance": 20
-								},
-								"inner": {
-									"hideWhenLessThanPercentage": 3
-								},
-								"mainLabel": {
-									"fontSize": 11
-								},
-								"percentage": {
-									"color": "#ffffff",
-									"decimalPlaces": 0
-								},
-								"value": {
-									"color": "#adadad",
-									"fontSize": 11
-								},
-								"lines": {
-									"enabled": true,
-									"style": "straight"
-								},
-								"truncation": {
-									"enabled": true
-								}
-							}
-						});
-					};
-
-					$scope.$watch('chartMetrics', function(nv, ov) {
-						if(nv) {
-							setTimeout($scope.loadChart, 100);
+							setTimeout($scope.loadPieChart, 100);
 						}
 					});
 				}
