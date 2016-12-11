@@ -1,0 +1,181 @@
+<div class='container-fluid'>
+	<div class='col-xs-12'>
+		<h2>Model metrics</h2>
+		<table width='100%' class='text-center'>
+			<tr>
+				<td width='25%'>
+					<h5>
+						<strong>{{metricsCtrl.metrics.model.NBP.sum}}</strong>
+						&nbsp;<span>packages</span>
+					</h5>
+				</td>
+				<td width='25%'>
+					<h5>
+						<strong>{{metricsCtrl.metrics.model.NBM.sum}}</strong>
+						&nbsp;<span>modules</span>
+					</h5>
+				</td>
+				<td width='25%'>
+					<h5>
+						<strong>{{metricsCtrl.metrics.model.NBIC.sum}}</strong>
+						&nbsp;<span>classes</span>
+					</h5>
+				</td>
+				<td width='25%'>
+					<h5>
+						<strong>{{metricsCtrl.metrics.model.NBIP.sum}}</strong>
+						&nbsp;<span>properties</span>
+					</h5>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class='col-xs-12'>
+		<div class='card' ng-init='plimit = 15'>
+			<div class='card-body'>
+				<h4 class='card-heading'>Number of modules by packages</h4>
+				<bar-chart chart-limit='plimit' chart-data='[
+					{
+						"label": "Modules",
+						"values": metricsCtrl.metrics.mpackages.PNBM.values,
+						"color": "#D35400"
+					}
+				]' />
+				<p class='text-center'>
+					<button class='btn btn-link' ng-click='plimit = plimit > 0? -1 : 15'>Show all</button>
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class='col-xs-6'>
+		<div class='card' ng-init='climit = 15'>
+			<div class='card-body'>
+				<h4 class='card-heading'>Number of introduced classes by packages</h4>
+				<bar-chart chart-limit='climit' chart-data='[
+					{
+						"label": "Classes",
+						"values": metricsCtrl.metrics.mpackages.PNBIC.values,
+						"color": "#3498DB"
+					}
+				]' />
+				<p class='text-center'>
+					<button class='btn btn-link' ng-click='climit = climit > 0? -1 : 15'>Show all</button>
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class='col-xs-6'>
+		<div class='card' ng-init='mlimit = 15'>
+			<div class='card-body'>
+				<h4 class='card-heading'>Number of introduced properties by packages</h4>
+				<bar-chart chart-limit='mlimit' chart-data='[
+					{
+						"label": "Properties",
+						"values": metricsCtrl.metrics.mpackages.PNBIP.values,
+						"color": "#28B463"
+					}
+				]' />
+				<p class='text-center'>
+					<button class='btn btn-link' ng-click='mlimit = mlimit > 0? -1 : 15'>Show all</button>
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class='col-xs-6'>
+		<div class='card'>
+			<div class='card-body'>
+				<h4 class='card-heading'>Class introductions vs. redefs</h4>
+				<pie-chart chart-data='[
+					{
+						"label": "Introductions",
+						"value": metricsCtrl.metrics.mpackages.PNBIC.sum,
+						"color": "#3498DB"
+					},
+					{
+						"label": "Redefinitions",
+						"value": metricsCtrl.metrics.mpackages.PNBRC.sum,
+						"color": "#99A3A4"
+					}
+				]' />
+			</div>
+		</div>
+	</div>
+	<div class='col-xs-6'>
+		<div class='card'>
+			<div class='card-body'>
+				<h4 class='card-heading'>Property introductions vs. redefs</h4>
+				<pie-chart chart-data='[
+					{
+						"label": "Introductions",
+						"value": metricsCtrl.metrics.mpackages.PNBIP.sum,
+						"color": "#28B463"
+					},
+					{
+						"label": "Redefinitions",
+						"value": metricsCtrl.metrics.mpackages.PNBRP.sum,
+						"color": "#99A3A4"
+					}
+				]' />
+			</div>
+		</div>
+	</div>
+	<div class='col-xs-6'>
+		<div class='card'>
+			<div class='card-body'>
+				<h4 class='card-heading'>Class kinds</h4>
+				<pie-chart chart-data='[
+					{
+						"label": "Concrete classes",
+						"value": metricsCtrl.metrics.mpackages.PNBICC.sum,
+						"color": "#3498DB"
+					},
+					{
+						"label": "Abstract classes",
+						"value": metricsCtrl.metrics.mpackages.PNBIAC.sum,
+						"color": "#8E44AD"
+					},
+					{
+						"label": "Interfaces",
+						"value": metricsCtrl.metrics.mpackages.PNBII.sum,
+						"color": "#D35400"
+					},
+					{
+						"label": "Enums",
+						"value": metricsCtrl.metrics.mpackages.PNBIE.sum,
+						"color": "#E74C3C"
+					}
+				]' />
+			</div>
+		</div>
+	</div>
+	<div class='col-xs-6'>
+		<div class='card'>
+			<div class='card-body'>
+				<h4 class='card-heading'>Property kinds</h4>
+				<pie-chart chart-data='[
+					{
+						"label": "Attributes",
+						"value": metricsCtrl.metrics.mpackages.PNBIPA.sum,
+						"color": "#8E44AD"
+					},
+					{
+						"label": "Inits",
+						"value": metricsCtrl.metrics.mpackages.PNBIPI.sum,
+						"color": "#D35400"
+					},
+					{
+						"label": "Methods",
+						"value": metricsCtrl.metrics.mpackages.PNBIPM.sum,
+						"color": "#28B463"
+					},
+					{
+						"label": "Virtual Types",
+						"value": metricsCtrl.metrics.mpackages.PNBIPVT.sum,
+						"color": "#E74C3C"
+					}
+				]' />
+			</div>
+		</div>
+	</div>
+</div>
