@@ -18,6 +18,7 @@ import web_base
 import highlight
 import uml
 import model::model_index
+import model::model_collect
 
 redef class APIRouter
 	redef init do
@@ -31,6 +32,7 @@ redef class APIRouter
 		use("/linearization/:id", new APIEntityLinearization(config))
 		use("/defs/:id", new APIEntityDefs(config))
 		use("/inheritance/:id", new APIEntityInheritance(config))
+		use("/packages", new APIPackages(config))
 	end
 end
 
@@ -131,6 +133,17 @@ class APIRandom
 		mentities = randomize_mentities(req, mentities)
 		mentities = limit_mentities(req, mentities)
 		res.json new JsonArray.from(mentities)
+	end
+end
+
+# Return the list of all packages
+#
+# Example: `GET /packages/`
+class APIPackages
+	super APIHandler
+
+	redef fun get(req, res) do
+		res.json new JsonArray.from(config.view.mpackages)
 	end
 end
 
