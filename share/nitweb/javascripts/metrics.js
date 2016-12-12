@@ -18,13 +18,36 @@
 	angular
 		.module('metrics', ['model'])
 
-		.controller('MetricsCtrl', function(Metrics) {
+		.controller('MetricsCtrl', function(Model, Metrics) {
 			var $ctrl = this;
+
+			$ctrl.kinds = ['MPackage', 'MGroup', 'MModule', 'MClass', 'MProperty'];
+			$ctrl.filterKinds = { MPackage: true };
+			$ctrl.target = 'all';
 
 			this.loadModelMetrics = function() {
 				Metrics.loadModelMetrics(
 					function(data) {
 						$ctrl.metrics = data;
+					}, function(err) {
+						$ctrl.error = err;
+					});
+			}
+
+			this.loadDocMetrics = function() {
+				this.loadPackages();
+				Metrics.loadDocMetrics($ctrl.filterKinds, $ctrl.target,
+					function(data) {
+						$ctrl.docMetrics = data;
+					}, function(err) {
+						$ctrl.error = err;
+					});
+			}
+
+			this.loadPackages = function() {
+				Model.loadPackages(
+					function(data) {
+						$ctrl.mpackages = data;
 					}, function(err) {
 						$ctrl.error = err;
 					});
@@ -154,12 +177,12 @@
 					};
 					$scope.$watch('chartLimit', function(nv, ov) {
 						if(nv) {
-							setTimeout($scope.loadBarChart, 100);
+							setTimeout($scope.loadBarChart, 150);
 						}
 					});
 					$scope.$watch('chartData', function(nv, ov) {
 						if(nv) {
-							setTimeout($scope.loadBarChart, 100);
+							setTimeout($scope.loadBarChart, 150);
 						}
 					});
 				}
