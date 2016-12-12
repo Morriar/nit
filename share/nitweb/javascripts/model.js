@@ -53,6 +53,12 @@
 						.error(cbErr);
 				},
 
+				loadPackages: function(cb, cbErr) {
+					$http.get(apiUrl + '/packages')
+						.success(cb)
+						.error(cbErr);
+				},
+
 				search: function(q, n, cb, cbErr) {
 					$http.get(apiUrl + '/search?q=' + q + '&n=' + n)
 						.success(cb)
@@ -155,6 +161,15 @@
 				},
 				loadStructuralMetrics: function(id, cb, cbErr) {
 					$http.get(apiUrl + '/metrics/structural/' + id)
+						.success(cb)
+						.error(cbErr);
+				},
+				loadDocMetrics: function(filterObj, target, cb, cbErr) {
+					var filters = [];
+					for(k in filterObj) {
+						if(filterObj[k]) filters.push(k);
+					}
+					$http.get(apiUrl + '/metrics/doc/?filters=' + filters.join(',') + '&target=' + target)
 						.success(cb)
 						.error(cbErr);
 				}
