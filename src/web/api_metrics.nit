@@ -22,6 +22,27 @@ redef class APIRouter
 		super
 		use("/metrics/structural", new APIModelMetrics(config))
 		use("/metrics/structural/:id", new APIStructuralMetrics(config))
+		use("/metrics/doc", new APIDocMetrics(config))
+	end
+end
+
+class APIDocMetrics
+	super APIHandler
+
+	redef fun get(req, res) do
+		var filters = new Array[String]
+		var farg = req.string_arg("filters")
+		if farg != null then
+			filters.add_all farg.split(',')
+		end
+		var target = req.string_arg("target")
+		if target == "all" then target = null
+		var metrics = config.model.collect_doc_metrics(self, filters, target)
+		if metrics == null then
+			res.api_error(404, "No metric for this model")
+			return
+		end
+		res.json metrics
 	end
 end
 
@@ -127,6 +148,8 @@ end
 
 redef class MEntity
 	private fun collect_metrics(h: APIStructuralMetrics): nullable JsonObject do return null
+
+	private fun collect_doc_metrics(h: APIDocMetrics, filters: Array[String], target: nullable String): nullable JsonObject do return null
 end
 
 redef class Model
@@ -141,6 +164,33 @@ redef class Model
 		var metrics = new JsonObject
 		metrics["mpackages"] = mpackages_metrics
 		metrics["model"] = model_metrics
+		return metrics
+	end
+
+	redef fun collect_doc_metrics(h, filters, target) do
+		var doc_metrics = new DocMetricSet(h.config.view)
+
+		var mentities = new HashSet[MEntity]
+		for mpackage in model.collect_mpackages(h.config.view) do
+			if target != null and target != mpackage.full_name then continue
+			if filters.has("MPackage") then mentities.add mpackage
+			for mgroup in mpackage.mgroups do
+				if filters.has("MGroup") then mentities.add mgroup
+			end
+			for mmodule in mpackage.collect_mmodules(h.config.view) do
+				if filters.has("MModule") then mentities.add mmodule
+				for mclass in mmodule.collect_intro_mclasses(h.config.view) do
+					if filters.has("MClass") then mentities.add mclass
+					for mprop in mclass.collect_intro_mproperties(h.config.view) do
+						if filters.has("MProperty") then mentities.add mprop
+					end
+				end
+			end
+		end
+		doc_metrics.collect(mentities)
+
+		var metrics = new JsonObject
+		metrics["doc"] = doc_metrics
 		return metrics
 	end
 end
@@ -236,6 +286,14 @@ redef class FloatMetric
 	end
 end
 
+redef class StringMetric
+	redef fun core_serialize_to(v) do
+		v.serialize_attribute("name", name)
+		v.serialize_attribute("desc", desc)
+		v.serialize_attribute("empty", values.is_empty)
+	end
+end
+
 redef class MPackageMetric
 	redef fun core_serialize_to(v) do
 		super
@@ -274,6 +332,31 @@ redef class MClassMetric
 		v.serialize_attribute("values", values)
 	end
 end
+
+redef class MDocMetric
+	redef fun core_serialize_to(v) do
+		super
+		if values.not_empty then v.serialize_attribute("min", min.full_name)
+		if values.not_empty then v.serialize_attribute("max", max.full_name)
+		var values = new JsonArray
+		for value in sort do
+			values.add new MetricEntry(value, self[value].as(Jsonable))
+		end
+		v.serialize_attribute("values", values)
+	end
+end
+
+redef class KindMetric
+	redef fun core_serialize_to(v) do
+		super
+		var values = new JsonArray
+		for value in sort do
+			values.add new MetricEntry(value, self[value])
+		end
+		v.serialize_attribute("values", values)
+	end
+end
+
 
 private class MetricEntry
 	super Jsonable
