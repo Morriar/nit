@@ -23,6 +23,7 @@ private import parser::tables
 import mixin
 import primitive_types
 private import model::serialize_model
+import contracts
 
 redef class ToolContext
 	# --discover-call-trace
@@ -518,6 +519,15 @@ class NaiveInterpreter
 
 		if node isa APropdef then
 			self.parameter_check(node, mpropdef, args)
+
+			# Compile precondition call if any
+			if node isa AMethPropdef then
+				var mpre = mpropdef.mproperty.mpre
+				if mpre != null then
+					send(mpre, args.to_a)
+				end
+			end
+
 			return node.call(self, mpropdef, args)
 		else if node isa AClassdef then
 			self.parameter_check(node, mpropdef, args)
@@ -878,6 +888,17 @@ redef class AMethPropdef
 				v.callsite(auto_super_init, args)
 			end
 		end
+
+		# Automatic super for preconditions
+		if mpropdef isa MPreconditionDef then
+			# print "auto_super for {mpropdef}"
+			if not mpropdef.is_intro then
+				var superpd = mpropdef.lookup_next_definition(mpropdef.mclassdef.mmodule, arguments.first.mtype)
+				# print superpd
+				v.call(superpd, arguments)
+			end
+		end
+
 		if auto_super_call then
 			# standard call-next-method
 			var superpd = mpropdef.lookup_next_definition(v.mainmodule, arguments.first.mtype)
