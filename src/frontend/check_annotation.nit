@@ -103,6 +103,8 @@ ldflags
 light_ffi
 
 platform
+
+pre
 """
 
 	# Efficient set build from `primtives_annotations_list`
