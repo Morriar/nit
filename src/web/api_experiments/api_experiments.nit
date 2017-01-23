@@ -17,3 +17,4 @@ module api_experiments
 
 import experiments_base
 import rate_the_model
+import order_the_doc
