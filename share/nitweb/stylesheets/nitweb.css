@@ -23,6 +23,16 @@ a {
     border: none;
 }
 
+.alert {
+	padding-right: 35px
+}
+
+.alert-floating {
+	position: fixed;
+	top: 70px;
+	right: 10px;
+}
+
 /* cards */
 
 .card.active {
@@ -245,10 +255,6 @@ entity-list:hover .btn-filter {
  * Ratings
  */
 
-.star {
-	color: grey;
-}
-
 .editable .star {
 	cursor: pointer;
 }
@@ -306,3 +312,13 @@ entity-list:hover .btn-filter {
 .nitcode .nc_v { font-style: italic; } /* local variable or parameter */
 .nitcode .nc_vt { font-style: italic; } /* virtual type or formal type */
 .nitcode .nc_error { border: 1px red solid;} /* not used */
+
+/* Experiments */
+
+.dndPlaceholder {
+	display: block;
+	width: 100%;
+	height: 40px;
+	border: 1px dashed gray;
+	border-radius: 3px;
+}

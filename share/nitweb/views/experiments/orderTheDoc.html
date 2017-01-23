@@ -1,0 +1,118 @@
+<div id='top' class='container-fluid'>
+	<div>
+		<h1>Order the documentation</h1>
+
+		<p>
+			Imagine you have to explain the following package, module or class to someone.
+			In which order would you present its content.
+
+			Drag the entries from the left column and drop them in the right column to create the
+			order that make the more sense.
+		</p>
+	</div>
+
+	<div class='col-xs-12'>
+		<h4>Feature to explain</h4>
+		<div class='card'>
+			<div class='card-left text-center'>
+				<entity-tag mentity='expOrderCtrl.target' />
+			</div>
+			<div class='card-body'>
+				<h5 class='card-heading'>
+					<entity-signature mentity='expOrderCtrl.target'/>
+					<br>
+					<small>
+						<entity-namespace namespace='expOrderCtrl.target.namespace' />
+					</small>
+				</h5>
+				<entity-doc mentity='expOrderCtrl.target' />
+			</div>
+		</div>
+		<br>
+	</div>
+
+	<div class='col-xs-4'>
+		<h4>Order these features</h4>
+
+		<ul class='nav nav-pills nav-stacked'
+			dnd-list='expOrderCtrl.session.to_order.__items'
+			dnd-drop='expOrderCtrl.move(item, index)'>
+			<li ng-repeat='(index, mentity) in expOrderCtrl.session.to_order.__items track by index'
+				ng-class='{active: expOrderCtrl.entity.full_name == mentity}'
+				dnd-draggable='mentity'
+				dnd-effect-allowed='move'>
+				<a ng-click='expOrderCtrl.loadEntity(mentity)'>
+					<img src='images/drag_reorder1.png' width='15' />&nbsp;&nbsp;&nbsp;
+					{{$index + 1}}.&nbsp;&nbsp;
+					{{mentity}}
+				</a>
+			</li>
+		</ul>
+	</div>
+
+	<div class='col-xs-8'>
+		<h4>Documentation</h4>
+
+		<p ng-if='!expOrderCtrl.entity' class='text-muted'>
+			Click an entity in the left panel to display its documentation.
+		</p>
+
+		<div ng-if='expOrderCtrl.entity' class='card'>
+			<div class='card-body'>
+				<h5 class='card-heading'>
+					<entity-signature mentity='expOrderCtrl.entity'/>
+					<br>
+					<small>
+						<entity-namespace namespace='expOrderCtrl.entity.namespace' />
+					</small>
+				</h5>
+				<entity-doc mentity='expOrderCtrl.entity' />
+			</div>
+		</div>
+	</div>
+		
+	<div class='col-xs-12'>
+		<div class='card'>
+			<div class='card-body'>
+				<h4 class='card-heading'>Leave a comment</h4>
+				<form>
+					<textarea class='form-control' rows='3'
+						ng-model='expOrderCtrl.session.comment'
+						ng-change='expOrderCtrl.save()'
+						ng-model-options='{ debounce: 1000 }'></textarea>
+				</form>
+			</div>
+		</div>
+		<br>
+		<p class='pull-left'>
+			<button class='btn btn-success' ng-click='expOrderCtrl.finish()' style='width: 100%'>
+			<span class='glyphicon glyphicon-new-window' /> Finished</button>
+		</p>
+		<p class='pull-right'>
+			<button class='btn btn-danger' ng-click='expOrderCtrl.restart()' style='width: 100%'>
+			<span class='glyphicon glyphicon-trash' /> Restart</button>
+		</p>
+	</div>
+
+	<div ng-if='expOrderCtrl.status'>
+		<div class='alert alert-{{expOrderCtrl.status.class}} alert-dismissible alert-floating'>
+			<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button>
+			{{expOrderCtrl.status.message}}
+		</div>
+	</div>
+<div>
+<div class='modal fade' tabindex='-1' role='dialog' id='modal' data-backdrop='static'>
+	<div class='modal-dialog' role='document'>
+		<div class='modal-content'>
+			<div class='modal-header'>
+				<h4 class='modal-title'>Thank you!</h4>
+			</div>
+			<div class='modal-body'>
+				<p>Your submission has been saved.</p>
+			</div>
+			<div class='modal-footer'>
+				<button type='button' class='btn btn-primary' ng-click='expOrderCtrl.quit()'>Finish</button>
+			</div>
+		</div>
+	</div>
+</div>

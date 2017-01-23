@@ -15,7 +15,7 @@
  */
 
 (function() {
-	angular.module('nitweb', ['ngRoute', 'ngSanitize', 'angular-loading-bar', 'entities', 'docdown', 'index', 'metrics', 'users', 'grades'])
+	angular.module('nitweb', ['ngRoute', 'ngSanitize', 'angular-loading-bar', 'dndLists', 'entities', 'docdown', 'index', 'metrics', 'users', 'grades', 'experiments'])
 	.config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
 		cfpLoadingBarProvider.includeSpinner = false;
 	}])
@@ -63,6 +63,29 @@
 				controller: 'EntityCtrl',
 				controllerAs: 'entityCtrl',
 				reloadOnSearch: false
+			})
+			.when('/experiments', {
+				templateUrl: 'views/experiments.html'
+			})
+			.when('/experiments/rateTheModel', {
+				templateUrl: 'views/experiments/rateTheModel.html',
+				controller: 'ExpRateCtrl',
+				controllerAs: 'expRateCtrl'
+			})
+			.when('/experiments/rateTheModel/results', {
+				templateUrl: 'views/experiments/rateTheModel-results.html',
+				controller: 'ExpRateResultsCtrl',
+				controllerAs: 'vm'
+			})
+			.when('/experiments/orderTheDoc', {
+				templateUrl: 'views/experiments/orderTheDoc.html',
+				controller: 'ExpOrderCtrl',
+				controllerAs: 'expOrderCtrl'
+			})
+			.when('/experiments/orderTheDoc/results', {
+				templateUrl: 'views/experiments/orderTheDoc-results.html',
+				controller: 'ExpOrderResultsCtrl',
+				controllerAs: 'vm'
 			})
 			.otherwise({
 				templateUrl: 'views/error.html'

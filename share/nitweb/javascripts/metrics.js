@@ -85,20 +85,21 @@
 						});
 
 						//  Graph size and scale
-						var margin = {top: 5, right: 10, bottom: 10, left: 100};
+						var margin = {top: 10, right: 10, bottom: 20, left: 100};
+						var barHeight = (15 / data.length) + 10;
 						var width = element.parent().width() - 30;
-						var height = data.length * (keys.length * 22) + 20;
+						var height = data.length * (keys.length * barHeight) + 20;
 
 						var svg = d3.select(element[0])
 							.append("svg")
 								.attr("width", width)
-								.attr("height", height);
+								.attr("height", height + margin.bottom);
 
 						var g = svg.append("g")
 							.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 						// Graph axis
-						var y = d3.scaleBand().rangeRound([0, height - 10]).paddingInner(0.3);
+						var y = d3.scaleBand().rangeRound([0, height]).paddingInner(0.3);
 						y.domain(keys);
 
 						g.append("g")
@@ -128,16 +129,20 @@
 
 							// Bars
 							var x = d3.scaleLinear().rangeRound([0, width - 250]);
-							x.domain([0, d3.max(serie.values, function(d) { return d.value })]);
+							x.domain([0, d3.max(data, function(serie) {
+								return d3.max(serie.values, function(d) {
+									return d.value
+								})
+							})]);
 
 							g.selectAll(".bar.serie-" + i)
 								.data(values)
 								.enter().append("rect")
 									.attr("class", "bar serie-" + i)
 									.attr("x", function(d) { return 0; })
-									.attr("y", function(d) { return y(d.mentity) + 22 * i; })
+									.attr("y", function(d) { return y(d.mentity) + barHeight * i+ 3; })
 									.attr("width", function(d) { return x(d.value); })
-									.attr("height", 20)
+									.attr("height", barHeight - 3)
 									.style("fill", function(d) { return serie.color; })
 
 
@@ -147,9 +152,9 @@
 								.enter().append("text")
 									.attr("class", "label serie-" + i)
 									.attr("x", function(d) { return x(d.value) + 15; })
-									.attr("y", function(d) { return y(d.mentity) + 22 * i + 15; })
+									.attr("y", function(d) { return y(d.mentity) + (barHeight * i) + (barHeight / 2) + 5; })
 									.attr("text-anchor", "middle")
-								.text(function(d) { return d.value; });
+								.text(function(d) { return d.value > 0 ? d.value : ""; });
 						}
 
 						// Add series legend
