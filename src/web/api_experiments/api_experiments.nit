@@ -12,32 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Components required to build a web server about the nit model.
-module web
+# Nitweb experiments handlers
+module api_experiments
 
-import api_auth
-import api_model
-import api_catalog
-import api_graph
-import api_docdown
-import api_metrics
-import api_feedback
-import api_experiments
-
-redef class APIRouter
-	redef init do
-		super
-		use("/*", new APIErrorHandler(config)) # catch 404 errors
-	end
-end
-
-# Error handler user to catch non resolved request by the API
-#
-# Displays a JSON formatted 404 error.
-class APIErrorHandler
-	super APIHandler
-
-	redef fun all(req, res) do
-		res.api_error(404, "Not found")
-	end
-end
+import experiments_base
+import rate_the_model
