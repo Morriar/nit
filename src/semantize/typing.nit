@@ -767,6 +767,12 @@ redef class AMethPropdef
 				if arrayclass == null then return # Skip error
 				mtype = arrayclass.get_mtype([mtype])
 			end
+			if i >= n_signature.n_params.length then
+				print mmethoddef
+				print n_signature or else "no sign"
+				print msignature.mparameters[i]
+				print i
+			end
 			var variable = self.n_signature.n_params[i].variable
 			assert variable != null
 			variable.declared_type = mtype

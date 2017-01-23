@@ -528,7 +528,22 @@ class NaiveInterpreter
 				end
 			end
 
-			return node.call(self, mpropdef, args)
+			var res = node.call(self, mpropdef, args)
+
+			# Compile postcondition call if any
+			if node isa AMethPropdef then
+				var mpostdef = mpropdef.mpostdef
+				if mpostdef != null then
+					# Set result variable
+					var post_args = args.to_a
+					if res != null then
+						post_args.push res
+					end
+					send(mpostdef.mproperty, post_args)
+				end
+			end
+
+			return res
 		else if node isa AClassdef then
 			self.parameter_check(node, mpropdef, args)
 			return node.call(self, mpropdef, args)
