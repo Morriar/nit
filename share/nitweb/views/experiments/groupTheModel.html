@@ -1,0 +1,162 @@
+<div id='top' class='container-fluid'>
+	<div>
+		<h1>Group the model</h1>
+
+		<p>
+			Imagine you have to regroup related entities. Which module will go with each module?
+			How many classes will you put in the same group? How many groups will you create?
+
+			Create groups by clicking on the button then drag the entries from the left column
+			to your groups.
+		</p>
+	</div>
+
+	<div class='col-xs-12'>
+		<h4>Feature to explain</h4>
+		<div class='card'>
+			<div class='card-left text-center'>
+				<entity-tag mentity='expGroupCtrl.target' />
+			</div>
+			<div class='card-body'>
+				<h5 class='card-heading'>
+					<entity-signature mentity='expGroupCtrl.target'/>
+					<br>
+					<small>
+						<entity-namespace namespace='expGroupCtrl.target.namespace' />
+					</small>
+				</h5>
+
+				<p>
+					<a data-toggle='collapse' data-target='#targetDoc'>
+						Show / Hide target documentation
+					</a>
+				</p>
+				<div class='collapse' id='targetDoc'>
+					<entity-doc mentity='expGroupCtrl.target' />
+				</div>
+			</div>
+		</div>
+		<br>
+	</div>
+
+	<div class='col-xs-4'>
+		<h4>Ungrouped features</h4>
+
+		<ul class='nav nav-pills nav-stacked'
+			dnd-list='expGroupCtrl.session.to_group.__items'>
+			<li ng-repeat='(index, mentity) in expGroupCtrl.session.to_group.__items track by index'
+				ng-class='{active: expGroupCtrl.entity.full_name == mentity}'
+				dnd-draggable='mentity'
+				dnd-effect-allowed='move'
+	            dnd-moved='expGroupCtrl.session.to_group.__items.splice($index, 1); expGroupCtrl.save()'>
+				<a ng-click='expGroupCtrl.loadEntity(mentity)'>
+					<img src='images/drag_reorder1.png' width='15' />&nbsp;&nbsp;&nbsp;
+					{{mentity}}
+				</a>
+			</li>
+		</ul>
+
+		<br>
+		<h4>Your groups</h4>
+
+		<div ng-repeat='(gindex, group) in expGroupCtrl.session.groups.__items track by gindex'>
+			<h5>
+				<div class='form-inline'>
+					<input type='text' class='form-control' ng-model='group.name' ng-change='expGroupCtrl.save()' />
+					<button
+						class='btn btn-link'
+						ng-click='expGroupCtrl.deleteGroup(gindex)'>
+						<span class='text-danger'>Delete</span>
+					</button>
+				</div>
+			</h5>
+			<ul class='nav nav-pills nav-stacked'
+				dnd-list='group.__items'>
+				<li ng-if='group.__items.length == 0' class='text-muted'>Drag something here</li>
+				<li ng-repeat='(index, mentity) in group.__items track by index'
+					ng-class='{active: expGroupCtrl.entity.full_name == mentity}'
+					dnd-draggable='mentity'
+					dnd-effect-allowed='move'
+		            dnd-moved='group.__items.splice($index, 1); expGroupCtrl.save()'>
+					<a ng-click='expGroupCtrl.loadEntity(mentity)'>
+						<img src='images/drag_reorder1.png' width='15' />&nbsp;&nbsp;&nbsp;
+						{{mentity}}
+					</a>
+				</li>
+			</ul>
+			<br>
+		</div>
+
+		<br>
+		<button class='btn btn-success' ng-click='expGroupCtrl.createGroup()'>New Group</button>
+		<br>
+		<br>
+	</div>
+
+	<div class='col-xs-8'>
+		<h4>Documentation</h4>
+
+		<p ng-if='!expGroupCtrl.entity' class='text-muted'>
+			Click an entity in the left panel to display its documentation.
+		</p>
+
+		<div ng-if='expGroupCtrl.entity' class='card'>
+			<div class='card-body'>
+				<h5 class='card-heading'>
+					<entity-signature mentity='expGroupCtrl.entity'/>
+					<br>
+					<small>
+						<entity-namespace namespace='expGroupCtrl.entity.namespace' />
+					</small>
+				</h5>
+				<entity-doc mentity='expGroupCtrl.entity' />
+			</div>
+		</div>
+	</div>
+		
+	<div class='col-xs-12'>
+		<div class='card'>
+			<div class='card-body'>
+				<h4 class='card-heading'>Leave a comment</h4>
+				<form>
+					<textarea class='form-control' rows='3'
+						ng-model='expGroupCtrl.session.comment'
+						ng-change='expGroupCtrl.save()'
+						ng-model-options='{ debounce: 1000 }'></textarea>
+				</form>
+			</div>
+		</div>
+		<br>
+		<p class='pull-left'>
+			<button class='btn btn-success' ng-click='expGroupCtrl.finish()' style='width: 100%'>
+			<span class='glyphicon glyphicon-new-window' /> Finished</button>
+		</p>
+		<p class='pull-right'>
+			<button class='btn btn-danger' ng-click='expGroupCtrl.restart()' style='width: 100%'>
+			<span class='glyphicon glyphicon-trash' /> Restart</button>
+		</p>
+	</div>
+
+	<div ng-if='expGroupCtrl.status'>
+		<div class='alert alert-{{expGroupCtrl.status.class}} alert-dismissible alert-floating'>
+			<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button>
+			{{expGroupCtrl.status.message}}
+		</div>
+	</div>
+<div>
+<div class='modal fade' tabindex='-1' role='dialog' id='modal' data-backdrop='static'>
+	<div class='modal-dialog' role='document'>
+		<div class='modal-content'>
+			<div class='modal-header'>
+				<h4 class='modal-title'>Thank you!</h4>
+			</div>
+			<div class='modal-body'>
+				<p>Your submission has been saved.</p>
+			</div>
+			<div class='modal-footer'>
+				<button type='button' class='btn btn-primary' ng-click='expGroupCtrl.restart()'>Order new entries</button>
+				<button type='button' class='btn btn-muted' ng-click='expGroupCtrl.quit()'>Quit</button>
+			</div>
+		</div>
+	</div>
+</div>

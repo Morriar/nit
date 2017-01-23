@@ -63,6 +63,12 @@
 					$http.get(apiUrl + '/search?q=' + q + '&n=' + n)
 						.success(cb)
 						.error(cbErr);
+				},
+
+				random: function(n, k, cb, cbErr) {
+					$http.get(apiUrl + '/random?n=' + n + '&k=' + k)
+						.success(cb)
+						.error(cbErr);
 				}
 			};
 		}])
@@ -188,6 +194,86 @@
 						.success(cb)
 						.error(cbErr);
 				},
+			}
+		}])
+
+		.factory('Experiments', [ '$http', function($http) {
+			return {
+				loadGradeSession: function(cb, cbErr) {
+					$http.get(apiUrl + '/experiments/grades/sessions')
+						.success(cb)
+						.error(cbErr);
+				},
+				clearGradeSession: function(cb, cbErr) {
+					$http.delete(apiUrl + '/experiments/grades/sessions')
+						.success(cb)
+						.error(cbErr);
+				},
+				saveGradeSession: function(obj, cb, cbErr) {
+					$http.post(apiUrl + '/experiments/grades/sessions', obj)
+						.success(cb)
+						.error(cbErr);
+				},
+				finishGradeSession: function(obj, cb, cbErr) {
+					$http.put(apiUrl + '/experiments/grades/sessions', obj)
+						.success(cb)
+						.error(cbErr);
+				},
+				loadGradeResults: function(cb, cbErr) {
+					$http.get(apiUrl + '/experiments/grades/results')
+						.success(cb)
+						.error(cbErr);
+				},
+				loadOrderSession: function(cb, cbErr) {
+					$http.get(apiUrl + '/experiments/order')
+						.success(cb)
+						.error(cbErr);
+				},
+				clearOrderSession: function(cb, cbErr) {
+					$http.delete(apiUrl + '/experiments/order')
+						.success(cb)
+						.error(cbErr);
+				},
+				saveOrderSession: function(obj, cb, cbErr) {
+					$http.post(apiUrl + '/experiments/order', obj)
+						.success(cb)
+						.error(cbErr);
+				},
+				finishOrderSession: function(obj, cb, cbErr) {
+					$http.put(apiUrl + '/experiments/order', obj)
+						.success(cb)
+						.error(cbErr);
+				},
+				loadOrderResults: function(cb, cbErr) {
+					$http.get(apiUrl + '/experiments/order/results')
+						.success(cb)
+						.error(cbErr);
+				},
+				loadGroupSession: function(cb, cbErr) {
+					$http.get(apiUrl + '/experiments/group')
+						.success(cb)
+						.error(cbErr);
+				},
+				clearGroupSession: function(cb, cbErr) {
+					$http.delete(apiUrl + '/experiments/group')
+						.success(cb)
+						.error(cbErr);
+				},
+				saveGroupSession: function(obj, cb, cbErr) {
+					$http.post(apiUrl + '/experiments/group', obj)
+						.success(cb)
+						.error(cbErr);
+				},
+				finishGroupSession: function(obj, cb, cbErr) {
+					$http.put(apiUrl + '/experiments/group', obj)
+						.success(cb)
+						.error(cbErr);
+				},
+				loadGroupResults: function(cb, cbErr) {
+					$http.get(apiUrl + '/experiments/group/results')
+						.success(cb)
+						.error(cbErr);
+				}
 			}
 		}])
 })();

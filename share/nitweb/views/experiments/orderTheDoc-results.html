@@ -1,0 +1,80 @@
+<div class='container-fluid'>
+	<h3>Order The Doc - Results</h3>
+	<table width='100%' class='text-center'>
+		<tr>
+			<td width='33%'>
+				<h5>
+					<strong>{{vm.results.length}}</strong>
+					&nbsp;<span>submissions</span>
+				</h5>
+			</td>
+			<td width='33%'>
+				<h5>
+					<strong>{{vm.participantsCount}}</strong>
+					&nbsp;<span>participants</span>
+				</h5>
+			</td>
+			<td width='33%'>
+				<h5>
+					<strong>{{vm.entitiesCount}}</strong>
+					&nbsp;<span>entities</span>
+				</h5>
+			</td>
+		</tr>
+	</table>
+
+	<ul class='nav nav-tabs'>
+		<li role='presentation' class='active'>
+			<a data-toggle='tab' data-target='#participation'>
+				<span class='glyphicon glyphicon-book'/> Participation
+			</a>
+		</li>
+	</ul>
+
+	<div class='tab-content'>
+		<div role='tabpanel' class='tab-pane fade in active' id='corpus'>
+			<div class='col-xs-6'>
+				<div class='card'>
+					<div class='card-body'>
+						<h4 class='card-heading'>Participants by ordered properties</h4>
+						<bar-chart chart-data='[
+							{
+								"label": "nb ratings",
+								"values": vm.participantsByRatings,
+								"color": "#3366cc"
+							}
+						]' />
+					</div>
+				</div>
+			</div>
+			<div class='col-xs-6'>
+				<div class='card'>
+					<div class='card-body'>
+						<h4 class='card-heading'>Participants by participation time</h4>
+						<bar-chart chart-data='[
+							{
+								"label": "minutes",
+								"values": vm.participantsByTimes,
+								"color": "#3366cc"
+							}
+						]' />
+					</div>
+				</div>
+			</div>
+			<div class='col-xs-6'>
+				<div class='card'>
+					<div class='card-body'>
+						<h4 class='card-heading'>Packages by ratings</h4>
+						<bar-chart chart-data='[
+							{
+								"label": "ratings",
+								"values": vm.packagesByRatings,
+								"color": "#E74C3C"
+							}
+						]' />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

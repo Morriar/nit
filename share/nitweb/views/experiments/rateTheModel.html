@@ -1,0 +1,151 @@
+<div class='container-fluid'>
+
+	<div id='top' class='col-xs-3 col-md-2'>
+		<h4>Rate these features</h4>
+		<ul class='nav nav-pills nav-stacked'>
+			<li ng-repeat='rating in expRateCtrl.session.mentities.__items'
+				ng-class='{active: $index == expRateCtrl.currentIndex}'>
+				<a ng-click='expRateCtrl.loadEntity($index)'>
+					<span class='glyphicon' ng-class='expRateCtrl.session.mentities.__items[$index].stars.__items[0].rating > 0 && expRateCtrl.session.mentities.__items[$index].stars.__items[1].rating > 0 && expRateCtrl.session.mentities.__items[$index].stars.__items[2].rating > 0 && expRateCtrl.session.mentities.__items[$index].stars.__items[3].rating > 0 ? "glyphicon-ok" : "glyphicon-remove"'></span>&nbsp;&nbsp;&nbsp;
+					{{rating.mentity_name}}
+				</a>
+			</li>
+			<li>
+				<br>
+				<button class='btn btn-success' ng-click='expRateCtrl.finish()' style='width: 100%'>
+				<span class='glyphicon glyphicon-new-window' /> Finished</button>
+				<br><br><br><br>
+			</li>
+			<li>
+				<button class='btn btn-danger' ng-click='expRateCtrl.restart()' style='width: 100%'>
+				<span class='glyphicon glyphicon-trash' /> Restart</button>
+			</li>
+		</ul>
+	</div>
+
+	<div class='col-xs-9 col-md-10'>
+		
+		<div class='container-fluid'>
+			<div class='col-xs-12 col-md-6'>
+				<div class='card'>
+					<div class='card-left text-center'>
+						<entity-tag mentity='expRateCtrl.mentity' />
+					</div>
+					<div class='card-body'>
+						<h5 class='card-heading'>
+							<entity-signature mentity='expRateCtrl.mentity'/>
+							<br>
+							<small>
+								<entity-namespace namespace='expRateCtrl.mentity.namespace' />
+							</small>
+						</h5>
+						<entity-doc mentity='expRateCtrl.mentity' />
+					</div>
+				</div>
+				<div class='card' ng-if='expRateCtrl.mentity.imports.length > 0'>
+					<div class='card-body'>
+						<h4 class='card-heading'>Imports</h4>
+						<ul>
+							<li ng-repeat='mod in expRateCtrl.mentity.imports'>
+								<entity-signature mentity='mod' />
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class='card' ng-if='expRateCtrl.mentity.intro_mclassdefs.length > 0'>
+					<div class='card-body'>
+						<h4 class='card-heading'>Introduced classes</h4>
+						<ul>
+							<li ng-repeat='mdef in expRateCtrl.mentity.intro_mclassdefs'>
+								<entity-signature mentity='mdef' />
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class='card' ng-if='expRateCtrl.mentity.intro_mproperties.length > 0'>
+					<div class='card-body'>
+						<h4 class='card-heading'>Introduced properties</h4>
+						<ul>
+							<li ng-repeat='mprop in expRateCtrl.mentity.intro_mproperties'>
+								<entity-signature mentity='mprop' />
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class='col-xs-12 col-md-6'>
+				<div class='card'>
+					<div class='card-body'>
+						<h4 class='card-heading'>Rate this feature</h4>
+						<p class='text-muted'>
+							Rate the entity for each dimension below
+							from 1 (very bad) to 5 (very good): 
+						</p>
+						<dl class='dl-horizontal' ng-repeat='star in expRateCtrl.session.mentities.__items[expRateCtrl.currentIndex].stars.__items'>
+							<dt>{{star.dimension}}</dt>
+							<dd>
+								<grade-stars rating='star' exps-ctrl='expRateCtrl' />
+								<p class='text-muted'><i>{{star.desc}}</i></p>
+							</dd>
+						</dl>
+					</div>
+				</div>
+				<div class='card'>
+					<div class='card-body'>
+						<h4 class='card-heading'>Leave a comment</h4>
+						<form>
+							<div class='checkbox'>
+								<div class='col-xs-4' ng-repeat='remark in expRateCtrl.session.mentities.__items[expRateCtrl.currentIndex].remarks.__items'>
+									<label>
+										<input type='checkbox' ng-model='remark.checked' ng-model='expRateCtrl.session.mentities.__items[expRateCtrl.currentIndex].comment' ng-change='expRateCtrl.save()' />
+										{{remark.desc}}
+									</label>
+								</div>
+							</div>
+							<br>Other / Comment
+							<textarea class='form-control' rows='3' ng-model='expRateCtrl.session.mentities.__items[expRateCtrl.currentIndex].comment' ng-change='expRateCtrl.save()' ng-model-options='{ debounce: 1000 }'></textarea>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<hr>
+
+		<div class='container-fluid'>
+			<div class='col-xs-6'>
+				<button class='btn btn-muted' ng-click='expRateCtrl.loadPrevious()'
+					ng-class='{disabled: !expRateCtrl.hasPrevious()}'>
+					<span class='glyphicon glyphicon-chevron-left' /> Previous</button>
+			</div>
+			<div class='col-xs-6 text-right'>
+				<button class='btn btn-muted' ng-click='expRateCtrl.loadNext()'
+					ng-class='{disabled: !expRateCtrl.hasNext()}'>
+					Next <span class='glyphicon glyphicon-chevron-right' /></button>
+			</div>
+		</div>
+	</div>
+
+	<div ng-if='expRateCtrl.status'>
+		<div class='alert alert-{{expRateCtrl.status.class}} alert-dismissible alert-floating'>
+			<button type="button" class='close' data-dismiss='alert'><span>&times;</span></button>
+			{{expRateCtrl.status.message}}
+		</div>
+	</div>
+<div>
+<div class="modal fade" tabindex="-1" role="dialog" id="modal" data-backdrop="static">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Thank you!</h4>
+			</div>
+			<div class="modal-body">
+				<p>Your submission has been saved.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" ng-click='expRateCtrl.restart()'>Rate another documentation</button>
+				<button type="button" class="btn btn-muted" ng-click='expRateCtrl.quit()'>Quit</button>
+			</div>
+		</div>
+	</div>
+</div>
