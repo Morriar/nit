@@ -18,7 +18,7 @@ class MyClass
 
 	fun foo: Int
 	is
-		post(print("a"))
+		post(assert result > 0)
 	do
 		test = true
 		return 10
@@ -30,7 +30,7 @@ class MySub
 
 	redef fun foo
 	is
-		post(print("b"))
+		post(assert result > 10)
 	do
 		super
 		return 100
@@ -38,70 +38,70 @@ class MySub
 end
 
 class MySub2
-	super MyClass
+	super MySub
 
 	redef fun foo
-	# is
-		# post(assert _result < 100)
+	is
+		post(assert result > 100)
 	do
 		super
-		return 10
+		return 1000
 	end
 end
 
 class MyBuggyClass
 
 	fun foo: Int
-	# is
-		# post(assert _result > 0)
+	is
+		post(assert result > 0)
 	do
-		return 10
+		return -10
 	end
 end
 
 class MyBuggySub
-	super MyClass
+	super MyBuggyClass
 
 	redef fun foo do
-		return 100
+		return -100
 	end
 end
 
 class MyBuggySub2
-	super MyClass
+	super MyBuggyClass
 
 	redef fun foo
-	# is
-		# post(assert _result < 100)
+	is
+		post(assert result < 100)
 	do
-		return 10
+		return -100
 	end
 end
 
 class MyBuggySub3
-	super MyClass
+	super MyBuggyClass
 
 	redef fun foo
-	# is
-		# post(assert _result < 100)
+	is
+		post(assert result > 1000)
 	do
 		return 100
 	end
 end
 
-# var c = new MyClass
+var c = new MyClass
 var s1 = new MySub
-# var s2 = new MySub2
-# c.foo # OK
+var s2 = new MySub2
+c.foo # OK
 s1.foo # OK
-# s2.foo # OK
+s2.foo # OK
 
-# var bc = new MyBuggyClass
-# var bs1 = new MyBuggySub
-# var bs2 = new MyBuggySub2
-# var bs3 = new MyBuggySub3
+var bc = new MyBuggyClass
+var bs1 = new MyBuggySub
+var bs2 = new MyBuggySub2
+var bs3 = new MyBuggySub3
 
 #alt1# bc.foo # POST KO x < 0
 #alt2# bs1.foo # POST KO x < 0
 #alt3# bs2.foo # POST KO x < 0
-#alt3# bs3.foo # POST KO x > 1000
+#alt4# bs3.foo # POST KO x > 1000

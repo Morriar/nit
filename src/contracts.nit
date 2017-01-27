@@ -37,10 +37,9 @@
 # use a lot of `and`... TODO: find a way to define the same annotation more than once.
 #
 # TODO option --contracts
-# TODO post
 # TODO post @pre
-# TODO post result
 # TODO inv
+# TODO rules on pre
 module contracts
 
 import phase
@@ -84,6 +83,8 @@ end
 # `MPrecondition` definition in a module
 class MPreconditionDef
 	super MContractDef
+
+	redef type MPROPERTY: MPrecondition
 end
 
 # Postcondition
@@ -94,13 +95,30 @@ class MPostcondition
 
 	redef type MPROPDEF: MPostconditionDef
 
-	# Attribute that holds the MPostcondition result if any
-	# var mpost_result: nullable AVardeclExpr = null
+	#
+	var pre_variables = new Array[Variable]
+
+	#
+	fun pre_exprs: Array[AExpr] do
+		var res = new Array[AExpr]
+		for mdef in mpropdefs do
+			res.add_all(mdef.pre_exprs)
+		end
+		return res
+	end
 end
 
 # `MPostcondition` definition in a module
 class MPostconditionDef
 	super MContractDef
+
+	redef type MPROPERTY: MPostcondition
+
+	# Pre exprs
+	var pre_exprs = new Array[AExpr]
+
+	# Pre decls
+	var pre_decls = new Array[AVarAssignExpr]
 end
 
 redef class MMethod
@@ -168,23 +186,28 @@ private class ContractsVisitor
 
 	var toolcontext: ToolContext
 
-	var current_aclassdef: nullable AClassdef = null
-	var current_apropdef: nullable AMethPropdef = null
-
 	redef fun visit(n) do
 		n.accept_contracts(self)
 		n.visit_all(self)
 	end
 end
 
-redef class ANode
-	private fun accept_contracts(v: ContractsVisitor) do end
+private class PostconditionVisitor
+	super Visitor
+
+	var toolcontext: ToolContext
+	var nblock: ABlockExpr
+	var mpostdef: MPostconditionDef
+
+	redef fun visit(n) do
+		n.accept_postcondition(self)
+		n.visit_all(self)
+	end
 end
 
-redef class AClassdef
-	redef fun accept_contracts(v) do
-		v.current_aclassdef = self
-	end
+redef class ANode
+	private fun accept_contracts(v: ContractsVisitor) do end
+	private fun accept_postcondition(v: PostconditionVisitor) do end
 end
 
 redef class AMethPropdef
@@ -192,9 +215,13 @@ redef class AMethPropdef
 	redef fun accept_contracts(v) do
 		var n_annotations = self.n_annotations
 		if n_annotations != null then
-			v.current_apropdef = self
-			v.enter_visit n_annotations
-			v.current_apropdef = null
+			for n_annotation in n_annotations.n_items do
+				if n_annotation.name == "pre" then
+					compile_precondition(v, n_annotation)
+				else if n_annotation.name == "post" then
+					compile_postcondition(v, n_annotation)
+				end
+			end
 		end
 	end
 
@@ -242,7 +269,7 @@ redef class AMethPropdef
 	# Compile the `MPostconditionDef` for `self`.
 	private fun compile_postcondition(v: ContractsVisitor, annot: AAnnotation) do
 		var mpropdef = self.mpropdef.as(not null)
-		print "Compile precondition for {mpropdef}"
+		# print "Compile postcondition for {mpropdef}"
 
 		# Create the postcondition property if one does not already exist
 		var mpost = mpropdef.mproperty.mpost
@@ -260,8 +287,6 @@ redef class AMethPropdef
 		end
 		if msignature != null then
 			mpostdef.msignature = msignature.adapt_to_postcondition
-			print mpostdef.msignature or else "null"
-			print is_intro
 		end
 		mpropdef.mpostdef = mpostdef
 
@@ -270,34 +295,41 @@ redef class AMethPropdef
 		n_postdef.mpropdef = mpostdef
 		n_postdef.location = mpropdef.location
 		n_postdef.n_visibility = new APublicVisibility
-		n_postdef.n_block = annot.to_block
+
+		# Parse @pre annotations
+		var n_block = annot.to_block
+		var av = new PostconditionVisitor(v.toolcontext, n_block, mpostdef)
+		av.enter_visit(n_block)
+		for n_decl in mpostdef.pre_decls do
+			var prop_block = self.n_block
+			if prop_block != null and not prop_block isa ABlockExpr then
+				var old = prop_block
+				prop_block = new ABlockExpr
+				prop_block.n_expr.add old
+				self.n_block = prop_block
+			end
+			if prop_block isa ABlockExpr then
+				# print "aaddd decl {n_decl}"
+				prop_block.n_expr.unshift(n_decl)
+				# do_flow(v.toolcontext)
+				# do_scope(v.toolcontext)
+				# do_typing(v.toolcontext.modelbuilder)
+			end
+		end
+
+		n_postdef.n_block = n_block
 
 		# Copy signature from mmethod
 		var n_signature = self.n_signature
-		if n_signature != null then
-			n_postdef.n_signature = n_signature.adapt_to_postcondition(n_postdef)
+		if n_signature == null and not is_intro then
+			var nintro = v.toolcontext.modelbuilder.mpropdef2node(mpost.intro)
+			if nintro isa AMethPropdef then
+				n_signature = nintro.n_signature
+			end
 		end
-
-		# Add special result declaration in top of the block
-		# var n_block = annot.to_block
-		# if msignature != null then
-			# var rettype = msignature.return_mtype
-			# if rettype != null then
-				# var n_result = v.toolcontext.parse_stmts("var result: {rettype}").as(ABlockExpr).n_expr.first
-				# if n_result isa AVardeclExpr then
-					# mpostdef.mpost_result = n_result
-					# n_block.n_expr.unshift n_result
-				# end
-			# end
-		# end
-		# n_postdef.n_block = n_block
-
-		# Create AST node for result attr holder
-		# n_result.
-		# n_result.do_flow(v.toolcontext)
-		# n_result.do_scope(v.toolcontext)
-		# n_result.do_typing(v.toolcontext.modelbuilder)
-		# v.toolcontext.modelbuilder.mpropdef2npropdef[mpost.mpost_result.intro] = n_result
+		if n_signature != null then
+			n_postdef.n_signature = n_signature.adapt_to_postcondition(n_postdef, mpropdef)
+		end
 
 		# Apply phase to new postcondition code
 		# FIXME is there a cleaner way?
@@ -310,16 +342,59 @@ redef class AMethPropdef
 	end
 end
 
-redef class AAnnotation
+redef class AExpr
 	redef fun accept_contracts(v) do
-		var apropdef = v.current_apropdef
-		if apropdef == null then return
-		if name == "pre" then
-			apropdef.compile_precondition(v, self)
-		else if name == "post" then
-			apropdef.compile_postcondition(v, self)
+		var n_annotations = self.n_annotations
+		if n_annotations != null then
+			for n_annotation in n_annotations.n_items do
+				if n_annotation.name != "pre" then return
+				if n_annotation.is_correct then return
+				v.toolcontext.warning(location, "contracts", "`pre` annotation outside a `post` contract")
+			end
 		end
 	end
+
+	redef fun accept_postcondition(v) do
+		var n_annotations = self.n_annotations
+		if n_annotations != null then
+			for n_annotation in n_annotations.n_items do
+				if n_annotation.name != "pre" then return
+				# print "found pre {n_annotation.location} in {self}"
+				v.mpostdef.pre_exprs.add self
+
+				var rvar = new Variable(n_annotation.object_id.to_s)
+				# print rvar
+				v.mpostdef.mproperty.pre_variables.add rvar
+
+				var read = new AVarExpr
+				var tid2 = new TId
+				tid2.text = "tmp"
+				tid2.location = n_annotation.location
+				read.n_id = tid2
+				read.location = n_annotation.location
+				read.variable = rvar
+				self.replace_with(read)
+
+				var decl = new AVarAssignExpr
+				var tid = new TId
+				tid.text = "tmp"
+				tid.location = n_annotation.location
+				decl.location = n_annotation.location
+				decl.n_id = tid
+				decl.variable = rvar
+				decl.n_assign = new TAssign
+				decl.n_value = self
+				v.mpostdef.pre_decls.add decl
+
+				n_annotation.is_correct = true
+			end
+		end
+	end
+end
+
+redef class AAnnotation
+
+	private var is_correct = false
 
 	# Create a `ABlockExpr` from self `n_args`
 	private fun to_block: ABlockExpr do
@@ -370,17 +445,20 @@ redef class ASignature
 	end
 
 	# Return a copy of `self` adapted for postcondition on `npropdef`
-	private fun adapt_to_postcondition(npropdef: AMethPropdef): ASignature do
+	private fun adapt_to_postcondition(npropdef: AMethPropdef, mpropdef: MMethodDef): ASignature do
 		var nsignature = adapt_to_precondition(npropdef)
 		# If self returns a value, add it as the last argument of
-		npropdef.mpropdef.mproperty.intro.msignature.return_mtype
-		var n_type = self.n_type
-		if n_type != null then
+		# npropdef.mpropdef.mproperty.intro.msignature.return_mtype
+		var msignature = mpropdef.msignature
+		if msignature == null then return nsignature
+
+		var ret_type = msignature.return_mtype
+		if ret_type != null then
 			var new_param = new AParam
 			var tid = new TId.init_tk(npropdef.location)
 			tid.text = "result"
 			new_param.n_id = tid
-			new_param.n_type = n_type
+		#	new_param.n_type = n_type
 			new_param.location = npropdef.location
 			nsignature.n_params.add new_param
 		end

@@ -149,11 +149,14 @@ class NaiveInterpreter
 	# If `n` cannot be evaluated, then aborts.
 	fun expr(n: AExpr): nullable Instance
 	do
+		# print "expr {n} {n.location}"
 		var frame = self.frame
 		var old = frame.current_node
 		frame.current_node = n
 		#n.debug("IN Execute expr")
+		# print "expr {n} ({n.class_name})"
 		var i = n.expr(self)
+		# print "after"
 		if i == null and not self.is_escaping then
 			n.debug("inconsitance: no value and not escaping.")
 		end
@@ -429,7 +432,11 @@ class NaiveInterpreter
 	fun read_variable(v: Variable): Instance
 	do
 		var f = frames.first.as(InterpreterFrame)
-		return f.map[v]
+		if not f.map.has_key(v) then
+			print "variable `{v}` not found"
+		end
+		var res = f.map[v]
+		return res
 	end
 
 	# Assign the value of the variable in the current frame
@@ -532,6 +539,7 @@ class NaiveInterpreter
 
 			# Compile postcondition call if any
 			if node isa AMethPropdef then
+				var mpost = mpropdef.mproperty.mpost
 				var mpostdef = mpropdef.mpostdef
 				if mpostdef != null then
 					# Set result variable
@@ -539,7 +547,15 @@ class NaiveInterpreter
 					if res != null then
 						post_args.push res
 					end
-					send(mpostdef.mproperty, post_args)
+					# print "call {mpostdef}({post_args.join(",")}) for {mpropdef}"
+					call(mpostdef, post_args)
+				else if mpost != null then
+					var post_args = args.to_a
+					if res != null then
+						post_args.push res
+					end
+					# print "send {mpost}({post_args.join(",")}) for {mpropdef}"
+					send(mpost, post_args)
 				end
 			end
 
@@ -865,13 +881,30 @@ redef class APropdef
 	end
 end
 
+redef class MPostcondition
+	var pre_values = new HashMap[Variable, Instance]
+end
+
 redef class AMethPropdef
 	super TablesCapable
 
 	redef fun call(v, mpropdef, args)
 	do
+		# print "call {mpropdef}"
 		var f = v.new_frame(self, mpropdef, args)
+
 		var res = call_commons(v, mpropdef, args, f)
+
+		# save postcondition@pre values
+		var mpost = mpropdef.mproperty.mpost
+		if mpost != null then
+			for variable in mpost.pre_variables do
+				# print "save {variable} for {mpost} in {mpropdef}"
+				mpost.pre_values[variable] = v.read_variable(variable)
+				# print mpost.pre_values[variable]
+			end
+		end
+
 		v.frames.shift
 		if v.is_escape(self.return_mark) then
 			res = v.escapevalue
@@ -904,12 +937,21 @@ redef class AMethPropdef
 			end
 		end
 
+		# init postcondition@pre variables
+		if mpropdef isa MPostconditionDef then
+			for pre_variable, value in mpropdef.mproperty.pre_values do
+				# print "init {pre_variable} for {mpropdef}"
+				v.write_variable(pre_variable, value)
+			end
+		end
+
 		# Automatic super for preconditions
-		if mpropdef isa MPreconditionDef then
+		if mpropdef isa MContractDef then
 			# print "auto_super for {mpropdef}"
 			if not mpropdef.is_intro then
 				var superpd = mpropdef.lookup_next_definition(mpropdef.mclassdef.mmodule, arguments.first.mtype)
 				# print superpd
+				# print "super {superpd}({arguments.join(",")}) for {mpropdef}"
 				v.call(superpd, arguments)
 			end
 		end
@@ -2207,6 +2249,11 @@ redef class ASendExpr
 	do
 		var recv = v.expr(self.n_expr)
 		if recv == null then return null
+		if callsite == null then
+			# print "expr {self} {location}"
+			# print n_expr
+			# print recv
+		end
 		var args = v.varargize(callsite.mpropdef, callsite.signaturemap, recv, self.raw_arguments)
 		if args == null then return null
 

@@ -962,6 +962,7 @@ redef class AVarExpr
 			#debug("{variable} is {mtype}")
 		else
 			#debug("{variable} is untyped")
+			# print "ERROR: {self}"
 		end
 
 		self.mtype = mtype
@@ -1784,10 +1785,12 @@ redef class ASendExpr
 
 	redef fun accept_typing(v)
 	do
+		# print "accept_typing {self}"
 		var nrecv = self.n_expr
 		var recvtype = v.visit_expr(nrecv)
 		var name = self.property_name
 		var node = self.property_node
+		# print "here {nrecv}: {recvtype or else "nil"}"
 
 		if recvtype == null then return # Forward error
 
