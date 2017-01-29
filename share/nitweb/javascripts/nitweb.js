@@ -87,6 +87,16 @@
 				controller: 'ExpOrderResultsCtrl',
 				controllerAs: 'vm'
 			})
+			.when('/experiments/groupTheModel', {
+				templateUrl: 'views/experiments/groupTheModel.html',
+				controller: 'ExpGroupCtrl',
+				controllerAs: 'expGroupCtrl'
+			})
+			.when('/experiments/groupTheModel/results', {
+				templateUrl: 'views/experiments/groupTheModel-results.html',
+				controller: 'ExpGroupResultsCtrl',
+				controllerAs: 'vm'
+			})
 			.otherwise({
 				templateUrl: 'views/error.html'
 			});

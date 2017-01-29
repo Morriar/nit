@@ -248,6 +248,31 @@
 					$http.get(apiUrl + '/experiments/order/results')
 						.success(cb)
 						.error(cbErr);
+				},
+				loadGroupSession: function(cb, cbErr) {
+					$http.get(apiUrl + '/experiments/group')
+						.success(cb)
+						.error(cbErr);
+				},
+				clearGroupSession: function(cb, cbErr) {
+					$http.delete(apiUrl + '/experiments/group')
+						.success(cb)
+						.error(cbErr);
+				},
+				saveGroupSession: function(obj, cb, cbErr) {
+					$http.post(apiUrl + '/experiments/group', obj)
+						.success(cb)
+						.error(cbErr);
+				},
+				finishGroupSession: function(obj, cb, cbErr) {
+					$http.put(apiUrl + '/experiments/group', obj)
+						.success(cb)
+						.error(cbErr);
+				},
+				loadGroupResults: function(cb, cbErr) {
+					$http.get(apiUrl + '/experiments/group/results')
+						.success(cb)
+						.error(cbErr);
 				}
 			}
 		}])
