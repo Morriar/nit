@@ -144,7 +144,7 @@ class OrderedTree[E: Object]
 
 	# print the full tree on `o`
 	# Write a ASCII-style tree and use the `display` method to label elements
-	redef fun write_to(stream: Writer)
+	redef fun write_to(stream)
 	do
 		for r in roots do
 			write_line(stream, r, "")
@@ -224,7 +224,7 @@ class OrderedTree[E: Object]
 	#     assert tree.is_empty
 	#     tree.add(null, 1)
 	#     assert not tree.is_empty
-	redef fun is_empty: Bool do return roots.is_empty
+	redef fun is_empty do return roots.is_empty
 
 	#     var tree = new OrderedTree[Int]
 	#     tree.add(null, 1)
