@@ -26,6 +26,7 @@ import frontend
 import model_index
 import model_ranking
 import csv
+import web
 
 redef class ToolContext
 	var ranker_phase: Phase = new RankerPhase(self, null)
@@ -33,42 +34,259 @@ redef class ToolContext
 	redef init do super
 end
 
+redef class NitwebConfig
+	redef var db_name = "nitweb_orders"
+end
+
 class RankerPhase
 	super Phase
+
+	var csv_out = "csv"
+
+	var rankers: Map[String, ModelRanker] is noinit
+
+	init do
+		csv_out.rmdir
+		csv_out.mkdir
+	end
 
 	redef fun process_mainmodule(mainmodule, mmodules)
 	do
 		var model = toolcontext.modelbuilder.model
 		var view = new ModelView(model)
-		# Input array
-		var ids = ["core::Object", "core::Array", "core::String", "core::Int"]
-		# Find mentity
-		var original_order = load_mentities(view, ids)
-		# Randomize order to avoid bias if the ranking do nothing
-		var mentities = original_order.to_shuffle
-		# Get all orders
-		var rankings = compute_rankings(mentities, mainmodule, view)
-		# Compare orders
-		var distances = compute_distances(original_order, rankings)
-		# Gen CSV
-		var csv = to_csv(distances)
-		# csv.write_to_file "distances.csv"
-		var plot = to_plot(distances)
-		var plot_file = "distances.plot"
-		plot.write_to_file plot_file
-		# gnuplot -e "set term png; set output \"$bn.png\"" "$1"
-		sys.system "gnuplot -p {plot_file}"
 
-		# Print results
-		print "Original order:"
-		print original_order
-		for kind, ranking in rankings do
-			print "{kind}: ({distances[kind]})"
-			print ranking
+		var config = new NitwebConfig(model, mainmodule, toolcontext.modelbuilder)
+		config.parse_options(args)
+
+		rankers = init_rankers(toolcontext.modelbuilder, mainmodule, view)
+
+		var subs = config.order_results.find_all
+		print subs.length
+
+		users_stats(subs)
+		kinds_stats(view, subs)
+		packages_stats(view, subs)
+		order_stats(view, subs)
+		compare_orders(view, mainmodule, subs)
+		comments_stats(subs)
+	end
+
+	fun users_stats(subs: Array[ExpOrderSession]) do
+		var users_subs = new Counter[String]
+		var users_times = new Counter[String]
+		var users_comps = new Counter[String]
+		for sub in subs do
+			users_subs.inc(sub.user.login)
+			users_times[sub.user.login] += sub.finished_at.as(not null) - sub.started_at
+			users_comps[sub.user.login] += sub.original_order.length
 		end
-		print csv
 
-		# Gen plot
+		var csv = new CsvDocument
+		csv.header = ["user", "nb_subs", "nb_ordered", "time"]
+
+		print "# users"
+		for user in users_subs.sort.reversed do
+			var sub = users_subs[user]
+			var ordered = users_comps[user]
+			var time = users_times[user] / 1000 / 60
+			print " * {user}: {sub} subs, {ordered} ordered, {time} minutes"
+			csv.add_record(user, sub, ordered, time)
+		end
+		csv.write_to_file csv_out / "users.csv"
+	end
+
+	fun kinds_stats(view: ModelView, subs: Array[ExpOrderSession]) do
+		var kinds_subs = new Counter[String]
+		var kinds_times = new Counter[String]
+		var kinds_comps = new Counter[String]
+		var ids_stats = new Counter[String]
+
+		for sub in subs do
+			ids_stats.inc(sub.mentity)
+			var mentity = view.mentity_by_full_name(sub.mentity)
+			if mentity == null then
+				print "Warning: unknown {sub.mentity}"
+				continue
+			end
+			var class_name = mentity.class_name
+			if class_name == "MPackage" then
+				kinds_subs.inc("MModules")
+				kinds_times["MModules"] += sub.finished_at.as(not null) - sub.started_at
+				kinds_comps["MModules"] += sub.original_order.length
+			else if class_name == "MModule" then
+				kinds_subs.inc("MClasses")
+				kinds_times["MClasses"] += sub.finished_at.as(not null) - sub.started_at
+				kinds_comps["MClasses"] += sub.original_order.length
+			else if class_name == "MClass" then
+				kinds_subs.inc("MProperties")
+				kinds_times["MProperties"] += sub.finished_at.as(not null) - sub.started_at
+				kinds_comps["MProperties"] += sub.original_order.length
+			else
+				print "Unknown order kind {class_name}"
+			end
+		end
+
+		print "# kinds"
+		var csv = new CsvDocument
+		csv.header = ["kind", "nb subs", "nb ordered", "time"]
+		for key in kinds_subs.sort.reversed do
+			var sub = kinds_subs[key]
+			var ordered = kinds_comps[key]
+			var time = kinds_times[key] / 1000 / 60
+			csv.add_record(key, sub, ordered, time)
+			print " * {key}: {sub} subs, {ordered} ordered, {time} minutes"
+		end
+		csv.write_to_file csv_out / "kinds.csv"
+
+		# print "# ids"
+		csv = new CsvDocument
+		csv.header = ["target", "nb subs"]
+		for key in ids_stats.sort.reversed do
+			# print " * {key}: {ids_stats[key]}"
+			csv.add_record(key, ids_stats[key])
+		end
+		csv.write_to_file csv_out / "targets.csv"
+	end
+
+	fun packages_stats(view: ModelView, subs: Array[ExpOrderSession]) do
+		var packages_subs = new Counter[String]
+		var packages_times = new Counter[String]
+		var packages_comps = new Counter[String]
+
+		for sub in subs do
+			var mentity = view.mentity_by_full_name(sub.mentity)
+			if mentity == null then
+				print "Warning: unknown {sub.mentity}"
+				continue
+			end
+			var mpackage: nullable MPackage
+			if mentity isa MPackage then
+				mpackage = mentity
+			else if mentity isa MModule then
+				mpackage = mentity.mpackage
+			else if mentity isa MClass then
+				mpackage = mentity.intro.mmodule.mpackage
+			else
+				print "Unknown target package {mentity}"
+				continue
+			end
+			if mpackage == null then
+				print "Unknown target package {sub.mentity}"
+				continue
+			end
+
+			packages_subs.inc(mpackage.full_name)
+			packages_times[mpackage.full_name] += sub.finished_at.as(not null) - sub.started_at
+			packages_comps[mpackage.full_name] += sub.original_order.length
+		end
+
+		print "# packages"
+		var csv = new CsvDocument
+		csv.header = ["package", "nb subs", "nb ordered", "time"]
+		for key in packages_subs.sort.reversed do
+			var sub = packages_subs[key]
+			var ordered = packages_comps[key]
+			var time = packages_times[key] / 1000 / 60
+			csv.add_record(key, sub, ordered, time)
+			print " * {key}: {sub} subs, {ordered} ordered, {time} minutes"
+		end
+		csv.write_to_file csv_out / "packages.csv"
+	end
+
+	fun order_stats(view: ModelView, subs: Array[ExpOrderSession]) do
+		var ids_stats = new Counter[String]
+		var same_orders = new Counter[String]
+		var sizes_stats = new Counter[Int]
+		for sub in subs do
+			var keys = sub.original_order
+			default_comparator.sort keys
+			same_orders.inc(keys.join(","))
+			sizes_stats.inc(keys.length)
+			for mentity in load_mentities(view, sub.to_order) do
+				ids_stats.inc(mentity.full_name)
+			end
+		end
+
+		# print "# orders"
+		var csv = new CsvDocument
+		csv.header = ["order", "nb subs"]
+		for key in same_orders.sort.reversed do
+			csv.add_record(key, same_orders[key])
+		#	print " * {key}: {same_orders[key]}"
+		end
+		csv.write_to_file csv_out / "same_orders.csv"
+
+		print "# sizes"
+		csv = new CsvDocument
+		csv.header = ["size", "nb subs"]
+		for key in sizes_stats.sort.reversed do
+			csv.add_record(key, sizes_stats[key])
+			print " * {key}: {sizes_stats[key]}"
+		end
+		csv.write_to_file csv_out / "order_sizes.csv"
+
+		# print "# ids"
+		csv = new CsvDocument
+		csv.header = ["target", "nb orders"]
+		for key in ids_stats.sort.reversed do
+			# print " * {key}: {ids_stats[key]}"
+			csv.add_record(key, ids_stats[key])
+		end
+		csv.write_to_file csv_out / "mentities.csv"
+
+		var distances_stats = new Counter[Int]
+		for sub in subs do
+			distances_stats.inc(sub.original_order.levenshtein_distance(sub.to_order))
+		end
+
+		print "# distances from original"
+		csv = new CsvDocument
+		csv.header = ["distance", "nb subs"]
+		for key in distances_stats.sort.reversed do
+			csv.add_record(key, distances_stats[key])
+			print " * {key}: {distances_stats[key]}"
+		end
+		csv.write_to_file csv_out / "original_distances.csv"
+	end
+
+	fun compare_orders(view: ModelView, mainmodule: MModule, subs: Array[ExpOrderSession]) do
+		# Compute rankings
+		var rankings = new HashMap[ExpOrderSession, Map[String, ModelRanking]]
+		for sub in subs do
+			# print "Compute ranking for {sub}"
+			var mentities = load_mentities(view, sub.original_order)
+			rankings[sub] = compute_rankings(mentities, mainmodule, view)
+		end
+		# Compute distances
+		var distances = new HashMap[ExpOrderSession, Map[String, Int]]
+		for sub in rankings.keys do
+			var original_mentities = load_mentities(view, sub.to_order)
+			distances[sub] = compute_distances(original_mentities, rankings[sub])
+		end
+
+		var csv = new CsvDocument
+		csv.header.add "submission"
+		csv.header.add "user"
+		csv.header.add "kind"
+		csv.header.add "original size"
+		csv.header.add "original distance"
+		csv.header.add_all rankers.keys
+		for sub in subs do
+			var mentity = view.mentity_by_full_name(sub.mentity)
+			if mentity == null then continue
+			var record = new Array[String]
+			record.add sub.id
+			record.add sub.user.login
+			record.add mentity.class_name
+			record.add sub.original_order.length.to_s
+			record.add sub.original_order.levenshtein_distance(sub.to_order).to_s
+			var distance = distances[sub]
+			for order in rankers.keys do
+				record.add distance[order].to_s
+			end
+			csv.records.add record
+		end
+		csv.write_to_file csv_out / "compare_orders.csv"
 	end
 
 	# Load mentities from an array of full names
@@ -87,17 +305,12 @@ class RankerPhase
 
 	# Compute ranks for all ranker with mentities
 	fun compute_rankings(mentities: Array[MEntity], mainmodule: MModule, view: ModelView): Map[String, ModelRanking] do
-		var orders = ["dep", "dep-doc", "mendel", "none", "random", "alpha", "natural", "heuristical", "pagerank-hierarchy", "pagerank-types", "pagerank-calls", "size", "loc", "lod", "usage"]
 		var rankings = new HashMap[String, ModelRanking]
-		for order in orders do
-			var ranker = get_ranker(order, toolcontext.modelbuilder, mainmodule, view)
-			if ranker == null then
-				print "Error: No ranker for name {order}"
-				continue
-			end
+		for id, ranker in rankers do
+			# print " * rank with {order}"
 			var ranking = new ModelRanking.from_mentities(mentities)
 			ranking.rank(ranker)
-			rankings[order] = ranking
+			rankings[id] = ranking
 		end
 		return rankings
 	end
@@ -114,66 +327,35 @@ class RankerPhase
 		return distances
 	end
 
-	# Translate distances map to csv document
-	fun to_csv(distances: Map[String, Int]): CsvDocument do
-		var csv = new CsvDocument
-		csv.header = ["engine", "distance"]
-		for kind, distance in distances do
-			csv.add_record(kind, distance)
-		end
-		return csv
+	fun init_rankers(modelbuilder: ModelBuilder, mainmodule: MModule, view: ModelView): Map[String, ModelRanker] do
+		var res = new HashMap[String, ModelRanker]
+		# res["none"] = new NoneRanker
+		res["random"] = new RandomRanker
+		res["alpha"] = new AlphaRanker
+		res["natural"] = new NaturalRanker
+		res["heuristical"] = new HeuristicalRanker
+		res["size"] = new SizeRanker
+		res["loc"] = new LOCRanker(modelbuilder)
+		res["lod"] = new LODRanker
+		res["usage"] = new UsageRanker(view, modelbuilder, false)
+		res["usage-all"] = new UsageRanker(view, modelbuilder, true)
+		res["dep"] = new DepRanker(mainmodule)
+		# res["dep-doc"] = new DocDepRanker(view)
+		res["mendel"] = new MendelRanker(mainmodule, view)
+		res["pagerank-hierarchy"] = new PageRankRanker(view, modelbuilder, "hierarchy")
+		res["pagerank-types"] = new PageRankRanker(view, modelbuilder, "types")
+		res["pagerank-calls"] = new PageRankRanker(view, modelbuilder, "calls")
+		return res
 	end
 
-	fun to_plot(distances: Map[String, Int]): String do
-		var plot = """
-			set auto x;
-			set yrange [0:];
-			set style data histogram;
-			set style histogram cluster gap 2;
-			set style histogram errorbars linewidth 1;
-			set style fill solid 0.3 border -1;
-			set bars front;
-			set boxwidth 0.9;
-			set xtic nomirror rotate by -45 scale 0 font ',8';
-			set title "$1 ; avg. on $count-1 runs"
-			set ylabel "time (s)"
-		"""
-		return plot
-	end
-
-	fun get_ranker(kind: String, modelbuilder: ModelBuilder, mainmodule: MModule, view: ModelView): nullable ModelRanker do
-		if kind == "dep" then
-			return new DepRanker(mainmodule)
-		else if kind == "dep-doc" then
-			return new DocDepRanker(view)
-		else if kind == "mendel" then
-			return new MendelRanker(mainmodule, view)
-		else if kind == "none" then
-			return new NoneRanker
-		else if kind == "random" then
-			return new RandomRanker
-		else if kind == "alpha" then
-			return new AlphaRanker
-		else if kind == "natural" then
-			return new NaturalRanker
-		else if kind == "heuristical" then
-			return new HeuristicalRanker
-		else if kind == "pagerank-hierarchy" then
-			return new PageRankRanker(view, modelbuilder, "hierarchy")
-		else if kind == "pagerank-types" then
-			return new PageRankRanker(view, modelbuilder, "types")
-		else if kind == "pagerank-calls" then
-			return new PageRankRanker(view, modelbuilder, "calss")
-		else if kind == "size" then
-			return new SizeRanker
-		else if kind == "loc" then
-			return new LOCRanker(modelbuilder)
-		else if kind == "lod" then
-			return new LODRanker
-		else if kind == "usage" then
-			return new UsageRanker(modelbuilder)
+	fun comments_stats(subs: Array[ExpOrderSession]) do
+		var user_comments = new Counter[String]
+		for sub in subs do
+			var comment = sub.comment
+			if comment == null then continue
+			user_comments.inc(sub.user.login)
+			# print sub.comment or else ""
 		end
-		return null
 	end
 end
 

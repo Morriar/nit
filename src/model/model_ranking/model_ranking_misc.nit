@@ -16,16 +16,12 @@ module model_ranking_misc
 
 import model_ranking_base
 
-# Always set rank to `0`.
-#
-# Dummy ranker used to reproduce the model order.
+# Dummy ranker that do nothing.
 class NoneRanker
 	super ModelRanker
 
 	# Keep original order.
 	redef fun sort(mentities) do end
-
-	redef fun rank_mentity(concern) do return 0.0
 end
 
 # Set a random rank.
