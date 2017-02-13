@@ -19,141 +19,153 @@ module model_ranking_usage
 
 import model_ranking_base
 import semantize::typing
+import model_views
+import counter
 
 # Weight concerns based on the number of usage inside the concern.
 class UsageRanker
 	super ModelRanker
 
+	# View to find modules
+	var view: ModelView
+
 	# Modelbuilder to find AST nodes
 	var modelbuilder: ModelBuilder
 
-	redef fun rank_mmodule(mmodule) do
-		var nmodule = modelbuilder.mmodule2node(mmodule)
-		if nmodule == null then return 0.0
-		var visitor = new ModuleUsageVisitor(self, mmodule)
-		visitor.enter_visit(nmodule)
-		return visitor.rank
-	end
+	# Count all kind of usage or only imports, news and calls
+	var all_usages: Bool
 
-	redef fun rank_mclassdef(mclassdef) do
-		var nclassdef = modelbuilder.mclassdef2node(mclassdef)
-		if nclassdef == null then return 0.0
-		var visitor = new ClassUsageVisitor(self, mclassdef)
-		visitor.enter_visit(nclassdef)
-		return visitor.rank
-	end
+	# Usage visitor to collect things
+	private var visitor = new UsageVisitor(self)
 
-	redef fun rank_mpropdef(mpropdef) do
-		var npropdef = modelbuilder.mpropdef2node(mpropdef)
-		if npropdef == null then return 0.0
-		var visitor = new CallUsageVisitor(self, mpropdef)
-		visitor.enter_visit(npropdef)
-		return visitor.rank
-	end
-end
-
-# Weight module based on the number of import clauses
-private class ModuleUsageVisitor
-	super Visitor
-
-	var ranker: UsageRanker
-
-	var mmodule: MModule
-
-	var rank = 0.0
-
-	redef fun visit(n)
-	do
-		if n isa AStdImport then
-			visit_import(n)
-		else if n isa AType then
-			visit_type(n)
+	init do
+		for mmodule in view.mmodules do
+			var nmodule = modelbuilder.mmodule2node(mmodule)
+			visitor.enter_visit(nmodule)
 		end
-		n.visit_all(self)
 	end
 
-	fun visit_import(n: AStdImport) do
-		# if ranker.toolcontext.opt_usage_no_imports.value then return
-		var mod = n.mmodule
-		if mod != null then rank += 1.0
-	end
-
-	fun visit_type(n: AType) do
-		# if ranker.toolcontext.opt_usage_no_types.value then return
-		var mtype = n.mtype
-		if mtype == null then return
-		if mtype isa MNullableType then mtype = mtype.mtype
-		if not mtype isa MClassType then return
-		var mmodule = mtype.mclass.intro.mmodule
-		if mmodule == self.mmodule then return
-		rank += 1.0
-	end
-end
-
-# Weight classes based on the number of type references
-private class ClassUsageVisitor
-	super Visitor
-
-	var ranker: UsageRanker
-
-	var mclassdef: MClassDef
-
-	var rank = 0.0
-
-	redef fun visit(n) do
-		if n isa ANewExpr then
-			visit_new(n)
-			visit_expr(n)
-		else if n isa AExpr then
-			visit_expr(n)
-		else if n isa AType then
-			visit_type(n)
-		end
-		n.visit_all(self)
-	end
-
-	fun visit_new(n: ANewExpr) do
-		# if ranker.toolcontext.opt_usage_no_news.value then return
-		increment_mtype(n.n_type.mtype)
-	end
-
-	fun visit_expr(n: AExpr) do
-		# if ranker.toolcontext.opt_usage_no_exprs.value then return
-		increment_mtype(n.mtype)
-	end
-
-
-	fun visit_type(n: AType) do
-		# if ranker.toolcontext.opt_usage_no_types.value then return
-		increment_mtype(n.mtype)
-	end
-
-	fun increment_mtype(mtype: nullable MType) do
-		if mtype == null then return
-		if mtype isa MNullableType then mtype = mtype.mtype
-		if not mtype isa MClassType then return
-		var mclass = mtype.mclass
-		if mclass == self.mclassdef.mclass then return
-		rank += 1.0
-	end
-end
-
-private class CallUsageVisitor
-	super Visitor
-
-	var ranker: UsageRanker
-
-	var mpropdef: MPropDef
-
-	var rank = 0.0
-
-	redef fun visit(n) do
-		if n isa ACallExpr then
-			var callsite = n.callsite
-			if callsite != null then
-				rank += 1.0
+	redef fun rank_mpackage(mpackage) do
+		var res = 0.0
+		for mgroup in mpackage.mgroups do
+			for mmodule in mgroup.mmodules do
+				res += rank_mmodule(mmodule)
 			end
 		end
+		return res
+	end
+
+	redef fun rank_mmodule(mmodule) do
+		if all_usages then
+			return visitor.mmodule_uses[mmodule].to_f
+		end
+		return visitor.mmodule_imports[mmodule].to_f
+	end
+
+	redef fun rank_mclass(mclass) do
+		if all_usages then
+			return visitor.mclass_uses[mclass].to_f
+		end
+		return visitor.mclass_news[mclass].to_f
+	end
+
+	redef fun rank_mclassdef(mclassdef) do return rank_mclass(mclassdef.mclass)
+
+	redef fun rank_mproperty(mprop) do
+		if all_usages then
+			return visitor.mprop_uses[mprop].to_f
+		end
+		return visitor.mprop_calls[mprop].to_f
+	end
+
+	redef fun rank_mpropdef(mpropdef) do return rank_mproperty(mpropdef.mproperty)
+end
+
+#
+private class UsageVisitor
+	super Visitor
+
+	var ranker: UsageRanker
+
+	# all modules usages
+	var mmodule_uses = new Counter[MModule]
+
+	# nb times a module is imported
+	var mmodule_imports = new Counter[MModule]
+
+	# all classes usages
+	var mclass_uses = new Counter[MClass]
+
+	# nb times a class is newed
+	var mclass_news = new Counter[MClass]
+
+	# all mprop uses
+	var mprop_uses = new Counter[MProperty]
+
+	# nb times a prop is called
+	var mprop_calls = new Counter[MProperty]
+
+	fun get_mclass(mtype: nullable MType): nullable MClass do
+		if mtype == null then return null
+		if mtype isa MNullableType then mtype = mtype.mtype
+		if not mtype isa MClassType then return null
+		return mtype.mclass
+	end
+
+	redef fun visit(n) do
+		n.accept_usage_visit(self)
 		n.visit_all(self)
+	end
+end
+
+redef class ANode
+	private fun accept_usage_visit(v: UsageVisitor) do visit_all(v)
+end
+
+redef class AExpr
+	redef fun accept_usage_visit(v) do
+		var mclass = v.get_mclass(mtype)
+		if mclass == null then return
+		v.mclass_uses.inc(mclass)
+		# TODO inc modules
+	end
+end
+
+redef class AStdImport
+	redef fun accept_usage_visit(v) do
+		var mmodule = self.mmodule
+		if mmodule == null then return
+		v.mmodule_imports.inc(mmodule)
+		v.mmodule_uses.inc(mmodule)
+	end
+end
+
+redef class ANewExpr
+	redef fun accept_usage_visit(v) do
+		var mclass = v.get_mclass(n_type.mtype)
+		if mclass == null then return
+		v.mclass_news.inc(mclass)
+		v.mclass_uses.inc(mclass)
+		# TODO inc module
+	end
+end
+
+redef class ACallExpr
+	redef fun accept_usage_visit(v) do
+		var callsite = self.callsite
+		if callsite == null then return
+		v.mprop_calls.inc(callsite.mpropdef.mproperty)
+		v.mprop_uses.inc(callsite.mpropdef.mproperty)
+		# TODO inc class
+		# TODO inc module
+	end
+end
+
+redef class AType
+	redef fun accept_usage_visit(v) do
+		var mclass = v.get_mclass(mtype)
+		if mclass == null then return
+		v.mclass_uses.inc(mclass)
+		# TODO inc module
 	end
 end

@@ -28,20 +28,23 @@ import frontend
 class SizeRanker
 	super ModelRanker
 
+	# Rank = mmodule.mclassdefs.length
 	redef fun rank_mmodule(mmodule) do
-		var rank = 0.0
-		for mclassdef in mmodule.mclassdefs do
-			rank += 1.0
-		end
-		return rank
+		return mmodule.mclassdefs.length.to_f
 	end
 
+	# Rank = mclassdef.mpropdefs.length
 	redef fun rank_mclassdef(mclassdef) do
-		var rank = 0.0
-		for mpropdef in mclassdef.mpropdefs do
-			rank += 1.0
+		return mclassdef.mpropdefs.length.to_f
+	end
+
+	redef fun rank_mpropdef(mpropdef) do
+		if mpropdef isa MMethod then
+			var msignature = mpropdef.intro.msignature
+			if msignature == null then return 0.0
+			return msignature.arity.to_f
 		end
-		return rank
+		return 0.0
 	end
 end
 
