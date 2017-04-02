@@ -47,18 +47,22 @@ end
 # Classdefs and Properties are ranked following `location.line_start`.
 # Modules are ranked following the alphabetical order (as seen in the IDE).
 class NaturalRanker
-	super ModelRanker
+	super AlphaRanker
 
 	# Comparator used for package, group and module names.
 	var alpha_comparator = new AlphaRanker
 
 	redef fun compare(a, b) do
-		if a isa MClassDef and b isa MClassDef and a.mmodule == b.mmodule then
-			return super
+		if a isa MClass and b isa MClass and a.intro.mmodule == b.intro.mmodule then
+			return a.intro.location.line_start <=> b.intro.location.line_start
+		else if a isa MClassDef and b isa MClassDef and a.mmodule == b.mmodule then
+			return a.location.line_start <=> b.location.line_start
+		else if a isa MProperty and b isa MProperty and a.intro.mclassdef == b.intro.mclassdef then
+			return a.intro.location.line_start <=> b.intro.location.line_start
 		else if a isa MPropDef and b isa MPropDef and a.mclassdef == b.mclassdef then
-			return super
+			return a.location.line_start <=> b.location.line_start
 		end
-		return alpha_comparator.compare(a, b)
+		return super
 	end
 
 	redef fun rank_mclassdef(mclassdef) do
