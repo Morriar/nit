@@ -1,0 +1,12 @@
+core::core::kernel::Object
+core::core::kernel::Sys
+core::core::kernel::Comparable
+core::core::kernel::Discrete
+core::core::kernel::Cloneable
+core::core::kernel::Numeric
+core::core::kernel::Bool
+core::core::kernel::Float
+core::core::kernel::Byte
+core::core::kernel::Int
+core::core::kernel::Char
+core::core::kernel::Pointer

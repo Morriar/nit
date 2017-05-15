@@ -1,0 +1,9 @@
+core::core::exec::ProcessWriter::SELF
+core::core::exec::ProcessWriter::_stream_out
+core::core::exec::ProcessWriter::stream_out
+core::core::exec::ProcessWriter::stream_out=
+core::core::exec::ProcessWriter::close
+core::core::exec::ProcessWriter::is_writable
+core::core::exec::ProcessWriter::write
+core::core::exec::ProcessWriter::pipeflags
+core::core::exec::ProcessWriter::execute

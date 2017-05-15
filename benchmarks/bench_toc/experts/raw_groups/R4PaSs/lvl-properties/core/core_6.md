@@ -1,0 +1,25 @@
+core::core::kernel::Float::SELF
+core::core::kernel::Float::OTHER
+core::core::kernel::Float::object_id
+core::core::kernel::Float::==
+core::core::kernel::Float::!=
+core::core::kernel::Float::output
+core::core::kernel::Float::<=
+core::core::kernel::Float::<
+core::core::kernel::Float::>=
+core::core::kernel::Float::>
+core::core::kernel::Float::+
+core::core::kernel::Float::unary -
+core::core::kernel::Float::
+core::core::kernel::Float::*
+core::core::kernel::Float::/
+core::core::kernel::Float::to_i
+core::core::kernel::Float::to_f
+core::core::kernel::Float::to_b
+core::core::kernel::Float::zero
+core::core::kernel::Float::value_of
+core::core::kernel::Float::<=>
+core::core::kernel::Float::is_between
+core::core::kernel::Float::is_approx
+core::core::kernel::Float::max
+core::core::kernel::Float::min

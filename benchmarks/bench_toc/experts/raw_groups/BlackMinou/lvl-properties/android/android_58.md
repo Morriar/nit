@@ -1,0 +1,15 @@
+android::android::sensors::AndroidSensor::SELF
+android::android::sensors::AndroidSensor::asensor
+android::android::sensors::AndroidSensor::asensor=
+android::android::sensors::AndroidSensor::enabled
+android::android::sensors::AndroidSensor::enabled=
+android::android::sensors::AndroidSensor::event_rate
+android::android::sensors::AndroidSensor::event_rate=
+android::android::sensors::AndroidSensor::name
+android::android::sensors::AndroidSensor::vendor
+android::android::sensors::AndroidSensor::sensor_type
+android::android::sensors::AndroidSensor::resolution
+android::android::sensors::AndroidSensor::min_delay
+android::android::sensors::AndroidSensor::_asensor
+android::android::sensors::AndroidSensor::_enabled
+android::android::sensors::AndroidSensor::_event_rate

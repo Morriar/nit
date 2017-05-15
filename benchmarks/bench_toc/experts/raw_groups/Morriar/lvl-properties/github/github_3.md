@@ -1,0 +1,21 @@
+github::github::api::Repo::SELF
+github::github::api::Repo::_key
+github::github::api::Repo::key
+github::github::api::Repo::lazy _key
+github::github::api::Repo::key=
+github::github::api::Repo::_full_name
+github::github::api::Repo::full_name
+github::github::api::Repo::full_name=
+github::github::api::Repo::from_json
+github::github::api::Repo::name
+github::github::api::Repo::owner
+github::github::api::Repo::branches
+github::github::api::Repo::issues
+github::github::api::Repo::search_issues
+github::github::api::Repo::last_issue
+github::github::api::Repo::labels
+github::github::api::Repo::milestones
+github::github::api::Repo::pulls
+github::github::api::Repo::contrib_stats
+github::github::api::Repo::default_branch
+github::github::api::Repo::init

@@ -1,0 +1,12 @@
+markdown::markdown::markdown::Token::SELF
+markdown::markdown::markdown::Token::_location
+markdown::markdown::markdown::Token::location
+markdown::markdown::markdown::Token::location=
+markdown::markdown::markdown::Token::_pos
+markdown::markdown::markdown::Token::pos
+markdown::markdown::markdown::Token::pos=
+markdown::markdown::markdown::Token::_char
+markdown::markdown::markdown::Token::char
+markdown::markdown::markdown::Token::char=
+markdown::markdown::markdown::Token::emit
+markdown::markdown::markdown::Token::init

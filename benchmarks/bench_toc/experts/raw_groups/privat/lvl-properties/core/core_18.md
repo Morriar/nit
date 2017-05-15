@@ -1,0 +1,10 @@
+core::core::fixed_ints::Int8
+core::core::fixed_ints::Int16
+core::core::fixed_ints::UInt16
+core::core::fixed_ints::Int32
+core::core::fixed_ints::UInt32
+core::core::fixed_ints::Numeric
+core::core::fixed_ints::Float
+core::core::fixed_ints::Byte
+core::core::fixed_ints::Int
+core::core::fixed_ints::Text

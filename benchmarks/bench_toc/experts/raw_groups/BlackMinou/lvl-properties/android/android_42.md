@@ -1,0 +1,14 @@
+android::android::assets_and_resources::NativeResources::SELF
+android::android::assets_and_resources::NativeResources::new_global_ref
+android::android::assets_and_resources::NativeResources::get_assets
+android::android::assets_and_resources::NativeResources::get_color
+android::android::assets_and_resources::NativeResources::get_boolean
+android::android::assets_and_resources::NativeResources::get_dimension
+android::android::assets_and_resources::NativeResources::get_drawable
+android::android::assets_and_resources::NativeResources::get_identifier
+android::android::assets_and_resources::NativeResources::get_integer
+android::android::assets_and_resources::NativeResources::get_string
+android::android::assets_and_resources::NativeResources::get_resource_entry_name
+android::android::assets_and_resources::NativeResources::get_resource_name
+android::android::assets_and_resources::NativeResources::get_resource_pakage_name
+android::android::assets_and_resources::NativeResources::get_resource_type_name

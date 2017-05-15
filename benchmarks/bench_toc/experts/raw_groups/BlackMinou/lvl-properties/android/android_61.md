@@ -1,0 +1,10 @@
+android::android::sensors::ASensorVector::SELF
+android::android::sensors::ASensorVector::v
+android::android::sensors::ASensorVector::x
+android::android::sensors::ASensorVector::y
+android::android::sensors::ASensorVector::z
+android::android::sensors::ASensorVector::azimuth
+android::android::sensors::ASensorVector::pitch
+android::android::sensors::ASensorVector::roll
+android::android::sensors::ASensorVector::status
+android::android::sensors::ASensorVector::reserved

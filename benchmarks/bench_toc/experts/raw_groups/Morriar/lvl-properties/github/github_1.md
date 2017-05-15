@@ -1,0 +1,12 @@
+github::github::api::GithubEntity::SELF
+github::github::api::GithubEntity::_api
+github::github::api::GithubEntity::api
+github::github::api::GithubEntity::api=
+github::github::api::GithubEntity::key
+github::github::api::GithubEntity::_json
+github::github::api::GithubEntity::json
+github::github::api::GithubEntity::json=
+github::github::api::GithubEntity::load_from_github
+github::github::api::GithubEntity::to_s
+github::github::api::GithubEntity::html_url
+github::github::api::GithubEntity::init

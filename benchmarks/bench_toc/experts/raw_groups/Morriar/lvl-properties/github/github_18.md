@@ -1,0 +1,14 @@
+github::github::api::ContributorStats::SELF
+github::github::api::ContributorStats::OTHER
+github::github::api::ContributorStats::_api
+github::github::api::ContributorStats::api
+github::github::api::ContributorStats::api=
+github::github::api::ContributorStats::_json
+github::github::api::ContributorStats::json
+github::github::api::ContributorStats::json=
+github::github::api::ContributorStats::from_json
+github::github::api::ContributorStats::author
+github::github::api::ContributorStats::total
+github::github::api::ContributorStats::weeks
+github::github::api::ContributorStats::<
+github::github::api::ContributorStats::init

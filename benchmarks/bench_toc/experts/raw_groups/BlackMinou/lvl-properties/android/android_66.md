@@ -1,0 +1,15 @@
+android::android::sensors::App
+android::android::sensors::ASensorType
+android::android::sensors::ASensorManager
+android::android::sensors::ASensorEventQueue
+android::android::sensors::ASensor
+android::android::sensors::AndroidSensor
+android::android::sensors::ASensorEvent
+android::android::sensors::FullSensor
+android::android::sensors::ASensorVector
+android::android::sensors::ASensorAccelerometer
+android::android::sensors::ASensorMagneticField
+android::android::sensors::ASensorGyroscope
+android::android::sensors::ASensorLight
+android::android::sensors::ASensorProximity
+android::android::sensors::ASensorEvents

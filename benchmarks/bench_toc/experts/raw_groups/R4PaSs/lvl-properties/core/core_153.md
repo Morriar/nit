@@ -1,0 +1,11 @@
+core::core::file::FileStream::SELF
+core::core::file::FileStream::_path
+core::core::file::FileStream::path
+core::core::file::FileStream::path=
+core::core::file::FileStream::_file
+core::core::file::FileStream::file
+core::core::file::FileStream::file=
+core::core::file::FileStream::file_stat
+core::core::file::FileStream::fd
+core::core::file::FileStream::close
+core::core::file::FileStream::set_buffering_mode

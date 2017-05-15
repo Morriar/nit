@@ -1,0 +1,15 @@
+core::core::text::native::NativeString::SELF
+core::core::text::native::NativeString::new
+core::core::text::native::NativeString::fast_cstring
+core::core::text::native::NativeString::[]
+core::core::text::native::NativeString::[]=
+core::core::text::native::NativeString::copy_to
+core::core::text::native::NativeString::cstring_length
+core::core::text::native::NativeString::atoi
+core::core::text::native::NativeString::atof
+core::core::text::native::NativeString::char_at
+core::core::text::native::NativeString::char_to_byte_index
+core::core::text::native::NativeString::length_of_char_at
+core::core::text::native::NativeString::char_to_byte_index_cached
+core::core::text::native::NativeString::byte_to_char_index_cached
+core::core::text::native::NativeString::find_beginning_of_char_at

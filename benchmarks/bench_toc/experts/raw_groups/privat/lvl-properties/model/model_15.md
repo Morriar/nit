@@ -1,0 +1,10 @@
+nitc::nitc::model::mmodule_data::MModuleData::init
+nitc::nitc::model::mmodule_data::MModuleData::model
+nitc::nitc::model::mmodule_data::MModuleData::has_mmodule
+nitc::nitc::model::mmodule_data::MModuleData::[]
+nitc::nitc::model::mmodule_data::MModuleData::[]=
+nitc::nitc::model::mmodule_data::MModuleData::defs
+nitc::nitc::model::mmodule_data::MModuleData::lookup_all_modules
+nitc::nitc::model::mmodule_data::MModuleData::lookup_all_values
+nitc::nitc::model::mmodule_data::MModuleData::lookup_values
+nitc::nitc::model::mmodule_data::MModuleData::lookup_first_value

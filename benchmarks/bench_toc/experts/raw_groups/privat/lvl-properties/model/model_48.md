@@ -1,0 +1,13 @@
+nitc::nitc::model::model::MPropDef::init
+nitc::nitc::model::model::MPropDef::MPROPERTY
+nitc::nitc::model::model::MPropDef::MPROPDEF
+nitc::nitc::model::model::MPropDef::mclassdef
+nitc::nitc::model::model::MPropDef::mproperty
+nitc::nitc::model::model::MPropDef::location
+nitc::nitc::model::model::MPropDef::name
+nitc::nitc::model::model::MPropDef::full_name
+nitc::nitc::model::model::MPropDef::c_name
+nitc::nitc::model::model::MPropDef::model
+nitc::nitc::model::model::MPropDef::to_s
+nitc::nitc::model::model::MPropDef::is_intro
+nitc::nitc::model::model::MPropDef::lookup_next_definition

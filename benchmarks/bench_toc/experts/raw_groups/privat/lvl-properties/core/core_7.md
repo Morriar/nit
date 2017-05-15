@@ -1,0 +1,17 @@
+core::core::text::abstract_text::Text
+core::core::text::abstract_text::String
+core::core::text::abstract_text::Buffer
+core::core::text::abstract_text::Object
+core::core::text::abstract_text::Bool
+core::core::text::abstract_text::Byte
+core::core::text::abstract_text::Int
+core::core::text::abstract_text::Float
+core::core::text::abstract_text::Char
+core::core::text::abstract_text::Collection
+core::core::text::abstract_text::Map
+core::core::text::abstract_text::Sys
+core::core::text::abstract_text::CachedAlphaComparator
+core::core::text::abstract_text::Sys
+core::core::text::abstract_text::FlatText
+core::core::text::abstract_text::NativeString
+core::core::text::abstract_text::NativeArray

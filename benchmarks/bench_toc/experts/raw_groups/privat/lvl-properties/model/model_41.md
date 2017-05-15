@@ -1,0 +1,13 @@
+nitc::nitc::model::model::MNullType::model
+nitc::nitc::model::model::MNullType::to_s
+nitc::nitc::model::model::MNullType::full_name
+nitc::nitc::model::model::MNullType::c_name
+nitc::nitc::model::model::MNullType::as_nullable
+nitc::nitc::model::model::MNullType::as_notnull
+nitc::nitc::model::model::MNullType::need_anchor
+nitc::nitc::model::model::MNullType::resolve_for
+nitc::nitc::model::model::MNullType::can_resolve_for
+nitc::nitc::model::model::MNullType::collect_mclassdefs
+nitc::nitc::model::model::MNullType::collect_mclasses
+nitc::nitc::model::model::MNullType::collect_mtypes
+nitc::nitc::model::model::MNullType::init

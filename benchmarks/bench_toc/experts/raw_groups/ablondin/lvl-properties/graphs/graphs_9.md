@@ -1,0 +1,10 @@
+graphs::graphs::digraph::TarjanAlgorithm::graph
+graphs::graphs::digraph::TarjanAlgorithm::index
+graphs::graphs::digraph::TarjanAlgorithm::stack
+graphs::graphs::digraph::TarjanAlgorithm::vertex_to_index
+graphs::graphs::digraph::TarjanAlgorithm::ancestor
+graphs::graphs::digraph::TarjanAlgorithm::in_stack
+graphs::graphs::digraph::TarjanAlgorithm::sccs
+graphs::graphs::digraph::TarjanAlgorithm::strongly_connected_components
+graphs::graphs::digraph::TarjanAlgorithm::init
+graphs::graphs::digraph::TarjanAlgorithm::visit

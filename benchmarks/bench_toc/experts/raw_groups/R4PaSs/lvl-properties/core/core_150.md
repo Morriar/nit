@@ -1,0 +1,12 @@
+core::core::stream::StringWriter::SELF
+core::core::stream::StringWriter::_content
+core::core::stream::StringWriter::content
+core::core::stream::StringWriter::content=
+core::core::stream::StringWriter::to_s
+core::core::stream::StringWriter::is_writable
+core::core::stream::StringWriter::write_bytes
+core::core::stream::StringWriter::write
+core::core::stream::StringWriter::_closed
+core::core::stream::StringWriter::closed
+core::core::stream::StringWriter::closed=
+core::core::stream::StringWriter::close

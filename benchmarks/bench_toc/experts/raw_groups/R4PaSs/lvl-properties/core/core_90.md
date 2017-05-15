@@ -1,0 +1,10 @@
+core::core::text::abstract_text::Sys::program_args
+core::core::text::abstract_text::Sys::program_name
+core::core::text::abstract_text::Sys::alpha_comparator
+core::core::text::abstract_text::Sys::args
+core::core::text::abstract_text::Sys::_args_cache
+core::core::text::abstract_text::Sys::args_cache
+core::core::text::abstract_text::Sys::args_cache=
+core::core::text::abstract_text::Sys::init_args
+core::core::text::abstract_text::Sys::native_argc
+core::core::text::abstract_text::Sys::native_argv

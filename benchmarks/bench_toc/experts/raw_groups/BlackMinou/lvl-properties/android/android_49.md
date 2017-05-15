@@ -1,0 +1,10 @@
+android::android::audio::Music::id
+android::android::audio::Music::media_player
+android::android::audio::Music::load
+android::android::audio::Music::play
+android::android::audio::Music::pause
+android::android::audio::Music::resume
+android::android::audio::Music::id=
+android::android::audio::Music::media_player=
+android::android::audio::Music::_id
+android::android::audio::Music::_media_player

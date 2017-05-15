@@ -1,0 +1,9 @@
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferences::SELF
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferences::contains
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferences::get_all
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferences::get_boolean
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferences::get_float
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferences::get_int
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferences::get_long
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferences::get_string
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferences::new_global_ref

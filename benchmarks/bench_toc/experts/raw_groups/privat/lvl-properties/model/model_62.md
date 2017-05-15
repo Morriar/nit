@@ -1,0 +1,10 @@
+nitc::nitc::model::model_viz::MPackageDot::model
+nitc::nitc::model::model_viz::MPackageDot::mpackages
+nitc::nitc::model::model_viz::MPackageDot::mmodules
+nitc::nitc::model::model_viz::MPackageDot::node_for
+nitc::nitc::model::model_viz::MPackageDot::cluster_group
+nitc::nitc::model::model_viz::MPackageDot::package_group
+nitc::nitc::model::model_viz::MPackageDot::dot_cluster
+nitc::nitc::model::model_viz::MPackageDot::collect_important_importation
+nitc::nitc::model::model_viz::MPackageDot::write_to
+nitc::nitc::model::model_viz::MPackageDot::init

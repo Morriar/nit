@@ -1,0 +1,11 @@
+android::android::audio::App
+android::android::audio::Sys
+android::android::audio::AudioManager
+android::android::audio::PlayableAudio
+android::android::audio::Sound
+android::android::audio::Music
+android::android::audio::SoundPool
+android::android::audio::MediaPlayer
+android::android::audio::NativeAudioManager
+android::android::audio::NativeMediaPlayer
+android::android::audio::NativeSoundPool

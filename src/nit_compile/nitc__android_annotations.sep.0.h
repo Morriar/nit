@@ -1,0 +1,29 @@
+#include "nit.common.h"
+#define COLOR_nitc__android_annotations__AndroidProject___manifest_lines 12
+extern const char FILE_nitc__android_annotations[];
+#define COLOR_nitc__android_annotations__AndroidProject___manifest_application_lines 13
+#define COLOR_nitc__android_annotations__AndroidProject___manifest_activity_attributes 14
+#define COLOR_nitc__android_annotations__AndroidProject___min_api 15
+#define COLOR_nitc__android_annotations__AndroidProject___target_api 16
+#define COLOR_nitc__android_annotations__AndroidProject___max_api 17
+#define COLOR_nitc__android_annotations__AndroidProject___activities 18
+#define COLOR_nitc___nitc__AndroidProject___core__kernel__Object__init 39
+#define COLOR_nitc__app_annotations__AppProject___modelbuilder 10
+extern const char FILE_nitc__app_annotations[];
+val* core__abstract_text___CString___to_s_full(char* self, long p0, long p1);
+#define COLOR_nitc__app_annotations__AppProject___mainmodule 11
+val* nitc__annotation___ModelBuilder___collect_annotations_on_modules(val* self, val* p0, val* p1);
+short int core___core__AbstractArrayRead___core__abstract_collection__Collection__is_empty(val* self);
+val* core___core__AbstractArray___core__abstract_collection__Sequence__pop(val* self);
+val* nitc__annotation___AAnnotation___arg_as_int(val* self, val* p0);
+val* core___core__AbstractArrayRead___core__abstract_collection__Collection__iterator(val* self);
+#define COLOR_core__abstract_collection__Iterator__is_ok 15
+#define COLOR_core__abstract_collection__Iterator__item 16
+long core___core__Int___Comparable__max(long self, long p0);
+#define COLOR_core__abstract_collection__Iterator__next 17
+#define COLOR_core__abstract_collection__Iterator__finish 18
+long core___core__Int___Comparable__min(long self, long p0);
+val* nitc__annotation___ModelBuilder___lookup_annotation_on_modules(val* self, val* p0, val* p1);
+#define COLOR_core__kernel__Object___61d_61d 3
+val* nitc__annotation___AAnnotation___arg_as_string(val* self, val* p0);
+void core___core__Array___core__abstract_collection__SimpleCollection__add(val* self, val* p0);

@@ -1,0 +1,16 @@
+core::core::kernel
+core::core::collection
+core::core::text
+core::core::stream
+core::core::file
+core::core::bytes
+core::core::error
+core::core::math
+core::core::numeric
+core::core::bitset
+core::core::fixed_ints
+core::core::exec
+core::core::environ
+core::core::time
+core::core::posix
+core::core::gc

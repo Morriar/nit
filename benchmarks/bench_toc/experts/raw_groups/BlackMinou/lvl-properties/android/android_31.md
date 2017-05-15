@@ -1,0 +1,16 @@
+android::android::input_events::AndroidPointerEvent::SELF
+android::android::input_events::AndroidPointerEvent::x
+android::android::input_events::AndroidPointerEvent::y
+android::android::input_events::AndroidPointerEvent::pressure
+android::android::input_events::AndroidPointerEvent::pressed
+android::android::input_events::AndroidPointerEvent::is_move
+android::android::input_events::AndroidPointerEvent::depressed
+android::android::input_events::AndroidPointerEvent::just_went_down
+android::android::input_events::AndroidPointerEvent::pointer_id
+android::android::input_events::AndroidPointerEvent::init
+android::android::input_events::AndroidPointerEvent::_motion_event
+android::android::input_events::AndroidPointerEvent::_pointer_index
+android::android::input_events::AndroidPointerEvent::native_x
+android::android::input_events::AndroidPointerEvent::native_y
+android::android::input_events::AndroidPointerEvent::native_pressure
+android::android::input_events::AndroidPointerEvent::native_pointer_id

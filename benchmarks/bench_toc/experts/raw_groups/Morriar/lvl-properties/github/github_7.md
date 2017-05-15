@@ -1,0 +1,25 @@
+github::github::api::Issue::SELF
+github::github::api::Issue::_key
+github::github::api::Issue::key
+github::github::api::Issue::lazy _key
+github::github::api::Issue::key=
+github::github::api::Issue::_number
+github::github::api::Issue::number
+github::github::api::Issue::number=
+github::github::api::Issue::from_json
+github::github::api::Issue::title
+github::github::api::Issue::user
+github::github::api::Issue::labels
+github::github::api::Issue::state
+github::github::api::Issue::locked
+github::github::api::Issue::assignee
+github::github::api::Issue::milestone
+github::github::api::Issue::comments
+github::github::api::Issue::comments_count
+github::github::api::Issue::created_at
+github::github::api::Issue::updated_at
+github::github::api::Issue::closed_at
+github::github::api::Issue::body
+github::github::api::Issue::events
+github::github::api::Issue::closed_by
+github::github::api::Issue::init

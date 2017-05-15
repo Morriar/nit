@@ -1,0 +1,9 @@
+core::core::queue
+core::core::re
+core::core::exec
+core::core::environ
+core::core::time
+core::core::gc
+core::core::bitset
+core::core::posix
+core::core

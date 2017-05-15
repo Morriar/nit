@@ -1,0 +1,9 @@
+nitc::nitc::model::model::MMethodDef::MPROPERTY
+nitc::nitc::model::model::MMethodDef::MPROPDEF
+nitc::nitc::model::model::MMethodDef::msignature
+nitc::nitc::model::model::MMethodDef::new_msignature
+nitc::nitc::model::model::MMethodDef::initializers
+nitc::nitc::model::model::MMethodDef::is_abstract
+nitc::nitc::model::model::MMethodDef::is_intern
+nitc::nitc::model::model::MMethodDef::is_extern
+nitc::nitc::model::model::MMethodDef::constant_value

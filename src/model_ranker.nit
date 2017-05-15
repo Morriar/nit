@@ -79,7 +79,24 @@ class RankerPhase
 	init do
 		csv_out.rmdir
 		csv_out.mkdir
+
+		var lines = "class_stereotypes.csv".to_path.read_lines
+		lines.shift
+		lines.pop
+		for line in lines do
+			var parts = line.split(",")
+			stereotypes[parts[0]] = parts[3]
+		end
+		lines = "props_stereotypes.csv".to_path.read_lines
+		lines.shift
+		lines.pop
+		for line in lines do
+			var parts = line.split(",")
+			stereotypes[parts[0]] = parts[3]
+		end
 	end
+
+	var stereotypes = new HashMap[String, String]
 
 	redef fun process_mainmodule(mainmodule, mmodules)
 	do
@@ -104,7 +121,9 @@ class RankerPhase
 		# order_inits(view, subs)
 		# order_attrs(view, subs)
 		# order_interfaces(view, subs)
-		entities_stereotypes(view, subs)
+		# order_stereotypes(view, subs)
+		duel_stereotypes(view, subs)
+		# entities_stereotypes(view, subs)
 	end
 
 	fun users_stats(subs: Array[ExpOrderSession]) do
@@ -265,6 +284,58 @@ class RankerPhase
 
 			print ""
 		end
+	end
+
+	fun duel_stereotypes(view: ModelView, subs: Array[ExpOrderSession]) do
+		var map = new HashMap[String, Counter[String]]
+		for sub in subs do
+			var pos = 0
+			for id in sub.to_order do
+				pos += 1
+				var opos = 0
+				if not stereotypes.has_key(id) then continue
+				var stereo = stereotypes[id]
+				for oid in sub.to_order do
+					opos += 1
+					if id == oid then continue
+					if not stereotypes.has_key(oid) then continue
+					var ostereo = stereotypes[oid]
+					if stereo == ostereo then continue
+
+					if not map.has_key(stereo) then map[stereo] = new Counter[String]
+					if not map.has_key(ostereo) then map[ostereo] = new Counter[String]
+
+					if pos < opos then
+						map[stereo][ostereo] += 1
+					else
+						map[stereo][ostereo] -= 1
+					end
+				end
+			end
+		end
+		var csv = new CsvDocument
+		csv.header = ["stereo", "vs", "score"]
+		for k, v in map do
+			for i, j in v do
+				csv.add_record(k, i, j)
+			end
+		end
+		csv.write_to_file("csv/stereotypes_duels.csv")
+	end
+
+	fun order_stereotypes(view: ModelView, subs: Array[ExpOrderSession]) do
+		var csv = new CsvDocument
+		csv.header = ["stereo", "pos", "length"]
+		for sub in subs do
+			var pos = 0
+			for id in sub.to_order do
+				pos += 1
+				if not stereotypes.has_key(id) then continue
+				var stereo = stereotypes[id]
+				csv.add_record(stereo, pos, sub.to_order.length)
+			end
+		end
+		csv.write_to_file("csv/stereotypes_pos.csv")
 	end
 
 	fun order_inits(view: ModelView, subs: Array[ExpOrderSession]) do

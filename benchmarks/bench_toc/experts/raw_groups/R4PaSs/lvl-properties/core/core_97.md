@@ -1,0 +1,13 @@
+core::core::text::string_search::Text::search
+core::core::text::string_search::Text::search_from
+core::core::text::string_search::Text::search_last
+core::core::text::string_search::Text::search_last_up_to
+core::core::text::string_search::Text::search_all
+core::core::text::string_search::Text::split
+core::core::text::string_search::Text::split_with
+core::core::text::string_search::Text::split_once_on
+core::core::text::string_search::Text::replace
+core::core::text::string_search::Text::has
+core::core::text::string_search::Text::remove_all
+core::core::text::string_search::Text::search_index_in
+core::core::text::string_search::Text::search_in

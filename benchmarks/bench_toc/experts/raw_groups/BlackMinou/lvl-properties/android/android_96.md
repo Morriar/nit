@@ -1,0 +1,16 @@
+android::android::notification::notification::Notification::SELF
+android::android::notification::notification::Notification::title
+android::android::notification::notification::Notification::title=
+android::android::notification::notification::Notification::text
+android::android::notification::notification::Notification::text=
+android::android::notification::notification::Notification::ticker
+android::android::notification::notification::Notification::ticker=
+android::android::notification::notification::Notification::small_icon
+android::android::notification::notification::Notification::small_icon=
+android::android::notification::notification::Notification::number
+android::android::notification::notification::Notification::number=
+android::android::notification::notification::Notification::ongoing
+android::android::notification::notification::Notification::ongoing=
+android::android::notification::notification::Notification::show
+android::android::notification::notification::Notification::cancel
+android::android::notification::notification::Notification::init

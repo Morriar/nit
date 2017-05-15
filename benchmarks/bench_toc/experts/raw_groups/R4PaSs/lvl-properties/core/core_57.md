@@ -1,0 +1,17 @@
+core::core::collection::list::ListIterator::init
+core::core::collection::list::ListIterator::SELF
+core::core::collection::list::ListIterator::item
+core::core::collection::list::ListIterator::item=
+core::core::collection::list::ListIterator::is_ok
+core::core::collection::list::ListIterator::next
+core::core::collection::list::ListIterator::index
+core::core::collection::list::ListIterator::index=
+core::core::collection::list::ListIterator::delete
+core::core::collection::list::ListIterator::insert_before
+core::core::collection::list::ListIterator::_list
+core::core::collection::list::ListIterator::list
+core::core::collection::list::ListIterator::list=
+core::core::collection::list::ListIterator::_node
+core::core::collection::list::ListIterator::node
+core::core::collection::list::ListIterator::node=
+core::core::collection::list::ListIterator::_index

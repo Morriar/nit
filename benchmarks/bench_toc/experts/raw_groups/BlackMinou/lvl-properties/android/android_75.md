@@ -1,0 +1,13 @@
+android::android::intent::intent_api10::App
+android::android::intent::intent_api10::Sys
+android::android::intent::intent_api10::NativeIntent
+android::android::intent::intent_api10::NativePackageManager
+android::android::intent::intent_api10::NativeComponentName
+android::android::intent::intent_api10::Action
+android::android::intent::intent_api10::Category
+android::android::intent::intent_api10::Extra
+android::android::intent::intent_api10::Flag
+android::android::intent::intent_api10::Intent
+android::android::intent::intent_api10::NativeActivity
+android::android::intent::intent_api10::StringCopyArray
+android::android::intent::intent_api10::StringCopyHashSet

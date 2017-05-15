@@ -1,0 +1,10 @@
+core::core::text::flat::FlatBufferCharView::SELF
+core::core::text::flat::FlatBufferCharView::SELFTYPE
+core::core::text::flat::FlatBufferCharView::[]
+core::core::text::flat::FlatBufferCharView::[]=
+core::core::text::flat::FlatBufferCharView::push
+core::core::text::flat::FlatBufferCharView::add
+core::core::text::flat::FlatBufferCharView::enlarge
+core::core::text::flat::FlatBufferCharView::append
+core::core::text::flat::FlatBufferCharView::iterator_from
+core::core::text::flat::FlatBufferCharView::reverse_iterator_from

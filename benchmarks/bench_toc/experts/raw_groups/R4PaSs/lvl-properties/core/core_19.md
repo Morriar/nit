@@ -1,0 +1,10 @@
+core::core::collection::abstract_collection::IteratorDecorator::init
+core::core::collection::abstract_collection::IteratorDecorator::SELF
+core::core::collection::abstract_collection::IteratorDecorator::real
+core::core::collection::abstract_collection::IteratorDecorator::real=
+core::core::collection::abstract_collection::IteratorDecorator::is_ok
+core::core::collection::abstract_collection::IteratorDecorator::item
+core::core::collection::abstract_collection::IteratorDecorator::finish
+core::core::collection::abstract_collection::IteratorDecorator::next
+core::core::collection::abstract_collection::IteratorDecorator::next_by
+core::core::collection::abstract_collection::IteratorDecorator::_real

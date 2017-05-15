@@ -1,0 +1,15 @@
+core::core::file::NativeFile::SELF
+core::core::file::NativeFile::io_read
+core::core::file::NativeFile::io_write
+core::core::file::NativeFile::write_byte
+core::core::file::NativeFile::io_close
+core::core::file::NativeFile::file_stat
+core::core::file::NativeFile::ferror
+core::core::file::NativeFile::fileno
+core::core::file::NativeFile::flush
+core::core::file::NativeFile::set_buffering_type
+core::core::file::NativeFile::io_open_read
+core::core::file::NativeFile::io_open_write
+core::core::file::NativeFile::native_stdin
+core::core::file::NativeFile::native_stdout
+core::core::file::NativeFile::native_stderr

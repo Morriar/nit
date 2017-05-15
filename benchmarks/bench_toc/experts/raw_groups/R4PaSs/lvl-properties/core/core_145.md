@@ -1,0 +1,17 @@
+core::core::stream::Reader::SELF
+core::core::stream::Reader::_decoder
+core::core::stream::Reader::decoder
+core::core::stream::Reader::decoder=
+core::core::stream::Reader::read_char
+core::core::stream::Reader::read_byte
+core::core::stream::Reader::read
+core::core::stream::Reader::read_bytes
+core::core::stream::Reader::read_line
+core::core::stream::Reader::read_lines
+core::core::stream::Reader::each_line
+core::core::stream::Reader::read_all
+core::core::stream::Reader::read_all_bytes
+core::core::stream::Reader::append_line_to
+core::core::stream::Reader::eof
+core::core::stream::Reader::read_word
+core::core::stream::Reader::read_nonwhitespace

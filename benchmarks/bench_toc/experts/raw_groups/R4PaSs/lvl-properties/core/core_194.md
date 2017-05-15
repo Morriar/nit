@@ -1,0 +1,9 @@
+core::core::posix::Passwd::SELF
+core::core::posix::Passwd::from_uid
+core::core::posix::Passwd::from_name
+core::core::posix::Passwd::name
+core::core::posix::Passwd::passwd
+core::core::posix::Passwd::uid
+core::core::posix::Passwd::gid
+core::core::posix::Passwd::dir
+core::core::posix::Passwd::shell

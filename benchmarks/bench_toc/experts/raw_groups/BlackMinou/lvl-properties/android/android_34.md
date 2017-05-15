@@ -1,0 +1,10 @@
+android::android::input_events::AMotionEventAction::SELF
+android::android::input_events::AMotionEventAction::action
+android::android::input_events::AMotionEventAction::pointer_index
+android::android::input_events::AMotionEventAction::is_down
+android::android::input_events::AMotionEventAction::is_up
+android::android::input_events::AMotionEventAction::is_move
+android::android::input_events::AMotionEventAction::is_cancel
+android::android::input_events::AMotionEventAction::is_outside
+android::android::input_events::AMotionEventAction::is_pointer_down
+android::android::input_events::AMotionEventAction::is_pointer_up

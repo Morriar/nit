@@ -1,0 +1,17 @@
+nitc::nitc::model::model_collect::MClass::collect_parents
+nitc::nitc::model::model_collect::MClass::collect_ancestors
+nitc::nitc::model::model_collect::MClass::collect_children
+nitc::nitc::model::model_collect::MClass::descendants
+nitc::nitc::model::model_collect::MClass::collect_intro_mproperties
+nitc::nitc::model::model_collect::MClass::collect_redef_mproperties
+nitc::nitc::model::model_collect::MClass::collect_local_mproperties
+nitc::nitc::model::model_collect::MClass::collect_inherited_mproperties
+nitc::nitc::model::model_collect::MClass::collect_accessible_mproperties
+nitc::nitc::model::model_collect::MClass::collect_intro_mmethods
+nitc::nitc::model::model_collect::MClass::collect_redef_mmethods
+nitc::nitc::model::model_collect::MClass::collect_local_mmethods
+nitc::nitc::model::model_collect::MClass::collect_intro_mattributes
+nitc::nitc::model::model_collect::MClass::collect_redef_mattributes
+nitc::nitc::model::model_collect::MClass::collect_local_mattributes
+nitc::nitc::model::model_collect::MClass::collect_inherited_mattributes
+nitc::nitc::model::model_collect::MClass::collect_accessible_mattributes

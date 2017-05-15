@@ -1,0 +1,11 @@
+core::core::collection::abstract_collection::Collection::SELF
+core::core::collection::abstract_collection::Collection::iterator
+core::core::collection::abstract_collection::Collection::is_empty
+core::core::collection::abstract_collection::Collection::not_empty
+core::core::collection::abstract_collection::Collection::length
+core::core::collection::abstract_collection::Collection::has
+core::core::collection::abstract_collection::Collection::has_only
+core::core::collection::abstract_collection::Collection::count
+core::core::collection::abstract_collection::Collection::first
+core::core::collection::abstract_collection::Collection::has_all
+core::core::collection::abstract_collection::Collection::has_exactly

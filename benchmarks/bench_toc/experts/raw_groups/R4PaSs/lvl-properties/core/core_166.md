@@ -1,0 +1,10 @@
+core::core::queue::ProxyQueue::init
+core::core::queue::ProxyQueue::SELF
+core::core::queue::ProxyQueue::_seq
+core::core::queue::ProxyQueue::seq
+core::core::queue::ProxyQueue::seq=
+core::core::queue::ProxyQueue::add
+core::core::queue::ProxyQueue::length
+core::core::queue::ProxyQueue::is_empty
+core::core::queue::ProxyQueue::iterator
+core::core::queue::ProxyQueue::remove

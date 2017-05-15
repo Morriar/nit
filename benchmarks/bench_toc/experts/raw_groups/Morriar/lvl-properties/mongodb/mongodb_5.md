@@ -1,0 +1,16 @@
+mongodb::mongodb::native_mongodb::NativeMongoCollection::SELF
+mongodb::mongodb::native_mongodb::NativeMongoCollection::new
+mongodb::mongodb::native_mongodb::NativeMongoCollection::insert
+mongodb::mongodb::native_mongodb::NativeMongoCollection::save
+mongodb::mongodb::native_mongodb::NativeMongoCollection::remove
+mongodb::mongodb::native_mongodb::NativeMongoCollection::remove_all
+mongodb::mongodb::native_mongodb::NativeMongoCollection::update
+mongodb::mongodb::native_mongodb::NativeMongoCollection::update_all
+mongodb::mongodb::native_mongodb::NativeMongoCollection::count
+mongodb::mongodb::native_mongodb::NativeMongoCollection::find
+mongodb::mongodb::native_mongodb::NativeMongoCollection::stats
+mongodb::mongodb::native_mongodb::NativeMongoCollection::drop
+mongodb::mongodb::native_mongodb::NativeMongoCollection::rename
+mongodb::mongodb::native_mongodb::NativeMongoCollection::destroy
+mongodb::mongodb::native_mongodb::NativeMongoCollection::set_mongoc_last_id
+mongodb::mongodb::native_mongodb::NativeMongoCollection::set_mongoc_error

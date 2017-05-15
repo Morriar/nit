@@ -1,0 +1,15 @@
+core::core::stream::LineIterator::init
+core::core::stream::LineIterator::SELF
+core::core::stream::LineIterator::_stream
+core::core::stream::LineIterator::stream
+core::core::stream::LineIterator::stream=
+core::core::stream::LineIterator::is_ok
+core::core::stream::LineIterator::item
+core::core::stream::LineIterator::_line
+core::core::stream::LineIterator::line
+core::core::stream::LineIterator::line=
+core::core::stream::LineIterator::next
+core::core::stream::LineIterator::_close_on_finish
+core::core::stream::LineIterator::close_on_finish
+core::core::stream::LineIterator::close_on_finish=
+core::core::stream::LineIterator::finish

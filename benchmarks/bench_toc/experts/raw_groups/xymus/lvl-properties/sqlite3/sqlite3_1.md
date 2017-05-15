@@ -1,0 +1,10 @@
+sqlite3::sqlite3::sqlite3::Statement::init
+sqlite3::sqlite3::sqlite3::Statement::close
+sqlite3::sqlite3::sqlite3::Statement::is_open
+sqlite3::sqlite3::sqlite3::Statement::is_open=
+sqlite3::sqlite3::sqlite3::Statement::_is_open
+sqlite3::sqlite3::sqlite3::Statement::iterator
+sqlite3::sqlite3::sqlite3::Statement::native_statement
+sqlite3::sqlite3::sqlite3::Statement::native_statement=
+sqlite3::sqlite3::sqlite3::Statement::_native_statement
+sqlite3::sqlite3::sqlite3::Statement::SELF

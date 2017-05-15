@@ -1,0 +1,12 @@
+sqlite3::sqlite3::sqlite3::StatementIterator::init
+sqlite3::sqlite3::sqlite3::StatementIterator::statement
+sqlite3::sqlite3::sqlite3::StatementIterator::statement=
+sqlite3::sqlite3::sqlite3::StatementIterator::_statement
+sqlite3::sqlite3::sqlite3::StatementIterator::item
+sqlite3::sqlite3::sqlite3::StatementIterator::item=
+sqlite3::sqlite3::sqlite3::StatementIterator::_item
+sqlite3::sqlite3::sqlite3::StatementIterator::next
+sqlite3::sqlite3::sqlite3::StatementIterator::is_ok
+sqlite3::sqlite3::sqlite3::StatementIterator::is_ok=
+sqlite3::sqlite3::sqlite3::StatementIterator::_is_ok
+sqlite3::sqlite3::sqlite3::StatementIterator::SELF

@@ -1,0 +1,13 @@
+nitc::nitc::model::model::MBottomType::model
+nitc::nitc::model::model::MBottomType::to_s
+nitc::nitc::model::model::MBottomType::full_name
+nitc::nitc::model::model::MBottomType::c_name
+nitc::nitc::model::model::MBottomType::as_nullable
+nitc::nitc::model::model::MBottomType::as_notnull
+nitc::nitc::model::model::MBottomType::need_anchor
+nitc::nitc::model::model::MBottomType::resolve_for
+nitc::nitc::model::model::MBottomType::can_resolve_for
+nitc::nitc::model::model::MBottomType::collect_mclassdefs
+nitc::nitc::model::model::MBottomType::collect_mclasses
+nitc::nitc::model::model::MBottomType::collect_mtypes
+nitc::nitc::model::model::MBottomType::init

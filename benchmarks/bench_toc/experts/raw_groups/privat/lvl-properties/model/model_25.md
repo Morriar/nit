@@ -1,0 +1,12 @@
+nitc::nitc::model::model::MClassDef::init
+nitc::nitc::model::model::MClassDef::mmodule
+nitc::nitc::model::model::MClassDef::mclass
+nitc::nitc::model::model::MClassDef::bound_mtype
+nitc::nitc::model::model::MClassDef::location
+nitc::nitc::model::model::MClassDef::to_s
+nitc::nitc::model::model::MClassDef::name
+nitc::nitc::model::model::MClassDef::full_name
+nitc::nitc::model::model::MClassDef::c_name
+nitc::nitc::model::model::MClassDef::model
+nitc::nitc::model::model::MClassDef
+nitc::nitc::model::model::MClassDef

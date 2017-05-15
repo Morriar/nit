@@ -1,0 +1,10 @@
+core::core::text::abstract_text::StringCharView::init
+core::core::text::abstract_text::StringCharView::SELF
+core::core::text::abstract_text::StringCharView::is_empty
+core::core::text::abstract_text::StringCharView::length
+core::core::text::abstract_text::StringCharView::iterator
+core::core::text::abstract_text::StringCharView::reverse_iterator
+core::core::text::abstract_text::StringCharView::SELFTYPE
+core::core::text::abstract_text::StringCharView::_target
+core::core::text::abstract_text::StringCharView::target
+core::core::text::abstract_text::StringCharView::target=

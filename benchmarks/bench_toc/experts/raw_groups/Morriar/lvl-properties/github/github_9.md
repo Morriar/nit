@@ -1,0 +1,13 @@
+github::github::api::PullRef::SELF
+github::github::api::PullRef::_api
+github::github::api::PullRef::api
+github::github::api::PullRef::api=
+github::github::api::PullRef::_json
+github::github::api::PullRef::json
+github::github::api::PullRef::json=
+github::github::api::PullRef::labl
+github::github::api::PullRef::ref
+github::github::api::PullRef::sha
+github::github::api::PullRef::user
+github::github::api::PullRef::repo
+github::github::api::PullRef::init

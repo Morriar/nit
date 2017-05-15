@@ -1,0 +1,10 @@
+android::android::native_app_glue::NativeAppGlue::SELF
+android::android::native_app_glue::NativeAppGlue::ndk_native_activity
+android::android::native_app_glue::NativeAppGlue::config
+android::android::native_app_glue::NativeAppGlue::saved_state
+android::android::native_app_glue::NativeAppGlue::saved_state_size
+android::android::native_app_glue::NativeAppGlue::looper
+android::android::native_app_glue::NativeAppGlue::input_queue
+android::android::native_app_glue::NativeAppGlue::window
+android::android::native_app_glue::NativeAppGlue::activity_state
+android::android::native_app_glue::NativeAppGlue::detroy_request

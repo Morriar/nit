@@ -1,0 +1,75 @@
+#include "nit.common.h"
+#define COLOR_json__serialization_write__JsonSerializer___stream 2
+extern const char FILE_json__serialization_write[];
+#define COLOR_json__serialization_write__JsonSerializer___plain_json 3
+#define COLOR_json__serialization_write__JsonSerializer___pretty_json 4
+#define COLOR_json__serialization_write__JsonSerializer___indent_level 5
+#define COLOR_json__serialization_write__JsonSerializer___open_objects 6
+#define COLOR_json__serialization_write__JsonSerializer___first_attribute 7
+#define COLOR_core__kernel__Object___61d_61d 3
+val* core__abstract_text___CString___to_s_full(char* self, long p0, long p1);
+#define COLOR_core__stream__Writer__write 32
+val* core___core__AbstractArrayRead___core__abstract_collection__Collection__iterator(val* self);
+#define COLOR_core__abstract_collection__Iterator__is_ok 15
+#define COLOR_core__abstract_collection__Iterator__item 16
+short int serialization___core__Object___is_same_serialized(val* self, val* p0);
+void serialization___serialization__Serializer___warn(val* self, val* p0);
+#define COLOR_core__abstract_collection__Iterator__next 17
+#define COLOR_core__abstract_collection__Iterator__finish 18
+void core___core__Array___core__abstract_collection__SimpleCollection__add(val* self, val* p0);
+#define COLOR_json__serialization_write__Serializable__accept_json_serializer 44
+val* core___core__AbstractArray___core__abstract_collection__Sequence__pop(val* self);
+void json___json__JsonSerializer___new_line_and_indent(val* self);
+#define COLOR_json___json__JsonSerializer___serialization__Serializer__serialize_attribute 34
+val* serialization___serialization__CachingSerializer___cache(val* self);
+short int serialization___serialization__SerializerCache___has_object(val* self, val* p0);
+long serialization___serialization__SerializerCache___id_for(val* self, val* p0);
+extern const struct type type_core__Int;
+extern const char FILE_core__kernel[];
+val* core__flat___Int___core__abstract_text__Object__to_s(long self);
+void json___json__JsonSerializer___serialization__Serializer__serialize(val* self, val* p0);
+val* core__range___Int___times(long self);
+val* core___core__Range___core__abstract_collection__Collection__iterator(val* self);
+#define COLOR_json___json__JsonSerializer___core__kernel__Object__init 33
+#define COLOR_core__abstract_text__Text__length 29
+#define COLOR_core__abstract_text__Text___91d_93d 41
+extern const struct type type_core__Char;
+val* core__abstract_text___Char___escape_to_utf16(uint32_t self);
+val* core__abstract_text___Char___Object__to_s(uint32_t self);
+long core___core__Int___Discrete__successor(long self, long p0);
+val* NEW_core__StringWriter(const struct type* type);
+extern const struct type type_core__StringWriter;
+val* NEW_json__JsonSerializer(const struct type* type);
+extern const struct type type_json__JsonSerializer;
+#define COLOR_json__serialization_write__JsonSerializer__stream_61d 21
+#define COLOR_core__kernel__Object__init 0
+void core___core__StringWriter___Stream__close(val* self);
+val* core___core__StringWriter___core__abstract_text__Object__to_s(val* self);
+long serialization___serialization__SerializerCache___new_id_for(val* self, val* p0);
+val* core__abstract_text___Object___class_name(val* self);
+#define COLOR_serialization__Serializable__core_serialize_to 45
+void json__serialization_write___core__Int___Serializable__accept_json_serializer(long self, val* p0);
+val* core__abstract_text___Float___Object__to_s(double self);
+void json__serialization_write___core__Float___Serializable__accept_json_serializer(double self, val* p0);
+val* core__abstract_text___Bool___Object__to_s(short int self);
+void json__serialization_write___core__Bool___Serializable__accept_json_serializer(short int self, val* p0);
+void json__serialization_write___core__Text___Serializable__accept_json_serializer(val* self, val* p0);
+void json__serialization_write___core__Char___Serializable__accept_json_serializer(uint32_t self, val* p0);
+val* core__flat___CString___core__abstract_text__Object__to_s(char* self);
+void json__serialization_write___core__CString___Serializable__accept_json_serializer(char* self, val* p0);
+#define COLOR_core__abstract_collection__Collection__iterator 27
+short int serialization___serialization__Serializer___try_to_serialize(val* self, val* p0);
+#define COLOR_core__kernel__Object___33d_61d 1
+val* NEW_core__NativeArray(int length, const struct type* type);
+extern const struct type type_core__NativeArray__core__String;
+#define COLOR_core__abstract_text__NativeArray__native_to_s 15
+void json__serialization_write___core__Collection___serialize_to_pure_json(val* self, val* p0);
+#define COLOR_core__abstract_collection__MapRead__iterator 16
+#define COLOR_core__abstract_collection__MapIterator__is_ok 15
+#define COLOR_core__abstract_collection__MapIterator__key 16
+#define COLOR_core__abstract_collection__MapIterator__item 17
+#define COLOR_core__abstract_text__Object__to_s 4
+#define COLOR_core__abstract_collection__MapIterator__next 18
+#define COLOR_core__abstract_collection__MapRead__length 15
+#define COLOR_core__abstract_collection__MapRead__keys 20
+#define COLOR_core__abstract_collection__MapRead__values 24

@@ -1,0 +1,10 @@
+nitc::nitc::model::model::MSignature::mparameters
+nitc::nitc::model::model::MSignature::mparameter_by_name
+nitc::nitc::model::model::MSignature::return_mtype
+nitc::nitc::model::model::MSignature::depth
+nitc::nitc::model::model::MSignature::length
+nitc::nitc::model::model::MSignature::init
+nitc::nitc::model::model::MSignature::vararg_rank
+nitc::nitc::model::model::MSignature::arity
+nitc::nitc::model::model::MSignature::to_s
+nitc::nitc::model::model::MSignature::resolve_for

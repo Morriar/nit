@@ -1,0 +1,11 @@
+core::core::collection::abstract_collection::Ref::init
+core::core::collection::abstract_collection::Ref::SELF
+core::core::collection::abstract_collection::Ref::first
+core::core::collection::abstract_collection::Ref::is_empty
+core::core::collection::abstract_collection::Ref::length
+core::core::collection::abstract_collection::Ref::has
+core::core::collection::abstract_collection::Ref::has_only
+core::core::collection::abstract_collection::Ref::count
+core::core::collection::abstract_collection::Ref::iterator
+core::core::collection::abstract_collection::Ref::item
+core::core::collection::abstract_collection::Ref::item=

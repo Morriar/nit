@@ -1,0 +1,13 @@
+mongodb::mongodb::mongodb::BSON::SELF
+mongodb::mongodb::mongodb::BSON::_native
+mongodb::mongodb::mongodb::BSON::native
+mongodb::mongodb::mongodb::BSON::native=
+mongodb::mongodb::mongodb::BSON::_is_alive
+mongodb::mongodb::mongodb::BSON::is_alive
+mongodb::mongodb::mongodb::BSON::is_alive=
+mongodb::mongodb::mongodb::BSON::from_json
+mongodb::mongodb::mongodb::BSON::from_json_string
+mongodb::mongodb::mongodb::BSON::to_s
+mongodb::mongodb::mongodb::BSON::to_json
+mongodb::mongodb::mongodb::BSON::finalize
+mongodb::mongodb::mongodb::BSON::init

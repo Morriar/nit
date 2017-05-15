@@ -1,0 +1,11 @@
+github::github::events::GithubEvent::SELF
+github::github::events::GithubEvent::_api
+github::github::events::GithubEvent::api
+github::github::events::GithubEvent::api=
+github::github::events::GithubEvent::_json
+github::github::events::GithubEvent::json
+github::github::events::GithubEvent::json=
+github::github::events::GithubEvent::init
+github::github::events::GithubEvent::from_json
+github::github::events::GithubEvent::action
+github::github::events::GithubEvent::repo

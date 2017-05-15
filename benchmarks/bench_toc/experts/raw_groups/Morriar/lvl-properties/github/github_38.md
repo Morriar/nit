@@ -1,0 +1,10 @@
+github::github::github_curl::GithubError::SELF
+github::github::github_curl::GithubError::_name
+github::github::github_curl::GithubError::name
+github::github::github_curl::GithubError::name=
+github::github::github_curl::GithubError::_json
+github::github::github_curl::GithubError::json
+github::github::github_curl::GithubError::json=
+github::github::github_curl::GithubError::init
+github::github::github_curl::GithubError::to_json
+github::github::github_curl::GithubError::to_s

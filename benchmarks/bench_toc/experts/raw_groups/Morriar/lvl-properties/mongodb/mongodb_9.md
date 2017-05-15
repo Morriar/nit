@@ -1,0 +1,12 @@
+mongodb::mongodb::mongodb::MongoError::SELF
+mongodb::mongodb::mongodb::MongoError::_native
+mongodb::mongodb::mongodb::MongoError::native
+mongodb::mongodb::mongodb::MongoError::native=
+mongodb::mongodb::mongodb::MongoError::_is_alive
+mongodb::mongodb::mongodb::MongoError::is_alive
+mongodb::mongodb::mongodb::MongoError::is_alive=
+mongodb::mongodb::mongodb::MongoError::domain
+mongodb::mongodb::mongodb::MongoError::code
+mongodb::mongodb::mongodb::MongoError::message
+mongodb::mongodb::mongodb::MongoError::to_s
+mongodb::mongodb::mongodb::MongoError::init

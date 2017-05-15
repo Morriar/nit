@@ -1,0 +1,16 @@
+markdown::markdown::markdown::TokenLinkOrImage::SELF
+markdown::markdown::markdown::TokenLinkOrImage::_link
+markdown::markdown::markdown::TokenLinkOrImage::link
+markdown::markdown::markdown::TokenLinkOrImage::link=
+markdown::markdown::markdown::TokenLinkOrImage::_name
+markdown::markdown::markdown::TokenLinkOrImage::name
+markdown::markdown::markdown::TokenLinkOrImage::name=
+markdown::markdown::markdown::TokenLinkOrImage::_comment
+markdown::markdown::markdown::TokenLinkOrImage::comment
+markdown::markdown::markdown::TokenLinkOrImage::comment=
+markdown::markdown::markdown::TokenLinkOrImage::_is_abbrev
+markdown::markdown::markdown::TokenLinkOrImage::is_abbrev
+markdown::markdown::markdown::TokenLinkOrImage::is_abbrev=
+markdown::markdown::markdown::TokenLinkOrImage::emit
+markdown::markdown::markdown::TokenLinkOrImage::emit_hyper
+markdown::markdown::markdown::TokenLinkOrImage::check_link

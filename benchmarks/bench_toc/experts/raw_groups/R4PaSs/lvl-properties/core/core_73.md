@@ -1,0 +1,13 @@
+core::core::collection::hash_collection::HashSet::init
+core::core::collection::hash_collection::HashSet::SELF
+core::core::collection::hash_collection::HashSet::length
+core::core::collection::hash_collection::HashSet::is_empty
+core::core::collection::hash_collection::HashSet::first
+core::core::collection::hash_collection::HashSet::has
+core::core::collection::hash_collection::HashSet::add
+core::core::collection::hash_collection::HashSet::remove
+core::core::collection::hash_collection::HashSet::clear
+core::core::collection::hash_collection::HashSet::iterator
+core::core::collection::hash_collection::HashSet::from
+core::core::collection::hash_collection::HashSet::new_set
+core::core::collection::hash_collection::HashSet::N

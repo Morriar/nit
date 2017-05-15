@@ -1,0 +1,104 @@
+#include "nit.common.h"
+#define COLOR_nitc__literal__ToolContext___literal_phase 46
+extern const char FILE_nitc__literal[];
+#define COLOR_nitc__phase__Phase___toolcontext 0
+extern const char FILE_nitc__phase[];
+void nitc__literal___AModule___do_literal(val* self, val* p0);
+val* NEW_nitc__literal__LiteralVisitor(const struct type* type);
+extern const struct type type_nitc__literal__LiteralVisitor;
+#define COLOR_nitc__literal__LiteralVisitor__toolcontext_61d 18
+#define COLOR_core__kernel__Object__init 0
+void nitc___nitc__Visitor___enter_visit(val* self, val* p0);
+#define COLOR_nitc__literal__LiteralVisitor___toolcontext 1
+#define COLOR_nitc__literal__ANode__accept_literal 27
+#define COLOR_nitc__parser_nodes__ANode__visit_all 22
+#define COLOR_nitc__literal___nitc__literal__LiteralVisitor___core__kernel__Object__init 20
+extern const struct type type_nitc__AStringFormExpr;
+#define COLOR_nitc__literal__AStringFormExpr___value 26
+extern const struct type type_nitc__AIntegerExpr;
+#define COLOR_nitc__literal__AIntegerExpr___value 4
+#define COLOR_core__kernel__Numeric__to_i 30
+#define COLOR_nitc__parser_nodes__AIntegerExpr___n_integer 3
+extern const char FILE_nitc__parser_nodes[];
+val* nitc__lexer_work___Token___text(val* self);
+val* core__fixed_ints_text___Text___to_num(val* self);
+#define COLOR_core__kernel__Object___61d_61d 3
+val* nitc___nitc__ANode___hot_location(val* self);
+val* NEW_core__NativeArray(int length, const struct type* type);
+extern const struct type type_core__NativeArray__core__String;
+val* core__abstract_text___CString___to_s_full(char* self, long p0, long p1);
+#define COLOR_core__abstract_text__NativeArray__native_to_s 15
+val* nitc___nitc__ToolContext___error(val* self, val* p0, val* p1);
+#define COLOR_nitc__literal__AFloatExpr___value 4
+#define COLOR_nitc__parser_nodes__AFloatExpr___n_float 3
+double core___core__Text___to_f(val* self);
+val* BOX_core__Float(double);
+#define COLOR_nitc__literal__AAugmentedLiteral___prefix 3
+#define COLOR_nitc__literal__AAugmentedLiteral__text 44
+#define COLOR_nitc__literal__AAugmentedLiteral__delimiter_start 45
+long core___core__Text___index_of(val* self, uint32_t p0);
+#define COLOR_core__abstract_text__Text__substring 34
+#define COLOR_nitc__literal__AAugmentedLiteral___suffix 5
+#define COLOR_nitc__literal__AAugmentedLiteral__delimiter_end 46
+long core___core__Text___last_index_of(val* self, uint32_t p0);
+extern const struct type type_core__Int;
+extern const char FILE_core__kernel[];
+#define COLOR_core__abstract_text__Text__substring_from 42
+#define COLOR_nitc__literal__AAugmentedLiteral___content 7
+#define COLOR_nitc__literal__AAugmentedLiteral__prefix 47
+#define COLOR_core__abstract_text__Text__length 29
+#define COLOR_nitc__literal__AAugmentedLiteral__suffix 48
+#define COLOR_nitc__literal__ACharExpr___value 19
+val* nitc___nitc__AAugmentedLiteral___prefix(val* self);
+#define COLOR_nitc__parser_nodes__ACharExpr___n_char 18
+val* nitc___nitc__AAugmentedLiteral___suffix(val* self);
+short int nitc__literal___ACharExpr___is_ascii(val* self);
+short int nitc__literal___ACharExpr___is_code_point(val* self);
+short int nitc__literal___ACharExpr___AAugmentedLiteral__is_valid_augmentation(val* self);
+val* nitc___nitc__AAugmentedLiteral___content(val* self);
+val* core___core__Text___unescape_nit(val* self);
+#define COLOR_core__abstract_text__Text__chars 33
+#define COLOR_core__abstract_collection__SequenceRead___91d_93d 38
+#define COLOR_nitc__literal__AugmentedStringFormExpr___delimiter_start 18
+#define COLOR_nitc__literal__AugmentedStringFormExpr___delimiter_end 19
+short int nitc___nitc__AugmentedStringFormExpr___is_string(val* self);
+short int nitc___nitc__AugmentedStringFormExpr___is_bytestring(val* self);
+short int nitc___nitc__AugmentedStringFormExpr___is_re(val* self);
+#define COLOR_core__abstract_collection__Collection__iterator 27
+#define COLOR_core__abstract_collection__Iterator__is_ok 15
+#define COLOR_core__abstract_collection__Iterator__item 16
+#define COLOR_core__abstract_collection__Iterator__next 17
+#define COLOR_core__abstract_collection__Iterator__finish 18
+#define COLOR_nitc__literal__AStringFormExpr___bytes 27
+#define COLOR_nitc__parser_nodes__AStringFormExpr___n_string 25
+#define COLOR_nitc__literal__AStringFormExpr___raw_text 28
+val* nitc__literal___AStringFormExpr___raw_text(val* self);
+val* core__bytes___Text___to_bytes(val* self);
+#define COLOR_nitc__literal__AEndStringExpr__lazy_32d_delimiter_end 31
+#define COLOR_nitc__literal__AEndStringExpr___delimiter_end 30
+#define COLOR_nitc__literal__AStartStringExpr__lazy_32d_delimiter_start 31
+#define COLOR_nitc__literal__AStartStringExpr___delimiter_start 30
+#define COLOR_core__abstract_text__Text___91d_93d 41
+long core___core__Int___Discrete__successor(long self, long p0);
+#define COLOR_nitc__literal__AStringExpr__lazy_32d_delimiter_start 31
+#define COLOR_nitc__literal__AStringExpr___delimiter_start 30
+val* nitc__literal___AStringFormExpr___AAugmentedLiteral__text(val* self);
+void nitc__literal___AStringExpr___AugmentedStringFormExpr__delimiter_end_61d(val* self, uint32_t p0);
+#define COLOR_nitc__literal__AStringExpr__lazy_32d_delimiter_end 33
+#define COLOR_nitc__literal__AStringExpr___delimiter_end 32
+uint32_t nitc__literal___AStringExpr___AAugmentedLiteral__delimiter_start(val* self);
+#define COLOR_nitc__literal___AStringExpr___ANode__accept_literal 109
+short int nitc___nitc__AugmentedStringFormExpr___AAugmentedLiteral__is_valid_augmentation(val* self);
+val* core__bytes___Text___unescape_to_bytes(val* self);
+val* core___core__Bytes___core__abstract_text__Object__to_s(val* self);
+#define COLOR_nitc__literal__ASuperstringExpr___prefix 26
+#define COLOR_nitc__parser_nodes__ASuperstringExpr___n_exprs 25
+val* core___core__SequenceRead___Collection__first(val* self);
+extern const struct type type_nitc__AugmentedStringFormExpr;
+#define COLOR_nitc__literal__ASuperstringExpr___suffix 28
+val* core___core__SequenceRead___last(val* self);
+val* nitc__literal___ASuperstringExpr___AAugmentedLiteral__prefix(val* self);
+#define COLOR_nitc__literal__AugmentedStringFormExpr__delimiter_end_61d 85
+val* nitc__literal___ASuperstringExpr___AAugmentedLiteral__suffix(val* self);
+#define COLOR_nitc__literal___ASuperstringExpr___nitc__parser_nodes__ANode__visit_all 103
+val* nitc___nitc__ANodes___core__abstract_collection__Collection__iterator(val* self);

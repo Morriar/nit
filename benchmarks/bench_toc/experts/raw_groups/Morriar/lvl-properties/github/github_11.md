@@ -1,0 +1,20 @@
+github::github::api::Milestone::SELF
+github::github::api::Milestone::_key
+github::github::api::Milestone::key
+github::github::api::Milestone::lazy _key
+github::github::api::Milestone::key=
+github::github::api::Milestone::_number
+github::github::api::Milestone::number
+github::github::api::Milestone::number=
+github::github::api::Milestone::from_json
+github::github::api::Milestone::title
+github::github::api::Milestone::description
+github::github::api::Milestone::open_issues
+github::github::api::Milestone::closed_issues
+github::github::api::Milestone::state
+github::github::api::Milestone::created_at
+github::github::api::Milestone::creator
+github::github::api::Milestone::due_on
+github::github::api::Milestone::updated_at
+github::github::api::Milestone::closed_at
+github::github::api::Milestone::init

@@ -1,0 +1,14 @@
+core::core::collection::abstract_collection::Sequence::SELF
+core::core::collection::abstract_collection::Sequence::first=
+core::core::collection::abstract_collection::Sequence::last=
+core::core::collection::abstract_collection::Sequence::add
+core::core::collection::abstract_collection::Sequence::push
+core::core::collection::abstract_collection::Sequence::append
+core::core::collection::abstract_collection::Sequence::pop
+core::core::collection::abstract_collection::Sequence::unshift
+core::core::collection::abstract_collection::Sequence::prepend
+core::core::collection::abstract_collection::Sequence::shift
+core::core::collection::abstract_collection::Sequence::[]=
+core::core::collection::abstract_collection::Sequence::insert
+core::core::collection::abstract_collection::Sequence::insert_all
+core::core::collection::abstract_collection::Sequence::remove_at

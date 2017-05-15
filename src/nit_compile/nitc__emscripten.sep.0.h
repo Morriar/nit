@@ -1,0 +1,25 @@
+#include "nit.common.h"
+val* core__abstract_text___CString___to_s_full(char* self, long p0, long p1);
+#define COLOR_core__kernel__Object___61d_61d 3
+val* NEW_nitc__EmscriptenPlatform(const struct type* type);
+extern const struct type type_nitc__EmscriptenPlatform;
+#define COLOR_nitc__emscripten___ToolContext___platform_from_name 177
+val* NEW_nitc__EnscriptenToolchain(const struct type* type);
+extern const struct type type_nitc__EnscriptenToolchain;
+#define COLOR_nitc__abstract_compiler__Toolchain__toolcontext_61d 16
+#define COLOR_nitc__abstract_compiler__Toolchain__compiler_61d 17
+#define COLOR_core__kernel__Object__init 0
+val* NEW_core__NativeArray(int length, const struct type* type);
+extern const struct type type_core__NativeArray__core__String;
+#define COLOR_nitc___nitc__EnscriptenToolchain___nitc__abstract_compiler__MakefileToolchain__makefile_name 30
+#define COLOR_core__abstract_text__NativeArray__native_to_s 15
+#define COLOR_nitc___nitc__EnscriptenToolchain___nitc__abstract_compiler__MakefileToolchain__default_outname 31
+#define COLOR_nitc___nitc__EnscriptenToolchain___nitc__abstract_compiler__MakefileToolchain__write_makefile 29
+#define COLOR_nitc__abstract_compiler__Toolchain___toolcontext 0
+extern const char FILE_nitc__abstract_compiler[];
+#define COLOR_nitc__abstract_compiler__ToolContext___opt_release 109
+#define COLOR_opts__Option___value 6
+#define COLOR_core__abstract_text__Text___43d 32
+#define COLOR_nitc__abstract_compiler__ToolContext___opt_make_flags 93
+#define COLOR_opts__Option__VALUE 0
+extern const char FILE_opts[];

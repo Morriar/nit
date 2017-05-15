@@ -1,0 +1,16 @@
+android::android::nit_activity::Activity::SELF
+android::android::nit_activity::Activity::native
+android::android::nit_activity::Activity::on_create
+android::android::nit_activity::Activity::on_restart
+android::android::nit_activity::Activity::on_start
+android::android::nit_activity::Activity::on_resume
+android::android::nit_activity::Activity::on_pause
+android::android::nit_activity::Activity::on_stop
+android::android::nit_activity::Activity::on_destroy
+android::android::nit_activity::Activity::on_restore_instance_state
+android::android::nit_activity::Activity::on_save_instance_state
+android::android::nit_activity::Activity::on_low_memory
+android::android::nit_activity::Activity::on_window_focus_changed
+android::android::nit_activity::Activity::on_configuration_changed
+android::android::nit_activity::Activity::init
+android::android::nit_activity::Activity::native=

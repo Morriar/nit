@@ -1,0 +1,12 @@
+<div class='container'>
+	<h2>
+		{{vm.results.total}} matches for
+		<a ui-sref='search({q: vm.query})'>{{vm.query}}</a>
+	</h2>
+	<div ng-repeat='result in vm.results.results'>
+		{{result}}
+	</div>
+	<div class='container text-center' ng-if='vm.results'>
+		<ui-pagination pagination='vm.results'/>
+	</div>
+</div>

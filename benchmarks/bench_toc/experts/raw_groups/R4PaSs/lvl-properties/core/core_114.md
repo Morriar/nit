@@ -1,0 +1,16 @@
+core::core::text::flat::FlatBufferCharIterator::init
+core::core::text::flat::FlatBufferCharIterator::SELF
+core::core::text::flat::FlatBufferCharIterator::_target
+core::core::text::flat::FlatBufferCharIterator::target
+core::core::text::flat::FlatBufferCharIterator::target=
+core::core::text::flat::FlatBufferCharIterator::_max
+core::core::text::flat::FlatBufferCharIterator::max
+core::core::text::flat::FlatBufferCharIterator::max=
+core::core::text::flat::FlatBufferCharIterator::_curr_pos
+core::core::text::flat::FlatBufferCharIterator::curr_pos
+core::core::text::flat::FlatBufferCharIterator::curr_pos=
+core::core::text::flat::FlatBufferCharIterator::with_pos
+core::core::text::flat::FlatBufferCharIterator::index
+core::core::text::flat::FlatBufferCharIterator::is_ok
+core::core::text::flat::FlatBufferCharIterator::item
+core::core::text::flat::FlatBufferCharIterator::next

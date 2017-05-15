@@ -1,0 +1,14 @@
+android::android::assets_and_resources::ResourcesManager::SELF
+android::android::assets_and_resources::ResourcesManager::color
+android::android::assets_and_resources::ResourcesManager::boolean
+android::android::assets_and_resources::ResourcesManager::dimension
+android::android::assets_and_resources::ResourcesManager::integer
+android::android::assets_and_resources::ResourcesManager::string
+android::android::assets_and_resources::ResourcesManager::raw_id
+android::android::assets_and_resources::ResourcesManager::other_id
+android::android::assets_and_resources::ResourcesManager::destroy
+android::android::assets_and_resources::ResourcesManager::init
+android::android::assets_and_resources::ResourcesManager::_android_resources
+android::android::assets_and_resources::ResourcesManager::_app_package
+android::android::assets_and_resources::ResourcesManager::native
+android::android::assets_and_resources::ResourcesManager::drawable

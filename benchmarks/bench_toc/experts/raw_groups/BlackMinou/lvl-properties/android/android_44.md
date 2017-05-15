@@ -1,0 +1,9 @@
+android::android::assets_and_resources::App
+android::android::assets_and_resources::AssetManager
+android::android::assets_and_resources::ResourcesManager
+android::android::assets_and_resources::NativeAssetFileDescriptor
+android::android::assets_and_resources::NativeActivity
+android::android::assets_and_resources::NativeAssetManager
+android::android::assets_and_resources::NativeResources
+android::android::assets_and_resources::NativeBitmap
+android::android::assets_and_resources::NativeDrawable

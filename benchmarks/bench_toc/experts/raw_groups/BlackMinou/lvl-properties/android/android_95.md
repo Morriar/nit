@@ -1,0 +1,10 @@
+android::android::bundle::bundle::Bundle
+android::android::bundle::bundle::Serializable
+android::android::bundle::bundle::Int
+android::android::bundle::bundle::Char
+android::android::bundle::bundle::Float
+android::android::bundle::bundle::Bool
+android::android::bundle::bundle::String
+android::android::bundle::bundle::Array
+android::android::bundle::bundle::StringCopyArray
+android::android::bundle::bundle::NativeBundle

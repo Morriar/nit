@@ -1,0 +1,9 @@
+nitc::nitc::model::model::MClassKind::Sys::abstract_kind
+nitc::nitc::model::model::MClassKind::Sys::concrete_kind
+nitc::nitc::model::model::MClassKind::Sys::interface_kind
+nitc::nitc::model::model::MClassKind::Sys::enum_kind
+nitc::nitc::model::model::MClassKind::extern_kind
+nitc::nitc::model::model::MClassKind::to_s
+nitc::nitc::model::model::MClassKind::need_init
+nitc::nitc::model::model::MClassKind::can_specialize
+nitc::nitc::model::model::MClassKind::init

@@ -1,0 +1,43 @@
+#include "nit.common.h"
+#define COLOR_nitc__ffi_base__MModule___ffi_callbacks 68
+extern const char FILE_nitc__ffi_base[];
+val* core___core__HashMap___core__abstract_collection__MapRead__keys(val* self);
+#define COLOR_core__abstract_collection__Collection__iterator 27
+#define COLOR_core__abstract_collection__Iterator__is_ok 15
+#define COLOR_core__abstract_collection__Iterator__item 16
+val* core___core__HashMap___core__abstract_collection__MapRead___91d_93d(val* self, val* p0);
+#define COLOR_nitc__light_ffi__MModule___ffi_ccu 61
+extern const char FILE_nitc__ffi[];
+#define COLOR_nitc__ffi_base__FFILanguage__compile_callback 21
+#define COLOR_core__abstract_collection__Iterator__next 17
+#define COLOR_core__abstract_collection__Iterator__finish 18
+#define COLOR_nitc__light_ffi_base__FFILanguage__compile_to_files 22
+#define COLOR_nitc__header_dependency__MModule___header_dependencies 69
+val* core___core__HashSet___core__abstract_collection__Collection__iterator(val* self);
+#define COLOR_nitc__light_ffi__MModule___uses_ffi 60
+extern const char FILE_nitc__c_tools[];
+#define COLOR_nitc__c_tools__CCompilationUnit___header_custom 1
+val* NEW_core__NativeArray(int length, const struct type* type);
+extern const struct type type_core__NativeArray__core__String;
+val* core__abstract_text___CString___to_s_full(char* self, long p0, long p1);
+val* nitc___nitc__MModule___nitc__model_base__MEntity__c_name(val* self);
+#define COLOR_core__abstract_text__NativeArray__native_to_s 15
+void template___template__Template___add(val* self, val* p0);
+#define COLOR_nitc__ffi___MModule___finalize_ffi_wrapper 132
+#define COLOR_nitc__ffi___VerifyNitniCallbacksPhase___nitc__phase__Phase__process_npropdef 29
+extern const struct type type_nitc__AMethPropdef;
+#define COLOR_nitc__parser_nodes__AMethPropdef___n_extern_code_block 23
+#define COLOR_nitc__light_ffi_base__AExternCodeBlock___language 5
+#define COLOR_core__kernel__Object___61d_61d 3
+val* nitc__nitni_callbacks___AMethPropdef___foreign_callbacks(val* self);
+val* nitc___nitc__ForeignCallbackSet___all(val* self);
+#define COLOR_nitc__modelize_property__APropdef___mpropdef 13
+extern const char FILE_nitc__model[];
+#define COLOR_nitc__model__MPropDef___mclassdef 6
+#define COLOR_nitc__model__MClassDef___mmodule 6
+#define COLOR_core__abstract_collection__Collection__has 30
+val* NEW_core__HashSet(const struct type* type);
+extern const struct type type_core__HashSet__nitc__NitniCallback;
+void core___core__HashSet___core__kernel__Object__init(val* self);
+void core___core__HashMap___core__abstract_collection__Map___91d_93d_61d(val* self, val* p0, val* p1);
+#define COLOR_core__abstract_collection__SimpleCollection__add 59

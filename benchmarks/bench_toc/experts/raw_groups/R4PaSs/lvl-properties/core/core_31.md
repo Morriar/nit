@@ -1,0 +1,14 @@
+core::core::collection::abstract_collection::SequenceRead::SELF
+core::core::collection::abstract_collection::SequenceRead::first
+core::core::collection::abstract_collection::SequenceRead::[]
+core::core::collection::abstract_collection::SequenceRead::last
+core::core::collection::abstract_collection::SequenceRead::index_of
+core::core::collection::abstract_collection::SequenceRead::last_index_of
+core::core::collection::abstract_collection::SequenceRead::index_of_from
+core::core::collection::abstract_collection::SequenceRead::last_index_of_from
+core::core::collection::abstract_collection::SequenceRead::==
+core::core::collection::abstract_collection::SequenceRead::hash
+core::core::collection::abstract_collection::SequenceRead::iterator
+core::core::collection::abstract_collection::SequenceRead::iterator_from
+core::core::collection::abstract_collection::SequenceRead::reverse_iterator
+core::core::collection::abstract_collection::SequenceRead::reverse_iterator_from

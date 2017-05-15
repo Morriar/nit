@@ -1,0 +1,11 @@
+core::core::kernel::Object::init
+core::core::kernel::Object::SELF
+core::core::kernel::Object::object_id
+core::core::kernel::Object::is_same_type
+core::core::kernel::Object::is_same_instance
+core::core::kernel::Object::==
+core::core::kernel::Object::!=
+core::core::kernel::Object::output
+core::core::kernel::Object::output_class_name
+core::core::kernel::Object::hash
+core::core::kernel::Object::sys

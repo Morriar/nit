@@ -1,0 +1,14 @@
+core::core::text::ropes::RopeBufSubstringIterator::init
+core::core::text::ropes::RopeBufSubstringIterator::SELF
+core::core::text::ropes::RopeBufSubstringIterator::_iter
+core::core::text::ropes::RopeBufSubstringIterator::iter
+core::core::text::ropes::RopeBufSubstringIterator::iter=
+core::core::text::ropes::RopeBufSubstringIterator::_nsstr
+core::core::text::ropes::RopeBufSubstringIterator::nsstr
+core::core::text::ropes::RopeBufSubstringIterator::nsstr=
+core::core::text::ropes::RopeBufSubstringIterator::_nsstr_done
+core::core::text::ropes::RopeBufSubstringIterator::nsstr_done
+core::core::text::ropes::RopeBufSubstringIterator::nsstr_done=
+core::core::text::ropes::RopeBufSubstringIterator::is_ok
+core::core::text::ropes::RopeBufSubstringIterator::item
+core::core::text::ropes::RopeBufSubstringIterator::next

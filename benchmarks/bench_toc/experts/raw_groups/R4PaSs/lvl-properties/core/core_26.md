@@ -1,0 +1,14 @@
+core::core::collection::abstract_collection::MapRead::SELF
+core::core::collection::abstract_collection::MapRead::[]
+core::core::collection::abstract_collection::MapRead::get_or_null
+core::core::collection::abstract_collection::MapRead::get_or_default
+core::core::collection::abstract_collection::MapRead::has_key
+core::core::collection::abstract_collection::MapRead::iterator
+core::core::collection::abstract_collection::MapRead::values
+core::core::collection::abstract_collection::MapRead::keys
+core::core::collection::abstract_collection::MapRead::is_empty
+core::core::collection::abstract_collection::MapRead::not_empty
+core::core::collection::abstract_collection::MapRead::length
+core::core::collection::abstract_collection::MapRead::provide_default_value
+core::core::collection::abstract_collection::MapRead::==
+core::core::collection::abstract_collection::MapRead::hash

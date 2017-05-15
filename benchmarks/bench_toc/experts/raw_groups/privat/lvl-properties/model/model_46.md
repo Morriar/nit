@@ -1,0 +1,11 @@
+nitc::nitc::model::model::MProperty::init
+nitc::nitc::model::model::MProperty::intro_mclassdef
+nitc::nitc::model::model::MProperty::name
+nitc::nitc::model::model::MProperty::full_name
+nitc::nitc::model::model::MProperty::c_name
+nitc::nitc::model::model::MProperty::visibility
+nitc::nitc::model::model::MProperty::is_autoinit
+nitc::nitc::model::model::MProperty::mpropdefs
+nitc::nitc::model::model::MProperty::intro
+nitc::nitc::model::model::MProperty::to_s
+nitc::nitc::model::model::MProperty

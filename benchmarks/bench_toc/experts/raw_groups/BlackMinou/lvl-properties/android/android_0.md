@@ -1,0 +1,10 @@
+android::android::app::App::init_window
+android::android::app::App::term_window
+android::android::app::App::paused
+android::android::app::App::pause
+android::android::app::App::resume
+android::android::app::App::save_state
+android::android::app::App::lost_focus
+android::android::app::App::gained_focus
+android::android::app::App::destroy
+android::android::app::App::paused=

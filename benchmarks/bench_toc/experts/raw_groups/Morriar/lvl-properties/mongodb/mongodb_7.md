@@ -1,0 +1,9 @@
+mongodb::mongodb::native_mongodb::NativeBSON
+mongodb::mongodb::native_mongodb::BSONError
+mongodb::mongodb::native_mongodb::BSONObjectId
+mongodb::mongodb::native_mongodb::Sys
+mongodb::mongodb::native_mongodb::NativeCStringArray
+mongodb::mongodb::native_mongodb::NativeMongoClient
+mongodb::mongodb::native_mongodb::NativeMongoDb
+mongodb::mongodb::native_mongodb::NativeMongoCollection
+mongodb::mongodb::native_mongodb::NativeMongoCursor

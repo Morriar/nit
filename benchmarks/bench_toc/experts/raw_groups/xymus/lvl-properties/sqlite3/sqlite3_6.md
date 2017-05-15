@@ -1,0 +1,10 @@
+sqlite3::sqlite3::sqlite3::Sqlite3DB
+sqlite3::sqlite3::sqlite3::Statement
+sqlite3::sqlite3::sqlite3::StatementRow
+sqlite3::sqlite3::sqlite3::StatementEntry
+sqlite3::sqlite3::sqlite3::String
+sqlite3::sqlite3::sqlite3::Int
+sqlite3::sqlite3::sqlite3::Float
+sqlite3::sqlite3::sqlite3::Blob
+sqlite3::sqlite3::sqlite3::StatementIterator
+sqlite3::sqlite3::sqlite3::Sqlite3Data

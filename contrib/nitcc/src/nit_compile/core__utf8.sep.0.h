@@ -1,0 +1,24 @@
+#include "nit.common.h"
+long core__abstract_text___Char___u8char_len(uint32_t self);
+extern const int COLOR_core__codec_base__Codec__add_char_to;
+void core__abstract_text___Char___u8char_tos(uint32_t self, char* p0, long p1);
+val* NEW_core__Bytes(const struct type* type);
+extern const struct type type_core__Bytes;
+extern const int COLOR_core__abstract_text__Text__byte_length;
+extern const int COLOR_core__bytes__Bytes__with_capacity;
+extern const int COLOR_core__codec_base__Codec__add_string_to;
+extern const int COLOR_core__bytes__Text__append_to_bytes;
+short int core__native___Byte___is_valid_utf8_start(unsigned char self);
+extern const struct type type_core__Int;
+extern const char FILE_core__kernel[];
+long core___core__Int___Discrete__successor(long self, long p0);
+long core__native___Byte___u8len(unsigned char self);
+uint32_t core___core__CString___char_at(char* self, long p0);
+val* core__flat___CString___to_s_unsafe(char* self, val* p0, val* p1, val* p2, val* p3);
+extern const struct type type_core__FlatString;
+extern const char FILE_core__utf8[];
+extern const int COLOR_core__abstract_text__FlatText__items;
+extern const int COLOR_core__abstract_text__Text__length;
+val* NEW_core__utf8__UTF8Codec(const struct type* type);
+extern const struct type type_core__utf8__UTF8Codec;
+extern const int COLOR_core__kernel__Object__init;

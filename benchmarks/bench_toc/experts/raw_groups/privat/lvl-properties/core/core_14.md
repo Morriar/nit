@@ -1,0 +1,15 @@
+core::core::file::Sys
+core::core::file::Stdin
+core::core::file::Stdout
+core::core::file::Stderr
+core::core::file::Path
+core::core::file::Text
+core::core::file::FileStat
+core::core::file::String
+core::core::file::Writable
+core::core::file::FileStream
+core::core::file::FileReader
+core::core::file::FileWriter
+core::core::file::Int
+core::core::file::FlatString
+core::core::file::NativeString

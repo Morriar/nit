@@ -1,0 +1,15 @@
+core::core::bytes::BytesIterator::init
+core::core::bytes::BytesIterator::SELF
+core::core::bytes::BytesIterator::_tgt
+core::core::bytes::BytesIterator::tgt
+core::core::bytes::BytesIterator::tgt=
+core::core::bytes::BytesIterator::_index
+core::core::bytes::BytesIterator::index
+core::core::bytes::BytesIterator::index=
+core::core::bytes::BytesIterator::_max
+core::core::bytes::BytesIterator::max
+core::core::bytes::BytesIterator::max=
+core::core::bytes::BytesIterator::with_buffer
+core::core::bytes::BytesIterator::is_ok
+core::core::bytes::BytesIterator::next
+core::core::bytes::BytesIterator::item

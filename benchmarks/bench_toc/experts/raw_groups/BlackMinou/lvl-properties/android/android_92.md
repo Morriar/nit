@@ -1,0 +1,22 @@
+android::android::bundle::bundle::Bundle::SELF
+android::android::bundle::bundle::Bundle::lazy _native_bundle
+android::android::bundle::bundle::Bundle::from
+android::android::bundle::bundle::Bundle::has
+android::android::bundle::bundle::Bundle::size
+android::android::bundle::bundle::Bundle::is_empty
+android::android::bundle::bundle::Bundle::clear
+android::android::bundle::bundle::Bundle::remove
+android::android::bundle::bundle::Bundle::keys
+android::android::bundle::bundle::Bundle::[]=
+android::android::bundle::bundle::Bundle::deserialize
+android::android::bundle::bundle::Bundle::deserialize_array
+android::android::bundle::bundle::Bundle::string
+android::android::bundle::bundle::Bundle::bool
+android::android::bundle::bundle::Bundle::char
+android::android::bundle::bundle::Bundle::int
+android::android::bundle::bundle::Bundle::float
+android::android::bundle::bundle::Bundle::array_of_float
+android::android::bundle::bundle::Bundle::array_of_char
+android::android::bundle::bundle::Bundle::array_of_int
+android::android::bundle::bundle::Bundle::array_of_bool
+android::android::bundle::bundle::Bundle::array_of_string

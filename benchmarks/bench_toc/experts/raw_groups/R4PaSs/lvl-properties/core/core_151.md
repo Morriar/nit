@@ -1,0 +1,13 @@
+core::core::stream::StringReader::init
+core::core::stream::StringReader::SELF
+core::core::stream::StringReader::_source
+core::core::stream::StringReader::source
+core::core::stream::StringReader::source=
+core::core::stream::StringReader::_cursor
+core::core::stream::StringReader::cursor
+core::core::stream::StringReader::cursor=
+core::core::stream::StringReader::read_char
+core::core::stream::StringReader::read_byte
+core::core::stream::StringReader::close
+core::core::stream::StringReader::read_all_bytes
+core::core::stream::StringReader::eof

@@ -1,0 +1,13 @@
+core::core::text::string_search::Match::init
+core::core::text::string_search::Match::SELF
+core::core::text::string_search::Match::string
+core::core::text::string_search::Match::from
+core::core::text::string_search::Match::length
+core::core::text::string_search::Match::after
+core::core::text::string_search::Match::to_s
+core::core::text::string_search::Match::string=
+core::core::text::string_search::Match::length=
+core::core::text::string_search::Match::from=
+core::core::text::string_search::Match::_string
+core::core::text::string_search::Match::_length
+core::core::text::string_search::Match::_from

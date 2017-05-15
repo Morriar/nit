@@ -1,0 +1,10 @@
+core::core::collection::abstract_collection::RefIterator::init
+core::core::collection::abstract_collection::RefIterator::SELF
+core::core::collection::abstract_collection::RefIterator::item
+core::core::collection::abstract_collection::RefIterator::next
+core::core::collection::abstract_collection::RefIterator::is_ok
+core::core::collection::abstract_collection::RefIterator::is_ok=
+core::core::collection::abstract_collection::RefIterator::_container
+core::core::collection::abstract_collection::RefIterator::container
+core::core::collection::abstract_collection::RefIterator::container=
+core::core::collection::abstract_collection::RefIterator::_is_ok

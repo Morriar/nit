@@ -1,0 +1,11 @@
+core::core::file::FileWriter::SELF
+core::core::file::FileWriter::write_bytes
+core::core::file::FileWriter::write
+core::core::file::FileWriter::write_byte
+core::core::file::FileWriter::close
+core::core::file::FileWriter::_is_writable
+core::core::file::FileWriter::is_writable
+core::core::file::FileWriter::is_writable=
+core::core::file::FileWriter::write_native
+core::core::file::FileWriter::open
+core::core::file::FileWriter::from_fd

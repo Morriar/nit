@@ -1,0 +1,13 @@
+core::core::stream::Stream
+core::core::stream::IOError
+core::core::stream::Reader
+core::core::stream::StringReader
+core::core::stream::LineIterator
+core::core::stream::PollableReader
+core::core::stream::BufferedReader
+core::core::stream::Writer
+core::core::stream::Writable
+core::core::stream::Bytes
+core::core::stream::Text
+core::core::stream::StringWriter
+core::core::stream::Duplex

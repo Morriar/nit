@@ -1,0 +1,11 @@
+android::android::assets_and_resources::NativeAssetFileDescriptor::SELF
+android::android::assets_and_resources::NativeAssetFileDescriptor::close
+android::android::assets_and_resources::NativeAssetFileDescriptor::create_input_stream
+android::android::assets_and_resources::NativeAssetFileDescriptor::create_output_stream
+android::android::assets_and_resources::NativeAssetFileDescriptor::describe_contents
+android::android::assets_and_resources::NativeAssetFileDescriptor::declared_length
+android::android::assets_and_resources::NativeAssetFileDescriptor::file_descriptor
+android::android::assets_and_resources::NativeAssetFileDescriptor::length
+android::android::assets_and_resources::NativeAssetFileDescriptor::start_offset
+android::android::assets_and_resources::NativeAssetFileDescriptor::to_s
+android::android::assets_and_resources::NativeAssetFileDescriptor::new_global_ref

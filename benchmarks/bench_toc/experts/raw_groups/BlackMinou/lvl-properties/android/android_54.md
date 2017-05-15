@@ -1,0 +1,11 @@
+android::android::sensors::ASensorType::SELF
+android::android::sensors::ASensorType::accelerometer
+android::android::sensors::ASensorType::is_accelerometer
+android::android::sensors::ASensorType::magnetic_field
+android::android::sensors::ASensorType::is_magnetic_field
+android::android::sensors::ASensorType::gyroscope
+android::android::sensors::ASensorType::is_gyroscope
+android::android::sensors::ASensorType::light
+android::android::sensors::ASensorType::is_light
+android::android::sensors::ASensorType::proximity
+android::android::sensors::ASensorType::is_proximity

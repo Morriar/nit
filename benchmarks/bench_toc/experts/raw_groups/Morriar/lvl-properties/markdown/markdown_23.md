@@ -1,0 +1,17 @@
+markdown::markdown::markdown::Text::skip_spaces
+markdown::markdown::markdown::Text::read_until
+markdown::markdown::markdown::Text::read_raw_until
+markdown::markdown::markdown::Text::read_xml_until
+markdown::markdown::markdown::Text::read_xml
+markdown::markdown::markdown::Text::read_md_link
+markdown::markdown::markdown::Text::read_md_link_id
+markdown::markdown::markdown::Text::xml_tag
+markdown::markdown::markdown::Text::is_valid_html_tag
+markdown::markdown::markdown::Text::escape
+markdown::markdown::markdown::Text::meta_from_fence
+markdown::markdown::markdown::Text::is_html_unsafe
+markdown::markdown::markdown::Text::is_html_block
+markdown::markdown::markdown::Text::is_link_prefix
+markdown::markdown::markdown::Text::html_unsafe_tags
+markdown::markdown::markdown::Text::html_block_tags
+markdown::markdown::markdown::Text::html_link_prefixes

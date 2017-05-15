@@ -1,0 +1,54 @@
+#include "nit.common.h"
+#define COLOR_nitc__simple_misc_analysis__ToolContext___simple_misc_analysis_phase 47
+extern const char FILE_nitc__simple_misc_analysis[];
+#define COLOR_nitc__phase__Phase___toolcontext 0
+extern const char FILE_nitc__phase[];
+void nitc__simple_misc_analysis___AModule___do_simple_misc_analysis(val* self, val* p0);
+val* NEW_nitc__simple_misc_analysis__SimpleMiscVisitor(const struct type* type);
+extern const struct type type_nitc__simple_misc_analysis__SimpleMiscVisitor;
+#define COLOR_nitc__simple_misc_analysis__SimpleMiscVisitor__toolcontext_61d 18
+#define COLOR_core__kernel__Object__init 0
+void nitc___nitc__Visitor___enter_visit(val* self, val* p0);
+#define COLOR_nitc__parser_nodes__ANode___location 1
+extern const char FILE_nitc__parser_nodes[];
+#define COLOR_nitc__location__Location___file 0
+#define COLOR_nitc__parser_nodes__SourceFile___first_token 6
+#define COLOR_core__kernel__Object___61d_61d 3
+#define COLOR_nitc__simple_misc_analysis__Token__accept_simple_misc_token 46
+#define COLOR_nitc__parser_nodes__Token___next_token 4
+#define COLOR_nitc__simple_misc_analysis__ANode__accept_simple_misc 30
+#define COLOR_nitc__simple_misc_analysis__SimpleMiscVisitor___once_count 1
+#define COLOR_nitc__simple_misc_analysis__SimpleMiscVisitor___toolcontext 2
+#define COLOR_nitc__parser_nodes__ANode__hot_location 24
+val* nitc___nitc__ToolContext___warning(val* self, val* p0, val* p1, val* p2);
+extern const struct type type_nitc__ADoExpr;
+val* core__abstract_text___CString___to_s_full(char* self, long p0, long p1);
+void nitc__simple_misc_analysis___nitc__simple_misc_analysis__SimpleMiscVisitor___warning(val* self, val* p0, val* p1, val* p2);
+#define COLOR_nitc__simple_misc_analysis___nitc__simple_misc_analysis__SimpleMiscVisitor___core__kernel__Object__init 24
+#define COLOR_nitc__parser_nodes__ANode__visit_all 22
+#define COLOR_nitc__simple_misc_analysis__ANode__after_simple_misc 34
+#define COLOR_nitc__parser_nodes__ASignature___n_opar 3
+#define COLOR_nitc__parser_nodes__ASignature___n_params 4
+short int nitc___nitc__ANodes___core__abstract_collection__Collection__is_empty(val* self);
+#define COLOR_nitc__parser_nodes__AExprs___n_exprs 3
+#define COLOR_nitc__parser_nodes__AEscapeExpr___n_expr 4
+#define COLOR_nitc__simple_misc_analysis__AExpr__warn_parentheses 67
+#define COLOR_nitc__parser_nodes__AWhileExpr___n_expr 5
+extern const struct type type_nitc__ATrueExpr;
+#define COLOR_nitc__parser_nodes__AWhileExpr___n_block 7
+void nitc__simple_misc_analysis___nitc__simple_misc_analysis__SimpleMiscVisitor___check_do_expr(val* self, val* p0);
+#define COLOR_nitc__parser_nodes__ADoExpr___n_block 5
+#define COLOR_nitc__parser_nodes__ALoopExpr___n_block 5
+#define COLOR_nitc__parser_nodes__AForExpr___n_block 7
+#define COLOR_nitc__parser_nodes__AForGroup___n_expr 5
+#define COLOR_nitc__parser_nodes__AWithExpr___n_block 7
+#define COLOR_nitc__parser_nodes__AIfExpr___n_expr 4
+#define COLOR_nitc__parser_nodes__AIfexprExpr___n_expr 4
+extern const struct type type_core__Int;
+extern const char FILE_core__kernel[];
+#define COLOR_nitc__simple_misc_analysis___AOnceExpr___ANode__accept_simple_misc 48
+#define COLOR_nitc__parser_nodes__Token___prev_token 3
+extern const struct type type_nitc__TEol;
+extern const struct type type_nitc__EOF;
+extern const struct type type_nitc__TComment;
+extern const struct type type_nitc__TSemi;

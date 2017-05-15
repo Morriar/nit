@@ -1,0 +1,9 @@
+core::core::text::ropes::RopeBuffer
+core::core::text::ropes::FlatString
+core::core::text::ropes::RopeBufferCharIterator
+core::core::text::ropes::RopeBufferCharReverseIterator
+core::core::text::ropes::RopeBufferChars
+core::core::text::ropes::RopeBufferByteIterator
+core::core::text::ropes::RopeBufferByteReverseIterator
+core::core::text::ropes::RopeBufferBytes
+core::core::text::ropes::Sys

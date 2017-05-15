@@ -1,0 +1,10 @@
+core::core::exec::ProcessReader::SELF
+core::core::exec::ProcessReader::_stream_in
+core::core::exec::ProcessReader::stream_in
+core::core::exec::ProcessReader::stream_in=
+core::core::exec::ProcessReader::close
+core::core::exec::ProcessReader::read_char
+core::core::exec::ProcessReader::read_byte
+core::core::exec::ProcessReader::eof
+core::core::exec::ProcessReader::pipeflags
+core::core::exec::ProcessReader::execute

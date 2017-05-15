@@ -1,0 +1,10 @@
+android::android::intent::intent_api15::Category::app_browser
+android::android::intent::intent_api15::Category::app_calculator
+android::android::intent::intent_api15::Category::app_calendar
+android::android::intent::intent_api15::Category::app_contacts
+android::android::intent::intent_api15::Category::app_email
+android::android::intent::intent_api15::Category::app_gallery
+android::android::intent::intent_api15::Category::app_maps
+android::android::intent::intent_api15::Category::app_messaging
+android::android::intent::intent_api15::Category::app_music
+android::android::intent::intent_api15::Category::browsable

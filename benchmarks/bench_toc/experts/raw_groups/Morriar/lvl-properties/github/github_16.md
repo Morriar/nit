@@ -1,0 +1,19 @@
+github::github::api::IssueEvent::SELF
+github::github::api::IssueEvent::_key
+github::github::api::IssueEvent::key
+github::github::api::IssueEvent::lazy _key
+github::github::api::IssueEvent::key=
+github::github::api::IssueEvent::_id
+github::github::api::IssueEvent::id
+github::github::api::IssueEvent::id=
+github::github::api::IssueEvent::from_json
+github::github::api::IssueEvent::issue
+github::github::api::IssueEvent::actor
+github::github::api::IssueEvent::created_at
+github::github::api::IssueEvent::event
+github::github::api::IssueEvent::commit_id
+github::github::api::IssueEvent::labl
+github::github::api::IssueEvent::assignee
+github::github::api::IssueEvent::milestone
+github::github::api::IssueEvent::rename
+github::github::api::IssueEvent::init

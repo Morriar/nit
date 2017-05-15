@@ -1,0 +1,13 @@
+github::github::test_github_curl::TestGithubCurl::SELF
+github::github::test_github_curl::TestGithubCurl::_auth
+github::github::test_github_curl::TestGithubCurl::auth
+github::github::test_github_curl::TestGithubCurl::auth=
+github::github::test_github_curl::TestGithubCurl::_user_agent
+github::github::test_github_curl::TestGithubCurl::user_agent
+github::github::test_github_curl::TestGithubCurl::user_agent=
+github::github::test_github_curl::TestGithubCurl::_testee
+github::github::test_github_curl::TestGithubCurl::testee
+github::github::test_github_curl::TestGithubCurl::testee=
+github::github::test_github_curl::TestGithubCurl::before_test
+github::github::test_github_curl::TestGithubCurl::test_get_repo
+github::github::test_github_curl::TestGithubCurl::test_get_user

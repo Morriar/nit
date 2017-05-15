@@ -1,0 +1,9 @@
+android::android::native_app_glue::Sys
+android::android::native_app_glue::App
+android::android::native_app_glue::NativeNativeActivity
+android::android::native_app_glue::NdkNativeActivity
+android::android::native_app_glue::NativeAppGlue
+android::android::native_app_glue::AConfiguration
+android::android::native_app_glue::ALooper
+android::android::native_app_glue::AInputQueue
+android::android::native_app_glue::ANativeWindow

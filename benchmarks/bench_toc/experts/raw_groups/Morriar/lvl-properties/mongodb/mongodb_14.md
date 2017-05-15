@@ -1,0 +1,12 @@
+mongodb::mongodb::mongodb::MongoCursor::SELF
+mongodb::mongodb::mongodb::MongoCursor::_native
+mongodb::mongodb::mongodb::MongoCursor::native
+mongodb::mongodb::mongodb::MongoCursor::native=
+mongodb::mongodb::mongodb::MongoCursor::_is_alive
+mongodb::mongodb::mongodb::MongoCursor::is_alive
+mongodb::mongodb::mongodb::MongoCursor::is_alive=
+mongodb::mongodb::mongodb::MongoCursor::init
+mongodb::mongodb::mongodb::MongoCursor::is_ok
+mongodb::mongodb::mongodb::MongoCursor::next
+mongodb::mongodb::mongodb::MongoCursor::item
+mongodb::mongodb::mongodb::MongoCursor::finalize

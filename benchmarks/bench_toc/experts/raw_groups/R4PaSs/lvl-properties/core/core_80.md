@@ -1,0 +1,16 @@
+core::core::text::abstract_text::FlatText::SELF
+core::core::text::abstract_text::FlatText::length
+core::core::text::abstract_text::FlatText::length=
+core::core::text::abstract_text::FlatText::bytelen
+core::core::text::abstract_text::FlatText::bytelen=
+core::core::text::abstract_text::FlatText::output
+core::core::text::abstract_text::FlatText::copy_to_native
+core::core::text::abstract_text::FlatText::_items
+core::core::text::abstract_text::FlatText::items
+core::core::text::abstract_text::FlatText::items=
+core::core::text::abstract_text::FlatText::_real_items
+core::core::text::abstract_text::FlatText::real_items
+core::core::text::abstract_text::FlatText::real_items=
+core::core::text::abstract_text::FlatText::fast_cstring
+core::core::text::abstract_text::FlatText::_length
+core::core::text::abstract_text::FlatText::_bytelen

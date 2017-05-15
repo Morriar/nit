@@ -1,0 +1,3 @@
+android::android::shared_preferences::shared_preferences_api11::NativeSharedPreferences
+android::android::shared_preferences::shared_preferences_api11::NativeSharedPreferencesEditor
+android::android::shared_preferences::shared_preferences_api11::SharedPreferences

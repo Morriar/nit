@@ -1,0 +1,10 @@
+core::core::text::ropes::RopeBufferCharReverseIterator::init
+core::core::text::ropes::RopeBufferCharReverseIterator::SELF
+core::core::text::ropes::RopeBufferCharReverseIterator::_sit
+core::core::text::ropes::RopeBufferCharReverseIterator::sit
+core::core::text::ropes::RopeBufferCharReverseIterator::sit=
+core::core::text::ropes::RopeBufferCharReverseIterator::index
+core::core::text::ropes::RopeBufferCharReverseIterator::from
+core::core::text::ropes::RopeBufferCharReverseIterator::is_ok
+core::core::text::ropes::RopeBufferCharReverseIterator::item
+core::core::text::ropes::RopeBufferCharReverseIterator::next

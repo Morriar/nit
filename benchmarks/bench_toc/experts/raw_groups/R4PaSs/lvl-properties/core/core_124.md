@@ -1,0 +1,16 @@
+core::core::text::ropes::ReverseRopeSubstrings::init
+core::core::text::ropes::ReverseRopeSubstrings::SELF
+core::core::text::ropes::ReverseRopeSubstrings::_iter
+core::core::text::ropes::ReverseRopeSubstrings::iter
+core::core::text::ropes::ReverseRopeSubstrings::iter=
+core::core::text::ropes::ReverseRopeSubstrings::_pos
+core::core::text::ropes::ReverseRopeSubstrings::pos
+core::core::text::ropes::ReverseRopeSubstrings::pos=
+core::core::text::ropes::ReverseRopeSubstrings::_str
+core::core::text::ropes::ReverseRopeSubstrings::str
+core::core::text::ropes::ReverseRopeSubstrings::str=
+core::core::text::ropes::ReverseRopeSubstrings::from
+core::core::text::ropes::ReverseRopeSubstrings::item
+core::core::text::ropes::ReverseRopeSubstrings::index
+core::core::text::ropes::ReverseRopeSubstrings::is_ok
+core::core::text::ropes::ReverseRopeSubstrings::next

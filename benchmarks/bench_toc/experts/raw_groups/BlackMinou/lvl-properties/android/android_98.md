@@ -1,0 +1,10 @@
+android::android::notification::native_notification::NativeNotificationBuilder::SELF
+android::android::notification::native_notification::NativeNotificationBuilder::new
+android::android::notification::native_notification::NativeNotificationBuilder::create
+android::android::notification::native_notification::NativeNotificationBuilder::title=
+android::android::notification::native_notification::NativeNotificationBuilder::text=
+android::android::notification::native_notification::NativeNotificationBuilder::ticker=
+android::android::notification::native_notification::NativeNotificationBuilder::small_icon=
+android::android::notification::native_notification::NativeNotificationBuilder::auto_cancel=
+android::android::notification::native_notification::NativeNotificationBuilder::number=
+android::android::notification::native_notification::NativeNotificationBuilder::ongoing=

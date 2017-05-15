@@ -1,0 +1,100 @@
+# Copyright 2016 Alexandre Terrasa <alexandre@moz-code.org>.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+module github_web_api
+
+import popcorn
+import popcorn::pop_config
+import popcorn::pop_repos
+import api
+
+redef class AppConfig
+end
+
+abstract class APIHandler
+	super Handler
+
+	var config: AppConfig
+end
+
+class APIRouter
+	super Router
+
+	var config: AppConfig
+
+	redef init do
+		super
+		use("/repos", new APIRepos(config))
+		use("/repos/:user/:repo", new APIRepo(config))
+	end
+end
+
+class APIRepos
+	super APIHandler
+
+	redef fun get(req, res) do
+		res.json new JsonArray.from(config.repos.find_all)
+	end
+end
+
+class APIRepo
+	super APIHandler
+
+	fun get_repo(req: HttpRequest, res: HttpResponse): nullable Repo do
+		var user_id = req.param("user")
+		if user_id == null then
+			res.api_error("Missing URI param `user`", 400)
+			return null
+		end
+		var repo_id = req.param("repo")
+		if repo_id == null then
+			res.api_error("Missing URI param `repo`", 400)
+			return null
+		end
+		var repo = config.tracks.find_by_id("{user}/{repo}")
+		if repo == null then
+			res.api_error("Repo `{repo}` not found", 404)
+			return null
+		end
+		return repo
+	end
+
+	redef fun get(req, res) do
+		var repo = get_repo(req, res)
+		if repo == null then return
+		res.json repo
+	end
+end
+
+redef class HttpResponse
+
+	# Return a JSON error
+	#
+	# Format:
+	# ~~~json
+	# { message: "Not found", status: 404 }
+	# ~~~
+	fun api_error(message: String, status: Int) do
+		var obj = new JsonObject
+		obj["status"] = status
+		obj["message"] = message
+		json_error(obj, status)
+	end
+end
+
+class APIErrorHandler
+	super APIHandler
+
+	redef fun all(req, res) do res.api_error("Not found", 404)
+end

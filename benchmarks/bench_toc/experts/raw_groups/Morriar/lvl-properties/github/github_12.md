@@ -1,0 +1,11 @@
+github::github::api::Comment::SELF
+github::github::api::Comment::_id
+github::github::api::Comment::id
+github::github::api::Comment::id=
+github::github::api::Comment::from_json
+github::github::api::Comment::user
+github::github::api::Comment::created_at
+github::github::api::Comment::updated_at
+github::github::api::Comment::body
+github::github::api::Comment::is_ack
+github::github::api::Comment::init

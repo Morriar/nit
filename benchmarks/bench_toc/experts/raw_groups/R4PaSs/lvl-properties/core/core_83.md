@@ -1,0 +1,13 @@
+core::core::text::abstract_text::String::SELF
+core::core::text::abstract_text::String::SELFTYPE
+core::core::text::abstract_text::String::to_s
+core::core::text::abstract_text::String::+
+core::core::text::abstract_text::String::*
+core::core::text::abstract_text::String::insert_at
+core::core::text::abstract_text::String::substrings
+core::core::text::abstract_text::String::reversed
+core::core::text::abstract_text::String::to_upper
+core::core::text::abstract_text::String::to_lower
+core::core::text::abstract_text::String::to_snake_case
+core::core::text::abstract_text::String::to_camel_case
+core::core::text::abstract_text::String::capitalized

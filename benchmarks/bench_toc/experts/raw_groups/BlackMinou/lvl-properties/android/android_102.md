@@ -1,0 +1,10 @@
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferencesEditor::SELF
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferencesEditor::clear
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferencesEditor::commit
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferencesEditor::put_boolean
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferencesEditor::put_float
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferencesEditor::put_int
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferencesEditor::put_long
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferencesEditor::put_string
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferencesEditor::remove
+android::android::shared_preferences::shared_preferences_api10::NativeSharedPreferencesEditor::new_global_ref

@@ -1,0 +1,13 @@
+android::android::audio::Sound::id
+android::android::audio::Sound::soundpool
+android::android::audio::Sound::soundpool_id
+android::android::audio::Sound::load
+android::android::audio::Sound::play
+android::android::audio::Sound::pause
+android::android::audio::Sound::resume
+android::android::audio::Sound::id=
+android::android::audio::Sound::soundpool=
+android::android::audio::Sound::soundpool_id=
+android::android::audio::Sound::_id
+android::android::audio::Sound::_soundpool
+android::android::audio::Sound::_soundpool_id

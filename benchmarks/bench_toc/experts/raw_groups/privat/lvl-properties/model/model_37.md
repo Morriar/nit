@@ -1,0 +1,12 @@
+nitc::nitc::model::model::MProxyType::model::need_anchor
+nitc::nitc::model::model::MProxyType::model::as_nullable
+nitc::nitc::model::model::MProxyType::model::as_notnull
+nitc::nitc::model::model::MProxyType::model::undecorate
+nitc::nitc::model::model::MProxyType::model::resolve_for
+nitc::nitc::model::model::MProxyType::model::can_resolve_for
+nitc::nitc::model::model::MProxyType::model::lookup_fixed
+nitc::nitc::model::model::MProxyType::model::depth
+nitc::nitc::model::model::MProxyType::model::length
+nitc::nitc::model::model::MProxyType::model::collect_mclassdefs
+nitc::nitc::model::model::MProxyType::model::collect_mclasses
+nitc::nitc::model::model::MProxyType::model::collect_mtypes

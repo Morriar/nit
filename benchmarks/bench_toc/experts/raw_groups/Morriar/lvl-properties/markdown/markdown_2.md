@@ -1,0 +1,12 @@
+markdown::markdown::markdown::LinkRef::SELF
+markdown::markdown::markdown::LinkRef::_link
+markdown::markdown::markdown::LinkRef::link
+markdown::markdown::markdown::LinkRef::link=
+markdown::markdown::markdown::LinkRef::_title
+markdown::markdown::markdown::LinkRef::title
+markdown::markdown::markdown::LinkRef::title=
+markdown::markdown::markdown::LinkRef::_is_abbrev
+markdown::markdown::markdown::LinkRef::is_abbrev
+markdown::markdown::markdown::LinkRef::is_abbrev=
+markdown::markdown::markdown::LinkRef::with_title
+markdown::markdown::markdown::LinkRef::init

@@ -1,0 +1,9 @@
+core::core::collection::abstract_collection::CoupleMapIterator::init
+core::core::collection::abstract_collection::CoupleMapIterator::SELF
+core::core::collection::abstract_collection::CoupleMapIterator::item
+core::core::collection::abstract_collection::CoupleMapIterator::key
+core::core::collection::abstract_collection::CoupleMapIterator::is_ok
+core::core::collection::abstract_collection::CoupleMapIterator::next
+core::core::collection::abstract_collection::CoupleMapIterator::_iter
+core::core::collection::abstract_collection::CoupleMapIterator::iter
+core::core::collection::abstract_collection::CoupleMapIterator::iter=

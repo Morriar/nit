@@ -1,0 +1,13 @@
+core::core::file::NativeFileStat::SELF
+core::core::file::NativeFileStat::mode
+core::core::file::NativeFileStat::atime
+core::core::file::NativeFileStat::ctime
+core::core::file::NativeFileStat::mtime
+core::core::file::NativeFileStat::size
+core::core::file::NativeFileStat::is_reg
+core::core::file::NativeFileStat::is_dir
+core::core::file::NativeFileStat::is_chr
+core::core::file::NativeFileStat::is_blk
+core::core::file::NativeFileStat::is_fifo
+core::core::file::NativeFileStat::is_lnk
+core::core::file::NativeFileStat::is_sock

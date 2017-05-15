@@ -1,0 +1,14 @@
+github::github::events::GithubEvent
+github::github::events::CommitCommentEvent
+github::github::events::CreateEvent
+github::github::events::DeleteEvent
+github::github::events::DeploymentEvent
+github::github::events::DeploymentStatusEvent
+github::github::events::ForkEvent
+github::github::events::IssueCommentEvent
+github::github::events::IssuesEvent
+github::github::events::MemberEvent
+github::github::events::PullRequestEvent
+github::github::events::PullRequestReviewCommentEvent
+github::github::events::PushEvent
+github::github::events::StatusEvent

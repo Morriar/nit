@@ -1,0 +1,20 @@
+digraph g {
+rankdir=LR;s0[shape=circle,label="0"];
+s0->s1 [label="#32"];
+s0->s2 [label="! .. \'\n, .. >\n@ .. {\n} .. "];
+s0->s3 [label="("];
+s0->s4 [label=")"];
+s0->s5 [label="*"];
+s0->s6 [label="+"];
+s0->s7 [label="?"];
+s0->s8 [label="|"];
+s1[shape=circle,shape=doublecircle,label="Ignored\n"];
+s2[shape=circle,shape=doublecircle,label="char\n"];
+s3[shape=circle,shape=doublecircle,label="\'(\'\n"];
+s4[shape=circle,shape=doublecircle,label="\')\'\n"];
+s5[shape=circle,shape=doublecircle,label="\'*\'\n"];
+s6[shape=circle,shape=doublecircle,label="\'+\'\n"];
+s7[shape=circle,shape=doublecircle,label="\'?\'\n"];
+s8[shape=circle,shape=doublecircle,label="\'\|\'\n"];
+empty->s0; empty[label="",shape=none];
+}

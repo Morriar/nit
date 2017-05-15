@@ -1,0 +1,13 @@
+github::github::github_curl::GithubCurl::SELF
+github::github::github_curl::GithubCurl::_header
+github::github::github_curl::GithubCurl::header
+github::github::github_curl::GithubCurl::header=
+github::github::github_curl::GithubCurl::_auth
+github::github::github_curl::GithubCurl::auth
+github::github::github_curl::GithubCurl::auth=
+github::github::github_curl::GithubCurl::_user_agent
+github::github::github_curl::GithubCurl::user_agent
+github::github::github_curl::GithubCurl::user_agent=
+github::github::github_curl::GithubCurl::init
+github::github::github_curl::GithubCurl::get_and_check
+github::github::github_curl::GithubCurl::get_and_parse
