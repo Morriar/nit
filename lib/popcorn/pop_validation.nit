@@ -714,13 +714,17 @@ end
 # assert validator.validate("""{ "url": "http://nitlanguage.org/foo?q" }""")
 # assert validator.validate("""{ "url": "http://nitlanguage.org/foo?q&a" }""")
 # assert validator.validate("""{ "url": "http://nitlanguage.org/foo?q&a=1" }""")
+# assert validator.validate("""{ "url": "http://moz-code.org" }""")
+# assert validator.validate("""{ "url": "http://cah.moz-code.org" }""")
+# assert validator.validate("""{ "url": "http://c-a-h.moz-code.org" }""")
+# assert validator.validate("""{ "url": "http://c-a-h.moz-code.org/foo-bar" }""")
 # ~~~
 class URLField
 	super RegexField
 
 	autoinit field, required
 
-	redef var re = "^(http|https):\\/\\/[a-zA-Z0-9\\-_]+(\\.[a-zA-Z0-9\\-_]+)+([a-zA-Z0-9\\-\\.,@?^=%&:/~\\+#]*[a-zA-Z0-9\\-\\@?^=%&/~\\+#])?".to_re
+	redef var re = "^(http|https):\\/\\/[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+([a-zA-Z0-9\\-\\.,@?^=%&:/~\\+#]*[a-zA-Z0-9\\-\\@?^=%&/~\\+#])?".to_re
 end
 
 # Check if a field value is already used
