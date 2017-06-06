@@ -13,7 +13,13 @@
 
 # Standard classes and methods used by default by Nit programs and libraries.
 # This module is implicitly imported by every module.
-module core
+module core is
+	new_annotation test
+	new_annotation before
+	new_annotation before_all
+	new_annotation after
+	new_annotation after_all
+end
 
 import posix
 import environ
@@ -33,3 +39,7 @@ import error
 import re
 import bytes
 import fixed_ints
+
+redef class Object
+	private init nitunit do end
+end
