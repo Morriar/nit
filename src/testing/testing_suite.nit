@@ -47,11 +47,17 @@ class NitUnitTester
 			if not mclassdef.is_test(mbuilder) then continue
 			if not suite_match_pattern(mclassdef) then continue
 			toolcontext.modelbuilder.total_classes += 1
+
+			var before = mclassdef.before(mbuilder)
+			var after = mclassdef.after(mbuilder)
+
 			for mpropdef in mclassdef.mpropdefs do
 				if not mpropdef isa MMethodDef or not mpropdef.is_test(mbuilder) then continue
 				if not case_match_pattern(mpropdef) then continue
 				toolcontext.modelbuilder.total_tests += 1
 				var test = new TestCase(suite, mpropdef, toolcontext)
+				test.before = before
+				test.after = after
 				suite.test_cases.add test
 			end
 		end
@@ -262,6 +268,12 @@ class TestCase
 	# Test method to be compiled and tested.
 	var test_method: MMethodDef
 
+	# Cases to execute before this one
+	var before = new Array[MMethodDef]
+
+	# Cases to execute after this one
+	var after = new Array[MMethodDef]
+
 	redef fun full_name do return test_method.full_name
 
 	redef fun location do return test_method.location
@@ -277,9 +289,13 @@ class TestCase
 			file.addn "\t{name}"
 		else
 			file.addn "\tvar subject = new {test_method.mclassdef.name}.nitunit"
-			file.addn "\tsubject.before_test"
+			for mmethod in before do
+				file.addn "\tsubject.{mmethod.name}"
+			end
 			file.addn "\tsubject.{name}"
-			file.addn "\tsubject.after_test"
+			for mmethod in after do
+				file.addn "\tsubject.{mmethod.name}"
+			end
 		end
 		file.addn "end"
 	end
@@ -377,10 +393,19 @@ redef class MMethodDef
 		return has_annotation(mbuilder, "test")
 	end
 
+	# Does self have the `before` annotation?
+	private fun is_before(mbuilder: ModelBuilder): Bool do
+		return has_annotation(mbuilder, "before")
+	end
 
 	# Does self have the `before_all` annotation?
 	private fun is_before_all(mbuilder: ModelBuilder): Bool do
 		return has_annotation(mbuilder, "before_all")
+	end
+
+	# Does self have the `after` annotation?
+	private fun is_after(mbuilder: ModelBuilder): Bool do
+		return has_annotation(mbuilder, "after")
 	end
 
 	# Does self have the `after_all` annotation?
@@ -401,6 +426,22 @@ redef class MClassDef
 		return false
 	end
 
+	# Methods tagged with `before` in this class definition
+	private fun before(mbuilder: ModelBuilder): Array[MMethodDef] do
+		var res = new Array[MMethodDef]
+		for mpropdef in mpropdefs do
+			if mpropdef isa MMethodDef and mpropdef.is_before(mbuilder) then
+				res.add mpropdef
+			end
+		end
+		var in_hierarchy = self.in_hierarchy
+		if in_hierarchy == null then return res
+		for mclassdef in in_hierarchy.direct_greaters do
+			res.add_all mclassdef.before(mbuilder)
+		end
+		return res
+	end
+
 	# Methods tagged with `before_all` in this class definition
 	private fun before_all(mbuilder: ModelBuilder): Array[MMethodDef] do
 		var res = new Array[MMethodDef]
@@ -413,6 +454,22 @@ redef class MClassDef
 		if in_hierarchy == null then return res
 		for mclassdef in in_hierarchy.direct_greaters do
 			res.add_all mclassdef.before_all(mbuilder)
+		end
+		return res
+	end
+
+	# Methods tagged with `after` in this class definition
+	private fun after(mbuilder: ModelBuilder): Array[MMethodDef] do
+		var res = new Array[MMethodDef]
+		for mpropdef in mpropdefs do
+			if mpropdef isa MMethodDef and mpropdef.is_after(mbuilder) then
+				res.add mpropdef
+			end
+		end
+		var in_hierarchy = self.in_hierarchy
+		if in_hierarchy == null then return res
+		for mclassdef in in_hierarchy.direct_greaters do
+			res.add_all mclassdef.after(mbuilder)
 		end
 		return res
 	end
