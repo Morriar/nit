@@ -438,7 +438,7 @@ redef class ModelBuilder
 	# Run NitUnit test suite for `mmodule` (if it is one).
 	fun test_unit(mmodule: MModule): nullable HTMLTag do
 		# is the module a test_suite?
-		if get_mmodule_annotation("test_suite", mmodule) == null then return null
+		if get_mmodule_annotation("test", mmodule) == null then return null
 		toolcontext.info("nitunit: test-suite {mmodule}", 2)
 
 		var tester = new NitUnitTester(self)
