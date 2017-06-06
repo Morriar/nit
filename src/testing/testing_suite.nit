@@ -45,7 +45,7 @@ class NitUnitTester
 		end
 		# generate all test cases
 		for mclassdef in mmodule.mclassdefs do
-			if not mclassdef.is_test then continue
+			if not mclassdef.is_test(mbuilder) then continue
 			if not suite_match_pattern(mclassdef) then continue
 			toolcontext.modelbuilder.total_classes += 1
 			for mpropdef in mclassdef.mpropdefs do
@@ -197,7 +197,7 @@ class TestSuite
 	# Write the test unit for `self` in a nit compilable file.
 	fun write_to_nit do
 		var file = new Template
-		file.addn "intrude import test_suite"
+		file.addn "intrude import core"
 		file.addn "import {mmodule.name}\n"
 		file.addn "var name = args.first"
 		var before_module = self.before_module
@@ -389,13 +389,13 @@ redef class MMethodDef
 end
 
 redef class MClassDef
-	# Is the class a TestClass?
-	# i.e. is a subclass of `TestSuite`
-	private fun is_test: Bool do
-		var in_hierarchy = self.in_hierarchy
-		if in_hierarchy == null then return false
-		for sup in in_hierarchy.greaters do
-			if sup.name == "TestSuite" then return true
+	# Does self have the `test` annotation?
+	private fun is_test(mbuilder: ModelBuilder): Bool do
+		var anode = mbuilder.mentity2node(self)
+		if not anode isa AClassdef then return false
+		for apropdef in anode.n_propdefs do
+			if not apropdef isa AAnnotPropdef then continue
+			if apropdef.n_atid.n_id.text == "test" then return true
 		end
 		return false
 	end
