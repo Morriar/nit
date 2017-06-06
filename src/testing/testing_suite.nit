@@ -49,11 +49,11 @@ class NitUnitTester
 			if not suite_match_pattern(mclassdef) then continue
 			toolcontext.modelbuilder.total_classes += 1
 			for mpropdef in mclassdef.mpropdefs do
-				if not mpropdef isa MMethodDef or not mpropdef.is_test then continue
+				if not mpropdef isa MMethodDef or not mpropdef.is_test(mbuilder) then continue
 				if not case_match_pattern(mpropdef) then continue
 				toolcontext.modelbuilder.total_tests += 1
 				var test = new TestCase(suite, mpropdef, toolcontext)
-				suite.add_test test
+				suite.test_cases.add test
 			end
 		end
 		# method to execute after all tests in the module
@@ -112,9 +112,6 @@ class TestSuite
 
 	# List of `TestCase` to be executed in this suite.
 	var test_cases = new Array[TestCase]
-
-	# Add a `TestCase` to the suite.
-	fun add_test(case: TestCase) do test_cases.add case
 
 	# Test to be executed before the whole test suite.
 	var before_module: nullable TestCase = null
@@ -375,11 +372,17 @@ class TestCase
 end
 
 redef class MMethodDef
-	# TODO use annotations?
 
-	# Is the method a test_method?
-	# i.e. begins with "test_"
-	private fun is_test: Bool do return name.has_prefix("test_")
+	private fun has_annotation(mbuilder: ModelBuilder, name: String): Bool do
+		var anode = mbuilder.mentity2node(self)
+		if not anode isa APropdef then return false
+		return anode.get_single_annotation(name, mbuilder) != null
+	end
+
+	# Does self have the `test` annotation?
+	private fun is_test(mbuilder: ModelBuilder): Bool do
+		return has_annotation(mbuilder, "test")
+	end
 
 	# Is the method a "before_module"?
 	private fun is_before_module: Bool do return name == "before_module"
