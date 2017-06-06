@@ -38,10 +38,9 @@ class NitUnitTester
 		var toolcontext = mbuilder.toolcontext
 		var suite = new TestSuite(mmodule, toolcontext)
 		# method to execute before all tests in the module
-		var before_module = mmodule.before_test
-		if before_module != null then
+		for mmethod in mmodule.before_all(mbuilder) do
 			toolcontext.modelbuilder.total_tests += 1
-			suite.before_module = new TestCase(suite, before_module, toolcontext)
+			suite.before_all.add new TestCase(suite, mmethod, toolcontext)
 		end
 		# generate all test cases
 		for mclassdef in mmodule.mclassdefs do
@@ -57,10 +56,9 @@ class NitUnitTester
 			end
 		end
 		# method to execute after all tests in the module
-		var after_module = mmodule.after_test
-		if after_module != null then
+		for mmethod in mmodule.after_all(mbuilder) do
 			toolcontext.modelbuilder.total_tests += 1
-			suite.after_module = new TestCase(suite, after_module, toolcontext)
+			suite.after_all.add new TestCase(suite, mmethod, toolcontext)
 		end
 		suite.run
 		return suite
@@ -113,17 +111,17 @@ class TestSuite
 	# List of `TestCase` to be executed in this suite.
 	var test_cases = new Array[TestCase]
 
-	# Test to be executed before the whole test suite.
-	var before_module: nullable TestCase = null
+	# Tests to be executed before the whole test suite.
+	var before_all = new Array[TestCase]
 
-	# Test to be executed after the whole test suite.
-	var after_module: nullable TestCase = null
+	# Tests to be executed after the whole test suite.
+	var after_all = new Array[TestCase]
 
 	# Display test suite status in std-out.
 	fun show_status do
 		var test_cases = self.test_cases.to_a
-		if before_module != null then test_cases.add before_module.as(not null)
-		if after_module != null then test_cases.add after_module.as(not null)
+		test_cases.add_all before_all
+		test_cases.add_all after_all
 		toolcontext.show_unit_status("Test-suite of module " + mmodule.full_name, test_cases)
 	end
 
@@ -149,10 +147,7 @@ class TestSuite
 		end
 		toolcontext.info("Execute test-suite {mmodule.name}", 1)
 
-		var before_module = self.before_module
-		var after_module = self.after_module
-
-		if before_module != null then
+		for before_module in before_all do
 			before_module.run
 			toolcontext.clear_progress_bar
 			toolcontext.show_unit(before_module)
@@ -162,7 +157,7 @@ class TestSuite
 					toolcontext.clear_progress_bar
 					toolcontext.show_unit(case)
 				end
-				if after_module != null then
+				for after_module in after_all do
 					after_module.fail "Nitunit Error: before_module test failed"
 					toolcontext.clear_progress_bar
 					toolcontext.show_unit(after_module)
@@ -180,7 +175,7 @@ class TestSuite
 			show_status
 		end
 
-		if not after_module == null then
+		for after_module in after_all do
 			after_module.run
 			toolcontext.clear_progress_bar
 			toolcontext.show_unit(after_module)
@@ -197,15 +192,13 @@ class TestSuite
 		file.addn "intrude import core"
 		file.addn "import {mmodule.name}\n"
 		file.addn "var name = args.first"
-		var before_module = self.before_module
-		if before_module != null then
+		for before_module in before_all do
 			before_module.write_to_nit(file)
 		end
 		for case in test_cases do
 			case.write_to_nit(file)
 		end
-		var after_module = self.after_module
-		if after_module != null then
+		for after_module in after_all do
 			after_module.write_to_nit(file)
 		end
 		file.write_to_file("{test_file}.nit")
@@ -384,11 +377,16 @@ redef class MMethodDef
 		return has_annotation(mbuilder, "test")
 	end
 
-	# Is the method a "before_module"?
-	private fun is_before_module: Bool do return name == "before_module"
 
-	# Is the method a "after_module"?
-	private fun is_after_module: Bool do return name == "after_module"
+	# Does self have the `before_all` annotation?
+	private fun is_before_all(mbuilder: ModelBuilder): Bool do
+		return has_annotation(mbuilder, "before_all")
+	end
+
+	# Does self have the `after_all` annotation?
+	private fun is_after_all(mbuilder: ModelBuilder): Bool do
+		return has_annotation(mbuilder, "after_all")
+	end
 end
 
 redef class MClassDef
@@ -402,29 +400,56 @@ redef class MClassDef
 		end
 		return false
 	end
+
+	# Methods tagged with `before_all` in this class definition
+	private fun before_all(mbuilder: ModelBuilder): Array[MMethodDef] do
+		var res = new Array[MMethodDef]
+		for mpropdef in mpropdefs do
+			if mpropdef isa MMethodDef and mpropdef.is_before_all(mbuilder) then
+				res.add mpropdef
+			end
+		end
+		var in_hierarchy = self.in_hierarchy
+		if in_hierarchy == null then return res
+		for mclassdef in in_hierarchy.direct_greaters do
+			res.add_all mclassdef.before_all(mbuilder)
+		end
+		return res
+	end
+
+	# Methods tagged with `after_all` in this class definition
+	private fun after_all(mbuilder: ModelBuilder): Array[MMethodDef] do
+		var res = new Array[MMethodDef]
+		for mpropdef in mpropdefs do
+			if mpropdef isa MMethodDef and mpropdef.is_after_all(mbuilder) then
+				res.add mpropdef
+			end
+		end
+		var in_hierarchy = self.in_hierarchy
+		if in_hierarchy == null then return res
+		for mclassdef in in_hierarchy.direct_greaters do
+			res.add_all mclassdef.after_all(mbuilder)
+		end
+		return res
+	end
 end
 
 redef class MModule
-	# "before_module" method for this module.
-	private fun before_test: nullable MMethodDef do
+
+	# Methods tagged with `before_all` at the module level (in `Sys`)
+	private fun before_all(mbuilder: ModelBuilder): Array[MMethodDef] do
 		for mclassdef in mclassdefs do
-			if not mclassdef.name == "Sys" then continue
-			for mpropdef in mclassdef.mpropdefs do
-				if mpropdef isa MMethodDef and mpropdef.is_before_module then return mpropdef
-			end
+			if mclassdef.name == "Sys" then return mclassdef.before_all(mbuilder)
 		end
-		return null
+		return new Array[MMethodDef]
 	end
 
-	# "after_module" method for this module.
-	private fun after_test: nullable MMethodDef do
+	# Methods tagged with `after_all` at the module level (in `Sys`)
+	private fun after_all(mbuilder: ModelBuilder): Array[MMethodDef] do
 		for mclassdef in mclassdefs do
-			if not mclassdef.name == "Sys" then continue
-			for mpropdef in mclassdef.mpropdefs do
-				if mpropdef isa MMethodDef and mpropdef.is_after_module then return mpropdef
-			end
+			if mclassdef.name == "Sys" then return mclassdef.after_all(mbuilder)
 		end
-		return null
+		return new Array[MMethodDef]
 	end
 end
 
