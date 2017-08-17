@@ -159,6 +159,10 @@ class ConcernsTree
 	super OrderedTree[MConcern]
 end
 
+redef class MGroup
+	redef var is_test is lazy do return name == "tests"
+end
+
 redef class MModule
 	# All the classes introduced in the module
 	var intro_mclasses = new Array[MClass]
