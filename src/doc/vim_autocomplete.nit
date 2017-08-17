@@ -53,8 +53,7 @@ redef class Model
 
 	# Get a custom view for vimautocomplete.
 	private fun vim_view: ModelView do
-		var view = new ModelView(self)
-		view.min_visibility = protected_visibility
+		var view = new ModelView(self, protected_visibility)
 		return view
 	end
 end
