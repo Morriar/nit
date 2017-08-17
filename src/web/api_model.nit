@@ -237,7 +237,10 @@ class APIEntityDefs
 		else if mentity isa MModule then
 			mentities = mentity.mclassdefs
 		else if mentity isa MClass then
-			mentities = mentity.mclassdefs
+			mentities = new Array[MEntity]
+			for mclassdef in mentity.mclassdefs do
+				mentities.add_all mclassdef.mpropdefs
+			end
 		else if mentity isa MClassDef then
 			mentities = mentity.mpropdefs
 		else if mentity isa MProperty then
