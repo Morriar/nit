@@ -1,4 +1,4 @@
-# This file is part of NIT ( http://www.nitlanguage.org ).
+
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -45,6 +45,8 @@ end
 # Recursively build parents and children list from a `center`.
 class InheritanceGraph
 	super ModelVisitor
+
+	autoinit center, view, min_visibility, include_fictive, include_empty_doc, include_test, include_attribute
 
 	# MEntity at the center of this graph
 	var center: MEntity
