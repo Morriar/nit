@@ -28,6 +28,7 @@ import model::model_views
 class DocModel
 	super ModelView
 
+	autoinit model, mainmodule, min_visibility, include_fictive, include_empty_doc, include_test, include_attribute
 	# `DocPage` composing the documentation associated to their ids.
 	#
 	# This is where `DocPhase` store and access pages to produce documentation.
