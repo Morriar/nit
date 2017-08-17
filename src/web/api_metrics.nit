@@ -74,7 +74,7 @@ class APIStructuralMetrics
 			res.api_error(404, "No metric for mentity `{mentity.full_name}`")
 			return
 		end
-		res.json metrics
+		res.api_json(req, metrics)
 	end
 end
 
