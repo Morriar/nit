@@ -41,12 +41,13 @@
 # ~~~
 module model_visitor
 
-import model
+import model_filters
 
 # The abstract model visitor template.
 #
 # Specific visitor must implement the `visit` method to perform the work.
 abstract class ModelVisitor
+
 	# Visit the entity `e`.
 	#
 	# This method setups `current_entity` and call `visit`.
@@ -72,70 +73,50 @@ abstract class ModelVisitor
 	#
 	# If set, only the classes and method with at least the given
 	# visibility level will be visited.
-	var min_visibility: nullable MVisibility = null is writable
-
-	# Can we accept this `mentity` in the view regarding its visibility?
-	fun accept_visibility(mentity: MEntity): Bool do
-		return mentity.accept_visibility(min_visibility)
-	end
+	var min_visibility: nullable MVisibility = null is optional
 
 	# Include fictive entities?
 	#
 	# By default, fictive entities (see `MEntity::is_fictive`) are not visited.
-	var include_fictive = false is writable
-
-	# Can we accept this `mentity` in the view regarding its fictivity?
-	fun accept_fictive(mentity: MEntity): Bool do
-		if include_fictive then return true
-		return not mentity.is_fictive
-	end
+	var include_fictive = false is optional
 
 	# Should we accept mentities with empty documentation?
 	#
 	# Default is `true`.
-	var include_empty_doc = true is writable
-
-	# Can we accept this `mentity` regarding its documentation?
-	fun accept_empty_doc(mentity: MEntity): Bool do
-		if include_empty_doc then return true
-		return mentity.mdoc != null
-	end
+	var include_empty_doc = true is optional
 
 	# Should we accept nitunit test suites?
 	#
 	# Default is `false`.
-	var include_test = false is writable
-
-	# Can we accept this `mentity` regarding its test suite status?
-	fun accept_test(mentity: MEntity): Bool do
-		if include_test then return true
-		if not mentity isa MModule then return true
-		return not mentity.is_test
-	end
+	var include_test = false is optional
 
 	# Should we accept `MAttribute` instances?
 	#
 	# Default is `true`.
-	var include_attribute = true is writable
+	var include_attribute = true is optional
 
-	# Can we accept this `mentity` regarding its type?
-	fun accept_attribute(mentity: MEntity): Bool do
-		if include_attribute then return true
-		if mentity isa MAttribute then return false
-		if mentity isa MAttributeDef then return false
-		return true
+	# Filters to apply when visiting the model.
+	#
+	# See ModelFilters for configuration.
+	var filters: ModelFilters is lazy, writable do
+		var filters = new ModelFilters
+		filters.add new VisibilityFilter(min_visibility or else private_visibility)
+		if not include_fictive then filters.add new FictiveFilter
+		if not include_empty_doc then filters.add new EmptyDocFilter
+		if not include_attribute then filters.add new AttributeFilter
+		if not include_test then filters.add new TestFilter
+		return filters
 	end
 
 	# Should we accept this `mentity` from the view?
-	fun accept_mentity(mentity: MEntity): Bool do
-		if not accept_visibility(mentity) then return false
-		if not accept_fictive(mentity) then return false
-		if not accept_empty_doc(mentity) then return false
-		if not accept_test(mentity) then return false
-		if not accept_attribute(mentity) then return false
-		return true
+	#
+	# If no `override_filters` is passed then use `self.filters`.
+	fun accept_mentity(mentity: MEntity, override_filters: nullable ModelFilters): Bool do
+		if override_filters != null then
+			return override_filters.accept_mentity(mentity)
+		end
+		return filters.accept_mentity(mentity)
 	end
-
 end
 
 redef class MEntity
@@ -143,11 +124,6 @@ redef class MEntity
 	#
 	# See the specific implementation in the subclasses.
 	fun visit_all(v: ModelVisitor) do end
-
-	private fun accept_visibility(min_visibility: nullable MVisibility): Bool do
-		if min_visibility == null then return true
-		return visibility >= min_visibility
-	end
 end
 
 redef class Model
