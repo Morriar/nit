@@ -332,7 +332,10 @@ redef class MClassDef
 		return new Namespace.from([mmodule.full_name, "$::", mclass.intro_mmodule.to_ns_ref: nullable NSEntity])
 	end
 
-	redef fun web_url do return "{mclass.web_url}/lin#{full_name}"
+	redef fun web_url do
+		if is_intro then return mclass.web_url
+		return "{mclass.web_url}/lin#{full_name}"
+	end
 end
 
 redef class MProperty
@@ -373,7 +376,10 @@ redef class MPropDef
 		return res
 	end
 
-	redef fun web_url do return "{mproperty.web_url}/lin#{full_name}"
+	redef fun web_url do
+		if is_intro then return mproperty.web_url
+		return "{mproperty.web_url}/lin#{full_name}"
+	end
 end
 
 redef class MClassType
