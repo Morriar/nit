@@ -29,24 +29,24 @@
 	</head>
 	<body>
 		<nav class='navbar navbar-default navbar-fixed-top'>
-			<div class='container-fluid'>
-				<div class='col-xs-3'>
-					<ul class='nav navbar-nav'>
-						<li class='dropdown'>
-							<a class='btn btn-link dropdown-toggle' type='button' data-toggle='dropdown'>
-								<span class='glyphicon glyphicon-menu-hamburger' />
-							</a>
-							<ul class='dropdown-menu'>
-								<li><a href='/docdown?edit'><span class='glyphicon glyphicon-edit'></span> DocDown</a></li>
-								<li><a href='/grades'><span class='glyphicon glyphicon-stats'></span> Grades</a></li>
-							</ul>
-						</li>
-					</ul>
-					<div class='navbar-header dropdown'>
-						<a class='navbar-brand' ng-href='/'>Nitdoc</a>
+			<div class='container'>
+				<div class='col-xs-2 no-padding'>
+					<div class='navbar-header'>
+						<ul class='nav navbar-nav'>
+							<li class='dropdown'>
+								<a class='btn btn-link dropdown-toggle' type='button' data-toggle='dropdown'>
+									<span class='glyphicon glyphicon-menu-hamburger' />
+								</a>
+								<ul class='dropdown-menu'>
+									<li><a href='/docdown?edit'><span class='glyphicon glyphicon-edit'></span> DocDown</a></li>
+									<li><a href='/grades'><span class='glyphicon glyphicon-stats'></span> Grades</a></li>
+								</ul>
+							</li>
+						</ul>
+						<a class='navbar-brand hidden-xs' ui-sref='catalog'>Nitdoc</a>
 					</div>
 				</div>
-				<div class='col-xs-7'>
+				<div class='col-xs-8'>
 					<ui-search-field />
 				</div>
 				<div class='col-xs-2'>

@@ -1,13 +1,13 @@
 <ul class='nav navbar-nav'>
 	<li ng-if='!user'>
 		<a href='/login'>
-			Login
+			<span class='hidden-xs'>Login</span>
 			<span class='octicon octicon-mark-github'></span>
 		</a>
 	</li>
 	<li class="dropdown" ng-if='user'>
 		<a class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown">
-			{{user.login}}
+			<span class='hidden-xs'>{{user.login}}<span>
 			<img class='avatar avatar-icon' ng-src='{{user.avatar_url}}' />
 		</a>
 		<ul class="dropdown-menu dropdown-menu-right">
