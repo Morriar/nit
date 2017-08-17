@@ -31,6 +31,7 @@ redef class APIRouter
 		use("/uml/:id", new APIEntityUML(config))
 		use("/linearization/:id", new APIEntityLinearization(config))
 		use("/defs/:id", new APIEntityDefs(config))
+		use("/all/:id", new APIEntityAll(config))
 		use("/inheritance/:id", new APIEntityInheritance(config))
 	end
 end
@@ -250,6 +251,28 @@ class APIEntityDefs
 		mentities = limit_mentities(req, mentities)
 		res.api_json(req, new JsonArray.from(mentities))
 	end
+end
+
+# List all accessible definitions of a MEntity.
+#
+# Example: `GET /all/core::Array`
+class APIEntityAll
+	super APIList
+
+	redef fun get(req, res) do
+		var mentity = mentity_from_uri(req, res)
+		if mentity == null then return
+		var mentities: Array[MEntity]
+		if mentity isa MClass then
+			mentities = mentity.collect_accessible_mproperties(config.view).to_a
+		else
+			res.api_error(404, "No all definition list for mentity `{mentity.full_name}`")
+			return
+		end
+		mentities = filter_mentities(req, mentities)
+		mentities = sort_mentities(req, mentities)
+		mentities = limit_mentities(req, mentities)
+		res.api_json(req, new JsonArray.from(mentities))
 	end
 end
 
