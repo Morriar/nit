@@ -65,8 +65,7 @@
 					},
 					controller: function(mentity, doc) {
 						this.mentity = mentity;
-						this.doc = doc;
-
+						this.doc = Object.keys(doc).length > 0 ? doc : null;
 						this.date = function(date) {
 							return new Date(date);
 						}
@@ -391,7 +390,7 @@
 			};
 		})
 
-		.directive('entityDef', ['Model', function(Model, Code) {
+		.directive('entityDef', function(Model, $sce) {
 			return {
 				restrict: 'E',
 				scope: {
@@ -410,7 +409,7 @@
 						if(!$scope.code) {
 							Model.loadEntityCode($scope.definition.full_name,
 								function(data) {
-									$scope.code = data;
+									$scope.code = $sce.trustAsHtml(data);
 									setTimeout(function() { // smooth collapse
 										$('#' + $scope.codeId).collapse('show')
 									}, 1);
@@ -431,7 +430,7 @@
 					});
 				}
 			};
-		}])
+		})
 
 		.controller('StarsCtrl', ['Feedback', '$scope', function(Feedback, $scope) {
 			$ctrl = this;
