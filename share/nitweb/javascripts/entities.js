@@ -264,25 +264,6 @@
 					},
 					controllerAs: 'vm'
 				})
-				.state('doc.entity.all', {
-					url: '/all?filters',
-					templateUrl: 'views/doc/defs.html',
-					resolve: {
-						defs: function(Model, $q, $stateParams, $state) {
-							var d = $q.defer();
-							Model.loadEntityAll($stateParams.id, d.resolve,
-								function() {
-									$state.go('404', null, { location: false })
-								});
-							return d.promise;
-						}
-					},
-					controller: function(mentity, defs) {
-						this.mentity = mentity;
-						this.defs = defs;
-					},
-					controllerAs: 'vm',
-				})
 		})
 
 		/* Model */
@@ -311,12 +292,6 @@
 				loadEntityDefs: function(id, filters_string, cb, cbErr) {
 					$http.get('/api/defs/' + id +
 						'&filters=' + filters_string)
-						.success(cb)
-						.error(cbErr);
-				},
-
-				loadEntityAll: function(id, filters_string, cb, cbErr) {
-					$http.get('/api/all/' + id + '?filters=' + filters_string)
 						.success(cb)
 						.error(cbErr);
 				},
