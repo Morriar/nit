@@ -1,5 +1,8 @@
 <div class='container'>
-	<entity-list list-title='{{vm.entities.total}} matches for {{vm.query}}'
+
+	<ui-filters allowed-filters='vm.allowedFilters' default-filters='vm.defaultFilters' />
+
+	<entity-list list-title='vm.entities.total + " matches for \"" + vm.query + "\""'
 		list-entities='vm.entities.results' />
 
 	<div class='container text-center' ng-if='vm.entities'>

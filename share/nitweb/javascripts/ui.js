@@ -23,7 +23,7 @@
 		.config(function($stateProvider, $locationProvider) {
 			$stateProvider
 				.state('search', {
-					url: '/search?q&p&n',
+					url: '/search?q&p&n&filters',
 					controller: 'SearchCtrl',
 					controllerAs: 'vm',
 					templateUrl: 'views/search.html',
@@ -33,7 +33,8 @@
 							var query = $stateParams.q;
 							var page = $stateParams.p ? $stateParams.p : 1;
 							var limit = $stateParams.n ? $stateParams.n : 10;
-							Model.search(query, page, limit, d.resolve,
+							var filters = $stateParams.filters ? $stateParams.filters : '';
+							Model.search(query, page, limit, filters, d.resolve,
 								function() {
 									$state.go('404', null, { location: false })
 								});
@@ -47,9 +48,12 @@
 			var vm = this;
 			vm.entities = entities;
 			vm.query = $stateParams.q;
+			vm.allowedFilters = ['no-empty-doc', 'no-test', 'no-fictive', 'no-attribute',
+				'no-redef', 'no-inh', 'no-extern', 'min-visibility'];
+			vm.defaultFilters = [];
 
 			$scope.$on('change-page', function(e, page, limit) {
-				$state.go('search', {q: vm.query, p: page, l: limit});
+				$state.go('.', {q: vm.query, p: page, l: limit});
 			})
 		})
 
@@ -64,7 +68,7 @@
 							vm.reset();
 							return;
 						}
-						Model.search(vm.query, 1, 8,
+						Model.search(vm.query, 1, 8, '',
 							function(data) {
 								vm.reset();
 								vm.results = data;
@@ -151,70 +155,153 @@
 		.directive('uiFilters', function() {
 			return {
 				restrict: 'E',
-				bindToController: {},
-				controller: function($state, $stateParams) {
+				scope: {},
+				bindToController: {
+					allowedFilters: '=',
+					defaultFilters: '='
+				},
+				controller: function($scope, $state, $stateParams) {
 					var vm = this;
 
-					vm.parseStateParams = function() {
-						var filters = {
-							'filter': '',
-							'attributes': true,
-							'tests': true,
-							'fictives': true,
-							'redefs': true,
-							'externs': true,
-							'inherited': false,
-							'empty-doc': true,
-							'min-visibility': 'private',
-						};
-						var string = $stateParams.filters;
-						if(!string) {
-							return filters;
+					vm.filterOptions = [];
+					for(fi in vm.allowedFilters) {
+						var filter = vm.allowedFilters[fi];
+						if(filter == 'string') {
+							vm.allowString = true;
+							continue;
 						}
+						if(filter == 'min-visibility') {
+							vm.allowVisibility = true;
+							continue;
+						}
+						vm.filterOptions.push({ id: filter, label: filter });
+					};
+
+					vm.filterText = '';
+					vm.minVisibility = 'protected';
+					vm.showFilters = $stateParams.filters;
+
+					vm.filterDefaults = [];
+					for(fi in vm.defaultFilters) {
+						var filter = vm.defaultFilters[fi];
+						vm.filterDefaults.push({ id: filter, label: filter });
+					};
+
+					vm.initFilters = function() {
+						var string = $stateParams.filters;
+						if(!string) return vm.filterDefaults;
+
+						var filters = [];
 						var fs = string.split(',');
 						for(fi in fs) {
 							var ffs = fs[fi].split(':');
-							if(ffs[0] == 'no-attribute') filters.attributes = false;
-							if(ffs[0] == 'no-test') filters.tests = false;
-							if(ffs[0] == 'no-fictive') filters.fictives = false;
-							if(ffs[0] == 'no-empty-doc') filters['empty-doc'] = false;
-							if(ffs[0] == 'no-redef') filters['redefs'] = false;
-							if(ffs[0] == 'no-extern') filters['externs'] = false;
-							if(ffs[0] == 'no-inh') filters['inherited'] = false;
-							if(ffs[0] == 'string') filters.filter = ffs[1];
-							if(ffs[0] == 'min-visibility') filters['min-visibility'] = ffs[1];
+							switch(ffs[0]) {
+								case 'string':
+									vm.filterText = ffs[1];
+									break;
+								case 'min-visibility':
+									vm.minVisibility = ffs[1];
+									break;
+								case 'no-attribute':
+									filters.push({ id: 'no-attribute' });
+									break;
+								case 'no-test':
+									filters.push({ id: 'no-test' });
+									break;
+								case 'no-fictive':
+									filters.push({ id: 'no-fictive' });
+									break;
+								case 'no-redef':
+									filters.push({ id: 'no-redef' });
+									break;
+								case 'no-extern':
+									filters.push({ id: 'no-extern' });
+									break;
+								case 'no-inh':
+									filters.push({ id: 'no-inh' });
+									break;
+								case 'no-empty-doc':
+									filters.push({ id: 'no-empty-doc' });
+									break;
+							}
 						}
 						return filters;
 					}
 
-					vm.filter = function() {
-						var filter_string = 'min-visibility:' + vm.filters['min-visibility'] + ',';
-						if(vm.filters.filter) {
-							filter_string += 'string:' + vm.filters.filter + ',';
+					vm.filtersToString = function() {
+						var string = 'min-visibility:' + vm.minVisibility + ',';
+						if(vm.filterText) {
+							string += 'string:' + vm.filterText + ',';
 						}
-						if(!vm.filters.attributes) filter_string += 'no-attribute,';
-						if(!vm.filters.tests) filter_string += 'no-test,';
-						if(!vm.filters.fictives) filter_string += 'no-fictive,';
-						if(!vm.filters.redefs) filter_string += 'no-redef,';
-						if(!vm.filters.externs) filter_string += 'no-extern,';
-						if(!vm.filters.inherited) filter_string += 'no-inh,';
-						if(!vm.filters["empty-doc"]) filter_string += 'no-empty-doc,';
+						for(fi in vm.filterSelected) {
+							string += vm.filterSelected[fi].id + ','
+						}
+						return string;
+					}
 
-						$state.go('.', {filters: filter_string}, {reload: true});
+					$scope.$on('ui-filters-changed', function(e) {
+						vm.filter();
+					})
+
+					vm.filter = function() {
+						$state.go('.', {filters: vm.filtersToString()}, {reload: true});
 					};
 
-					vm.visibility = function(min_visibility) {
-						vm.filters['min-visibility'] = min_visibility;
+					vm.group = function() {
+						$state.go('.', {group_by: vm.grouping}, {reload: true});
+					};
+
+					vm.visibility = function(visibility) {
+						vm.minVisibility = visibility;
 						vm.filter();
 					};
 
-					vm.filters = vm.parseStateParams();
+					vm.filterSelected = vm.initFilters();
+					vm.groupingAlgos = [ 'none', 'kind', 'visibility', 'intro_redef', 'package', 'module', 'class', 'classdef', 'return' ];
+					vm.grouping = $stateParams.group_by ? $stateParams.group_by : 'kind';
 				},
 				controllerAs: 'vm',
 				replace: true,
 				templateUrl: '/directives/ui/filters.html'
 			};
 		})
+
+		.directive('uiSelectFilters', function() {
+			return {
+				restrict: 'E',
+				scope: {},
+				bindToController: {
+					options: '=',
+					selected: '='
+				},
+				controller: function($scope) {
+					var vm = this;
+
+					vm.settings = {
+						showCheckAll: false,
+						showUncheckAll: false,
+						idProperty: 'id',
+						smartButtonTextProvider: function(selected) {
+							return selected.length + ' selected';
+						}
+					}
+
+					vm.customTexts = {
+						buttonDefaultText: 'none'
+					}
+
+					vm.events = {
+						onSelectionChanged: function(selection) {
+							$scope.$emit('ui-filters-changed', vm.selected);
+						}
+					}
+				},
+				controllerAs: 'vm',
+				templateUrl: '/directives/ui/select-filters.html'
+			}
+		})
+
+		/* Summaries */
 
 		.directive('uiSummary', function($rootScope, $location, $anchorScroll) {
 			return {

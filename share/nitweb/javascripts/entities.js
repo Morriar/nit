@@ -143,7 +143,9 @@
 					resolve: {
 						defs: function(Model, $q, $stateParams, $state) {
 							var d = $q.defer();
-							Model.loadEntityDefs($stateParams.id, $stateParams.filters,
+							var filters = $stateParams.filters ? $stateParams.filters : '';
+							Model.loadEntityDefs($stateParams.id,
+								filters,
 								d.resolve,
 								function() {
 									$state.go('404', null, { location: false })
@@ -192,8 +194,20 @@
 				.state('doc.entity.all', {
 					url: '/all?filters',
 					templateUrl: 'views/doc/all.html',
-					controller: function(mentity) {
+					resolve: {
+						all: function(Model, $q, $stateParams, $state) {
+							var d = $q.defer();
+							Model.loadEntityAll($stateParams.id, $stateParams.filters,
+								d.resolve,
+								function() {
+									$state.go('404', null, { location: false })
+								});
+							return d.promise;
+						}
+					},
+					controller: function(mentity, all) {
 						this.mentity = mentity;
+						this.all = all;
 					},
 					controllerAs: 'vm',
 				})
@@ -223,7 +237,14 @@
 				},
 
 				loadEntityDefs: function(id, filters_string, cb, cbErr) {
-					$http.get('/api/defs/' + id + '?filters=' + filters_string)
+					$http.get('/api/defs/' + id +
+						'&filters=' + filters_string)
+						.success(cb)
+						.error(cbErr);
+				},
+
+				loadEntityAll: function(id, filters_string, cb, cbErr) {
+					$http.get('/api/all/' + id + '?filters=' + filters_string)
 						.success(cb)
 						.error(cbErr);
 				},
@@ -245,8 +266,9 @@
 						.success(cb)
 						.error(cbErr);
 				},
-				search: function(q, p, n, cb, cbErr) {
-					$http.get('/api/search?q=' + q + '&p=' + p + '&n=' + n)
+				search: function(q, p, n, filters, cb, cbErr) {
+					$http.get('/api/search?q=' + q + '&p=' + p + '&n=' + n +
+						'&filters=' + filters)
 						.success(cb)
 						.error(cbErr);
 				}

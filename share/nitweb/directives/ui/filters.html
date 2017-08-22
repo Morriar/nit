@@ -1,33 +1,49 @@
-<form class='form-inline'>
-	<span ng-repeat='(filter, value) in vm.filters'>
-		<div class='form-group has-icon' ng-if='filter == "filter"'>
+<div>
+	<button class='btn btn-link pull-right' ng-click='vm.showFilters = !vm.showFilters'
+		title='Show options'>
+		<span class='glyphicon glyphicon-cog text-muted' />
+	</button>
+	<form class='form-inline form-filters' ng-if='vm.showFilters'>
+
+		<div class='form-group has-icon' ng-if='vm.allowString'>
 			<input type='text' class='form-control' ng-change='vm.filter()'
 				ng-model-options='{ debounce: 300 }'
-				ng-model='vm.filters.filter' placeholder='Filter...'>
-			<span class='glyphicon glyphicon-search form-control-icon text-muted'></span>
+				ng-model='vm.filterText' placeholder='Filter...'>
+			<span class='glyphicon glyphicon-filter form-control-icon text-muted'></span>
 		</div>
-		<div class='checkbox pull-right' ng-if='filter != "min-visibility" && filter != "filter"'>
-			<label class='text-muted'>
-				{{filter}}
-				<input type='checkbox' ng-model='vm.filters[filter]' ng-change='vm.filter()'>
-			</label>
-			&nbsp;&nbsp;
+
+		<div class='form-group'>
+			<label>group by</label>
+			<select class='form-control' ng-model='vm.grouping' ng-change='vm.group()'>
+				<option ng-repeat='algo in vm.groupingAlgos'>{{algo}}</option>
+			</select>
 		</div>
-		<div class='pull-right form-group' ng-if='filter == "min-visibility"'>
-			<span class='text-muted'>min visibility</span>
+
+		<div class='form-group'>
+			<label>hide</label>
+			<ui-select-filters options='vm.filterOptions' selected='vm.filterSelected' class='form-group' />
+		</div>
+
+		<div class='form-group' ng-if='vm.allowVisibility'>
+			<label>min visibility</label>
 			<button class='btn btn-link btn-xs' ng-click='vm.visibility("public")'
-				title='Toggle public'>
-				<span class=' glyphicon glyphicon-eye-open text-success'/>
+				title='public'>
+				<span class='glyphicon glyphicon-eye-open text-success' />
 			</button>
 			<button class='btn btn-link btn-xs' ng-click='vm.visibility("protected")'
-				title='Toggle protected'>
-				<span class=' glyphicon glyphicon-eye-open text-warning'/>
+				title='protected'>
+				<span class='glyphicon text-warning' ng-class='{
+					"glyphicon-eye-open": vm.minVisibility != "public",
+					"glyphicon-eye-close": vm.minVisibility == "public",
+				}'/>
 			</button>
 			<button class='btn btn-link btn-xs' ng-click='vm.visibility("private")'
-				title='Toggle private'>
-				<span class=' glyphicon glyphicon-eye-open text-danger'/>
+				title='private'>
+				<span class='glyphicon text-danger' ng-class='{
+					"glyphicon-eye-open": vm.minVisibility == "private",
+					"glyphicon-eye-close": vm.minVisibility != "private",
+				}'/>
 			</button>
-			&nbsp;&nbsp;
 		</div>
-	</span>
-</form>
+	</form>
+</div>
