@@ -72,10 +72,19 @@ class APIList
 	end
 
 	# Filter mentities based on the config view filters
-	fun filter_mentities(req: HttpRequest, mentities: Array[MEntity]): Array[MEntity] do
+	fun filter_mentities(req: HttpRequest, mentities: Array[MEntity], context: nullable MEntity): Array[MEntity] do
+		var filters = config.view.filters
+
+		var req_filters = req.string_arg("filters")
+		if req_filters != null then
+			filters = new ModelFilters.from_string(context, req_filters)
+		else if context != null then
+			filters = new ModelFilters.from_string(context, context.default_filters.join(","))
+		end
+
 		var res = new Array[MEntity]
 		for mentity in mentities do
-			if config.view.filters.accept_mentity(mentity) then res.add mentity
+			if config.view.accept_mentity(mentity, filters) then res.add mentity
 		end
 		return res
 	end
@@ -227,29 +236,49 @@ class APIEntityDefs
 	redef fun get(req, res) do
 		var mentity = mentity_from_uri(req, res)
 		if mentity == null then return
-		var mentities: Array[MEntity]
+		var mentities = new Array[MEntity]
 		if mentity isa MPackage then
-			mentities = mentity.mgroups.to_a
+			mentities.add_all mentity.collect_mgroups(config.view)
 		else if mentity isa MGroup then
-			mentities = new Array[MEntity]
-			mentities.add_all mentity.in_nesting.direct_smallers
-			mentities.add_all mentity.mmodules
+			mentities.add_all mentity.collect_mgroups(config.view)
+			mentities.add_all mentity.collect_mmodules(config.view)
 		else if mentity isa MModule then
-			mentities = mentity.mclassdefs
+			var mclasses = new HashSet[MClass]
+			# Collect intros
+			mentities.add_all mentity.collect_intro_mclassdefs(config.view)
+			# Collect redefs
+			for mclassdef in mentity.collect_redef_mclassdefs(config.view) do
+				mclasses.add mclassdef.mclass
+				mentities.add mclassdef
+			end
+			# Collect imported
+			for mclass in mentity.collect_imported_mclasses(config.view) do
+				if mclasses.has(mclass) then continue
+				mentities.add mclass.intro
+			end
 		else if mentity isa MClass then
-			mentities = new Array[MEntity]
-			for mclassdef in mentity.mclassdefs do
-				mentities.add_all mclassdef.mpropdefs
+			var mprops = new HashSet[MProperty]
+			# Collect intros
+			mentities.add_all mentity.collect_intro_mpropdefs(config.view)
+			# Collect redefs
+			for mpropdef in mentity.collect_redef_mpropdefs(config.view) do
+				mprops.add mpropdef.mproperty
+				mentities.add mpropdef
+			end
+			# Collect inherited
+			for mprop in mentity.collect_inherited_mproperties(config.view) do
+				if mprops.has(mprop) then continue
+				mentities.add mprop.intro
 			end
 		else if mentity isa MClassDef then
-			mentities = mentity.mpropdefs
+			mentities.add_all mentity.mpropdefs
 		else if mentity isa MProperty then
-			mentities = mentity.mpropdefs
+			mentities.add_all mentity.mpropdefs
 		else
 			res.api_error(404, "No definition list for mentity `{mentity.full_name}`")
 			return
 		end
-		mentities = filter_mentities(req, mentities)
+		mentities = filter_mentities(req, mentities, mentity)
 		mentities = sort_mentities(req, mentities)
 		mentities = limit_mentities(req, mentities)
 		res.api_json(req, new JsonArray.from(mentities))
@@ -342,4 +371,82 @@ class APIEntityCode
 		hl.enter_visit node
 		return hl.html
 	end
+end
+
+redef class HighlightVisitor
+	redef fun hrefto(mentity) do
+		print mentity.web_url
+		return mentity.web_url
+	end
+end
+
+redef class ModelFilters
+	init from_string(context: nullable MEntity, string: String) do
+		var pairs = string.split(",")
+		for pair in pairs do
+			var parts = pair.split(":")
+			var filter = get_filter(context, parts[0], if parts.length >= 2 then parts[1] else null)
+			if filter == null then continue
+			add filter
+		end
+	end
+
+	private fun get_filter(context: nullable MEntity, key: String, value: nullable String): nullable ModelFilter do
+		if key == "min-visibility" then
+			if value == "public" then
+				return new VisibilityFilter(public_visibility)
+			else if value == "protected" then
+				return new VisibilityFilter(protected_visibility)
+			else if value == "private" then
+				return new VisibilityFilter(private_visibility)
+			end
+		else if key == "no-fictive" then
+			return new FictiveFilter
+		else if key == "no-attribute" then
+			return new AttributeFilter
+		else if key == "no-test" then
+			return new TestFilter
+		else if key == "no-empty-doc" then
+			return new EmptyDocFilter
+		else if key == "no-redef" then
+			return new RedefFilter
+		else if key == "no-extern" then
+			return new ExternFilter
+		else if key == "no-inh" and context != null then
+			return new InheritedFilter(context)
+		else if key == "string" and value != null then
+			return new StringFilter(value)
+		end
+		return null
+	end
+end
+
+redef class MEntity
+	var allowed_filters: Array[String] = ["string", "no-empty-doc", "no-test", "no-fictive",
+		"no-attribute", "no-redef", "no-inh", "no-extern", "min-visibility"]
+
+	var default_filters: Array[String] = ["no-fictive", "no-test", "no-inh"]
+
+	redef fun core_serialize_to(v) do
+		super
+		if v isa FullJsonSerializer then
+			v.serialize_attribute("allowed_filters", allowed_filters)
+			v.serialize_attribute("default_filters", default_filters)
+		end
+	end
+end
+
+redef class MPackage
+	redef var allowed_filters = ["string", "no-empty-doc", "no-test", "no-fictive"]
+	redef var default_filters = ["no-fictive", "no-test"]
+end
+
+redef class MGroup
+	redef var allowed_filters = ["string", "no-empty-doc", "no-test", "no-fictive"]
+	redef var default_filters = ["no-fictive", "no-test"]
+end
+
+redef class MModule
+	redef var allowed_filters = ["string", "no-empty-doc", "no-test", "no-fictive",
+		"no-redef", "no-inh", "no-extern", "min-visibility"]
 end
