@@ -155,14 +155,21 @@ redef class MPackage
 		return res
 	end
 
+	# `Mgroups` contained in `self`.
+	fun collect_mgroups(view: ModelView): HashSet[MGroup] do
+		var res = new HashSet[MGroup]
+		for mgroup in mgroups do
+			if not view.accept_mentity(mgroup) then continue
+			res.add(mgroup)
+		end
+		return res
+	end
+
 	# `MModules` contained in `self`.
 	fun collect_mmodules(view: ModelView): HashSet[MModule] do
 		var res = new HashSet[MModule]
-		for mgroup in mgroups do
-			for mmodule in mgroup.mmodules do
-				if not view.accept_mentity(mmodule) then continue
-				res.add(mmodule)
-			end
+		for mgroup in collect_mgroups(view) do
+			res.add_all mgroup.collect_mmodules(view)
 		end
 		return res
 	end
@@ -195,6 +202,26 @@ redef class MGroup
 		for mgroup in view.mgroups do
 			if mgroup == self or not view.accept_mentity(mgroup) then continue
 			if mgroup.collect_parents(view).has(self) then res.add mgroup
+		end
+		return res
+	end
+
+	# `MGroups` contained in `self`
+	fun collect_mgroups(view: ModelView): HashSet[MENTITY] do
+		var res = new HashSet[MENTITY]
+		for mgroup in in_nesting.direct_smallers do
+			if not view.accept_mentity(mgroup) then continue
+			res.add(mgroup)
+		end
+		return res
+	end
+
+	# `MModules` contained in `self`.
+	fun collect_mmodules(view: ModelView): HashSet[MModule] do
+		var res = new HashSet[MModule]
+		for mmodule in mmodules do
+			if not view.accept_mentity(mmodule) then continue
+			res.add(mmodule)
 		end
 		return res
 	end
@@ -293,6 +320,17 @@ redef class MModule
 		end
 		return mclasses
 	end
+
+	# Collect all imported mclasses from `self` parents.
+	fun collect_imported_mclasses(view: ModelView): Set[MClass] do
+		var res = new HashSet[MClass]
+		for parent in collect_parents(view) do
+			res.add_all parent.collect_intro_mclasses(view)
+			res.add_all parent.collect_redef_mclasses(view)
+			res.add_all parent.collect_imported_mclasses(view)
+		end
+		return res
+	end
 end
 
 redef class MClass
@@ -347,6 +385,19 @@ redef class MClass
 		return res
 	end
 
+	# Collect all mpropdefs introduced in `self`.
+	fun collect_intro_mpropdefs(view: ModelView): Set[MPropDef] do
+		var set = new HashSet[MPropDef]
+		for mclassdef in mclassdefs do
+			for mpropdef in mclassdef.mpropdefs do
+				if not mpropdef.is_intro then continue
+				if not view.accept_mentity(mpropdef) then continue
+				set.add(mpropdef)
+			end
+		end
+		return set
+	end
+
 	# Collect all mproperties introduced in 'self' with `visibility >= min_visibility`.
 	fun collect_intro_mproperties(view: ModelView): Set[MProperty] do
 		var set = new HashSet[MProperty]
@@ -354,6 +405,19 @@ redef class MClass
 			for mprop in mclassdef.intro_mproperties do
 				if not view.accept_mentity(mprop) then continue
 				set.add(mprop)
+			end
+		end
+		return set
+	end
+
+	# Collect all mpropdefs redefined by `self`.
+	fun collect_redef_mpropdefs(view: ModelView): Set[MPropDef] do
+		var set = new HashSet[MPropDef]
+		for mclassdef in mclassdefs do
+			for mpropdef in mclassdef.mpropdefs do
+				if mpropdef.is_intro then continue
+				if not view.accept_mentity(mpropdef) then continue
+				set.add(mpropdef)
 			end
 		end
 		return set
