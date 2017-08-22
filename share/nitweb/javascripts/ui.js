@@ -23,7 +23,7 @@
 		.config(function($stateProvider, $locationProvider) {
 			$stateProvider
 				.state('search', {
-					url: '/search?q&p&n',
+					url: '/search?q&p&n&filters',
 					controller: 'SearchCtrl',
 					controllerAs: 'vm',
 					templateUrl: 'views/search.html',
@@ -33,7 +33,9 @@
 							var query = $stateParams.q;
 							var page = $stateParams.p ? $stateParams.p : 1;
 							var limit = $stateParams.n ? $stateParams.n : 10;
-							Model.search(query, page, limit, d.resolve,
+							var filters = $stateParams.filters ? $stateParams.filters :
+								'min-visibility:protected,no-inherited,no-fictive,no-test';
+							Model.search(query, page, limit, filters, d.resolve,
 								function() {
 									$state.go('404', null, { location: false })
 								});
@@ -47,9 +49,12 @@
 			var vm = this;
 			vm.entities = entities;
 			vm.query = $stateParams.q;
+			vm.allowedFilters = ['no-empty-doc', 'no-test', 'no-fictive', 'no-attribute',
+				'no-redef', 'no-inh', 'no-extern', 'min-visibility'];
+			vm.defaultFilters = [];
 
 			$scope.$on('change-page', function(e, page, limit) {
-				$state.go('search', {q: vm.query, p: page, l: limit});
+				$state.go('.', {q: vm.query, p: page, l: limit});
 			})
 		})
 
@@ -64,7 +69,7 @@
 							vm.reset();
 							return;
 						}
-						Model.search(vm.query, 1, 8,
+						Model.search(vm.query, 1, 8, '',
 							function(data) {
 								vm.reset();
 								vm.results = data;
@@ -133,15 +138,16 @@
 				controllerAs: 'vm',
 				templateUrl: 'directives/ui/search-field.html',
 				link: function ($scope, element, attrs, ctrl) {
-					$document.bind('click', function (event) {
+					//$document.bind('click', function (event) {
+/*						if(ctrl.results.results.length == 0) return;
 						var isChild = $(element).has(event.target).length > 0;
 						var isSelf = element[0] == event.target;
 						var isInside = isChild || isSelf;
 						if (!isInside) {
-							ctrl.reset();
-							$scope.$apply();
-						}
-					});
+//							ctrl.reset();
+//							$scope.$apply();
+						}*/
+					//});
 				}
 			};
 		})

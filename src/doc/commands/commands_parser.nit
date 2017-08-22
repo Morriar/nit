@@ -185,7 +185,7 @@ class CommandParser
 		if name == "doc" then return new CmdComment(model)
 		if name == "code" then return new CmdEntityCode(model, modelbuilder)
 		if name == "lin" then return new CmdLinearization(model, mainmodule)
-		if name == "defs" then return new CmdFeatures(model)
+		if name == "defs" then return new CmdFeatures(model, mainmodule)
 		if name == "parents" then return new CmdParents(model, mainmodule)
 		if name == "ancestors" then return new CmdAncestors(model, mainmodule)
 		if name == "children" then return new CmdChildren(model, mainmodule)

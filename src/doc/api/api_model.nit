@@ -181,7 +181,7 @@ end
 class APIEntityDefs
 	super APICommand
 
-	redef fun command do return new CmdFeatures(config.model)
+	redef fun command do return new CmdFeatures(config.model, config.mainmodule)
 end
 
 # List intro definitions of a MEntity.

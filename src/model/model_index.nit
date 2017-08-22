@@ -582,7 +582,10 @@ end
 class VisibilityComparator
 	super ScoreComparator
 
-	redef fun compare(o1, o2) do return o2.mentity.visibility <=> o1.mentity.visibility
+	redef fun compare(o1, o2) do
+		if o1.score != o2.score then return super
+		return o2.mentity.visibility <=> o1.mentity.visibility
+	end
 end
 
 # Compare two matches by their name in lexicographic order

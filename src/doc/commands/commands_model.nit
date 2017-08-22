@@ -302,6 +302,11 @@ end
 class CmdFeatures
 	super CmdEntityList
 
+	autoinit(model, mainmodule, filter, mentity, mentity_name, limit, page, count, max)
+
+	# Mainmodule for class linearization
+	var mainmodule: MModule
+
 	# Same as `CmdEntity::init_mentity`
 	#
 	# Plus `WarningNoFeatures` if no features are found for `mentity`.
@@ -320,10 +325,23 @@ class CmdFeatures
 			mentities.add_all mentity.collect_mgroups(filter)
 			mentities.add_all mentity.collect_mmodules(filter)
 		else if mentity isa MModule then
-			mentities.add_all mentity.collect_local_mclassdefs(filter)
+			mentities.add_all mentity.collect_intro_mclasses(filter)
+			mentities.add_all mentity.collect_redef_mclassdefs(filter)
+
+			var redef_mclasses = mentity.collect_redef_mclasses(filter)
+			for ientity in mentity.collect_imported_mclasses(mainmodule, filter) do
+				if redef_mclasses.has(ientity) then continue
+				mentities.add ientity
+			end
 		else if mentity isa MClass then
 			mentities.add_all mentity.collect_intro_mproperties(filter)
 			mentities.add_all mentity.collect_redef_mpropdefs(filter)
+
+			var redef_mprops = mentity.collect_redef_mproperties(filter)
+			for ientity in mentity.collect_inherited_mproperties(mainmodule, filter) do
+				if redef_mprops.has(ientity) then continue
+				mentities.add ientity
+			end
 		else if mentity isa MClassDef then
 			mentities.add_all mentity.collect_intro_mpropdefs(filter)
 			mentities.add_all mentity.collect_redef_mpropdefs(filter)

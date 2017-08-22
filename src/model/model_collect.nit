@@ -544,6 +544,25 @@ redef class MModule
 		return res
 	end
 
+	# Collect all classdefs imported from `self` parents
+	fun collect_imported_mclassdefs(mainmodule: MModule, filter: nullable ModelFilter): Set[MClassDef] do
+		var res = new HashSet[MClassDef]
+		for parent in collect_parents(mainmodule, filter) do
+			res.add_all parent.collect_intro_mclassdefs(filter)
+			res.add_all parent.collect_redef_mclassdefs(filter)
+			res.add_all parent.collect_imported_mclassdefs(mainmodule, filter)
+		end
+		return res
+	end
+
+	# Collect all classdefs local to self and imported from `self` parents
+	fun collect_all_mclassdefs(mainmodule: MModule, filter: nullable ModelFilter): Set[MClassDef] do
+		var res = new HashSet[MClassDef]
+		res.add_all collect_intro_mclassdefs(filter)
+		res.add_all collect_imported_mclassdefs(mainmodule, filter)
+		return res
+	end
+
 	# Collect all classes introduced in `self`
 	fun collect_intro_mclasses(filter: nullable ModelFilter): Set[MClass] do
 		var res = new HashSet[MClass]
