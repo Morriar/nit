@@ -1,4 +1,7 @@
 <div>
+	<ui-filters allowed-filters='vm.mentity.allowed_filters'
+		default-filters='vm.mentity.default_filters' />
+
 	<entity-list list-title='Groups' ng-if='vm.mentity.class_name == "MPackage"'
 		list-entities='vm.defs.results' list-object-filter='{}' />
 

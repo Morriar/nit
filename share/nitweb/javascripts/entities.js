@@ -211,12 +211,15 @@
 					controllerAs: 'vm',
 				})
 				.state('doc.entity.defs', {
-					url: '/defs',
+					url: '/defs?filters',
 					templateUrl: 'views/doc/defs.html',
 					resolve: {
 						defs: function(Model, $q, $stateParams, $state) {
 							var d = $q.defer();
-							Model.loadEntityDefs($stateParams.id, d.resolve,
+							var filters = $stateParams.filters ? $stateParams.filters : '';
+							Model.loadEntityDefs($stateParams.id,
+								filters,
+								d.resolve,
 								function() {
 									$state.go('404', null, { location: false })
 								});
@@ -262,7 +265,7 @@
 					controllerAs: 'vm'
 				})
 				.state('doc.entity.all', {
-					url: '/all',
+					url: '/all?filters',
 					templateUrl: 'views/doc/defs.html',
 					resolve: {
 						defs: function(Model, $q, $stateParams, $state) {
@@ -305,8 +308,15 @@
 						.error(cbErr);
 				},
 
-				loadEntityDefs: function(id, cb, cbErr) {
-					$http.get('/api/defs/' + id)
+				loadEntityDefs: function(id, filters_string, cb, cbErr) {
+					$http.get('/api/defs/' + id +
+						'&filters=' + filters_string)
+						.success(cb)
+						.error(cbErr);
+				},
+
+				loadEntityAll: function(id, filters_string, cb, cbErr) {
+					$http.get('/api/all/' + id + '?filters=' + filters_string)
 						.success(cb)
 						.error(cbErr);
 				},
@@ -487,22 +497,11 @@
 				scope: {
 					listEntities: '=',
 					listId: '@',
-					listTitle: '@',
-					listObjectFilter: '=',
+					listTitle: '@'
 				},
 				templateUrl: '/directives/entity/list.html',
 				link: function ($scope, element, attrs) {
-					$scope.showFilters = false;
-					if(!$scope.listObjectFilter) {
-						$scope.listObjectFilter = {};
-					}
-					if(!$scope.visibilityFilter) {
-						$scope.visibilityFilter = {
-							public: true,
-							protected: true,
-							private: false
-						};
-					}
+					$scope.showFilters = true;
 					$scope.toggleFilters = function() {
 						$scope.showFilters = !$scope.showFilters;
 					};

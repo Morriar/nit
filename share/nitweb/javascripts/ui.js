@@ -23,7 +23,7 @@
 		.config(function($stateProvider, $locationProvider) {
 			$stateProvider
 				.state('search', {
-					url: '/search?q&p&n',
+					url: '/search?q&p&n&filters',
 					controller: 'SearchCtrl',
 					controllerAs: 'vm',
 					templateUrl: 'views/search.html',
@@ -33,7 +33,8 @@
 							var query = $stateParams.q;
 							var page = $stateParams.p ? $stateParams.p : 1;
 							var limit = $stateParams.n ? $stateParams.n : 10;
-							Model.search(query, page, limit, d.resolve,
+							var filters = $stateParams.filters ? $stateParams.filters : '';
+							Model.search(query, page, limit, filters, d.resolve,
 								function() {
 									$state.go('404', null, { location: false })
 								});
@@ -47,9 +48,12 @@
 			var vm = this;
 			vm.entities = entities;
 			vm.query = $stateParams.q;
+			vm.allowedFilters = ['no-empty-doc', 'no-test', 'no-fictive', 'no-attribute',
+				'no-redef', 'no-inh', 'no-extern', 'min-visibility'];
+			vm.defaultFilters = [];
 
 			$scope.$on('change-page', function(e, page, limit) {
-				$state.go('search', {q: vm.query, p: page, l: limit});
+				$state.go('.', {q: vm.query, p: page, l: limit});
 			})
 		})
 
@@ -64,7 +68,7 @@
 							vm.reset();
 							return;
 						}
-						Model.search(vm.query, 1, 8,
+						Model.search(vm.query, 1, 8, '',
 							function(data) {
 								vm.reset();
 								vm.results = data;
@@ -151,39 +155,153 @@
 		.directive('uiFilters', function() {
 			return {
 				restrict: 'E',
-				scope: {
-					property: '=',
-					classesOn: '=',
-					classesOff: '='
+				scope: {},
+				bindToController: {
+					allowedFilters: '=',
+					defaultFilters: '='
 				},
-				replace: true,
-				templateUrl: '/directives/ui-filter-button-vis.html',
-				link: function ($scope, element, attrs) {
-					$scope.toggle = function() {
-						$scope.property = !$scope.property;
+				controller: function($scope, $state, $stateParams) {
+					var vm = this;
+
+					vm.filterOptions = [];
+					for(fi in vm.allowedFilters) {
+						var filter = vm.allowedFilters[fi];
+						if(filter == 'string') {
+							vm.allowString = true;
+							continue;
+						}
+						if(filter == 'min-visibility') {
+							vm.allowVisibility = true;
+							continue;
+						}
+						vm.filterOptions.push({ id: filter, label: filter });
+					};
+
+					vm.filterText = '';
+					vm.minVisibility = 'protected';
+					vm.showFilters = $stateParams.filters;
+
+					vm.filterDefaults = [];
+					for(fi in vm.defaultFilters) {
+						var filter = vm.defaultFilters[fi];
+						vm.filterDefaults.push({ id: filter, label: filter });
+					};
+
+					vm.initFilters = function() {
+						var string = $stateParams.filters;
+						if(!string) return vm.filterDefaults;
+
+						var filters = [];
+						var fs = string.split(',');
+						for(fi in fs) {
+							var ffs = fs[fi].split(':');
+							switch(ffs[0]) {
+								case 'string':
+									vm.filterText = ffs[1];
+									break;
+								case 'min-visibility':
+									vm.minVisibility = ffs[1];
+									break;
+								case 'no-attribute':
+									filters.push({ id: 'no-attribute' });
+									break;
+								case 'no-test':
+									filters.push({ id: 'no-test' });
+									break;
+								case 'no-fictive':
+									filters.push({ id: 'no-fictive' });
+									break;
+								case 'no-redef':
+									filters.push({ id: 'no-redef' });
+									break;
+								case 'no-extern':
+									filters.push({ id: 'no-extern' });
+									break;
+								case 'no-inh':
+									filters.push({ id: 'no-inh' });
+									break;
+								case 'no-empty-doc':
+									filters.push({ id: 'no-empty-doc' });
+									break;
+							}
+						}
+						return filters;
 					}
-				}
+
+					vm.filtersToString = function() {
+						var string = 'min-visibility:' + vm.minVisibility + ',';
+						if(vm.filterText) {
+							string += 'string:' + vm.filterText + ',';
+						}
+						for(fi in vm.filterSelected) {
+							string += vm.filterSelected[fi].id + ','
+						}
+						return string;
+					}
+
+					$scope.$on('ui-filters-changed', function(e) {
+						vm.filter();
+					})
+
+					vm.filter = function() {
+						$state.go('.', {filters: vm.filtersToString()}, {reload: true});
+					};
+
+					vm.group = function() {
+						$state.go('.', {group_by: vm.grouping}, {reload: true});
+					};
+
+					vm.visibility = function(visibility) {
+						vm.minVisibility = visibility;
+						vm.filter();
+					};
+
+					vm.filterSelected = vm.initFilters();
+					vm.groupingAlgos = [ 'none', 'kind', 'visibility', 'intro_redef', 'package', 'module', 'class', 'classdef', 'return' ];
+					vm.grouping = $stateParams.group_by ? $stateParams.group_by : 'kind';
+				},
+				controllerAs: 'vm',
+				replace: true,
+				templateUrl: '/directives/ui/filters.html'
 			};
 		})
 
-		.filter('visibility', function() {
-			return function(input, visibilityFilter) {
-				var res = [];
-				input.forEach(function(entry) {
-					if(visibilityFilter.public == false && entry.visibility == "public") {
-						return;
+		.directive('uiSelectFilters', function() {
+			return {
+				restrict: 'E',
+				scope: {},
+				bindToController: {
+					options: '=',
+					selected: '='
+				},
+				controller: function($scope) {
+					var vm = this;
+
+					vm.settings = {
+						showCheckAll: false,
+						showUncheckAll: false,
+						idProperty: 'id',
+						smartButtonTextProvider: function(selected) {
+							return selected.length + ' selected';
+						}
 					}
-					if(visibilityFilter.protected == false && entry.visibility == "protected") {
-						return;
+
+					vm.customTexts = {
+						buttonDefaultText: 'none'
 					}
-					if(visibilityFilter.private == false && entry.visibility == "private") {
-						return;
+
+					vm.events = {
+						onSelectionChanged: function(selection) {
+							$scope.$emit('ui-filters-changed', vm.selected);
+						}
 					}
-					res.push(entry);
-				});
-				return res;
-			};
+				},
+				controllerAs: 'vm',
+				templateUrl: '/directives/ui/select-filters.html'
+			}
 		})
+
+		/* Summaries */
 
 		.directive('uiSummary', function($rootScope, $location, $anchorScroll) {
 			return {
@@ -236,58 +354,6 @@
 							$rootScope.reloadSummary();
 						}, 100);
 					});
-				}
-			};
-		})
-
-		.directive('uiFilterForm', function() {
-			return {
-				restrict: 'E',
-				scope: {
-					searchFilter: '=',
-					visibilityFilter: '='
-				},
-				replace: true,
-				templateUrl: '/directives/ui-filter-form.html'
-			};
-		})
-
-		.directive('uiFilterField', function() {
-			return {
-				restrict: 'E',
-				scope: {
-					property: '='
-				},
-				replace: true,
-				templateUrl: '/directives/ui-filter-field.html'
-			};
-		})
-
-		.directive('uiFilterGroupVis', function() {
-			return {
-				restrict: 'E',
-				scope: {
-					property: '='
-				},
-				replace: true,
-				templateUrl: '/directives/ui-filter-group-vis.html'
-			};
-		})
-
-		.directive('uiFilterButtonVis', function() {
-			return {
-				restrict: 'E',
-				scope: {
-					property: '=',
-					classesOn: '=',
-					classesOff: '='
-				},
-				replace: true,
-				templateUrl: '/directives/ui-filter-button-vis.html',
-				link: function ($scope, element, attrs) {
-					$scope.toggle = function() {
-						$scope.property = !$scope.property;
-					}
 				}
 			};
 		})
