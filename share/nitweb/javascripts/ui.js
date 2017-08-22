@@ -151,37 +151,68 @@
 		.directive('uiFilters', function() {
 			return {
 				restrict: 'E',
-				scope: {
-					property: '=',
-					classesOn: '=',
-					classesOff: '='
-				},
-				replace: true,
-				templateUrl: '/directives/ui-filter-button-vis.html',
-				link: function ($scope, element, attrs) {
-					$scope.toggle = function() {
-						$scope.property = !$scope.property;
-					}
-				}
-			};
-		})
+				bindToController: {},
+				controller: function($state, $stateParams) {
+					var vm = this;
 
-		.filter('visibility', function() {
-			return function(input, visibilityFilter) {
-				var res = [];
-				input.forEach(function(entry) {
-					if(visibilityFilter.public == false && entry.visibility == "public") {
-						return;
+					vm.parseStateParams = function() {
+						var filters = {
+							'filter': '',
+							'attributes': true,
+							'tests': true,
+							'fictives': true,
+							'redefs': true,
+							'externs': true,
+							'inherited': false,
+							'empty-doc': true,
+							'min-visibility': 'private',
+						};
+						var string = $stateParams.filters;
+						if(!string) {
+							return filters;
+						}
+						var fs = string.split(',');
+						for(fi in fs) {
+							var ffs = fs[fi].split(':');
+							if(ffs[0] == 'no-attribute') filters.attributes = false;
+							if(ffs[0] == 'no-test') filters.tests = false;
+							if(ffs[0] == 'no-fictive') filters.fictives = false;
+							if(ffs[0] == 'no-empty-doc') filters['empty-doc'] = false;
+							if(ffs[0] == 'no-redef') filters['redefs'] = false;
+							if(ffs[0] == 'no-extern') filters['externs'] = false;
+							if(ffs[0] == 'no-inh') filters['inherited'] = false;
+							if(ffs[0] == 'string') filters.filter = ffs[1];
+							if(ffs[0] == 'min-visibility') filters['min-visibility'] = ffs[1];
+						}
+						return filters;
 					}
-					if(visibilityFilter.protected == false && entry.visibility == "protected") {
-						return;
-					}
-					if(visibilityFilter.private == false && entry.visibility == "private") {
-						return;
-					}
-					res.push(entry);
-				});
-				return res;
+
+					vm.filter = function() {
+						var filter_string = 'min-visibility:' + vm.filters['min-visibility'] + ',';
+						if(vm.filters.filter) {
+							filter_string += 'string:' + vm.filters.filter + ',';
+						}
+						if(!vm.filters.attributes) filter_string += 'no-attribute,';
+						if(!vm.filters.tests) filter_string += 'no-test,';
+						if(!vm.filters.fictives) filter_string += 'no-fictive,';
+						if(!vm.filters.redefs) filter_string += 'no-redef,';
+						if(!vm.filters.externs) filter_string += 'no-extern,';
+						if(!vm.filters.inherited) filter_string += 'no-inh,';
+						if(!vm.filters["empty-doc"]) filter_string += 'no-empty-doc,';
+
+						$state.go('.', {filters: filter_string}, {reload: true});
+					};
+
+					vm.visibility = function(min_visibility) {
+						vm.filters['min-visibility'] = min_visibility;
+						vm.filter();
+					};
+
+					vm.filters = vm.parseStateParams();
+				},
+				controllerAs: 'vm',
+				replace: true,
+				templateUrl: '/directives/ui/filters.html'
 			};
 		})
 
@@ -236,58 +267,6 @@
 							$rootScope.reloadSummary();
 						}, 100);
 					});
-				}
-			};
-		})
-
-		.directive('uiFilterForm', function() {
-			return {
-				restrict: 'E',
-				scope: {
-					searchFilter: '=',
-					visibilityFilter: '='
-				},
-				replace: true,
-				templateUrl: '/directives/ui-filter-form.html'
-			};
-		})
-
-		.directive('uiFilterField', function() {
-			return {
-				restrict: 'E',
-				scope: {
-					property: '='
-				},
-				replace: true,
-				templateUrl: '/directives/ui-filter-field.html'
-			};
-		})
-
-		.directive('uiFilterGroupVis', function() {
-			return {
-				restrict: 'E',
-				scope: {
-					property: '='
-				},
-				replace: true,
-				templateUrl: '/directives/ui-filter-group-vis.html'
-			};
-		})
-
-		.directive('uiFilterButtonVis', function() {
-			return {
-				restrict: 'E',
-				scope: {
-					property: '=',
-					classesOn: '=',
-					classesOff: '='
-				},
-				replace: true,
-				templateUrl: '/directives/ui-filter-button-vis.html',
-				link: function ($scope, element, attrs) {
-					$scope.toggle = function() {
-						$scope.property = !$scope.property;
-					}
 				}
 			};
 		})

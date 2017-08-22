@@ -1,0 +1,33 @@
+<form class='form-inline'>
+	<span ng-repeat='(filter, value) in vm.filters'>
+		<div class='form-group has-icon' ng-if='filter == "filter"'>
+			<input type='text' class='form-control' ng-change='vm.filter()'
+				ng-model-options='{ debounce: 300 }'
+				ng-model='vm.filters.filter' placeholder='Filter...'>
+			<span class='glyphicon glyphicon-search form-control-icon text-muted'></span>
+		</div>
+		<div class='checkbox pull-right' ng-if='filter != "min-visibility" && filter != "filter"'>
+			<label class='text-muted'>
+				{{filter}}
+				<input type='checkbox' ng-model='vm.filters[filter]' ng-change='vm.filter()'>
+			</label>
+			&nbsp;&nbsp;
+		</div>
+		<div class='pull-right form-group' ng-if='filter == "min-visibility"'>
+			<span class='text-muted'>min visibility</span>
+			<button class='btn btn-link btn-xs' ng-click='vm.visibility("public")'
+				title='Toggle public'>
+				<span class=' glyphicon glyphicon-eye-open text-success'/>
+			</button>
+			<button class='btn btn-link btn-xs' ng-click='vm.visibility("protected")'
+				title='Toggle protected'>
+				<span class=' glyphicon glyphicon-eye-open text-warning'/>
+			</button>
+			<button class='btn btn-link btn-xs' ng-click='vm.visibility("private")'
+				title='Toggle private'>
+				<span class=' glyphicon glyphicon-eye-open text-danger'/>
+			</button>
+			&nbsp;&nbsp;
+		</div>
+	</span>
+</form>
