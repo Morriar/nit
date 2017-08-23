@@ -168,7 +168,7 @@ redef class ModelView
 
 	private var score_sorter = new ScoreComparator
 	private var vis_sorter = new VisibilityComparator
-	private var kind_sorter = new MEntityComparator
+	private var kind_sorter = new MatchKindComparator
 	private var name_sorter = new NameComparator
 	private var lname_sorter = new NameLengthComparator
 	private var fname_sorter = new FullNameComparator
@@ -557,7 +557,7 @@ end
 #
 # Usefull to order the mentities by kind in this order:
 # packages, groups, modules and classes, properties.
-class MEntityComparator
+class MatchKindComparator
 	super ScoreComparator
 
 	# See `MEntity::compare_mentity`

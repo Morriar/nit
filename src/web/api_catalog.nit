@@ -270,7 +270,7 @@ redef class APISearch
 	private var lname_sorter = new NameLengthComparator
 	private var fname_sorter = new FullNameComparator
 	private var lfname_sorter = new FullNameLengthComparator
-	private var kind_sorter = new MEntityComparator
+	private var kind_sorter = new MatchKindComparator
 end
 
 redef class Catalog
