@@ -218,6 +218,8 @@ class NSRef
 		v.serialize_attribute("web_url", mentity.web_url)
 		v.serialize_attribute("api_url", mentity.api_url)
 		v.serialize_attribute("name", mentity.name)
+		var mdoc = mentity.mdoc_or_fallback
+		if mdoc != null then v.serialize_attribute("synopsis", mdoc.synopsis)
 	end
 end
 
@@ -238,41 +240,18 @@ redef class MEntity
 
 	redef fun core_serialize_to(v) do
 		super
-		v.serialize_attribute("namespace", namespace)
+		if namespace != null then
+			v.serialize_attribute("namespace", namespace)
+		end
 		v.serialize_attribute("web_url", web_url)
 		v.serialize_attribute("api_url", api_url)
 	end
 
 	# Return `self.full_name` as an object that can be serialized to json.
-	fun namespace: nullable Namespace do return null
+	var namespace: nullable Namespace = null
 
 	# Return a new NSRef to `self`.
 	fun to_ns_ref: NSRef do return new NSRef(self)
-end
-
-redef class MEntityRef
-	redef fun core_serialize_to(v) do
-		super
-		v.serialize_attribute("namespace", mentity.namespace)
-		v.serialize_attribute("web_url", mentity.web_url)
-		v.serialize_attribute("api_url", mentity.api_url)
-		v.serialize_attribute("name", mentity.name)
-		v.serialize_attribute("mdoc", mentity.mdoc_or_fallback)
-		v.serialize_attribute("visibility", mentity.visibility.to_s)
-		v.serialize_attribute("modifiers", mentity.collect_modifiers)
-		v.serialize_attribute("class_name", mentity.class_name)
-		var mentity = self.mentity
-		if mentity isa MMethod then
-			v.serialize_attribute("msignature", mentity.intro.msignature)
-		else if mentity isa MMethodDef then
-			v.serialize_attribute("msignature", mentity.msignature)
-		else if mentity isa MVirtualTypeProp then
-			v.serialize_attribute("bound", to_mentity_ref(mentity.intro.bound))
-		else if mentity isa MVirtualTypeDef then
-			v.serialize_attribute("bound", to_mentity_ref(mentity.bound))
-		end
-		v.serialize_attribute("location", mentity.location)
-	end
 end
 
 redef class MDoc
@@ -284,11 +263,11 @@ redef class MDoc
 end
 
 redef class MPackage
-	redef fun namespace do return new Namespace.from([to_ns_ref])
+	redef var namespace is lazy do return new Namespace.from([to_ns_ref])
 end
 
 redef class MGroup
-	redef fun namespace do
+	redef var namespace is lazy do
 		var p = parent
 		if p == null then
 			return new Namespace.from([to_ns_ref, ">": nullable NSEntity])
@@ -298,7 +277,7 @@ redef class MGroup
 end
 
 redef class MModule
-	redef fun namespace do
+	redef var namespace is lazy do
 		var mgroup = self.mgroup
 		if mgroup == null then
 			return new Namespace.from([to_ns_ref])
@@ -315,13 +294,13 @@ redef class MModule
 end
 
 redef class MClass
-	redef fun namespace do
+	redef var namespace is lazy do
 		return new Namespace.from([intro_mmodule.ns_for(visibility), "::", to_ns_ref: nullable NSEntity])
 	end
 end
 
 redef class MClassDef
-	redef fun namespace do
+	redef var namespace is lazy do
 		if is_intro then
 			return new Namespace.from([mmodule.ns_for(mclass.visibility), "$", to_ns_ref: nullable NSEntity])
 		else if mclass.intro_mmodule.mpackage != mmodule.mpackage then
@@ -339,7 +318,7 @@ redef class MClassDef
 end
 
 redef class MProperty
-	redef fun namespace do
+	redef var namespace is lazy do
 		if intro_mclassdef.is_intro then
 			return new Namespace.from([intro_mclassdef.mmodule.ns_for(visibility), "::", intro_mclassdef.mclass.to_ns_ref, "::", to_ns_ref: nullable NSEntity])
 		else
@@ -349,7 +328,7 @@ redef class MProperty
 end
 
 redef class MPropDef
-	redef fun namespace do
+	redef var namespace is lazy do
 		var res = new Namespace
 		res.add mclassdef.namespace
 		res.add "$"
@@ -382,6 +361,15 @@ redef class MPropDef
 	end
 end
 
+redef class MType
+	redef fun core_serialize_to(v) do
+		super
+		v.serialize_attribute("web_url", web_url)
+		var mdoc = mdoc_or_fallback
+		if mdoc != null then v.serialize_attribute("synopsis", mdoc.synopsis)
+	end
+end
+
 redef class MClassType
 	redef var web_url = mclass.web_url is lazy
 end
@@ -396,14 +384,4 @@ end
 
 redef class MVirtualType
 	redef var web_url = mproperty.web_url is lazy
-end
-
-redef class POSetElement[E]
-	super Serializable
-
-	redef fun core_serialize_to(v) do
-		assert self isa POSetElement[MEntity]
-		v.serialize_attribute("direct_greaters", to_mentity_refs(direct_greaters))
-		v.serialize_attribute("direct_smallers", to_mentity_refs(direct_smallers))
-	end
 end

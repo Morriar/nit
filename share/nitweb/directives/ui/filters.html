@@ -12,10 +12,10 @@
 			<span class='glyphicon glyphicon-filter form-control-icon text-muted'></span>
 		</div>
 
-		<div class='form-group'>
+		<div class='form-group' ng-if='vm.allowedGroups.length > 1'>
 			<label>group by</label>
-			<select class='form-control' ng-model='vm.grouping' ng-change='vm.group()'>
-				<option ng-repeat='algo in vm.groupingAlgos'>{{algo}}</option>
+			<select class='form-control' ng-model='vm.defaultGroup' ng-change='vm.group()'>
+				<option ng-repeat='algo in vm.allowedGroups'>{{algo}}</option>
 			</select>
 		</div>
 

@@ -29,18 +29,6 @@ import json::static
 import json::serialization_write
 import loader
 
-# A reference to another mentity.
-class MEntityRef
-	super MEntity
-
-	# MEntity to link to.
-	var mentity: MEntity
-
-	redef fun core_serialize_to(v) do
-		v.serialize_attribute("full_name", mentity.full_name)
-	end
-end
-
 redef class MEntity
 	serialize
 
@@ -114,11 +102,6 @@ end
 redef class MModule
 	redef fun core_serialize_to(v) do
 		super
-		if v isa FullJsonSerializer then
-			var view = private_view
-			v.serialize_attribute("intro_mclasses", to_mentity_refs(sort_entities(intro_mclasses)))
-			v.serialize_attribute("redef_mclassdefs", to_mentity_refs(sort_entities(collect_redef_mclassdefs(view))))
-		end
 	end
 end
 
@@ -127,10 +110,7 @@ redef class MClass
 		super
 		v.serialize_attribute("mparameters", mparameters)
 		if v isa FullJsonSerializer then
-			var view = private_view
-			v.serialize_attribute("intro", to_mentity_ref(intro))
-			v.serialize_attribute("intro_mproperties", to_mentity_refs(sort_entities(collect_intro_mproperties(view))))
-			v.serialize_attribute("redef_mproperties", to_mentity_refs(sort_entities(collect_redef_mproperties(view))))
+			v.serialize_attribute("intro", intro)
 		end
 	end
 end
@@ -147,7 +127,7 @@ redef class MProperty
 	redef fun core_serialize_to(v) do
 		super
 		if v isa FullJsonSerializer then
-			v.serialize_attribute("intro", to_mentity_ref(intro))
+			v.serialize_attribute("intro", intro)
 		end
 	end
 end
@@ -163,15 +143,15 @@ end
 redef class MAttribute
 	redef fun core_serialize_to(v) do
 		super
-		v.serialize_attribute("static_mtype", to_mentity_ref(intro.static_mtype))
+		v.serialize_attribute("static_mtype", intro.static_mtype)
 	end
 end
 
 redef class MVirtualTypeProp
 	redef fun core_serialize_to(v) do
 		super
-		v.serialize_attribute("mvirtualtype", to_mentity_ref(mvirtualtype))
-		v.serialize_attribute("bound", to_mentity_ref(intro.bound))
+		v.serialize_attribute("mvirtualtype", mvirtualtype)
+		v.serialize_attribute("bound", intro.bound)
 	end
 end
 
@@ -192,15 +172,23 @@ end
 redef class MAttributeDef
 	redef fun core_serialize_to(v) do
 		super
-		v.serialize_attribute("static_mtype", to_mentity_ref(static_mtype))
+		v.serialize_attribute("static_mtype", static_mtype)
 	end
 end
 
 redef class MVirtualTypeDef
 	redef fun core_serialize_to(v) do
 		super
-		v.serialize_attribute("bound", to_mentity_ref(bound))
+		v.serialize_attribute("bound", bound)
 		v.serialize_attribute("is_fixed", is_fixed)
+	end
+end
+
+redef class MType
+	redef fun core_serialize_to(v) do
+		v.serialize_attribute("class_name", class_name)
+		v.serialize_attribute("name", name)
+		v.serialize_attribute("mdoc", mdoc_or_fallback)
 	end
 end
 
@@ -208,42 +196,25 @@ redef class MSignature
 	redef fun core_serialize_to(v) do
 		v.serialize_attribute("arity", arity)
 		v.serialize_attribute("mparams", mparameters)
-		v.serialize_attribute("return_mtype", to_mentity_ref(return_mtype))
+		v.serialize_attribute("return_mtype", return_mtype)
 		v.serialize_attribute("vararg_rank", vararg_rank)
 	end
 end
 
 redef class MParameterType
 	redef fun core_serialize_to(v) do
-		v.serialize_attribute("name", name)
+		super
 		v.serialize_attribute("rank", rank)
-		v.serialize_attribute("mtype", to_mentity_ref(mclass.intro.bound_mtype.arguments[rank]))
+		v.serialize_attribute("mtype", mclass.intro.bound_mtype.arguments[rank])
 	end
 end
 
 redef class MParameter
 	redef fun core_serialize_to(v) do
-		v.serialize_attribute("is_vararg", is_vararg)
 		v.serialize_attribute("name", name)
-		v.serialize_attribute("mtype", to_mentity_ref(mtype))
+		v.serialize_attribute("is_vararg", is_vararg)
+		v.serialize_attribute("mtype", mtype)
 	end
-end
-
-# Create a ref to a `mentity`.
-fun to_mentity_ref(mentity: nullable MEntity): nullable MEntityRef do
-	if mentity == null then return null
-	return new MEntityRef(mentity)
-end
-
-# Return a collection of `mentities` as a JsonArray of MEntityRefs.
-fun to_mentity_refs(mentities: Collection[MEntity]): Array[MEntityRef] do
-	var array = new Array[MEntityRef]
-	for mentity in mentities do
-		var ref = to_mentity_ref(mentity)
-		if ref == null then continue
-		array.add ref
-	end
-	return array
 end
 
 # Use the FullJsonSerializer to generate the full json representation of a MEntity.

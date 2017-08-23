@@ -1,6 +1,8 @@
 <div>
 	<ui-filters allowed-filters='vm.mentity.allowed_filters'
-		default-filters='vm.mentity.default_filters' />
+		default-filters='vm.mentity.default_filters'
+		allowed-groups='vm.mentity.allowed_groups'
+		default-group='vm.mentity.default_group' />
 
 	<entity-list ng-repeat='group in vm.defs'
 		list-title='group.name' list-entities='group.mentities' />
