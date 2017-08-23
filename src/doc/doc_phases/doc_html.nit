@@ -101,7 +101,7 @@ class RenderHTMLPhase
 	super DocPhase
 
 	# Used to sort sidebar elements by name.
-	var name_sorter = new MEntityNameSorter
+	var name_sorter = new MEntityNameComparator
 
 	redef fun apply do
 		if ctx.opt_no_render.value then return

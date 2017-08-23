@@ -64,14 +64,6 @@ redef class MEntity
 
 	# Same as `to_full_json` but with pretty json.
 	fun to_pretty_full_json: String do return serialize_to_full_json(plain=true, pretty=true)
-
-	# Sort mentities by name
-	private fun sort_entities(mentities: Collection[MEntity]): Array[MEntity] do
-		var sorter = new MEntityNameSorter
-		var sorted = mentities.to_a
-		sorter.sort(sorted)
-		return sorted
-	end
 end
 
 redef class MDoc

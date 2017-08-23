@@ -22,7 +22,7 @@ class LinListPhase
 	super DocPhase
 
 	# Used to sort list by linearization order
-	private var lin_sorter = new MEntityNameSorter
+	private var lin_sorter = new MEntityNameComparator
 
 	redef fun apply do
 		for page in doc.pages.values do page.apply_linearization(self, doc)

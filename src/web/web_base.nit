@@ -15,6 +15,7 @@
 # Base classes used by `nitweb`.
 module web_base
 
+import model::model_sorters
 import model::model_views
 import model::model_json
 import doc_down

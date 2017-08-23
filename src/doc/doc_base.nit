@@ -17,6 +17,7 @@ module doc_base
 
 import toolcontext
 import model_ext
+import model::model_sorters
 import model::model_views
 
 # The model of a Nitdoc documentation.
