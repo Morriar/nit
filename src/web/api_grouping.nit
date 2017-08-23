@@ -249,7 +249,7 @@ class ReturnGroupBuilder
 end
 
 redef class MEntity
-	var allowed_groups: Array[String] = ["kind"]
+	var allowed_groups: Array[String] = ["none", "kind"]
 	var default_group = "kind"
 
 	redef fun core_serialize_to(v) do
@@ -262,9 +262,9 @@ redef class MEntity
 end
 
 redef class MModule
-	redef var allowed_groups = ["kind", "intro-redef", "visibility"]
+	redef var allowed_groups = ["none", "kind", "intro-redef", "visibility"]
 end
 
 redef class MClass
-	redef var allowed_groups = ["kind", "package", "module", "intro-redef", "visibility"]
+	redef var allowed_groups = ["none", "kind", "package", "module", "intro-redef", "visibility"]
 end

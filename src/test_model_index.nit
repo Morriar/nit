@@ -91,7 +91,7 @@ else
 	res = index.find(q)
 end
 
-res = res.sort(new ScoreComparator, new MEntityComparator).
+res = res.sort(new ScoreComparator, new MatchKindComparator).
 		uniq.
 		limit(10).
 		sort(new VisibilityComparator, new NameComparator)

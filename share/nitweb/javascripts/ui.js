@@ -175,6 +175,18 @@
 						$state.go('.', {group_by: vm.defaultGroup}, {reload: true});
 					};
 
+					// Ordering
+
+					vm.allowedOrders = [ 'alpha', 'natural', 'lin'];
+					vm.defaultOrder = 'alpha';
+					if($stateParams.order_by) {
+						vm.defaultOrder = $stateParams.order_by;
+					}
+
+					vm.order = function() {
+						$state.go('.', {order_by: vm.defaultOrder}, {reload: true});
+					};
+
 					// Filtering
 
 					vm.filterOptions = [];

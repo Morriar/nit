@@ -138,16 +138,18 @@
 					controllerAs: 'vm',
 				})
 				.state('doc.entity.defs', {
-					url: '/defs?filters&group_by',
+					url: '/defs?group_by&order_by&filters',
 					templateUrl: 'views/doc/defs.html',
 					resolve: {
 						defs: function(Model, $q, $stateParams, $state) {
-							var grouping = $stateParams.group_by;
 							var d = $q.defer();
-							var filters = $stateParams.filters ? $stateParams.filters : '';
+							var groupBy = $stateParams.group_by;
+							var orderBy = $stateParams.order_by;
+							var filters = $stateParams.filters;
 							Model.loadEntityDefs($stateParams.id,
-								filters,
-								grouping ? grouping : 'heuristical',
+								groupBy ? groupBy : 'heuristical',
+								orderBy ? orderBy : 'alpha',
+								filters ? filters : '',
 								d.resolve,
 								function() {
 									$state.go('404', null, { location: false })
@@ -218,10 +220,11 @@
 						.error(cbErr);
 				},
 
-				loadEntityDefs: function(id, filters_string, grouping, cb, cbErr) {
+				loadEntityDefs: function(id, groupBy, orderBy, filterString, cb, cbErr) {
 					$http.get('/api/defs/' + id +
-						'?group_by=' + grouping + 
-						'&filters=' + filters_string)
+						'?group_by=' + groupBy + 
+						'&order_by=' + orderBy + 
+						'&filters=' + filterString)
 						.success(cb)
 						.error(cbErr);
 				},

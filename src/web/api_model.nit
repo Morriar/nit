@@ -117,7 +117,30 @@ class APIList
 	#
 	# TODO choose order from request
 	fun sort_mentities(req: HttpRequest, groups: Array[DocGroup]): Array[DocGroup] do
-		var sorter = new MEntityNameComparator
+		var r = req.string_arg("order_by")
+		var sorter: MEntityComparator
+		if r == "none" then
+			sorter = new MEntityNoneComparator
+		else if r == "rand" then
+			sorter = new MEntityRandomComparator
+		else if r == "natural" then
+			sorter = new MEntityNaturalComparator
+		else if r == "size" then
+			sorter = new MEntitySizeComparator(config.view)
+		else if r == "loc" then
+			sorter = new MEntityLOCComparator
+		else if r == "lod" then
+			sorter = new MEntityLODComparator
+		else if r == "kind" then
+			sorter = new MEntityKindComparator
+		else if r == "lin" then
+			sorter = new MEntityDepComparator(config.view)
+		else if r == "doc-dep" then
+			sorter = new MEntityDocDepComparator
+		else
+			sorter = new MEntityNameComparator
+		end
+		# TODO usage, mendel, pagerank
 		for group in groups do
 			sorter.sort(group.mentities)
 		end

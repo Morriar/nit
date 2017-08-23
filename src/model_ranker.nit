@@ -38,6 +38,37 @@ redef class NitwebConfig
 	redef var db_name = "nitweb_orders"
 end
 
+redef class MEntity
+	fun stereotype(view: ModelView): String do return ""
+end
+
+redef class MMethod
+
+	redef fun stereotype(view) do
+		if is_getter(view) then return "accessor"
+		if is_setter(view) then return "mutator"
+		if is_init then return "creational"
+		# collaborational
+		return super
+	end
+
+	# Is `self` a getter method for an attribute?
+	fun is_getter(view: ModelView): Bool do
+		for mattribute in intro_mclassdef.mclass.collect_accessible_mattributes(view) do
+			if mattribute.name == "_{name}" then return true
+		end
+		return false
+	end
+
+	# Is `self` a setter method for an attribute?
+	fun is_setter(view: ModelView): Bool do
+		for mattribute in intro_mclassdef.mclass.collect_accessible_mattributes(view) do
+			if "{mattribute.name}=" == "_{name}" then return true
+		end
+		return false
+	end
+end
+
 class RankerPhase
 	super Phase
 
@@ -61,14 +92,19 @@ class RankerPhase
 		rankers = init_rankers(toolcontext.modelbuilder, mainmodule, view)
 
 		var subs = config.order_results.find_all
-		print subs.length
+		# print subs.length
 
-		users_stats(subs)
-		kinds_stats(view, subs)
-		packages_stats(view, subs)
-		order_stats(view, subs)
-		compare_orders(view, mainmodule, subs)
-		comments_stats(subs)
+		# users_stats(subs)
+		# kinds_stats(view, subs)
+		# packages_stats(view, subs)
+		# order_stats(view, subs)
+		# compare_orders(view, mainmodule, subs)
+		# comments_stats(subs)
+		# compare_experts(view, subs)
+		# order_inits(view, subs)
+		# order_attrs(view, subs)
+		# order_interfaces(view, subs)
+		entities_stereotypes(view, subs)
 	end
 
 	fun users_stats(subs: Array[ExpOrderSession]) do
@@ -193,6 +229,260 @@ class RankerPhase
 		csv.write_to_file csv_out / "packages.csv"
 	end
 
+	fun compare_experts(view: ModelView, subs: Array[ExpOrderSession]) do
+		var orders = new HashMap[Array[String], Array[ExpOrderSession]]
+		for sub in subs do
+			var keys = sub.original_order
+			default_comparator.sort keys
+
+			if not orders.has_key(keys) then
+				orders[keys] = new Array[ExpOrderSession]
+			end
+			orders[keys].add sub
+		end
+		for order, order_subs in orders do
+			if order_subs.length < 2 then continue
+			var parts = order.first.split("::")
+			parts = parts.subarray(0, parts.length - 1)
+			print "{parts.join("::")}\tlength {order.length}"
+			# print order.join(", ")
+
+			for sub in order_subs do
+				printn "{sub.user.login}"
+				# for i in sub.to_order do
+					# printn "\t{i.split("::").last}"
+				# end
+				print ""
+				# for i in sub.to_order do
+					# print i
+				# end
+				for sub2 in order_subs do
+					if sub == sub2 then continue
+					print "\t{sub.to_order.levenshtein_distance(sub2.to_order)} / {kendall_tau(sub.to_order, sub2.to_order)} {sub2.user.login}"
+					print sub.to_order
+				end
+			end
+
+			print ""
+		end
+	end
+
+	fun order_inits(view: ModelView, subs: Array[ExpOrderSession]) do
+		var all = 0
+		var init_count = new Counter[Int]
+		var init_pos = new Counter[Int]
+		var init_firsts = new Counter[Bool]
+		for sub in subs do
+			var line = new Array[String]
+			var icount = 0
+			var pos = 0
+			var contains_init = false
+			var init_first = true
+			for id in sub.to_order do
+				var mentity = view.mentity_by_full_name(id)
+				if mentity == null then
+					print "Warning: no mentity for id {id}"
+					continue
+				end
+				if mentity isa MMethodDef then
+					mentity = mentity.mproperty
+				end
+				if mentity isa MMethod and mentity.is_init then
+					icount += 1
+					init_count.inc(icount)
+					init_firsts.inc(init_first)
+					init_pos.inc(pos)
+					contains_init = true
+					line.add "**{mentity.name}**"
+				else
+					init_first = false
+					line.add "{mentity.name}"
+				end
+				pos += 1
+				all += 1
+			end
+			if contains_init then print line.join("\t")
+		end
+		print "all: {all}"
+		print "inits: {init_pos.sum}"
+		for k, i in init_pos do
+			print "{k}\t{i}"
+		end
+
+		init_firsts.print_elements(init_firsts.length)
+		init_count.print_elements(init_count.length)
+	end
+
+	fun order_attrs(view: ModelView, subs: Array[ExpOrderSession]) do
+		var all = 0
+		var getters = 0
+		var setters = 0
+		var get_pos = new Counter[Int]
+		var set_pos = new Counter[Int]
+		var set_get_pos = new Counter[String]
+		var acc_first = new Counter[Bool]
+		var kinds = new Counter[Bool]
+		for sub in subs do
+			var pos = 0
+			var is_first = true
+			var all_acc = true
+			for id in sub.to_order do
+				var mentity = view.mentity_by_full_name(id)
+				if mentity == null then
+					print "Warning: no mentity for id {id}"
+					continue
+				end
+				if mentity isa MMethodDef then
+					mentity = mentity.mproperty
+				end
+				if mentity isa MMethod and mentity.is_getter(view) then
+					# print mentity
+					getters += 1
+					get_pos.inc(pos)
+					acc_first.inc(is_first)
+				else if mentity isa MMethod and mentity.is_setter(view) then
+					setters += 1
+					set_pos.inc(pos)
+					acc_first.inc(is_first)
+					var getter = null
+					var found_getter = false
+					for other in sub.to_order do
+						if "{other.split("::").last}=" == mentity.name then getter = other
+					end
+					if pos > 0 then
+						if sub.to_order[pos - 1] == getter then
+							set_get_pos.inc("before")
+							found_getter = true
+						end
+					end
+					if pos < sub.to_order.length - 1 then
+						if sub.to_order[pos + 1] == getter then
+							set_get_pos.inc("after")
+							found_getter = true
+						end
+					end
+					if getter != null and not found_getter then
+						set_get_pos.inc("elsewhere")
+					else if getter == null then
+						set_get_pos.inc("nowhere")
+					end
+				else
+					if not(mentity isa MMethod and mentity.is_init) then
+						is_first = false
+						all_acc = false
+					end
+				end
+				all += 1
+				pos += 1
+			end
+			kinds.inc(all_acc)
+		end
+		print "all: {all}"
+		print "getters: {getters}"
+		print "setters: {setters}"
+
+		print "Getter positions:"
+		for k, v in get_pos do
+			print "{k}\t{v}"
+		end
+		print "Setter positions:"
+		for k, v in set_pos do
+			print "{k}\t{v}"
+		end
+
+		print "Relative positions of getter / setter"
+		for k, v in set_get_pos do
+			print "{k}\t{v}"
+		end
+
+		print "Accessor is first"
+		for k, v in acc_first do
+			print "{k}\t{v}"
+		end
+
+		kinds.print_elements(2)
+	end
+
+	fun order_interfaces(view: ModelView, subs: Array[ExpOrderSession]) do
+		var all = 0
+		var mclasses = 0
+		var ifaces = 0
+		var abs = 0
+		var ifaces_pos = new Counter[Int]
+		var abs_pos = new Counter[Int]
+		var ifaces_first = new Counter[Bool]
+		var abs_first = new Counter[Bool]
+		for sub in subs do
+			var pos = 0
+			var is_first = true
+			for id in sub.to_order do
+				var mentity = view.mentity_by_full_name(id)
+				if mentity == null then
+					print "Warning: no mentity for id {id}"
+					continue
+				end
+				if mentity isa MClassDef then
+					mentity = mentity.mclass
+				end
+				if mentity isa MClass and mentity.is_interface then
+					# print mentity
+					ifaces += 1
+					ifaces_pos.inc(pos)
+					ifaces_first.inc(is_first)
+				else if mentity isa MClass and mentity.is_abstract then
+					abs += 1
+					abs_pos.inc(pos)
+					abs_first.inc(is_first)
+				else if mentity isa MClass then
+					mclasses += 1
+					is_first = false
+				end
+				all += 1
+				pos += 1
+			end
+		end
+		print "all: {all}"
+		print "mclasses: {mclasses}"
+		print "ifaces: {ifaces}"
+		print "abs: {abs}"
+
+		print "Interfaces positions:"
+		for k, v in ifaces_pos do
+			print "{k}\t{v}"
+		end
+
+		print "Interface is first"
+		for k, v in ifaces_first do
+			print "{k}\t{v}"
+		end
+
+		print "Abstract positions:"
+		for k, v in abs_pos do
+			print "{k}\t{v}"
+		end
+
+		print "Abstract is first"
+		for k, v in abs_first do
+			print "{k}\t{v}"
+		end
+	end
+
+	fun entities_stereotypes(view: ModelView, subs: Array[ExpOrderSession]) do
+		var done = new HashSet[String]
+		var csv = new CsvDocument
+		csv.header = ["mentity", "kind", "stereotype"]
+		for sub in subs do
+			for id in sub.to_order do
+				if done.has(id) then continue
+				var mentity = view.mentity_by_full_name(id)
+				done.add(id)
+				if mentity == null then continue
+				csv.add_record(mentity.full_name, mentity.class_name, mentity.stereotype(view))
+			end
+		end
+		csv.write_to_file("csv/stereotypes.csv")
+	end
+
 	fun order_stats(view: ModelView, subs: Array[ExpOrderSession]) do
 		var ids_stats = new Counter[String]
 		var same_orders = new Counter[String]
@@ -274,6 +564,7 @@ class RankerPhase
 		for sub in subs do
 			var mentity = view.mentity_by_full_name(sub.mentity)
 			if mentity == null then continue
+			if not mentity isa MClass then continue
 			var record = new Array[String]
 			record.add sub.id
 			record.add sub.user.login
@@ -357,6 +648,39 @@ class RankerPhase
 			# print sub.comment or else ""
 		end
 	end
+end
+
+# Compute Kendall-Tau distance between `ta` and `tb`.
+#
+# ~~~
+# var a = ["A", "B", "C"]
+# var b = ["A", "B", "C"]
+# var c = ["C", "B", "A"]
+# var d = ["A", "B", "C", "D", "E"]
+# var e = ["C", "D", "A", "B", "E"]
+# assert kendall_tau(a, b) == 0
+# assert kendall_tau(a, c) == 3
+# assert kendall_tau(d, e) == 4
+# ~~~
+fun kendall_tau(ta, tb: Array[String]): Int do
+	var n = ta.length
+	assert n == tb.length
+
+	# Ranks
+	var pa = new HashMap[String, Int]
+	var pb = new HashMap[String, Int]
+	for i in [0 .. n[ do
+		pa[ta[i]] = i
+		pb[tb[i]] = i
+	end
+
+	var tau = 0
+	for i in [0 .. n[ do
+		for j in [i + 1 .. n[ do
+			if pb[ta[i]] > pb[ta[j]] then tau += 1
+		end
+	end
+	return tau
 end
 
 # build toolcontext
