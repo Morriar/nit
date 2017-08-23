@@ -19,6 +19,13 @@
 			</select>
 		</div>
 
+		<div class='form-group' ng-if='vm.allowedOrders.length > 1'>
+			<label>order by</label>
+			<select class='form-control' ng-model='vm.defaultOrder' ng-change='vm.order()'>
+				<option ng-repeat='algo in vm.allowedOrders'>{{algo}}</option>
+			</select>
+		</div>
+
 		<div class='form-group'>
 			<label>hide</label>
 			<ui-select-filters options='vm.filterOptions' selected='vm.filterSelected' class='form-group' />

@@ -39,9 +39,6 @@ class TestModelSerialization
 		mentities.add model.mpackages.first
 		mentities.add model.mmodules.first
 		mentities.add model.mclasses.first
-		for mentity in mentities do
-			print ((new MEntityRef(mentity)).to_pretty_full_json)
-		end
 	end
 
 	fun test_packages_to_full_json is test do
