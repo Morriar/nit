@@ -15,6 +15,7 @@
 module api_model
 
 import web_base
+import api_grouping
 import highlight
 import uml
 import model::model_index
@@ -70,6 +71,30 @@ class APIList
 		return mentities
 	end
 
+	fun group_mentities(req: HttpRequest, mentities: Array[MEntity]): Array[DocGroup] do
+		var req_group = req.string_arg("group_by")
+		var grouper: DocGroupBuilder
+		if req_group == "none" then
+			grouper = new NoneGroupBuilder
+		else if req_group == "kind" then
+			grouper = new KindGroupBuilder
+		else if req_group == "visibility" then
+			grouper = new VisibilityGroupBuilder
+		else if req_group == "intro-redef" then
+			grouper = new IntroRedefGroupBuilder
+		else if req_group == "package" then
+			grouper = new PackageGroupBuilder(config.view)
+		else if req_group == "module" then
+			grouper = new ModuleGroupBuilder(config.view)
+		else if req_group == "return" then
+			grouper = new ReturnGroupBuilder
+		else
+			grouper = new KindGroupBuilder
+		end
+		grouper.group_mentities(mentities)
+		return grouper.groups
+	end
+
 	# Filter mentities based on the config view filters
 	fun filter_mentities(req: HttpRequest, mentities: Array[MEntity], context: nullable MEntity): Array[MEntity] do
 		var filters = config.view.filters
@@ -91,27 +116,38 @@ class APIList
 	# Sort mentities by lexicographic order
 	#
 	# TODO choose order from request
-	fun sort_mentities(req: HttpRequest, mentities: Array[MEntity]): Array[MEntity] do
-		var sorted = mentities.to_a
+	fun sort_mentities(req: HttpRequest, groups: Array[DocGroup]): Array[DocGroup] do
 		var sorter = new MEntityNameSorter
-		sorter.sort(sorted)
-		return sorted
+		for group in groups do
+			sorter.sort(group.mentities)
+		end
+		return groups
 	end
 
 	# Limit mentities depending on the `n` parameter.
-	fun limit_mentities(req: HttpRequest, mentities: Array[MEntity]): Array[MEntity] do
+	fun limit_mentities(req: HttpRequest, groups: Array[DocGroup]): Array[DocGroup] do
 		var n = req.int_arg("n")
-		if n != null then
-			return mentities.sub(0, n)
+		if n == null then return groups
+
+		var res = new Array[DocGroup]
+		var limit = n
+		for group in groups do
+			if group.mentities.length > limit then
+				group.mentities = group.mentities.sub(0, limit)
+			end
+			limit -= group.mentities.length
+			if group.mentities.not_empty then res.add group
 		end
-		return mentities
+		return res
 	end
 
 	redef fun get(req, res) do
 		var mentities = list_mentities(req)
-		mentities = sort_mentities(req, mentities)
-		mentities = limit_mentities(req, mentities)
-		res.api_json(req, new JsonArray.from(mentities))
+		mentities = filter_mentities(req, mentities)
+		var groups = [new DocGroup.with_mentities(null, null, mentities)]
+		groups = sort_mentities(req, groups)
+		groups = limit_mentities(req, groups)
+		res.api_json(req, new JsonArray.from(groups))
 	end
 end
 
@@ -129,8 +165,9 @@ class APISearch
 		end
 		var page = req.int_arg("p")
 		var limit = req.int_arg("n")
-		var response = new JsonArray.from(search(query, limit))
-		res.api_json(req, paginate(response, response.length, page, limit))
+		var mentities = search(query, limit)
+		mentities = filter_mentities(req, mentities)
+		res.api_json(req, paginate(new JsonArray.from(mentities), mentities.length, page, limit))
 	end
 
 	fun search(query: String, limit: nullable Int): Array[MEntity] do
@@ -145,18 +182,21 @@ class APIRandom
 	super APIList
 
 	# Randomize mentities order.
-	fun randomize_mentities(req: HttpRequest, mentities: Array[MEntity]): Array[MEntity] do
-		var res = mentities.to_a
-		res.shuffle
-		return res
+	fun randomize_mentities(req: HttpRequest, groups: Array[DocGroup]): Array[DocGroup] do
+		groups.shuffle
+		for group in groups do
+			group.mentities.shuffle
+		end
+		return groups
 	end
 
 	redef fun get(req, res) do
 		var mentities = list_mentities(req)
 		mentities = filter_mentities(req, mentities)
-		mentities = randomize_mentities(req, mentities)
-		mentities = limit_mentities(req, mentities)
-		res.api_json(req, new JsonArray.from(mentities))
+		var groups = [new DocGroup.with_mentities(null, null, mentities)]
+		groups = randomize_mentities(req, groups)
+		groups = limit_mentities(req, groups)
+		res.api_json(req, new JsonArray.from(groups))
 	end
 end
 
@@ -197,12 +237,26 @@ end
 #
 # Example: `GET /entity/core::Array/inheritance`
 class APIEntityInheritance
-	super APIHandler
+	super APIList
 
 	redef fun get(req, res) do
 		var mentity = mentity_from_uri(req, res)
 		if mentity == null then return
-		res.api_json(req, mentity.hierarchy_poset(config.view)[mentity])
+
+		var pe = mentity.hierarchy_poset(config.view)[mentity]
+		var parents = filter_mentities(req, pe.direct_greaters.to_a)
+		var children = filter_mentities(req, pe.direct_smallers.to_a)
+
+		var groups = new Array[DocGroup]
+		if parents.not_empty then
+			groups.add new DocGroup.with_mentities("parents", "Parents", parents)
+		end
+		if children.not_empty then
+			groups.add new DocGroup.with_mentities("children", "Children", children)
+		end
+		groups = sort_mentities(req, groups)
+		groups = limit_mentities(req, groups)
+		res.api_json(req, new JsonArray.from(groups))
 	end
 end
 
@@ -220,9 +274,7 @@ class APIEntityLinearization
 			res.api_error(404, "No linearization for mentity `{mentity.full_name}`")
 			return
 		end
-		var mentities = new JsonArray
-		for e in lin do mentities.add e
-		res.api_json(req, mentities)
+		res.api_json(req, new JsonArray.from(lin.to_a))
 	end
 end
 
@@ -278,9 +330,10 @@ class APIEntityDefs
 			return
 		end
 		mentities = filter_mentities(req, mentities, mentity)
-		mentities = sort_mentities(req, mentities)
-		mentities = limit_mentities(req, mentities)
-		res.api_json(req, new JsonArray.from(mentities))
+		var groups = group_mentities(req, mentities)
+		groups = sort_mentities(req, groups)
+		groups = limit_mentities(req, groups)
+		res.api_json(req, new JsonArray.from(groups))
 	end
 end
 
@@ -351,7 +404,6 @@ end
 
 redef class HighlightVisitor
 	redef fun hrefto(mentity) do
-		print mentity.web_url
 		return mentity.web_url
 	end
 end

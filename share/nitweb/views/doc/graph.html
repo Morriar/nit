@@ -5,11 +5,8 @@
 		</div>
 	</div>
 
-	<!-- Parents -->
-	<entity-list list-title='Parents'
-		list-entities='vm.inh.direct_greaters' list-object-filter='{}' />
-
-	<!-- Children -->
-	<entity-list list-title='Children'
-		list-entities='vm.inh.direct_smallers' list-object-filter='{}' />
+	<div>
+		<entity-list ng-repeat='group in vm.inh'
+			list-title='group.name' list-entities='group.mentities' />
+	</div>
 </div>

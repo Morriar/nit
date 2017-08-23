@@ -138,14 +138,16 @@
 					controllerAs: 'vm',
 				})
 				.state('doc.entity.defs', {
-					url: '/defs?filters',
+					url: '/defs?filters&group_by',
 					templateUrl: 'views/doc/defs.html',
 					resolve: {
 						defs: function(Model, $q, $stateParams, $state) {
+							var grouping = $stateParams.group_by;
 							var d = $q.defer();
 							var filters = $stateParams.filters ? $stateParams.filters : '';
 							Model.loadEntityDefs($stateParams.id,
 								filters,
+								grouping ? grouping : 'heuristical',
 								d.resolve,
 								function() {
 									$state.go('404', null, { location: false })
@@ -216,8 +218,9 @@
 						.error(cbErr);
 				},
 
-				loadEntityDefs: function(id, filters_string, cb, cbErr) {
+				loadEntityDefs: function(id, filters_string, grouping, cb, cbErr) {
 					$http.get('/api/defs/' + id +
+						'?group_by=' + grouping + 
 						'&filters=' + filters_string)
 						.success(cb)
 						.error(cbErr);
@@ -342,7 +345,7 @@
 				scope: {
 					listEntities: '=',
 					listId: '@',
-					listTitle: '@'
+					listTitle: '='
 				},
 				templateUrl: '/directives/entity/list.html',
 				link: function ($scope, element, attrs) {

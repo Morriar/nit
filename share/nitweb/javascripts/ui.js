@@ -158,10 +158,24 @@
 				scope: {},
 				bindToController: {
 					allowedFilters: '=',
-					defaultFilters: '='
+					defaultFilters: '=',
+					allowedGroups: '=',
+					defaultGroup: '='
 				},
 				controller: function($scope, $state, $stateParams) {
 					var vm = this;
+
+					// Grouping
+
+					if($stateParams.group_by) {
+						vm.defaultGroup = $stateParams.group_by;
+					}
+
+					vm.group = function() {
+						$state.go('.', {group_by: vm.defaultGroup}, {reload: true});
+					};
+
+					// Filtering
 
 					vm.filterOptions = [];
 					for(fi in vm.allowedFilters) {
@@ -179,7 +193,7 @@
 
 					vm.filterText = '';
 					vm.minVisibility = 'protected';
-					vm.showFilters = $stateParams.filters;
+					vm.showFilters = $stateParams.filters || $stateParams.group_by;
 
 					vm.filterDefaults = [];
 					for(fi in vm.defaultFilters) {
@@ -247,18 +261,12 @@
 						$state.go('.', {filters: vm.filtersToString()}, {reload: true});
 					};
 
-					vm.group = function() {
-						$state.go('.', {group_by: vm.grouping}, {reload: true});
-					};
-
 					vm.visibility = function(visibility) {
 						vm.minVisibility = visibility;
 						vm.filter();
 					};
 
 					vm.filterSelected = vm.initFilters();
-					vm.groupingAlgos = [ 'none', 'kind', 'visibility', 'intro_redef', 'package', 'module', 'class', 'classdef', 'return' ];
-					vm.grouping = $stateParams.group_by ? $stateParams.group_by : 'kind';
 				},
 				controllerAs: 'vm',
 				replace: true,

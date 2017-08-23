@@ -1,9 +1,12 @@
-<div class='entity-list'>
-	<h3 id={{listId}}>
-		<span>{{listTitle}}</span>
-		<button class='btn btn-link btn-xs pull-right btn-filter' ng-click='toggleFilters()'>
-			<span class='glyphicon glyphicon-filter text-muted' />
-		</button>
+<div class='entity-list' id={{listId}}>
+	<h3 ng-if='listTitle'>
+		<entity-namespace namespace='listTitle.namespace' ng-if='listTitle.namespace' />
+		<entity-link mentity='listTitle' ng-if='!listTitle.namespace && listTitle.web_url' />
+		<small ng-if='listTitle.mdoc.html_synopsis'>
+			<br>
+			<span ng-bind-html='listTitle.mdoc.html_synopsis' />
+		</small>
+		<span ng-if='!listTitle.namespace && !listTitle.web_url'>{{listTitle}}</span>
 	</h3>
 	<div class='card-list'>
 		<entity-card mentity='mentity' ng-repeat='mentity in listEntities' />
