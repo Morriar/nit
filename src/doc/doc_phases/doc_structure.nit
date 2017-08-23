@@ -29,7 +29,7 @@ class StructurePhase
 	private var concerns_sorter = new MConcernRankSorter
 
 	# Used to sort ConcernsTree by name.
-	private var name_sorter = new MEntityNameSorter
+	private var name_sorter = new MEntityNameComparator
 
 	# Populates the given DocModel.
 	redef fun apply do

@@ -17,6 +17,7 @@ module test_neo
 
 import neo
 import model
+import model::model_sorters
 import frontend
 
 var test_id = "NIT_TESTING_ID".environ
@@ -56,7 +57,7 @@ var read_model = new NeoModel(test_name, toolcontext, read_client)
 read_model.load(neo_model)
 
 # Compare model
-var sorter = new MEntityNameSorter
+var sorter = new MEntityNameComparator
 
 print "# mpackages:"
 var org_mpackages = org_model.mpackages.to_a

@@ -36,7 +36,7 @@ class Nitx
 	var doc: DocModel
 
 	# Comparator used to sort MEntities.
-	var sorter = new MEntityNameSorter
+	var sorter = new MEntityNameComparator
 
 	# Displays the welcome message and start prompt.
 	fun start do

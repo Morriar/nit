@@ -23,7 +23,7 @@ class InheritanceListsPhase
 	super DocPhase
 
 	# Used to sort list by name.
-	var name_sorter = new MEntityNameSorter
+	var name_sorter = new MEntityNameComparator
 
 	redef fun apply do
 		for page in doc.pages.values do

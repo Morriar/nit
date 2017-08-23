@@ -117,7 +117,7 @@ class APIList
 	#
 	# TODO choose order from request
 	fun sort_mentities(req: HttpRequest, groups: Array[DocGroup]): Array[DocGroup] do
-		var sorter = new MEntityNameSorter
+		var sorter = new MEntityNameComparator
 		for group in groups do
 			sorter.sort(group.mentities)
 		end
