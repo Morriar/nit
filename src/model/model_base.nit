@@ -132,7 +132,7 @@ class MVisibility
 	super Comparable
 	redef type OTHER: MVisibility
 
-	redef var to_s: String
+	redef var to_s
 
 	private var level: Int
 
