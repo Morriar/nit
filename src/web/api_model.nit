@@ -71,11 +71,11 @@ class APIList
 		return mentities
 	end
 
-	fun group_mentities(req: HttpRequest, mentities: Array[MEntity]): Array[DocGroup] do
+	fun group_mentities(req: HttpRequest, mentities: Array[MEntity]): Array[DocGroup[MEntity]] do
 		var req_group = req.string_arg("group_by")
-		var grouper: DocGroupBuilder
+		var grouper: DocGroupBuilder[MEntity]
 		if req_group == "none" then
-			grouper = new NoneGroupBuilder
+			grouper = new NoneGroupBuilder[MEntity]
 		else if req_group == "kind" then
 			grouper = new KindGroupBuilder
 		else if req_group == "visibility" then
@@ -91,7 +91,7 @@ class APIList
 		else
 			grouper = new KindGroupBuilder
 		end
-		grouper.group_mentities(mentities)
+		grouper.group_elements(mentities)
 		return grouper.groups
 	end
 
@@ -116,7 +116,7 @@ class APIList
 	# Sort mentities by lexicographic order
 	#
 	# TODO choose order from request
-	fun sort_mentities(req: HttpRequest, groups: Array[DocGroup]): Array[DocGroup] do
+	fun sort_mentities(req: HttpRequest, groups: Array[DocGroup[MEntity]]): Array[DocGroup[MEntity]] do
 		var r = req.string_arg("order_by")
 		var sorter: MEntityComparator
 		if r == "none" then
@@ -142,24 +142,24 @@ class APIList
 		end
 		# TODO usage, mendel, pagerank
 		for group in groups do
-			sorter.sort(group.mentities)
+			sorter.sort(group.elements)
 		end
 		return groups
 	end
 
 	# Limit mentities depending on the `n` parameter.
-	fun limit_mentities(req: HttpRequest, groups: Array[DocGroup]): Array[DocGroup] do
+	fun limit_mentities(req: HttpRequest, groups: Array[DocGroup[MEntity]]): Array[DocGroup[MEntity]] do
 		var n = req.int_arg("n")
 		if n == null then return groups
 
-		var res = new Array[DocGroup]
+		var res = new Array[DocGroup[MEntity]]
 		var limit = n
 		for group in groups do
-			if group.mentities.length > limit then
-				group.mentities = group.mentities.sub(0, limit)
+			if group.elements.length > limit then
+				group.elements = group.elements.sub(0, limit)
 			end
-			limit -= group.mentities.length
-			if group.mentities.not_empty then res.add group
+			limit -= group.elements.length
+			if group.elements.not_empty then res.add group
 		end
 		return res
 	end
@@ -167,7 +167,7 @@ class APIList
 	redef fun get(req, res) do
 		var mentities = list_mentities(req)
 		mentities = filter_mentities(req, mentities)
-		var groups = [new DocGroup.with_mentities(null, null, mentities)]
+		var groups = [new DocGroup[MEntity].with_elements(null, null, mentities)]
 		groups = sort_mentities(req, groups)
 		groups = limit_mentities(req, groups)
 		res.api_json(req, new JsonArray.from(groups))
@@ -205,10 +205,10 @@ class APIRandom
 	super APIList
 
 	# Randomize mentities order.
-	fun randomize_mentities(req: HttpRequest, groups: Array[DocGroup]): Array[DocGroup] do
+	fun randomize_mentities(req: HttpRequest, groups: Array[DocGroup[MEntity]]): Array[DocGroup[MEntity]] do
 		groups.shuffle
 		for group in groups do
-			group.mentities.shuffle
+			group.elements.shuffle
 		end
 		return groups
 	end
@@ -216,7 +216,7 @@ class APIRandom
 	redef fun get(req, res) do
 		var mentities = list_mentities(req)
 		mentities = filter_mentities(req, mentities)
-		var groups = [new DocGroup.with_mentities(null, null, mentities)]
+		var groups = [new DocGroup[MEntity].with_elements(null, null, mentities)]
 		groups = randomize_mentities(req, groups)
 		groups = limit_mentities(req, groups)
 		res.api_json(req, new JsonArray.from(groups))
@@ -270,12 +270,12 @@ class APIEntityInheritance
 		var parents = filter_mentities(req, pe.direct_greaters.to_a)
 		var children = filter_mentities(req, pe.direct_smallers.to_a)
 
-		var groups = new Array[DocGroup]
+		var groups = new Array[DocGroup[MEntity]]
 		if parents.not_empty then
-			groups.add new DocGroup.with_mentities("parents", "Parents", parents)
+			groups.add new DocGroup[MEntity].with_elements("parents", "Parents", parents)
 		end
 		if children.not_empty then
-			groups.add new DocGroup.with_mentities("children", "Children", children)
+			groups.add new DocGroup[MEntity].with_elements("children", "Children", children)
 		end
 		groups = sort_mentities(req, groups)
 		groups = limit_mentities(req, groups)

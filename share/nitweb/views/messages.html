@@ -1,0 +1,11 @@
+<div class='container-fluid'>
+	<div class='page-header'>
+		<h2>Messages</h2>
+		<div ng-repeat='group in vm.messages'>
+			<h3 ng-if='group.name'>{{group.name}}</h3>
+			<div class='card-list'>
+				<compiler-message message='message' ng-repeat='message in group.elements' />
+			</div>
+		</div>
+	</div>
+</div>

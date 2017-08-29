@@ -21,7 +21,7 @@ class TestText
 		new FlatBufferFactory
 	: TextFactory]
 
-	fun test_escape_to_c is test do
+	fun test_escape_to_c is test, foo do
 		for f in factories do
 			assert f.create("abAB12<>&").escape_to_c       == "abAB12<>&"
 			assert f.create("\n\"'\\").escape_to_c         == "\\n\\\"\\'\\\\"

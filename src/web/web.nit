@@ -23,6 +23,7 @@ import api_docdown
 import api_metrics
 import api_feedback
 import api_light
+import api_messages
 
 redef class APIRouter
 	redef init do

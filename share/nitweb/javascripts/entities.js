@@ -246,6 +246,7 @@
 						.success(cb)
 						.error(cbErr);
 				},
+
 				search: function(q, p, n, filters, cb, cbErr) {
 					$http.get('/api/search?q=' + q + '&p=' + p + '&n=' + n +
 						'&filters=' + filters)

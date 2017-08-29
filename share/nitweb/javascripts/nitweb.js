@@ -15,7 +15,7 @@
  */
 
 (function() {
-	angular.module('nitweb', ['ui.router', 'ngSanitize', 'angular-loading-bar', 'catalog', 'entities', 'docdown', 'metrics', 'users', 'grades', 'angularjs-dropdown-multiselect'])
+	angular.module('nitweb', ['ui.router', 'ngSanitize', 'angular-loading-bar', 'catalog', 'entities', 'docdown', 'metrics', 'users', 'grades', 'messages', 'angularjs-dropdown-multiselect'])
 
 	.config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
 		cfpLoadingBarProvider.includeSpinner = false;

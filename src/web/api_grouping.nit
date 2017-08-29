@@ -16,44 +16,44 @@ module api_grouping
 
 import web_base
 
-class DocGroup
+class DocGroup[E]
 	serialize
 
 	var id: nullable String is writable
 	var name: nullable Serializable is writable
-	var subgroups = new Array[DocGroup] is writable
-	var mentities = new Array[MEntity] is writable
+	var subgroups = new Array[DocGroup[E]] is writable
+	var elements = new Array[E] is writable
 
-	init with_mentities(id: nullable String, name: nullable Serializable, mentities: Array[MEntity]) do
+	init with_elements(id: nullable String, name: nullable Serializable, elements: Array[E]) do
 		init(id, name)
-		self.mentities = mentities
+		self.elements = elements
 	end
 end
 
-abstract class DocGroupBuilder
+abstract class DocGroupBuilder[E]
 	super Comparator
 
-	redef type COMPARED: DocGroup
+	redef type COMPARED: DocGroup[E]
 
-	private var index = new HashMap[nullable Serializable, DocGroup]
+	private var index = new HashMap[nullable Serializable, DocGroup[E]]
 
-	fun group_mentities(mentities: Array[MEntity]) do
-		for mentity in mentities do group_mentity(mentity)
+	fun group_elements(elements: Array[E]) do
+		for element in elements do group_element(element)
 	end
 
-	fun group_mentity(mentity: MEntity) do
-		var group = group_for(mentity)
-		group.mentities.add mentity
+	fun group_element(element: E) do
+		var group = group_for(element)
+		group.elements.add element
 	end
 
-	fun group_for(mentity: MEntity): DocGroup is abstract
+	fun group_for(element: E): DocGroup[E] is abstract
 
-	fun group(id: nullable String, name: nullable Serializable): DocGroup do
-		if not index.has_key(name) then index[name] = new DocGroup(id, name)
+	fun group(id: nullable String, name: nullable Serializable): DocGroup[E] do
+		if not index.has_key(name) then index[name] = new DocGroup[E](id, name)
 		return index[name]
 	end
 
-	fun groups: Array[DocGroup] do
+	fun groups: Array[DocGroup[E]] do
 		var groups = index.values.to_a
 		sort(groups)
 		return groups
@@ -69,14 +69,14 @@ abstract class DocGroupBuilder
 	end
 end
 
-class NoneGroupBuilder
-	super DocGroupBuilder
+class NoneGroupBuilder[E]
+	super DocGroupBuilder[E]
 
-	redef fun group_for(mentity) do return group(null, null)
+	redef fun group_for(element) do return group(null, null)
 end
 
 class KindGroupBuilder
-	super DocGroupBuilder
+	super DocGroupBuilder[MEntity]
 
 	redef fun group_for(mentity) do
 		if mentity isa MPackage then return group("packages", "Packages")
@@ -122,7 +122,7 @@ class KindGroupBuilder
 end
 
 class VisibilityGroupBuilder
-	super DocGroupBuilder
+	super DocGroupBuilder[MEntity]
 
 	redef fun group_for(mentity) do return group(mentity.visibility.to_s, mentity.visibility.to_s)
 
@@ -139,7 +139,7 @@ class VisibilityGroupBuilder
 end
 
 class IntroRedefGroupBuilder
-	super DocGroupBuilder
+	super DocGroupBuilder[MEntity]
 
 	redef fun group_for(mentity) do
 		if mentity isa MClassDef then
@@ -160,7 +160,7 @@ class IntroRedefGroupBuilder
 end
 
 class PackageGroupBuilder
-	super DocGroupBuilder
+	super DocGroupBuilder[MEntity]
 
 	var view: ModelView
 
@@ -223,7 +223,7 @@ class ClassDefGroupBuilder
 end
 
 class ReturnGroupBuilder
-	super DocGroupBuilder
+	super DocGroupBuilder[MEntity]
 
 	redef fun group_for(mentity) do
 		if mentity isa MProperty then return group_for(mentity.intro)
