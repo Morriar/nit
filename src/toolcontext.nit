@@ -205,6 +205,7 @@ class ToolContext
 		if level <= verbose_level then
 			print "{s}"
 		end
+		var log_info = self.log_info
 		if log_info != null then
 			log_info.write s
 			log_info.write "\n"
@@ -440,7 +441,7 @@ The Nit language documentation and the source code of its tools and libraries ma
 	var share_dir: String is lazy do
 		var sharedir = opt_share_dir.value
 		if sharedir == null then
-			sharedir = nit_dir / "share"
+			sharedir = (nit_dir or else "") / "share"
 			if not sharedir.file_exists then
 				fatal_error(null, "Fatal Error: cannot locate shared files directory in {sharedir}. Uses --share-dir to define it's location.")
 			end
@@ -535,6 +536,7 @@ end
 class BashCompletion
 	super Template
 
+	# ToolContext to read options from
 	var toolcontext: ToolContext
 
 	private fun extract_options_names: Array[String] do
