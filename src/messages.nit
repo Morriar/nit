@@ -15,6 +15,7 @@
 # Tools messages
 module messages
 
+import model
 import location
 
 # A warning or an error
@@ -128,3 +129,78 @@ redef class SourceFile
 	var messages = new Array[Message]
 end
 
+redef class MEntity
+
+	# Errors and warnings associated with `self`.
+	fun messages: Array[Message] do return new Array[Message]
+end
+
+redef class MPackage
+	redef fun messages do
+		var res = new HashSet[Message]
+		for mgroup in mgroups do res.add_all mgroup.messages
+		return res.to_a
+	end
+end
+
+redef class MGroup
+	redef fun messages do
+		var res = new HashSet[Message]
+		for mgroup in in_nesting.smallers do
+			if mgroup == self then continue
+			res.add_all mgroup.messages
+		end
+		for mmodule in mmodules do res.add_all mmodule.messages
+		return res.to_a
+	end
+end
+
+redef class MModule
+	redef fun messages do
+		var source = location.file
+		if source == null then return super
+		return source.messages
+	end
+end
+
+redef class MClass
+	redef fun messages do
+		var res = super
+		for mclassdef in mclassdefs do res.add_all mclassdef.messages
+		return res
+	end
+end
+
+redef class MClassDef
+	redef fun messages do
+		var res = super
+		for message in mmodule.messages do
+			var mloc = message.location
+			if mloc == null then continue
+			if not mloc.located_in(location) then continue
+			res.add message
+		end
+		return res
+	end
+end
+
+redef class MProperty
+	redef fun messages do
+		var res = super
+		for mpropdef in mpropdefs do res.add_all mpropdef.messages
+		return res
+	end
+end
+
+redef class MPropDef
+	redef fun messages do
+		var res = super
+		for message in mclassdef.messages do
+			var mloc = message.location
+			if mloc == null then continue
+			if not mloc.located_in(location) then continue
+			res.add message
+		end
+		return res
+	end
+end
