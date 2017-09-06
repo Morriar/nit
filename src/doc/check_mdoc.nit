@@ -86,6 +86,18 @@ private class MDocPhase
 				toolcontext.modelbuilder.advice(npropdef, "missing-example",
 					"Documentation warning: No example provided for public property `{mproperty}`")
 			end
+			if npropdef isa AMethPropdef then
+				var n_signature = npropdef.n_signature
+				if n_signature != null then
+					for param in n_signature.n_params do
+						var pname = param.n_id.text
+						if not v.refs_to.has(pname) then
+							toolcontext.modelbuilder.advice(param, "missing-doc",
+								"Documentation warning: Undocumented parameter `{pname}`")
+						end
+					end
+				end
+			end
 		else if ndoc == null and mpropdef.is_intro and mproperty.visibility >= protected_visibility and mpropdef.name != "new" then
 			toolcontext.modelbuilder.advice(npropdef, "missing-doc",
 				"Documentation warning: Undocumented property `{mpropdef.mproperty}`")
@@ -100,7 +112,20 @@ private class CheckMDocDecorator
 
 	var has_example = false
 
+	var refs_to = new HashSet[String]
+
 	redef fun add_code(v, block) do
 		has_example = true
+	end
+
+	redef fun add_span_code(v, text, from, to) do
+		var code = code_from_text(text, from, to)
+		refs_to.add code
+	end
+
+	fun code_from_text(buffer: Text, from, to: Int): String do
+		var out = new FlatBuffer
+		for i in [from..to[ do out.add buffer[i]
+		return out.write_to_string
 	end
 end
