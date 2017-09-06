@@ -34,6 +34,10 @@ private class MDocPhase
 		var text = ndoc.to_mdoc.content.join("\n")
 		proc.process(text)
 
+		var re = new Regex("returns?")
+		re.ignore_case = true
+		if text.has(re) then decorator.has_return = true
+
 		return decorator
 	end
 
@@ -97,6 +101,11 @@ private class MDocPhase
 			if npropdef isa AMethPropdef then
 				var n_signature = npropdef.n_signature
 				if n_signature != null then
+					var ret = n_signature.n_type
+					if ret != null and not v.has_return then
+						toolcontext.modelbuilder.advice(ret, "missing-doc",
+							"Documentation warning: Undocumented return type for `{mproperty}`")
+					end
 					for param in n_signature.n_params do
 						var pname = param.n_id.text
 						if not v.refs_to.has(pname) then
@@ -119,6 +128,8 @@ private class CheckMDocDecorator
 	var toolcontext: ToolContext
 
 	var has_example = false
+
+	var has_return = false
 
 	var refs_to = new HashSet[String]
 
