@@ -18,6 +18,7 @@ module check_mdoc
 import modelize_class
 import modelize_property
 import markdown
+private import parser_util
 
 redef class ToolContext
 	var mdoc_phase: Phase = new MDocPhase(self, [modelize_class_phase, modelize_property_phase])
@@ -33,6 +34,12 @@ private class MDocPhase
 
 		var text = ndoc.to_mdoc.content.join("\n")
 		proc.process(text)
+
+		for error in decorator.errors do
+			# TODO better location
+			toolcontext.modelbuilder.advice(ndoc, "uncompilable-example",
+				"Documentation warning: uncompilable example with cause \"{error.message}\"")
+		end
 
 		var re = new Regex("returns?")
 		re.ignore_case = true
@@ -133,8 +140,20 @@ private class CheckMDocDecorator
 
 	var refs_to = new HashSet[String]
 
+	var errors = new Array[MdCodeError]
+
 	redef fun add_code(v, block) do
 		has_example = true
+
+		# Try to parse code
+		var meta = block.meta or else "nit"
+		if meta != "nit" and meta != "nitish" then return
+		var code = block.raw_content
+		var ast = toolcontext.parse_something(code)
+		if ast isa AError then
+			# TODO semantic analysis
+			errors.add new MdCodeError(ast.message)
+		end
 	end
 
 	redef fun add_span_code(v, text, from, to) do
@@ -147,4 +166,8 @@ private class CheckMDocDecorator
 		for i in [from..to[ do out.add buffer[i]
 		return out.write_to_string
 	end
+end
+
+private class MdCodeError
+	var message: String
 end
