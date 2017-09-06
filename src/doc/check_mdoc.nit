@@ -13,6 +13,11 @@
 # limitations under the License.
 
 # Check the documentation of all modules, classes and properties.
+#
+# TODO
+# * check class initialization example
+# * check method call example
+# * check doc down and doc commands warnings
 module check_mdoc
 
 import modelize_class
