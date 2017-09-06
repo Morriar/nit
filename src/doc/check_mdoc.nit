@@ -77,7 +77,7 @@ private class MDocPhase
 				end
 			else if ndoc == null and mclassdef.is_intro and mclass.visibility >= public_visibility then
 				toolcontext.modelbuilder.advice(nclassdef, "missing-doc",
-					"Documentation warning: Undocumented public class `{mclass}`")
+					"Documentation warning: Undocumented public {mclass.kind} `{mclass}`")
 			end
 		end
 	end
