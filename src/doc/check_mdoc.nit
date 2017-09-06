@@ -67,6 +67,14 @@ private class MDocPhase
 					toolcontext.modelbuilder.advice(nclassdef, "missing-example",
 						"Documentation warning: No example provided for public class `{mclass}`")
 				end
+				var n_formaldefs = nclassdef.n_formaldefs
+				for n_formaldef in n_formaldefs do
+					var pname = n_formaldef.n_id.text
+					if not v.refs_to.has(pname) then
+						toolcontext.modelbuilder.advice(n_formaldef, "missing-doc",
+							"Documentation warning: Undocumented formal parameter `{pname}`")
+					end
+				end
 			else if ndoc == null and mclassdef.is_intro and mclass.visibility >= public_visibility then
 				toolcontext.modelbuilder.advice(nclassdef, "missing-doc",
 					"Documentation warning: Undocumented public class `{mclass}`")
