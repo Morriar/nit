@@ -17,6 +17,7 @@ module check_mdoc
 
 import modelize_class
 import modelize_property
+import markdown
 
 redef class ToolContext
 	var mdoc_phase: Phase = new MDocPhase(self, [modelize_class_phase, modelize_property_phase])
@@ -25,6 +26,33 @@ end
 private class MDocPhase
 	super Phase
 
+	fun process_mdoc(ndoc: ADoc): CheckMDocDecorator do
+		var proc = new MarkdownProcessor
+		var decorator = new CheckMDocDecorator(toolcontext)
+		proc.emitter.decorator = decorator
+
+		var text = ndoc.to_mdoc.content.join("\n")
+		proc.process(text)
+
+		return decorator
+	end
+
+	redef fun process_nmodule(nmodule) do
+		var mmodule = nmodule.mmodule
+		if mmodule == null then return
+
+		var ndecl = nmodule.n_moduledecl
+		if ndecl == null then return
+
+		var ndoc = ndecl.n_doc
+		if ndoc == null then return
+
+		var v = process_mdoc(ndoc)
+		if not v.has_example then
+			toolcontext.modelbuilder.advice(nmodule, "missing-example",
+				"Documentation warning: No example provided for module `{mmodule}`")
+		end
+	end
 
 	redef fun process_nclassdef(nclassdef) do
 		var mclassdef = nclassdef.mclassdef
@@ -33,7 +61,13 @@ private class MDocPhase
 
 		if nclassdef isa AStdClassdef then
 			var ndoc = nclassdef.n_doc
-			if ndoc == null and mclassdef.is_intro and mclass.visibility >= public_visibility then
+			if ndoc != null and mclassdef.is_intro and mclass.visibility >= public_visibility then
+				var v = process_mdoc(ndoc)
+				if not v.has_example then
+					toolcontext.modelbuilder.advice(nclassdef, "missing-example",
+						"Documentation warning: No example provided for public class `{mclass}`")
+				end
+			else if ndoc == null and mclassdef.is_intro and mclass.visibility >= public_visibility then
 				toolcontext.modelbuilder.advice(nclassdef, "missing-doc",
 					"Documentation warning: Undocumented public class `{mclass}`")
 			end
@@ -46,9 +80,27 @@ private class MDocPhase
 		var mproperty = mpropdef.mproperty
 
 		var ndoc = npropdef.n_doc
-		if ndoc == null and mpropdef.is_intro and mproperty.visibility >= protected_visibility and mpropdef.name != "new" then
+		if ndoc != null and mpropdef.is_intro and mproperty.visibility >= protected_visibility then
+			var v = process_mdoc(ndoc)
+			if not v.has_example then
+				toolcontext.modelbuilder.advice(npropdef, "missing-example",
+					"Documentation warning: No example provided for public property `{mproperty}`")
+			end
+		else if ndoc == null and mpropdef.is_intro and mproperty.visibility >= protected_visibility and mpropdef.name != "new" then
 			toolcontext.modelbuilder.advice(npropdef, "missing-doc",
 				"Documentation warning: Undocumented property `{mpropdef.mproperty}`")
 		end
+	end
+end
+
+private class CheckMDocDecorator
+	super HTMLDecorator
+
+	var toolcontext: ToolContext
+
+	var has_example = false
+
+	redef fun add_code(v, block) do
+		has_example = true
 	end
 end
