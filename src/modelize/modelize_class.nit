@@ -172,8 +172,6 @@ redef class ModelBuilder
 				var mdoc = ndoc.to_mdoc
 				mclassdef.mdoc = mdoc
 				mdoc.original_mentity = mclassdef
-			else if mclassdef.is_intro and mclass.visibility >= public_visibility then
-				advice(nclassdef, "missing-doc", "Documentation warning: Undocumented public class `{mclass}`")
 			end
 		end
 
