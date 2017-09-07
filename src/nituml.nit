@@ -30,9 +30,11 @@ redef class ToolContext
 	# Generate private?
 	var opt_privacy = new OptionBool("Generates private API", "-p", "--private")
 
+	# Show result with dot
+	var opt_show = new OptionBool("Show result with dot", "-s", "--show")
+
 	redef init do
-		option_context.add_option opt_gen
-		option_context.add_option opt_privacy
+		option_context.add_option(opt_gen, opt_privacy, opt_show)
 		super
 	end
 end
@@ -48,10 +50,22 @@ private class UMLPhase
 
 		var d = new UMLModel(toolcontext.modelbuilder.model, mainmodule, filters)
 		if toolcontext.opt_gen.value == 0 then
-			print d.generate_class_uml.write_to_string
+			var dot = d.generate_class_uml.write_to_string
+			print dot
+			if toolcontext.opt_show.value then show_dot(dot)
 		else if toolcontext.opt_gen.value == 1 then
-			print d.generate_package_uml.write_to_string
+			var dot = d.generate_package_uml.write_to_string
+			print dot
+			if toolcontext.opt_show.value then show_dot(dot)
 		end
+	end
+
+	# Show dot in graphviz (blocking)
+	fun show_dot(dot: Writable) do
+		var f = new ProcessWriter("dot", "-Txlib")
+		f.write dot.write_to_string
+		f.close
+		f.wait
 	end
 end
 
