@@ -98,8 +98,8 @@ redef class MClass
 			t.add "];\n"
 		end
 		return t
-	end
 
+	end
 end
 
 redef class MMethod
