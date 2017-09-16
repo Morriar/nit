@@ -102,7 +102,11 @@ redef class MClass
 	end
 end
 
-redef class MMethod
+redef class MProperty
+	redef fun to_uml(model) do return intro.to_uml(model)
+end
+
+redef class MMethodDef
 	redef fun to_uml(model) do
 		var tpl = new Template
 		if model.show_visibility then
@@ -110,7 +114,7 @@ redef class MMethod
 			tpl.add " "
 		end
 		tpl.add name.escape_to_dot
-		var msignature = intro.msignature
+		var msignature = msignature
 		if msignature != null then
 			tpl.add msignature.to_uml(model)
 		end
@@ -140,7 +144,7 @@ redef class MSignature
 	end
 end
 
-redef class MAttribute
+redef class MAttributeDef
 	redef fun to_uml(model) do
 		var tpl = new Template
 		if model.show_visibility then
@@ -150,7 +154,7 @@ redef class MAttribute
 		tpl.add name.escape_to_dot
 		if model.show_types then
 			tpl.add ": "
-			tpl.add intro.static_mtype.as(not null).to_uml(model)
+			tpl.add static_mtype.as(not null).to_uml(model)
 		end
 		return tpl
 	end

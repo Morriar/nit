@@ -97,14 +97,14 @@ redef class MClassDef
 		for i in mpropdefs do
 			if not i isa MAttributeDef then continue
 			if not model.filter.accept_mentity(i) then continue
-			t.add i.tpl_module(model)
+			t.add i.to_uml(model)
 			t.add "\\l"
 		end
 		t.add "|"
 		for i in mpropdefs do
 			if not i isa MMethodDef then continue
 			if not model.filter.accept_mentity(i) then continue
-			t.add i.tpl_module(model)
+			t.add i.to_uml(model)
 			t.add "\\l"
 		end
 		t.add "\}\""
@@ -125,29 +125,6 @@ redef class MClassDef
 			end
 			t.add "]\n"
 		end
-		return t
-	end
-end
-
-redef class MMethodDef
-	redef fun tpl_module(model) do
-		var t = new Template
-		t.add mproperty.visibility.to_uml
-		t.add " "
-		t.add name.escape_to_dot
-		t.add msignature.to_uml(model)
-		return t
-	end
-end
-
-redef class MAttributeDef
-	redef fun tpl_module(model) do
-		var t = new Template
-		t.add mproperty.visibility.to_uml
-		t.add " "
-		t.add name
-		t.add ": "
-		t.add static_mtype.to_uml(model)
 		return t
 	end
 end
