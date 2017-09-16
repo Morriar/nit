@@ -41,6 +41,16 @@ class UMLModel
 
 	# Show types for attributes, methods and in signatures
 	var show_types = true
+
+	# Colour for the border of a class when first introduced
+	#
+	# Defaults to a shade of green
+	var intro_colour = "#58B26A"
+
+	# Colour for the border of a class when refined
+	#
+	# Defaults to a shade of red
+	var redef_colour = "#B24758"
 end
 
 redef class MEntity

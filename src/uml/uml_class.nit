@@ -45,7 +45,6 @@ redef class UMLModel
 end
 
 redef class MClass
-
 	redef fun to_uml(model) do
 		var name = name.escape_to_dot
 		var t = new Template

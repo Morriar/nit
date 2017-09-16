@@ -34,26 +34,21 @@ redef class UMLModel
 				fontname = "Bitstream Vera Sans"
 				fontsize = 8
 			]\n"""
-		tpl.add mainmodule.tpl_module(self)
+		tpl.add mainmodule.to_uml(self)
 		tpl.add "\}"
 		return tpl
 	end
 end
 
-redef class MEntity
-	# Builds a dot UML package diagram entity from `self`
-	fun tpl_module(model: UMLModel): Writable is abstract
-end
-
 redef class MModule
-	redef fun tpl_module(model) do
+	redef fun to_uml(model) do
 		var name = self.name.escape_to_dot
 		var t = new Template
 		t.add "subgraph cluster{name} \{\n"
 		t.add "label = \"{name}\"\n"
 		for i in mclassdefs do
 			if not model.filter.accept_mentity(i) then continue
-			t.add i.tpl_module(model)
+			t.add i.to_uml(model)
 		end
 		t.add "\}\n"
 		return t
@@ -62,17 +57,7 @@ end
 
 redef class MClassDef
 
-	# Colour for the border of a class when first introduced
-	#
-	# Defaults to a shade of green
-	var intro_colour = "#58B26A"
-
-	# Colour for the border of a class when refined
-	#
-	# Defaults to a shade of red
-	var redef_colour = "#B24758"
-
-	redef fun tpl_module(model) do
+	redef fun to_uml(model) do
 		var name = self.name.escape_to_dot
 		var t = new Template
 		t.add "{mmodule.name.escape_to_dot}{name} [\n\tlabel = \"\{"
@@ -109,12 +94,12 @@ redef class MClassDef
 		end
 		t.add "\}\""
 		if is_intro then
-			t.add "color=\"{intro_colour}\""
+			t.add "color=\"{model.intro_colour}\""
 		else
-			t.add "color=\"{redef_colour}\""
+			t.add "color=\"{model.redef_colour}\""
 		end
 		t.add "\n]\n"
-		var supers = in_hierarchy.direct_greaters
+		var supers = collect_parents(model.view)
 		for i in supers do
 			if i.mmodule != mmodule then continue
 			t.add "{i.mmodule}{i.name} -> {mmodule}{name} [dir=back"
