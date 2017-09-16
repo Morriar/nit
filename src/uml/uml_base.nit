@@ -30,3 +30,8 @@ class UMLModel
 	# Filters to apply on model if any
 	var filter: nullable ModelFilter
 end
+
+redef class MEntity
+	# Generates a dot-compatible `Writable` UML Class diagram from `self`
+	fun to_uml(model: UMLModel): Writable is abstract
+end

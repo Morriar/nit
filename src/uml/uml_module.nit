@@ -132,10 +132,10 @@ end
 redef class MMethodDef
 	redef fun tpl_module(model) do
 		var t = new Template
-		t.add mproperty.visibility.tpl_class
+		t.add mproperty.visibility.to_uml
 		t.add " "
 		t.add name.escape_to_dot
-		t.add msignature.tpl_class(model)
+		t.add msignature.to_uml(model)
 		return t
 	end
 end
@@ -143,11 +143,11 @@ end
 redef class MAttributeDef
 	redef fun tpl_module(model) do
 		var t = new Template
-		t.add mproperty.visibility.tpl_class
+		t.add mproperty.visibility.to_uml
 		t.add " "
 		t.add name
 		t.add ": "
-		t.add static_mtype.tpl_class(model)
+		t.add static_mtype.to_uml(model)
 		return t
 	end
 end
