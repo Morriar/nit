@@ -12,12 +12,43 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Group head module for UML generation services
+# Exposes the base class for UML generation of a `Model`
 module uml
 
-import uml_base
+import toolcontext
+import model::model_collect
 
-redef class UMLModel
+# UML model builder.
+class UMLModel
+
+	# Model view
+	var view: ModelView
+
+	# Main module used for linearization.
+	var mainmodule: MModule
+
+	# Show class attributes
+	var show_attributes = true
+
+	# Show class methods
+	var show_methods = true
+
+	# Show classes and properties visibility
+	var show_visibility = true
+
+	# Show types for attributes, methods and in signatures
+	var show_types = true
+
+	# Colour for the border of a class when first introduced
+	#
+	# Defaults to a shade of green
+	var intro_colour = "#58B26A"
+
+	# Colour for the border of a class when refined
+	#
+	# Defaults to a shade of red
+	var redef_colour = "#B24758"
+
 	# Generates a UML class diagram from a `Model`
 	fun generate_class_uml: Writable do
 		var tpl = new Template
@@ -62,6 +93,11 @@ redef class UMLModel
 		return tpl
 	end
 
+end
+
+redef class MEntity
+	# Generates a dot-compatible `Writable` UML Class diagram from `self`
+	fun to_uml(model: UMLModel): Writable is abstract
 end
 
 redef class MModule
