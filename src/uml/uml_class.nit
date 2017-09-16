@@ -50,13 +50,13 @@ redef class MClass
 		var name = name.escape_to_dot
 		var t = new Template
 		t.add "{name} [\n label = \"\{"
-		if kind == abstract_kind then
-			t.add "abstract\\n{name}"
-		else if kind == interface_kind then
-			t.add "interface\\n{name}"
+		if kind == abstract_kind or kind == interface_kind or
+		   kind == enum_kind or kind == extern_kind then
+			t.add "{kind.to_uml}\\n{name}"
 		else
-			t.add "{name}"
+			t.add name
 		end
+
 		if arity > 0 then
 			t.add "["
 			for i in [0..mparameters.length[ do
@@ -218,5 +218,23 @@ redef class MNullableType
 		t.add "nullable "
 		t.add mtype.to_uml(model)
 		return t
+	end
+end
+
+redef class MClassKind
+
+	# Returns the UML representation of `self`
+	fun to_uml: Writable do
+		if self == abstract_kind then
+			return "&lt;&lt;abstract&gt;&gt;"
+		else if self == interface_kind then
+			return "&lt;&lt;interface&gt;&gt;"
+		else if self == enum_kind then
+			return "&lt;&lt;enum&gt;&gt;"
+		else if self == extern_kind then
+			return "&lt;&lt;extern&gt;&gt;"
+		else
+			return ""
+		end
 	end
 end
