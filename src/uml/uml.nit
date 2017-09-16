@@ -39,15 +39,26 @@ class UMLModel
 	# Show types for attributes, methods and in signatures
 	var show_types = true
 
-	# Colour for the border of a class when first introduced
+	# Stereotypes to display in italic
+	var special_kinds: Array[MClassKind] = [abstract_kind, interface_kind, enum_kind, extern_kind]
+
+	# Use colors in output?
+	var show_colors = false
+
+	# Color for the border of a public class or text of a property
 	#
 	# Defaults to a shade of green
-	var intro_colour = "#58B26A"
+	var public_color = "#58B26A"
 
-	# Colour for the border of a class when refined
+	# Color for the border of a private class or text of a property
+	#
+	# Defaults to a shade of orange
+	var protected_color = "orange"
+
+	# Color for the border of a private class or text of a property
 	#
 	# Defaults to a shade of red
-	var redef_colour = "#B24758"
+	var private_color = "#B24758"
 
 	# Generates a UML class diagram from a `Model`
 	fun generate_class_uml: Writable do
@@ -116,17 +127,28 @@ redef class MModule
 end
 
 redef class MClass
-	redef fun to_uml(model) do
-		var name = name.escape_to_dot
-		var t = new Template
-		t.add "{name} [\n label = \"\{"
-		if kind == abstract_kind or kind == interface_kind or
-		   kind == enum_kind or kind == extern_kind then
-			t.add "{kind.to_uml}\\n{name}"
-		else
-			t.add name
-		end
 
+	private fun to_uml_header(model: UMLModel): Writable do
+		var t = new Template
+		t.add "<TR><TD>"
+		if model.show_colors then
+			if visibility == public_visibility then
+				t.add "<FONT COLOR=\"{model.public_color}\">"
+			else if visibility == protected_visibility then
+				t.add "<FONT COLOR=\"{model.protected_color}\">"
+			else if visibility == private_visibility then
+				t.add "<FONT COLOR=\"{model.private_color}\">"
+			end
+		end
+		if model.special_kinds.has(kind) then
+			t.add "{kind.to_uml}<BR/><I>"
+		end
+		t.add "<B>"
+		if model.show_visibility and visibility == private_visibility then
+			t.add visibility.to_uml
+			t.add " "
+		end
+		t.add name.escape_to_dot
 		if arity > 0 then
 			t.add "["
 			for i in [0..mparameters.length[ do
@@ -135,27 +157,56 @@ redef class MClass
 			end
 			t.add "]"
 		end
+		t.add "</B>"
+		if model.special_kinds.has(kind) then
+			t.add "</I>"
+		end
+		if model.show_colors then
+			t.add "</FONT>"
+		end
+		t.add "</TD></TR>"
+		return t
+	end
+
+	redef fun to_uml(model) do
+		var name = name.escape_to_dot
+		var t = new Template
+		t.add "{name} [\n label = <"
+		t.add "<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLPADDING=\"2\" CELLSPACING=\"0\">"
+		t.add to_uml_header(model)
 		if model.show_attributes then
 			var mattributes = collect_intro_mattributes(model.view)
 			if mattributes.not_empty then
-				t.add "|"
+				t.add "<TR><TD ALIGN=\"LEFT\" BALIGN=\"LEFT\">"
 				for i in mattributes do
 					t.add i.to_uml(model)
-					t.add "\\l"
+					t.add "<BR/>"
 				end
+				t.add "</TD></TR>"
 			end
 		end
 		if model.show_methods then
 			var mmethods = collect_intro_mmethods(model.view)
 			if mmethods.not_empty then
-				t.add "|"
+				t.add "<TR><TD ALIGN=\"LEFT\" BALIGN=\"LEFT\">"
 				for i in mmethods do
 					t.add i.to_uml(model)
-					t.add "\\l"
+					t.add "<BR/>"
 				end
+				t.add "</TD></TR>"
 			end
 		end
-		t.add "\}\"\n]\n"
+		t.add "</TABLE>>"
+		if model.show_colors then
+			if visibility == private_visibility then
+				t.add "color=\"{model.private_color}\""
+			else
+				t.add "color=\"{model.public_color}\""
+			end
+		end
+		t.add "shape=\"none\""
+		t.add "margin=0"
+		t.add "\n]\n"
 		for i in collect_parents(model.view) do
 			t.add "{i.name.escape_to_dot} -> {name} [dir=back"
 			if i.kind == interface_kind then
@@ -166,7 +217,6 @@ redef class MClass
 			t.add "];\n"
 		end
 		return t
-
 	end
 end
 
@@ -175,44 +225,41 @@ redef class MClassDef
 	redef fun to_uml(model) do
 		var name = self.name.escape_to_dot
 		var t = new Template
-		t.add "{mmodule.name.escape_to_dot}{name} [\n\tlabel = \"\{"
-		if mclass.kind == abstract_kind then
-			t.add "abstract\\n{name}"
-		else if mclass.kind == interface_kind then
-			t.add "interface\\n{name}"
-		else
-			t.add "{name}"
-		end
-		if mclass.arity > 0 then
-			t.add "["
-			var mparameters = mclass.mparameters
-			t.add mparameters.first.name
-			for i in [1 .. mparameters.length[ do
-				t.add ", "
-				t.add mparameters[i].name
+		t.add "{mmodule.name.escape_to_dot}{name} [\n\tlabel = <"
+		t.add "<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLPADDING=\"2\" CELLSPACING=\"0\">"
+		t.add mclass.to_uml_header(model)
+		if model.show_attributes then
+			var mattrs = collect_mattributedefs(model.view)
+			if mattrs.not_empty then
+				t.add "<TR><TD ALIGN=\"LEFT\" BALIGN=\"LEFT\">"
+				for i in mattrs do
+					t.add i.to_uml(model)
+					t.add "<BR/>"
+				end
+				t.add "</TD></TR>"
 			end
-			t.add "]"
 		end
-		t.add "|"
-		for i in mpropdefs do
-			if not i isa MAttributeDef then continue
-			if not model.view.accept_mentity(i) then continue
-			t.add i.to_uml(model)
-			t.add "\\l"
+		if model.show_methods then
+			var mmethods = collect_mmethoddefs(model.view)
+			if mmethods.not_empty then
+				t.add "<TR><TD ALIGN=\"LEFT\" BALIGN=\"LEFT\">"
+				for i in mmethods do
+					t.add i.to_uml(model)
+					t.add "<BR/>"
+				end
+				t.add "</TD></TR>"
+			end
 		end
-		t.add "|"
-		for i in mpropdefs do
-			if not i isa MMethodDef then continue
-			if not model.view.accept_mentity(i) then continue
-			t.add i.to_uml(model)
-			t.add "\\l"
+		t.add "</TABLE>>"
+		if model.show_colors then
+			if is_intro then
+				t.add "color=\"{model.public_color}\""
+			else
+				t.add "color=\"{model.protected_color}\""
+			end
 		end
-		t.add "\}\""
-		if is_intro then
-			t.add "color=\"{model.intro_colour}\""
-		else
-			t.add "color=\"{model.redef_colour}\""
-		end
+		t.add "shape=\"none\""
+		t.add "margin=0"
 		t.add "\n]\n"
 		var supers = collect_parents(model.view)
 		for i in supers do
@@ -223,7 +270,7 @@ redef class MClassDef
 			else
 				t.add " arrowtail=empty"
 			end
-			t.add "]\n"
+			t.add "];\n"
 		end
 		return t
 	end
@@ -236,6 +283,15 @@ end
 redef class MMethodDef
 	redef fun to_uml(model) do
 		var tpl = new Template
+		if model.show_colors then
+			if visibility == public_visibility then
+				tpl.add "<FONT COLOR=\"{model.public_color}\">"
+			else if visibility == protected_visibility then
+				tpl.add "<FONT COLOR=\"{model.protected_color}\">"
+			else if visibility == private_visibility then
+				tpl.add "<FONT COLOR=\"{model.private_color}\">"
+			end
+		end
 		if model.show_visibility then
 			tpl.add visibility.to_uml
 			tpl.add " "
@@ -244,6 +300,9 @@ redef class MMethodDef
 		var msignature = msignature
 		if msignature != null then
 			tpl.add msignature.to_uml(model)
+		end
+		if model.show_colors then
+			tpl.add "</FONT>"
 		end
 		return tpl
 	end
@@ -274,6 +333,15 @@ end
 redef class MAttributeDef
 	redef fun to_uml(model) do
 		var tpl = new Template
+		if model.show_colors then
+			if visibility == public_visibility then
+				tpl.add "<FONT COLOR=\"{model.public_color}\">"
+			else if visibility == protected_visibility then
+				tpl.add "<FONT COLOR=\"{model.protected_color}\">"
+			else if visibility == private_visibility then
+				tpl.add "<FONT COLOR=\"{model.private_color}\">"
+			end
+		end
 		if model.show_visibility then
 			tpl.add visibility.to_uml
 			tpl.add " "
@@ -282,6 +350,9 @@ redef class MAttributeDef
 		if model.show_types then
 			tpl.add ": "
 			tpl.add static_mtype.as(not null).to_uml(model)
+		end
+		if model.show_colors then
+			tpl.add "</FONT>"
 		end
 		return tpl
 	end
@@ -367,5 +438,14 @@ redef class MClassKind
 		else
 			return ""
 		end
+	end
+end
+
+redef class Text
+	redef fun escape_to_dot do
+		var res = super
+		res = res.replace("\\<", "&lt;")
+		res = res.replace("\\>", "&gt;")
+		return res
 	end
 end
