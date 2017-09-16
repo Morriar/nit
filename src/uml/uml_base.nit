@@ -29,6 +29,18 @@ class UMLModel
 
 	# Filters to apply on model if any
 	var filter: nullable ModelFilter
+
+	# Show class attributes
+	var show_attributes = true
+
+	# Show class methods
+	var show_methods = true
+
+	# Show classes and properties visibility
+	var show_visibility = true
+
+	# Show types for attributes, methods and in signatures
+	var show_types = true
 end
 
 redef class MEntity

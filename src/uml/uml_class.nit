@@ -59,25 +59,31 @@ redef class MClass
 		end
 		if arity > 0 then
 			t.add "["
-			t.add mparameters.first.name
-			for i in [1 .. mparameters.length[ do
-				t.add ", "
-				t.add mparameters[i].name
+			for i in [0..mparameters.length[ do
+				if i > 0 then t.add ", "
+				t.add mparameters[i].to_uml(model)
 			end
 			t.add "]"
 		end
-		t.add "|"
-		var props = collect_intro_mproperties(model.filter)
-		for i in props do
-			if not i isa MAttribute then continue
-			t.add i.to_uml(model)
-			t.add "\\l"
+		if model.show_attributes then
+			var mattributes = collect_intro_mattributes(model.filter)
+			if mattributes.not_empty then
+				t.add "|"
+				for i in mattributes do
+					t.add i.to_uml(model)
+					t.add "\\l"
+				end
+			end
 		end
-		t.add "|"
-		for i in props do
-			if not i isa MMethod then continue
-			t.add i.to_uml(model)
-			t.add "\\l"
+		if model.show_methods then
+			var mmethods = collect_intro_mmethods(model.view)
+			if mmethods.not_empty then
+				t.add "|"
+				for i in mmethods do
+					t.add i.to_uml(model)
+					t.add "\\l"
+				end
+			end
 		end
 		t.add "\}\"\n]\n"
 		var g = in_hierarchy(model.mainmodule).direct_greaters
@@ -99,36 +105,34 @@ end
 redef class MMethod
 	redef fun to_uml(model) do
 		var tpl = new Template
-		tpl.add visibility.to_uml
-		tpl.add " "
+		if model.show_visibility then
+			tpl.add visibility.to_uml
+			tpl.add " "
+		end
 		tpl.add name.escape_to_dot
-		tpl.add intro.msignature.to_uml(model)
+		var msignature = intro.msignature
+		if msignature != null then
+			tpl.add msignature.to_uml(model)
+		end
 		return tpl
 	end
 end
 
 redef class MSignature
-
 	redef fun to_uml(model) do
 		var t = new Template
 		t.add "("
-		var params = new Array[MParameter]
-		for i in mparameters do
-			params.add i
-		end
-		if params.length > 0 then
-			t.add params.first.name.escape_to_dot
-			t.add ": "
-			t.add params.first.mtype.to_uml(model)
-			for i in [1 .. params.length [ do
-				t.add ", "
-				t.add params[i].name.escape_to_dot
+		for i in [0..mparameters.length[ do
+			if i > 0 then t.add ", "
+			t.add mparameters[i].name.escape_to_dot
+			if model.show_types then
 				t.add ": "
-				t.add params[i].mtype.to_uml(model)
+				t.add mparameters[i].mtype.to_uml(model)
 			end
 		end
 		t.add ")"
-		if return_mtype != null then
+		var return_mtype = self.return_mtype
+		if model.show_types and return_mtype != null then
 			t.add ": "
 			t.add return_mtype.to_uml(model)
 		end
@@ -139,11 +143,15 @@ end
 redef class MAttribute
 	redef fun to_uml(model) do
 		var tpl = new Template
-		tpl.add visibility.to_uml
-		tpl.add " "
+		if model.show_visibility then
+			tpl.add visibility.to_uml
+			tpl.add " "
+		end
 		tpl.add name.escape_to_dot
-		tpl.add ": "
-		tpl.add intro.static_mtype.to_uml(model)
+		if model.show_types then
+			tpl.add ": "
+			tpl.add intro.static_mtype.as(not null).to_uml(model)
+		end
 		return tpl
 	end
 end
@@ -177,9 +185,8 @@ redef class MGenericType
 		var t = new Template
 		t.add name.substring(0, name.index_of('['))
 		t.add "["
-		t.add arguments.first.to_uml(model)
-		for i in [1 .. arguments.length[ do
-			t.add ", "
+		for i in [0..arguments.length[ do
+			if i > 0 then t.add ", "
 			t.add arguments[i].to_uml(model)
 		end
 		t.add "]"
@@ -189,7 +196,13 @@ end
 
 redef class MParameterType
 	redef fun to_uml(model) do
-		return name
+		var t = new Template
+		t.add name.escape_to_dot
+		if model.show_types then
+			t.add ": "
+			t.add mclass.intro.bound_mtype.arguments[rank].to_uml(model)
+		end
+		return t
 	end
 end
 
