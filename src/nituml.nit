@@ -43,21 +43,35 @@ private class UMLPhase
 	super Phase
 	redef fun process_mainmodule(mainmodule, mmodules)
 	do
-		var filters = new ModelFilter
-		if not toolcontext.opt_privacy.value then
-			filters.min_visibility = protected_visibility
-		end
+		var view = new ModelView(mainmodule.model,
+			min_visibility = if toolcontext.opt_privacy.value then
+				private_visibility else protected_visibility,
+			include_fictive = false,
+			include_empty_doc = true,
+			include_test = false,
+			include_attribute = true)
 
-		var d = new UMLModel(toolcontext.modelbuilder.model, mainmodule, filters)
-		if toolcontext.opt_gen.value == 0 then
-			var dot = d.class_diagram(view.mclasses).write_to_string
-			print dot
-			if toolcontext.opt_show.value then show_dot(dot)
-		else if toolcontext.opt_gen.value == 1 then
-			var dot = d.generate_package_uml.write_to_string
-			print dot
-			if toolcontext.opt_show.value then show_dot(dot)
+
+		var diagram: UMLDiagram
+		if toolcontext.opt_gen.value == 1 then
+			var mclassdefs = new Array[MClassDef]
+			for mmodule in mmodules do
+				mclassdefs.add_all(mmodule.collect_intro_mclassdefs(view))
+				mclassdefs.add_all(mmodule.collect_redef_mclassdefs(view))
+			end
+			diagram = new UMLClassDefDiagram(view, mainmodule)
+			diagram.draw(mclassdefs)
+		else
+			var mclasses = new Array[MClass]
+			for mmodule in mmodules do
+				mclasses.add_all(mmodule.collect_intro_mclasses(view))
+			end
+			diagram = new UMLClassDiagram(view, mainmodule)
+			diagram.draw(mclasses)
 		end
+		var dot = diagram.to_dot
+		print dot
+		if toolcontext.opt_show.value then show_dot(dot)
 	end
 
 	# Show dot in graphviz (blocking)

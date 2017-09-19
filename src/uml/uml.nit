@@ -17,6 +17,7 @@ module uml
 
 import toolcontext
 import model::model_collect
+import dot
 
 # UML model builder.
 class UMLModel
@@ -59,52 +60,162 @@ class UMLModel
 	#
 	# Defaults to a shade of red
 	var private_color = "#B24758"
+end
 
-	# Generate an UML class diagram with `classes`
-	fun class_diagram(mclasses: Collection[MClass]): Writable do
-		var tpl = new Template
-		tpl.add "digraph G \{\n"
-		tpl.add """	fontname = "Bitstream Vera Sans"
-				fontsize = 8
-				node [
-					fontname = "Bitstream Vera Sans"
-					fontsize = 8
-					shape = "record"
-				]
+#
+abstract class UMLDiagram
+	super UMLModel
 
-				edge [
-					fontname = "Bitstream Vera Sans"
-					fontsize = 8
-				]\n"""
-		for mclass in mclasses do
-			tpl.add mclass.to_uml(self)
-			for i in mclass.collect_parents(view) do
-				if not mclasses.has(i) then continue
-				tpl.add mclass.to_uml_inheritance(self, i)
-			end
-		end
-		tpl.add "\}"
-		return tpl
+	# DotGraph under construction
+	private var graph = new DotGraph("G", "digraph")
+
+	init do
+		graph["compound"] = "true"
+		graph["rankdir"] = "BT"
+		graph["ranksep"] = 0.3
+		graph["nodesep"] = 0.3
+
+		graph.nodes_attrs["margin"] = 0.1
+		graph.nodes_attrs["width"] = 0
+		graph.nodes_attrs["height"] = 0
+		graph.nodes_attrs["fontsize"] = 10
+		graph.nodes_attrs["fontname"] = "helvetica"
 	end
 
-	# Generates a UML package diagram from a `Model`
-	fun generate_package_uml: Writable do
-		var tpl = new Template
-		tpl.add "digraph G \{\n"
-		tpl.add """	fontname = "Bitstream Vera Sans"
-			fontsize = 8
-			node [
-				fontname = "Bitstream Vera Sans"
-				fontsize = 8
-				shape = "record"
-			]
-			edge [
-				fontname = "Bitstream Vera Sans"
-				fontsize = 8
-			]\n"""
-		tpl.add mainmodule.to_uml(self)
-		tpl.add "\}"
-		return tpl
+	# Drawn nodes by their ids
+	private var nodes = new HashMap[String, DotNode]
+
+	# Render `self` to dot
+	fun to_dot: Writable do return graph.to_dot
+end
+
+# An UML class diagram convertible to dot
+class UMLClassDiagram
+	super UMLDiagram
+
+	# Draw a mmodule if not yet drawn
+	fun add_mmodule(mmodule: MModule): DotCluster do
+		var id = "cluster{mmodule.full_name.escape_to_dot}"
+		print id
+		print nodes.has_key(id)
+		if nodes.has_key(id) then return nodes[id].as(DotCluster)
+
+		var cluster = new DotCluster(id, "subgraph")
+		cluster["label"] = mmodule.full_name.escape_to_dot
+		cluster["labelloc"] = "b"
+		nodes[id] = cluster
+		return cluster
+	end
+
+	# Draw a mclass if not yet drawn
+	fun add_mclass(mclass: MClass): DotNode do
+		var id = mclass.full_name.escape_to_dot
+		if nodes.has_key(id) then return nodes[id]
+
+		var node = new DotNode(id)
+		node["label"] = mclass.to_uml(self).write_to_string
+		node["shape"] = "none"
+		node["margin"] = 0
+		if show_colors then
+			if mclass.visibility == private_visibility then
+				node["color"] = private_color
+			else
+				node["color"] = public_color
+			end
+		end
+		nodes[id] = node
+		return node
+	end
+
+	# Draw an extends or implements edge between `from` and `to`
+	fun inheritance_edge(from, to: MClass): DotEdge do
+		var nfrom = add_mclass(from)
+		var nto = add_mclass(to)
+		var edge = new DotEdge(nfrom, nto)
+		edge["arrowhead"] = "empty"
+		if from.kind != interface_kind and to.kind == interface_kind then
+			edge["style"] = "dashed"
+		end
+		return edge
+	end
+
+	# Draw `mclasses`
+	fun draw(mclasses: Collection[MClass]): Writable do
+		for mclass in mclasses do
+			var nmodule = add_mmodule(mclass.intro_mmodule)
+			nmodule.add add_mclass(mclass)
+			for i in mclass.collect_parents(view) do
+				if not mclasses.has(i) then continue
+				nmodule.add inheritance_edge(mclass, i)
+			end
+			graph.add nmodule
+		end
+		return graph.to_dot
+	end
+end
+
+# An UML class definition diagram convertible to dot
+class UMLClassDefDiagram
+	super UMLDiagram
+
+	# Draw a mmodule if not yet drawn
+	fun add_mmodule(mmodule: MModule): DotCluster do
+		var id = "cluster{mmodule.full_name.escape_to_dot}"
+		print id
+		print nodes.has_key(id)
+		if nodes.has_key(id) then return nodes[id].as(DotCluster)
+
+		var cluster = new DotCluster(id, "subgraph")
+		cluster["label"] = mmodule.full_name.escape_to_dot
+		cluster["labelloc"] = "b"
+		nodes[id] = cluster
+		return cluster
+	end
+
+	# Draw a mclass if not yet drawn
+	fun add_mclassdef(mclassdef: MClassDef): DotNode do
+		var id = mclassdef.full_name.escape_to_dot
+		if nodes.has_key(id) then return nodes[id]
+
+		var node = new DotNode(id)
+		node["label"] = mclassdef.to_uml(self).write_to_string
+		node["shape"] = "none"
+		node["margin"] = 0
+		if show_colors then
+			if mclassdef.visibility == private_visibility then
+				node["color"] = private_color
+			else
+				node["color"] = public_color
+			end
+		end
+		nodes[id] = node
+		return node
+	end
+
+	# Draw an extends or implements edge between `from` and `to`
+	fun inheritance_edge(from, to: MClassDef): DotEdge do
+		var nfrom = add_mclassdef(from)
+		var nto = add_mclassdef(to)
+		var edge = new DotEdge(nfrom, nto)
+		edge["arrowhead"] = "empty"
+		if from.mclass.kind != interface_kind and to.mclass.kind == interface_kind then
+			edge["style"] = "dashed"
+		end
+		return edge
+	end
+
+	# Draw `mclassdefs`
+	fun draw(mclassdefs: Collection[MClassDef]): Writable do
+		for mclassdef in mclassdefs do
+			var nmodule = add_mmodule(mclassdef.mmodule)
+			nmodule.add add_mclassdef(mclassdef)
+			for i in mclassdef.collect_parents(view) do
+				if not mclassdefs.has(i) then continue
+				nmodule.add inheritance_edge(mclassdef, i)
+			end
+			graph.add nmodule
+		end
+		return graph.to_dot
 	end
 end
 
@@ -113,28 +224,7 @@ redef class MEntity
 	fun to_uml(model: UMLModel): Writable is abstract
 end
 
-redef class MModule
-	redef fun to_uml(model) do
-		var name = self.name.escape_to_dot
-		var t = new Template
-		t.add "subgraph cluster{name} \{\n"
-		t.add "label = \"{name}\"\n"
-		for i in mclassdefs do
-			if not model.view.accept_mentity(i) then continue
-			t.add i.to_uml(model)
-			var supers = i.collect_parents(model.view)
-			for parent in supers do
-				if parent.mmodule != i.mmodule then continue
-				t.add i.to_uml_inheritance(model, parent)
-			end
-		end
-		t.add "\}\n"
-		return t
-	end
-end
-
 redef class MClass
-
 	private fun to_uml_header(model: UMLModel): Writable do
 		var t = new Template
 		t.add "<TR><TD>"
@@ -176,10 +266,8 @@ redef class MClass
 	end
 
 	redef fun to_uml(model) do
-		var name = name.escape_to_dot
 		var t = new Template
-		t.add "{name} [\n label = <"
-		t.add "<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLPADDING=\"2\" CELLSPACING=\"0\">"
+		t.add "<<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLPADDING=\"2\" CELLSPACING=\"0\">"
 		t.add to_uml_header(model)
 		if model.show_attributes then
 			var mattributes = collect_intro_mattributes(model.view)
@@ -204,29 +292,6 @@ redef class MClass
 			end
 		end
 		t.add "</TABLE>>"
-		if model.show_colors then
-			if visibility == private_visibility then
-				t.add "color=\"{model.private_color}\""
-			else
-				t.add "color=\"{model.public_color}\""
-			end
-		end
-		t.add "shape=\"none\""
-		t.add "margin=0"
-		t.add "\n]\n"
-		return t
-	end
-
-	# Draw an inheritance relation between `self` and `super_class`
-	fun to_uml_inheritance(model: UMLModel, super_class: MClass): Writable do
-		var t = new Template
-		t.add "{super_class.name.escape_to_dot} -> {name.escape_to_dot} [dir=back"
-		if kind != interface_kind and super_class.kind == interface_kind then
-			t.add " arrowtail=empty style=dashed"
-		else
-			t.add " arrowtail=empty"
-		end
-		t.add "];\n"
 		return t
 	end
 end
@@ -234,10 +299,8 @@ end
 redef class MClassDef
 
 	redef fun to_uml(model) do
-		var name = self.name.escape_to_dot
 		var t = new Template
-		t.add "{mmodule.name.escape_to_dot}{name} [\n\tlabel = <"
-		t.add "<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLPADDING=\"2\" CELLSPACING=\"0\">"
+		t.add "<<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLPADDING=\"2\" CELLSPACING=\"0\">"
 		t.add mclass.to_uml_header(model)
 		if model.show_attributes then
 			var mattrs = collect_mattributedefs(model.view)
@@ -262,31 +325,6 @@ redef class MClassDef
 			end
 		end
 		t.add "</TABLE>>"
-		if model.show_colors then
-			if is_intro then
-				t.add "color=\"{model.public_color}\""
-			else
-				t.add "color=\"{model.protected_color}\""
-			end
-		end
-		t.add "shape=\"none\""
-		t.add "margin=0"
-		t.add "\n];\n"
-		return t
-	end
-
-	# Draw an inheritance relation between `self` and `super_class`
-	fun to_uml_inheritance(model: UMLModel, super_class: MClassDef): Writable do
-		var t = new Template
-		t.add "{super_class.mmodule.name.escape_to_dot}{super_class.name.escape_to_dot}"
-		t.add " -> "
-		t.add "{mmodule.name.escape_to_dot}{name.escape_to_dot} [dir=back"
-		if mclass.kind != interface_kind and super_class.mclass.kind == interface_kind then
-			t.add " arrowtail=empty style=dashed"
-		else
-			t.add " arrowtail=empty"
-		end
-		t.add "];\n"
 		return t
 	end
 end
