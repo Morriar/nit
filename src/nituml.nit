@@ -50,7 +50,7 @@ private class UMLPhase
 
 		var d = new UMLModel(toolcontext.modelbuilder.model, mainmodule, filters)
 		if toolcontext.opt_gen.value == 0 then
-			var dot = d.generate_class_uml.write_to_string
+			var dot = d.class_diagram(view.mclasses).write_to_string
 			print dot
 			if toolcontext.opt_show.value then show_dot(dot)
 		else if toolcontext.opt_gen.value == 1 then

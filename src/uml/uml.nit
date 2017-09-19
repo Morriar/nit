@@ -60,8 +60,8 @@ class UMLModel
 	# Defaults to a shade of red
 	var private_color = "#B24758"
 
-	# Generates a UML class diagram from a `Model`
-	fun generate_class_uml: Writable do
+	# Generate an UML class diagram with `classes`
+	fun class_diagram(mclasses: Collection[MClass]): Writable do
 		var tpl = new Template
 		tpl.add "digraph G \{\n"
 		tpl.add """	fontname = "Bitstream Vera Sans"
@@ -76,9 +76,12 @@ class UMLModel
 					fontname = "Bitstream Vera Sans"
 					fontsize = 8
 				]\n"""
-		for mclass in view.mclasses do
+		for mclass in mclasses do
 			tpl.add mclass.to_uml(self)
-			tpl.add "\n"
+			for i in mclass.collect_parents(view) do
+				if not mclasses.has(i) then continue
+				tpl.add mclass.to_uml_inheritance(self, i)
+			end
 		end
 		tpl.add "\}"
 		return tpl
@@ -103,7 +106,6 @@ class UMLModel
 		tpl.add "\}"
 		return tpl
 	end
-
 end
 
 redef class MEntity
@@ -120,6 +122,11 @@ redef class MModule
 		for i in mclassdefs do
 			if not model.view.accept_mentity(i) then continue
 			t.add i.to_uml(model)
+			var supers = i.collect_parents(model.view)
+			for parent in supers do
+				if parent.mmodule != i.mmodule then continue
+				t.add i.to_uml_inheritance(model, parent)
+			end
 		end
 		t.add "\}\n"
 		return t
@@ -207,15 +214,19 @@ redef class MClass
 		t.add "shape=\"none\""
 		t.add "margin=0"
 		t.add "\n]\n"
-		for i in collect_parents(model.view) do
-			t.add "{i.name.escape_to_dot} -> {name} [dir=back"
-			if kind != interface_kind and i.kind == interface_kind then
-				t.add " arrowtail=empty style=dashed"
-			else
-				t.add " arrowtail=empty"
-			end
-			t.add "];\n"
+		return t
+	end
+
+	# Draw an inheritance relation between `self` and `super_class`
+	fun to_uml_inheritance(model: UMLModel, super_class: MClass): Writable do
+		var t = new Template
+		t.add "{super_class.name.escape_to_dot} -> {name.escape_to_dot} [dir=back"
+		if kind != interface_kind and super_class.kind == interface_kind then
+			t.add " arrowtail=empty style=dashed"
+		else
+			t.add " arrowtail=empty"
 		end
+		t.add "];\n"
 		return t
 	end
 end
@@ -260,18 +271,22 @@ redef class MClassDef
 		end
 		t.add "shape=\"none\""
 		t.add "margin=0"
-		t.add "\n]\n"
-		var supers = collect_parents(model.view)
-		for i in supers do
-			if i.mmodule != mmodule then continue
-			t.add "{i.mmodule}{i.name} -> {mmodule}{name} [dir=back"
-			if mclass.kind != interface_kind and i.mclass.kind == interface_kind then
-				t.add " arrowtail=empty style=dashed"
-			else
-				t.add " arrowtail=empty"
-			end
-			t.add "];\n"
+		t.add "\n];\n"
+		return t
+	end
+
+	# Draw an inheritance relation between `self` and `super_class`
+	fun to_uml_inheritance(model: UMLModel, super_class: MClassDef): Writable do
+		var t = new Template
+		t.add "{super_class.mmodule.name.escape_to_dot}{super_class.name.escape_to_dot}"
+		t.add " -> "
+		t.add "{mmodule.name.escape_to_dot}{name.escape_to_dot} [dir=back"
+		if mclass.kind != interface_kind and super_class.mclass.kind == interface_kind then
+			t.add " arrowtail=empty style=dashed"
+		else
+			t.add " arrowtail=empty"
 		end
+		t.add "];\n"
 		return t
 	end
 end
