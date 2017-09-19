@@ -308,6 +308,16 @@ redef class MMethodDef
 	end
 end
 
+redef class MType
+	# Special case for generic signatures
+	#
+	# We don't want the signature to display the bound of generic types even if
+	# `Model.show_types == true`.
+	#
+	# See `MParameterType::to_uml_signature`.
+	fun to_uml_signature(model: UMLModel): Writable do return to_uml(model)
+end
+
 redef class MSignature
 	redef fun to_uml(model) do
 		var t = new Template
@@ -324,7 +334,7 @@ redef class MSignature
 		var return_mtype = self.return_mtype
 		if model.show_types and return_mtype != null then
 			t.add ": "
-			t.add return_mtype.to_uml(model)
+			t.add return_mtype.to_uml_signature(model)
 		end
 		return t
 	end
@@ -382,20 +392,6 @@ redef class MClassType
 	end
 end
 
-redef class MGenericType
-	redef fun to_uml(model) do
-		var t = new Template
-		t.add name.substring(0, name.index_of('['))
-		t.add "["
-		for i in [0..arguments.length[ do
-			if i > 0 then t.add ", "
-			t.add arguments[i].to_uml(model)
-		end
-		t.add "]"
-		return t
-	end
-end
-
 redef class MParameterType
 	redef fun to_uml(model) do
 		var t = new Template
@@ -406,6 +402,8 @@ redef class MParameterType
 		end
 		return t
 	end
+
+	redef fun to_uml_signature(model) do return name.escape_to_dot
 end
 
 redef class MVirtualType
