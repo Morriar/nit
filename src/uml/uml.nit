@@ -209,8 +209,8 @@ redef class MClass
 		t.add "\n]\n"
 		for i in collect_parents(model.view) do
 			t.add "{i.name.escape_to_dot} -> {name} [dir=back"
-			if i.kind == interface_kind then
-				t.add " arrowtail=open style=dashed"
+			if kind != interface_kind and i.kind == interface_kind then
+				t.add " arrowtail=empty style=dashed"
 			else
 				t.add " arrowtail=empty"
 			end
@@ -265,8 +265,8 @@ redef class MClassDef
 		for i in supers do
 			if i.mmodule != mmodule then continue
 			t.add "{i.mmodule}{i.name} -> {mmodule}{name} [dir=back"
-			if i.mclass.kind == interface_kind then
-				t.add " arrowtail=open style=dashed"
+			if mclass.kind != interface_kind and i.mclass.kind == interface_kind then
+				t.add " arrowtail=empty style=dashed"
 			else
 				t.add " arrowtail=empty"
 			end
