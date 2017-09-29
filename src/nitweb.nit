@@ -73,7 +73,7 @@ private class NitwebPhase
 
 		var catalog = build_catalog(toolcontext.modelbuilder, filter)
 
-		var config = new NitwebConfig(model, mainmodule, toolcontext.modelbuilder, filter, catalog)
+		var config = new NitwebConfig(model, mainmodule, toolcontext.modelbuilder, toolcontext, filter, catalog)
 		var config_file = toolcontext.opt_config.value
 		if config_file == null then config.default_config_file = "nitweb.ini"
 		config.parse_options(args)

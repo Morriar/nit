@@ -195,6 +195,14 @@ redef class CmdGraph
 	end
 end
 
+redef class CmdUML
+	redef fun http_init(req) do
+		pdepth = req.int_arg("pdepth")
+		cdepth = req.int_arg("cdepth")
+		return super
+	end
+end
+
 redef class CmdInheritanceGraph
 	redef fun http_init(req) do
 		var opt_pdepth = req.int_arg("pdepth")

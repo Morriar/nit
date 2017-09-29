@@ -124,7 +124,7 @@
 					resolve: {
 						graph: function(Model, $q, $stateParams, $state) {
 							var d = $q.defer();
-							Model.loadEntityGraph($stateParams.id, d.resolve,
+							Model.loadEntityUML($stateParams.id, d.resolve,
 								function() {
 									$state.go('404', null, { location: false })
 								});
@@ -399,6 +399,12 @@
 
 				loadEntityMeta: function(id, cb, cbErr) {
 					$http.get('/api/meta/' + id)
+						.success(cb)
+						.error(cbErr);
+				},
+
+				loadEntityUML: function(id, cb, cbErr) {
+					$http.get('/api/uml/' + id + '?format=svg&pdepth=3&cdepth=3')
 						.success(cb)
 						.error(cbErr);
 				},

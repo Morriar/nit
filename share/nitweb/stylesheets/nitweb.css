@@ -171,3 +171,8 @@ entity-list:hover .btn-filter {
 .star.active {
 	color: #FFC000
 }
+
+.graph svg {
+	width: 100%;
+	height: 100%;
+}

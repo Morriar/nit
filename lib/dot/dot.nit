@@ -54,6 +54,8 @@ abstract class DotElement
 
 	# Return `id.escape_to_dot`
 	fun escape_id: String do return id.escape_to_dot
+
+	redef fun hash do return id.hash
 end
 
 # Map of graph/node/edge attribute that can be rendered to dot.
@@ -66,7 +68,12 @@ class AttributeMap
 	fun to_dot(separator: String): Text do
 		var dot = new Buffer
 		for key, value in self do
-			dot.append "{key}=\"{value.to_s}\"{separator}"
+			#FIXME hackish
+			if key == "label" and value isa Text and value.has_prefix("<") then
+				dot.append "{key}={value}{separator}"
+			else
+				dot.append "{key}=\"{value.to_s}\"{separator}"
+			end
 		end
 		return dot
 	end
@@ -82,18 +89,6 @@ end
 # graph["nodesep"] = 0.3
 # graph.nodes_attrs["fontname"] = "helvetica"
 # graph.edges_attrs["color"] = "gray"
-# ~~~
-#
-# Creating subgraphs
-# ~~~
-# var sub = new DotGraph("cluster_sub", "subgraph")
-# sub["label"] = "process #1"
-#
-# var a0 = sub.add_node("a0")
-# var a1 = sub.add_node("a1")
-# sub.add_edge(a0, a1)
-#
-# graph.add sub
 # ~~~
 class DotGraph
 	super DotElement
@@ -114,7 +109,7 @@ class DotGraph
 	#
 	# If the graph already contains a node with that ID, it will be replaced.
 	fun add(element: DotElement) do
-		nodes[element.id] = element
+		if not nodes.has_key(element.id) then nodes[element.id] = element
 	end
 
 	# Edge list
@@ -202,7 +197,7 @@ end
 # ~~~
 # Then added to a graph
 # ~~~
-# var graph = new DotGraph("G", "digraph")
+#sh var graph = new DotGraph("G", "digraph")
 # graph.add edge
 # ~~~
 # Or can be created directly from an existing graph
@@ -239,4 +234,25 @@ class DotEdge
 		if attrs.not_empty then res.append "[{attrs.to_dot(",")}]"
 		return res.write_to_string
 	end
+end
+
+# A dot cluster allows nested nodes
+#
+# Creating clusters
+# ~~~
+# var graph = new DotGraph("G", "digraph")
+# graph["rankdir"] = "BT"
+#
+# var sub = new DotCluster("cluster_sub", "subgraph")
+# sub["label"] = "process #1"
+#
+# var a0 = sub.add_node("a0")
+# var a1 = sub.add_node("a1")
+# sub.add_edge(a0, a1)
+#
+# graph.add sub
+# ~~~
+class DotCluster
+	super DotGraph
+	super DotNode
 end
