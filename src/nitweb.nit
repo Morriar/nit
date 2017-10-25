@@ -16,8 +16,7 @@
 module nitweb
 
 import frontend
-import web
-import doc::doc_down
+import doc::api
 
 redef class ToolContext
 
