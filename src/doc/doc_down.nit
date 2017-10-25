@@ -64,11 +64,9 @@ redef class MDoc
 	# Renders markdown line as a HTML comment block.
 	private fun lines_to_html(lines: Array[String]): Writable do
 		var res = new Template
-		var decorator = markdown_proc.decorator.as(NitdocDecorator)
-		decorator.current_mdoc = self
 		res.add "<div class=\"nitdoc\">"
-		# do not use DocUnit as synopsys
 		if not lines.is_empty then
+			# do not use DocUnit as synopsys
 			if not lines.first.has_prefix("    ") and
 			   not lines.first.has_prefix("\t") then
 				# parse synopsys
@@ -76,21 +74,9 @@ redef class MDoc
 				res.add "<h1 class=\"synopsys\">{syn}</h1>"
 			end
 		end
-		# check for annotations
-		for i in [0 .. lines.length[ do
-			var line = lines[i]
-			if line.to_upper.has_prefix("ENSURE") or line.to_upper.has_prefix("REQUIRE") then
-				var html = inline_proc.process(line)
-				lines[i] = "<p class=\"contract\">{html}</p>"
-			else if line.to_upper.has_prefix("TODO") or line.to_upper.has_prefix("FIXME") then
-				var html = inline_proc.process(line)
-				lines[i] = "<p class=\"todo\">{html}</p>"
-			end
-		end
 		# add other lines
 		res.add markdown_proc.process(lines.join("\n"))
 		res.add "</div>"
-		decorator.current_mdoc = null
 		return res
 
 	end
@@ -105,11 +91,6 @@ class NitdocDecorator
 	super HTMLDecorator
 
 	private var toolcontext = new ToolContext
-
-	# The currently processed mdoc.
-	#
-	# Unfortunately, this seems to be the simpler way to get the currently processed `MDoc` object.
-	var current_mdoc: nullable MDoc = null
 
 	redef fun add_code(v, block) do
 		var meta = block.meta or else "nit"
