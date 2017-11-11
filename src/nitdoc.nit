@@ -17,12 +17,15 @@
 # Generate API documentation in HTML format from nit source code.
 module nitdoc
 
-import modelbuilder
-import doc
+import doc::static
+import counter
 
 redef class ToolContext
 	# Nitdoc generation phase.
 	var docphase: Phase = new Nitdoc(self, null)
+
+	# Directory where the Nitdoc is rendered.
+	var opt_dir = new OptionString("Output directory", "-d", "--dir")
 
 	# Do not generate documentation for attributes.
 	var opt_no_attributes = new OptionBool("Ignore the attributes", "--no-attributes")
@@ -30,9 +33,47 @@ redef class ToolContext
 	# Do not generate documentation for private properties.
 	var opt_private = new OptionBool("Also generate private API", "--private")
 
+	# File pattern used to link documentation to source code.
+	var opt_test = new OptionBool("Print test data (metrics and structure)", "--test")
+
+	# Use a shareurl instead of copy shared files.
+	#
+	# This is usefull if you don't want to store the Nitdoc templates with your
+	# documentation.
+	var opt_shareurl = new OptionString("Use shareurl instead of copy shared files", "--shareurl")
+
+	# Use a custom title for the homepage.
+	var opt_custom_title = new OptionString("Custom title for homepage", "--custom-title")
+
+	# Display a custom brand or logo in the documentation top menu.
+	var opt_custom_brand = new OptionString("Custom link to external site", "--custom-brand")
+
+	# Display a custom introduction text before the packages overview.
+	var opt_custom_intro = new OptionString("Custom intro text for homepage", "--custom-overview-text")
+	# Display a custom footer on each documentation page.
+	#
+	# Generally used to display the documentation or product version.
+	var opt_custom_footer = new OptionString("Custom footer text", "--custom-footer-text")
+
+	# Piwik tracker URL.
+	#
+	# If you want to monitor your visitors.
+	var opt_piwik_tracker = new OptionString("Piwik tracker URL (ex: `nitlanguage.org/piwik/`)", "--piwik-tracker")
+
+	# Piwik tracker site id.
+	var opt_piwik_site_id = new OptionString("Piwik site ID", "--piwik-site-id")
+
+	# Do not produce HTML files
+	var opt_no_render = new OptionBool("Do not render HTML files", "--no-render")
+
 	redef init do
 		super
-		option_context.add_option(opt_no_attributes, opt_private)
+		option_context.add_option(
+			opt_dir, opt_no_attributes, opt_private, opt_test,
+			opt_share_dir, opt_shareurl, opt_custom_title,
+			opt_custom_footer, opt_custom_intro, opt_custom_brand,
+			opt_piwik_tracker, opt_piwik_site_id,
+			opt_no_render)
 	end
 end
 
@@ -46,29 +87,104 @@ private class Nitdoc
 		var accept_attribute = true
 		if toolcontext.opt_no_attributes.value then accept_attribute = false
 
+		var catalog = new Catalog(toolcontext.modelbuilder)
+		catalog.build_catalog(mainmodule.model.mpackages)
+
 		var filters = new ModelFilter(
 			min_visibility,
 			accept_attribute = accept_attribute,
 			accept_fictive = false)
-		var doc = new DocModel(mainmodule.model, mainmodule, filters)
+		var doc = new DocModel(mainmodule.model, mainmodule, filters, toolcontext, toolcontext.modelbuilder, catalog)
 
-		var phases = [
-			new IndexingPhase(toolcontext, doc),
-			new MakePagePhase(toolcontext, doc),
-			new POSetPhase(toolcontext, doc),
-			new ConcernsPhase(toolcontext, doc),
-			new StructurePhase(toolcontext, doc),
-			new InheritanceListsPhase(toolcontext, doc),
-			new IntroRedefListPhase(toolcontext, doc),
-			new LinListPhase(toolcontext, doc),
-			new GraphPhase(toolcontext, doc),
-			new ReadmePhase(toolcontext, doc),
-			new RenderHTMLPhase(toolcontext, doc),
-			new DocTestPhase(toolcontext, doc): DocPhase]
+		doc.share_url = toolcontext.opt_shareurl.value
+		doc.custom_brand = toolcontext.opt_custom_brand.value
+		doc.custom_title = toolcontext.opt_custom_title.value
+		doc.custom_footer = toolcontext.opt_custom_footer.value
+		doc.custom_intro = toolcontext.opt_custom_intro.value
+		doc.tracker_url = toolcontext.opt_piwik_tracker.value
+		doc.piwik_site_id = toolcontext.opt_piwik_site_id.value
 
-		for phase in phases do
-			toolcontext.info("# {phase.class_name}", 1)
-			phase.apply
+		# Prepare output dir
+		var output_dir = toolcontext.opt_dir.value or else "doc"
+		output_dir.mkdir
+
+		# Copy assets
+		var share_dir = toolcontext.opt_share_dir.value or else "share/nitdoc"
+		sys.system("cp -r -- {share_dir.escape_to_sh}/* {output_dir.escape_to_sh}/")
+
+		# Make pages
+		doc.add_page new PageHome("overview", "Overview")
+
+		for mpackage in doc.mpackages do
+			doc.add_page new PageMPackage(mpackage)
+		end
+		for mgroup in doc.mgroups do
+			doc.add_page new PageMGroup(mgroup)
+		end
+		for mmodule in doc.mmodules do
+			doc.add_page new PageMModule(mmodule)
+		end
+		for mclass in doc.mclasses do
+			doc.add_page new PageMClass(mclass)
+		end
+		for mproperty in doc.mproperties do
+			doc.add_page new PageMProperty(mproperty)
+		end
+
+		doc.build_structure
+
+		if not toolcontext.opt_no_render.value then
+			doc.render_html(output_dir)
+			doc.create_index_file("{output_dir}/quicksearch-list.js")
+		end
+
+		if toolcontext.opt_test.value then
+			# Pages metrics
+			var page_counter = new Counter[String]
+			var pages = doc.pages.keys.to_a
+			default_comparator.sort(pages)
+			for title in pages do
+				var page = doc.pages[title]
+				page_counter.inc page.class_name
+				# print page.pretty_print.write_to_string
+			end
+			print "Generated {doc.pages.length} pages"
+			page_counter.print_elements(100)
+			# Model metrics
+			var model_counter = new Counter[String]
+			for mentity in doc.mentities do
+				model_counter.inc mentity.class_name
+			end
+			print "Found {doc.mentities.length} mentities"
+			model_counter.print_elements(100)
+		end
+	end
+end
+
+redef class Catalog
+
+	# Build the catalog from `mpackages`
+	fun build_catalog(mpackages: Array[MPackage]) do
+		# Compute the poset
+		for p in mpackages do
+			var g = p.root
+			assert g != null
+			modelbuilder.scan_group(g)
+
+			deps.add_node(p)
+			for gg in p.mgroups do for m in gg.mmodules do
+				for im in m.in_importation.direct_greaters do
+					var ip = im.mpackage
+					if ip == null or ip == p then continue
+					deps.add_edge(p, ip)
+				end
+			end
+		end
+		# Build the catalog
+		for mpackage in mpackages do
+			package_page(mpackage)
+			git_info(mpackage)
+			mpackage_stats(mpackage)
 		end
 	end
 end

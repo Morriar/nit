@@ -16,4 +16,4 @@
 module doc
 
 import doc_base
-import doc_phases
+import doc_html

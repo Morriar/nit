@@ -1,67 +1,171 @@
 /*
- * Global
+ * Copyright 2017 Alexandre Terrasa <alexandre@moz-code.org>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
+/* utils */
+
+.no-margin {
+	margin: 0;
+}
+
+.no-padding {
+	padding: 0;
+}
+
+.navbar-fixed-top {
+	background-color: #1E9431;
+	box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+}
+
+/* Body */
+
 body {
-	text-align: justify;
+	background: #f2f2f2;
+	margin-top: 70px;
+	margin-bottom: 70px;
 }
 
-a:hover {
-	text-decoration: none;
+h1, h2, h3, h4, h5, h6 {
+	color: #666;
 }
 
-ul li .label {
-	padding: 1px 4px;
-	font-size: 70%;
-	vertical-align: middle;
-	border-radius: .25em;
-	margin: 3px;
+a {
+	cursor: pointer;
+}
+
+.page-header {
+    margin-top: 0;
+    border: none;
+}
+
+/* ui */
+
+.btn-bar { margin-top: -5px; float: right }
+.btn-bar .btn { padding: 5px 10px; }
+
+entity-list .btn-filter {
+	visibility: hidden;
+}
+
+entity-list:hover .btn-filter {
+	visibility: visible;
+}
+
+/* doc */
+
+.nitdoc .synopsys {
+	margin-top: 0;
+}
+
+.signature {
+	color: #666;
 	font-family: monospace;
 }
 
-code {
-	color: #333;
-	border: 1px solid #ddd;
+.signature .name {
+	font-weight: bold;
 }
 
-pre code {
-	border: none;
+.page-header .signature .name, .signature .signature .name {
+	font-weight: normal;
 }
 
-.navbar-default .navbar-toggle {
-	margin-top: 2px;
-	padding: 5px 10px;
+.signature .signature a {
+	color: #666;
+	font-family: monospace;
 }
 
-h3 {
-	margin: 10px 0;
+/* tabs */
+
+.nav-tabs li { cursor: pointer; }
+
+.nav>li.warning>a {
+    color: #fff;
+    background-color: #f0ad4e;
 }
 
-article {
-	padding: 10px 0px;
+.nav>li.warning>a:focus, .nav>li.warning>a:hover {
+    background-color: #ff9c0f;
 }
 
-article.nospace {
-	padding: 0;
-	margin: 0;
+/* forms */
+
+.has-icon {
+    position: relative;
+}
+
+.has-icon .form-control {
+	padding-left: 35px;
+}
+
+.form-control-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    display: block;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    pointer-events: none;
+}
+
+/* navs */
+
+.nav-tabs li { cursor: pointer; }
+
+/* Summary */
+
+.summary h1, .summary h2, .summary h3, .summary h4, .summary h5, .summary h6 {
+	margin: 5px 0;
+}
+
+.summary h1 a, .summary h2 a, .summary h3 a, .summary h4 a, .summary h5 a, .summary h6 a {
+	color: #555;
+}
+
+.summary h1 { font-size: 14px; margin-left: 0px; font-weight: bold; }
+.summary h2 { font-size: 13px; margin-left: 5px; font-weight: bold; }
+.summary h3 { font-size: 12px; margin-left: 10px; }
+.summary h4 { font-size: 11px; margin-left: 15px; }
+.summary h5 { font-size: 10px; margin-left: 20px; }
+.summary h6 { font-size: 9px; margin-left: 25px; }
+
+/*
+ * Top menu
+ */
+
+.navbar-brand > a {
+	color: #fff;
+}
+
+.navbar-brand > a:hover, .navbar-brand > a:focus {
+	color: #ddd;
 }
 
 /*
  * Sidebar
  */
 
-#sidebar .panel {
+#sidebar {
 	margin-top: 15px;
-	box-shadow: none;
 }
 
 #sidebar .panel-heading {
-	padding: 3px 0 0 0;
 	font-size: 16px;
-}
-
-#sidebar .panel-body {
-	padding: 0;
 }
 
 #sidebar .panel-body ul>li>a {
@@ -86,7 +190,7 @@ article.nospace {
 	color: #999;
 }
 
-#sidebar .panel-heading a:hover, #sidebar .panel ul a:hover {
+#sidebar a:hover, #sidebar ul a:hover {
 	color: #0d8921;
 	background-color: transparent;
 }
@@ -149,7 +253,7 @@ article.nospace {
 
 #content {
 	position: fixed;
-	top: 30px;
+	top: 50px;
 	bottom: 0;
 	left: 10px;
 	right: 15px;
@@ -241,10 +345,6 @@ article:hover .dropdown, article:target .dropdown {
 	vertical-align: middle;
 }
 
-.signature a, .list-definition a, .info.signature a {
-	color: #0d8921;
-}
-
 .info {
 	color: #888;
 }
@@ -259,13 +359,6 @@ article:hover .dropdown, article:target .dropdown {
 
 .graph {
 	text-align: center;
-}
-
-.nitdoc .synopsys {
-	margin: 5px 0;
-	font-size: 16px;
-	font-weight: bold;
-	line-height: 1.4;
 }
 
 .public {
@@ -283,37 +376,3 @@ article:hover .dropdown, article:target .dropdown {
 .list-definition .list-definition {
 	margin-left: 30px;
 }
-
-/*
- * Code Highlighting
- */
-
-.nitcode a { color: inherit; text-decoration: inherit; } /* hide links */
-.nitcode a:hover { text-decoration: underline; } /* underline links */
-.nitcode span[title]:hover { text-decoration: underline; } /* underline titles */
-/* lexical raw tokens. independent of usage or semantic: */
-.nitcode .nc_c { color: gray; font-style: italic; } /* comment */
-.nitcode .nc_d { color: #3D8127; font-style: italic; } /* documentation comments */
-.nitcode .nc_k { font-weight: bold; } /* keyword */
-.nitcode .nc_o {} /* operator */
-.nitcode .nc_i {} /* standard identifier */
-.nitcode .nc_t { color: #445588; font-weight: bold; } /* type/class identifier */
-.nitcode .nc_a { color: #445588; font-style: italic; } /* old style attribute identifier */
-.nitcode .nc_l { color: #009999; } /* char and number literal */
-.nitcode .nc_s { color: #8F1546; } /* string literal */
-/* syntactic token usage. added because of their position in the AST */
-.nitcode .nc_ast { color: blue; } /* assert label */
-.nitcode .nc_la { color: blue; } /* break/continue label */
-.nitcode .nc_m { color: #445588; } /* module name */
-/* syntactic groups */
-.nitcode .nc_def { font-weight: bold; color: blue; } /* name used in a definition */
-.nitcode .nc_def.nc_a { color: blue; } /* name used in a attribute definition */
-.nitcode .nc_def.nc_t { color: blue; } /* name used in a class or vt definition */
-.nitcode .nc_ss { color: #9E6BEB; } /* superstrings */
-.nitcode .nc_cdef {} /* A whole class definition */
-.nitcode .nc_pdef {} /* A whole property definition */
-/* semantic token usage */
-.nitcode .nc_v { font-style: italic; } /* local variable or parameter */
-.nitcode .nc_vt { font-style: italic; } /* virtual type or formal type */
-.nitcode .nc_error { border: 1px red solid;} /* not used */
-

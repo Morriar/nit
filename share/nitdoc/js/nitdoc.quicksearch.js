@@ -360,20 +360,24 @@ $.widget("nitdoc.quicksearch", {
 });
 
 var searchField = $("<input/>")
-.addClass("form-control input-sm")
+.addClass("form-control search-input")
 .attr({
 	id: "nitdoc-qs-field",
 	type: "text",
 	placeholder: "Search..."
 })
 
-$("#topmenu-collapse").append(
-	$("<div>")
-	.addClass("navbar-form navbar-right")
+$("#search-placeholder").append(
+	$("<form>")
+	.css("margin-bottom", 0)
 	.append(
 		$("<div>")
-		.addClass("form-group")
+		.addClass("form-group has-icon")
 		.append(searchField)
+		.append(
+			$("<span>")
+			.addClass("glyphicon glyphicon-search form-control-icon text-muted")
+		)
 	)
 );
 
