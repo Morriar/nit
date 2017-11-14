@@ -274,7 +274,7 @@ redef class CardCatalogTags
 		for tag in tags do
 			addn "<div class='col-xs-3 col-md-12'>"
 			addn " <span class='badge'>{catalog.tag2proj[tag].length}</span>"
-			addn " <a ui-sref='tag(\{id: tag\})'>{tag}</a>"
+			addn " <a href='tag_{tag.to_cmangle}.html'>{tag}</a>"
 			addn "</div>"
 		end
 		addn "</div>"
@@ -296,7 +296,7 @@ redef class CardCatalogPackage
 				<small>&nbsp;"""
 		for tag in mpackage.metadata.tags do
 			add "<span>"
-			add "<a ui-sref='tag(\{id: tag\})' class='text-muted'>{tag}</a>"
+			add "<a href='tag_{tag.to_cmangle}.html' class='text-muted'>{tag}</a>"
 			if tag != mpackage.metadata.tags.last then addn ", "
 			add "</span>"
 		end
@@ -388,7 +388,7 @@ redef class CardMetadata
 		if metadata.tags.not_empty then
 			addn "<h4>Tags</h4>"
 			for tag in metadata.tags do
-				addn "<a href=''>{tag}</a>"
+				addn " <a href='tag_{tag.to_cmangle}.html'>{tag}</a>"
 				if tag != metadata.tags.last then add ", "
 			end
 		end
@@ -427,19 +427,5 @@ redef class CardMetadata
 				<li>{{{stats.mmethods}}} methods</li>
 				<li>{{{stats.loc}}} loc</li>
 			</ul>"""
-	end
-end
-
-redef class Person
-	redef fun to_html do
-		var tpl = new Template
-		tpl.addn "<span>"
-		var gravatar = self.gravatar
-		if gravatar != null then
-			tpl.addn "<img class='avatar' src='https://secure.gravatar.com/avatar/{gravatar}?size=14&amp;default=retro' />"
-		end
-		tpl.addn " <a ui-sref='person(\{id: maintainer.name\})'>{name}</a>"
-		tpl.addn "</span>"
-		return tpl.write_to_string
 	end
 end

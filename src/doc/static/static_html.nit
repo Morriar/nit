@@ -195,6 +195,14 @@ redef class PageMEntity
 	end
 end
 
+redef class PagePerson
+	redef var html_url is lazy do return person.html_url
+end
+
+redef class PageTag
+	redef var html_url is lazy do return "tag_{tag.to_cmangle}.html"
+end
+
 redef class MEntity
 	redef fun to_dot_node do
 		var node = super

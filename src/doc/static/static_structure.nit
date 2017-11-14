@@ -216,3 +216,54 @@ redef class PageMProperty
 		build_linearization(doc)
 	end
 end
+
+redef class PagePerson
+	redef fun apply_structure(doc) do
+		var mpackages_sorter = new CatalogScoreSorter(doc.catalog)
+		main_tab.content.add new CardPageHeader(person.name, person.email)
+
+		var maint = doc.catalog.maint2proj[person]
+		mpackages_sorter.sort maint
+		var mlist = new CardList
+		for mpackage in maint do
+			mlist.cards.add new CardCatalogPackage(doc.catalog, mpackage)
+		end
+
+		# TODO pagination?
+		if maint.not_empty then
+			main_tab.content.add new CardSection(3, "{maint.length} maintained packages")
+			main_tab.content.add mlist
+		end
+
+		var contrib = doc.catalog.contrib2proj[person]
+		mpackages_sorter.sort contrib
+		var clist = new CardList
+		for mpackage in contrib do
+			clist.cards.add new CardCatalogPackage(doc.catalog, mpackage)
+		end
+
+		# TODO pagination?
+		if contrib.not_empty then
+			main_tab.content.add new CardSection(3, "{contrib.length} contributed packages")
+			main_tab.content.add clist
+		end
+	end
+end
+
+redef class PageTag
+	redef fun apply_structure(doc) do
+		var mpackages_sorter = new CatalogScoreSorter(doc.catalog)
+		main_tab.content.add new CardPageHeader(tag)
+
+		var mpackages = doc.catalog.tag2proj[tag]
+		mpackages_sorter.sort mpackages
+		var list = new CardList
+		for mpackage in mpackages do
+			list.cards.add new CardCatalogPackage(doc.catalog, mpackage)
+		end
+
+		# TODO pagination?
+		main_tab.content.add new CardSection(3, "{mpackages.length} packages")
+		main_tab.content.add list
+	end
+end

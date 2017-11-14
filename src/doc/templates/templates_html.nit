@@ -18,6 +18,7 @@ module templates_html
 import model::model_collect
 import doc::doc_down
 import html::bootstrap
+import catalog
 
 redef class MEntity
 
@@ -361,5 +362,27 @@ redef class MParameter
 		end
 		if is_vararg then tpl.add "..."
 		return tpl
+	end
+end
+
+redef class Person
+	#
+	fun html_id: String do return name.to_cmangle
+	#
+	fun html_url: String do return "person_{html_id}.html"
+
+	#
+	fun html_link: Link do return new Link(html_url, name)
+
+	redef fun to_html do
+		var tpl = new Template
+		tpl.addn "<span>"
+		var gravatar = self.gravatar
+		if gravatar != null then
+			tpl.addn "<img class='avatar' src='https://secure.gravatar.com/avatar/{gravatar}?size=14&amp;default=retro' />"
+		end
+		tpl.addn html_link
+		tpl.addn "</span>"
+		return tpl.write_to_string
 	end
 end

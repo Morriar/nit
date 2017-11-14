@@ -58,7 +58,8 @@ $.widget("nitdoc.quicksearch", {
 		this._table = $("<table/>")
 			.attr("id", this.options.tableID)
 			.css(this.options.tableCSS)
-			.css("min-width", this.element.outerWidth());
+			.css("min-width", this.element.outerWidth())
+			.css("z-index", 10000);
 		$("body").append(this._table);
 		// make table disappear when a click occurs outside
 		$(document).click($.proxy(this.closeTable, this));

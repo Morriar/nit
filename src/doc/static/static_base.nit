@@ -222,6 +222,30 @@ class PageMProperty
 	redef var tabs = [main_tab, lin_tab] is lazy
 end
 
+#
+class PagePerson
+	super DocPage
+	autoinit person
+
+	#
+	var person: Person
+
+	redef var id is lazy do return person.name
+	redef var title is lazy do return person.name
+end
+
+#
+class PageTag
+	super DocPage
+	autoinit tag
+
+	#
+	var tag: String
+
+	redef var id is lazy do return "tag_{tag}"
+	redef var title is lazy do return tag
+end
+
 redef class MEntity
 	# MEntities composing the breadcrumbs of a nitdoc page
 	fun nitdoc_breadcrumbs: Array[MEntity] is abstract

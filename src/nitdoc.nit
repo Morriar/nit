@@ -130,6 +130,12 @@ private class Nitdoc
 		for mproperty in doc.mproperties do
 			doc.add_page new PageMProperty(mproperty)
 		end
+		for name, person in doc.catalog.persons do
+			doc.add_page new PagePerson(person)
+		end
+		for tag in doc.catalog.tag2proj.keys do
+			doc.add_page new PageTag(tag)
+		end
 
 		doc.build_structure
 
