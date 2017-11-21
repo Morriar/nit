@@ -243,14 +243,14 @@ end
 
 redef class CmdAncestors
 	redef fun parser_init(mentity_name, options) do
-		if options.has_key("parents") and options["parents"] == "false" then parents = false
+		if options.has_key("parents") then parents = options.opt_bool("parents")
 		return super
 	end
 end
 
 redef class CmdDescendants
 	redef fun parser_init(mentity_name, options) do
-		if options.has_key("children") and options["children"] == "false" then children = false
+		if options.has_key("children") then children = options.opt_bool("children")
 		return super
 	end
 end
@@ -308,6 +308,12 @@ redef class Map[K, V]
 		if string == null then return null
 		if string.is_int then return string.to_i
 		return null
+	end
+
+	private fun opt_bool(key: K): nullable Bool do
+		var string = opt_string(key)
+		if string == null then return null
+		return string.to_b
 	end
 end
 
