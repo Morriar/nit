@@ -19,6 +19,7 @@ module mmodules_metrics
 
 import metrics_base
 import model::model_collect
+import model::model_views
 
 redef class ToolContext
 
@@ -171,7 +172,7 @@ class MNBD
 	redef fun collect(mmodules) do
 		for mmodule in mmodules do
 			values[mmodule] = 0
-			for a in mmodule.collect_ancestors(model_view) do
+			for a in mmodule.collect_ancestors(model_view.filter) do
 				values[mmodule] += a.intro_mclasses.length
 			end
 		end

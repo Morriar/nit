@@ -72,7 +72,7 @@ redef class MClass
 			t.add "]"
 		end
 		t.add "|"
-		var props = collect_intro_mproperties(model.view)
+		var props = collect_intro_mproperties(model.view.filter)
 		for i in props do
 			if not i isa MAttribute then continue
 			t.add i.tpl_class(model)

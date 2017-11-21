@@ -31,6 +31,7 @@ module vim_autocomplete
 import modelbuilder
 import phase
 import modelize::modelize_class
+import model::model_views
 import model::model_collect
 
 redef class ToolContext
@@ -230,7 +231,7 @@ redef class MClassType
 		stream.write line_separator*2
 		stream.write "## Properties"
 		stream.write line_separator
-		var props = mclass.collect_accessible_mproperties(view).to_a
+		var props = mclass.collect_accessible_mproperties(view.filter).to_a
 		alpha_comparator.sort props
 		for prop in props do
 			if mclass.name == "Object" or prop.intro.mclassdef.mclass.name != "Object" then
@@ -286,7 +287,7 @@ private class AutocompletePhase
 			# Can it be instantiated?
 			if mclass.kind != interface_kind and mclass.kind != abstract_kind then
 
-				for prop in mclass.collect_accessible_mproperties(view) do
+				for prop in mclass.collect_accessible_mproperties(view.filter) do
 					if prop isa MMethod and prop.is_init then
 						mclass_intro.target_constructor = prop.intro
 						mclass_intro.write_doc(view, constructors_stream)
@@ -335,7 +336,7 @@ redef class MModule
 	redef fun write_extra_doc(view, stream)
 	do
 		# Introduced classes
-		var class_intros = collect_intro_mclasses(view).to_a
+		var class_intros = collect_intro_mclasses(view.filter).to_a
 		if class_intros.not_empty then
 			alpha_comparator.sort class_intros
 			stream.write line_separator*2
@@ -352,7 +353,7 @@ redef class MModule
 		# Introduced properties
 		var prop_intros = new Array[MPropDef]
 		for c in mclassdefs do
-			prop_intros.add_all c.collect_intro_mpropdefs(view)
+			prop_intros.add_all c.collect_intro_mpropdefs(view.filter)
 		end
 
 		if prop_intros.not_empty then

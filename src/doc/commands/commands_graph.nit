@@ -190,7 +190,7 @@ class InheritanceGraph
 			from_dotdotdot(mentity)
 			return
 		end
-		var parents = mentity.collect_parents(view)
+		var parents = mentity.collect_parents(view.filter)
 		if parents.length > 10 then
 			from_dotdotdot(mentity)
 			return
@@ -226,7 +226,7 @@ class InheritanceGraph
 			to_dotdotdot(mentity)
 			return
 		end
-		var children = mentity.collect_children(view)
+		var children = mentity.collect_children(view.filter)
 		if children.length > 10 then
 			to_dotdotdot(mentity)
 			return

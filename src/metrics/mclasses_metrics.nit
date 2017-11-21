@@ -18,6 +18,7 @@
 module mclasses_metrics
 
 import metrics_base
+import model::model_views
 import model::model_collect
 
 redef class ToolContext
@@ -176,7 +177,7 @@ class CNBP
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.collect_accessible_mproperties(model_view).length
+			values[mclass] = mclass.collect_accessible_mproperties(model_view.filter).length
 		end
 	end
 end
@@ -190,7 +191,7 @@ class CNBA
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.collect_accessible_mattributes(model_view).length
+			values[mclass] = mclass.collect_accessible_mattributes(model_view.filter).length
 		end
 	end
 end
@@ -204,7 +205,7 @@ class CNBM
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.collect_accessible_mmethods(model_view).length
+			values[mclass] = mclass.collect_accessible_mmethods(model_view.filter).length
 		end
 	end
 end
@@ -218,7 +219,7 @@ class CNBI
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.collect_accessible_inits(model_view).length
+			values[mclass] = mclass.collect_accessible_inits(model_view.filter).length
 		end
 	end
 end
@@ -232,7 +233,7 @@ class CNBV
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.collect_accessible_vts(model_view).length
+			values[mclass] = mclass.collect_accessible_vts(model_view.filter).length
 		end
 	end
 end
@@ -246,7 +247,7 @@ class CNBIP
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.collect_intro_mproperties(model_view).length
+			values[mclass] = mclass.collect_intro_mproperties(model_view.filter).length
 		end
 	end
 end
@@ -260,7 +261,7 @@ class CNBRP
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.collect_redef_mproperties(model_view).length
+			values[mclass] = mclass.collect_redef_mproperties(model_view.filter).length
 		end
 	end
 end
@@ -274,7 +275,7 @@ class CNBHP
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.collect_inherited_mproperties(model_view).length
+			values[mclass] = mclass.collect_inherited_mproperties(model_view.filter).length
 		end
 	end
 end
@@ -288,7 +289,7 @@ class CNBLP
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.collect_local_mproperties(model_view).length
+			values[mclass] = mclass.collect_local_mproperties(model_view.filter).length
 		end
 	end
 end

@@ -111,13 +111,13 @@ class CmdAncestors
 		if not res isa CmdSuccess then return res
 		var mentity = self.mentity.as(not null)
 
-		var ancestors = mentity.collect_ancestors(view).to_a
+		var ancestors = mentity.collect_ancestors(view.filter).to_a
 		if parents then
 			results = ancestors
 			return res
 		end
 
-		var parents = mentity.collect_parents(view)
+		var parents = mentity.collect_parents(view.filter)
 		var mentities = new HashSet[MEntity]
 		for ancestor in ancestors do
 			if not parents.has(ancestor) then mentities.add ancestor
@@ -138,7 +138,7 @@ class CmdParents
 		if not res isa CmdSuccess then return res
 		var mentity = self.mentity.as(not null)
 
-		results = mentity.collect_parents(view).to_a
+		results = mentity.collect_parents(view.filter).to_a
 		return res
 	end
 end
@@ -154,7 +154,7 @@ class CmdChildren
 		if not res isa CmdSuccess then return res
 		var mentity = self.mentity.as(not null)
 
-		results = mentity.collect_children(view).to_a
+		results = mentity.collect_children(view.filter).to_a
 		return res
 	end
 end
@@ -175,13 +175,13 @@ class CmdDescendants
 		if not res isa CmdSuccess then return res
 		var mentity = self.mentity.as(not null)
 
-		var descendants = mentity.collect_descendants(view).to_a
+		var descendants = mentity.collect_descendants(view.filter).to_a
 		if children then
 			results = descendants
 			return res
 		end
 
-		var children = mentity.collect_children(view)
+		var children = mentity.collect_children(view.filter)
 		var mentities = new HashSet[MEntity]
 		for descendant in descendants do
 			if not children.has(descendant) then mentities.add descendant
@@ -274,21 +274,21 @@ class CmdFeatures
 
 		var mentities = new Array[MEntity]
 		if mentity isa MPackage then
-			mentities.add_all mentity.collect_mgroups(view)
-			mentities.add_all mentity.collect_mmodules(view)
+			mentities.add_all mentity.collect_mgroups(view.filter)
+			mentities.add_all mentity.collect_mmodules(view.filter)
 		else if mentity isa MGroup then
-			mentities.add_all mentity.collect_mgroups(view)
-			mentities.add_all mentity.collect_mmodules(view)
+			mentities.add_all mentity.collect_mgroups(view.filter)
+			mentities.add_all mentity.collect_mmodules(view.filter)
 		else if mentity isa MModule then
-			mentities.add_all mentity.collect_local_mclassdefs(view)
+			mentities.add_all mentity.collect_local_mclassdefs(view.filter)
 		else if mentity isa MClass then
-			mentities.add_all mentity.collect_intro_mproperties(view)
-			mentities.add_all mentity.collect_redef_mpropdefs(view)
+			mentities.add_all mentity.collect_intro_mproperties(view.filter)
+			mentities.add_all mentity.collect_redef_mpropdefs(view.filter)
 		else if mentity isa MClassDef then
-			mentities.add_all mentity.collect_intro_mpropdefs(view)
-			mentities.add_all mentity.collect_redef_mpropdefs(view)
+			mentities.add_all mentity.collect_intro_mpropdefs(view.filter)
+			mentities.add_all mentity.collect_redef_mpropdefs(view.filter)
 		else if mentity isa MProperty then
-			mentities.add_all mentity.collect_mpropdefs(view)
+			mentities.add_all mentity.collect_mpropdefs(view.filter)
 		else
 			return new WarningNoFeatures(mentity)
 		end
@@ -309,13 +309,13 @@ class CmdIntros
 		var mentity = self.mentity.as(not null)
 
 		if mentity isa MModule then
-			var mentities = mentity.collect_intro_mclasses(view).to_a
+			var mentities = mentity.collect_intro_mclasses(view.filter).to_a
 			self.results = mentities
 		else if mentity isa MClass then
-			var mentities = mentity.collect_intro_mproperties(view).to_a
+			var mentities = mentity.collect_intro_mproperties(view.filter).to_a
 			self.results = mentities
 		else if mentity isa MClassDef then
-			var mentities = mentity.collect_intro_mpropdefs(view).to_a
+			var mentities = mentity.collect_intro_mpropdefs(view.filter).to_a
 			view.mainmodule.linearize_mpropdefs(mentities)
 			self.results = mentities
 		else
@@ -337,13 +337,13 @@ class CmdRedefs
 		var mentity = self.mentity.as(not null)
 
 		if mentity isa MModule then
-			var mentities = mentity.collect_redef_mclasses(view).to_a
+			var mentities = mentity.collect_redef_mclasses(view.filter).to_a
 			self.results = mentities
 		else if mentity isa MClass then
-			var mentities = mentity.collect_redef_mproperties(view).to_a
+			var mentities = mentity.collect_redef_mproperties(view.filter).to_a
 			self.results = mentities
 		else if mentity isa MClassDef then
-			var mentities = mentity.collect_redef_mpropdefs(view).to_a
+			var mentities = mentity.collect_redef_mpropdefs(view.filter).to_a
 			view.mainmodule.linearize_mpropdefs(mentities)
 			self.results = mentities
 		else
@@ -365,7 +365,7 @@ class CmdAllProps
 		var mentity = self.mentity.as(not null)
 
 		if mentity isa MClass then
-			results = mentity.collect_accessible_mproperties(view).to_a
+			results = mentity.collect_accessible_mproperties(view.filter).to_a
 		else
 			return new WarningNoFeatures(mentity)
 		end

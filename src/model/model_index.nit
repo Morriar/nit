@@ -151,16 +151,22 @@ redef class ModelView
 		return index
 	end
 
-	redef fun mentities_by_name(name) do
+	redef fun mentities_by_name(name, filter) do
+		var res = new Array[MEntity]
 		if index.name_prefixes.has_key(name) then
-			return index.name_prefixes[name]
+			for mentity in index.name_prefixes[name] do
+				if filter == null or filter.accept_mentity(mentity) then
+					res.add mentity
+				end
+			end
 		end
-		return new Array[MEntity]
+		return res
 	end
 
-	redef fun mentity_by_full_name(full_name) do
+	redef fun mentity_by_full_name(full_name, filter) do
 		if mentities_by_full_name.has_key(full_name) then
-			return mentities_by_full_name[full_name]
+			var mentity = mentities_by_full_name[full_name]
+			if filter == null or filter.accept_mentity(mentity) then return mentity
 		end
 		return null
 	end
