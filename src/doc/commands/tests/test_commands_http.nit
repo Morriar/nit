@@ -202,7 +202,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_results is test do
 		var req = new_request("/?kind=modules&l=2")
-		var cmd = new CmdModelEntities(test_model, test_filter, kind = "modules")
+		var cmd = new CmdModelEntities(test_model, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.results.as(not null).length == 2
@@ -210,12 +210,51 @@ class TestCommandsHttp
 
 	fun test_cmd_http_results_random is test do
 		var req = new_request("/?kind=packages&l=1")
-		var cmd = new CmdRandomEntities(test_model, test_filter, kind = "packages")
+		var cmd = new CmdRandomEntities(test_model, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.results.as(not null).length == 1
 	end
 
+	fun atest_cmd_http_filter_attribute is test do
+		var req = new_request("/?kind=properties&l=1&filter-attribute=true")
+		var cmd = new CmdRandomEntities(test_model, test_filter)
+		var res = cmd.http_init(req)
+		assert res isa CmdSuccess
+		for mentity in cmd.results.as(not null) do
+			assert not mentity isa MAttribute
+		end
+	end
+
+	fun atest_cmd_http_filter_visibility is test do
+		var req = new_request("/?kind=properties&l=1&filter-visibility=public")
+		var cmd = new CmdRandomEntities(test_model, test_filter)
+		var res = cmd.http_init(req)
+		assert res isa CmdSuccess
+		for mentity in cmd.results.as(not null) do
+			assert mentity isa MProperty and mentity.visibility == public_visibility
+		end
+	end
+
+	fun atest_cmd_http_filter_full_name is test do
+		var req = new_request("/?kind=classes&l=1&filter-full-name=harac")
+		var cmd = new CmdRandomEntities(test_model, test_filter)
+		var res = cmd.http_init(req)
+		assert res isa CmdSuccess
+		for mentity in cmd.results.as(not null) do
+			assert mentity.name == "Character"
+		end
+	end
+
+	fun atest_cmd_http_filter_inherited is test do
+		var req = new_request("/?kind=properties&l=1&filter-inherited=Character")
+		var cmd = new CmdRandomEntities(test_model, test_filter)
+		var res = cmd.http_init(req)
+		assert res isa CmdSuccess
+		for mentity in cmd.results.as(not null) do
+			assert mentity isa MProperty and mentity.intro.mclassdef.mclass.name == "Character"
+		end
+	end
 	# CmdGraph
 
 	fun test_cmd_http_uml is test do

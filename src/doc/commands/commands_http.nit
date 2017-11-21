@@ -20,8 +20,65 @@ import commands::commands_catalog
 import nitcorn::vararg_routes
 
 redef class DocCommand
+
+	# Init command options from a HTTPRequest
+	fun init_http_options(req: HttpRequest) do
+		init_http_filter(req)
+	end
+
+	# Init filter options from a HTTPRequest
+	fun init_http_filter(req: HttpRequest) do
+		var filter = self.filter or else new ModelFilter
+		if req.get_args.has_key("filter-visibility") then
+			var visibility = req.string_arg("filter-visibility")
+			if visibility == "public" then
+				filter.min_visibility = public_visibility
+			else if visibility == "protected" then
+				filter.min_visibility = protected_visibility
+			else
+				filter.min_visibility = private_visibility
+			end
+		end
+		if req.get_args.has_key("filter-fictive") then
+			filter.accept_fictive = not (req.bool_arg("filter-fictive") or else false)
+		end
+		if req.get_args.has_key("filter-test") then
+			filter.accept_test = not (req.bool_arg("filter-test") or else false)
+		end
+		if req.get_args.has_key("filter-redef") then
+			filter.accept_redef = not (req.bool_arg("filter-redef") or else false)
+		end
+		if req.get_args.has_key("filter-extern") then
+			filter.accept_extern = not (req.bool_arg("filter-extern") or else false)
+		end
+		if req.get_args.has_key("filter-attribute") then
+			filter.accept_attribute = not (req.bool_arg("filter-attribute") or else false)
+		end
+		if req.get_args.has_key("filter-empty-doc") then
+			filter.accept_empty_doc = not (req.bool_arg("filter-empty-doc") or else false)
+		end
+		if req.get_args.has_key("filter-inherited") then
+			var name = req.string_arg("filter-inherited")
+			if name != null then
+				var mentity = model.mentity_by_full_name(name)
+				if mentity == null then
+					var mentities = model.mentities_by_name(name)
+					if mentities.not_empty then mentity = mentities.first
+				end
+				filter.accept_inherited = mentity
+			end
+		end
+		if req.get_args.has_key("filter-full-name") then
+			filter.accept_full_name = req.string_arg("filter-full-name")
+		end
+		self.filter = filter
+	end
+
 	# Init the command from an HTTPRequest
-	fun http_init(req: HttpRequest): CmdMessage do return init_command
+	fun http_init(req: HttpRequest): CmdMessage do
+		init_http_options(req)
+		return init_command
+	end
 end
 
 redef class CmdEntity
