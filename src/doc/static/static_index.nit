@@ -47,13 +47,13 @@ private class QuickSearchTable
 	var doc: DocModel
 
 	init do
-		for mmodule in doc.mmodules do
+		for mmodule in doc.model.collect_mmodules(doc.filter) do
 			self[mmodule.name].add new QuickSearchResult(mmodule.full_name, mmodule.html_url)
 		end
-		for mclass in doc.mclasses do
+		for mclass in doc.model.collect_mclasses(doc.filter) do
 			self[mclass.name].add new QuickSearchResult(mclass.full_name, mclass.html_url)
 		end
-		for mproperty in doc.mproperties do
+		for mproperty in doc.model.collect_mproperties(doc.filter) do
 			for mpropdef in mproperty.mpropdefs do
 				var full_name = mpropdef.mclassdef.mclass.full_name
 				var cls_url = mpropdef.mclassdef.mclass.html_url

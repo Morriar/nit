@@ -115,19 +115,19 @@ private class Nitdoc
 		# Make pages
 		doc.add_page new PageHome("overview", "Overview")
 
-		for mpackage in doc.mpackages do
+		for mpackage in doc.model.collect_mpackages(doc.filter) do
 			doc.add_page new PageMPackage(mpackage)
 		end
-		for mgroup in doc.mgroups do
+		for mgroup in doc.model.collect_mgroups(doc.filter) do
 			doc.add_page new PageMGroup(mgroup)
 		end
-		for mmodule in doc.mmodules do
+		for mmodule in doc.model.collect_mmodules(doc.filter) do
 			doc.add_page new PageMModule(mmodule)
 		end
-		for mclass in doc.mclasses do
+		for mclass in doc.model.collect_mclasses(doc.filter) do
 			doc.add_page new PageMClass(mclass)
 		end
-		for mproperty in doc.mproperties do
+		for mproperty in doc.model.collect_mproperties(doc.filter) do
 			doc.add_page new PageMProperty(mproperty)
 		end
 		for name, person in doc.catalog.persons do
@@ -158,10 +158,11 @@ private class Nitdoc
 			page_counter.print_elements(100)
 			# Model metrics
 			var model_counter = new Counter[String]
-			for mentity in doc.mentities do
+			var mentities = doc.model.collect_mentities(doc.filter)
+			for mentity in mentities do
 				model_counter.inc mentity.class_name
 			end
-			print "Found {doc.mentities.length} mentities"
+			print "Found {mentities.length} mentities"
 			model_counter.print_elements(100)
 		end
 	end

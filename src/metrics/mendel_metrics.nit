@@ -71,7 +71,7 @@ private class MendelMetricsPhase
 		var model_view = new ModelView(model, mainmodule, filter)
 
 		var mclasses = new HashSet[MClass]
-		for mclass in model_view.mclasses do
+		for mclass in model.collect_mclasses(filter) do
 			if mclass.is_interface then continue
 			mclasses.add(mclass)
 		end

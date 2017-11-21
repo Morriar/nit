@@ -15,6 +15,7 @@
 module model_views
 
 import model_visitor
+import model_collect
 
 # Provide a configurable view to a model.
 #
@@ -33,98 +34,9 @@ class ModelView
 	# MModule used to flatten mclass hierarchy
 	var mainmodule: MModule
 
-	# MPackages visible through `self`.
-	var mpackages: Set[MPackage] is lazy do
-		var mpackages = new HashSet[MPackage]
-		for mpackage in model.mpackages do
-			if not accept_mentity(mpackage) then continue
-			mpackages.add mpackage
-		end
-		return mpackages
-	end
-
-	# MGroups visible through `self`.
-	var mgroups: Set[MGroup] is lazy do
-		var mgroups = new HashSet[MGroup]
-		for mpackage in mpackages do
-			for mgroup in mpackage.mgroups do
-				if not accept_mentity(mgroup) then continue
-				mgroups.add mgroup
-			end
-		end
-		return mgroups
-	end
-
-	# MModules visible through `self`.
-	var mmodules: Set[MModule] is lazy do
-		var mmodules = new HashSet[MModule]
-		for mmodule in model.mmodules do
-			if not accept_mentity(mmodule) then continue
-			mmodules.add mmodule
-		end
-		return mmodules
-	end
-
-	# MClasses visible through `self`.
-	var mclasses: Set[MClass] is lazy do
-		var mclasses = new HashSet[MClass]
-		for mclass in model.mclasses do
-			if not accept_mentity(mclass) then continue
-			mclasses.add mclass
-		end
-		return mclasses
-	end
-
-	# MClassDefs visible through `self`.
-	var mclassdefs: Set[MClassDef] is lazy do
-		var mclassdefs = new HashSet[MClassDef]
-		for mclass in mclasses do
-			for mclassdef in mclass.mclassdefs do
-				if not accept_mentity(mclassdef) then continue
-				mclassdefs.add mclassdef
-			end
-		end
-		return mclassdefs
-	end
-
-	# MProperties visible through `self`.
-	var mproperties: Set[MProperty] is lazy do
-		var mproperties = new HashSet[MProperty]
-		for mproperty in model.mproperties do
-			if not accept_mentity(mproperty) then continue
-			mproperties.add mproperty
-		end
-		return mproperties
-	end
-
-	# MPropdefs visible through `self`.
-	var mpropdefs: Set[MPropDef] is lazy do
-		var mpropdefs = new HashSet[MPropDef]
-		for mproperty in mproperties do
-			for mpropdef in mproperty.mpropdefs do
-				if not accept_mentity(mpropdef) then continue
-				mpropdefs.add mpropdef
-			end
-		end
-		return mpropdefs
-	end
-
-	# Lists all MEntities visible through `self`.
-	var mentities: Set[MEntity] is lazy do
-		var res = new HashSet[MEntity]
-		res.add_all mpackages
-		res.add_all mgroups
-		res.add_all mmodules
-		res.add_all mclasses
-		res.add_all mclassdefs
-		res.add_all mproperties
-		res.add_all mpropdefs
-		return res
-	end
-
 	# Searches the MEntity that matches `full_name`.
 	fun mentity_by_full_name(full_name: String, filter: nullable ModelFilter): nullable MEntity do
-		for mentity in mentities do
+		for mentity in model.collect_mentities(filter) do
 			if filter != null and not filter.accept_mentity(mentity) then continue
 			if mentity.full_name == full_name then return mentity
 		end
@@ -134,7 +46,7 @@ class ModelView
 	# Searches the MEntities that matches `full_name`.
 	fun mentities_by_name(name: String, filter: nullable ModelFilter): Array[MEntity] do
 		var res = new Array[MEntity]
-		for mentity in mentities do
+		for mentity in model.collect_mentities(filter) do
 			if filter != null and not filter.accept_mentity(mentity) then continue
 			if mentity.name == name then res.add mentity
 		end
@@ -145,7 +57,7 @@ class ModelView
 	fun to_tree: MEntityTree do
 		var v = new ModelTreeVisitor
 		v.filter = self.filter
-		for mpackage in mpackages do
+		for mpackage in model.collect_mpackages(filter) do
 			v.enter_visit(mpackage)
 		end
 		return v.tree
