@@ -89,7 +89,7 @@ redef class PageMEntity
 	redef fun apply_structure(doc) do
 		var mentity = self.mentity
 
-		var sq = new CmdSummary(doc, mentity,
+		var sq = new CmdSummary(doc.model, doc.filter, mentity,
 			mdoc = mentity.mdoc_or_fallback, markdown_processor = doc.md_processor)
 		sq.init_command
 
@@ -113,7 +113,7 @@ redef class PageMEntity
 
 	# Build the API tab
 	fun build_api(doc: DocModel) do
-		var dq = new CmdFeatures(doc, mentity)
+		var dq = new CmdFeatures(doc.model, doc.filter, mentity)
 		dq.init_command
 
 		var mentities = dq.results
@@ -127,7 +127,7 @@ redef class PageMEntity
 	# Build the dependencies tab
 	fun build_dependencies(doc: DocModel) do
 		if not doc.ctx.opt_nodot.value then
-			var gq = new CmdInheritanceGraph(doc, mentity)
+			var gq = new CmdInheritanceGraph(doc.model, doc.mainmodule, doc.filter, mentity)
 			gq.init_command
 			var graph = gq.graph
 			if graph != null then
@@ -137,10 +137,10 @@ redef class PageMEntity
 		end
 
 		var inh = new HashMap[String, CmdEntityList]
-		inh["Ancestors"] = new CmdAncestors(doc, mentity, parents = false)
-		inh["Parents"] = new CmdParents(doc, mentity)
-		inh["Children"] = new CmdChildren(doc, mentity)
-		inh["Descendants"] = new CmdDescendants(doc, mentity, children = false)
+		inh["Ancestors"] = new CmdAncestors(doc.model, doc.mainmodule, doc.filter, mentity, parents = false)
+		inh["Parents"] = new CmdParents(doc.model, doc.mainmodule, doc.filter, mentity)
+		inh["Children"] = new CmdChildren(doc.model, doc.mainmodule, doc.filter, mentity)
+		inh["Descendants"] = new CmdDescendants(doc.model, doc.mainmodule, doc.filter, mentity, children = false)
 
 		for title, cmd in inh do
 			cmd.init_command
@@ -156,7 +156,7 @@ redef class PageMEntity
 
 	# Build the code panel
 	fun build_code(doc: DocModel) do
-		var cq = new CmdCode(doc, doc.modelbuilder, mentity)
+		var cq = new CmdCode(doc.model, doc.modelbuilder, doc.filter, mentity)
 		cq.init_command
 
 		var code = cq.node
@@ -166,7 +166,7 @@ redef class PageMEntity
 
 	# Build the linearization panel
 	fun build_linearization(doc: DocModel) do
-		var lq = new CmdLinearization(doc, mentity)
+		var lq = new CmdLinearization(doc.model, doc.mainmodule, doc.filter, mentity)
 		lq.init_command
 
 		var mentities = lq.results

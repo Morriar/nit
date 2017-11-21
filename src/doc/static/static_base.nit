@@ -18,7 +18,6 @@ module static_base
 import cards
 import modelize
 import toolcontext
-import model::model_views
 
 intrude import markdown::wikilinks
 
@@ -29,7 +28,9 @@ intrude import markdown::wikilinks
 # The model is populated through `DocPhase` to be constructed.
 # It is a placeholder to share data between each phase.
 class DocModel
-	super ModelView
+
+	# Model used to access mentities
+	var model: Model
 
 	# ToolContext to access rendering options
 	var ctx: ToolContext
@@ -37,8 +38,14 @@ class DocModel
 	# ModelBuilder used to retrieve AST nodes
 	var modelbuilder: ModelBuilder
 
-	#
+	# Mainmodule for linearization
+	var mainmodule: MModule
+
+	# Catalog
 	var catalog: Catalog
+
+	# Filter to apply if any
+	var filter: nullable ModelFilter
 
 	# `DocPage` composing the documentation associated to their ids.
 	#
@@ -57,15 +64,15 @@ class DocModel
 
 	# Specific Markdown processor to use within Nitdoc
 	var md_processor: MarkdownProcessor is lazy do
-		var parser = new CommandParser(self, modelbuilder, catalog)
+		var parser = new CommandParser(model, mainmodule, modelbuilder, catalog, filter)
 		return new CmdMarkdownProcessor(parser)
 	end
 
 	# Specific Markdown processor to use within Nitdoc
 	var inline_processor: MarkdownProcessor is lazy do
-		var parser = new CommandParser(self, modelbuilder, catalog)
+		var parser = new CommandParser(model, mainmodule, modelbuilder, catalog, filter)
 		var proc = new CmdMarkdownProcessor(parser)
-		proc.decorator = new CmdInlineDecorator(self)
+		proc.decorator = new CmdInlineDecorator(model)
 		return proc
 	end
 

@@ -38,7 +38,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_entity is test do
 		var req = new_request("/test_prog::Character")
-		var cmd = new CmdEntity(test_view)
+		var cmd = new CmdEntity(test_model, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.mentity.as(not null).full_name == "test_prog::Character"
@@ -46,7 +46,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_entity_not_found is test do
 		var req = new_request("/Characterzzz")
-		var cmd = new CmdEntity(test_view)
+		var cmd = new CmdEntity(test_model, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa ErrorMEntityNotFound
 		assert res.suggestions.first.full_name == "test_prog::Character"
@@ -54,7 +54,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_entity_conflict is test do
 		var req = new_request("/+")
-		var cmd = new CmdEntity(test_view)
+		var cmd = new CmdEntity(test_model, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa ErrorMEntityConflict
 		assert res.conflicts.length == 2
@@ -64,7 +64,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_comment is test do
 		var req = new_request("/test_prog::Character")
-		var cmd = new CmdComment(test_view)
+		var cmd = new CmdComment(test_model, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.mdoc != null
@@ -72,7 +72,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_comment_no_mdoc is test do
 		var req = new_request("/test_prog::Character?fallback=false")
-		var cmd = new CmdComment(test_view)
+		var cmd = new CmdComment(test_model, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa WarningNoMDoc
 	end
@@ -81,7 +81,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_parents is test do
 		var req = new_request("/test_prog::Warrior")
-		var cmd = new CmdParents(test_view)
+		var cmd = new CmdParents(test_model, test_main, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.results.as(not null).length == 1
@@ -89,7 +89,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_ancestors is test do
 		var req = new_request("/test_prog::Warrior")
-		var cmd = new CmdAncestors(test_view)
+		var cmd = new CmdAncestors(test_model, test_main, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.results.as(not null).length == 2
@@ -97,7 +97,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_ancestorsi_without_parents is test do
 		var req = new_request("/test_prog::Warrior?parents=false")
-		var cmd = new CmdAncestors(test_view)
+		var cmd = new CmdAncestors(test_model, test_main, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.results.as(not null).length == 1
@@ -105,7 +105,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_children is test do
 		var req = new_request("/test_prog::Career")
-		var cmd = new CmdChildren(test_view)
+		var cmd = new CmdChildren(test_model, test_main, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.results.as(not null).length == 3
@@ -113,7 +113,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_descendants is test do
 		var req = new_request("/test_prog::Career?children=false")
-		var cmd = new CmdDescendants(test_view)
+		var cmd = new CmdDescendants(test_model, test_main, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.results.as(not null).length == 0
@@ -123,7 +123,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_search is test do
 		var req = new_request("/?q=Carer&l=1")
-		var cmd = new CmdSearch(test_view)
+		var cmd = new CmdSearch(test_model, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.results.as(not null).first.full_name == "test_prog::Career"
@@ -132,7 +132,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_search_no_query is test do
 		var req = new_request("/")
-		var cmd = new CmdSearch(test_view)
+		var cmd = new CmdSearch(test_model, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa ErrorNoQuery
 	end
@@ -141,7 +141,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_features is test do
 		var req = new_request("/test_prog::Character?l=10")
-		var cmd = new CmdFeatures(test_view)
+		var cmd = new CmdFeatures(test_model, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.results.as(not null).length == 10
@@ -149,7 +149,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_features_no_features is test do
 		var req = new_request("/test_prog$Career$strength_bonus?l=10")
-		var cmd = new CmdFeatures(test_view)
+		var cmd = new CmdFeatures(test_model, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa WarningNoFeatures
 	end
@@ -158,7 +158,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_lin is test do
 		var req = new_request("/init?l=10")
-		var cmd = new CmdLinearization(test_view)
+		var cmd = new CmdLinearization(test_model, test_main, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.results.as(not null).length == 10
@@ -166,7 +166,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_lin_no_lin is test do
 		var req = new_request("/test_prog?l=10")
-		var cmd = new CmdLinearization(test_view)
+		var cmd = new CmdLinearization(test_model, test_main, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa WarningNoLinearization
 	end
@@ -175,7 +175,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_code is test do
 		var req = new_request("/test_prog::Career")
-		var cmd = new CmdCode(test_view, test_builder)
+		var cmd = new CmdCode(test_model, test_builder, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.node isa AStdClassdef
@@ -184,7 +184,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_code_format is test do
 		var req = new_request("/test_prog::Career?format=html")
-		var cmd = new CmdCode(test_view, test_builder)
+		var cmd = new CmdCode(test_model, test_builder, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.node isa AStdClassdef
@@ -193,7 +193,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_code_no_code is test do
 		var req = new_request("/test_prog")
-		var cmd = new CmdCode(test_view, test_builder)
+		var cmd = new CmdCode(test_model, test_builder, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa WarningNoCode
 	end
@@ -202,7 +202,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_results is test do
 		var req = new_request("/?kind=modules&l=2")
-		var cmd = new CmdModelEntities(test_view, kind = "modules")
+		var cmd = new CmdModelEntities(test_model, test_filter, kind = "modules")
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.results.as(not null).length == 2
@@ -210,7 +210,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_results_random is test do
 		var req = new_request("/?kind=packages&l=1")
-		var cmd = new CmdRandomEntities(test_view, kind = "packages")
+		var cmd = new CmdRandomEntities(test_model, test_filter, kind = "packages")
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.results.as(not null).length == 1
@@ -220,7 +220,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_uml is test do
 		var req = new_request("/test_prog::Character?format=svg")
-		var cmd = new CmdUML(test_view)
+		var cmd = new CmdUML(test_model, test_main, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.uml != null
@@ -229,7 +229,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_uml_not_found is test do
 		var req = new_request("/strength_bonus")
-		var cmd = new CmdUML(test_view)
+		var cmd = new CmdUML(test_model, test_main, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa WarningNoUML
 		assert cmd.format == "dot"
@@ -238,7 +238,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_inh_graph is test do
 		var req = new_request("/test_prog::Character?pdepth=1&cdepth=1")
-		var cmd = new CmdInheritanceGraph(test_view)
+		var cmd = new CmdInheritanceGraph(test_model, test_main, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.graph != null
@@ -250,7 +250,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_catalog_search is test do
 		var req = new_request("/?q=test&l=1")
-		var cmd = new CmdCatalogSearch(test_view, test_catalog)
+		var cmd = new CmdCatalogSearch(test_model, test_catalog, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.results.as(not null).first.full_name == "test_prog"
@@ -260,7 +260,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_catalog_tag is test do
 		var req = new_request("/test", "/:tid")
-		var cmd = new CmdCatalogTag(test_view, test_catalog)
+		var cmd = new CmdCatalogTag(test_model, test_catalog, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.tag == "test"
@@ -269,7 +269,7 @@ class TestCommandsHttp
 
 	fun test_cmd_http_catalog_person is test do
 		var req = new_request("/Alexandre%20Terrasa", "/:pid")
-		var cmd = new CmdCatalogPerson(test_view, test_catalog)
+		var cmd = new CmdCatalogPerson(test_model, test_catalog, test_filter)
 		var res = cmd.http_init(req)
 		assert res isa CmdSuccess
 		assert cmd.person.as(not null).name == "Alexandre Terrasa"

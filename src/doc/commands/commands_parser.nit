@@ -25,14 +25,20 @@ import commands::commands_catalog
 # Parse string commands to create DocQueries
 class CommandParser
 
-	# ModelView used to retrieve mentities
-	var view: ModelView
+	# Model used to retrieve mentities
+	var model: Model
+
+	# Main module for linearization
+	var mainmodule: MModule
 
 	# ModelBuilder used to retrieve AST nodes
 	var modelbuilder: ModelBuilder
 
 	# Catalog used for catalog commands
 	var catalog: nullable Catalog
+
+	# Filter to apply on model if any
+	var filter: nullable ModelFilter
 
 	# List of allowed command names for this parser
 	var allowed_commands: Array[String] = [
@@ -135,37 +141,37 @@ class CommandParser
 	# You must redefine this method to add new custom commands.
 	fun new_command(name: String): nullable DocCommand do
 		# CmdEntity
-		if name == "doc" then return new CmdComment(view)
-		if name == "code" then return new CmdCode(view, modelbuilder)
-		if name == "lin" then return new CmdLinearization(view)
-		if name == "defs" then return new CmdFeatures(view)
-		if name == "parents" then return new CmdParents(view)
-		if name == "ancestors" then return new CmdAncestors(view)
-		if name == "children" then return new CmdChildren(view)
-		if name == "descendants" then return new CmdDescendants(view)
-		if name == "param" then return new CmdParam(view)
-		if name == "return" then return new CmdReturn(view)
-		if name == "new" then return new CmdNew(view, modelbuilder)
-		if name == "call" then return new CmdCall(view, modelbuilder)
+		if name == "doc" then return new CmdComment(model, filter)
+		if name == "code" then return new CmdCode(model, modelbuilder, filter)
+		if name == "lin" then return new CmdLinearization(model, mainmodule, filter)
+		if name == "defs" then return new CmdFeatures(model, filter)
+		if name == "parents" then return new CmdParents(model, mainmodule, filter)
+		if name == "ancestors" then return new CmdAncestors(model, mainmodule, filter)
+		if name == "children" then return new CmdChildren(model, mainmodule, filter)
+		if name == "descendants" then return new CmdDescendants(model, mainmodule, filter)
+		if name == "param" then return new CmdParam(model, filter)
+		if name == "return" then return new CmdReturn(model, filter)
+		if name == "new" then return new CmdNew(model, modelbuilder, filter)
+		if name == "call" then return new CmdCall(model, modelbuilder, filter)
 		# CmdGraph
-		if name == "uml" then return new CmdUML(view)
-		if name == "graph" then return new CmdInheritanceGraph(view)
+		if name == "uml" then return new CmdUML(model, mainmodule, filter)
+		if name == "graph" then return new CmdInheritanceGraph(model, mainmodule, filter)
 		# CmdModel
-		if name == "list" then return new CmdModelEntities(view)
-		if name == "random" then return new CmdRandomEntities(view)
+		if name == "list" then return new CmdModelEntities(model, filter)
+		if name == "random" then return new CmdRandomEntities(model, filter)
 		# CmdCatalog
 		var catalog = self.catalog
 		if catalog != null then
-			if name == "catalog" then return new CmdCatalogPackages(view, catalog)
-			if name == "stats" then return new CmdCatalogStats(view, catalog)
-			if name == "tags" then return new CmdCatalogTags(view, catalog)
-			if name == "tag" then return new CmdCatalogTag(view, catalog)
-			if name == "person" then return new CmdCatalogPerson(view, catalog)
-			if name == "contrib" then return new CmdCatalogContributing(view, catalog)
-			if name == "maintain" then return new CmdCatalogMaintaining(view, catalog)
-			if name == "search" then return new CmdCatalogSearch(view, catalog)
+			if name == "catalog" then return new CmdCatalogPackages(model, catalog, filter)
+			if name == "stats" then return new CmdCatalogStats(model, catalog, filter)
+			if name == "tags" then return new CmdCatalogTags(model, catalog, filter)
+			if name == "tag" then return new CmdCatalogTag(model, catalog, filter)
+			if name == "person" then return new CmdCatalogPerson(model, catalog, filter)
+			if name == "contrib" then return new CmdCatalogContributing(model, catalog, filter)
+			if name == "maintain" then return new CmdCatalogMaintaining(model, catalog, filter)
+			if name == "search" then return new CmdCatalogSearch(model, catalog, filter)
 		else
-			if name == "search" then return new CmdSearch(view)
+			if name == "search" then return new CmdSearch(model, filter)
 		end
 		return null
 	end

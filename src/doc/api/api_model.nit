@@ -76,7 +76,7 @@ end
 class APIList
 	super APICommand
 
-	redef fun command do return new CmdModelEntities(config.view)
+	redef fun command do return new CmdModelEntities(config.model)
 end
 
 # Return a random list of MEntities.
@@ -85,7 +85,7 @@ end
 class APIRandom
 	super APICommand
 
-	redef fun command do return new CmdRandomEntities(config.view)
+	redef fun command do return new CmdRandomEntities(config.model)
 end
 
 # Search mentities from a cmd string.
@@ -94,7 +94,7 @@ end
 class APISearch
 	super APIList
 
-	redef fun command do return new CmdCatalogSearch(config.view, config.catalog)
+	redef fun command do return new CmdCatalogSearch(config.model, config.catalog)
 end
 
 # CmdEntity
@@ -105,7 +105,7 @@ end
 class APIEntity
 	super APICommand
 
-	redef fun command do return new CmdEntity(config.view)
+	redef fun command do return new CmdEntity(config.model)
 end
 
 # Return the full MDoc of a MEntity.
@@ -114,7 +114,7 @@ end
 class APIEntityDoc
 	super APICommand
 
-	redef fun command do return new CmdComment(config.view)
+	redef fun command do return new CmdComment(config.model)
 end
 
 # List MEntity ancestors
@@ -123,7 +123,7 @@ end
 class APIEntityAncestors
 	super APICommand
 
-	redef fun command do return new CmdAncestors(config.view)
+	redef fun command do return new CmdAncestors(config.model, config.mainmodule)
 end
 
 # List MEntity parents
@@ -132,7 +132,7 @@ end
 class APIEntityParents
 	super APICommand
 
-	redef fun command do return new CmdParents(config.view)
+	redef fun command do return new CmdParents(config.model, config.mainmodule)
 end
 
 # List MEntity children
@@ -141,7 +141,7 @@ end
 class APIEntityChildren
 	super APICommand
 
-	redef fun command do return new CmdChildren(config.view)
+	redef fun command do return new CmdChildren(config.model, config.mainmodule)
 end
 
 # List MEntity descendants
@@ -150,7 +150,7 @@ end
 class APIEntityDescendants
 	super APICommand
 
-	redef fun command do return new CmdDescendants(config.view)
+	redef fun command do return new CmdDescendants(config.model, config.mainmodule)
 end
 
 # Linearize super definitions of a MClassDef or a MPropDef if any.
@@ -159,7 +159,7 @@ end
 class APIEntityLinearization
 	super APICommand
 
-	redef fun command do return new CmdLinearization(config.view)
+	redef fun command do return new CmdLinearization(config.model, config.mainmodule)
 end
 
 # List definitions of a MEntity.
@@ -168,7 +168,7 @@ end
 class APIEntityDefs
 	super APICommand
 
-	redef fun command do return new CmdFeatures(config.view)
+	redef fun command do return new CmdFeatures(config.model)
 end
 
 # List intro definitions of a MEntity.
@@ -177,7 +177,7 @@ end
 class APIEntityIntros
 	super APICommand
 
-	redef fun command do return new CmdIntros(config.view)
+	redef fun command do return new CmdIntros(config.model, config.mainmodule)
 end
 
 # List redef definitions of a MEntity.
@@ -186,7 +186,7 @@ end
 class APIEntityRedefs
 	super APICommand
 
-	redef fun command do return new CmdRedefs(config.view)
+	redef fun command do return new CmdRedefs(config.model, config.mainmodule)
 end
 
 # List all definitions accessible from a MEntity.
@@ -195,7 +195,7 @@ end
 class APIEntityAll
 	super APICommand
 
-	redef fun command do return new CmdAllProps(config.view)
+	redef fun command do return new CmdAllProps(config.model, config.mainmodule)
 end
 
 # Return the source code of MEntity.
@@ -204,7 +204,7 @@ end
 class APIEntityCode
 	super APICommand
 
-	redef fun command do return new CmdCode(config.view, config.modelbuilder)
+	redef fun command do return new CmdCode(config.model, config.modelbuilder)
 end
 
 # Return the metadata for MEntity is any.
@@ -213,7 +213,7 @@ end
 class APIEntityMetadata
 	super APICommand
 
-	redef fun command do return new CmdMetadata(config.view)
+	redef fun command do return new CmdMetadata(config.model)
 end
 
 # CmdGraph
@@ -224,14 +224,14 @@ end
 class APIEntityUML
 	super APICommand
 
-	redef fun command do return new CmdUML(config.view)
+	redef fun command do return new CmdUML(config.model, config.mainmodule)
 end
 
 # Render a hierarchy graph for `mentity` if any.
 class APIInheritanceGraph
 	super APICommand
 
-	redef fun command do return new CmdInheritanceGraph(config.view)
+	redef fun command do return new CmdInheritanceGraph(config.model, config.mainmodule)
 end
 
 redef class MEntity
@@ -250,7 +250,7 @@ end
 class APICatalogPackages
 	super APICommand
 
-	redef fun command do return new CmdCatalogPackages(config.view, config.catalog)
+	redef fun command do return new CmdCatalogPackages(config.model, config.catalog)
 end
 
 # Get the catalog statistics
@@ -259,7 +259,7 @@ end
 class APICatalogStats
 	super APICommand
 
-	redef fun command do return new CmdCatalogStats(config.view, config.catalog)
+	redef fun command do return new CmdCatalogStats(config.model, config.catalog)
 end
 
 # Get all the tags from the catalog
@@ -268,7 +268,7 @@ end
 class APICatalogTags
 	super APICommand
 
-	redef fun command do return new CmdCatalogTags(config.view, config.catalog)
+	redef fun command do return new CmdCatalogTags(config.model, config.catalog)
 end
 
 # Get the packages related to a tag
@@ -277,7 +277,7 @@ end
 class APICatalogTag
 	super APICommand
 
-	redef fun command do return new CmdCatalogTag(config.view, config.catalog)
+	redef fun command do return new CmdCatalogTag(config.model, config.catalog)
 end
 
 # Get a person existing in the catalog
@@ -286,7 +286,7 @@ end
 class APICatalogPerson
 	super APICommand
 
-	redef fun command do return new CmdCatalogPerson(config.view, config.catalog)
+	redef fun command do return new CmdCatalogPerson(config.model, config.catalog)
 end
 
 # Get the list of mpackages maintained by a person
@@ -295,7 +295,7 @@ end
 class APICatalogMaintaining
 	super APICommand
 
-	redef fun command do return new CmdCatalogMaintaining(config.view, config.catalog)
+	redef fun command do return new CmdCatalogMaintaining(config.model, config.catalog)
 end
 
 # Get the list of mpackages contributed by a person
@@ -304,5 +304,5 @@ end
 class APICatalogContributing
 	super APICommand
 
-	redef fun command do return new CmdCatalogContributing(config.view, config.catalog)
+	redef fun command do return new CmdCatalogContributing(config.model, config.catalog)
 end

@@ -26,6 +26,9 @@ import dot
 abstract class CmdGraph
 	super DocCommand
 
+	# Mainmodule for linearization
+	var mainmodule: MModule
+
 	# Rendering format
 	#
 	# Can be `dot` or `html`.
@@ -57,7 +60,7 @@ class CmdUML
 	super CmdEntity
 	super CmdGraph
 
-	autoinit(view, mentity, mentity_name, format, uml)
+	autoinit(model, mainmodule, filter, mentity, mentity_name, format, uml)
 
 	# UML model to return
 	var uml: nullable UMLModel = null is optional, writable
@@ -70,10 +73,8 @@ class CmdUML
 		var mentity = self.mentity.as(not null)
 
 		if mentity isa MClassDef then mentity = mentity.mclass
-		if mentity isa MClass then
-			uml = new UMLModel(view, view.mainmodule)
-		else if mentity isa MModule then
-			uml = new UMLModel(view, view.mainmodule)
+		if mentity isa MClass or mentity isa MModule then
+			uml = new UMLModel(model, mainmodule, filter)
 		else
 			return new WarningNoUML(mentity)
 		end
@@ -107,7 +108,7 @@ class CmdInheritanceGraph
 	super CmdEntity
 	super CmdGraph
 
-	autoinit(view, mentity, mentity_name, pdepth, cdepth, format, graph)
+	autoinit(model, mainmodule, filter, mentity, mentity_name, pdepth, cdepth, format, graph)
 
 	# Parents depth to display
 	var pdepth: nullable Int = null is optional, writable
@@ -125,7 +126,7 @@ class CmdInheritanceGraph
 		if not res isa CmdSuccess then return res
 		var mentity = self.mentity.as(not null)
 
-		graph = new InheritanceGraph(mentity, view)
+		graph = new InheritanceGraph(mentity, model, mainmodule, filter)
 		return res
 	end
 
@@ -145,8 +146,14 @@ class InheritanceGraph
 	# MEntity at the center of this graph
 	var center: MEntity
 
-	# ModelView used to filter graph
-	var view: ModelView
+	# Model used to build graph from
+	var model: Model
+
+	# Mainmodule for class linearization
+	var mainmodule: MModule
+
+	# Filter to apply on model if any
+	var filter: nullable ModelFilter
 
 	# Graph generated
 	var graph: DotGraph is lazy do
@@ -190,7 +197,7 @@ class InheritanceGraph
 			from_dotdotdot(mentity)
 			return
 		end
-		var parents = mentity.collect_parents(view.filter)
+		var parents = mentity.collect_parents(mainmodule, filter)
 		if parents.length > 10 then
 			from_dotdotdot(mentity)
 			return
@@ -226,7 +233,7 @@ class InheritanceGraph
 			to_dotdotdot(mentity)
 			return
 		end
-		var children = mentity.collect_children(view.filter)
+		var children = mentity.collect_children(mainmodule, filter)
 		if children.length > 10 then
 			to_dotdotdot(mentity)
 			return

@@ -71,9 +71,7 @@ private class NitwebPhase
 			accept_attribute = not toolcontext.opt_no_attribute.value
 		)
 
-		var view = new ModelView(model, mainmodule, filter)
-
-		var config = new NitwebConfig(model, mainmodule, toolcontext.modelbuilder, view)
+		var config = new NitwebConfig(model, mainmodule, toolcontext.modelbuilder, filter)
 		var config_file = toolcontext.opt_config.value
 		if config_file == null then config.default_config_file = "nitweb.ini"
 		config.parse_options(args)

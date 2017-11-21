@@ -40,9 +40,7 @@ class NitwebConfig
 	var modelbuilder: ModelBuilder
 
 	# The JSON API does not filter anything by default.
-	#
-	# So we can cache the model view.
-	var view: ModelView
+	var filter: nullable ModelFilter
 
 	# Catalog to pass to handlers.
 	var catalog: Catalog is noinit
@@ -53,7 +51,7 @@ class NitwebConfig
 	# TODO move to nitweb
 	fun build_catalog do
 		var catalog = new Catalog(modelbuilder)
-		var mpackages = view.model.collect_mpackages(view.filter)
+		var mpackages = model.collect_mpackages(filter)
 		# Compute the poset
 		for p in mpackages do
 			var g = p.root
@@ -87,11 +85,13 @@ abstract class APIHandler
 	var config: NitwebConfig
 
 	# Find the MEntity ` with `full_name`.
-	fun find_mentity(model: ModelView, full_name: nullable String): nullable MEntity do
+	fun find_mentity(full_name: nullable String): nullable MEntity do
 		if full_name == null then return null
-		var mentity = model.model.mentity_by_full_name(full_name.from_percent_encoding, model.filter)
+		var mentity = config.model.mentity_by_full_name(full_name.from_percent_encoding, config.filter)
 		if mentity == null then return null
-		if config.view.accept_mentity(mentity) then return mentity
+
+		var filter = config.filter
+		if filter == null or filter.accept_mentity(mentity) then return mentity
 		return null
 	end
 
@@ -106,7 +106,7 @@ abstract class APIHandler
 			res.api_error(400, "Expected mentity full name")
 			return null
 		end
-		var mentity = find_mentity(config.view, id)
+		var mentity = find_mentity(id)
 		if mentity == null then
 			res.api_error(404, "MEntity `{id}` not found")
 		end

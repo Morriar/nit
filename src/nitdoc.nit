@@ -90,11 +90,11 @@ private class Nitdoc
 		var catalog = new Catalog(toolcontext.modelbuilder)
 		catalog.build_catalog(mainmodule.model.mpackages)
 
-		var filters = new ModelFilter(
+		var filter = new ModelFilter(
 			min_visibility,
 			accept_attribute = accept_attribute,
 			accept_fictive = false)
-		var doc = new DocModel(mainmodule.model, mainmodule, filters, toolcontext, toolcontext.modelbuilder, catalog)
+		var doc = new DocModel(mainmodule.model, toolcontext, toolcontext.modelbuilder, mainmodule,catalog, filter)
 
 		doc.share_url = toolcontext.opt_shareurl.value
 		doc.custom_brand = toolcontext.opt_custom_brand.value

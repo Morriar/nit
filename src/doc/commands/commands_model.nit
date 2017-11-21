@@ -93,11 +93,23 @@ class WarningNoMDoc
 	redef fun to_s do return "No documentation for `{mentity.full_name}`."
 end
 
+# An abstract inheritance command
+#
+# For things like ancestors, parents, children and descendants.
+abstract class CmdInheritance
+	super CmdEntityList
+
+	autoinit(model, mainmodule, filter, mentity, mentity_name, limit, page, count, max)
+
+	# Mainmodule for class linearization
+	var mainmodule: MModule
+end
+
 # MEntity ancestors command
 #
 # Retrieve all the ancestors (direct and indirect) of a MEntity.
 class CmdAncestors
-	super CmdEntityList
+	super CmdInheritance
 
 	# Include direct parents in the ancestors list
 	#
@@ -111,13 +123,13 @@ class CmdAncestors
 		if not res isa CmdSuccess then return res
 		var mentity = self.mentity.as(not null)
 
-		var ancestors = mentity.collect_ancestors(view.filter).to_a
+		var ancestors = mentity.collect_ancestors(mainmodule, filter).to_a
 		if parents then
 			results = ancestors
 			return res
 		end
 
-		var parents = mentity.collect_parents(view.filter)
+		var parents = mentity.collect_parents(mainmodule, filter)
 		var mentities = new HashSet[MEntity]
 		for ancestor in ancestors do
 			if not parents.has(ancestor) then mentities.add ancestor
@@ -129,7 +141,7 @@ end
 
 # MEntity parents command
 class CmdParents
-	super CmdEntityList
+	super CmdInheritance
 
 	redef fun init_results do
 		if results != null then return new CmdSuccess
@@ -138,14 +150,14 @@ class CmdParents
 		if not res isa CmdSuccess then return res
 		var mentity = self.mentity.as(not null)
 
-		results = mentity.collect_parents(view.filter).to_a
+		results = mentity.collect_parents(mainmodule, filter).to_a
 		return res
 	end
 end
 
 # MEntity children command
 class CmdChildren
-	super CmdEntityList
+	super CmdInheritance
 
 	redef fun init_results do
 		if results != null then return new CmdSuccess
@@ -154,14 +166,14 @@ class CmdChildren
 		if not res isa CmdSuccess then return res
 		var mentity = self.mentity.as(not null)
 
-		results = mentity.collect_children(view.filter).to_a
+		results = mentity.collect_children(mainmodule, filter).to_a
 		return res
 	end
 end
 
 # MEntity descendants command
 class CmdDescendants
-	super CmdEntityList
+	super CmdInheritance
 
 	# Include direct children in the descendants list
 	#
@@ -175,13 +187,13 @@ class CmdDescendants
 		if not res isa CmdSuccess then return res
 		var mentity = self.mentity.as(not null)
 
-		var descendants = mentity.collect_descendants(view.filter).to_a
+		var descendants = mentity.collect_descendants(mainmodule, filter).to_a
 		if children then
 			results = descendants
 			return res
 		end
 
-		var children = mentity.collect_children(view.filter)
+		var children = mentity.collect_children(mainmodule, filter)
 		var mentities = new HashSet[MEntity]
 		for descendant in descendants do
 			if not children.has(descendant) then mentities.add descendant
@@ -195,7 +207,7 @@ end
 #
 # Collects and linearizes definitions about an MEntity.
 class CmdLinearization
-	super CmdEntityList
+	super CmdInheritance
 
 	# Same states than `CmdEntity::init_mentity`
 	#
@@ -209,7 +221,7 @@ class CmdLinearization
 		var mentity = self.mentity.as(not null)
 
 		sorter = null
-		results = mentity.collect_linearization(view.mainmodule)
+		results = mentity.collect_linearization(mainmodule)
 		if results == null then return new WarningNoLinearization(mentity)
 		return res
 	end
@@ -244,7 +256,7 @@ class CmdSearch
 		var query = self.query
 		if query == null then return new ErrorNoQuery
 		sorter = null
-		results = view.model.find(query)
+		results = model.find(query)
 		return res
 	end
 end
@@ -274,21 +286,21 @@ class CmdFeatures
 
 		var mentities = new Array[MEntity]
 		if mentity isa MPackage then
-			mentities.add_all mentity.collect_mgroups(view.filter)
-			mentities.add_all mentity.collect_mmodules(view.filter)
+			mentities.add_all mentity.collect_mgroups(filter)
+			mentities.add_all mentity.collect_mmodules(filter)
 		else if mentity isa MGroup then
-			mentities.add_all mentity.collect_mgroups(view.filter)
-			mentities.add_all mentity.collect_mmodules(view.filter)
+			mentities.add_all mentity.collect_mgroups(filter)
+			mentities.add_all mentity.collect_mmodules(filter)
 		else if mentity isa MModule then
-			mentities.add_all mentity.collect_local_mclassdefs(view.filter)
+			mentities.add_all mentity.collect_local_mclassdefs(filter)
 		else if mentity isa MClass then
-			mentities.add_all mentity.collect_intro_mproperties(view.filter)
-			mentities.add_all mentity.collect_redef_mpropdefs(view.filter)
+			mentities.add_all mentity.collect_intro_mproperties(filter)
+			mentities.add_all mentity.collect_redef_mpropdefs(filter)
 		else if mentity isa MClassDef then
-			mentities.add_all mentity.collect_intro_mpropdefs(view.filter)
-			mentities.add_all mentity.collect_redef_mpropdefs(view.filter)
+			mentities.add_all mentity.collect_intro_mpropdefs(filter)
+			mentities.add_all mentity.collect_redef_mpropdefs(filter)
 		else if mentity isa MProperty then
-			mentities.add_all mentity.collect_mpropdefs(view.filter)
+			mentities.add_all mentity.collect_mpropdefs(filter)
 		else
 			return new WarningNoFeatures(mentity)
 		end
@@ -299,7 +311,7 @@ end
 
 # TODO remove once the filters/sorters are merged
 class CmdIntros
-	super CmdEntityList
+	super CmdInheritance
 
 	redef fun init_results do
 		if results != null then return new CmdSuccess
@@ -309,14 +321,14 @@ class CmdIntros
 		var mentity = self.mentity.as(not null)
 
 		if mentity isa MModule then
-			var mentities = mentity.collect_intro_mclasses(view.filter).to_a
+			var mentities = mentity.collect_intro_mclasses(filter).to_a
 			self.results = mentities
 		else if mentity isa MClass then
-			var mentities = mentity.collect_intro_mproperties(view.filter).to_a
+			var mentities = mentity.collect_intro_mproperties(filter).to_a
 			self.results = mentities
 		else if mentity isa MClassDef then
-			var mentities = mentity.collect_intro_mpropdefs(view.filter).to_a
-			view.mainmodule.linearize_mpropdefs(mentities)
+			var mentities = mentity.collect_intro_mpropdefs(filter).to_a
+			mainmodule.linearize_mpropdefs(mentities)
 			self.results = mentities
 		else
 			return new WarningNoFeatures(mentity)
@@ -327,7 +339,7 @@ end
 
 # TODO remove once the filters/sorters are merged
 class CmdRedefs
-	super CmdEntityList
+	super CmdInheritance
 
 	redef fun init_command do
 		if results != null then return new CmdSuccess
@@ -337,14 +349,14 @@ class CmdRedefs
 		var mentity = self.mentity.as(not null)
 
 		if mentity isa MModule then
-			var mentities = mentity.collect_redef_mclasses(view.filter).to_a
+			var mentities = mentity.collect_redef_mclasses(filter).to_a
 			self.results = mentities
 		else if mentity isa MClass then
-			var mentities = mentity.collect_redef_mproperties(view.filter).to_a
+			var mentities = mentity.collect_redef_mproperties(filter).to_a
 			self.results = mentities
 		else if mentity isa MClassDef then
-			var mentities = mentity.collect_redef_mpropdefs(view.filter).to_a
-			view.mainmodule.linearize_mpropdefs(mentities)
+			var mentities = mentity.collect_redef_mpropdefs(filter).to_a
+			mainmodule.linearize_mpropdefs(mentities)
 			self.results = mentities
 		else
 			return new WarningNoFeatures(mentity)
@@ -355,7 +367,7 @@ end
 
 # TODO remove once the filters/sorters are merged
 class CmdAllProps
-	super CmdEntityList
+	super CmdInheritance
 
 	redef fun init_results do
 		if results != null then return new CmdSuccess
@@ -365,7 +377,7 @@ class CmdAllProps
 		var mentity = self.mentity.as(not null)
 
 		if mentity isa MClass then
-			results = mentity.collect_accessible_mproperties(view.filter).to_a
+			results = mentity.collect_accessible_mproperties(mainmodule, filter).to_a
 		else
 			return new WarningNoFeatures(mentity)
 		end
@@ -387,7 +399,7 @@ end
 class CmdCode
 	super CmdEntity
 
-	autoinit(view, modelbuilder, mentity, mentity_name, format)
+	autoinit(model, modelbuilder, filter, mentity, mentity_name, format)
 
 	# ModelBuilder used to get AST nodes
 	var modelbuilder: ModelBuilder
@@ -472,21 +484,21 @@ class CmdModelEntities
 
 		var mentities = new Array[MEntity]
 		if kind == "packages" then
-			mentities = view.model.collect_mpackages(view.filter).to_a
+			mentities = model.collect_mpackages(filter).to_a
 		else if kind == "groups" then
-			mentities = view.model.collect_mgroups(view.filter).to_a
+			mentities = model.collect_mgroups(filter).to_a
 		else if kind == "modules" then
-			mentities = view.model.collect_mmodules(view.filter).to_a
+			mentities = model.collect_mmodules(filter).to_a
 		else if kind == "classes" then
-			mentities = view.model.collect_mclasses(view.filter).to_a
+			mentities = model.collect_mclasses(filter).to_a
 		else if kind == "classdefs" then
-			mentities = view.model.collect_mclassdefs(view.filter).to_a
+			mentities = model.collect_mclassdefs(filter).to_a
 		else if kind == "properties" then
-			mentities = view.model.collect_mproperties(view.filter).to_a
+			mentities = model.collect_mproperties(filter).to_a
 		else if kind == "propdefs" then
-			mentities = view.model.collect_mpropdefs(view.filter).to_a
+			mentities = model.collect_mpropdefs(filter).to_a
 		else
-			mentities = view.model.collect_mentities(view.filter).to_a
+			mentities = model.collect_mentities(filter).to_a
 		end
 		results = mentities
 		return res
