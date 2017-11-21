@@ -192,12 +192,54 @@ redef class Model
 		return res
 	end
 
+	# Collect all MClassDefs in `self`
+	fun collect_mclassdefs(filter: nullable ModelFilter): HashSet[MClassDef] do
+		var res = new HashSet[MClassDef]
+		for mclass in collect_mclasses(filter) do
+			res.add_all mclass.collect_mclassdefs(filter)
+		end
+		return res
+	end
+
 	# Collect all MProperties introduced in `self`
 	fun collect_intro_mproperties(filter: nullable ModelFilter): HashSet[MProperty] do
 		var res = new HashSet[MProperty]
 		for mpackage in collect_mpackages(filter) do
 			res.add_all mpackage.collect_intro_mproperties(filter)
 		end
+		return res
+	end
+
+	# Collect all MProperties in `self`
+	fun collect_mproperties(filter: nullable ModelFilter): HashSet[MProperty] do
+		var res = new HashSet[MProperty]
+		for mproperty in mproperties do
+			if filter == null or filter.accept_mentity(mproperty) then res.add mproperty
+		end
+		return res
+	end
+
+	# Collect all MPropDefs in `self`
+	fun collect_mpropdefs(filter: nullable ModelFilter): HashSet[MPropDef] do
+		var res = new HashSet[MPropDef]
+		for mproperty in collect_mproperties(filter) do
+			for mpropdef in mproperty.mpropdefs do
+				if filter == null or filter.accept_mentity(mpropdef) then res.add mpropdef
+			end
+		end
+		return res
+	end
+
+	# Collect all MEntities in `self`
+	fun collect_mentities(filter: nullable ModelFilter): HashSet[MEntity] do
+		var res = new HashSet[MEntity]
+		res.add_all collect_mpackages(filter)
+		res.add_all collect_mgroups(filter)
+		res.add_all collect_mmodules(filter)
+		res.add_all collect_mclasses(filter)
+		res.add_all collect_mclassdefs(filter)
+		res.add_all collect_mproperties(filter)
+		res.add_all collect_mpropdefs(filter)
 		return res
 	end
 end

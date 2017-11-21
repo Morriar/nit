@@ -119,7 +119,7 @@ redef class Catalog
 	# Build the catalog for Nitx
 	private fun build_catalog(view: ModelView) do
 		# Compute the poset
-		for p in view.mpackages do
+		for p in view.model.collect_mpackages(view.filter) do
 			var g = p.root
 			assert g != null
 			modelbuilder.scan_group(g)
@@ -134,7 +134,7 @@ redef class Catalog
 			end
 		end
 		# Build the catalog
-		for mpackage in view.mpackages do
+		for mpackage in view.model.collect_mpackages(view.filter) do
 			package_page(mpackage)
 			git_info(mpackage)
 			mpackage_stats(mpackage)

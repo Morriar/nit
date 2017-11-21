@@ -35,7 +35,7 @@ class CmdParam
 		if not mentity isa MClass then return new ErrorNotClass(mentity)
 
 		var mentities = new HashSet[MEntity]
-		for mproperty in view.mproperties do
+		for mproperty in view.model.collect_mproperties(view.filter) do
 			if not mproperty isa MMethod then continue
 			var msignature = mproperty.intro.msignature
 			if msignature != null then
@@ -70,7 +70,7 @@ class CmdReturn
 		if not mentity isa MClass then return new ErrorNotClass(mentity)
 
 		var mentities = new HashSet[MEntity]
-		for mproperty in view.mproperties do
+		for mproperty in view.model.collect_mproperties(view.filter) do
 			if not mproperty isa MMethod then continue
 			var msignature = mproperty.intro.msignature
 			if msignature != null then
@@ -109,7 +109,7 @@ class CmdNew
 		if not mentity isa MClass then return new ErrorNotClass(mentity)
 
 		var mentities = new HashSet[MEntity]
-		for mpropdef in view.mpropdefs do
+		for mpropdef in view.model.collect_mpropdefs(view.filter) do
 			var visitor = new TypeInitVisitor(mentity)
 			var npropdef = modelbuilder.mpropdef2node(mpropdef)
 			if npropdef == null then continue
@@ -145,7 +145,7 @@ class CmdCall
 		if not mentity isa MProperty then return new ErrorNotProperty(mentity)
 
 		var mentities = new HashSet[MEntity]
-		for mpropdef in view.mpropdefs do
+		for mpropdef in view.model.collect_mpropdefs(view.filter) do
 			if mpropdef.mproperty == mentity then continue
 			var visitor = new MPropertyCallVisitor
 			var npropdef = modelbuilder.mpropdef2node(mpropdef)

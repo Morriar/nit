@@ -510,21 +510,21 @@ class CmdModelEntities
 
 		var mentities = new Array[MEntity]
 		if kind == "packages" then
-			mentities = view.mpackages.to_a
+			mentities = view.model.collect_mpackages(view.filter).to_a
 		else if kind == "groups" then
-			mentities = view.mgroups.to_a
+			mentities = view.model.collect_mgroups(view.filter).to_a
 		else if kind == "modules" then
-			mentities = view.mmodules.to_a
+			mentities = view.model.collect_mmodules(view.filter).to_a
 		else if kind == "classes" then
-			mentities = view.mclasses.to_a
+			mentities = view.model.collect_mclasses(view.filter).to_a
 		else if kind == "classdefs" then
-			mentities = view.mclassdefs.to_a
+			mentities = view.model.collect_mclassdefs(view.filter).to_a
 		else if kind == "properties" then
-			mentities = view.mproperties.to_a
+			mentities = view.model.collect_mproperties(view.filter).to_a
 		else if kind == "propdefs" then
-			mentities = view.mpropdefs.to_a
+			mentities = view.model.collect_mpropdefs(view.filter).to_a
 		else
-			mentities = view.mentities.to_a
+			mentities = view.model.collect_mentities(view.filter).to_a
 		end
 		results = mentities
 		return res

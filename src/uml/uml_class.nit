@@ -35,7 +35,7 @@ redef class UMLModel
 					fontname = "Bitstream Vera Sans"
 					fontsize = 8
 				]\n"""
-		for mclass in view.mclasses do
+		for mclass in view.model.collect_mclasses(view.filter) do
 			tpl.add mclass.tpl_class(self)
 			tpl.add "\n"
 		end
