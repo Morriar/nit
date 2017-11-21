@@ -14,3 +14,18 @@ module text
 import ropes
 import string_search
 import fixed_ints_text
+
+redef class Text
+
+	# Return `true` if and only if the string equals `"true"`
+	#
+	# ~~~
+	# assert "true".to_b
+	# assert not "false".to_b
+	# assert not "".to_b
+	# assert not "foo".to_b
+	# ~~~
+	fun to_b: Bool do
+		return self.to_s == "true"
+	end
+end
