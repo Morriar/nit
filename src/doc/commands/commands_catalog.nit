@@ -38,7 +38,7 @@ class CmdCatalogSearch
 		if query == null then return new ErrorNoQuery
 		sorter = null
 
-		var index = view.index
+		var index = view.model.index
 
 		# lookup by name prefix
 		var matches = index.find_by_name_prefix(query).uniq.

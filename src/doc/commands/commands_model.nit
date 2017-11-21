@@ -244,7 +244,7 @@ class CmdSearch
 		var query = self.query
 		if query == null then return new ErrorNoQuery
 		sorter = null
-		results = view.find(query)
+		results = view.model.find(query)
 		return res
 	end
 end

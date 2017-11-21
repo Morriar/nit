@@ -23,6 +23,7 @@
 # like Nitweb, Nitx, Nitdoc or documentation cards within READMEs.
 module commands_base
 
+import model::model_views
 import model::model_index
 import catalog
 
@@ -140,11 +141,11 @@ class CmdEntity
 		var mentity_name = self.mentity_name
 		if mentity_name == null then return new ErrorMEntityNoName
 
-		mentity = view.mentity_by_full_name(mentity_name)
+		mentity = view.model.mentity_by_full_name(mentity_name)
 		if mentity == null then
-			var mentities = view.mentities_by_name(mentity_name)
+			var mentities = view.model.mentities_by_name(mentity_name)
 			if mentities.is_empty then
-				var suggest = view.find(mentity_name, 3)
+				var suggest = view.model.find(mentity_name, 3)
 				return new ErrorMEntityNotFound(mentity_name, suggest)
 			else if mentities.length > 1 then
 				return new ErrorMEntityConflict(mentity_name, mentities)

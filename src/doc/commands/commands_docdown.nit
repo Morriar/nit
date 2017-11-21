@@ -87,10 +87,10 @@ class CmdDecorator
 	end
 
 	private fun try_find_mentity(view: ModelView, text: String): nullable MEntity do
-		var mentity = view.mentity_by_full_name(text)
+		var mentity = view.model.mentity_by_full_name(text, view.filter)
 		if mentity != null then return mentity
 
-		var mentities = view.mentities_by_name(text)
+		var mentities = view.model.mentities_by_name(text, view.filter)
 		if mentities.is_empty then
 			return null
 		else if mentities.length > 1 then
