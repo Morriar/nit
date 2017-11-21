@@ -221,14 +221,14 @@ redef class CmdComment
 	redef fun parser_init(mentity_name, options) do
 		full_doc = not options.has_key("only-synopsis")
 		fallback = not options.has_key("no-fallback")
-		if options.has_key("format") then format = options["format"]
+		if options.has_key("format") then format = options.opt_string("format")
 		return super
 	end
 end
 
 redef class CmdCode
 	redef fun parser_init(mentity_name, options) do
-		if options.has_key("format") then format = options["format"]
+		if options.has_key("format") then format = options.opt_string("format")
 		return super
 	end
 end
@@ -264,7 +264,7 @@ end
 
 redef class CmdGraph
 	redef fun parser_init(mentity_name, options) do
-		if options.has_key("format") then format = options["format"]
+		if options.has_key("format") then format = options.opt_string("format")
 		return super
 	end
 end
@@ -298,6 +298,15 @@ redef class CmdCatalogPerson
 end
 
 # Utils
+
+redef class Map[K, V]
+	private fun opt_string(key: K): nullable String do
+		if not has_key(key) then return null
+		var value = self[key]
+		if value == null then return null
+		return value.to_s
+	end
+end
 
 redef class Text
 	# Read `self` as raw text until `nend` and append it to the `out` buffer.
