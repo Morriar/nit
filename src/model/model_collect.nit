@@ -242,6 +242,25 @@ redef class Model
 		res.add_all collect_mpropdefs(filter)
 		return res
 	end
+
+	# Searches the MEntity that matches `full_name`.
+	fun mentity_by_full_name(full_name: String, filter: nullable ModelFilter): nullable MEntity do
+		for mentity in collect_mentities(filter) do
+			if filter != null and not filter.accept_mentity(mentity) then continue
+			if mentity.full_name == full_name then return mentity
+		end
+		return null
+	end
+
+	# Searches the MEntities that matches `full_name`.
+	fun mentities_by_name(name: String, filter: nullable ModelFilter): Array[MEntity] do
+		var res = new Array[MEntity]
+		for mentity in collect_mentities(filter) do
+			if filter != null and not filter.accept_mentity(mentity) then continue
+			if mentity.name == name then res.add mentity
+		end
+		return res
+	end
 end
 
 redef class MPackage

@@ -53,8 +53,9 @@ class NitwebConfig
 	# TODO move to nitweb
 	fun build_catalog do
 		var catalog = new Catalog(modelbuilder)
+		var mpackages = view.model.collect_mpackages(view.filter)
 		# Compute the poset
-		for p in view.mpackages do
+		for p in mpackages do
 			var g = p.root
 			assert g != null
 			modelbuilder.scan_group(g)
@@ -69,7 +70,7 @@ class NitwebConfig
 			end
 		end
 		# Build the catalog
-		for mpackage in view.mpackages do
+		for mpackage in mpackages do
 			catalog.package_page(mpackage)
 			catalog.git_info(mpackage)
 			catalog.mpackage_stats(mpackage)
@@ -88,7 +89,7 @@ abstract class APIHandler
 	# Find the MEntity ` with `full_name`.
 	fun find_mentity(model: ModelView, full_name: nullable String): nullable MEntity do
 		if full_name == null then return null
-		var mentity = model.mentity_by_full_name(full_name.from_percent_encoding)
+		var mentity = model.model.mentity_by_full_name(full_name.from_percent_encoding, model.filter)
 		if mentity == null then return null
 		if config.view.accept_mentity(mentity) then return mentity
 		return null
