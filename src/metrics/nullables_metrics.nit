@@ -89,7 +89,7 @@ class CNBNA
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			var all = mclass.collect_accessible_mattributes(model_view)
+			var all = mclass.collect_accessible_mattributes(model_view.filter)
 			for mattr in all do
 				if mattr.is_nullable then values.inc(mclass)
 			end

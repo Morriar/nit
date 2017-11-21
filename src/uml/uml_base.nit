@@ -16,6 +16,7 @@
 module uml_base
 
 import toolcontext
+import model::model_views
 import model::model_collect
 
 # UML model builder.
