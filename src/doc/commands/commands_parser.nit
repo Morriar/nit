@@ -210,7 +210,7 @@ end
 
 redef class CmdList
 	redef fun parser_init(mentity_name, options) do
-		if options.has_key("limit") and options["limit"].is_int then limit = options["limit"].to_i
+		if options.has_key("limit") then limit = options.opt_int("limit")
 		return super
 	end
 end
@@ -236,7 +236,7 @@ end
 redef class CmdSearch
 	redef fun parser_init(mentity_name, options) do
 		query = mentity_name
-		if options.has_key("page") and options["page"].is_int then page = options["page"].to_i
+		if options.has_key("page") then page = options.opt_int("page")
 		return super
 	end
 end
@@ -271,12 +271,8 @@ end
 
 redef class CmdInheritanceGraph
 	redef fun parser_init(mentity_name, options) do
-		if options.has_key("pdepth") and options["pdepth"].is_int then
-			pdepth = options["pdepth"].to_i
-		end
-		if options.has_key("cdepth") and options["cdepth"].is_int then
-			cdepth = options["cdepth"].to_i
-		end
+		if options.has_key("pdepth") then pdepth = options.opt_int("pdepth")
+		if options.has_key("cdepth") then cdepth = options.opt_int("cdepth")
 		return super
 	end
 end
@@ -305,6 +301,13 @@ redef class Map[K, V]
 		var value = self[key]
 		if value == null then return null
 		return value.to_s
+	end
+
+	private fun opt_int(key: K): nullable Int do
+		var string = opt_string(key)
+		if string == null then return null
+		if string.is_int then return string.to_i
+		return null
 	end
 end
 
