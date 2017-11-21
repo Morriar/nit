@@ -156,7 +156,7 @@ class ModelFilter
 	end
 
 	# If set, accept only entities local to `accept_inherited`
-	var accept_inherited: nullable MEntity = null is optional
+	var accept_inherited: nullable MEntity = null is optional, writable
 
 	# Accept only entities local to `accept_inherited`
 	#
