@@ -195,8 +195,57 @@ end
 
 redef class DocCommand
 
+	# Parse filter options
+	fun parse_filter(options: Map[String, String]) do
+		var filter = self.filter or else new ModelFilter
+		if options.has_key("filter-visibility") then
+			var visibility = options.opt_string("filter-visibility")
+			if visibility == "public" then
+				filter.min_visibility = public_visibility
+			else if visibility == "protected" then
+				filter.min_visibility = protected_visibility
+			else
+				filter.min_visibility = private_visibility
+			end
+		end
+		if options.has_key("filter-fictive") then
+			filter.accept_fictive = not options.opt_bool("filter-fictive")
+		end
+		if options.has_key("filter-test") then
+			filter.accept_test = not options.opt_bool("filter-test")
+		end
+		if options.has_key("filter-redef") then
+			filter.accept_redef = not options.opt_bool("filter-redef")
+		end
+		if options.has_key("filter-extern") then
+			filter.accept_extern = not options.opt_bool("filter-extern")
+		end
+		if options.has_key("filter-attribute") then
+			filter.accept_attribute = not options.opt_bool("filter-attribute")
+		end
+		if options.has_key("filter-empty-doc") then
+			filter.accept_empty_doc = not options.opt_bool("filter-empty-doc")
+		end
+		if options.has_key("filter-inherited") then
+			var name = options.opt_string("filter-inherited")
+			if name != null then
+				var mentity = model.mentity_by_full_name(name)
+				if mentity == null then
+					var mentities = model.mentities_by_name(name)
+					if mentities.not_empty then mentity = mentities.first
+				end
+				filter.accept_inherited = mentity
+			end
+		end
+		if options.has_key("filter-full-name") then
+			filter.accept_full_name = options.opt_string("filter-full-name")
+		end
+		self.filter = filter
+	end
+
 	# Initialize the command from the CommandParser data
 	fun parser_init(arg: String, options: Map[String, String]): CmdMessage do
+		parse_filter(options)
 		return init_command
 	end
 end
@@ -310,9 +359,9 @@ redef class Map[K, V]
 		return null
 	end
 
-	private fun opt_bool(key: K): nullable Bool do
+	private fun opt_bool(key: K): Bool do
 		var string = opt_string(key)
-		if string == null then return null
+		if string == null then return false
 		return string.to_b
 	end
 end

@@ -157,6 +157,46 @@ class TestCommandsParser
 		assert cmd.results != null
 	end
 
+	fun atest_cmd_parser_filter_attribute is test do
+		var parser = new CommandParser(test_model, test_main, test_builder, test_catalog, test_filter)
+		var cmd = parser.parse("list: properties | filter-attribute: true")
+		assert cmd isa CmdModelEntities
+		assert parser.error == null
+		for mentity in cmd.results.as(not null) do
+			assert not mentity isa MAttribute
+		end
+	end
+
+	fun atest_cmd_parser_filter_visibility is test do
+		var parser = new CommandParser(test_model, test_main, test_builder, test_catalog, test_filter)
+		var cmd = parser.parse("list: properties | filter-visibility: public")
+		assert cmd isa CmdModelEntities
+		assert parser.error == null
+		for mentity in cmd.results.as(not null) do
+			assert mentity isa MProperty and mentity.visibility == public_visibility
+		end
+	end
+
+	fun atest_cmd_parser_filter_full_name is test do
+		var parser = new CommandParser(test_model, test_main, test_builder, test_catalog, test_filter)
+		var cmd = parser.parse("list: classes | filter-full-name: harac")
+		assert cmd isa CmdModelEntities
+		assert parser.error == null
+		for mentity in cmd.results.as(not null) do
+			assert mentity.name == "Character"
+		end
+	end
+
+	fun atest_cmd_parser_filter_inherited is test do
+		var parser = new CommandParser(test_model, test_main, test_builder, test_catalog, test_filter)
+		var cmd = parser.parse("list: properties | filter-inherited: Character")
+		assert cmd isa CmdModelEntities
+		assert parser.error == null
+		for mentity in cmd.results.as(not null) do
+			assert mentity isa MProperty and mentity.intro.mclassdef.mclass.name == "Character"
+		end
+	end
+
 	fun test_cmd_parser_results_mentities is test do
 		var parser = new CommandParser(test_model, test_main, test_builder, test_catalog, test_filter)
 		var cmd = parser.parse("random: modules")
