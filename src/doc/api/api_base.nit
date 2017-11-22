@@ -43,38 +43,7 @@ class NitwebConfig
 	var filter: nullable ModelFilter
 
 	# Catalog to pass to handlers.
-	var catalog: Catalog is noinit
-
-	# Build the catalog
-	#
-	# This method should be called at nitweb startup.
-	# TODO move to nitweb
-	fun build_catalog do
-		var catalog = new Catalog(modelbuilder)
-		var mpackages = model.collect_mpackages(filter)
-		# Compute the poset
-		for p in mpackages do
-			var g = p.root
-			assert g != null
-			modelbuilder.scan_group(g)
-
-			catalog.deps.add_node(p)
-			for gg in p.mgroups do for m in gg.mmodules do
-				for im in m.in_importation.direct_greaters do
-					var ip = im.mpackage
-					if ip == null or ip == p then continue
-					catalog.deps.add_edge(p, ip)
-				end
-			end
-		end
-		# Build the catalog
-		for mpackage in mpackages do
-			catalog.package_page(mpackage)
-			catalog.git_info(mpackage)
-			catalog.mpackage_stats(mpackage)
-		end
-		self.catalog = catalog
-	end
+	var catalog: Catalog
 end
 
 # Specific handler for the nitweb API.

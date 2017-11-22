@@ -255,6 +255,7 @@ class TestCommandsHttp
 			assert mentity isa MProperty and mentity.intro.mclassdef.mclass.name == "Character"
 		end
 	end
+
 	# CmdGraph
 
 	fun test_cmd_http_uml is test do
