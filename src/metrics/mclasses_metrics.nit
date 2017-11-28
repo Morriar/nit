@@ -18,7 +18,6 @@
 module mclasses_metrics
 
 import metrics_base
-import model::model_views
 import model::model_collect
 
 redef class ToolContext
@@ -39,24 +38,23 @@ private class MClassesMetricsPhase
 
 		var model = toolcontext.modelbuilder.model
 		var filter = new ModelFilter(private_visibility)
-		var model_view = new ModelView(model, mainmodule, filter)
 
 		print toolcontext.format_h1("\n# MClasses metrics")
 
 		var metrics = new MetricSet
-		metrics.register(new CNOA(model_view))
-		metrics.register(new CNOP(model_view))
-		metrics.register(new CNOC(model_view))
-		metrics.register(new CNOD(model_view))
-		metrics.register(new CDIT(model_view))
-		metrics.register(new CNBP(model_view))
-		metrics.register(new CNBA(model_view))
-		metrics.register(new CNBI(model_view))
-		metrics.register(new CNBM(model_view))
-		metrics.register(new CNBV(model_view))
-		metrics.register(new CNBIP(model_view))
-		metrics.register(new CNBRP(model_view))
-		metrics.register(new CNBHP(model_view))
+		metrics.register(new CNOA(model, mainmodule, filter))
+		metrics.register(new CNOP(model, mainmodule, filter))
+		metrics.register(new CNOC(model, mainmodule, filter))
+		metrics.register(new CNOD(model, mainmodule, filter))
+		metrics.register(new CDIT(model, mainmodule, filter))
+		metrics.register(new CNBP(model, mainmodule, filter))
+		metrics.register(new CNBA(model, mainmodule, filter))
+		metrics.register(new CNBI(model, mainmodule, filter))
+		metrics.register(new CNBM(model, mainmodule, filter))
+		metrics.register(new CNBV(model, mainmodule, filter))
+		metrics.register(new CNBIP(model, mainmodule, filter))
+		metrics.register(new CNBRP(model, mainmodule, filter))
+		metrics.register(new CNBHP(model, mainmodule, filter))
 
 		var mclasses = new HashSet[MClass]
 		for mpackage in model.mpackages do
@@ -94,8 +92,14 @@ abstract class MClassMetric
 	super Metric
 	redef type ELM: MClass
 
-	# Model view used to collect and filter entities
-	var model_view: ModelView
+	# Model used to collect and filter entities
+	var model: Model
+
+	# Mainmodule for class linearization
+	var mainmodule: MModule
+
+	# Filter to apply
+	var filter: nullable ModelFilter
 end
 
 # Class Metric: Number of Ancestors
@@ -107,7 +111,7 @@ class CNOA
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.in_hierarchy(model_view.mainmodule).greaters.length - 1
+			values[mclass] = mclass.in_hierarchy(mainmodule).greaters.length - 1
 		end
 	end
 end
@@ -121,7 +125,7 @@ class CNOP
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.in_hierarchy(model_view.mainmodule).direct_greaters.length
+			values[mclass] = mclass.in_hierarchy(mainmodule).direct_greaters.length
 		end
 	end
 end
@@ -135,7 +139,7 @@ class CNOC
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.in_hierarchy(model_view.mainmodule).direct_smallers.length
+			values[mclass] = mclass.in_hierarchy(mainmodule).direct_smallers.length
 		end
 	end
 end
@@ -149,7 +153,7 @@ class CNOD
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.in_hierarchy(model_view.mainmodule).smallers.length - 1
+			values[mclass] = mclass.in_hierarchy(mainmodule).smallers.length - 1
 		end
 	end
 end
@@ -163,7 +167,7 @@ class CDIT
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.in_hierarchy(model_view.mainmodule).depth
+			values[mclass] = mclass.in_hierarchy(mainmodule).depth
 		end
 	end
 end
@@ -177,7 +181,7 @@ class CNBP
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.collect_accessible_mproperties(model_view.filter).length
+			values[mclass] = mclass.collect_accessible_mproperties(mainmodule, filter).length
 		end
 	end
 end
@@ -191,7 +195,7 @@ class CNBA
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.collect_accessible_mattributes(model_view.filter).length
+			values[mclass] = mclass.collect_accessible_mattributes(mainmodule, filter).length
 		end
 	end
 end
@@ -205,7 +209,7 @@ class CNBM
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.collect_accessible_mmethods(model_view.filter).length
+			values[mclass] = mclass.collect_accessible_mmethods(mainmodule, filter).length
 		end
 	end
 end
@@ -219,7 +223,7 @@ class CNBI
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.collect_accessible_inits(model_view.filter).length
+			values[mclass] = mclass.collect_accessible_inits(mainmodule, filter).length
 		end
 	end
 end
@@ -233,7 +237,7 @@ class CNBV
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.collect_accessible_vts(model_view.filter).length
+			values[mclass] = mclass.collect_accessible_vts(mainmodule, filter).length
 		end
 	end
 end
@@ -247,7 +251,7 @@ class CNBIP
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.collect_intro_mproperties(model_view.filter).length
+			values[mclass] = mclass.collect_intro_mproperties(filter).length
 		end
 	end
 end
@@ -261,7 +265,7 @@ class CNBRP
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.collect_redef_mproperties(model_view.filter).length
+			values[mclass] = mclass.collect_redef_mproperties(filter).length
 		end
 	end
 end
@@ -275,7 +279,7 @@ class CNBHP
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.collect_inherited_mproperties(model_view.filter).length
+			values[mclass] = mclass.collect_inherited_mproperties(mainmodule, filter).length
 		end
 	end
 end
@@ -289,7 +293,7 @@ class CNBLP
 
 	redef fun collect(mclasses) do
 		for mclass in mclasses do
-			values[mclass] = mclass.collect_local_mproperties(model_view.filter).length
+			values[mclass] = mclass.collect_local_mproperties(filter).length
 		end
 	end
 end

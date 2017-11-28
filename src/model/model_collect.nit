@@ -61,16 +61,16 @@ redef class MEntity
 	# Collect `self` ancestors (direct and indirect)
 	#
 	# The concept of ancestor is abstract at this stage.
-	fun collect_ancestors(filter: nullable ModelFilter): Set[MENTITY] do
+	fun collect_ancestors(mainmodule: MModule, filter: nullable ModelFilter): Set[MENTITY] do
 		var done = new HashSet[MENTITY]
 		var todo = new Array[MENTITY]
 
-		todo.add_all collect_parents(filter)
+		todo.add_all collect_parents(mainmodule, filter)
 		while todo.not_empty do
 			var mentity = todo.pop
 			if mentity == self or done.has(mentity) then continue
 			done.add mentity
-			todo.add_all mentity.collect_parents(filter)
+			todo.add_all mentity.collect_parents(mainmodule, filter)
 		end
 		return done
 	end
@@ -78,26 +78,26 @@ redef class MEntity
 	# Collect `self` parents (direct ancestors)
 	#
 	# The concept of parent is abstract at this stage.
-	fun collect_parents(filter: nullable ModelFilter): Set[MENTITY] is abstract
+	fun collect_parents(mainmodule: MModule, filter: nullable ModelFilter): Set[MENTITY] is abstract
 
 	# Collect `self` children (direct descendants)
 	#
 	# The concept of child is abstract at this stage.
-	fun collect_children(filter: nullable ModelFilter): Set[MENTITY] is abstract
+	fun collect_children(mainmodule: MModule, filter: nullable ModelFilter): Set[MENTITY] is abstract
 
 	# Collect `self` descendants (direct and direct)
 	#
 	# The concept of descendant is abstract at this stage.
-	fun collect_descendants(filter: nullable ModelFilter): Set[MENTITY] do
+	fun collect_descendants(mainmodule: MModule, filter: nullable ModelFilter): Set[MENTITY] do
 		var done = new HashSet[MENTITY]
 		var todo = new Array[MENTITY]
 
-		todo.add_all collect_children(filter)
+		todo.add_all collect_children(mainmodule, filter)
 		while todo.not_empty do
 			var mentity = todo.pop
 			if mentity == self or done.has(mentity) then continue
 			done.add mentity
-			todo.add_all mentity.collect_children(filter)
+			todo.add_all mentity.collect_children(mainmodule, filter)
 		end
 		return done
 	end
@@ -114,7 +114,7 @@ redef class MEntity
 	# * `MClassDef`: classdef inheritance
 	# * `MProperty`: property definitions graph (all propdefs flattened)
 	# * `MPropDef`: property definitions graph
-	fun hierarchy_poset(filter: nullable ModelFilter): POSet[MENTITY] do
+	fun hierarchy_poset(mainmodule: MModule, filter: nullable ModelFilter): POSet[MENTITY] do
 		var poset = new POSet[MENTITY]
 		var parents_done = new HashSet[MENTITY]
 		var parents = new Array[MENTITY]
@@ -124,7 +124,7 @@ redef class MEntity
 			if parents_done.has(mentity) then continue
 			parents_done.add mentity
 			poset.add_node mentity
-			for parent in mentity.collect_parents(filter) do
+			for parent in mentity.collect_parents(mainmodule, filter) do
 				poset.add_edge(mentity, parent)
 				parents.add parent
 			end
@@ -136,7 +136,7 @@ redef class MEntity
 			var mentity = children.pop
 			if children_done.has(mentity) then continue
 			children_done.add mentity
-			for child in mentity.collect_children(filter) do
+			for child in mentity.collect_children(mainmodule, filter) do
 				poset.add_edge(child, mentity)
 				children.add child
 			end
@@ -268,10 +268,10 @@ redef class MPackage
 	redef fun collect_modifiers do return super + ["package"]
 
 	# Collect all packages directly imported by `self`
-	redef fun collect_parents(filter) do
+	redef fun collect_parents(mainmodule, filter) do
 		var res = new HashSet[MENTITY]
 		for mgroup in mgroups do
-			for parent in mgroup.collect_parents(filter) do
+			for parent in mgroup.collect_parents(mainmodule, filter) do
 				var mpackage = parent.mpackage
 				if mpackage == self then continue
 				if filter == null or filter.accept_mentity(mpackage) then res.add(mpackage)
@@ -281,10 +281,10 @@ redef class MPackage
 	end
 
 	# Collect all packages that directly depends on `self`
-	redef fun collect_children(filter) do
+	redef fun collect_children(mainmodule, filter) do
 		var res = new HashSet[MENTITY]
 		for mpackage in model.collect_mpackages(filter) do
-			if mpackage.collect_parents(filter).has(self) then res.add mpackage
+			if mpackage.collect_parents(mainmodule, filter).has(self) then res.add mpackage
 		end
 		return res
 	end
@@ -421,10 +421,10 @@ redef class MGroup
 	redef fun collect_modifiers do return super + ["group"]
 
 	# Collect all groups directly import by `self`
-	redef fun collect_parents(filter) do
+	redef fun collect_parents(mainmodule, filter) do
 		var res = new HashSet[MENTITY]
 		for mmodule in mmodules do
-			for parent in mmodule.collect_parents(filter) do
+			for parent in mmodule.collect_parents(mainmodule, filter) do
 				var mgroup = parent.mgroup
 				if mgroup == null or mgroup == self then continue
 				if filter == null or filter.accept_mentity(mgroup) then res.add(mgroup)
@@ -434,12 +434,12 @@ redef class MGroup
 	end
 
 	# Collect all group that directly import `self`
-	redef fun collect_children(filter) do
+	redef fun collect_children(mainmodule, filter) do
 		var res = new HashSet[MENTITY]
 		for mgroup in model.collect_mgroups(filter) do
 			if mgroup == self then continue
 			if filter != null and not filter.accept_mentity(mgroup) then continue
-			if mgroup.collect_parents(filter).has(self) then res.add mgroup
+			if mgroup.collect_parents(mainmodule, filter).has(self) then res.add mgroup
 		end
 		return res
 	end
@@ -477,7 +477,17 @@ redef class MModule
 	redef fun collect_modifiers do return super + ["module"]
 
 	# Collect all modules directly imported by `self`
-	redef fun collect_parents(filter) do
+	redef fun collect_ancestors(mainmodule, filter) do
+		var res = new HashSet[MENTITY]
+		for mentity in in_importation.greaters do
+			if mentity == self then continue
+			if filter == null or filter.accept_mentity(mentity) then res.add mentity
+		end
+		return res
+	end
+
+	# Collect all modules directly imported by `self`
+	redef fun collect_parents(mainmodule, filter) do
 		var res = new HashSet[MENTITY]
 		for mentity in in_importation.direct_greaters do
 			if mentity == self then continue
@@ -487,7 +497,7 @@ redef class MModule
 	end
 
 	# Collect all modules that directly import `self`
-	redef fun collect_children(filter) do
+	redef fun collect_children(mainmodule, filter) do
 		var res = new HashSet[MENTITY]
 		for mentity in in_importation.direct_smallers do
 			if mentity == self then continue
@@ -497,7 +507,7 @@ redef class MModule
 	end
 
 	# Collect all module descendants of `self` (direct and transitive imports)
-	redef fun collect_descendants(filter) do
+	redef fun collect_descendants(mainmodule, filter) do
 		var res = new HashSet[MENTITY]
 		for mentity in in_importation.smallers do
 			if mentity == self then continue
@@ -562,12 +572,12 @@ redef class MModule
 	end
 
 	# Collect all classes imported from `self` parents
-	fun collect_imported_mclasses(filter: nullable ModelFilter): Set[MClass] do
+	fun collect_imported_mclasses(mainmodule: MModule, filter: nullable ModelFilter): Set[MClass] do
 		var res = new HashSet[MClass]
-		for parent in collect_parents(filter) do
+		for parent in collect_parents(mainmodule, filter) do
 			res.add_all parent.collect_intro_mclasses(filter)
 			res.add_all parent.collect_redef_mclasses(filter)
-			res.add_all parent.collect_imported_mclasses(filter)
+			res.add_all parent.collect_imported_mclasses(mainmodule, filter)
 		end
 		return res
 	end
@@ -642,7 +652,7 @@ redef class MClass
 	# Collect all direct parents of `self`
 	#
 	# This method uses a flattened hierarchy containing all the mclassdefs.
-	redef fun collect_parents(filter, mainmodule) do
+	redef fun collect_parents(mainmodule, filter) do
 		var res = new HashSet[MENTITY]
 		if not mainmodule.flatten_mclass_hierarchy.has(self) then return res
 		for mclass in in_hierarchy(mainmodule).direct_greaters do
@@ -657,7 +667,7 @@ redef class MClass
 	# Collect all direct children of `self`
 	#
 	# This method uses a flattened hierarchy containing all the mclassdefs.
-	redef fun collect_children(filter, mainmodule) do
+	redef fun collect_children(mainmodule, filter) do
 		var res = new HashSet[MENTITY]
 		if not mainmodule.flatten_mclass_hierarchy.has(self) then return res
 		for mclass in in_hierarchy(mainmodule).direct_smallers do
@@ -736,11 +746,11 @@ redef class MClass
 	end
 
 	# Collect all properties inehrited by `self`
-	fun collect_inherited_mproperties(filter: nullable ModelFilter): Set[MProperty] do
+	fun collect_inherited_mproperties(mainmodule: MModule, filter: nullable ModelFilter): Set[MProperty] do
 		var set = new HashSet[MProperty]
-		for parent in collect_parents(filter) do
+		for parent in collect_parents(mainmodule, filter) do
 			set.add_all(parent.collect_intro_mproperties(filter))
-			set.add_all(parent.collect_inherited_mproperties(filter))
+			set.add_all(parent.collect_inherited_mproperties(mainmodule, filter))
 		end
 		return set
 	end
@@ -748,11 +758,11 @@ redef class MClass
 	# Collect all properties accessible by `self`
 	#
 	# This include introduced, redefined, inherited properties.
-	fun collect_accessible_mproperties(filter: nullable ModelFilter): Set[MProperty] do
+	fun collect_accessible_mproperties(mainmodule: MModule, filter: nullable ModelFilter): Set[MProperty] do
 		var set = new HashSet[MProperty]
 		set.add_all(collect_intro_mproperties(filter))
 		set.add_all(collect_redef_mproperties(filter))
-		set.add_all(collect_inherited_mproperties(filter))
+		set.add_all(collect_inherited_mproperties(mainmodule, filter))
 		return set
 	end
 
@@ -783,9 +793,9 @@ redef class MClass
 	end
 
 	# Collect all methods inherited by `self`
-	fun collect_inherited_mmethods(filter: nullable ModelFilter): Set[MMethod] do
+	fun collect_inherited_mmethods(mainmodule: MModule, filter: nullable ModelFilter): Set[MMethod] do
 		var res = new HashSet[MMethod]
-		for mproperty in collect_inherited_mproperties(filter) do
+		for mproperty in collect_inherited_mproperties(mainmodule, filter) do
 			if mproperty isa MMethod then res.add(mproperty)
 		end
 		return res
@@ -794,11 +804,11 @@ redef class MClass
 	# Collect all methods accessible by `self`
 	#
 	# This include introduced, redefined, inherited methods.
-	fun collect_accessible_mmethods(filter: nullable ModelFilter): Set[MMethod] do
+	fun collect_accessible_mmethods(mainmodule: MModule, filter: nullable ModelFilter): Set[MMethod] do
 		var set = new HashSet[MMethod]
 		set.add_all(collect_intro_mmethods(filter))
 		set.add_all(collect_redef_mmethods(filter))
-		set.add_all(collect_inherited_mmethods(filter))
+		set.add_all(collect_inherited_mmethods(mainmodule, filter))
 		return set
 	end
 
@@ -829,9 +839,9 @@ redef class MClass
 	end
 
 	# Collect all attributes inherited by `self`
-	fun collect_inherited_mattributes(filter: nullable ModelFilter): Set[MAttribute] do
+	fun collect_inherited_mattributes(mainmodule: MModule, filter: nullable ModelFilter): Set[MAttribute] do
 		var res = new HashSet[MAttribute]
-		for mproperty in collect_inherited_mproperties(filter) do
+		for mproperty in collect_inherited_mproperties(mainmodule, filter) do
 			if mproperty isa MAttribute then res.add(mproperty)
 		end
 		return res
@@ -840,11 +850,11 @@ redef class MClass
 	# Collect all attributes accessible by `self`
 	#
 	# This include introduced, redefined, inherited mattributes.
-	fun collect_accessible_mattributes(filter: nullable ModelFilter): Set[MAttribute] do
+	fun collect_accessible_mattributes(mainmodule: MModule, filter: nullable ModelFilter): Set[MAttribute] do
 		var set = new HashSet[MAttribute]
 		set.add_all(collect_intro_mattributes(filter))
 		set.add_all(collect_redef_mattributes(filter))
-		set.add_all(collect_inherited_mattributes(filter))
+		set.add_all(collect_inherited_mattributes(mainmodule, filter))
 		return set
 	end
 
@@ -875,9 +885,9 @@ redef class MClass
 	end
 
 	# Collect all init methods inherited by `self`
-	fun collect_inherited_inits(filter: nullable ModelFilter): Set[MMethod] do
+	fun collect_inherited_inits(mainmodule: MModule, filter: nullable ModelFilter): Set[MMethod] do
 		var res = new HashSet[MMethod]
-		for mproperty in collect_inherited_mmethods(filter) do
+		for mproperty in collect_inherited_mmethods(mainmodule, filter) do
 			if mproperty.is_init then res.add(mproperty)
 		end
 		return res
@@ -886,11 +896,11 @@ redef class MClass
 	# Collect all init methods accessible by `self`
 	#
 	# This include introduced, redefined, inherited inits.
-	fun collect_accessible_inits(filter: nullable ModelFilter): Set[MMethod] do
+	fun collect_accessible_inits(mainmodule: MModule, filter: nullable ModelFilter): Set[MMethod] do
 		var set = new HashSet[MMethod]
 		set.add_all(collect_intro_inits(filter))
 		set.add_all(collect_redef_inits(filter))
-		set.add_all(collect_inherited_inits(filter))
+		set.add_all(collect_inherited_inits(mainmodule, filter))
 		return set
 	end
 
@@ -921,9 +931,9 @@ redef class MClass
 	end
 
 	# Collect all virtual types inherited by `self`
-	fun collect_inherited_vts(filter: nullable ModelFilter): Set[MVirtualTypeProp] do
+	fun collect_inherited_vts(mainmodule: MModule, filter: nullable ModelFilter): Set[MVirtualTypeProp] do
 		var res = new HashSet[MVirtualTypeProp]
-		for mproperty in collect_inherited_mproperties(filter) do
+		for mproperty in collect_inherited_mproperties(mainmodule, filter) do
 			if mproperty isa MVirtualTypeProp then res.add(mproperty)
 		end
 		return res
@@ -932,9 +942,9 @@ redef class MClass
 	# Collect all virtual types accessible by `self`
 	#
 	# This include introduced, redefined, inherited virtual types.
-	fun collect_accessible_vts(filter: nullable ModelFilter): Set[MVirtualTypeProp] do
+	fun collect_accessible_vts(mainmodule: MModule, filter: nullable ModelFilter): Set[MVirtualTypeProp] do
 		var set = new HashSet[MVirtualTypeProp]
-		for mproperty in collect_accessible_mproperties(filter) do
+		for mproperty in collect_accessible_mproperties(mainmodule, filter) do
 			if mproperty isa MVirtualTypeProp then set.add mproperty
 		end
 		return set
@@ -965,7 +975,7 @@ redef class MClassDef
 		return mclassdefs
 	end
 
-	redef fun collect_parents(filter) do
+	redef fun collect_parents(mainmodule, filter) do
 		var res = new HashSet[MENTITY]
 		var hierarchy = self.in_hierarchy
 		if hierarchy == null then return res
@@ -976,7 +986,7 @@ redef class MClassDef
 		return res
 	end
 
-	redef fun collect_children(filter) do
+	redef fun collect_children(mainmodule, filter) do
 		var res = new HashSet[MENTITY]
 		var hierarchy = self.in_hierarchy
 		if hierarchy == null then return res
@@ -1066,10 +1076,10 @@ redef class MProperty
 	end
 
 	# Collect all direct super definitions of `self`
-	redef fun collect_parents(filter) do
+	redef fun collect_parents(mainmodule, filter) do
 		var res = new HashSet[MENTITY]
 		for mpropdef in mpropdefs do
-			for parent in mpropdef.collect_parents(filter) do
+			for parent in mpropdef.collect_parents(mainmodule, filter) do
 				var mprop = parent.mproperty
 				if filter == null or filter.accept_mentity(mprop) then res.add mprop
 			end
@@ -1078,10 +1088,10 @@ redef class MProperty
 	end
 
 	# Collection all definitions that have `self` as a direct super definition
-	redef fun collect_children(filter) do
+	redef fun collect_children(mainmodule, filter) do
 		var res = new HashSet[MENTITY]
 		for mpropdef in mpropdefs do
-			for child in mpropdef.collect_parents(filter) do
+			for child in mpropdef.collect_parents(mainmodule, filter) do
 				var mprop = child.mproperty
 				if filter == null or filter.accept_mentity(mprop) then res.add mprop
 			end
@@ -1134,7 +1144,7 @@ redef class MPropDef
 	end
 
 	# Collect only the next definition of `self`
-	redef fun collect_parents(filter) do
+	redef fun collect_parents(mainmodule, filter) do
 		var res = new HashSet[MENTITY]
 		var mpropdef = self
 		while not mpropdef.is_intro do
@@ -1145,10 +1155,10 @@ redef class MPropDef
 	end
 
 	# Collect all children definitions that directly depend on `self`
-	redef fun collect_children(filter) do
+	redef fun collect_children(mainmodule, filter) do
 		var res = new HashSet[MENTITY]
 		for mpropdef in mproperty.collect_mpropdefs(filter) do
-			if mpropdef.collect_parents(filter).has(self) then res.add mpropdef
+			if mpropdef.collect_parents(mainmodule, filter).has(self) then res.add mpropdef
 		end
 		return res
 	end
