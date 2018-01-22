@@ -66,3 +66,4 @@ nitunit.xml
 .DS_Store
 
 **/nit_compile/*
+.nlp/
