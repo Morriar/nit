@@ -101,3 +101,20 @@ redef class MProperty
 		return res
 	end
 end
+
+# Sort examples by score
+class ExampleSorter
+	super Comparator
+
+	redef type COMPARED: MEntity
+
+	# Scores used to sort examples
+	var scores: ArrayMap[MEntity, Float]
+
+	redef fun compare(a, b) do
+		if scores.has_key(a) and scores.has_key(b) then
+			return scores[b] <=> scores[a]
+		end
+		return 0
+	end
+end
