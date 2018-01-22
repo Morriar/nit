@@ -246,6 +246,47 @@ redef class CmdGraph
 	end
 end
 
+redef class CmdExamples
+	redef fun execute(no_color) do
+		var full_name = mentity.as(not null).cs_full_name(no_color)
+		print_examples("Examples for `{full_name}`:", results, no_color)
+	end
+
+	fun print_examples(list_title: nullable String, list_items: nullable Array[CmdExampleResult], no_color: nullable Bool) do
+		if list_title != null then
+			if no_color == null or not no_color then
+				print list_title.bold
+			else
+				print list_title
+			end
+			print ""
+		end
+		if list_items != null and list_items.not_empty then
+			for result in list_items do
+				var title = "* From `{result.mentity.cs_location(no_color)}`:"
+				if no_color == null or not no_color then
+					print title.bold
+				else
+					print title
+				end
+				if no_color == null or not no_color then
+					var ansi = render_code(result.node)
+					if ansi != null then
+						print "~~~"
+						print ansi.write_to_string
+						print "~~~"
+					end
+				else
+					printn result.mentity.cs_source_code
+				end
+				print ""
+			end
+		else
+			print "None."
+		end
+	end
+end
+
 # CmdUsage
 
 redef class CmdCall

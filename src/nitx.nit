@@ -24,6 +24,7 @@
 module nitx
 
 import frontend
+import frontend::parse_examples
 import doc::term
 import readline
 
