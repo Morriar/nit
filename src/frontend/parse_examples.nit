@@ -71,27 +71,22 @@ private class ExamplesPhase
 		process_example(mpropdef, npropdef)
 	end
 
-	# Process an mentity as an MExample
+	# Process an mentity as an example
 	#
 	# This method parses the mentity node and link the mentity to possible
 	# examplified entities.
 	fun process_example(example_mentity: MEntity, node: ANode) do
+		example_mentity.is_example = true
+
 		var visitor = new ExampleVisitor(toolcontext)
 		visitor.enter_visit(node)
 		var sorted = visitor.counter.sort.reversed
 
-		var example = new MExample(example_mentity)
-		example.node = node
 		for mentity in sorted do
-			example.example_for[mentity] = visitor.counter[mentity]
-			if not mentity.examples.has(example) then mentity.examples.add example
+			example_mentity.example_for[mentity] = visitor.counter[mentity].to_f / (visitor.counter.length * (example_mentity.location.line_end - example_mentity.location.line_start)).to_f
+			if not mentity.examples.has(example_mentity) then mentity.examples.add example_mentity
 		end
 	end
-end
-
-redef class MExample
-	# AST node containing the example code
-	var node: nullable ANode = null is writable
 end
 
 # Example parsing

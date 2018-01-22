@@ -24,38 +24,24 @@ module model_examples
 
 import model
 
-# An example from a MEntity flagged with `is example`.
-class MExample
-
-	redef init do
-		super
-		mentity.mexample = self
-	end
-
-	# MEntity containing this example
-	var mentity: MEntity
-
-	# MEntities this example is for
-	#
-	# For each entity we provide a weight so examples can be ranked.
-	var example_for = new ArrayMap[MEntity, Int]
-
-	redef fun to_s do return mentity.full_name
-end
-
 redef class MEntity
 
 	# Is `self` existing for an example purpose?
 	#
 	# All mentities annotated with `is example` or located inside a mentity that
 	# is an example are considered as examples.
-	fun is_example: Bool do return mexample != null
+	var is_example = false is writable
 
 	# Return this entity as a MExample
-	var mexample: nullable MExample = null
+	# var mexample: nullable MExample = null
 
 	# Examples found for `self`
-	var examples = new Array[MExample]
+	var examples = new Array[MEntity]
+
+	# MEntities this example is for
+	#
+	# For each entity we provide a weight so examples can be ranked.
+	var example_for = new ArrayMap[MEntity, Float]
 end
 
 redef class MPackage
