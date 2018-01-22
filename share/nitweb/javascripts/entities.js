@@ -210,6 +210,26 @@
 					},
 					controllerAs: 'vm',
 				})
+				.state('doc.entity.examples', {
+					url: '/examples',
+					templateUrl: 'views/doc/examples.html',
+					resolve: {
+						examples: function(Model, $q, $stateParams, $state) {
+							var d = $q.defer();
+							Model.loadEntityExamples($stateParams.id, d.resolve,
+								function() {
+									$state.go('404', null, { location: false })
+								});
+							return d.promise;
+						}
+					},
+					controller: function(mentity, examples) {
+						this.mentity = mentity;
+						this.examples = examples;
+						console.log(examples);
+					},
+					controllerAs: 'vm',
+				})
 				.state('doc.entity.defs', {
 					url: '/defs',
 					templateUrl: 'views/doc/defs.html',
@@ -331,6 +351,12 @@
 
 				loadEntityCode: function(id, cb, cbErr) {
 					$http.get('/api/code/' + id + '?format=html')
+						.success(cb)
+						.error(cbErr);
+				},
+
+				loadEntityExamples: function(id, cb, cbErr) {
+					$http.get('/api/examples/' + id + '?format=html')
 						.success(cb)
 						.error(cbErr);
 				},

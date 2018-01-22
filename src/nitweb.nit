@@ -16,6 +16,7 @@
 module nitweb
 
 import frontend
+import frontend::parse_examples
 import doc::api
 import doc::doc_down
 
@@ -78,6 +79,7 @@ private class NitwebPhase
 		var config_file = toolcontext.opt_config.value
 		if config_file == null then config.default_config_file = "nitweb.ini"
 		config.parse_options(args)
+
 		var opt_host = toolcontext.opt_host.value
 		if opt_host != null then config.ini["app.host"] = opt_host
 		var opt_port = toolcontext.opt_port.value

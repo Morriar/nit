@@ -41,6 +41,8 @@ redef class APIRouter
 		use("/uml/:id", new APIEntityUML(config))
 		use("/graph/inheritance/:id", new APIInheritanceGraph(config))
 
+		use("/examples/:id", new APIEntityExamples(config))
+
 		use("/catalog/packages/", new APICatalogPackages(config))
 		use("/catalog/stats", new APICatalogStats(config))
 		use("/catalog/tags", new APICatalogTags(config))
@@ -224,6 +226,15 @@ class APIInheritanceGraph
 	super APICommand
 
 	redef fun command do return new CmdInheritanceGraph(config.view)
+end
+
+# Return examples related to a MEntity
+#
+# Example: `GET /examples/core::Array`
+class APIEntityExamples
+	super APICommand
+
+	redef fun command do return new CmdExamples(config.view, config.modelbuilder)
 end
 
 # CmdCatalog

@@ -1,0 +1,13 @@
+<div>
+	<div ng-if='!vm.examples || vm.examples.results.length == 0'>
+		<i>No examples for {{vm.mentity}}</i>
+	</div>
+	<div class='card' ng-repeat='example in vm.examples.results' ng-if='vm.examples.results'>
+		<div class='card-body'>
+			<h5 class='card-heading'>
+				From <entity-location loc='example.location' />
+			</h5>
+			<pre ng-bind-html='example.code' />
+		</div>
+	</div>
+</div>
