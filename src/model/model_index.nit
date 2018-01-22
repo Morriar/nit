@@ -197,7 +197,7 @@ redef class ModelView
 		var full_matches = new IndexMatches
 		for match in index.find_by_full_name_prefix(query).
 			sort(kind_sorter, lfname_sorter, fname_sorter) do
-			match.score += malus
+			match.score += malus.to_f
 			full_matches.add match
 		end
 		matches = matches.uniq
@@ -211,7 +211,7 @@ redef class ModelView
 		malus = matches.length
 		var sim_matches = new IndexMatches
 		for match in index.find_by_similarity(query).sort(score_sorter, kind_sorter, lname_sorter, name_sorter) do
-			match.score += malus
+			match.score += malus.to_f
 			sim_matches.add match
 		end
 		matches.add_all sim_matches
@@ -302,7 +302,7 @@ class ModelIndex
 		var score = 1
 		for mentities in array do
 			for mentity in mentities do
-				results.add new IndexMatch(mentity, score)
+				results.add new IndexMatch(mentity, score.to_f)
 			end
 			score += 1
 		end
@@ -327,7 +327,7 @@ class ModelIndex
 		var results = new IndexMatches
 		for mentity in mentities do
 			if mentity isa MClassDef or mentity isa MPropDef then continue
-			results.add new IndexMatch(mentity, name.levenshtein_distance(mentity.name))
+			results.add new IndexMatch(mentity, name.levenshtein_distance(mentity.name).to_f)
 		end
 		return results
 	end
@@ -340,7 +340,7 @@ class ModelIndex
 		var results = new IndexMatches
 		for mentity in mentities do
 			if mentity isa MClassDef or mentity isa MPropDef then continue
-			results.add new IndexMatch(mentity, name.levenshtein_distance(mentity.full_name))
+			results.add new IndexMatch(mentity, name.levenshtein_distance(mentity.full_name).to_f)
 		end
 		return results
 	end
@@ -350,8 +350,8 @@ class ModelIndex
 		var results = new IndexMatches
 		for mentity in mentities do
 			if mentity isa MClassDef or mentity isa MPropDef then continue
-			results.add new IndexMatch(mentity, name.levenshtein_distance(mentity.name))
-			results.add new IndexMatch(mentity, name.levenshtein_distance(mentity.full_name))
+			results.add new IndexMatch(mentity, name.levenshtein_distance(mentity.name).to_f)
+			results.add new IndexMatch(mentity, name.levenshtein_distance(mentity.full_name).to_f)
 		end
 		return results
 	end
@@ -361,7 +361,7 @@ class ModelIndex
 		var results = find_by_name_prefix(name)
 		for mentity in mentities do
 			if mentity isa MClassDef or mentity isa MPropDef then continue
-			results.add new IndexMatch(mentity, name.levenshtein_distance(mentity.name))
+			results.add new IndexMatch(mentity, name.levenshtein_distance(mentity.name).to_f)
 		end
 		return results
 	end
@@ -371,7 +371,7 @@ class ModelIndex
 		var results = find_by_full_name_prefix(name)
 		for mentity in mentities do
 			if mentity isa MClassDef or mentity isa MPropDef then continue
-			results.add new IndexMatch(mentity, name.levenshtein_distance(mentity.full_name))
+			results.add new IndexMatch(mentity, name.levenshtein_distance(mentity.full_name).to_f)
 		end
 		return results
 	end
@@ -391,8 +391,8 @@ class ModelIndex
 
 		for mentity in mentities do
 			if mentity isa MClassDef or mentity isa MPropDef then continue
-			results.add new IndexMatch(mentity, name.levenshtein_distance(mentity.name))
-			results.add new IndexMatch(mentity, name.levenshtein_distance(mentity.full_name))
+			results.add new IndexMatch(mentity, name.levenshtein_distance(mentity.name).to_f)
+			results.add new IndexMatch(mentity, name.levenshtein_distance(mentity.full_name).to_f)
 		end
 		return results
 	end
@@ -476,7 +476,7 @@ class IndexMatches
 		var res = new IndexMatches
 		for match in self do
 			res.add match
-			match.score = res.length
+			match.score = res.length.to_f
 		end
 		return res
 	end
@@ -512,7 +512,7 @@ class IndexMatch
 	# on the search method producing the match and the comparators used to sort
 	# the matches.
 	# The only universal rule is: low score = relevance.
-	var score: Int is writable
+	var score: Float is writable
 
 	# By default matches are compared only on their score
 	redef fun <=>(o) do return score <=> o.score
