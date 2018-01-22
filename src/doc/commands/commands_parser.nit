@@ -36,7 +36,7 @@ class CommandParser
 
 	# List of allowed command names for this parser
 	var allowed_commands: Array[String] = [
-	"doc", "code", "lin", "uml", "graph", "search",
+	"doc", "code", "lin", "uml", "graph", "search", "examples",
 	"parents", "ancestors", "children", "descendants",
 	"param", "return", "new", "call", "defs", "list", "random",
 	"catalog", "stats", "tags", "tag", "person", "contrib", "maintain"] is writable
@@ -51,6 +51,7 @@ class CommandParser
 		usage["lin: <name>"] = "display the linearization for `name`"
 		usage["uml: <name>"] = "display the UML diagram for `name`"
 		usage["graph: <name>"] = "display the inheritance graph for `name`"
+		usage["examples: <name>"] = "display usage examples for `name`"
 		usage["parents: <name>"] = "list the direct parents of `name`"
 		usage["ancestors: <name>"] = "list all ancestors of `name`"
 		usage["children: <name>"] = "list direct children of `name`"
@@ -147,6 +148,7 @@ class CommandParser
 		if name == "return" then return new CmdReturn(view)
 		if name == "new" then return new CmdNew(view, modelbuilder)
 		if name == "call" then return new CmdCall(view, modelbuilder)
+		if name == "examples" then return new CmdExamples(view, modelbuilder)
 		# CmdGraph
 		if name == "uml" then return new CmdUML(view)
 		if name == "graph" then return new CmdInheritanceGraph(view)
@@ -222,7 +224,7 @@ end
 
 redef class CmdCode
 	redef fun parser_init(mentity_name, options) do
-		if options.has_key("format") then format = options["format"]
+		if options.has_key("format") then format = options["format"] else format = "ansi"
 		return super
 	end
 end

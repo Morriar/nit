@@ -457,6 +457,105 @@ class WarningNoCode
 	redef fun to_s do return "No code for `{mentity.full_name}`"
 end
 
+# Cmd that finds examples related to a `mentity`.
+class CmdExamples
+	super CmdEntity
+	super CmdCode
+	super CmdList
+
+	redef type ITEM: CmdExampleResult
+
+	redef var sorter = new MEntityNameSorter
+
+	autoinit(view, modelbuilder, mentity, mentity_name, limit, page, count, max)
+
+	redef fun init_command do
+		var res = init_mentity
+		if not res isa CmdSuccess then return res
+		res = init_results
+		if not res isa CmdSuccess then return res
+		sort
+		paginate
+		return res
+	end
+
+	# Same states than `CmdEntity::init_mentity`
+	#
+	# Plus returns `WarningNoExample` if no example can be found for the mentity.
+	redef fun init_results do
+		sorter = null
+		if results != null then return new CmdSuccess
+
+		var res = super
+		if not res isa CmdSuccess then return res
+		var mentity = self.mentity.as(not null)
+
+		var examples = mentity.examples
+		if examples.is_empty then return new WarningNoExample(mentity)
+
+		# remove nested examples
+		var selected_examples = new Array[MEntity]
+		for example in examples do
+			for other_example in examples do
+				if example == other_example then continue
+				if other_example.has_mentity(view, example) then continue label example
+			end
+			selected_examples.add example
+		end label example
+
+		# select relevant examples
+		var scores = new ArrayMap[MEntity, Float]
+		for example in selected_examples do
+			if not example.example_for.has_key(mentity) then continue
+			scores[example] = example.example_for[mentity]
+		end
+
+		# sort examples
+		var examples_sorter = new ExampleSorter(scores)
+		var keys = scores.keys.to_a
+		examples_sorter.sort keys
+
+		# build result list
+		var results = new Array[CmdExampleResult]
+		for example_mentity in keys do
+			var cmd_code = new CmdEntityCode(view, modelbuilder, example_mentity)
+			var code_res = cmd_code.init_command
+			if code_res isa CmdSuccess then
+				var node = cmd_code.node
+				if node == null then continue
+				results.add new CmdExampleResult(self, example_mentity, node)
+			end
+		end
+		self.results = results
+		return res
+	end
+end
+
+# A result provided by a `CmdExamples` command
+class CmdExampleResult
+
+	# Command that produced this result
+	#
+	# Mainly used to provide the code rendering options.
+	var cmd: CmdCode
+
+	# MEntity that contains this example
+	var mentity: MEntity
+
+	# AST node that contains the example code
+	var node: nullable ANode
+end
+
+# No example found for `mentity`.
+class WarningNoExample
+	super CmdWarning
+
+	# MEntity provided
+	var mentity: MEntity
+
+	redef fun to_s do return "No example for `{mentity.full_name}`"
+end
+
 # Model commands
 
 # A command that returns a list of all mentities in a model

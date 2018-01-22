@@ -88,6 +88,22 @@ redef class CmdEntityCode
 	end
 end
 
+redef class CmdExampleResult
+	serialize
+
+	redef fun core_serialize_to(v) do
+		v.serialize_attribute("mentity", mentity)
+		var node = self.node
+		if node != null then
+			v.serialize_attribute("location", node.location)
+		end
+		var output = cmd.render_code(node)
+		if output != null then
+			v.serialize_attribute("code", output.write_to_string)
+		end
+	end
+end
+
 redef class CmdGraph
 	redef fun to_json do
 		var obj = new JsonObject
