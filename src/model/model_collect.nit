@@ -145,6 +145,9 @@ redef class MEntity
 		end
 		return poset
 	end
+
+	# Does `self` contain `mentity`?
+	fun has_mentity(view: ModelView, mentity: MEntity): Bool do return false
 end
 
 redef class Model
@@ -339,6 +342,17 @@ redef class MPackage
 		end
 		return res
 	end
+
+	redef fun has_mentity(view, mentity) do
+		if mentity isa MPackage then return false
+
+		var mgroups = collect_all_mgroups(view)
+		if mentity isa MGroup then return mgroups.has(mentity)
+		for mgroup in mgroups do
+			if mgroup.has_mentity(view, mentity) then return true
+		end
+		return false
+	end
 end
 
 redef class MGroup
@@ -387,6 +401,21 @@ redef class MGroup
 			res.add(mmodule)
 		end
 		return res
+	end
+
+	redef fun has_mentity(view, mentity) do
+		if mentity isa MPackage then return false
+
+		var mgroups = collect_mgroups(view)
+		if mentity isa MGroup then return mgroups.has(mentity)
+
+		var mmodules = collect_mmodules(view)
+		if mentity isa MModule then return mmodules.has(mentity)
+
+		for mmodule in mmodules do
+			if mmodule.has_mentity(view, mentity) then return true
+		end
+		return false
 	end
 end
 
@@ -550,6 +579,20 @@ redef class MModule
 			if mproperty isa MVirtualTypeProp then res.add(mproperty)
 		end
 		return res
+	end
+
+	redef fun has_mentity(view, mentity) do
+		if mentity isa MPackage then return false
+		if mentity isa MGroup then return false
+		if mentity isa MModule then return false
+
+		var mclasses = collect_intro_mclasses(view)
+		if mentity isa MClass then return mclasses.has(mentity)
+
+		for mclass in mclasses do
+			if mclass.has_mentity(view, mentity) then return true
+		end
+		return false
 	end
 end
 
@@ -862,6 +905,24 @@ redef class MClass
 		end
 		return set
 	end
+
+	redef fun has_mentity(view, mentity) do
+		if mentity isa MPackage then return false
+		if mentity isa MGroup then return false
+		if mentity isa MModule then return false
+		if mentity isa MClass then return false
+
+		var mclassdefs = collect_mclassdefs(view)
+		if mentity isa MClassDef then return mclassdefs.has(mentity)
+
+		var mproperties = collect_local_mproperties(view)
+		if mentity isa MProperty then return mproperties.has(mentity)
+
+		for mclassdef in mclassdefs do
+			if mclassdef.has_mentity(view, mentity) then return true
+		end
+		return false
+	end
 end
 
 redef class MClassDef
@@ -970,6 +1031,21 @@ redef class MClassDef
 			res.add mpropdef
 		end
 		return res
+	end
+
+	redef fun has_mentity(view, mentity) do
+		if mentity isa MPackage then return false
+		if mentity isa MGroup then return false
+		if mentity isa MModule then return false
+		if mentity isa MClass then return false
+		if mentity isa MClassDef then return false
+
+		var mproperties = intro_mproperties
+		if mentity isa MProperty then return mproperties.has(mentity)
+
+		var mpropdefs = collect_mpropdefs(view)
+		if mentity isa MPropDef then return mpropdefs.has(mentity)
+		return false
 	end
 end
 
