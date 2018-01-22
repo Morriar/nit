@@ -155,6 +155,7 @@ redef class APropdef
 			v.counter.inc mpropdef.mproperty.intro.mclassdef.mclass
 			v.counter.inc mpropdef.mproperty.intro.mclassdef
 			v.counter.inc mpropdef.mproperty.intro
+			v.counter.inc mpropdef.mproperty
 		end
 		visit_all(v)
 	end
