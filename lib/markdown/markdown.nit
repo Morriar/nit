@@ -1016,9 +1016,6 @@ class MDBlock
 			last_line = null
 		else
 			first_line.as(not null).prev = null
-			# update current block loc
-			location.line_start = first_line.as(not null).location.line_start
-			location.column_start = first_line.as(not null).location.column_start
 		end
 		if first_block == null then
 			first_block = block

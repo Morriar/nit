@@ -1,6 +1,6 @@
 <div>
-	<div ng-if='!vm.examples || vm.examples.results.length == 0'>
-		<i>No examples for {{vm.mentity}}</i>
+	<div ng-if='!vm.examples || !vm.examples.results || vm.examples.results.length == 0'>
+		<i>No examples for <entity-link mentity='vm.mentity' /></i>
 	</div>
 	<div class='card' ng-repeat='example in vm.examples.results' ng-if='vm.examples.results'>
 		<div class='card-body'>

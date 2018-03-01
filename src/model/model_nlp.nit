@@ -64,11 +64,17 @@ class ModelNLPIndex
 	# By default, we do not index class and property definitions.
 	# Redefine this method if you want to do so.
 	fun index_model(view: ModelView) do
-		for mentity in view.mpackages do index_mentity(mentity)
-		for mentity in view.mgroups do index_mentity(mentity)
+		# for mentity in view.mpackages do index_mentity(mentity)
+		# for mentity in view.mgroups do index_mentity(mentity)
 		for mentity in view.mmodules do index_mentity(mentity)
-		for mentity in view.mclasses do index_mentity(mentity)
-		for mentity in view.mproperties do index_mentity(mentity)
+		for mentity in view.mclasses do
+			if mentity.visibility != public_visibility then continue
+			index_mentity(mentity)
+		end
+		for mentity in view.mproperties do
+			if mentity.visibility != public_visibility then continue
+			index_mentity(mentity)
+		end
 		update_index
 	end
 

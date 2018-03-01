@@ -42,13 +42,13 @@ docs: doc/stdlib/index.html doc/nitc/index.html
 tools:
 	cd src; make
 
-bin/nitdoc:
-	cd src; make ../bin/nitdoc
+# bin/nitdoc:
+	# cd src; make ../bin/nitdoc
 
 bin/nitls:
 	cd src; make ../bin/nitls
 
-doc/stdlib/index.html: bin/nitdoc bin/nitls
+doc/stdlib/index.html: bin/nitls
 	@echo '***************************************************************'
 	@echo '* Generate doc for NIT standard library                       *'
 	@echo '***************************************************************'

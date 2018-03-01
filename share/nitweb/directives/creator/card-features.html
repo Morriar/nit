@@ -1,0 +1,18 @@
+<div>
+	<div class='card-left'>
+		<span class='glyphicon glyphicon-paperclip' />
+	</div>
+	<div class='card-body'>
+		<h5 class='card-heading'>
+			Suggested features of <entity-link mentity='vm.card.mentity'/>
+		</h5>
+		<br>
+		You should write about this:
+		<br>
+		<ul>
+			<li ng-repeat='mentity in vm.card.features'>
+				<entity-signature mentity='mentity'/>
+			</li>
+		</ul>
+	</div>
+</div>

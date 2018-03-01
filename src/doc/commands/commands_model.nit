@@ -467,7 +467,7 @@ class CmdExamples
 
 	redef var sorter = new MEntityNameSorter
 
-	autoinit(view, modelbuilder, mentity, mentity_name, limit, page, count, max)
+	autoinit(view, modelbuilder, mentity, mentity_name, format, limit, page, count, max)
 
 	redef fun init_command do
 		var res = init_mentity

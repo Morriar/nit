@@ -226,7 +226,6 @@
 					controller: function(mentity, examples) {
 						this.mentity = mentity;
 						this.examples = examples;
-						console.log(examples);
 					},
 					controllerAs: 'vm',
 				})

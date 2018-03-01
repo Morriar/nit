@@ -122,19 +122,19 @@ abstract class Handler
 		end
 	end
 
-	# GET handler.
+	# GET method handler.
 	#
 	# Exemple of route responding to GET requests.
 	# ~~~
 	# class GetHandler
 	#	super Handler
 	#
-	#	redef fun get(req, res) do res.send "GETrequest received"
+	#	redef fun get(req, res) do res.send "GET request received"
 	# end
 	# ~~~
 	fun get(req: HttpRequest, res: HttpResponse) do end
 
-	# POST handler.
+	# POST method handler.
 	#
 	# Exemple of route responding to POST requests.
 	# ~~~
@@ -146,7 +146,7 @@ abstract class Handler
 	# ~~~
 	fun post(req: HttpRequest, res: HttpResponse) do end
 
-	# PUT handler.
+	# PUT method handler.
 	#
 	# Exemple of route responding to PUT requests.
 	# ~~~
@@ -158,9 +158,9 @@ abstract class Handler
 	# ~~~
 	fun put(req: HttpRequest, res: HttpResponse) do end
 
-	# DELETE handler.
+	# DELETE method handler.
 	#
-	# Exemple of route responding to PUT requests.
+	# Exemple of route responding to DELETE requests.
 	# ~~~
 	# class DeleteHandler
 	#	super Handler

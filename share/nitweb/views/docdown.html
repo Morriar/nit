@@ -1,31 +1,163 @@
-<div class='container-fluid'>
-	<div class='page-header'>
-		<h2>Docdown snippets</h2>
-		<p class='text-muted'>Sharable documentation snippets.</p>
-		<div class="input-group">
-			<span ng-if='edit' class="input-group-btn">
-				<button class='btn btn-success' ng-click='docdownCtrl.editMode(false)'>
-					<span class='glyphicon glyphicon-link' /> View
-				</button>
-			</span>
-			<span ng-if='!edit' class="input-group-btn">
-				<button class='btn btn-success' ng-click='docdownCtrl.editMode(true)'>
-					<span class='glyphicon glyphicon-edit' /> Edit
-				</button>
-			</span>
-			<input class='form-control' type='text' ng-model='link' />
-		</div>
+<div class='creator-window'>
+	<div class='creator-main-panel'>
+		<doc-editor markdown='vm.markdown' />
 	</div>
-	<div class='row'>
-		<div ng-show='edit' class='col-xs-6'>
-			<div class='card'>
-				<textarea ng-model='markdown' ng-model-options='{ debounce: 100 }' ng-change='docdownCtrl.updateSnippet()' class='form-control' rows='20'></textarea>
+
+	<div class='creator-side-panel'>
+		<div class='form-group'>
+			<label for='target'>Doc target</label>
+			<input type='text' class='form-control' id='target' ng-model='vm.target' ng-change='vm.changeTarget()' />
+		</div>
+		<ul class='nav nav-tabs'>
+			<li>
+				<a data-target='#summary' data-toggle='tab'>Summary</a>
+			</li>
+			<li class='active'>
+				<a data-target='#suggestions' data-toggle='tab'>Suggestions</a>
+			</li>
+			<li>
+				<a data-target='#docs' data-toggle='tab'>My Docs</a>
+			</li>
+			<li>
+				<a data-target='#debug' data-toggle='tab'>Debug</a>
+			</li>
+		</ul>
+
+		<div class='tab-content'>
+			<div class='tab-pane summary' id='summary'>
+				<br>
+				<div ng-repeat='section in vm.summary'>
+					<h1 ng-if='section.level == 1'>
+						<a ng-click='vm.jumpSection(section)'>{{section.title}}</a>
+					</h1>
+					<h2 ng-if='section.level == 2'>
+						<a ng-click='vm.jumpSection(section)'>{{section.title}}</a>
+					</h2>
+					<h3 ng-if='section.level == 3'>
+						<a ng-click='vm.jumpSection(section)'>{{section.title}}</a>
+					</h3>
+					<h4 ng-if='section.level == 4'>
+						<a ng-click='vm.jumpSection(section)'>{{section.title}}</a>
+					</h4>
+					<h5 ng-if='section.level == 5'>
+						<a ng-click='vm.jumpSection(section)'>{{section.title}}</a>
+					</h5>
+					<h6 ng-if='section.level == 6'>
+						<a ng-click='vm.jumpSection(section)'>{{section.title}}</a>
+					</h6>
+				</div>
+			</div>
+			<div class='tab-pane active' id='suggestions'>
+				<div id='suggests'>
+					<div ng-repeat='suggest in vm.suggestions'>
+						<suggest-card card='suggest' index='$index' />
+					</div>
+				</div>
+			</div>
+			<div class='tab-pane' id='docs'>
+				<ul class='nav nav-pills nav-stacked'>
+					<li ng-repeat='doc in vm.session.docs'>
+						<a ng-click='vm.loadDoc(doc)'>{{doc.name}}</a>
+					</li>
+				</ul>
+			</div>
+			<div class='tab-pane' id='debug'>
+				<table class='table'>
+					<tr>
+						<th width='20%'>Cursor</th>
+						<td>line: {{vm.debug.line}}, col: {{vm.debug.char}}</td>
+					</tr>
+					<tr>
+						<th>Section</th>
+						<td>
+							<a ng-click='vm.jumpSection(section)'>
+								{{vm.debug.current_section.title}}</a>
+								(line {{vm.debug.current_section.line}})
+						</td>
+					</tr>
+					<tr>
+						<th>Block</th>
+						<td>
+							{{vm.debug.current_block.content}}
+						</td>
+					</tr>
+					<tr>
+						<th>Refs</th>
+						<td>
+							<span ng-repeat='ref in vm.debug.current_refs'>
+								<entity-signature mentity='ref' />
+								<br>
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<th>Targets</th>
+						<td>
+							<span ng-repeat='target in vm.debug.current_targets'>
+								<entity-signature mentity='target' />
+								<br>
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<th>Cards</th>
+						<td>
+							<span ng-repeat='card in vm.debug.found_cards'>
+								{{card}}
+								<br>
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<th>Matches</th>
+						<td>
+							<span ng-repeat='entity in vm.debug.current_matches'>
+								<entity-signature mentity='target' />
+								<br>
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<th>Suggestions</th>
+						<td>
+							<span ng-repeat='suggest in vm.suggestions'>
+								{{suggest.command}}
+								<br>
+							</span>
+						</td>
+					</tr>
+				</table>
 			</div>
 		</div>
-		<div ng-class='edit ? "col-xs-6" : "col-xs-12"'>
-			<div class='card'>
-				<div class='card-body nitdoc'>
-					<div ng-bind-html='html' />
+	</div>
+
+	<div class='creator-footer'>
+		<div class='btn-group dropup pull-right'>
+			<button type='button' class='btn btn-success dropdown-toggle'
+				data-toggle='dropdown'>
+				Render
+				<span class="caret"></span>
+			</button>
+			<ul class='dropdown-menu'>
+				<li><a ng-click='vm.renderHtml()'>HTML</a></li>
+				<li><a ng-click='vm.renderHtml()'>Markdown</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class='modal fade' id='renderModal' tabindex='-1'>
+		<div class='modal-dialog'>
+			<div class='modal-content'>
+				<div class='modal-header'>
+					<button type='button' class='close' data-dismiss='modal'>
+						<span>&times;</span>
+					</button>
+					<h4 class='modal-title'>HTML rendering</h4>
+				</div>
+				<div class='modal-body'>
+					<div class='nitdoc'>
+						<div ng-bind-html='vm.html' />
+					</div>
 				</div>
 			</div>
 		</div>

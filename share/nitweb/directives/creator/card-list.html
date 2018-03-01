@@ -1,0 +1,13 @@
+<div>
+	<div class='card-left'>
+		<span class='glyphicon glyphicon-list' />
+	</div>
+	<div class='card-body'>
+		<h4 class='card-heading'>{{vm.card.title}}</h4>
+		<ul class='list-unstyled'>
+			<li ng-repeat='mentity in vm.card.mentities'>
+				<entity-signature mentity='mentity'/>
+			</li>
+		</ul>
+	</div>
+</div>
