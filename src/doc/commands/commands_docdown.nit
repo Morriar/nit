@@ -142,14 +142,6 @@ class CmdMarkdownProcessor
 		var command = parser.parse(cmd)
 		var error = parser.error
 
-		# If not a command, try a comment command
-		if command == null and error isa CmdParserError then
-			error = null
-			command = new CmdEntity(parser.view, mentity_name = cmd)
-			var status = command.parser_init(cmd, new HashMap[String, String])
-			if not status isa CmdSuccess then error = status
-		end
-
 		if error isa CmdError then
 			emit_text error.to_html.write_to_string
 			return

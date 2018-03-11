@@ -16,6 +16,7 @@ module doc_suggest
 
 import doc_parser
 import doc::commands
+import doc::commands::commands_json
 import model::model_nlp
 
 class SuggestionEngine
@@ -117,7 +118,7 @@ class SuggestionEngine
 			end
 		end
 		sorter.sort(cards)
-		for card in cards do print "{card.command}: {card.score}"
+		for card in cards do print "{card.command_string}: {card.score}"
 		return cards
 	end
 
@@ -138,7 +139,9 @@ class SuggestionEngine
 	fun mentity_suggestions(mentity: MEntity, mentity_score: Float): Array[DocCard] do
 		var cards = new Array[DocCard]
 
-		cards.add new CardEntity(mentity_score, mentity)
+		var cmd = new CmdEntity(view, mentity = mentity)
+		var res = cmd.init_command
+		if res isa CmdSuccess then cards.add new CardEntity(cmd, mentity_score)
 		cards.add_all suggest_examples(mentity, mentity_score - 0.001)
 		cards.add_all suggest_uml(mentity, mentity_score - 0.002)
 		# TODO suggest list
@@ -152,7 +155,9 @@ class SuggestionEngine
 		var res = cmd.init_command
 		if res isa CmdSuccess then
 			for example in cmd.results.as(not null) do
-				cards.add new CardExample(base_score - cards.length.to_f / 100.0, mentity, example)
+				var ecmd = new CmdEntityCode(view, modelbuilder, mentity = example.mentity, format = "html")
+				ecmd.init_command
+				cards.add new CardExample(ecmd, base_score - cards.length.to_f / 100.0)
 				break
 			end
 		end
@@ -168,7 +173,7 @@ class SuggestionEngine
 		var cmd = new CmdInheritanceGraph(view, mentity, format = "svg")
 		var res = cmd.init_command
 		if res isa CmdSuccess then
-			cards.add new CardUML(base_score - cards.length.to_f / 100.0, mentity, cmd.render)
+			cards.add new CardUML(cmd, base_score - cards.length.to_f / 100.0)
 		end
 
 		return cards
@@ -385,58 +390,102 @@ abstract class DocCard
 
 	var score: Float
 
-	var is_tip = false
-
 	# Code command to insert
-	fun command: String is abstract
+	fun command_string: String is abstract
 
-	redef fun to_s do return "{command}({score})"
+	redef fun to_s do return "{command_string}({score})"
 
 	redef fun ==(o) do
-		if o isa DocCard then return command == o.command
+		if o isa DocCard then return command_string == o.command_string
 		return super
 	end
 
 	redef fun core_serialize_to(v) do
 		super
 		v.serialize_attribute("kind", class_name)
-		v.serialize_attribute("is_tip", is_tip)
-		v.serialize_attribute("command", command)
+		v.serialize_attribute("command_string", command_string)
 	end
 end
 
-class CardBadTarget
+abstract class CardCommand
 	super DocCard
 	serialize
+	autoinit(command, score)
 
-	var target_name: String
+	type CMD: DocCommand
 
-	var suggestions: Array[String]
+	var command: CMD
 
-	redef var command = ""
+	redef fun command_string do return command.to_s
+
+	redef fun core_serialize_to(v) do
+		super
+		v.serialize_attribute("command_options", command.to_json_options)
+	end
 end
 
-class CardSuggestTargets
-	super DocCard
-	serialize
+# Scafolding
 
-	var suggestions: Array[String]
-
-	redef var command = ""
-end
-
-class CardEntity
+class CardFeatures
 	super DocCard
 	serialize
 
 	var mentity: MEntity
 
-	redef var command = "[[doc: {mentity.full_name}]]" is lazy
+	var features: Array[MEntity]
 
 	redef fun core_serialize_to(v) do
 		super
-		v.serialize_attribute("mentity", mentity)
-		var mdoc = mentity.mdoc_or_fallback
+		v.serialize_attribute("features", features)
+	end
+
+	redef var command_string = "[[list: {mentity.full_name} | features]]" is lazy
+end
+
+class CardUsage
+	super DocCard
+	serialize
+
+	redef var command_string = "[[usage]]"
+end
+
+class CardLicense
+	super DocCard
+	serialize
+
+	var license: String
+
+	redef var command_string is lazy do return "[[license: {license}]]"
+
+	redef fun core_serialize_to(v) do
+		super
+		v.serialize_attribute("license", license)
+	end
+end
+
+class CardTesting
+	super DocCard
+	serialize
+
+	var mentity: MEntity
+
+	redef var command_string is lazy do return "[[tests: {mentity.full_name}]]"
+end
+
+# Free doc
+
+class CardEntity
+	super CardCommand
+	serialize
+
+	redef type CMD: CmdEntity
+
+	redef fun core_serialize_to(v) do
+		super
+		v.serialize_attribute("mentity", command.mentity)
+		var mentity = command.mentity
+		var mdoc = null
+		if mentity != null then mdoc = mentity.mdoc_or_fallback
 		if mdoc != null then
 			v.serialize_attribute("synopsis", mdoc.html_synopsis.write_to_string)
 			if not mdoc.comment.trim.is_empty then
@@ -450,113 +499,100 @@ class CardEntityLink
 	super CardEntity
 	serialize
 
-	redef var command = "[[{mentity.full_name}]]" is lazy
-end
-
-class CardTipHeadings
-	super DocCard
-	serialize
-
-	var target_name: String
-
-	redef var command = "# `{target_name}`\n\n" is lazy
-end
-
-class CardTipRefs
-	super DocCard
-	serialize
-
-	redef var is_tip = true
-	redef var command = "[[help: links]]"
-end
-
-class CardTipCards
-	super DocCard
-	serialize
-
-	redef var is_tip = true
-	redef var command = "[[help: cards]]"
-end
-
-class CardTipBegin
-	super CardEntity
-	serialize
-
-	redef var command = "# `{mentity.full_name}`\n\n[[doc: {mentity.full_name}]]" is lazy
-end
-
-class CardTipTarget
-	super CardEntity
-	serialize
-
-	redef var command = "[[doc: {mentity.full_name}]]" is lazy
-end
-
-class CardFeatures
-	super CardEntity
-	serialize
-
-	var features: Array[MEntity]
-	redef var command = "[[list: {mentity.full_name} | features]]" is lazy
-
-	redef fun core_serialize_to(v) do
-		super
-		v.serialize_attribute("features", features)
-	end
-end
-
-class CardUsage
-	super CardEntity
-	serialize
-
-	redef var command = "[[usage]]"
+	redef type CMD: CmdLink
 end
 
 class CardExample
 	super CardEntity
 	serialize
 
-	var example: CmdExampleResult
-
-	redef var command is lazy do return "[[code: {example.mentity.full_name}]]"
+	redef type CMD: CmdEntityCode
 
 	redef fun core_serialize_to(v) do
 		super
-		v.serialize_attribute("example", example)
+		v.serialize_attribute("example", command.to_json)
 	end
-end
-
-class CardLicense
-	super CardEntity
-	serialize
-
-	var license: String
-
-	redef var command is lazy do return "[[license: {license}]]"
-
-	redef fun core_serialize_to(v) do
-		super
-		v.serialize_attribute("license", license)
-	end
-end
-
-class CardTesting
-	super CardEntity
-	serialize
-
-	redef var command is lazy do return "[[tests: {mentity.full_name}]]"
 end
 
 class CardUML
 	super CardEntity
 	serialize
 
-	var svg: nullable Writable
-
-	redef var command is lazy do return "[[uml: {mentity.full_name}]]"
+	redef type CMD: CmdInheritanceGraph
 
 	redef fun core_serialize_to(v) do
 		super
-		v.serialize_attribute("svg", svg)
+		v.serialize_attribute("svg", command.render)
 	end
+end
+
+
+# Tips
+
+abstract class CardTip
+	super DocCard
+	serialize
+
+	var is_tip = true
+end
+
+class CardBadTarget
+	super CardTip
+	serialize
+
+	var target_name: String
+
+	var suggestions: Array[String]
+
+	redef var command_string = ""
+end
+
+class CardSuggestTargets
+	super CardTip
+	serialize
+
+	var suggestions: Array[String]
+
+	redef var command_string = ""
+end
+
+class CardTipHeadings
+	super CardTip
+	serialize
+
+	var target_name: String
+
+	redef var command_string = "# `{target_name}`\n\n" is lazy
+end
+
+class CardTipRefs
+	super CardTip
+	serialize
+
+	redef var command_string = "[[help: links]]"
+end
+
+class CardTipCards
+	super CardTip
+	serialize
+
+	redef var command_string = "[[help: cards]]"
+end
+
+class CardTipBegin
+	super CardTip
+	serialize
+
+	var target: MEntity
+
+	redef var command_string = "# `{target.full_name}`\n\n[[doc: {target.full_name}]]" is lazy
+end
+
+class CardTipTarget
+	super CardTip
+	serialize
+
+	var target_name: String
+
+	redef var command_string = "[[doc: {target_name}]]" is lazy
 end

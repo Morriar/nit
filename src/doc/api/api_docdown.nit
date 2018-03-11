@@ -116,7 +116,10 @@ class APIDocdownSuggest
 		cmd.init_command
 		var mentity = cmd.mentity.as(not null)
 		# suggestions.add new CardEntity(1.0, mentity)
-		suggestions.add new CardEntityLink(1.0, mentity)
+
+		var lcmd = new CmdLink(view, mentity)
+		lcmd.init_command
+		suggestions.add new CardEntityLink(lcmd, 1.0)
 
 
 		var names = ["all", "get", "put", "post", "delete"]
@@ -133,12 +136,14 @@ class APIDocdownSuggest
 		var graph = cmd.graph.as(not null)
 		graph.draw_node(mentity)
 		graph.draw_children(mentity)
-		suggestions.add new CardUML(1.0, mentity, cmd.render)
+		suggestions.add new CardUML(cmd, 1.0)
 
 		cmd = new CmdExamples(view, config.modelbuilder, mentity, format = "html")
 		cmd.init_command
 		for example in cmd.results.as(not null) do
-			suggestions.add new CardExample(1.0, mentity, example)
+			var ecmd = new CmdEntityCode(view, config.modelbuilder, example.mentity)
+			ecmd.init_command
+			suggestions.add new CardExample(ecmd, 1.0)
 			break
 		end
 

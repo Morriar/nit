@@ -93,6 +93,17 @@ class WarningNoMDoc
 	redef fun to_s do return "No documentation for `{mentity.full_name}`."
 end
 
+# Get the link to a MEntity API documentation
+class CmdLink
+	super CmdEntity
+
+	# The link text to display
+	var text: nullable String = null is optional, writable
+
+	# The link title to display when the link is hovered
+	var title: nullable String = null is optional, writable
+end
+
 # MEntity ancestors command
 #
 # Retrieve all the ancestors (direct and indirect) of a MEntity.

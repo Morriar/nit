@@ -98,6 +98,7 @@
 					function(data) {
 						vm.summary = data.summary;
 						vm.suggestions = data.suggestions;
+console.log(data);
 						vm.debug = data.debug;
 					}, function(err) {
 						vm.error = err;
@@ -122,7 +123,7 @@
 
 			$scope.$on('insert-card', function(e, card) {
 				var cursor = vm.editor.doc.getCursor();
-				vm.editor.doc.replaceRange(card.command, cursor);
+				vm.editor.doc.replaceRange(card.command_string, cursor);
 			})
 
 			$scope.$on('edit-card', function(e, card) {

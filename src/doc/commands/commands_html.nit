@@ -52,6 +52,14 @@ redef class CmdEntity
 	end
 end
 
+redef class CmdLink
+	redef fun to_html do
+		var mentity = self.mentity
+		if mentity == null then return ""
+		return mentity.html_link(text, title)
+	end
+end
+
 redef class CmdEntities
 	redef fun to_html do
 		var mentities = self.results

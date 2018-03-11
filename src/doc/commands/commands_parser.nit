@@ -89,15 +89,24 @@ class CommandParser
 			error = new CmdParserError("empty command name", 0)
 			return null
 		end
-		if not allowed_commands.has(name) then
-			error = new CmdParserError("unknown command name", 0)
+		# If the command name contains two consecutive colons or there is no colon in the name,
+		# we certainly have a wiki link to a mentity
+		var is_short_link = false
+		if (pos < string.length - 2 and string[pos] == ':' and string[pos + 1] == ':') or
+			pos == string.length then
+			is_short_link = true
+		else if not allowed_commands.has(name) then
+			error = new CmdParserError("unknown command name `{name}`", 0)
 			return null
 		end
 
 		# Parse the argument
 		tmp.clear
 		pos = string.read_until(tmp, pos + 1, '|')
-		var arg = tmp.write_to_string.trim
+		var arg = name
+		if not is_short_link then
+			arg = tmp.write_to_string.trim
+		end
 
 		# Parse command options
 		var opts = new HashMap[String, String]
@@ -118,9 +127,14 @@ class CommandParser
 		end
 
 		# Build the command
-		var command = new_command(name)
+		var command
+		if is_short_link then
+			command = new CmdLink(view)
+		else
+			command = new_command(name)
+		end
 		if command == null then
-			error = new CmdParserError("Unknown command name")
+			error = new CmdParserError("Unknown command name `{name}`", 0)
 			return null
 		end
 
@@ -207,6 +221,7 @@ end
 redef class CmdList
 	redef fun parser_init(mentity_name, options) do
 		if options.has_key("limit") and options["limit"].is_int then limit = options["limit"].to_i
+		if options.has_key("page") and options["page"].is_int then page = options["page"].to_i
 		return super
 	end
 end
@@ -222,6 +237,14 @@ redef class CmdComment
 	end
 end
 
+redef class CmdLink
+	redef fun parser_init(mentity_name, options) do
+		if options.has_key("text") then text = options["text"]
+		if options.has_key("title") then title = options["title"]
+		return super
+	end
+end
+
 redef class CmdCode
 	redef fun parser_init(mentity_name, options) do
 		if options.has_key("format") then format = options["format"] else format = "ansi"
@@ -232,7 +255,6 @@ end
 redef class CmdSearch
 	redef fun parser_init(mentity_name, options) do
 		query = mentity_name
-		if options.has_key("page") and options["page"].is_int then page = options["page"].to_i
 		return super
 	end
 end

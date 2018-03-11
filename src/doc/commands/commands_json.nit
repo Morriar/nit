@@ -26,6 +26,9 @@ import catalog::catalog_json
 redef class DocCommand
 	# Return a JSON Serializable representation of `self` results
 	fun to_json: nullable Serializable is abstract
+
+	# Return the card options as a serialisable object
+	fun to_json_options: nullable Serializable do return new JsonObject
 end
 
 # Message handling
@@ -54,6 +57,13 @@ redef class CmdList
 		obj["max"] = max
 		return obj
 	end
+
+	redef fun to_json_options do
+		var obj = super.as(JsonObject)
+		obj["page"] = page
+		obj["limit"] = limit
+		return obj
+	end
 end
 
 redef class CmdEntityList
@@ -69,6 +79,47 @@ redef class CmdComment
 		if render != null then
 			obj["documentation"] = render.write_to_string
 		end
+		return obj
+	end
+
+	redef fun to_json_options do
+		var obj = super.as(JsonObject)
+		obj["only-synopsis"] = not full_doc
+		obj["no-fallback"] = not fallback
+		obj["format"] = format
+		return obj
+	end
+end
+
+redef class CmdLink
+	redef fun to_json_options do
+		var obj = super.as(JsonObject)
+		obj["text"] = text
+		obj["title"] = title
+		return obj
+	end
+end
+
+redef class CmdAncestors
+	redef fun to_json_options do
+		var obj = super.as(JsonObject)
+		obj["parents"] = parents
+		return obj
+	end
+end
+
+redef class CmdDescendants
+	redef fun to_json_options do
+		var obj = super.as(JsonObject)
+		obj["children"] = children
+		return obj
+	end
+end
+
+redef class CmdCode
+	redef fun to_json_options do
+		var obj = super.as(JsonObject)
+		obj["format"] = format
 		return obj
 	end
 end
@@ -111,6 +162,21 @@ redef class CmdGraph
 		if output != null then
 			obj["graph"] = output.write_to_string
 		end
+		return obj
+	end
+
+	redef fun to_json_options do
+		var obj = super.as(JsonObject)
+		obj["format"] = format
+		return obj
+	end
+end
+
+redef class CmdInheritanceGraph
+	redef fun to_json_options do
+		var obj = super.as(JsonObject)
+		obj["pdepth"] = pdepth
+		obj["cdepth"] = cdepth
 		return obj
 	end
 end
