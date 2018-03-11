@@ -82,7 +82,7 @@ private class NitwebPhase
 
 		var cli = new NLPClient("http://localhost:9000")
 		config.nlp_index = new ModelNLPIndex(cli)
-		config.nlp_index.index_model(config.view)
+		# config.nlp_index.index_model(config.view)
 
 		var opt_host = toolcontext.opt_host.value
 		if opt_host != null then config.ini["app.host"] = opt_host

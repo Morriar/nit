@@ -446,6 +446,13 @@ class CardEntity
 	end
 end
 
+class CardEntityLink
+	super CardEntity
+	serialize
+
+	redef var command = "[[{mentity.full_name}]]" is lazy
+end
+
 class CardTipHeadings
 	super DocCard
 	serialize

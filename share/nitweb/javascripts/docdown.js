@@ -125,6 +125,11 @@
 				vm.editor.doc.replaceRange(card.command, cursor);
 			})
 
+			$scope.$on('edit-card', function(e, card) {
+				vm.config_card = card;
+				$('#editModal').modal();
+			})
+
 			$scope.$on('dismiss-card', function(e, card) {
 				console.log(card);
 				// TODO Send card dismiss
@@ -175,6 +180,10 @@
 						$scope.$emit('insert-card', vm.card);
 					}
 
+					this.editCard = function() {
+						$scope.$emit('edit-card', vm.card);
+					}
+
 					this.dismissCard = function() {
 						$scope.$emit('dismiss-card', vm.card);
 					}
@@ -190,6 +199,26 @@
 				controllerAs: 'vm',
 				replace: true,
 				templateUrl: '/directives/creator/suggest-card.html'
+			};
+		})
+
+		.directive('configCard', function() {
+			return {
+				restrict: 'E',
+				scope: {},
+				bindToController: {
+					card: '='
+				},
+				controller: function($scope, $sce) {
+					var vm = this;
+
+					this.insertCard = function() {
+						$scope.$emit('insert-card', vm.card);
+					}
+				},
+				controllerAs: 'vm',
+				replace: true,
+				templateUrl: '/directives/creator/config-card.html'
 			};
 		})
 })();

@@ -261,17 +261,20 @@ class InheritanceGraph
 			return
 		end
 		var children = mentity.collect_children(view)
-		if children.length > 10 then
-			to_dotdotdot(mentity)
-			return
-		end
+		# if children.length > 20 then
+			# to_dotdotdot(mentity)
+			# return
+		# end
+		var allow = ["StaticHandler", "Router", "AuthHandler"]
 		for child in children do
+			if not allow.has(child.name) then continue
 			if child isa MGroup then
 				if child.mpackage.mgroups.first == child then child = child.mpackage
 			end
 			draw_edge(child, mentity)
 		end
 		for child in children do
+			if not allow.has(child.name) then continue
 			if child isa MGroup then
 				if child.mpackage.mgroups.first == child then child = child.mpackage
 			end

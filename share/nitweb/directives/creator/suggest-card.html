@@ -27,6 +27,9 @@
 		<div ng-switch-when='CardEntity'>
 			<div ng-include='"/directives/creator/card-doc.html"' />
 		</div>
+		<div ng-switch-when='CardEntityLink'>
+			<div ng-include='"/directives/creator/card-link.html"' />
+		</div>
 		<div ng-switch-when='CardUsage'>
 			<div ng-include='"/directives/creator/card-usage.html"' />
 		</div>
@@ -44,6 +47,7 @@
 		</div>
 	</div>
 	<div class='card-footer text-right'>
+		<button class='btn btn-xs btn-link' ng-click='vm.editCard()' ng-if='!vm.card.has_config'><span class='glyphicon glyphicon-cog text-muted'></button>
 		<button class='btn btn-xs btn-success' ng-click='vm.insertCard()' ng-if='!vm.card.is_tip'>Insert</button>
 		<button class='btn btn-xs btn-muted' ng-click='vm.dismissCard()'>Dismiss</button>
 	</div>

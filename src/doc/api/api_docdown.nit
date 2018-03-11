@@ -109,6 +109,39 @@ class APIDocdownSuggest
 		var loc = new nitc::Location(null, line, line, col, col)
 		var suggestions = engine.doc_suggestions(doc, loc)
 
+		# TODO tmp
+		suggestions.clear
+
+		var cmd = new CmdEntity(view, mentity_name = "popcorn::Handler")
+		cmd.init_command
+		var mentity = cmd.mentity.as(not null)
+		# suggestions.add new CardEntity(1.0, mentity)
+		suggestions.add new CardEntityLink(1.0, mentity)
+
+
+		var names = ["all", "get", "put", "post", "delete"]
+		var mfeatures = mentity.as(MClass).collect_intro_mproperties(view)
+		var features = new Array[MEntity]
+		for feature in mfeatures do
+			if not names.has(feature.name) then continue
+			features.add feature
+		end
+		suggestions.add new CardFeatures(1.0, mentity, features)
+
+		cmd = new CmdInheritanceGraph(view, mentity, format = "svg", pdepth = 0, cdepth = 2)
+		cmd.init_command
+		var graph = cmd.graph.as(not null)
+		graph.draw_node(mentity)
+		graph.draw_children(mentity)
+		suggestions.add new CardUML(1.0, mentity, cmd.render)
+
+		cmd = new CmdExamples(view, config.modelbuilder, mentity, format = "html")
+		cmd.init_command
+		for example in cmd.results.as(not null) do
+			suggestions.add new CardExample(1.0, mentity, example)
+			break
+		end
+
 		var obj = new JsonObject
 		obj["summary"] = doc.all_subsections
 		obj["suggestions"] = suggestions

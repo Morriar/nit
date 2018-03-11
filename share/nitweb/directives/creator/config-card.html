@@ -1,0 +1,47 @@
+<div ng-switch='vm.card.kind'>
+	<div ng-switch-when='CardSuggestTargets'>
+		<div ng-include='"/directives/creator/card-suggest-targets-config.html"' />
+	</div>
+	<div ng-switch-when='CardBadTarget'>
+		<div ng-include='"/directives/creator/card-bad-target-config.html"' />
+	</div>
+	<div ng-switch-when='CardTipBegin'>
+		<div ng-include='"/directives/creator/card-empty-config.html"' />
+	</div>
+	<div ng-switch-when='CardTipHeadings'>
+		<div ng-include='"/directives/creator/card-md-headings-config.html"' />
+	</div>
+	<div ng-switch-when='CardTipRefs'>
+		<div ng-include='"/directives/creator/card-md-links-config.html"' />
+	</div>
+	<div ng-switch-when='CardTipCards'>
+		<div ng-include='"/directives/creator/card-md-cards-config.html"' />
+	</div>
+	<div ng-switch-when='CardTipTarget'>
+		<div ng-include='"/directives/creator/card-target-config.html"' />
+	</div>
+	<div ng-switch-when='CardFeatures'>
+		<div ng-include='"/directives/creator/card-features-config.html"' />
+	</div>
+	<div ng-switch-when='CardEntity'>
+		<div ng-include='"/directives/creator/card-doc-config.html"' />
+	</div>
+	<div ng-switch-when='CardEntityLink'>
+		<div ng-include='"/directives/creator/card-link-config.html"' />
+	</div>
+	<div ng-switch-when='CardUsage'>
+		<div ng-include='"/directives/creator/card-usage-config.html"' />
+	</div>
+	<div ng-switch-when='CardExample'>
+		<div ng-include='"/directives/creator/card-example-config.html"' />
+	</div>
+	<div ng-switch-when='CardTesting'>
+		<div ng-include='"/directives/creator/card-testing-config.html"' />
+	</div>
+	<div ng-switch-when='CardLicense'>
+		<div ng-include='"/directives/creator/card-license-config.html"' />
+	</div>
+	<div ng-switch-when='CardUML'>
+		<div ng-include='"/directives/creator/card-uml-config.html"' />
+	</div>
+</div>
