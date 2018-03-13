@@ -22,6 +22,8 @@ intrude import markdown::wikilinks
 import doc_suggest
 import doc::commands::commands_docdown
 
+import doc::cards::doc_cards
+
 redef class NitwebConfig
 
 	# TODO
@@ -92,89 +94,102 @@ class APIDocdownSuggest
 	redef fun post(req, res) do
 
 		var view = config.view
-		var mbuilder = config.modelbuilder
-		var index = config.nlp_index
+		# var mbuilder = config.modelbuilder
+		# var index = config.nlp_index
 
-		var md = req.body
-		var processor = new DocParser
-		var doc = processor.parse_string(md)
+		# var md = req.body
+		# var processor = new DocParser
+		# var doc = processor.parse_string(md)
 
-		var target = req.string_arg("target")
-		if target == "null" then target = null
+		var target_name = req.string_arg("target")
+		if target_name == "null" then target_name = null
 
-		var engine = new SuggestionEngine(view, mbuilder, index, target, doc)
+		var tcmd = new CmdEntity(view, mentity_name = target_name)
+		var tres = tcmd.init_command
+		var target = null
+		if tres isa CmdSuccess then
+			target = tcmd.mentity
+			# TODO handle errors and show tips
+		end
 
-		var line = req.int_arg("line") or else 1
-		var col = req.int_arg("column") or else 1
-		var loc = new nitc::Location(null, line, line, col, col)
-		var suggestions = engine.doc_suggestions(doc, loc)
+		# var engine = new SuggestionEngine(view, mbuilder, index, target, doc)
+
+		# var line = req.int_arg("line") or else 1
+		# var col = req.int_arg("column") or else 1
+		# var loc = new nitc::Location(null, line, line, col, col)
+		# var suggestions = engine.doc_suggestions(doc, loc)
 
 		# TODO tmp
-		suggestions.clear
-
-		var cmd = new CmdEntity(view, mentity_name = "popcorn::Handler")
-		cmd.init_command
-		var mentity = cmd.mentity.as(not null)
-		# suggestions.add new CardEntity(1.0, mentity)
-
-		var lcmd = new CmdLink(view, mentity)
-		lcmd.init_command
-		suggestions.add new CardEntityLink(lcmd, 1.0)
-
-
-		var names = ["all", "get", "put", "post", "delete"]
-		var mfeatures = mentity.as(MClass).collect_intro_mproperties(view)
-		var features = new Array[MEntity]
-		for feature in mfeatures do
-			if not names.has(feature.name) then continue
-			features.add feature
+		var scaf = new ReadmeScaffolder(view)
+		var suggestions = new Array[DocCard]
+		if target isa MPackage then
+			suggestions.add_all scaf.scaffold(target)
 		end
-		suggestions.add new CardFeatures(1.0, mentity, features)
+		# suggestions.clear
 
-		cmd = new CmdInheritanceGraph(view, mentity, format = "svg", pdepth = 0, cdepth = 2)
-		cmd.init_command
-		var graph = cmd.graph.as(not null)
-		graph.draw_node(mentity)
-		graph.draw_children(mentity)
-		suggestions.add new CardUML(cmd, 1.0)
-
-		cmd = new CmdExamples(view, config.modelbuilder, mentity, format = "html")
-		cmd.init_command
-		for example in cmd.results.as(not null) do
-			var ecmd = new CmdEntityCode(view, config.modelbuilder, example.mentity)
-			ecmd.init_command
-			suggestions.add new CardExample(ecmd, 1.0)
-			break
-		end
+		# var cmd = new CmdEntity(view, mentity_name = "popcorn::Handler")
+		# cmd.init_command
+		# var mentity = cmd.mentity.as(not null)
+		# # suggestions.add new CardEntity(1.0, mentity)
+        #
+		# var lcmd = new CmdLink(view, mentity)
+		# lcmd.init_command
+		# suggestions.add new CardEntityLink(lcmd, 1.0)
+        #
+        #
+		# var names = ["all", "get", "put", "post", "delete"]
+		# var mfeatures = mentity.as(MClass).collect_intro_mproperties(view)
+		# var features = new Array[MEntity]
+		# for feature in mfeatures do
+		#	if not names.has(feature.name) then continue
+		#	features.add feature
+		# end
+		# suggestions.add new CardFeatures(1.0, mentity, features)
+        #
+		# cmd = new CmdInheritanceGraph(view, mentity, format = "svg", pdepth = 0, cdepth = 2)
+		# cmd.init_command
+		# var graph = cmd.graph.as(not null)
+		# graph.draw_node(mentity)
+		# graph.draw_children(mentity)
+		# suggestions.add new CardUML(cmd, 1.0)
+        #
+		# cmd = new CmdExamples(view, config.modelbuilder, mentity, format = "html")
+		# cmd.init_command
+		# for example in cmd.results.as(not null) do
+		#	var ecmd = new CmdEntityCode(view, config.modelbuilder, example.mentity)
+		#	ecmd.init_command
+		#	suggestions.add new CardExample(ecmd, 1.0)
+		#	break
+		# end
 
 		var obj = new JsonObject
-		obj["summary"] = doc.all_subsections
+		# obj["summary"] = doc.all_subsections
 		obj["suggestions"] = suggestions
-		obj["debug"] = engine.last_debug
+		# obj["debug"] = engine.last_debug
 		res.json obj
 	end
 end
 
-redef class DocBlock
-	serialize
-
-	redef fun core_serialize_to(v) do
-		super
-		v.serialize_attribute("location", location)
-		v.serialize_attribute("content", to_s)
-	end
-end
-
-redef class DocSection
-	serialize
-
-	redef fun core_serialize_to(v) do
-		super
-		v.serialize_attribute("title", title)
-		v.serialize_attribute("level", level)
-		v.serialize_attribute("line", location.line_start)
-	end
-end
+# redef class DocBlock
+#	serialize
+#
+#	redef fun core_serialize_to(v) do
+#		super
+#		v.serialize_attribute("location", location)
+#		v.serialize_attribute("content", to_s)
+#	end
+# end
+#
+# redef class DocSection
+#	serialize
+#
+#	redef fun core_serialize_to(v) do
+#		super
+#		v.serialize_attribute("title", title)
+#		v.serialize_attribute("level", level)
+#		v.serialize_attribute("line", location.line_start)
+#	end
+# end
 
 # TODO
 class DocSession

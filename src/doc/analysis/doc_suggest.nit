@@ -44,9 +44,9 @@ class SuggestionEngine
 
 	var last_debug: nullable DebugMode = null
 
-	fun doc_suggestions(doc: DocModel, cursor: nullable nitc::Location): Array[DocCard] do
+	fun doc_suggestions(doc: DocModel, cursor: nullable nitc::Location): Array[DocCard2] do
 		var debug = new DebugMode
-		var suggest = new Array[DocCard]
+		var suggest = new Array[DocCard2]
 
 		# TODO errors and warnings
 		# TODO top level cards
@@ -77,8 +77,8 @@ class SuggestionEngine
 		return suggest
 	end
 
-	fun toplevel_suggestions: Array[DocCard] do
-		var cards = new Array[DocCard]
+	fun toplevel_suggestions: Array[DocCard2] do
+		var cards = new Array[DocCard2]
 
 		var target_name = self.target_name
 		var target = self.target
@@ -107,8 +107,8 @@ class SuggestionEngine
 		return cards
 	end
 
-	fun block_suggestions(block: DocBlock): Array[DocCard] do
-		var cards = new Array[DocCard]
+	fun block_suggestions(block: DocBlock): Array[DocCard2] do
+		var cards = new Array[DocCard2]
 		# TODO extract block target
 		var mentities = block_mentities(block)
 		for mentity, score in mentities do
@@ -136,8 +136,8 @@ class SuggestionEngine
 		return mentities
 	end
 
-	fun mentity_suggestions(mentity: MEntity, mentity_score: Float): Array[DocCard] do
-		var cards = new Array[DocCard]
+	fun mentity_suggestions(mentity: MEntity, mentity_score: Float): Array[DocCard2] do
+		var cards = new Array[DocCard2]
 
 		var cmd = new CmdEntity(view, mentity = mentity)
 		var res = cmd.init_command
@@ -236,8 +236,8 @@ class SuggestionEngine
 		# for mentity in section.mentities do
 		# end
 
-	# fun suggest(doc: DocContext, line_pos: nullable Int): Array[DocCard] do
-	#	var suggest = new Array[DocCard]
+	# fun suggest(doc: DocContext, line_pos: nullable Int): Array[DocCard2] do
+	#	var suggest = new Array[DocCard2]
     #
 	#	if doc.is_empty then
 	#		suggest.add new DocTipEmpty(1.0, [view.mpackages.rand, view.mpackages.rand])
@@ -368,24 +368,24 @@ end
 class CardSorter
 	super Comparator
 
-	redef type COMPARED: DocCard
+	redef type COMPARED: DocCard2
 
 	redef fun compare(a, b) do return b.score <=> a.score
 end
 
 redef class DocBlock
-	var suggestions = new ArraySet[DocCard]
+	var suggestions = new ArraySet[DocCard2]
 end
 
 redef class DocComposite
 	redef fun suggestions do
-		var res = new ArraySet[DocCard]
+		var res = new ArraySet[DocCard2]
 		for block in content do res.add_all block.suggestions
 		return res
 	end
 end
 
-abstract class DocCard
+abstract class DocCard2
 	serialize
 
 	var score: Float
@@ -396,7 +396,7 @@ abstract class DocCard
 	redef fun to_s do return "{command_string}({score})"
 
 	redef fun ==(o) do
-		if o isa DocCard then return command_string == o.command_string
+		if o isa DocCard2 then return command_string == o.command_string
 		return super
 	end
 
@@ -408,7 +408,7 @@ abstract class DocCard
 end
 
 abstract class CardCommand
-	super DocCard
+	super DocCard2
 	serialize
 	autoinit(command, score)
 
@@ -427,7 +427,7 @@ end
 # Scafolding
 
 class CardFeatures
-	super DocCard
+	super DocCard2
 	serialize
 
 	var mentity: MEntity
@@ -443,14 +443,14 @@ class CardFeatures
 end
 
 class CardUsage
-	super DocCard
+	super DocCard2
 	serialize
 
 	redef var command_string = "[[usage]]"
 end
 
-class CardLicense
-	super DocCard
+class CardLicense2
+	super DocCard2
 	serialize
 
 	var license: String
@@ -463,8 +463,8 @@ class CardLicense
 	end
 end
 
-class CardTesting
-	super DocCard
+class CardTesting2
+	super DocCard2
 	serialize
 
 	var mentity: MEntity
@@ -530,7 +530,7 @@ end
 # Tips
 
 abstract class CardTip
-	super DocCard
+	super DocCard2
 	serialize
 
 	var is_tip = true

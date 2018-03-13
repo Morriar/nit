@@ -72,3 +72,8 @@
 	padding:  0 10px 10px 10px;
 	width: 100%
 }
+
+.card pre {
+	word-break: break-word;
+	white-space: pre-line;
+}

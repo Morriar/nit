@@ -118,7 +118,7 @@ console.log(data);
 
 			$scope.$on('doc-change', function(e, data, pos) {
 				vm.markdown = data;
-				vm.updateSuggestions(vm.target, data, pos.line + 1, pos.ch + 1);
+				//vm.updateSuggestions(vm.target, data, pos.line + 1, pos.ch + 1);
 			})
 
 			$scope.$on('insert-card', function(e, card) {
@@ -126,14 +126,20 @@ console.log(data);
 				vm.editor.doc.replaceRange(card.command_string, cursor);
 			})
 
+			$scope.$on('insert-content', function(e, content) {
+				var cursor = vm.editor.doc.getCursor();
+				vm.editor.doc.replaceRange(content, cursor);
+			})
+
 			$scope.$on('edit-card', function(e, card) {
 				vm.config_card = card;
 				$('#editModal').modal();
 			})
 
-			$scope.$on('dismiss-card', function(e, card) {
-				console.log(card);
+			$scope.$on('dismiss-card', function(e, index) {
+				//console.log(card);
 				// TODO Send card dismiss
+				vm.suggestions.splice(index, 1);
 			})
 
 			$scope.$on('update-target', function(e, target) {
@@ -142,7 +148,7 @@ console.log(data);
 			})
 
 			//TODO remove
-			vm.target = null;
+			vm.target = 'popcorn';
 			vm.markdown = '';
 			/*if($location.search().snippet) {
 				vm.markdown = atob($location.search().snippet);
@@ -200,6 +206,32 @@ console.log(data);
 				controllerAs: 'vm',
 				replace: true,
 				templateUrl: '/directives/creator/suggest-card.html'
+			};
+		})
+
+		.directive('cardScaffolding', function() {
+			return {
+				restrict: 'E',
+				scope: {},
+				bindToController: {
+					card: '=',
+					index: '='
+				},
+				controller: function($scope, $sce) {
+					var vm = this;
+
+					this.insertCard = function() {
+						$scope.$emit('insert-content', vm.card.content);
+						$scope.$emit('dismiss-card', vm.index);
+					}
+
+					this.dismissCard = function() {
+						$scope.$emit('dismiss-card', vm.index);
+					}
+				},
+				controllerAs: 'vm',
+				replace: true,
+				templateUrl: '/directives/cards/card-scaffolding.html'
 			};
 		})
 

@@ -1,0 +1,23 @@
+<div class='card suggest-card'>
+
+	<div>
+		<div class='card-left'>
+			<span class='glyphicon glyphicon-file' />
+		</div>
+		<div class='card-body'>
+			<h5 class='card-heading'>
+				{{vm.card.title}}
+			</h5>
+			<br/>
+			{{vm.card.description}}
+			<br/>
+			<br/>
+			<pre>{{vm.card.content}}</pre>
+		</div>
+	</div>
+
+	<div class='card-footer text-right'>
+		<button class='btn btn-xs btn-success' ng-click='vm.insertCard()'>Insert</button>
+		<button class='btn btn-xs btn-muted' ng-click='vm.dismissCard()'>Dismiss</button>
+	</div>
+</div>

@@ -50,7 +50,9 @@
 			<div class='tab-pane active' id='suggestions'>
 				<div id='suggests'>
 					<div ng-repeat='suggest in vm.suggestions'>
-						<suggest-card card='suggest' index='$index' />
+						<!--suggest-card card='suggest' index='$index' ng-if='!suggest.is_scaffoling'/-->
+
+						<card-scaffolding card='suggest' ng-if='suggest.is_scaffolding' />
 					</div>
 				</div>
 			</div>
