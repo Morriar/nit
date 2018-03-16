@@ -21,6 +21,8 @@ import commands::commands_model
 import commands::commands_graph
 import commands::commands_usage
 import commands::commands_catalog
+import commands::commands_ini
+import commands::commands_main
 
 # Parse string commands to create DocQueries
 class CommandParser
@@ -39,6 +41,9 @@ class CommandParser
 	"doc", "code", "lin", "uml", "graph", "search", "examples",
 	"parents", "ancestors", "children", "descendants",
 	"param", "return", "new", "call", "defs", "list", "random",
+	"ini-desc", "ini-git", "ini-issues", "ini-maintainer", "ini-contributors", "ini-license",
+	"license-file", "contrib-file", "git-clone",
+	"mains", "main-compile", "main-run", "main-opts", "testing",
 	"catalog", "stats", "tags", "tag", "person", "contrib", "maintain"] is writable
 
 	# List of commands usage and documentation
@@ -68,6 +73,21 @@ class CommandParser
 		usage["tag: <tag>"] = "list all packages with `tag`"
 		usage["maintain: <person>"] = "list all packages maintained by `person`"
 		usage["contrib: <person>"] = "list all packages contributed by `person`"
+		# Ini commands
+		usage["ini-desc: <package>"] = "display the description from the `package` ini file"
+		usage["ini-git: <package>"] = "display the git url from the `package` ini file"
+		usage["ini-issues: <package>"] = "display the issues url from the `package` ini file"
+		usage["ini-license: <package>"] = "display the license from the `package` ini file"
+		usage["ini-maintainer: <package>"] = "display the maintainer from the `package` ini file"
+		usage["ini-contributors: <package>"] = "display the contributors from the `package` ini file"
+		usage["license-file: <package>"] = "display the license file for the `package`"
+		usage["git-clone: <package>"] = "display the git clone command for the `package`"
+		# Misc
+		usage["mains: <name>"] = "display the list of main methods for `name`"
+		usage["main-compile: <name>"] = "display the nitc command to compile `name`"
+		usage["main-run: <name>"] = "display the command to run `name`"
+		usage["main-opts: <name>"] = "display the command options for `name`"
+		usage["testing: <name>"] = "display the nitunit command to test `name`"
 		return usage
 	end
 
@@ -103,9 +123,11 @@ class CommandParser
 		# Parse the argument
 		tmp.clear
 		pos = string.read_until(tmp, pos + 1, '|')
-		var arg = name
-		if not is_short_link then
-			arg = tmp.write_to_string.trim
+		var arg = tmp.write_to_string.trim
+		if is_short_link and not arg.is_empty then
+			arg = "{name}:{arg}"
+		else if is_short_link then
+			arg = name
 		end
 
 		# Parse command options
@@ -169,6 +191,22 @@ class CommandParser
 		# CmdModel
 		if name == "list" then return new CmdModelEntities(view)
 		if name == "random" then return new CmdRandomEntities(view)
+		# Ini
+		if name == "ini-desc" then return new CmdIniDescription(view)
+		if name == "ini-git" then return new CmdIniGitUrl(view)
+		if name == "ini-issues" then return new CmdIniIssuesUrl(view)
+		if name == "ini-license" then return new CmdIniLicense(view)
+		if name == "ini-maintainer" then return new CmdIniMaintainer(view)
+		if name == "ini-contributors" then return new CmdIniContributors(view)
+		if name == "license-file" then return new CmdLicenseFile(view)
+		if name == "contrib-file" then return new CmdContribFile(view)
+		if name == "git-clone" then return new CmdIniCloneCommand(view)
+		# Misc
+		if name == "mains" then return new CmdMains(view)
+		if name == "main-compile" then return new CmdMainCompile(view)
+		if name == "main-run" then return new CmdManSynopsis(view)
+		if name == "main-opts" then return new CmdManOptions(view)
+		if name == "testing" then return new CmdTesting(view)
 		# CmdCatalog
 		var catalog = self.catalog
 		if catalog != null then

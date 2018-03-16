@@ -120,7 +120,7 @@ class APIDocdownSuggest
 		# var suggestions = engine.doc_suggestions(doc, loc)
 
 		# TODO tmp
-		var scaf = new ReadmeScaffolder(view)
+		var scaf = new ReadmeScaffolder(view, config.md_processor)
 		var suggestions = new Array[DocCard]
 		if target isa MPackage then
 			suggestions.add_all scaf.scaffold(target)

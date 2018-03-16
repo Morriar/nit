@@ -219,9 +219,18 @@ console.log(data);
 				},
 				controller: function($scope, $sce) {
 					var vm = this;
+					vm.mode = 'html';
+
+					this.switchCard = function() {
+						if(vm.mode == 'html') {
+							vm.mode = 'md';
+						} else {
+							vm.mode = 'html';
+						}
+					}
 
 					this.insertCard = function() {
-						$scope.$emit('insert-content', vm.card.content);
+						$scope.$emit('insert-content', vm.card.markdown);
 						$scope.$emit('dismiss-card', vm.index);
 					}
 
