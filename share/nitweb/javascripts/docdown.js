@@ -148,7 +148,7 @@ console.log(data);
 			})
 
 			//TODO remove
-			vm.target = 'popcorn';
+			vm.target = 'markdown';
 			vm.markdown = '';
 			/*if($location.search().snippet) {
 				vm.markdown = atob($location.search().snippet);
@@ -206,6 +206,27 @@ console.log(data);
 				controllerAs: 'vm',
 				replace: true,
 				templateUrl: '/directives/creator/suggest-card.html'
+			};
+		})
+
+		.directive('cardTip', function() {
+			return {
+				restrict: 'E',
+				scope: {},
+				bindToController: {
+					card: '=',
+					index: '='
+				},
+				controller: function($scope, $sce) {
+					var vm = this;
+
+					this.dismissCard = function() {
+						$scope.$emit('dismiss-card', vm.index);
+					}
+				},
+				controllerAs: 'vm',
+				replace: true,
+				templateUrl: '/directives/cards/card-tip.html'
 			};
 		})
 

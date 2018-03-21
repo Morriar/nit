@@ -83,3 +83,5 @@
 .suggest-card pre h4, .suggest-card .well h4 { font-size: 125%; }
 .suggest-card pre h5, .suggest-card .well h5 { font-size: 115%; }
 .suggest-card pre h6, .suggest-card .well h6 { font-size: 105%; }
+
+.tip-card { background-color: #fffdf3; }

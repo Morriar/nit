@@ -19,14 +19,12 @@ import serialization
 abstract class DocCard
 	serialize
 
+	# Card icon
+	fun icon: String is abstract
+
 	# Card title
 	fun title: String is abstract
 
 	# Card description / explanation
 	fun description: String is abstract
-
-	# Card kind
-	#
-	# Used by the frontend to know what kind of card it's displaying.
-	var kind: String = class_name
 end

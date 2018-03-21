@@ -529,7 +529,7 @@ end
 
 # Tips
 
-abstract class CardTip
+abstract class CardTip2
 	super DocCard2
 	serialize
 
@@ -537,7 +537,7 @@ abstract class CardTip
 end
 
 class CardBadTarget
-	super CardTip
+	super CardTip2
 	serialize
 
 	var target_name: String
@@ -548,7 +548,7 @@ class CardBadTarget
 end
 
 class CardSuggestTargets
-	super CardTip
+	super CardTip2
 	serialize
 
 	var suggestions: Array[String]
@@ -557,7 +557,7 @@ class CardSuggestTargets
 end
 
 class CardTipHeadings
-	super CardTip
+	super CardTip2
 	serialize
 
 	var target_name: String
@@ -566,21 +566,21 @@ class CardTipHeadings
 end
 
 class CardTipRefs
-	super CardTip
+	super CardTip2
 	serialize
 
 	redef var command_string = "[[help: links]]"
 end
 
 class CardTipCards
-	super CardTip
+	super CardTip2
 	serialize
 
 	redef var command_string = "[[help: cards]]"
 end
 
 class CardTipBegin
-	super CardTip
+	super CardTip2
 	serialize
 
 	var target: MEntity
@@ -589,7 +589,7 @@ class CardTipBegin
 end
 
 class CardTipTarget
-	super CardTip
+	super CardTip2
 	serialize
 
 	var target_name: String

@@ -152,7 +152,7 @@ class WarningNoTest
 end
 
 # Cmd that finds the man file related to an `mentity`
-abstract class CmdManFile
+class CmdManFile
 	super CmdEntity
 
 	# Man file
