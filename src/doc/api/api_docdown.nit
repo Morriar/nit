@@ -22,7 +22,7 @@ intrude import markdown::wikilinks
 import doc_suggest
 import doc::commands::commands_docdown
 
-import doc::cards::doc_cards
+import doc::cards
 
 redef class NitwebConfig
 
@@ -123,8 +123,15 @@ class APIDocdownSuggest
 		var scaf = new ReadmeScaffolder(view, config.md_processor)
 		var suggestions = new Array[DocCard]
 		if target isa MPackage then
-			suggestions.add_all scaf.scaffold(target)
+			# suggestions.add_all scaf.scaffold(target)
 		end
+
+		var gen = new ReadmeMEntity(view, config.modelbuilder, config.md_processor)
+		# var suggestions = new Array[DocCard]
+		if target != null then
+			suggestions.add_all gen.cards(target)
+		end
+
 		# suggestions.clear
 
 		# var cmd = new CmdEntity(view, mentity_name = "popcorn::Handler")

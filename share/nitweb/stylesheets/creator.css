@@ -73,7 +73,7 @@
 	height: 100%;
 }
 
-.suggest-card pre, .suggest-card .well { font-size: 80%; }
+.suggest-card pre, .suggest-card .well { font-size: 80%; word-break: break-word; }
 .suggest-card pre :first-child, .suggest-card .well :first-child { margin-top: 0; }
 .suggest-card pre :last-child, .suggest-card .well :last-child { margin-bottom: 0; }
 

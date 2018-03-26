@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module doc_cards
+module cards_scaffolding
 
 import doc::cards::cards_base
 import doc::commands
@@ -176,7 +176,7 @@ abstract class CardTip
 
 	redef var icon = "info-sign"
 
-	var md_processor: MarkdownProcessor
+	var md_processor: MarkdownProcessor is noserialize
 
 	# Markdown content to insert into the document
 	fun markdown: String is abstract
@@ -186,9 +186,8 @@ abstract class CardTip
 	end
 
 	redef fun core_serialize_to(v) do
-		v.serialize_attribute("icon", icon)
+		super
 		v.serialize_attribute("is_tip", true)
-		v.serialize_attribute("description", description)
 	end
 end
 
@@ -196,7 +195,7 @@ class CardTipIni
 	super CardTip
 	serialize
 
-	var mentity: MEntity
+	var mentity: MEntity is noserialize
 
 	redef var title = "Add a package.ini file"
 
@@ -457,9 +456,9 @@ abstract class CardScaffolding
 
 	redef var icon = "file"
 
-	var md_processor: MarkdownProcessor
+	var md_processor: MarkdownProcessor is noserialize
 
-	var mentity: MEntity
+	var mentity: MEntity is noserialize
 
 	# Markdown content to insert into the document
 	fun markdown: String is abstract
@@ -469,7 +468,7 @@ abstract class CardScaffolding
 	end
 
 	redef fun core_serialize_to(v) do
-		v.serialize_attribute("icon", icon)
+		super
 		v.serialize_attribute("is_scaffolding", true)
 		v.serialize_attribute("markdown", markdown)
 		v.serialize_attribute("html", html)
@@ -480,7 +479,7 @@ class CardTitle
 	super CardScaffolding
 	serialize
 
-	var no_desc: Bool
+	var no_desc: Bool is noserialize
 
 	redef var title = "Readme Title"
 	redef var description = "Provide a good title and a short description of your project."
@@ -504,6 +503,12 @@ class CardOverview
 	redef var title = "Project Overview"
 	redef var description = "List the most interesting features of your project to explain what it does and why it is useful."
 
+	redef fun options do
+		var options = new HashMap[String, String]
+		options["filter-entities"] = ""
+		return options
+	end
+
 	redef var markdown is lazy do
 		var tpl = new Template
 		tpl.addn "## Overview\n"
@@ -520,11 +525,17 @@ class CardGettingStarted
 	redef var title = "Project Installation & Compilation"
 	redef var description = "Explain how a new user can obtain a working copy of your project and run it."
 
-	var no_parent: Bool
-	var no_git: Bool
-	var mains: nullable Array[MEntity]
-	var main_with_synopsis: HashSet[MEntity]
-	var main_with_options: HashSet[MEntity]
+	var no_parent: Bool is noserialize
+	var no_git: Bool is noserialize
+	var mains: nullable Array[MEntity] is noserialize
+	var main_with_synopsis: HashSet[MEntity] is noserialize
+	var main_with_options: HashSet[MEntity] is noserialize
+
+	redef fun options do
+		var options = new HashMap[String, String]
+		options["filter-mains"] = ""
+		return options
+	end
 
 	redef var markdown is lazy do
 		var tpl = new Template
@@ -601,8 +612,8 @@ class CardContributing
 	super CardScaffolding
 	serialize
 
-	var no_git: Bool
-	var no_contrib_file: Bool
+	var no_git: Bool is noserialize
+	var no_contrib_file: Bool is noserialize
 
 	redef var title = "Contributing"
 	redef var description = "Explain how other users can contribute to your project."
@@ -628,8 +639,8 @@ class CardAuthors
 	super CardScaffolding
 	serialize
 
-	var no_author: Bool
-	var no_contrib: Bool
+	var no_author: Bool is noserialize
+	var no_contrib: Bool is noserialize
 
 	redef var title = "Authors"
 	redef var description = "List the authors and contributors of your project."
@@ -653,8 +664,8 @@ class CardLicense
 	super CardScaffolding
 	serialize
 
-	var no_license: Bool
-	var no_license_file: Bool
+	var no_license: Bool is noserialize
+	var no_license_file: Bool is noserialize
 
 	redef var title = "License"
 	redef var description = "Give the license of your project so your users know how they may use it."

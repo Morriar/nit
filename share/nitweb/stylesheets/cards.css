@@ -75,5 +75,5 @@
 
 .card pre {
 	word-break: break-word;
-	white-space: pre-line;
+	white-space: pre-wrap;
 }

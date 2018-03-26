@@ -5,13 +5,17 @@
 			<span class='glyphicon glyphicon-{{vm.card.icon}}' />
 		</div>
 		<div class='card-body'>
-			<h4 class='card-heading'>
-				{{vm.card.title}}
-			</h4>
+			<h4 class='card-heading' ng-bind-html='vm.card.title' />
 			<p>{{vm.card.description}}</p>
-			<br>
-			<div ng-if='vm.mode == "html"'>
+			<div ng-if='vm.mode == "html" && !vm.card.is_graph && !vm.card.is_code'>
 				<div class='well' ng-bind-html='vm.card.html' />
+			</div>
+			<div ng-if='vm.mode == "html" && vm.card.is_graph' class='text-center'>
+				<br/>
+				<div ng-bind-html='vm.card.html' />
+			</div>
+			<div ng-if='vm.mode == "html" && vm.card.is_code'>
+				<div class='code' ng-bind-html='vm.card.html' />
 			</div>
 			<div ng-if='vm.mode == "md"'>
 				<pre ng-bind-html='vm.card.markdown' />

@@ -98,7 +98,6 @@
 					function(data) {
 						vm.summary = data.summary;
 						vm.suggestions = data.suggestions;
-console.log(data);
 						vm.debug = data.debug;
 					}, function(err) {
 						vm.error = err;
@@ -131,8 +130,9 @@ console.log(data);
 				vm.editor.doc.replaceRange(content, cursor);
 			})
 
-			$scope.$on('edit-card', function(e, card) {
+			$scope.$on('edit-card', function(e, card, index) {
 				vm.config_card = card;
+				vm.config_index = index;
 				$('#editModal').modal();
 			})
 
@@ -169,43 +169,6 @@ console.log(data);
 				restrict: 'E',
 				replace: true,
 				template: '<div id="editor" />'
-			};
-		})
-
-		.directive('suggestCard', function() {
-			return {
-				restrict: 'E',
-				scope: {},
-				bindToController: {
-					card: '=',
-					index: '='
-				},
-				controller: function($scope, $sce) {
-					var vm = this;
-
-					this.insertCard = function() {
-						$scope.$emit('insert-card', vm.card);
-					}
-
-					this.editCard = function() {
-						$scope.$emit('edit-card', vm.card);
-					}
-
-					this.dismissCard = function() {
-						$scope.$emit('dismiss-card', vm.card);
-					}
-
-					this.svg = function(svg) {
-						return $sce.trustAsHtml(svg);
-					}
-
-					this.selectTarget = function(target) {
-						$scope.$emit('update-target', target);
-					}
-				},
-				controllerAs: 'vm',
-				replace: true,
-				templateUrl: '/directives/creator/suggest-card.html'
 			};
 		})
 
@@ -258,10 +221,56 @@ console.log(data);
 					this.dismissCard = function() {
 						$scope.$emit('dismiss-card', vm.index);
 					}
+
+					this.editCard = function() {
+						$scope.$emit('edit-card', vm.card, vm.index);
+					}
 				},
 				controllerAs: 'vm',
 				replace: true,
 				templateUrl: '/directives/cards/card-scaffolding.html'
+			};
+		})
+
+		.directive('cardFreedoc', function() {
+			return {
+				restrict: 'E',
+				scope: {},
+				bindToController: {
+					card: '=',
+					index: '='
+				},
+				controller: function($scope, $sce) {
+					var vm = this;
+					vm.mode = 'html';
+					// TODO beurk
+					vm.card.html = vm.card.html.replace('<p>', '');
+					vm.card.html = $sce.trustAsHtml(vm.card.html);
+
+					this.switchCard = function() {
+						if(vm.mode == 'html') {
+							vm.mode = 'md';
+						} else {
+							vm.mode = 'html';
+						}
+					}
+
+					this.insertCard = function() {
+						$scope.$emit('insert-content', vm.card.markdown);
+						$scope.$emit('dismiss-card', vm.index);
+					}
+
+					this.dismissCard = function() {
+						$scope.$emit('dismiss-card', vm.index);
+					}
+
+					this.editCard = function() {
+						$scope.$emit('edit-card', vm.card, vm.index);
+					}
+				},
+				controllerAs: 'vm',
+				replace: true,
+				templateUrl: '/directives/cards/card-freedoc.html'
 			};
 		})
 
@@ -270,18 +279,21 @@ console.log(data);
 				restrict: 'E',
 				scope: {},
 				bindToController: {
-					card: '='
+					card: '=',
+					index: '=',
 				},
 				controller: function($scope, $sce) {
 					var vm = this;
 
 					this.insertCard = function() {
-						$scope.$emit('insert-card', vm.card);
+						$('#editModal').modal('hide');
+						$scope.$emit('insert-content', vm.card.markdown);
+						$scope.$emit('dismiss-card', vm.index);
 					}
 				},
 				controllerAs: 'vm',
 				replace: true,
-				templateUrl: '/directives/creator/config-card.html'
+				templateUrl: '/directives/cards/card-config.html'
 			};
 		})
 })();

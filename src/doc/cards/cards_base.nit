@@ -27,4 +27,19 @@ abstract class DocCard
 
 	# Card description / explanation
 	fun description: String is abstract
+
+	# Card options
+	fun options: Map[String, String] do return new HashMap[String, String]
+
+	# Does this card have any options associated?
+	fun has_options: Bool do return options.not_empty
+
+	redef fun core_serialize_to(v) do
+		v.serialize_attribute("icon", icon)
+		v.serialize_attribute("title", title)
+		v.serialize_attribute("description", description)
+		v.serialize_attribute("options", options)
+		v.serialize_attribute("has_options", has_options)
+		v.serialize_attribute("kind", class_name)
+	end
 end

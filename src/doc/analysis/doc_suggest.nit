@@ -40,144 +40,144 @@ class SuggestionEngine
 		return target
 	end
 
-	var sorter = new CardSorter
+	# var sorter = new CardSorter
+    #
+	# var last_debug: nullable DebugMode = null
+    #
+	# fun doc_suggestions(doc: DocModel, cursor: nullable nitc::Location): Array[DocCard2] do
+	#	var debug = new DebugMode
+	#	var suggest = new Array[DocCard2]
+    #
+	#	# TODO errors and warnings
+	#	# TODO top level cards
+	#	# suggest.add_all toplevel_suggestions
+    #
+	#	if cursor != null then
+	#		debug.line = cursor.line_start
+	#		debug.char = cursor.column_start
+    #
+	#		var block = doc.block_at(cursor) or else doc
+	#		debug.current_block = block
+    #
+	#		# if suggest.is_empty then
+	#			suggest.add_all block_suggestions(block)
+	#		# end
+	#	# else
+	#		# var block = doc
+	#		# debug.current_block = block
+	#	end
+    #
+	#	# debug.current_section = block
+	#	# debug.current_sentence = sentence
+	#	# debug.current_refs = block.all_refs.to_a
+	#	# debug.current_targets = extract_targets(block.all_refs).keys.to_a
+	#	# debug.found_cards = block.all_cards.to_a
+	#	last_debug = debug
+    #
+	#	return suggest
+	# end
 
-	var last_debug: nullable DebugMode = null
+	# fun toplevel_suggestions: Array[DocCard2] do
+	#	var cards = new Array[DocCard2]
+    #
+	#	var target_name = self.target_name
+	#	var target = self.target
+	#	if target_name == null and doc.is_empty then
+	#		# TODO suggest form metrics instead of rand
+	#		var mpackages = view.mpackages.to_a
+	#		mpackages.shuffle
+	#		var suggestions = new Array[String]
+	#		for mentity in mpackages.subarray(0, 3) do
+	#			suggestions.add mentity.full_name
+	#		end
+	#		cards.add new CardSuggestTargets(1.0, suggestions)
+	#	else if target_name != null and target == null then
+	#		var suggestions = new Array[String]
+	#		for mentity in view.find(target_name, 3) do
+	#			suggestions.add mentity.full_name
+	#		end
+	#		cards.add new CardBadTarget(1.0, target_name, suggestions)
+	#	else if doc.is_empty and target != null then
+	#		cards.add new CardTipBegin(1.0, target)
+	#	else if target_name != null and doc.all_subsections.is_empty then
+	#		cards.add new CardTipHeadings(1.0, target_name)
+	#	else if doc.all_refs.is_empty and doc.all_cards.is_empty then
+	#		cards.add new CardTipRefs(1.0)
+	#	end
+	#	return cards
+	# end
+    #
+	# fun block_suggestions(block: DocBlock): Array[DocCard2] do
+	#	var cards = new Array[DocCard2]
+	#	# TODO extract block target
+	#	var mentities = block_mentities(block)
+	#	for mentity, score in mentities do
+	#		for card in mentity_suggestions(mentity, score) do
+	#			if cards.has(card) then continue
+	#			cards.add card
+	#		end
+	#	end
+	#	sorter.sort(cards)
+	#	for card in cards do print "{card.command_string}: {card.score}"
+	#	return cards
+	# end
 
-	fun doc_suggestions(doc: DocModel, cursor: nullable nitc::Location): Array[DocCard2] do
-		var debug = new DebugMode
-		var suggest = new Array[DocCard2]
+	# # Extract `mentities` relevant to the current `block`
+	# fun block_mentities(block: DocBlock): ArrayMap[MEntity, Float] do
+	#	var mentities = new ArrayMap[MEntity, Float]
+	#	for ref in block.refs do
+	#		var cmd = new CmdEntity(view, mentity_name = ref)
+	#		var res = cmd.init_command
+	#		if res isa CmdSuccess then mentities[cmd.mentity.as(not null)] = 1.0
+	#	end
+	#	for match, score in nlp_matches(block) do
+	#		if not mentities.has_key(match) then mentities[match] = score
+	#	end
+	#	return mentities
+	# end
+    #
+	# fun mentity_suggestions(mentity: MEntity, mentity_score: Float): Array[DocCard2] do
+	#	var cards = new Array[DocCard2]
+    #
+	#	var cmd = new CmdEntity(view, mentity = mentity)
+	#	var res = cmd.init_command
+	#	if res isa CmdSuccess then cards.add new CardEntity(cmd, mentity_score)
+	#	cards.add_all suggest_examples(mentity, mentity_score - 0.001)
+	#	cards.add_all suggest_uml(mentity, mentity_score - 0.002)
+	#	# TODO suggest list
+	#	return cards
+	# end
 
-		# TODO errors and warnings
-		# TODO top level cards
-		# suggest.add_all toplevel_suggestions
-
-		if cursor != null then
-			debug.line = cursor.line_start
-			debug.char = cursor.column_start
-
-			var block = doc.block_at(cursor) or else doc
-			debug.current_block = block
-
-			# if suggest.is_empty then
-				suggest.add_all block_suggestions(block)
-			# end
-		# else
-			# var block = doc
-			# debug.current_block = block
-		end
-
-		# debug.current_section = block
-		# debug.current_sentence = sentence
-		# debug.current_refs = block.all_refs.to_a
-		# debug.current_targets = extract_targets(block.all_refs).keys.to_a
-		# debug.found_cards = block.all_cards.to_a
-		last_debug = debug
-
-		return suggest
-	end
-
-	fun toplevel_suggestions: Array[DocCard2] do
-		var cards = new Array[DocCard2]
-
-		var target_name = self.target_name
-		var target = self.target
-		if target_name == null and doc.is_empty then
-			# TODO suggest form metrics instead of rand
-			var mpackages = view.mpackages.to_a
-			mpackages.shuffle
-			var suggestions = new Array[String]
-			for mentity in mpackages.subarray(0, 3) do
-				suggestions.add mentity.full_name
-			end
-			cards.add new CardSuggestTargets(1.0, suggestions)
-		else if target_name != null and target == null then
-			var suggestions = new Array[String]
-			for mentity in view.find(target_name, 3) do
-				suggestions.add mentity.full_name
-			end
-			cards.add new CardBadTarget(1.0, target_name, suggestions)
-		else if doc.is_empty and target != null then
-			cards.add new CardTipBegin(1.0, target)
-		else if target_name != null and doc.all_subsections.is_empty then
-			cards.add new CardTipHeadings(1.0, target_name)
-		else if doc.all_refs.is_empty and doc.all_cards.is_empty then
-			cards.add new CardTipRefs(1.0)
-		end
-		return cards
-	end
-
-	fun block_suggestions(block: DocBlock): Array[DocCard2] do
-		var cards = new Array[DocCard2]
-		# TODO extract block target
-		var mentities = block_mentities(block)
-		for mentity, score in mentities do
-			for card in mentity_suggestions(mentity, score) do
-				if cards.has(card) then continue
-				cards.add card
-			end
-		end
-		sorter.sort(cards)
-		for card in cards do print "{card.command_string}: {card.score}"
-		return cards
-	end
-
-	# Extract `mentities` relevant to the current `block`
-	fun block_mentities(block: DocBlock): ArrayMap[MEntity, Float] do
-		var mentities = new ArrayMap[MEntity, Float]
-		for ref in block.refs do
-			var cmd = new CmdEntity(view, mentity_name = ref)
-			var res = cmd.init_command
-			if res isa CmdSuccess then mentities[cmd.mentity.as(not null)] = 1.0
-		end
-		for match, score in nlp_matches(block) do
-			if not mentities.has_key(match) then mentities[match] = score
-		end
-		return mentities
-	end
-
-	fun mentity_suggestions(mentity: MEntity, mentity_score: Float): Array[DocCard2] do
-		var cards = new Array[DocCard2]
-
-		var cmd = new CmdEntity(view, mentity = mentity)
-		var res = cmd.init_command
-		if res isa CmdSuccess then cards.add new CardEntity(cmd, mentity_score)
-		cards.add_all suggest_examples(mentity, mentity_score - 0.001)
-		cards.add_all suggest_uml(mentity, mentity_score - 0.002)
-		# TODO suggest list
-		return cards
-	end
-
-	fun suggest_examples(mentity: MEntity, base_score: Float): Array[CardExample] do
-		var cards = new Array[CardExample]
-
-		var cmd = new CmdExamples(view, modelbuilder, mentity, format = "html")
-		var res = cmd.init_command
-		if res isa CmdSuccess then
-			for example in cmd.results.as(not null) do
-				var ecmd = new CmdEntityCode(view, modelbuilder, mentity = example.mentity, format = "html")
-				ecmd.init_command
-				cards.add new CardExample(ecmd, base_score - cards.length.to_f / 100.0)
-				break
-			end
-		end
-
-		return cards
-	end
-
-	fun suggest_uml(mentity: MEntity, base_score: Float): Array[CardUML] do
-		var cards = new Array[CardUML]
-
-		if mentity isa MProperty or mentity isa MPropDef then return cards
-
-		var cmd = new CmdInheritanceGraph(view, mentity, format = "svg")
-		var res = cmd.init_command
-		if res isa CmdSuccess then
-			cards.add new CardUML(cmd, base_score - cards.length.to_f / 100.0)
-		end
-
-		return cards
-	end
+	# fun suggest_examples(mentity: MEntity, base_score: Float): Array[CardExample] do
+	#	var cards = new Array[CardExample]
+    #
+	#	var cmd = new CmdExamples(view, modelbuilder, mentity, format = "html")
+	#	var res = cmd.init_command
+	#	if res isa CmdSuccess then
+	#		for example in cmd.results.as(not null) do
+	#			var ecmd = new CmdEntityCode(view, modelbuilder, mentity = example.mentity, format = "html")
+	#			ecmd.init_command
+	#			cards.add new CardExample(ecmd, base_score - cards.length.to_f / 100.0)
+	#			break
+	#		end
+	#	end
+    #
+	#	return cards
+	# end
+    #
+	# fun suggest_uml(mentity: MEntity, base_score: Float): Array[CardUML] do
+	#	var cards = new Array[CardUML]
+    #
+	#	if mentity isa MProperty or mentity isa MPropDef then return cards
+    #
+	#	var cmd = new CmdInheritanceGraph(view, mentity, format = "svg")
+	#	var res = cmd.init_command
+	#	if res isa CmdSuccess then
+	#		cards.add new CardUML(cmd, base_score - cards.length.to_f / 100.0)
+	#	end
+    #
+	#	return cards
+	# end
 
 	# fun suggest_features(target: MEntity): nullable CardFeatures do
 	#	var features = new Array[MEntity]
@@ -426,7 +426,7 @@ end
 
 # Scafolding
 
-class CardFeatures
+class CardFeatures2
 	super DocCard2
 	serialize
 
@@ -442,7 +442,7 @@ class CardFeatures
 	redef var command_string = "[[list: {mentity.full_name} | features]]" is lazy
 end
 
-class CardUsage
+class CardUsage2
 	super DocCard2
 	serialize
 
@@ -474,7 +474,7 @@ end
 
 # Free doc
 
-class CardEntity
+class CardEntity2
 	super CardCommand
 	serialize
 
@@ -495,15 +495,15 @@ class CardEntity
 	end
 end
 
-class CardEntityLink
-	super CardEntity
+class CardEntityLink2
+	super CardEntity2
 	serialize
 
 	redef type CMD: CmdLink
 end
 
-class CardExample
-	super CardEntity
+class CardExample2
+	super CardEntity2
 	serialize
 
 	redef type CMD: CmdEntityCode
@@ -514,8 +514,8 @@ class CardExample
 	end
 end
 
-class CardUML
-	super CardEntity
+class CardUML2
+	super CardEntity2
 	serialize
 
 	redef type CMD: CmdInheritanceGraph
