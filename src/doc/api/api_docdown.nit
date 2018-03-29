@@ -123,11 +123,11 @@ class APIDocdownSuggest
 		var scaf = new ReadmeScaffolder(view, config.md_processor)
 		var suggestions = new Array[DocCard]
 		if target isa MPackage then
-			# suggestions.add_all scaf.scaffold(target)
+			suggestions.add_all scaf.scaffold(target)
 		end
 
 		var gen = new ReadmeMEntity(view, config.modelbuilder, config.md_processor)
-		# var suggestions = new Array[DocCard]
+		suggestions = new Array[DocCard]
 		if target != null then
 			suggestions.add_all gen.cards(target)
 		end

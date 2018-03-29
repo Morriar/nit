@@ -230,7 +230,7 @@ class CardTipIniDesc
 	redef fun markdown do
 		var tpl = new Template
 		tpl.addn "DocDown uses the package description from the `package.ini` file.\n"
-		tpl.addn "Add this key into your `package.ini` file:\n"
+		tpl.addn "Add the key `package.desc` into the file:\n"
 		tpl.addn "~~~\n"
 		tpl.addn "[package]"
 		tpl.addn "desc=Add a short description of your project"

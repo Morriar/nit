@@ -12,17 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module example_md is example
+# How to redefine the decorator behavior
+#
+# You can subclass any decorator to redefine its behavior or customize the output.
+module example_decorator is example
 
-intrude import markdown
+import markdown::decorators
 
-class TestMarkdownProcessorExample
-	test
+# We create a new Decorator for Markdown that inherits from the HTML one.
+class MyHTMLDecorator
+	super HTMLDecorator
 
-	fun test_process_empty is test do
-		var test = ""
-		var exp = ""
-		var res = test.md_to_html.write_to_string
-		assert res == exp
+	# We redefine the output for paragraphs so we can add a custom CSS class.
+	redef fun add_paragraph(v, block) do
+		v.add "<p class=\"my-css-class\">"
+		v.emit_in block
+		v.add "</p>\n"
 	end
 end

@@ -19,13 +19,14 @@ import template
 
 # Parse a markdown string and split it in blocks.
 #
-# Blocks are then outputed by an `MarkdownEmitter`.
+# Blocks are then outputed by a `Decorator`.
 #
 # Usage:
-#
-#    var proc = new MarkdownProcessor
-#    var html = proc.process("**Hello World!**")
-#    assert html == "<p><strong>Hello World!</strong></p>\n"
+# ~~~
+# var proc = new MarkdownProcessor
+# var html = proc.process("**Hello World!**")
+# assert html == "<p><strong>Hello World!</strong></p>\n"
+# ~~~
 #
 # SEE: `String::md_to_html` for a shortcut.
 class MarkdownProcessor

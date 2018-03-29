@@ -1,0 +1,21 @@
+# NAME
+
+nitmd - CLI for the Nit Markdown parser
+
+
+# SYNOPSIS
+
+nitmd [-t format] <file.md>
+
+# DESCRIPTION
+
+nitc is the current official Nit compiler.
+It takes the main module of a Nit program as argument and produces an executable file.
+
+# OPTIONS
+
+### `-t`, `--to`
+Specify output format (html, md, man)
+
+### `-h`, `-?`, `--help`
+Show Help (the list of options).
