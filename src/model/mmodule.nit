@@ -61,6 +61,17 @@ redef class MGroup
 	# module is not loaded.
 	var default_mmodule: nullable MModule = null
 
+	# Is this group empty?
+	#
+	# A group is empty if it contains no Nit modules and only empty groups.
+	fun is_empty: Bool do
+		for mgroup in in_nesting.smallers do
+			if mgroup == self then continue
+			if not mgroup.is_empty then return false
+		end
+		return mmodules.is_empty
+	end
+
 	redef fun mdoc_or_fallback
 	do
 		if mdoc != null then return mdoc

@@ -1,0 +1,30 @@
+# [[popcorn]]
+
+[[ini-desc: popcorn]].
+
+## Overview
+
+Main features:
+
+[[defs: popcorn | no-test, no-example]]
+
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine.
+
+### Dependencies
+
+This project requires the following packages:
+
+[[parents: popcorn]]
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+[[testing: popcorn]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: popcorn]].
+

@@ -195,8 +195,8 @@ end
 # Decorator for span elements.
 #
 # Because inline comments can appear as span elements,
-# InlineDecorator do not decorate things like paragraphs or headers.
-private class InlineDecorator
+# NitdocInlineDecorator do not decorate things like paragraphs or headers.
+private class NitdocInlineDecorator
 	super NitdocDecorator
 
 	redef fun add_paragraph(v, block) do
@@ -237,7 +237,7 @@ redef class Model
 	# This processor is specificaly designed to inlinable doc elements like synopsys.
 	var nitdoc_inline_processor: MarkdownProcessor is lazy, writable do
 		var proc = new MarkdownProcessor
-		proc.decorator = new InlineDecorator
+		proc.decorator = new NitdocInlineDecorator
 		return proc
 	end
 end

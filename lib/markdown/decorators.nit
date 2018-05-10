@@ -34,10 +34,12 @@ class MdDecorator
 		v.add "{"#" * lvl} "
 		v.emit_in block
 		v.addn
+		v.addn
 	end
 
 	redef fun add_paragraph(v, block) do
 		v.emit_in block
+		v.addn
 		v.addn
 	end
 
@@ -50,7 +52,6 @@ class MdDecorator
 		v.addn
 		v.emit_in block
 		v.add "~~~"
-		v.addn
 	end
 
 	redef fun add_blockquote(v, block) do
@@ -83,7 +84,6 @@ class MdDecorator
 			v.add "{current_li} "
 		end
 		v.emit_in block
-		v.addn
 	end
 
 	redef fun add_em(v, text) do

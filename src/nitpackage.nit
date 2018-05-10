@@ -16,7 +16,11 @@
 module nitpackage
 
 import frontend
+import frontend::parse_examples
 import doc::commands::commands_main
+
+import doc::cards
+import doc::commands::commands_docdown
 
 redef class ToolContext
 	# --expand
@@ -46,12 +50,26 @@ redef class ToolContext
 	# --gen-man
 	var opt_gen_man = new OptionBool("Generate manpages files", "--gen-man")
 
+	# --check-docdown
+	var opt_check_docdown = new OptionBool("Check README.docdown files", "--check-docdown")
+
+	# --gen-docdown
+	var opt_gen_docdown = new OptionBool("Generate README.docdown files", "--gen-docdown")
+
+	# --check-readme
+	var opt_check_readme = new OptionBool("Check README.md files", "--check-readme")
+
+	# --gen-readme
+	var opt_gen_readme = new OptionBool("Generate README.md files", "--gen-readme")
+
 	redef init do
 		super
 		option_context.add_option(opt_expand, opt_force)
 		option_context.add_option(opt_check_ini, opt_gen_ini)
 		option_context.add_option(opt_check_makefile, opt_gen_makefile)
 		option_context.add_option(opt_check_man, opt_gen_man)
+		option_context.add_option(opt_check_docdown, opt_gen_docdown)
+		option_context.add_option(opt_check_readme, opt_gen_readme)
 	end
 end
 
@@ -87,6 +105,18 @@ private class NitPackagePhase
 				continue
 			end
 
+			# Check README.docdown
+			if toolcontext.opt_check_docdown.value then
+				mpackage.check_docdown(toolcontext)
+				continue
+			end
+
+			# Check README.md
+			if toolcontext.opt_check_readme.value then
+				mpackage.check_readme(toolcontext)
+				continue
+			end
+
 			# Expand packages
 			if toolcontext.opt_expand.value and not mpackage.is_expanded then
 				var path = mpackage.expand
@@ -119,6 +149,22 @@ private class NitPackagePhase
 			# Create manpages
 			if toolcontext.opt_gen_man.value then
 				mpackage.gen_man(toolcontext, mainmodule)
+			end
+
+			# Create README.docdown
+			if toolcontext.opt_gen_docdown.value then
+				if not mpackage.has_docdown or toolcontext.opt_force.value then
+					var path = mpackage.gen_docdown(toolcontext, mainmodule)
+					toolcontext.info("generated DOCDOWN `{path}`", 0)
+				end
+			end
+
+			# Create README.md
+			if toolcontext.opt_gen_readme.value then
+				if not mpackage.has_readme or toolcontext.opt_force.value then
+					var path = mpackage.gen_readme(toolcontext, mainmodule)
+					toolcontext.info("generated README `{path}`", 0)
+				end
 			end
 		end
 	end
@@ -410,6 +456,220 @@ redef class MPackage
 			if not has_man then pkg_man.mkdir
 			mmodule.gen_man(toolcontext)
 		end
+	end
+
+	# README
+
+	private fun check_readme(toolcontext: ToolContext) do
+		if not has_readme then
+			toolcontext.error(location, "No `README.md` file for `{name}`")
+			return
+		end
+		# TODO check content match docdown
+	end
+
+	private fun check_docdown(toolcontext: ToolContext) do
+		if not has_docdown then
+			toolcontext.error(location, "No `README.docdown` file for `{name}`")
+			return
+		end
+		# TODO save old README
+		# TODO remove non-nit groups
+		# TODO load mpackage synopsis from ini
+		# TODO add description for bins
+		# TODO remove non-test groups from nitunit command
+		# TODO check content
+		# TODO get transltation errors
+	end
+
+	private fun gen_docdown(toolcontext: ToolContext, mainmodule: MModule): String do
+		var model = toolcontext.modelbuilder.model
+		var filter = new ModelFilter(accept_empty_group = false, accept_example = false)
+
+		var tpl = new Template
+
+		var no_ini = self.ini == null
+		var git_url = self.git_url
+
+		if no_ini then
+			toolcontext.warning(location, "docdown-scaff",
+				"Warning: missing `package.ini` for `{self}`")
+		end
+
+		# README title
+		var no_desc = no_ini or not ini.as(not null).has_key("package.desc")
+		if not no_ini and no_desc then
+			toolcontext.warning(location, "docdown-scaff",
+				"Warning: missing key `package.desc` in `package.ini` for `{self}`")
+		end
+		tpl.add((new CardTitle(self, no_desc)).markdown)
+
+		# Overview
+		var filter_features = new ModelFilter(accept_empty_group = false, accept_example = false, accept_test = false)
+		var cmd_features = new CmdFeatures(model, filter_features, self)
+		var res_features = cmd_features.init_command
+		var no_features = not res_features isa CmdSuccess
+
+		if not no_features then
+			tpl.add((new CardOverview(self)).markdown)
+		end
+
+		# Getting started
+
+		var cmd_parents = new CmdParents(model, mainmodule, filter, self)
+		var res_parents = cmd_parents.init_command
+		var no_parent = not res_parents isa CmdSuccess
+
+		var mains = new Array[MEntity]
+		var cmd_mains = new CmdMains(model, filter, self)
+		var res_mains = cmd_mains.init_command
+		if res_mains isa CmdSuccess then mains.add_all cmd_mains.results.as(not null)
+
+		var no_git = no_ini or not ini.as(not null).has_key("upstream.git")
+		if git_url == null or not git_url.has_suffix("nit.git") then
+			if not no_ini and no_git then
+				toolcontext.warning(location, "docdown-scaff",
+					"Warning: missing key `upstream.git` in `package.ini` for `{self}`")
+			end
+		else
+			no_git = true
+		end
+
+		var man_synopsis = new HashSet[MEntity]
+		var man_opts = new HashSet[MEntity]
+		for main in mains do
+			var cmd_man = new CmdManFile(model, filter, main)
+			var res_man = cmd_man.init_command
+			var no_man = not res_man isa CmdSuccess
+
+			if no_man then
+				toolcontext.warning(location, "docdown-scaff",
+					"Warning: no manpage for `{main}` in `{self}`")
+				continue
+			end
+
+			var cmd_syn = new CmdManSynopsis(model, filter, main)
+			var res_syn = cmd_syn.init_command
+			var no_syn = not res_syn isa CmdSuccess
+
+			if no_syn then
+				toolcontext.warning(location, "docdown-scaff",
+					"Warning: no manpage synopsis for `{main}` in `{self}`")
+			else
+				man_synopsis.add main
+			end
+
+			var cmd_opts = new CmdManOptions(model, filter, main)
+			var res_opts = cmd_opts.init_command
+			var no_opts = not res_opts isa CmdSuccess
+
+			if no_opts then
+				toolcontext.warning(location, "docdown-scaff",
+					"Warning: no manpage options for `{main}` in `{self}`")
+			else
+				man_opts.add main
+			end
+		end
+		tpl.add((new CardGettingStarted(self, no_parent, no_git, mains, man_synopsis, man_opts)).markdown)
+
+		# Testing
+		var cmd_tests = new CmdTesting(model, filter, self)
+		var res_tests = cmd_tests.init_command
+		var no_tests = not res_tests isa CmdSuccess
+
+		if no_tests then
+			toolcontext.warning(location, "docdown-scaff",
+				"Warning: no tests in `{self}`")
+		else
+			tpl.add((new CardTesting(self)).markdown)
+		end
+
+		# Issues
+		if git_url == null or not git_url.has_suffix("nit.git") then
+			var no_issues = no_ini or not ini.as(not null).has_key("upstream.issues")
+			if not no_ini and no_issues then
+				toolcontext.warning(location, "docdown-scaff",
+					"Warning: missing key `upstream.issues` in `package.ini` for `{self}`")
+			else
+				tpl.add((new CardIssues(self)).markdown)
+			end
+		end
+
+		# Contributing
+		if git_url == null or not git_url.has_suffix("nit.git") then
+			var cmd_contrib = new CmdContribFile(model, filter, self)
+			var res_contrib = cmd_contrib.init_command
+			var no_contrib_file = not res_contrib isa CmdSuccess
+
+			if no_contrib_file then
+				toolcontext.warning(location, "docdown-scaff",
+					"Warning: missing file `LICENSE.md` in `{self}`")
+			end
+			if not no_git or not no_contrib_file then
+				tpl.add((new CardContributing(self, no_git, no_contrib_file)).markdown)
+			end
+		end
+
+		# License
+		if git_url == null or not git_url.has_suffix("nit.git") then
+			var no_license = no_ini or not ini.as(not null).has_key("package.license")
+			if not no_ini and no_license then
+				toolcontext.warning(location, "docdown-scaff",
+					"Warning: missing key `package.license` in `package.ini` for `{self}`")
+			end
+
+			var cmd_license = new CmdLicenseFile(model, filter, self)
+			var res_license = cmd_license.init_command
+			var no_license_file = not res_license isa CmdSuccess
+
+			if no_license_file then
+				toolcontext.warning(location, "docdown-scaff",
+					"Warning: missing file `LICENSE.md` in `{self}`")
+			end
+			if not no_license or not no_license_file then
+				tpl.add((new CardLicense(self, no_license, no_license_file)).markdown)
+			end
+		end
+
+		# Authors
+		var no_author = no_ini or not ini.as(not null).has_key("package.maintainer")
+		if not no_ini and no_author then
+			toolcontext.warning(location, "docdown-scaff",
+				"Warning: missing key `package.maintainer` in `package.ini` for `{self}`")
+		end
+		var no_contrib = no_ini or not ini.as(not null).has_key("package.more_contributors")
+		if git_url == null or not git_url.has_suffix("nit.git") then
+			if not no_ini and no_contrib then
+				toolcontext.warning(location, "docdown-scaff",
+					"Warning: missing key `package.more_contributors` in `package.ini` for `{self}`")
+			end
+		end
+		if not no_author or not no_contrib then
+			tpl.add((new CardAuthors(self, no_author, no_contrib)).markdown)
+		end
+
+		var docdown_path = self.docdown_path.as(not null)
+		tpl.write_to_file(docdown_path)
+		return docdown_path
+	end
+
+	private fun gen_readme(toolcontext: ToolContext, mainmodule: MModule): String do
+		var model = toolcontext.modelbuilder.model
+
+		var docdown_path = self.docdown_path.as(not null)
+		var docdown = docdown_path.to_path.read_all
+
+		var md_proc = new MarkdownProcessor
+		var parser = new CommandParser(model, mainmodule, toolcontext.modelbuilder)
+		md_proc.decorator = new CmdMdDecorator(parser)
+		var md = md_proc.process(docdown).write_to_string
+		md = md.trim # FIXME hack to remove last empty line added by nitmd
+		md = md.replace("\n\n\n", "\n\n") # FIXME hack to remove double spacing added by nitmd
+		md = "{md}\n"
+
+		var readme_path = self.readme_path.as(not null)
+		md.write_to_file(readme_path)
+		return readme_path
 	end
 end
 

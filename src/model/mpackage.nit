@@ -92,6 +92,36 @@ class MPackage
 		if ini_path == null then return false
 		return ini_path.file_exists
 	end
+
+	# The path to `self` README.md
+	fun readme_path: nullable String do
+		var path = package_path
+		if path == null then return null
+		if not is_expanded then return null
+		return path / "README.md"
+	end
+
+	# Does `self` have a README.md file?
+	fun has_readme: Bool do
+		var readme_path = self.readme_path
+		if readme_path == null then return false
+		return readme_path.file_exists
+	end
+
+	# The path to `self` README.docdown
+	fun docdown_path: nullable String do
+		var path = package_path
+		if path == null then return null
+		if not is_expanded then return null
+		return path / "README.docdown"
+	end
+
+	# Does `self` have a README.docdown file?
+	fun has_docdown: Bool do
+		var docdown_path = self.docdown_path
+		if docdown_path == null then return false
+		return docdown_path.file_exists
+	end
 end
 
 # A group of modules in a package

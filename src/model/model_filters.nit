@@ -70,6 +70,7 @@ class ModelFilter
 		if not accept_mentity_empty_doc(mentity) then return false
 		if not accept_mentity_inherited(mentity) then return false
 		if not accept_mentity_full_name(mentity) then return false
+		if not accept_mentity_empty_group(mentity) then return false
 		return true
 	end
 
@@ -222,5 +223,17 @@ class ModelFilter
 		var string = accept_full_name
 		if string == null then return true
 		return mentity.full_name.has(string)
+	end
+
+	# If set, accept only mgroups that are not empty
+	#
+	# ie. groups that contain Nit modules.
+	var accept_empty_group: Bool = true is optional, writable
+
+	# Accept only mgroups that are not empty
+	fun accept_mentity_empty_group(mentity: MEntity): Bool do
+		if accept_empty_group then return true
+		if not mentity isa MGroup then return true
+		return not mentity.is_empty
 	end
 end

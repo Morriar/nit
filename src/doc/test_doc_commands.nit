@@ -58,7 +58,6 @@ class TestDocCommandParser
 		var command = parser.parse("doc:")
 		assert command == null
 		assert parser.errors.length == 1
-		print parser.errors.first
 		assert parser.errors.first.to_s == "Error: empty command arg (col: 4)"
 	end
 
