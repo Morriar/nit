@@ -67,6 +67,14 @@ end
 abstract class APICommand
 	super APIHandler
 
+	var default_filter = new ModelFilter(
+		min_visibility = protected_visibility,
+		accept_test = false,
+		accept_example = false,
+		accept_fictive = false,
+		accept_attribute = false
+	)
+
 	# Return the doc command to apply for self
 	fun command: DocCommand is abstract
 
@@ -136,7 +144,7 @@ end
 class APIEntityAncestors
 	super APICommand
 
-	redef fun command do return new CmdAncestors(config.model, config.mainmodule)
+	redef fun command do return new CmdAncestors(config.model, config.mainmodule, default_filter)
 end
 
 # List MEntity parents
@@ -145,7 +153,7 @@ end
 class APIEntityParents
 	super APICommand
 
-	redef fun command do return new CmdParents(config.model, config.mainmodule)
+	redef fun command do return new CmdParents(config.model, config.mainmodule, default_filter)
 end
 
 # List MEntity children
@@ -154,7 +162,7 @@ end
 class APIEntityChildren
 	super APICommand
 
-	redef fun command do return new CmdChildren(config.model, config.mainmodule)
+	redef fun command do return new CmdChildren(config.model, config.mainmodule, default_filter)
 end
 
 # List MEntity descendants
@@ -163,7 +171,7 @@ end
 class APIEntityDescendants
 	super APICommand
 
-	redef fun command do return new CmdDescendants(config.model, config.mainmodule)
+	redef fun command do return new CmdDescendants(config.model, config.mainmodule, default_filter)
 end
 
 # Linearize super definitions of a MClassDef or a MPropDef if any.
@@ -172,7 +180,7 @@ end
 class APIEntityLinearization
 	super APICommand
 
-	redef fun command do return new CmdLinearization(config.model, config.mainmodule)
+	redef fun command do return new CmdLinearization(config.model, config.mainmodule, default_filter)
 end
 
 # List definitions of a MEntity.
@@ -181,7 +189,7 @@ end
 class APIEntityDefs
 	super APICommand
 
-	redef fun command do return new CmdFeatures(config.model)
+	redef fun command do return new CmdFeatures(config.model, default_filter)
 end
 
 # List intro definitions of a MEntity.
@@ -190,7 +198,7 @@ end
 class APIEntityIntros
 	super APICommand
 
-	redef fun command do return new CmdIntros(config.model, config.mainmodule)
+	redef fun command do return new CmdIntros(config.model, config.mainmodule, default_filter)
 end
 
 # List redef definitions of a MEntity.
@@ -199,7 +207,7 @@ end
 class APIEntityRedefs
 	super APICommand
 
-	redef fun command do return new CmdRedefs(config.model, config.mainmodule)
+	redef fun command do return new CmdRedefs(config.model, config.mainmodule, default_filter)
 end
 
 # List all definitions accessible from a MEntity.
@@ -208,7 +216,7 @@ end
 class APIEntityAll
 	super APICommand
 
-	redef fun command do return new CmdAllProps(config.model, config.mainmodule)
+	redef fun command do return new CmdAllProps(config.model, config.mainmodule, default_filter)
 end
 
 # Return the source code of MEntity.
@@ -226,7 +234,7 @@ end
 class APIEntityUML
 	super APICommand
 
-	redef fun command do return new CmdUML(config.model, config.mainmodule)
+	redef fun command do return new CmdUML(config.model, config.mainmodule, default_filter)
 end
 
 # Return the inheritance graph for MEntity.
@@ -235,7 +243,7 @@ end
 class APIInheritanceGraph
 	super APICommand
 
-	redef fun command do return new CmdInheritanceGraph(config.model, config.mainmodule)
+	redef fun command do return new CmdInheritanceGraph(config.model, config.mainmodule, default_filter)
 end
 
 # CmdCatalog
