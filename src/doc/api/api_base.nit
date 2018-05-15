@@ -39,9 +39,6 @@ class NitwebConfig
 	# Modelbuilder used to access sources.
 	var modelbuilder: ModelBuilder
 
-	# The JSON API does not filter anything by default.
-	var filter: nullable ModelFilter
-
 	# Catalog to pass to handlers.
 	var catalog: Catalog
 end
@@ -56,11 +53,8 @@ abstract class APIHandler
 	# Find the MEntity ` with `full_name`.
 	fun find_mentity(full_name: nullable String): nullable MEntity do
 		if full_name == null then return null
-		var mentity = config.model.mentity_by_full_name(full_name.from_percent_encoding, config.filter)
+		var mentity = config.model.mentity_by_full_name(full_name.from_percent_encoding)
 		if mentity == null then return null
-
-		var filter = config.filter
-		if filter == null or filter.accept_mentity(mentity) then return mentity
 		return null
 	end
 
