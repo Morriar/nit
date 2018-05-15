@@ -63,14 +63,6 @@ a {
 .btn-bar { margin-top: -5px; float: right }
 .btn-bar .btn { padding: 5px 10px; }
 
-entity-list .btn-filter {
-	visibility: hidden;
-}
-
-entity-list:hover .btn-filter {
-	visibility: visible;
-}
-
 /* doc */
 
 .nitdoc .synopsys {

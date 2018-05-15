@@ -537,26 +537,9 @@
 				scope: {
 					listEntities: '=',
 					listId: '@',
-					listTitle: '@',
-					listObjectFilter: '=',
+					listTitle: '@'
 				},
-				templateUrl: '/directives/entity/list.html',
-				link: function ($scope, element, attrs) {
-					$scope.showFilters = false;
-					if(!$scope.listObjectFilter) {
-						$scope.listObjectFilter = {};
-					}
-					if(!$scope.visibilityFilter) {
-						$scope.visibilityFilter = {
-							public: true,
-							protected: true,
-							private: false
-						};
-					}
-					$scope.toggleFilters = function() {
-						$scope.showFilters = !$scope.showFilters;
-					};
-				}
+				templateUrl: '/directives/entity/list.html'
 			};
 		})
 

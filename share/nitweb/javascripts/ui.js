@@ -146,44 +146,7 @@
 			};
 		})
 
-		/* Filters */
-
-		.directive('uiFilters', function() {
-			return {
-				restrict: 'E',
-				scope: {
-					property: '=',
-					classesOn: '=',
-					classesOff: '='
-				},
-				replace: true,
-				templateUrl: '/directives/ui-filter-button-vis.html',
-				link: function ($scope, element, attrs) {
-					$scope.toggle = function() {
-						$scope.property = !$scope.property;
-					}
-				}
-			};
-		})
-
-		.filter('visibility', function() {
-			return function(input, visibilityFilter) {
-				var res = [];
-				input.forEach(function(entry) {
-					if(visibilityFilter.public == false && entry.visibility == "public") {
-						return;
-					}
-					if(visibilityFilter.protected == false && entry.visibility == "protected") {
-						return;
-					}
-					if(visibilityFilter.private == false && entry.visibility == "private") {
-						return;
-					}
-					res.push(entry);
-				});
-				return res;
-			};
-		})
+		/* Summary */
 
 		.directive('uiSummary', function($rootScope, $location, $anchorScroll) {
 			return {
@@ -236,58 +199,6 @@
 							$rootScope.reloadSummary();
 						}, 100);
 					});
-				}
-			};
-		})
-
-		.directive('uiFilterForm', function() {
-			return {
-				restrict: 'E',
-				scope: {
-					searchFilter: '=',
-					visibilityFilter: '='
-				},
-				replace: true,
-				templateUrl: '/directives/ui-filter-form.html'
-			};
-		})
-
-		.directive('uiFilterField', function() {
-			return {
-				restrict: 'E',
-				scope: {
-					property: '='
-				},
-				replace: true,
-				templateUrl: '/directives/ui-filter-field.html'
-			};
-		})
-
-		.directive('uiFilterGroupVis', function() {
-			return {
-				restrict: 'E',
-				scope: {
-					property: '='
-				},
-				replace: true,
-				templateUrl: '/directives/ui-filter-group-vis.html'
-			};
-		})
-
-		.directive('uiFilterButtonVis', function() {
-			return {
-				restrict: 'E',
-				scope: {
-					property: '=',
-					classesOn: '=',
-					classesOff: '='
-				},
-				replace: true,
-				templateUrl: '/directives/ui-filter-button-vis.html',
-				link: function ($scope, element, attrs) {
-					$scope.toggle = function() {
-						$scope.property = !$scope.property;
-					}
 				}
 			};
 		})
