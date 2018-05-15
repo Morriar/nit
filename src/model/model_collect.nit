@@ -54,7 +54,7 @@ redef class MEntity
 	fun collect_modifiers: Array[String] do return new Array[String]
 
 	# Collect `self` linearization anchored on `mainmodule`
-	fun collect_linearization(mainmodule: MModule): nullable Array[MEntity] do
+	fun collect_linearization(mainmodule: MModule, filter: nullable ModelFilter): nullable Array[MEntity] do
 		return null
 	end
 
@@ -643,8 +643,8 @@ redef class MClass
 
 	redef fun collect_modifiers do return intro.collect_modifiers
 
-	redef fun collect_linearization(mainmodule) do
-		var mclassdefs = self.mclassdefs.to_a
+	redef fun collect_linearization(mainmodule, filter) do
+		var mclassdefs = self.collect_mclassdefs(filter).to_a
 		mainmodule.linearize_mclassdefs(mclassdefs)
 		return mclassdefs
 	end
@@ -980,9 +980,10 @@ redef class MClassDef
 		return res
 	end
 
-	redef fun collect_linearization(mainmodule) do
+	redef fun collect_linearization(mainmodule, filter) do
 		var mclassdefs = new Array[MClassDef]
 		for mclassdef in in_hierarchy.as(not null).greaters do
+			if filter != null and not filter.accept_mentity(mclassdef) then continue
 			if mclassdef.mclass == self.mclass then mclassdefs.add mclassdef
 		end
 		mainmodule.linearize_mclassdefs(mclassdefs)
@@ -1074,8 +1075,8 @@ end
 redef class MProperty
 	redef fun collect_modifiers do return intro.collect_modifiers
 
-	redef fun collect_linearization(mainmodule) do
-		var mpropdefs = self.mpropdefs.to_a
+	redef fun collect_linearization(mainmodule, filter) do
+		var mpropdefs = self.collect_mpropdefs(filter).to_a
 		mainmodule.linearize_mpropdefs(mpropdefs)
 		return mpropdefs
 	end
@@ -1145,10 +1146,11 @@ redef class MPropDef
 		return res
 	end
 
-	redef fun collect_linearization(mainmodule) do
+	redef fun collect_linearization(mainmodule, filter) do
 		var mpropdefs = new Array[MPropDef]
 		var mentity = self
 		while not mentity.is_intro do
+			if filter != null and not filter.accept_mentity(mentity) then continue
 			mpropdefs.add mentity
 			mentity = mentity.lookup_next_definition(mainmodule, mentity.mclassdef.bound_mtype)
 		end

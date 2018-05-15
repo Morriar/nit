@@ -249,7 +249,7 @@ class CmdLinearization
 		var mentity = self.mentity.as(not null)
 
 		sorter = null
-		results = mentity.collect_linearization(mainmodule)
+		results = mentity.collect_linearization(mainmodule, filter)
 		if results == null then return new WarningNoLinearization(mentity)
 		return res
 	end
