@@ -16,6 +16,7 @@
 module nitweb
 
 import frontend
+import frontend::parse_examples
 import doc::api
 import doc::doc_down
 
