@@ -6,8 +6,10 @@
 	</div>
 
 	<!-- Parents -->
-	<entity-list list-title='Parents'
-		list-entities='vm.parents.results' list-object-filter='{}' />
+	<div ng-if='vm.parents.results.length > 0'>
+		<entity-list list-title='Parents'
+			list-entities='vm.parents.results' list-object-filter='{}' />
+	</div>
 
 	<!-- Children -->
 	<entity-list list-title='Children'

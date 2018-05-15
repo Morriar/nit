@@ -1,0 +1,40 @@
+<div>
+	<div class='form-group has-icon'>
+		<input type='text' class='form-control' ng-change='vm.filterName()'
+			ng-model-options='{ debounce: 300 }'
+			ng-model='vm.nameText' placeholder='Filter...'>
+		<span class='glyphicon glyphicon-filter form-control-icon text-muted'></span>
+	</div>
+
+	<div class='form-group'>
+		<label>Filters</label>
+		<div ng-dropdown-multiselect='' class='form-group'
+			options='vm.options'
+			selected-model='vm.selected'
+			extra-settings='vm.settings'
+			translation-texts='vm.customTexts'
+			events='vm.events'></div>
+	</div>
+
+	<div class='form-group'>
+		<label>Visibility</label>
+		<button class='btn btn-link btn-xs' ng-click='vm.filterVisibility("public")'
+			title='public'>
+			<span class='glyphicon glyphicon-eye-open text-success' />
+		</button>
+		<button class='btn btn-link btn-xs' ng-click='vm.filterVisibility("protected")'
+			title='protected'>
+			<span class='glyphicon text-warning' ng-class='{
+				"glyphicon-eye-open": vm.minVisibility != "public",
+				"glyphicon-eye-close": vm.minVisibility == "public",
+			}'/>
+		</button>
+		<button class='btn btn-link btn-xs' ng-click='vm.filterVisibility("private")'
+			title='private'>
+			<span class='glyphicon text-danger' ng-class='{
+				"glyphicon-eye-open": vm.minVisibility == "private",
+				"glyphicon-eye-close": vm.minVisibility != "private",
+			}'/>
+		</button>
+	</div>
+</div>
