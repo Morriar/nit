@@ -376,3 +376,20 @@ end
 redef class String
 	super JsonRef
 end
+
+redef class ModelFilter
+	serialize
+
+	redef fun core_serialize_to(v) do
+		v.serialize_attribute("min-visibility", min_visibility.to_s)
+		v.serialize_attribute("no-fictive", not accept_fictive)
+		v.serialize_attribute("no-test", not accept_test)
+		v.serialize_attribute("no-example", not accept_example)
+		v.serialize_attribute("no-redef", not accept_redef)
+		v.serialize_attribute("no-extern", not accept_extern)
+		v.serialize_attribute("no-attribute", not accept_attribute)
+		v.serialize_attribute("no-empty-doc", not accept_empty_doc)
+		v.serialize_attribute("no-inherited", accept_inherited != null)
+		v.serialize_attribute("match", accept_full_name)
+	end
+end

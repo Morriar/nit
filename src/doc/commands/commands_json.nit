@@ -54,6 +54,7 @@ redef class CmdList
 		obj["count"] = count
 		obj["limit"] = limit
 		obj["max"] = max
+		obj["filters"] = filter
 		return obj
 	end
 end
