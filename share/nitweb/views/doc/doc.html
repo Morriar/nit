@@ -16,19 +16,19 @@
 			</div>
 		</div>
 
-		<entity-list list-title='Introduced classes' list-entities='vm.intros.results'
+		<entity-list list-title='Introduced classes' list-data='vm.intros'
 			ng-if='vm.mentity.class_name == "MModule"' />
 
-		<entity-list list-title='Class redefinitions' list-entities='vm.redefs.results'
+		<entity-list list-title='Class redefinitions' list-data='vm.redefs'
 			ng-if='vm.mentity.class_name == "MModule"' />
 
 		<entity-list list-title='Constructors'
-			list-entities='vm.mentity.all_mproperties' />
+			list-data='vm.mentity.all_mproperties' />
 
-		<entity-list list-title='Introduced properties' list-entities='vm.intros.results'
+		<entity-list list-title='Introduced properties' list-data='vm.intros'
 			ng-if='vm.mentity.class_name == "MClass"' />
 
-		<entity-list list-title='Redefined properties' list-entities='vm.redefs.results'
+		<entity-list list-title='Redefined properties' list-data='vm.redefs'
 			ng-if='vm.mentity.class_name == "MClass"' />
 
 	</div>

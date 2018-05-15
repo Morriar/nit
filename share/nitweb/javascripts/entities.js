@@ -211,12 +211,17 @@
 					controllerAs: 'vm',
 				})
 				.state('doc.entity.defs', {
-					url: '/defs',
+					url: '/defs?filters',
 					templateUrl: 'views/doc/defs.html',
 					resolve: {
 						defs: function(Model, $q, $stateParams, $state) {
 							var d = $q.defer();
-							Model.loadEntityDefs($stateParams.id, d.resolve,
+							/*var filters = $stateParams.filters ? $stateParams.filters :
+								'min-visibility:protected,no-inherited,no-fictive,no-test';*/
+							var filters = "";
+							Model.loadEntityDefs($stateParams.id,
+								filters,
+								d.resolve,
 								function() {
 									$state.go('404', null, { location: false })
 								});
@@ -323,6 +328,20 @@
 		/* Model */
 
 		.factory('Model', [ '$http', function($http) {
+			var filterArgs = function(filters) {
+				var string = '';
+				if(!filters) return string;
+				filters.split(',').forEach(function(key) {
+					var parts = key.split(':');
+					if(parts.length < 2) {
+						string += '&' + key.trim() + '=true';
+					} else {
+						string += '&' + parts[0].trim() + '=' + parts.slice(1, parts.length).join(":");
+					}
+				})
+				return string;
+			}
+
 			return {
 
 				loadEntity: function(id, cb, cbErr) {
@@ -343,8 +362,8 @@
 						.error(cbErr);
 				},
 
-				loadEntityDefs: function(id, cb, cbErr) {
-					$http.get('/api/defs/' + id)
+				loadEntityDefs: function(id, filterString, cb, cbErr) {
+					$http.get('/api/defs/' + id + '?' + filterArgs(filterString))
 						.success(cb)
 						.error(cbErr);
 				},
@@ -374,7 +393,7 @@
 				},
 
 				loadEntityAncestors: function(id, cb, cbErr) {
-					$http.get('/api/ancestors/' + id)
+					$http.get('/api/ancestors/' + id + '?parents=false')
 						.success(cb)
 						.error(cbErr);
 				},
@@ -421,8 +440,9 @@
 						.error(cbErr);
 				},
 
-				search: function(q, p, n, cb, cbErr) {
-					$http.get('/api/search?q=' + q + '&p=' + p + '&l=' + n)
+				search: function(q, p, n/*, filterString*/, cb, cbErr) {
+					$http.get('/api/search?q=' + q + '&p=' + p + '&l=' + n/* +
+						filterArgs(filterString)*/)
 						.success(cb)
 						.error(cbErr);
 				}
@@ -534,12 +554,37 @@
 		.directive('entityList', function() {
 			return {
 				restrict: 'E',
-				scope: {
-					listEntities: '=',
+				scope: {},
+				bindToController: {
+					listData: '=',
 					listId: '@',
 					listTitle: '@'
 				},
-				templateUrl: '/directives/entity/list.html'
+				controller: function(Model, $scope, $stateParams) {
+					var vm = this;
+					$scope.$on('ui-filters-changed', function(e, filters) {
+						//$state.go('.', {filters: filters}, {reload: true});
+						console.log("filtering");
+						Model.loadEntityDefs($stateParams.id,
+							filters,
+							function(data) {
+								console.log(data);
+								vm.listData = data;
+							},
+							function(error) {
+								console.log(error);
+							});
+					})
+
+				},
+				controllerAs: 'vm',
+				templateUrl: '/directives/entity/list.html',
+				link: function ($scope, element, attrs) {
+					$scope.showFilters = true;
+					$scope.toggleFilters = function() {
+						$scope.showFilters = !$scope.showFilters;
+					};
+				}
 			};
 		})
 

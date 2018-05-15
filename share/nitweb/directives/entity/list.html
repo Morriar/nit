@@ -1,8 +1,13 @@
-<div class='entity-list' ng-if='listEntities.length > 0'>
-	<h3 id={{listId}}>
-		<span>{{listTitle}}</span>
+<div class='entity-list'>
+	<button class='btn btn-link pull-right' ng-click='vm.showListConfig = !vm.showListConfig'
+		title='List options'>
+		<span class='glyphicon glyphicon-cog text-muted' />
+	</button>
+	<h3 id={{vm.listId}}>
+		<span>{{vm.listTitle}}</span>
 	</h3>
+	<ui-list-options list-filters='vm.listData.filters' />
 	<div class='card-list'>
-		<entity-card mentity='mentity' ng-repeat='mentity in listEntities' />
+		<entity-card mentity='mentity' ng-repeat='mentity in vm.listData.results' />
 	</div>
 </div>
