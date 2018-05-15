@@ -421,12 +421,6 @@
 						.error(cbErr);
 				},
 
-				loadEntityGraph: function(id, cb, cbErr) {
-					$http.get('/api/graph/inheritance/' + id + '?format=svg&cdepth=3')
-						.success(cb)
-						.error(cbErr);
-				},
-
 				search: function(q, p, n, cb, cbErr) {
 					$http.get('/api/search?q=' + q + '&p=' + p + '&l=' + n)
 						.success(cb)
