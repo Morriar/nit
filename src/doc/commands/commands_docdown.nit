@@ -17,8 +17,10 @@ module commands_docdown
 
 import commands::commands_parser
 import commands::commands_html
+import commands::commands_md
 
 intrude import doc_down
+import markdown::decorators
 intrude import markdown::wikilinks
 
 # Retrieve the MDoc summary
@@ -62,17 +64,15 @@ class CmdSummary
 	end
 end
 
-# Custom Markdown processor able to process doc commands
-class CmdDecorator
+# Custom Markdown processor able to process doc commands as HTML
+class CmdHTMLDecorator
 	super NitdocDecorator
-
-	redef type PROCESSOR: CmdMarkdownProcessor
 
 	# Model used by wikilink commands to find entities
 	var model: Model
 
-	# Filter to apply if any
-	var filter: nullable ModelFilter
+	# Parser used to process doc commands
+	var parser: CommandParser
 
 	redef fun add_span_code(v, buffer, from, to) do
 		var text = new FlatBuffer
@@ -90,10 +90,10 @@ class CmdDecorator
 	end
 
 	private fun try_find_mentity(text: String): nullable MEntity do
-		var mentity = model.mentity_by_full_name(text, filter)
+		var mentity = model.mentity_by_full_name(text)
 		if mentity != null then return mentity
 
-		var mentities = model.mentities_by_name(text, filter)
+		var mentities = model.mentities_by_name(text)
 		if mentities.is_empty then
 			return null
 		else if mentities.length > 1 then
@@ -103,33 +103,6 @@ class CmdDecorator
 	end
 
 	redef fun add_wikilink(v, token) do
-		v.render_wikilink(token, model)
-	end
-end
-
-# Same as `InlineDecorator` but with wikilink commands handling
-class CmdInlineDecorator
-	super InlineDecorator
-
-	redef type PROCESSOR: CmdMarkdownProcessor
-
-	# Model used by wikilink commands to find entities
-	var model: Model
-
-	redef fun add_wikilink(v, token) do
-		v.render_wikilink(token, model)
-	end
-end
-
-# Custom MarkdownEmitter for commands
-class CmdMarkdownProcessor
-	super MarkdownProcessor
-
-	# Parser used to process doc commands
-	var parser: CommandParser
-
-	# Render a wikilink
-	fun render_wikilink(token: TokenWikiLink, model: Model) do
 		var link = token.link
 		if link == null then return
 		var name = token.name
@@ -139,13 +112,69 @@ class CmdMarkdownProcessor
 		var error = parser.error
 
 		if error isa CmdError then
-			emit_text error.to_html.write_to_string
+			v.emit_text error.to_html.write_to_string
 			return
 		end
 		if error isa CmdWarning then
-			emit_text error.to_html.write_to_string
+			v.emit_text error.to_html.write_to_string
 		end
-		add command.as(not null).to_html
+		v.add command.as(not null).to_html
+	end
+end
+
+# Same as `NitdocInlineDecorator` but with wikilink commands handling as HTML
+class CmdHTMLInlineDecorator
+	super NitdocInlineDecorator
+
+	# Parser used to process doc commands
+	var parser: CommandParser
+
+	redef fun add_wikilink(v, token) do
+		var link = token.link
+		if link == null then return
+		var name = token.name
+		if name != null then link = "{name} | {link}"
+
+		var command = parser.parse(link.write_to_string)
+		var error = parser.error
+
+		if error isa CmdError then
+			v.emit_text error.to_html.write_to_string
+			return
+		end
+		if error isa CmdWarning then
+			v.emit_text error.to_html.write_to_string
+		end
+		v.add command.as(not null).to_html
+	end
+end
+
+# Custom Markdown processor able to process doc commands as Markdown
+class CmdMdDecorator
+	super MdDecorator
+
+	# Parser used to process doc commands
+	var parser: CommandParser
+
+	redef fun add_wikilink(v, token) do
+		var link = token.link
+		if link == null then return
+		var name = token.name
+		if name != null then link = "{name} | {link}"
+
+		var command = parser.parse(link.write_to_string)
+		var error = parser.error
+
+		if error isa CmdError then
+			v.emit_text error.to_s
+			v.addn
+			return
+		end
+		if error isa CmdWarning then
+			v.emit_text error.to_s
+			v.addn
+		end
+		v.add command.as(not null).to_md
 	end
 end
 

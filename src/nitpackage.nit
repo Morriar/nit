@@ -16,6 +16,7 @@
 module nitpackage
 
 import frontend
+import doc::commands::commands_docdown
 import doc::commands::commands_main
 
 redef class ToolContext
@@ -50,13 +51,23 @@ redef class ToolContext
 	# --check-readme
 	var opt_check_readme = new OptionBool("Check README.md files", "--check-readme")
 
+	# --gen-readme
+	var opt_gen_readme = new OptionBool("Generate README.md files", "--gen-readme")
+
+	# --check-docdown
+	var opt_check_docdown = new OptionBool("Check README.docdown.md files", "--check-docdown")
+
+	# --copy-docdown
+	var opt_copy_docdown = new OptionBool("Copy README.md files to README.docdown.md", "--copy-docdown")
+
 	redef init do
 		super
 		option_context.add_option(opt_expand, opt_force)
 		option_context.add_option(opt_check_ini, opt_gen_ini)
 		option_context.add_option(opt_check_makefile, opt_gen_makefile)
 		option_context.add_option(opt_check_man, opt_gen_man)
-		option_context.add_option(opt_check_readme)
+		option_context.add_option(opt_check_readme, opt_gen_readme)
+		option_context.add_option(opt_check_docdown, opt_copy_docdown)
 	end
 end
 
@@ -98,6 +109,12 @@ private class NitPackagePhase
 				continue
 			end
 
+			# Check README.docdown
+			if toolcontext.opt_check_docdown.value then
+				mpackage.check_docdown(toolcontext)
+				continue
+			end
+
 			# Expand packages
 			if toolcontext.opt_expand.value and not mpackage.is_expanded then
 				var path = mpackage.expand
@@ -130,6 +147,24 @@ private class NitPackagePhase
 			# Create manpages
 			if toolcontext.opt_gen_man.value then
 				mpackage.gen_man(toolcontext, mainmodule)
+			end
+
+			# Create README.md
+			if toolcontext.opt_gen_readme.value then
+				if not mpackage.has_readme or toolcontext.opt_force.value then
+					var path = mpackage.gen_readme(toolcontext, mainmodule)
+					toolcontext.info("generated README `{path}`", 0)
+				end
+			end
+
+			# Copy README.md as README.docdown.md
+			if toolcontext.opt_copy_docdown.value then
+				if not mpackage.has_docdown or toolcontext.opt_force.value then
+					var path = mpackage.copy_docdown(toolcontext)
+					if path != null then
+						toolcontext.info("copied README `{path}`", 0)
+					end
+				end
 			end
 		end
 	end
@@ -430,6 +465,44 @@ redef class MPackage
 			toolcontext.error(location, "No `README.md` file for `{name}`")
 			return
 		end
+	end
+
+	private fun check_docdown(toolcontext: ToolContext) do
+		if not has_docdown then
+			toolcontext.error(location, "No `README.docdown` file for `{name}`")
+			return
+		end
+	end
+
+	private fun copy_docdown(toolcontext: ToolContext): nullable String do
+		if not has_readme then
+			toolcontext.error(location, "No `README.md` file for `{name}`")
+			return null
+		end
+
+		var readme_path = self.readme_path.as(not null)
+		var docdown_path = self.docdown_path.as(not null)
+		sys.system "cp {readme_path} {docdown_path}"
+		return docdown_path
+	end
+
+	private fun gen_readme(toolcontext: ToolContext, mainmodule: MModule): String do
+		var model = toolcontext.modelbuilder.model
+
+		var docdown_path = self.docdown_path.as(not null)
+		var docdown = docdown_path.to_path.read_all
+
+		var md_proc = new MarkdownProcessor
+		var parser = new CommandParser(model, mainmodule, toolcontext.modelbuilder)
+		md_proc.decorator = new CmdMdDecorator(parser)
+		var md = md_proc.process(docdown).write_to_string
+		# md = md.trim # FIXME hack to remove last empty line added by nitmd
+		# md = md.replace("\n\n\n", "\n\n") # FIXME hack to remove double spacing added by nitmd
+		# md = "{md}\n"
+
+		var readme_path = self.readme_path.as(not null)
+		md.write_to_file(readme_path)
+		return readme_path
 	end
 end
 
