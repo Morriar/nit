@@ -32,20 +32,25 @@ config.add_option(opt_to)
 config.tool_description = usage.write_to_string
 
 config.parse_options(args)
-if config.args.length != 1 then
+if config.args.length > 1 then
 	config.usage
 	exit 1
 end
 
-var file = config.args.first
-if not file.file_exists then
-	print "'{file}' not found"
-	exit 1
-end
+var md
+if config.args.is_empty then
+	md = sys.stdin.read_all
+else
+	var file = config.args.first
+	if not file.file_exists then
+		print "'{file}' not found"
+		exit 1
+	end
 
-var ifs = new FileReader.open(file)
-var md = ifs.read_all
-ifs.close
+	var ifs = new FileReader.open(file)
+	md = ifs.read_all
+	ifs.close
+end
 
 var processor = new MarkdownProcessor
 var to = opt_to.value
@@ -59,4 +64,4 @@ else
 	print "Unknown output format: {to}"
 	exit 1
 end
-print processor.process(md)
+printn processor.process(md)

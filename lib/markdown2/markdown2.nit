@@ -25,3 +25,27 @@ redef class String
 		return renderer.render(doc)
 	end
 end
+
+# TODO inline parser
+	# TODO clean code startup code
+
+# TODO markdown redering + tests
+
+# TODO extensions
+	# TODO toc tree
+	# TODO tables
+	# TODO tasklists
+	# TODO sub
+	# TODO abbrv
+	# TODO mathmode
+
+# TODO bench
+	# TODO replace regex by loops?
+
+# TODO replace old markdown
+	# TODO nitmd
+	# TODO nitunit
+	# TODO nitdoc
+	# TODO nitweb
+	# TODO nitiwiki
+	# TODO commands
