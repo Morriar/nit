@@ -17,6 +17,7 @@ module markdown_md_rendering
 
 import markdown_rendering
 import markdown_github
+import markdown_wikilinks
 
 # Markdown document renderer to Markdown
 class MarkdownRenderer
@@ -344,5 +345,19 @@ redef class MdText
 
 	redef fun process_len(v) do
 		v.length += literal.length
+	end
+end
+
+# Wikilinks
+
+redef class MdWikilink
+	redef fun render_md(v) do
+		v.add_md "[["
+		var title = self.title
+		if title != null then
+			v.add_md "{title} | "
+		end
+		v.add link
+		v.add_md "]]"
 	end
 end
