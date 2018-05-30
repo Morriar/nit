@@ -540,29 +540,3 @@ Another paragraph.
 		assert md_to_tex(md) == tex
 	end
 end
-
-class TestLatexGithub
-	super TestMarkdownLatex
-	test
-
-	fun test_strike is test do
-		var md = """
-A ~~super~~ text.
-"""
-		var tex = """
-A \\sout{super} text.
-"""
-		assert md_to_tex(md) == tex
-	end
-
-	fun test_super is test do
-		var md = """
-A ^super^ text.
-"""
-		var tex = """
-A \\textsuperscript{super} text.
-"""
-		assert md_to_tex(md) == tex
-	end
-end
-
