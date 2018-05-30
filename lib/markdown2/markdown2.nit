@@ -44,7 +44,6 @@ end
 
 # TODO replace old markdown
 	# TODO nitmd
-	# TODO nitunit
 	# TODO nitdoc
 	# TODO nitweb
 	# TODO nitiwiki
