@@ -18,6 +18,7 @@ module markdown_html_rendering
 import markdown_rendering
 import markdown_github
 import markdown_wikilinks
+import markdown_maths
 
 # Markdown document renderer to HTML
 class HtmlRenderer
@@ -447,5 +448,15 @@ redef class MdWikilink
 		v.add_raw "<wiki link=\"{v.encode_uri(link)}\">"
 		visit_all(v)
 		v.add_raw "</wiki>"
+	end
+end
+
+# Math mode
+
+redef class MdMaths
+	redef fun render_html(v) do
+		v.add_raw "<math>"
+		visit_all(v)
+		v.add_raw "<math>"
 	end
 end
