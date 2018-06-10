@@ -47,7 +47,7 @@ class CmdComment
 
 	# Format to render the comment
 	#
-	# Can be one of `raw` or `html`.
+	# Can be one of `raw`, `html` or `md`.
 	# Default is `raw`.
 	var format = "raw" is optional, writable
 
@@ -74,10 +74,6 @@ class CmdComment
 		var mdoc = self.mdoc
 		if mdoc == null then return null
 
-		if format == "html" then
-			if full_doc then return mdoc.html_documentation
-			return mdoc.html_synopsis
-		end
 		if full_doc then return mdoc.documentation
 		return mdoc.synopsis
 	end
