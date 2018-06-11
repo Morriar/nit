@@ -16,7 +16,8 @@
 module wiki_links
 
 import wiki_base
-import markdown::wikilinks
+import markdown2::markdown_html_rendering
+import markdown2::markdown_wikilinks
 import ordered_tree
 
 redef class Nitiwiki
@@ -159,16 +160,27 @@ redef class WikiEntry
 		return null
 	end
 
-	private var md_proc: NitiwikiMdProcessor is lazy do
-		return new NitiwikiMdProcessor(wiki, self)
+	# Parser used to analyze Markdown strings
+	var md_parser: MdParser is lazy do
+		var parser = new MdParser
+		parser.wikilinks_mode = true
+		return parser
+	end
+
+	# Markdown to HTML renderer
+	var md_renderer = new NitiwikiRenderer(true, wiki, self) is lazy
+
+	# Render Markdown `intput` as a HTML string
+	fun render_md(input: String): String do
+		var ast = md_parser.parse(input)
+		return md_renderer.render(ast)
 	end
 
 	# Process wikilinks from sidebar.
 	private fun render_sidebar_wikilinks do
 		var blocks = sidebar.blocks
 		for i in [0..blocks.length[ do
-			blocks[i] = md_proc.process(blocks[i].to_s).write_to_string
-			md_proc.decorator.headlines.clear
+			blocks[i] = render_md(blocks[i].to_s)
 		end
 	end
 end
@@ -192,7 +204,7 @@ end
 redef class WikiArticle
 
 	# Headlines ids and titles.
-	var headlines = new ArrayMap[String, HeadLine]
+	var headlines = new ArrayMap[String, MdHeading]
 
 	# Is `self` an index page?
 	#
@@ -211,8 +223,8 @@ redef class WikiArticle
 	redef fun render do
 		super
 		if not is_dirty and not wiki.force_render or not has_source then return
-		content = md_proc.process(md.as(not null))
-		headlines.add_all(md_proc.decorator.headlines)
+		content = render_md(md.as(not null))
+		headlines.add_all(md_renderer.headings)
 	end
 end
 
@@ -230,26 +242,9 @@ class WikiSectionIndex
 	redef fun dir_href do return section.dir_href
 end
 
-# A MarkdownProcessor able to parse wiki links.
-class NitiwikiMdProcessor
-	super MarkdownProcessor
-
-	# Wiki used to resolve links.
-	var wiki: Nitiwiki
-
-	# Article parsed by `self`.
-	#
-	# Used to contextualize links.
-	var context: WikiEntry
-
-	init do
-		decorator = new NitiwikiDecorator(wiki, context)
-	end
-end
-
-# The decorator associated to `MarkdownProcessor`.
-class NitiwikiDecorator
-	super HTMLDecorator
+# Custom nitiwiki renderer for nitiwiki
+class NitiwikiRenderer
+	super HtmlRenderer
 
 	# Wiki used to resolve links.
 	var wiki: Nitiwiki
@@ -257,14 +252,17 @@ class NitiwikiDecorator
 	# Article used to contextualize links.
 	var context: WikiEntry
 
-	redef fun add_wikilink(v, token) do
-		var wiki = v.as(NitiwikiMdProcessor).wiki
+	# Render a wiki link
+	fun add_wikilink(wikilink: MdWikilink) do
+		var wiki = self.wiki
+
 		var target: nullable WikiEntry = null
 		var anchor: nullable String = null
-		var link = token.link
-		if link == null then return
-		var name = token.name
-		v.add "<a "
+
+		var link = wikilink.link
+		var name = wikilink.title
+
+		add_raw "<a "
 		if not link.has_prefix("http://") and not link.has_prefix("https://") then
 			# Extract commands from the link.
 			var command = null
@@ -275,9 +273,9 @@ class NitiwikiDecorator
 			end
 
 			if link.has("#") then
-				var parts = link.split_with("#")
-				link = parts.first
-				anchor = parts.subarray(1, parts.length - 1).join("#")
+				var hparts = link.split_with("#")
+				link = hparts.first
+				anchor = hparts.subarray(1, hparts.length - 1).join("#")
 			end
 			if link.has("/") then
 				target = wiki.lookup_entry_by_path(context, link.to_s)
@@ -297,22 +295,31 @@ class NitiwikiDecorator
 				end
 			else
 				wiki.message("Warning: unknown wikilink `{link}` (in {context.src_path.as(not null)})", 0)
-				v.add "class=\"broken\" "
+				add_raw "class=\"broken\" "
 			end
 		end
-		v.add "href=\""
-		append_value(v, link)
-		if anchor != null then append_value(v, "#{anchor}")
-		v.add "\""
-		var comment = token.comment
-		if comment != null and not comment.is_empty then
-			v.add " title=\""
-			append_value(v, comment)
-			v.add "\""
+		add_raw "href=\""
+		add_raw encode_uri(link)
+		if anchor != null then add_raw encode_uri("#{anchor}")
+		add_raw "\""
+		add_raw ">"
+		if name == null then
+			add_text link
+		else if wikilink.title == null then
+			add_text name
+		else
+			wikilink.visit_all(self)
 		end
-		v.add ">"
-		if name == null then name = link
-		v.emit_text(name)
-		v.add "</a>"
+		add_raw "</a>"
+	end
+end
+
+redef class MdWikilink
+	redef fun render_html(v) do
+		if not v isa NitiwikiRenderer then
+			super
+			return
+		end
+		v.add_wikilink(self)
 	end
 end
