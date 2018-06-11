@@ -16,7 +16,8 @@
 module wiki_html
 
 import wiki_links
-import markdown::decorators
+intrude import markdown2::markdown_html_rendering
+import markdown2
 
 redef class Nitiwiki
 
@@ -47,16 +48,16 @@ redef class Nitiwiki
 		return sitemap
 	end
 
+	# Markdown parser used for inline element such as titles in TOC.
+	private var md_parser = new MdParser is lazy
+
 	# Markdown processor used for inline element such as titles in TOC.
-	private var inline_processor: MarkdownProcessor is lazy do
-		var proc = new MarkdownProcessor
-		proc.decorator = new InlineDecorator
-		return proc
-	end
+	private var md_inline_renderer = new HtmlRenderer is lazy
 
 	# Inline markdown (remove h1, p, ... elements).
 	private fun inline_md(md: Writable): Writable do
-		return inline_processor.process(md.write_to_string)
+		var ast = md_parser.parse(md.write_to_string)
+		return md_inline_renderer.render(ast)
 	end
 end
 
@@ -257,8 +258,7 @@ redef class WikiArticle
 		while iter.is_ok do
 			var hl = iter.item
 			# parse title as markdown
-			var title = wiki.inline_md(hl.title)
-			tpl.add "<li><a href=\"#{hl.id}\">{title}</a>"
+			tpl.add "<li><a href=\"#{hl.id(wiki.md_inline_renderer)}\">{hl.title}</a>"
 			iter.next
 			if iter.is_ok then
 				if iter.item.level > hl.level then

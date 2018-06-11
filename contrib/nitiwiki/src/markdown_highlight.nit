@@ -14,6 +14,7 @@
 
 # Extends the wiki with an external highlighter (or any processor) for code blocks
 module markdown_highlight
+
 import wiki_links
 
 redef class WikiConfig
@@ -59,41 +60,52 @@ redef class WikiConfig
 	end
 end
 
-redef class NitiwikiDecorator
-	# Extends special cases for meta in fences
-	redef fun add_code(v, block) do
-		var highlighter = wiki.config.highlighter
+redef class MdCodeBlock
+
+	redef fun render_html(v) do
+		if not render_code(v, self) then super
+	end
+
+	private fun render_code(v: HtmlRenderer, block: MdCodeBlock): Bool do
+		if not v isa NitiwikiRenderer then
+			return false
+		end
+		var highlighter = v.wiki.config.highlighter
 
 		# No highlighter, then defaults
 		if highlighter.is_empty then
-			super
-			return
+			return false
 		end
 
-		var code = block.raw_content
-		var meta = block.meta or else wiki.config.highlighter_default
+		var code = literal
+
+		# No code, then defaults
+		if code == null or code.is_empty then
+			return false
+		end
+
+		var meta = info or else v.wiki.config.highlighter_default
 
 		# No meta nor forced meta, then defaults
 		if meta.is_empty then
-			super
-			return
+			return false
 		end
 
 		# Execute the command
-		wiki.message("Executing `{highlighter}` `{meta}` (in {context.src_path.as(not null)})", 2)
+		v.wiki.message("Executing `{highlighter}` `{meta}` (in {v.context.src_path.as(not null)})", 2)
 		var proc = new ProcessDuplex("sh", "-c", highlighter, "", meta.to_s)
 		var res = proc.write_and_read(code)
 		if proc.status != 0 then
-			wiki.message("Warning: `{highlighter}` `{meta}` returned {proc.status} (in {context.src_path.as(not null)})", 0)
+			v.wiki.message("Warning: `{highlighter}` `{meta}` returned {proc.status} (in {v.context.src_path.as(not null)})", 0)
 		end
 
 		# Check the result
 		if res.is_empty then
 			# No result, then defaults
-			wiki.message("  `{highlighter}` produced nothing, process internally instead (in {context.src_path.as(not null)})", 2)
-			super
-			return
+			v.wiki.message("  `{highlighter}` produced nothing, process internally instead (in {v.context.src_path.as(not null)})", 2)
+			return false
 		end
-		v.add(res)
+		v.add_raw(res)
+		return true
 	end
 end
