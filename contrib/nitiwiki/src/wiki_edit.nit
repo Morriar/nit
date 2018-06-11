@@ -16,7 +16,7 @@
 module wiki_edit
 
 import nitcorn
-import markdown
+import markdown2
 import md5
 import config
 
@@ -35,7 +35,7 @@ class WikiEditForm
 	# Custom HTML code, for forms and links
 	var html: String
 
-	init do content = (md or else "").md_to_html.to_s + html
+	init do content = (md or else "").md_to_html2.to_s + html
 
 	redef fun dir_href do return "edit" / href
 
