@@ -22,6 +22,7 @@ import commands_base
 import model::model_collect
 import modelize
 import modelbuilder
+import doc_down
 import htmlight
 import doc_down
 

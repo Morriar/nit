@@ -46,6 +46,12 @@ end
 
 redef class MdNode
 
+	# Return `self` as raw text
+	fun raw_text: String do
+		var v = new RawTextVisitor
+		return v.render(self)
+	end
+
 	# Render `self` as raw text
 	fun render_raw_text(v: RawTextVisitor) do visit_all(v)
 end

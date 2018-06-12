@@ -66,8 +66,11 @@ redef class CmdEntities
 			tpl.add "<li>"
 			tpl.add mentity.html_link
 			if mdoc != null then
-				tpl.add " - "
-				tpl.add mdoc.html_synopsis
+				var html_synopsis = mdoc.html_synopsis
+				if html_synopsis != null then
+					tpl.add " - "
+					tpl.add html_synopsis
+				end
 			end
 			tpl.add "</li>"
 		end
@@ -90,10 +93,13 @@ redef class CmdComment
 		# end
 		if mdoc != null then
 			# if not opts.has_key("no-link") and not opts.has_key("no-synopsis") then
-				tpl.add " - "
 			# end
 			# if not opts.has_key("no-synopsis") then
-				tpl.add mdoc.html_synopsis
+			var html_synopsis = mdoc.html_synopsis
+			if html_synopsis != null then
+				tpl.add " - "
+				tpl.add html_synopsis
+			end
 			# end
 		end
 		tpl.add "</h3>"

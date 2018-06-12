@@ -81,11 +81,11 @@ redef class CmdComment
 		tpl.add "### `{mentity}`"
 		if mdoc != null then
 			tpl.add " - "
-			tpl.add mdoc.synopsis
+			tpl.add mdoc.md_synopsis
 		end
 		tpl.add "\n"
 		if mdoc != null then
-			tpl.add mdoc.comment
+			tpl.add mdoc.md_comment
 		end
 		return tpl.write_to_string
 	end

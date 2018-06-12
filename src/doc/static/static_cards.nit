@@ -208,7 +208,10 @@ class CardMEntity
 			if full_doc then
 				addn mdoc.html_documentation
 			else
-				addn mdoc.html_synopsis
+				var html_synopsis = mdoc.html_synopsis
+				if html_synopsis != null then
+					addn html_synopsis
+				end
 			end
 		end
 		addn """
@@ -293,7 +296,10 @@ class CardInheritance
 		var comment = mentity.mdoc_or_fallback
 		if comment != null then
 			tpl.add ": "
-			tpl.add comment.html_synopsis
+			var html_synopsis = comment.html_synopsis
+			if html_synopsis != null then
+				addn html_synopsis
+			end
 		end
 		return new ListItem(tpl)
 	end
@@ -535,7 +541,10 @@ class CardCatalogPackage
 			if full_doc then
 				addn mdoc.html_documentation
 			else
-				addn mdoc.html_synopsis
+				var html_synopsis = mdoc.html_synopsis
+				if html_synopsis != null then
+					addn html_synopsis
+				end
 			end
 		end
 		addn " </div>"

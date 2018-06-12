@@ -110,7 +110,7 @@ abstract class MdNode
 	end
 
 	# Insert `sibling` before `self`.
-	private fun insert_before(sibling: MdNode) do
+	fun insert_before(sibling: MdNode) do
 		sibling.unlink
 		sibling.prev = prev
 		if sibling.prev != null then
