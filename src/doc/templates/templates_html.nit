@@ -15,10 +15,8 @@
 # Translate mentities to html blocks.
 module templates_html
 
-import model::model_collect
-import doc::doc_down
+import commands_docdown
 import html::bootstrap
-import catalog
 
 redef class MEntity
 
@@ -375,5 +373,161 @@ redef class Person
 		tpl.addn html_link
 		tpl.addn "</span>"
 		return tpl.write_to_string
+	end
+end
+
+# MDoc
+
+redef class MDoc
+
+	# Markdown renderer to HTML
+	var mdoc_html_renderer: MDocHtmlRenderer is lazy do
+		return original_mentity.as(not null).model.mdoc_html_renderer
+	end
+
+	# Markdown renderer to inline HTML
+	var mdoc_html_inline_renderer: MDocHtmlInlineRenderer is lazy do
+		return original_mentity.as(not null).model.mdoc_html_inline_renderer
+	end
+
+	# Renders the synopsis as a HTML comment block.
+	var html_synopsis: nullable Writable is lazy do
+		var ast = mdoc_ast
+		var first = ast.first_child
+		if not first isa MdHeading then return null
+		var res = mdoc_html_inline_renderer.render(first)
+		return "<span class=\"synopsys nitdoc\">{res}</span>"
+	end
+
+	# Renders the comment without the synopsis as a HTML comment block.
+	var html_comment: Writable is lazy do
+		return html_documentation
+		# var ast = mdoc_ast
+#
+		# var res = new Buffer
+		# var node = ast.first_child
+		# if node == null then
+			# return "<div class=\"nitdoc\"></div>"
+		# end
+
+		# while node != null do
+			# print node
+			# res.append mdoc_html_renderer.render(node)
+			# node = node.next
+		# end
+
+		# return "<div class=\"nitdoc\">{res}</div>"
+	end
+
+	# Renders the synopsis and the comment as a HTML comment block.
+	var html_documentation: Writable is lazy do
+		var res = mdoc_html_renderer.render(mdoc_ast)
+		return "<div class=\"nitdoc\">{res}</div>"
+	end
+end
+
+redef class Model
+
+	# Markdown renderer to HTML
+	var mdoc_html_renderer = new MDocHtmlRenderer is lazy, writable
+
+	# Markdown renderer for inlined HTML
+	var mdoc_html_inline_renderer = new MDocHtmlInlineRenderer is lazy, writable
+end
+
+
+#
+class MDocHtmlRenderer
+	super HtmlRenderer
+end
+
+#
+class MDocHtmlInlineRenderer
+	super HtmlRenderer
+
+	redef fun visit(node) do node.render_html_inline(self)
+end
+
+redef class MdNode
+	# Render `self` as HTML without any block
+	fun render_html_inline(v: MDocHtmlInlineRenderer) do render_html(v)
+end
+
+redef class MdBlock
+	redef fun render_html_inline(v) do visit_all(v)
+end
+
+redef class MdHeading
+	redef fun render_html(v) do
+		var parent = self.parent
+		if v isa MDocHtmlRenderer and parent != null and parent.first_child == self then
+			# v.add_line
+			v.add_raw "<h{level} class=\"synopsys\">"
+			visit_all(v)
+			v.add_raw "</h{level}>"
+			# v.add_line
+			return
+		end
+		super
+	end
+end
+
+redef class MdCodeBlock
+	redef fun render_html(v) do
+		var meta = info or else "nit"
+		var ast = nit_ast
+
+		if ast == null then
+			v.add_raw "<pre class=\"{meta}\"><code>"
+			v.add_raw v.html_escape(literal or else "", false)
+			v.add_raw "</code></pre>\n"
+			return
+		else if ast isa AError then
+			v.add_raw "<pre class=\"{meta}\"><code>"
+			v.add_raw v.html_escape(literal or else "", false)
+			v.add_raw "</code></pre>\n"
+			return
+		end
+
+		var hl = new CmdHtmlightVisitor
+		hl.show_infobox = false
+		hl.line_id_prefix = ""
+		hl.highlight_node(ast)
+
+		v.add_raw "<pre class=\"nitcode\"><code>"
+		v.add_raw hl.html.write_to_string
+		v.add_raw "</code></pre>\n"
+	end
+end
+
+redef class MdLineBreak
+	redef fun render_html_inline(v) do end
+end
+
+redef class MdCode
+	redef fun render_html(v) do
+		var mentity = nit_mentity
+		if mentity != null then
+			v.add_raw "<code>"
+			v.add_raw mentity.html_link(text = literal).write_to_string
+			v.add_raw "</code>"
+			return
+		end
+		var ast = nit_ast
+		if ast == null or ast isa AError then
+			v.add_raw "<code class=\"rawcode\">"
+			v.add_raw v.html_escape(literal, false)
+			v.add_raw "</code>"
+			return
+		end
+		# TODO links?
+		var hl = new CmdHtmlightVisitor
+		hl.show_infobox = false
+		hl.line_id_prefix = ""
+		hl.highlight_node(ast)
+
+		v.add_raw "<code class=\"nitcode\">"
+		v.add_raw hl.html.write_to_string
+		v.add_raw "</code>"
 	end
 end

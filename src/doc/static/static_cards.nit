@@ -15,10 +15,7 @@
 # Cards templates for the static documentation
 module static_cards
 
-import doc::commands::commands_graph
-import doc::commands::commands_catalog
-import doc::commands::commands_docdown
-import templates_html
+import doc::commands::commands_html
 
 # A card that can be rendered to HTML
 #
@@ -149,13 +146,13 @@ end
 # A card that displays the summary of a Markdown document
 class CardMdSummary
 	super CardMDoc
-	autoinit(md_processor, headlines)
+	autoinit(md_renderer, headlines)
 
 	# Markdown processor used to extract and render the content
-	var md_processor: MarkdownProcessor is writable
+	var md_renderer: HtmlRenderer is writable
 
 	# Headlines found in the document
-	var headlines: ArrayMap[String, HeadLine] is writable
+	var headlines: ArrayMap[String, MdHeading] is writable
 
 	redef var id = "summary"
 	redef var title = "Summary"
@@ -166,8 +163,11 @@ class CardMdSummary
 		addn " <ul class='list-unstyled'>"
 		for id, headline in headlines do
 			var level = headline.level
-			var title = md_processor.process(headline.title)
-			addn "<li><a href='#{id}'><h{level}>{title}</h{level}></a></li>"
+			var content = headline.first_child
+			if content != null then
+				var title = md_renderer.render(content)
+				addn "<li><a href='#{id}'><h{level}>{title}</h{level}></a></li>"
+			end
 		end
 		addn " </ul>"
 		addn "</div>"

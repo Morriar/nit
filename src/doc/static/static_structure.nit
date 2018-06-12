@@ -66,15 +66,14 @@ redef class PageMEntity
 	fun build_main(doc: DocModel) do
 		var mentity = self.mentity
 
-		var sq = new CmdSummary(doc.model, doc.filter, mentity,
-			markdown_processor = doc.inline_processor)
+		var sq = new CmdSummary(doc.model, doc.filter, mentity)
 		sq.init_command
 
 		main_tab.content.add new CardMDoc(mentity, mentity.mdoc_or_fallback)
 
 		var summary = sq.summary
 		if summary != null then
-			main_tab.sidebar.cards.add new CardMdSummary(headlines = summary, md_processor = doc.inline_processor)
+			main_tab.sidebar.cards.add new CardMdSummary(headlines = summary, md_renderer = doc.md_renderer)
 		end
 	end
 

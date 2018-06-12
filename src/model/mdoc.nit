@@ -31,6 +31,25 @@ class MDoc
 
 	# The original location of the doc for error messages
 	var location: Location
+
+	# Raw synopsis
+	#
+	# * Returns the first line of the MDoc content without the headings `#`.
+	# * Returns `null` if the content is empty.
+	# * Returns `null` if the content does not start with a Markdown heading.
+	var synopsis: nullable String is lazy do
+		return content.first
+	end
+
+	# Comment without synopsis HTML escaped
+	var comment: String is lazy do
+		var lines = content.to_a
+		if not lines.is_empty then lines.shift
+		return lines.join("\n")
+	end
+
+	# Full comment HTML escaped.
+	var documentation: String is lazy do return content.join("\n")
 end
 
 redef class MEntity

@@ -15,13 +15,13 @@
 # Render commands results as HTML
 module commands_html
 
+import commands::commands_docdown
 import commands::commands_graph
 import commands::commands_usage
 import commands::commands_ini
 import commands::commands_main
 
 import templates::templates_html
-import doc_down
 import highlight
 
 redef class DocCommand
@@ -347,5 +347,14 @@ redef class CmdHtmlightVisitor
 		if mentity isa MClassDef then return mentity.mclass.html_url
 		if mentity isa MPropDef then return mentity.mproperty.html_url
 		return mentity.html_url
+	end
+end
+
+redef class MdWikilink
+	redef fun render_html(v) do
+		var command = self.command
+		if command != null then
+			v.add_raw command.to_html.write_to_string
+		end
 	end
 end

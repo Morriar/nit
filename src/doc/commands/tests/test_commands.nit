@@ -15,7 +15,7 @@
 # Nitunit for doc commands
 module test_commands
 
-import commands_base
+import commands_docdown
 import frontend
 
 # Nitunit test suite specific to commands
@@ -66,5 +66,8 @@ class TestCommands
 		test_main = mainmodule
 		test_model = model
 		test_builder = modelbuilder
+
+		var test_cmd_parser = new CommandParser(model, mainmodule, modelbuilder)
+		test_model.cmd_parser = test_cmd_parser
 	end
 end

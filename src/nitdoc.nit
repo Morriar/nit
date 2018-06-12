@@ -130,7 +130,7 @@ private class Nitdoc
 
 		var doc = new DocModel(model, mainmodule, modelbuilder, catalog, filter)
 
-		model.nitdoc_md_processor = doc.md_processor
+		doc.model.cmd_parser = doc.cmd_parser
 		doc.no_dot = toolcontext.opt_nodot.value
 		doc.no_code = toolcontext.opt_nocode.value
 		doc.code_url = toolcontext.opt_source.value

@@ -24,11 +24,9 @@
 # TODO consider serialization module?
 module templates_json
 
-import model::model_collect
 import json::static
 import json::serialization_write
-import catalog
-import doc_down
+import commands_html
 
 redef class MEntity
 	serialize

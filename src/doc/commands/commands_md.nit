@@ -20,8 +20,6 @@ import commands::commands_usage
 import commands::commands_ini
 import commands::commands_main
 
-import doc_down
-
 redef class DocCommand
 
 	# Render results as a Markdown string
@@ -62,8 +60,11 @@ redef class CmdEntities
 			var mdoc = mentity.mdoc_or_fallback
 			tpl.add "* `{mentity}`"
 			if mdoc != null then
-				tpl.add " - "
-				tpl.add mdoc.synopsis
+				var synopsis = mdoc.synopsis
+				if synopsis != null then
+					tpl.add " - "
+					tpl.add synopsis
+				end
 			end
 			tpl.add "\n"
 		end
@@ -329,5 +330,41 @@ redef class CmdTesting
 		tpl.addn command
 		tpl.addn "~~~"
 		return tpl.write_to_string
+	end
+end
+
+# MDoc
+
+redef class MDoc
+
+	# Renders the synopsis as a HTML comment block.
+	var md_synopsis: Writable is lazy do
+		if content.is_empty then return ""
+		return content.first
+	end
+
+	#
+	var md_comment: Writable is lazy do
+		if content.is_empty then return ""
+		var lines = content.to_a
+		lines.shift
+		return lines.join("\n")
+	end
+
+	# Renders the synopsis and the comment as a HTML comment block.
+	var md_documentation: Writable is lazy do return lines_to_md(content.to_a)
+
+	private fun lines_to_md(lines: Array[String]): Writable do
+		var res = new Template
+		if not lines.is_empty then
+			var syn = lines.first
+			if not syn.has_prefix("    ") and not syn.has_prefix("\t") and
+			  not syn.trim.has_prefix("#") then
+				lines.shift
+				res.add "# {syn}\n"
+			end
+		end
+		res.add lines.join("\n")
+		return res
 	end
 end

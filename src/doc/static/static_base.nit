@@ -16,9 +16,6 @@
 module static_base
 
 import static_cards
-import modelize
-
-intrude import markdown::wikilinks
 
 # The model of a Nitdoc documentation
 class DocModel
@@ -38,21 +35,11 @@ class DocModel
 	# Model filters applied to the whole documentation
 	var filter: ModelFilter
 
-	# Specific Markdown processor to use within Nitdoc
-	var md_processor: MarkdownProcessor is lazy do
-		var parser = new CommandParser(model, mainmodule, modelbuilder, catalog)
-		var proc = new CmdMarkdownProcessor(parser)
-		proc.decorator = new CmdDecorator(model)
-		return proc
-	end
+	# Commands parser
+	var cmd_parser = new CommandParser(model, mainmodule, modelbuilder, catalog) is lazy
 
-	# Specific Markdown processor to use within Nitdoc
-	var inline_processor: MarkdownProcessor is lazy do
-		var parser = new CommandParser(model, mainmodule, modelbuilder, catalog)
-		var proc = new CmdMarkdownProcessor(parser)
-		proc.decorator = new CmdInlineDecorator(model)
-		return proc
-	end
+	#
+	var md_renderer = new MDocHtmlRenderer is lazy
 
 	# Do not generate dot graphs
 	var no_dot = false is writable
