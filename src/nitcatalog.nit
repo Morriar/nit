@@ -132,65 +132,7 @@ g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
 	end
 end
 
-redef class NitdocDecorator
-	redef fun add_image(v, link, name, comment)
-	do
-		# Keep absolute links as is
-		if link.has_prefix("http://") or link.has_prefix("https://") then
-			super
-			return
-		end
-
-		do
-			# Get the directory of the doc object to deal with the relative link
-			var mdoc = current_mdoc
-			if mdoc == null then break
-			var source = mdoc.location.file
-			if source == null then break
-			var path = source.filename
-			var stat = path.file_stat
-			if stat == null then break
-			if not stat.is_dir then path = path.dirname
-
-			# Get the full path to the local resource
-			var fulllink = path / link.to_s
-			stat = fulllink.file_stat
-			if stat == null then break
-
-			# Get a collision-free catalog name for the resource
-			var hash = fulllink.md5
-			var ext = fulllink.file_extension
-			if ext != null then hash = hash + "." + ext
-
-			# Copy the local resource in the resource directory of the catalog
-			var res = catalog.outdir / "res" / hash
-			fulllink.file_copy_to(res)
-
-			# Hijack the link in the html.
-			link = ".." / "res" / hash
-			super(v, link, name, comment)
-			return
-		end
-
-		# Something went bad
-		catalog.modelbuilder.toolcontext.error(current_mdoc.location, "Error: cannot find local image `{link}`")
-		super
-	end
-
-	# The registered catalog
-	#
-	# It is used to deal with relative links in images.
-	var catalog: Catalog is noautoinit
-end
-
 redef class Catalog
-	redef init
-	do
-		# Register `self` to the global NitdocDecorator
-		# FIXME this is ugly. But no better idea at the moment.
-		modelbuilder.model.nitdoc_md_processor.decorator.as(NitdocDecorator).catalog = self
-	end
-
 	# The output directory where to generate pages
 	var outdir: String is noautoinit
 
@@ -626,12 +568,25 @@ end
 if not opt_no_model.value then
 	modelbuilder.run_phases
 end
+var mainmodule = tc.make_main_module(mmodules)
 
 var out = opt_dir.value or else "catalog.out"
 (out/"p").mkdir
 (out/"res").mkdir
 
 catalog.outdir = out
+
+var cmd_parser = new CommandParser(model, mainmodule, modelbuilder)
+var md_parser = new MdParser
+md_parser.github_mode = true
+md_parser.wikilinks_mode = true
+md_parser.post_processors.add new MDocProcessSynopsis
+md_parser.post_processors.add new MDocProcessCodes
+md_parser.post_processors.add new MDocProcessImages(out, "../")
+md_parser.post_processors.add new MDocProcessMEntityLinks(model, mainmodule)
+md_parser.post_processors.add new MDocProcessCommands(cmd_parser)
+md_parser.post_processors.add new MDocProcessSummary
+model.mdoc_parser = md_parser
 
 # Generate the css (hard coded)
 var css = """
