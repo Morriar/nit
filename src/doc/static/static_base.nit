@@ -36,21 +36,8 @@ class DocModel
 	# Model filters applied to the whole documentation
 	var filter: ModelFilter
 
-	# Specific Markdown processor to use within Nitdoc
-	var md_processor: MarkdownProcessor is lazy do
-		var parser = new CommandParser(model, mainmodule, modelbuilder, catalog)
-		var proc = new CmdMarkdownProcessor(parser)
-		proc.decorator = new CmdDecorator(model)
-		return proc
-	end
-
-	# Specific Markdown processor to use within Nitdoc
-	var inline_processor: MarkdownProcessor is lazy do
-		var parser = new CommandParser(model, mainmodule, modelbuilder, catalog)
-		var proc = new CmdMarkdownProcessor(parser)
-		proc.decorator = new CmdInlineDecorator(model)
-		return proc
-	end
+	# Commands parser for MDoc
+	var cmd_parser = new CommandParser(model, mainmodule, modelbuilder, catalog) is lazy
 
 	# Do not generate dot graphs
 	var no_dot = false is writable

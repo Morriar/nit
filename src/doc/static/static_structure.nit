@@ -65,16 +65,12 @@ redef class PageMEntity
 	# Build the main tab (the one that contains the MDoc)
 	fun build_main(doc: DocModel) do
 		var mentity = self.mentity
-
-		var sq = new CmdSummary(doc.model, doc.filter, mentity,
-			markdown_processor = doc.inline_processor)
-		sq.init_command
-
 		main_tab.content.add new CardMDoc(mentity, mentity.mdoc_or_fallback)
 
-		var summary = sq.summary
-		if summary != null then
-			main_tab.sidebar.cards.add new CardMdSummary(headlines = summary, md_processor = doc.inline_processor)
+		var sq = new CmdSummary(doc.model, doc.filter, mentity)
+		var res = sq.init_command
+		if res isa CmdSuccess then
+			main_tab.sidebar.cards.add new CardMdSummary(sq)
 		end
 	end
 

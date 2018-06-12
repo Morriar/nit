@@ -146,28 +146,17 @@ end
 # A card that displays the summary of a Markdown document
 class CardMdSummary
 	super CardMDoc
-	autoinit(md_processor, headlines)
+	autoinit(cmd_summary)
 
-	# Markdown processor used to extract and render the content
-	var md_processor: MarkdownProcessor is writable
-
-	# Headlines found in the document
-	var headlines: ArrayMap[String, HeadLine] is writable
+	# CmdSummary used to parse the MDoc
+	var cmd_summary: CmdSummary is writable
 
 	redef var id = "summary"
 	redef var title = "Summary"
 
 	redef fun rendering do
 		addn "<h4>Summary</h4>"
-		addn "<div class='summary'>"
-		addn " <ul class='list-unstyled'>"
-		for id, headline in headlines do
-			var level = headline.level
-			var title = md_processor.process(headline.title)
-			addn "<li><a href='#{id}'><h{level}>{title}</h{level}></a></li>"
-		end
-		addn " </ul>"
-		addn "</div>"
+		add cmd_summary.to_html
 	end
 end
 

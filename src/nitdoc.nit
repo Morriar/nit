@@ -130,7 +130,22 @@ private class Nitdoc
 
 		var doc = new DocModel(model, mainmodule, modelbuilder, catalog, filter)
 
-		model.nitdoc_md_processor = doc.md_processor
+		# Prepare output dir
+		var test_mode = toolcontext.opt_test.value
+		var no_render = toolcontext.opt_norender.value
+		var output_dir = toolcontext.opt_dir.value or else "doc"
+
+		var md_parser = new MdParser
+		md_parser.github_mode = true
+		md_parser.wikilinks_mode = true
+		md_parser.post_processors.add new MDocProcessSynopsis
+		md_parser.post_processors.add new MDocProcessCodes
+		md_parser.post_processors.add new MDocProcessImages(output_dir, ".")
+		md_parser.post_processors.add new MDocProcessMEntityLinks(model, mainmodule)
+		md_parser.post_processors.add new MDocProcessCommands(doc.cmd_parser)
+		md_parser.post_processors.add new MDocProcessSummary
+		model.mdoc_parser = md_parser
+
 		doc.no_dot = toolcontext.opt_nodot.value
 		doc.no_code = toolcontext.opt_nocode.value
 		doc.code_url = toolcontext.opt_source.value
@@ -142,14 +157,9 @@ private class Nitdoc
 		doc.tracker_url = toolcontext.opt_piwik_tracker.value
 		doc.piwik_site_id = toolcontext.opt_piwik_site_id.value
 
-		# Prepare output dir
-		var test_mode = toolcontext.opt_test.value
-		var no_render = toolcontext.opt_norender.value
-		var output_dir = toolcontext.opt_dir.value or else "doc"
 
 		if not no_render then
 			output_dir.mkdir
-
 			# Copy assets
 			var share_dir = toolcontext.opt_share_dir.value or else "{toolcontext.share_dir}/nitdoc"
 			sys.system("cp -r -- {share_dir.escape_to_sh}/* {output_dir.escape_to_sh}/")
