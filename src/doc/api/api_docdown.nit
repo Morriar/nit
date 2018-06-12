@@ -19,12 +19,21 @@ import api_model
 import doc_down
 
 redef class NitwebConfig
-	# Specific Markdown processor to use within Nitweb
-	var md_processor: MarkdownProcessor is lazy do
-		var parser = new CommandParser(model, mainmodule, modelbuilder, catalog)
-		var proc = new CmdMarkdownProcessor(parser)
-		proc.decorator = new CmdDecorator(model)
-		return proc
+
+	# Command parser for MDoc contents
+	var cmd_parser = new CommandParser(model, mainmodule, modelbuilder, catalog, filter) is lazy
+
+	# Markdown parser for MDoc contents
+	var mdoc_parser: MdParser is lazy do
+		var md_parser = new MdParser
+		md_parser.github_mode = true
+		md_parser.wikilinks_mode = true
+		md_parser.post_processors.add new MDocProcessSynopsis
+		md_parser.post_processors.add new MDocProcessCodes
+		md_parser.post_processors.add new MDocProcessMEntityLinks(model, mainmodule)
+		md_parser.post_processors.add new MDocProcessCommands(cmd_parser, toolcontext)
+		md_parser.post_processors.add new MDocProcessSummary
+		return md_parser
 	end
 end
 
@@ -39,7 +48,12 @@ end
 class APIDocdown
 	super APIHandler
 
+	private var mdoc_parser: MdParser = config.model.mdoc_parser is lazy
+
+	private var mdoc_renderer = new MDocHtmlRenderer
+
 	redef fun post(req, res) do
-		res.html config.md_processor.process(req.body)
+		var ast = mdoc_parser.parse(req.body)
+		res.html mdoc_renderer.render(ast)
 	end
 end

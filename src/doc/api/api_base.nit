@@ -31,7 +31,10 @@ class NitwebConfig
 
 	redef fun default_db_name do return "nitweb"
 
-	# Model to use.
+	# ToolContet
+	var toolcontext: ToolContext
+
+	# Model to serve
 	var model: Model
 
 	# MModule used to flatten model.
@@ -45,6 +48,9 @@ class NitwebConfig
 
 	# Catalog to pass to handlers.
 	var catalog: Catalog
+
+	# Temporary directory for embedded images and files
+	var tmp_dir = "tmp" is writable
 end
 
 # Specific handler for the nitweb API.

@@ -29,6 +29,9 @@ redef class ToolContext
 	# Port number to bind on (will overwrite the config one).
 	var opt_port = new OptionInt("Port number to use", -1, "--port")
 
+	# Directory for embedded images and files
+	var opt_tmp_dir = new OptionString("Temporary file directory", "--tmp-dir")
+
 	# --no-private
 	var opt_no_private = new OptionBool("Do not show private entities", "--no-private")
 
@@ -50,7 +53,7 @@ redef class ToolContext
 	init do
 		super
 		option_context.add_option(opt_config, opt_host, opt_port, opt_no_private,
-			opt_no_fictive, opt_no_test, opt_no_attribute, opt_no_empty_doc)
+			opt_no_fictive, opt_no_test, opt_no_attribute, opt_no_empty_doc, opt_tmp_dir)
 	end
 end
 
@@ -81,13 +84,15 @@ private class NitwebPhase
 		if opt_host != null then config.ini["app.host"] = opt_host
 		var opt_port = toolcontext.opt_port.value
 		if opt_port >= 0 then config.ini["app.port"] = opt_port.to_s
+		var opt_tmp_dir = toolcontext.opt_tmp_dir.value
+		if opt_tmp_dir != null then config.tmp_dir = opt_tmp_dir
 		return config
 	end
 
 	redef fun process_mainmodule(mainmodule, mmodules)
 	do
 		var config = build_config(toolcontext, mainmodule)
-		config.model.nitdoc_md_processor = config.md_processor
+		config.model.mdoc_parser = config.mdoc_parser
 
 		var app = new App
 
@@ -97,6 +102,7 @@ private class NitwebPhase
 		app.use("/login", new GithubLogin(config.github_client_id))
 		app.use("/oauth", new GithubOAuthCallBack(config.github_client_id, config.github_client_secret))
 		app.use("/logout", new GithubLogout)
+		app.use("/*", new StaticHandler(config.tmp_dir))
 		app.use("/*", new StaticHandler(toolcontext.share_dir / "nitweb", "index.html"))
 		app.use_after("/*", new ConsoleLog)
 

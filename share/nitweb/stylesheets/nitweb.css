@@ -73,10 +73,6 @@ entity-list:hover .btn-filter {
 
 /* doc */
 
-.nitdoc .synopsys {
-	margin-top: 0;
-}
-
 .signature {
 	color: #666;
 	font-family: monospace;
