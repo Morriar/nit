@@ -268,6 +268,11 @@ abstract class CmdEntityFile
 	# Accepted file names
 	fun file_names: Array[String] is abstract
 
+	# URL to the file
+	#
+	# Can be refined in subtools.
+	var file_url: nullable String = file is lazy, writable
+
 	# Init file related data
 	fun init_file: CmdMessage do
 		var mentity = self.mentity.as(not null)
