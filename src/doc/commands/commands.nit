@@ -18,4 +18,5 @@ import commands::commands_base
 import commands::commands_model
 import commands::commands_graph
 import commands::commands_usage
+import commands::commands_docdown
 import commands::commands_parser

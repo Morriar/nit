@@ -12,7 +12,7 @@
 		"class_name": "MClass",
 		"full_name": "test_prog::Career",
 		"visibility": "public",
-		"html_synopsis": "<span class=\"synopsys nitdoc\">A <code class=\"nitcode\"><span class=\"nitcode\"><span class=\"line\"><span class=\"nc_t\">Career</span></span></span></code> gives a characteristic bonus or malus to the character.</span>",
+		"html_synopsis": "<span class=\"synopsis nitdoc\">A <code class=\"nitcode\"><span class=\"nitcode\"><span class=\"line\"><span class=\"nc_t\">Career</span></span></span></code> gives a characteristic bonus or malus to the character.</span>",
 		"modifiers": ["abstract class"]
 	}, {
 		"name": "career",
@@ -30,7 +30,7 @@
 		"class_name": "MMethod",
 		"full_name": "test_prog::Character::career",
 		"visibility": "public",
-		"html_synopsis": "<span class=\"synopsys nitdoc\">The current <code class=\"nitcode\"><span class=\"nitcode\"><span class=\"line\"><span class=\"nc_t\">Career</span></span></span></code> of the character.</span>",
+		"html_synopsis": "<span class=\"synopsis nitdoc\">The current <code class=\"nitcode\"><span class=\"nitcode\"><span class=\"line\"><span class=\"nc_t\">Career</span></span></span></code> of the character.</span>",
 		"modifiers": ["fun"],
 		"msignature": {
 			"arity": 0,
@@ -38,7 +38,7 @@
 			"return_mtype": {
 				"name": "nullable Career",
 				"synopsis": "A `Career` gives a characteristic bonus or malus to the character.",
-				"html_synopsis": "<span class=\"synopsys nitdoc\">A <code class=\"nitcode\"><span class=\"nitcode\"><span class=\"line\"><span class=\"nc_t\">Career</span></span></span></code> gives a characteristic bonus or malus to the character.</span>"
+				"html_synopsis": "<span class=\"synopsis nitdoc\">A <code class=\"nitcode\"><span class=\"nitcode\"><span class=\"line\"><span class=\"nc_t\">Career</span></span></span></code> gives a characteristic bonus or malus to the character.</span>"
 			}
 		}
 	}, {
@@ -54,7 +54,7 @@
 		"class_name": "MGroup",
 		"full_name": "test_prog>game>",
 		"visibility": "public",
-		"html_synopsis": "<span class=\"synopsys nitdoc\">Gaming group</span>",
+		"html_synopsis": "<span class=\"synopsis nitdoc\">Gaming group</span>",
 		"modifiers": ["group"]
 	}, {
 		"name": "game",
@@ -69,7 +69,7 @@
 		"class_name": "MModule",
 		"full_name": "test_prog::game",
 		"visibility": "public",
-		"html_synopsis": "<span class=\"synopsys nitdoc\">A game abstraction for RPG.</span>",
+		"html_synopsis": "<span class=\"synopsis nitdoc\">A game abstraction for RPG.</span>",
 		"modifiers": ["module"]
 	}, {
 		"name": "races",
@@ -84,7 +84,7 @@
 		"class_name": "MModule",
 		"full_name": "test_prog::races",
 		"visibility": "public",
-		"html_synopsis": "<span class=\"synopsys nitdoc\">Races of the game.</span>",
+		"html_synopsis": "<span class=\"synopsis nitdoc\">Races of the game.</span>",
 		"modifiers": ["module"]
 	}, {
 		"name": "careers",
@@ -99,7 +99,7 @@
 		"class_name": "MModule",
 		"full_name": "test_prog::careers",
 		"visibility": "public",
-		"html_synopsis": "<span class=\"synopsys nitdoc\">Careers of the game.</span>",
+		"html_synopsis": "<span class=\"synopsis nitdoc\">Careers of the game.</span>",
 		"modifiers": ["module"]
 	}, {
 		"name": "Game",
@@ -114,7 +114,7 @@
 		"class_name": "MClass",
 		"full_name": "test_prog::Game",
 		"visibility": "public",
-		"html_synopsis": "<span class=\"synopsys nitdoc\">This is the interface you have to implement to use ure gaming platform.</span>",
+		"html_synopsis": "<span class=\"synopsis nitdoc\">This is the interface you have to implement to use ure gaming platform.</span>",
 		"modifiers": ["interface"]
 	}, {
 		"name": "Race",
@@ -129,7 +129,7 @@
 		"class_name": "MClass",
 		"full_name": "test_prog::Race",
 		"visibility": "public",
-		"html_synopsis": "<span class=\"synopsys nitdoc\">Race determines basic characteristics and what the character will be able to do in life.</span>",
+		"html_synopsis": "<span class=\"synopsis nitdoc\">Race determines basic characteristics and what the character will be able to do in life.</span>",
 		"modifiers": ["abstract class"]
 	}, {
 		"name": "Starter",
@@ -164,7 +164,7 @@
 			"return_mtype": {
 				"name": "Int",
 				"synopsis": "Some services about Integers.",
-				"html_synopsis": "<span class=\"synopsys nitdoc\">Some services about Integers.</span>"
+				"html_synopsis": "<span class=\"synopsis nitdoc\">Some services about Integers.</span>"
 			}
 		}
 	}],

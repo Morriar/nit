@@ -15,8 +15,8 @@
 # Doc down related queries
 module commands_docdown
 
-import templates::md_commands
-import markdown
+import commands::commands_model
+import doc_down
 
 # Retrieve the MDoc summary
 #
@@ -24,31 +24,15 @@ import markdown
 class CmdSummary
 	super CmdComment
 
-	# Markdown processor used to parse the headlines
-	var markdown_processor: MarkdownProcessor is writable
-
-	# Resulting summary
-	#
-	# Associates each headline to its id.
-	var summary: nullable ArrayMap[String, HeadLine] = null is optional, writable
+	# Headings found in the MDoc
+	var headings: nullable Array[MdHeading] = null is optional, writable
 
 	redef fun init_command do
+		if headings != null then return new CmdSuccess
 		var res = super
 		if not res isa CmdSuccess then return res
-		var mentity = self.mentity.as(not null)
-
-		var mdoc = self.mdoc
-		if mdoc == null then
-			mdoc = if fallback then mentity.mdoc_or_fallback else mentity.mdoc
-			self.mdoc = mdoc
-		end
-		if mdoc == null then return new WarningNoMDoc(mentity)
-
-		markdown_processor.process(mdoc.md_documentation.write_to_string)
-
-		var summary = new ArrayMap[String, HeadLine]
-		summary.add_all markdown_processor.decorator.headlines
-		self.summary = summary
+		var mdoc = self.mdoc.as(not null)
+		self.headings = mdoc.mdoc_headings
 		return res
 	end
 end

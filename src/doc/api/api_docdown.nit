@@ -16,7 +16,7 @@
 module api_docdown
 
 import api_model
-import commands::commands_docdown
+import doc_down
 
 redef class NitwebConfig
 	# Specific Markdown processor to use within Nitweb

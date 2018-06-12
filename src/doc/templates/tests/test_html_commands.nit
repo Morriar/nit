@@ -22,6 +22,19 @@ class TestCommandsHtml
 	super TestCommands
 	test
 
+	fun before is before do
+		var cmd_parser = new CommandParser(test_model, test_main, test_builder)
+		var md_parser = new MdParser
+		md_parser.github_mode = true
+		md_parser.wikilinks_mode = true
+		md_parser.post_processors.add new MDocProcessSynopsis
+		md_parser.post_processors.add new MDocProcessCodes
+		md_parser.post_processors.add new MDocProcessImages("out", ".")
+		md_parser.post_processors.add new MDocProcessCommands(cmd_parser)
+		md_parser.post_processors.add new MDocProcessSummary
+		test_model.mdoc_parser = md_parser
+	end
+
 	fun print_html(html: nullable Writable) do
 		if html == null then return
 		print html

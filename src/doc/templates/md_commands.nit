@@ -15,13 +15,10 @@
 # Render commands results as Markdown
 module md_commands
 
-import commands_catalog
-import commands_graph
-import commands_ini
-import commands_main
-import commands_usage
+import commands_docdown
 
 import highlight
+intrude import markdown2::markdown_md_rendering
 
 redef class DocCommand
 
@@ -64,7 +61,7 @@ redef class CmdEntities
 			tpl.add "* `{mentity}`"
 			if mdoc != null then
 				tpl.add " - "
-				tpl.add mdoc.synopsis
+				tpl.add mdoc.md_synopsis
 			end
 			tpl.add "\n"
 		end
@@ -82,11 +79,15 @@ redef class CmdComment
 		tpl.add "### `{mentity}`"
 		if mdoc != null then
 			tpl.add " - "
-			tpl.add mdoc.synopsis
+			tpl.add mdoc.md_synopsis
 		end
-		tpl.add "\n"
 		if mdoc != null then
-			tpl.add mdoc.comment
+			var comment = mdoc.md_comment.write_to_string
+			if not comment.is_empty then
+				tpl.add "\n"
+				tpl.add "\n"
+				tpl.add comment
+			end
 		end
 		return tpl.write_to_string
 	end
@@ -118,7 +119,7 @@ redef class CmdCode
 
 		var code = render_code(node)
 		var tpl = new Template
-		tpl.addn "~~~nit"
+		tpl.addn "~~~"
 		tpl.add code.write_to_string
 		tpl.addn "~~~"
 		return tpl.write_to_string
@@ -341,34 +342,56 @@ end
 
 redef class MDoc
 
-	# Renders the synopsis as a HTML comment block.
+	# Markdown renderer to Markdown
+	var mdoc_md_renderer = new MDocMdRenderer is lazy, writable
+
+	# Markdown renderer for inlined Markdown
+	var mdoc_md_inline_renderer = new MDocMdInlineRenderer is lazy, writable
+
+	# Renders the synopsis as a Markdown string
 	var md_synopsis: Writable is lazy do
-		if content.is_empty then return ""
-		return content.first
+		var synopsis = mdoc_synopsis
+		if synopsis == null then return ""
+		return mdoc_md_inline_renderer.render(synopsis)
 	end
 
-	#
+	# Renders the comment without the synopsis as a Markdown string
 	var md_comment: Writable is lazy do
-		if content.is_empty then return ""
-		var lines = content.to_a
-		lines.shift
-		return lines.join("\n")
+		mdoc_md_renderer.reset
+		for node in mdoc_comment do
+			mdoc_md_renderer.enter_visit(node)
+			mdoc_md_renderer.md.append "\n"
+		end
+		return mdoc_md_renderer.md.write_to_string
 	end
 
-	# Renders the synopsis and the comment as a HTML comment block.
-	var md_documentation: Writable is lazy do return lines_to_md(content.to_a)
+	# Renders the synopsis and the comment as a Markdown string
+	var md_documentation: Writable is lazy do
+		return mdoc_md_renderer.render(mdoc_document)
+	end
+end
 
-	private fun lines_to_md(lines: Array[String]): Writable do
-		var res = new Template
-		if not lines.is_empty then
-			var syn = lines.first
-			if not syn.has_prefix("    ") and not syn.has_prefix("\t") and
-			  not syn.trim.has_prefix("#") then
-				lines.shift
-				res.add "# {syn}\n"
-			end
-		end
-		res.add lines.join("\n")
-		return res
+# Markdown renderer to Markdown
+class MDocMdRenderer
+	super MarkdownRenderer
+end
+
+# Markdown renderer to inline Markdown
+class MDocMdInlineRenderer
+	super MDocMdRenderer
+
+	redef fun visit(node) do node.render_md_inline(self)
+end
+
+redef class MdNode
+	# Render `self` as HTML without any block
+	fun render_md_inline(v: MDocMdInlineRenderer) do render_md(v)
+end
+
+redef class MdWikilink
+	redef fun render_md(v) do
+		var command = self.command
+		if command == null then return
+		v.add_raw command.to_md.write_to_string.r_trim
 	end
 end

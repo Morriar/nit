@@ -119,6 +119,30 @@ redef class CmdComment
 	end
 end
 
+redef class CmdSummary
+	redef fun to_html do
+		var tpl = new Template
+		var headings = self.headings
+		if headings == null then return tpl
+
+		var doc = mdoc.as(not null).html_documentation
+		if doc.write_to_string.is_empty then return tpl
+
+		tpl.addn "<div class='summary'>"
+		tpl.addn " <ul class='list-unstyled'>"
+		for heading in headings do
+			var id = heading.id
+			if id == null then continue
+			var level = heading.level
+			var title = heading.raw_text
+			tpl.addn "<li><a href='#{id}'><h{level}>{title}</h{level}></a></li>"
+		end
+		tpl.addn " </ul>"
+		tpl.addn "</div>"
+		return tpl
+	end
+end
+
 redef class CmdEntityLink
 	redef fun to_html do
 		var mentity = self.mentity
@@ -138,26 +162,12 @@ redef class CmdCode
 
 	redef fun render_code(node) do
 		if format == "html" then
-			var hl = new CmdHtmlightVisitor
+			var hl = new MDocHtmlightVisitor
 			hl.show_infobox = false
 			hl.highlight_node node
 			return hl.html
 		end
 		return super
-	end
-end
-
-# Custom HtmlightVisitor for commands
-#
-# We create a new subclass so its behavior can be refined in clients without
-# breaking the main implementation.
-class CmdHtmlightVisitor
-	super HtmlightVisitor
-
-	redef fun hrefto(mentity) do
-		if mentity isa MClassDef then return mentity.mclass.html_url
-		if mentity isa MPropDef then return mentity.mproperty.html_url
-		return mentity.html_url
 	end
 end
 
@@ -358,102 +368,10 @@ end
 
 # MDoc
 
-# Custom Markdown processor able to process doc commands
-class CmdDecorator
-	super NitdocDecorator
-
-	redef type PROCESSOR: CmdMarkdownProcessor
-
-	# Model used by wikilink commands to find entities
-	var model: Model
-
-	# Filter to apply if any
-	var filter: nullable ModelFilter
-
-	redef fun add_span_code(v, buffer, from, to) do
-		var text = new FlatBuffer
-		buffer.read(text, from, to)
-		var name = text.write_to_string
-		name = name.replace("nullable ", "")
-		var mentity = try_find_mentity(name)
-		if mentity == null then
-			super
-		else
-			v.add "<code>"
-			v.emit_text mentity.html_link.write_to_string
-			v.add "</code>"
-		end
-	end
-
-	private fun try_find_mentity(text: String): nullable MEntity do
-		var mentity = model.mentity_by_full_name(text, filter)
-		if mentity != null then return mentity
-
-		var mentities = model.mentities_by_name(text, filter)
-		if mentities.is_empty then
-			return null
-		else if mentities.length > 1 then
-			# TODO smart resolve conflicts
-		end
-		return mentities.first
-	end
-
-	redef fun add_wikilink(v, token) do
-		v.render_wikilink(token, model)
-	end
-end
-
-# Same as `InlineDecorator` but with wikilink commands handling
-class CmdInlineDecorator
-	super InlineDecorator
-
-	redef type PROCESSOR: CmdMarkdownProcessor
-
-	# Model used by wikilink commands to find entities
-	var model: Model
-
-	redef fun add_wikilink(v, token) do
-		v.render_wikilink(token, model)
-	end
-end
-
-# Custom MarkdownEmitter for commands
-class CmdMarkdownProcessor
-	super MarkdownProcessor
-
-	# Parser used to process doc commands
-	var parser: CommandParser
-
-	# Render a wikilink
-	fun render_wikilink(token: TokenWikiLink, model: Model) do
-		var link = token.link
-		if link == null then return
-		var name = token.name
-		if name != null then link = "{name} | {link}"
-
-		var command = parser.parse(link.write_to_string)
-		var error = parser.error
-
-		if error isa CmdError then
-			emit_text error.to_html.write_to_string
-			return
-		end
-		if error isa CmdWarning then
-			emit_text error.to_html.write_to_string
-		end
-		add command.as(not null).to_html
-	end
-end
-
-redef class Text
-	# Read `self` between `nstart` and `nend` (excluded) and writte chars to `out`.
-	private fun read(out: FlatBuffer, nstart, nend: Int): Int do
-		var pos = nstart
-		while pos < length and pos < nend do
-			out.add self[pos]
-			pos += 1
-		end
-		if pos == length then return -1
-		return pos
+redef class MdWikilink
+	redef fun render_html(v) do
+		var command = self.command
+		if command == null then return
+		v.add_raw command.to_html.write_to_string
 	end
 end

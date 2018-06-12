@@ -24,17 +24,31 @@ class TestModelSerialization
 	var lib_path: String = "{suite_path.dirname}/../../../../tests/test_prog"
 
 	var mainmodule: MModule is noinit
+	var modelbuilder: ModelBuilder is noinit
 
 	private var model: Model do
 		var toolcontext = new ToolContext
 		var model = new Model
-		var mbuilder = new ModelBuilder(model, toolcontext)
-		var mmodules = mbuilder.parse_full([lib_path])
+		modelbuilder = new ModelBuilder(model, toolcontext)
+		var mmodules = modelbuilder.parse_full([lib_path])
 		if mmodules.is_empty then return model
-		mbuilder.run_phases
+		modelbuilder.run_phases
 		toolcontext.run_global_phases(mmodules)
 		mainmodule = mmodules.first
 		return model
+	end
+
+	fun before is before do
+		var cmd_parser = new CommandParser(model, mainmodule, modelbuilder)
+		var md_parser = new MdParser
+		md_parser.github_mode = true
+		md_parser.wikilinks_mode = true
+		md_parser.post_processors.add new MDocProcessSynopsis
+		md_parser.post_processors.add new MDocProcessCodes
+		md_parser.post_processors.add new MDocProcessImages("out", ".")
+		md_parser.post_processors.add new MDocProcessCommands(cmd_parser)
+		md_parser.post_processors.add new MDocProcessSummary
+		model.mdoc_parser = md_parser
 	end
 
 	fun test_refs_to_full_json is test do
