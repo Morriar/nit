@@ -22,7 +22,6 @@ import commands_main
 import commands_usage
 
 import templates::templates_json
-import catalog::catalog_json
 
 redef class DocCommand
 	# Return a JSON Serializable representation of `self` results
