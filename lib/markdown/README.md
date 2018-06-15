@@ -1,4 +1,4 @@
-A markdown parser for Nit.
+# A markdown parser for Nit
 
 Markdown documentation can be found in http://daringfireball.net/projects/markdown/.
 This parser is inspired by the famous TxtMark for Java (https://github.com/rjeschke/txtmark).

@@ -1,15 +1,15 @@
-Basic geometry data structures and services.
+# Basic geometry data structures and services
 
-# Points and Lines
+## Points and Lines
 
 The very basics of geometry needs, for two and three-dimensional space.
 
-# Boxes and detection collision
+## Boxes and detection collision
 
 Boxes module introduces Bounding boxes for Points and Lines and services to detect collision or inclusion between boxes.
 It means a simple and fast way to test collision but not really accurate since it uses bounding boxes.
 
-# Quadtrees
+## Quadtrees
 
 A QuadTree is a tree data structure in which each internal node has exactly four children
 They're most often used to partition two-dimensional space by recursively subdividing
@@ -27,7 +27,7 @@ This API provides two different types of Quadtree : Static and Dynamic (respecti
 * Dynamic: You just need to fill the quadtree with objects, and when the threshold is reached,
 it will automatically divide the current region, depending on the distribution of objects already in the region.
 
-# Polygons
+## Polygons
 
 Some basic polygon services.
 

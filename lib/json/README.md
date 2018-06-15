@@ -1,10 +1,10 @@
-read and write JSON formatted text
+# read and write JSON formatted text
 
 These services can be useful to communicate with a remote server or client,
 save data locally or even debug and understand the structure of a Nit object.
 There is a single API to write JSON, and three API to read depending on the use case.
 
-# Write JSON
+## Write JSON
 
 Writing Nit objects to JSON format can be useful to communicate with a remote service,
 save data locally or even debug and understand the structure of an object.
@@ -13,7 +13,7 @@ There is two related services to write JSON object, the method
 The method `serialize_to_json` is actually a shortcut to `JsonSerializer`, both
 share the same features.
 
-## Write plain JSON
+### Write plain JSON
 
 Passing the argument `plain=true` to `serialize_to_json` generates plain and clean JSON.
 This format is non-Nit program, it cannot be fully deserialized back to Nit objects.
@@ -24,7 +24,7 @@ Most classes from the `core` library are already supported, including collection
 For your local objects, you can annotate them with `serialize` to automate subclassing
 `Serializable` and the implementation of its services.
 
-### Example
+#### Example
 
 ~~~
 class Person
@@ -76,7 +76,7 @@ assert charlie.serialize_to_json(pretty=true, plain=true) == """
 }"""
 ~~~
 
-## Write JSON with metadata
+### Write JSON with metadata
 
 By default, `serialize_to_json` and `JsonSerializer` include metadate in the generated JSON.
 This metadata is used by `JsonDeserializer` when reading the JSON code to recreate
@@ -86,7 +86,7 @@ The metadata allows to avoid repeating an object and its resolves cycles in the 
 For more information on Nit serialization, see: ../serialization/README.md
 
 
-# Read JSON
+## Read JSON
 
 There are a total of 3 API to read JSON:
 * `JsonDeserializer` reads JSON to recreate complex Nit objects (discussed here),
@@ -110,7 +110,7 @@ The type to recreate is either declared or inferred:
 The method `deserialize_json` is a shortcut to `JsonDeserializer` which prints
 errors to the console. It is fit only for small scripts and other quick and dirty usage.
 
-### Example
+#### Example
 
 ~~~
 class Triangle
@@ -158,7 +158,7 @@ object = deserializer.deserialize("Triangle")
 assert deserializer.errors.is_empty # If false, `object` is invalid
 ~~~
 
-### Missing attributes and default values
+#### Missing attributes and default values
 
 When reading JSON, some attributes expected by Nit classes may be missing.
 The JSON object may come from an external API using optional attributes or

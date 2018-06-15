@@ -1,9 +1,9 @@
-Portable game and multimedia framework for Nit
+# Portable game and multimedia framework for Nit
 
 _gamnit_ is a modular framework to create portable 2D or 3D apps in Nit.
 It is based on the portability framework _app.nit_ and the OpenGL ES 2.0 standard.
 
-# System configuration
+## System configuration
 
 To compile the _gamnit_ apps packaged with the Nit repository on GNU/Linux you need to install the dev version of a few libraries and some tools.
 On Debian 8.2, this command should install everything needed:
@@ -25,7 +25,7 @@ You need to install and setup Xcode, and you may install the GLSL shader validat
 brew install glslang
 ~~~
 
-# Services by submodules
+## Services by submodules
 
 _gamnit_ is modular, different services of the framework are available through different submodules:
 

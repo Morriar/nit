@@ -1,12 +1,12 @@
-Android platform support and APIs
+# Android platform support and APIs
 
-# Compilation for Android
+## Compilation for Android
 
 The compiler generates an APK file as the output when the `android`
 module is imported by the compilation target. The path to the generated
 file can be specified using the `-o` and `--dir` options.
 
-# Host system configuration
+## Host system configuration
 
 To compile Android apps from a 64 bits GNU/Linux host you can reuse an existing Android Studio
 installation or make a clean install with command line tools only.
@@ -53,12 +53,12 @@ it may be possible to support other platforms with some tweaks.
 	sudo apt install openjdk-8-jdk
 	~~~
 
-# Configure the Android application
+## Configure the Android application
 
 The _app.nit_ framework and this project offers some services to
 customize the generated Android application.
 
-## Annotations
+### Annotations
 
 * All _app.nit_ annotations are applied to Android projects:
   `app_name`, `app_namespace` and `app_version`.
@@ -87,7 +87,7 @@ integer as argument. They are applied in the Android manifest as
   only be used by low-level implementations of Nit on Android.
   Its usefulness will be extended in the future to customize user applications.
 
-## Android implementation
+### Android implementation
 
 There is two core implementation for Nit apps on Android.
 `android::nit_activity` is used by apps with standard windows and native UI controls.
@@ -96,13 +96,13 @@ There is two core implementation for Nit apps on Android.
 Clients don't have to select the core implementation, it is imported by other relevant modules.
 For example, a module importing `app::ui` and `android` will trigger the importation of `android::nit_activity`.
 
-## Lock app orientation
+### Lock app orientation
 
 Importing `android::landscape` or `android::portrait` locks the generated
 application in the specified orientation. This can be useful for games and
 other multimedia applications.
 
-## Resources and application icon
+### Resources and application icon
 
 Resources specific to the Android platform should be placed in an `android/` folder at the root of the project.
 The folder should adopt the structure of a normal Android project, e.g., a custom XML resource file can be placed
@@ -116,14 +116,14 @@ The Nit compiler detects these files and uses them as the application icon.
 Additional `android/` folders may be placed next to more specific Nit modules to change the Android resources
 for application variants. The more specific resources will have priority over the project level `android/` files.
 
-# Compilation modes
+## Compilation modes
 
 There are two compilation modes for the Android platform, debug and release.
 Theses modes are also applied to the generated Android projects.
 The compilation mode is specified as an argument to `nitc`, only
 `--release` can be specified as debug is the default behavior.
 
-## Debug mode
+### Debug mode
 
 Debug mode enables compiling to an APK file without handling signing keys
 and their password. The APK file can be installed to a local device with
@@ -131,7 +131,7 @@ USB debugging enabled, but it cannot be published on the Play Store.
 
 By default, `nitc` will compile Android applications in debug mode.
 
-## Release mode
+### Release mode
 
 Building in release mode will use your private key to sign the
 APK file, it can then be published on the Play Store.

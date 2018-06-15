@@ -1,6 +1,6 @@
-Lightweight framework for Web applications development
+# Lightweight framework for Web applications development
 
-# Features
+## Features
 
 Dynamic content is served by subclassing `Action` and implementing `answer`.
 This method receives an `HttpRequest` and must return an `HttpResponse`.
@@ -21,7 +21,7 @@ It also benefits from the full power of the Nit language:
 class refinement can be used to customize default services and merge many applications in a single server,
 and the FFI enables calling services in different languages.
 
-# Examples
+## Examples
 
 A minimal example follows with a custom `Action` and using `FileServer`.
 
@@ -34,7 +34,7 @@ Larger projects using _nitcorn_ can be found in the `contrib/` folder:
 * _tnitter_ is a micro-blogging platform with a simple Web and RESTful interface.
 * _benitlux_ uses a custom `Action` to subscribe people to a mailing list and define a RESTful interface.
 
-## Simple hello world server
+### Simple hello world server
 
 ~~~
 import nitcorn
@@ -80,7 +80,7 @@ factory.config.virtual_hosts.add vh
 factory.run
 ~~~
 
-# Credits
+## Credits
 
 This nitcorn library is a fork from an independent project originally created in 2013 by
 Jean-Philippe Caissy, Guillaume Auger, Frederic Sevillano, Justin Michaud-Ouellette,
