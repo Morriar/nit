@@ -344,8 +344,17 @@ class MDocProcessCommands
 	# Parser used to process doc commands
 	var parser: CommandParser
 
+	# ToolContext to display errors
+	var toolcontext: ToolContext
+
 	# Visit each `MdWikilink`
 	redef fun visit(node) do
+		var document = self.document
+		if document == null then return
+
+		var mdoc = document.mdoc
+		if mdoc == null then return
+
 		if node isa MdWikilink then
 			var link = node.link
 			var name = node.title
@@ -355,13 +364,11 @@ class MDocProcessCommands
 			var error = parser.error
 
 			if error isa CmdError then
-				# TODO render error
-				# emit_text error.to_html.write_to_string
+				toolcontext.error(mdoc.location, error.to_s)
 				return
 			end
 			if error isa CmdWarning then
-				# TODO render error
-				# emit_text error.to_html.write_to_string
+				toolcontext.warning(mdoc.location, "mdoc", error.to_s)
 			end
 			node.command = command
 		end

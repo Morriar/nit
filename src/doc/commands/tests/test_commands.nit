@@ -31,6 +31,9 @@ class TestCommands
 	# Default is `$NIT_DIR/tests/test_prog`.
 	var test_src: String = test_path / "../../../../tests/test_prog" is lazy
 
+	# Toolcontext used for tests
+	var test_context: ToolContext is noinit
+
 	# Model used for tests
 	var test_model: Model is noinit
 
@@ -63,6 +66,7 @@ class TestCommands
 		toolcontext.run_global_phases(mmodules)
 		var mainmodule = toolcontext.make_main_module(mmodules)
 
+		test_context = toolcontext
 		test_main = mainmodule
 		test_model = model
 		test_builder = modelbuilder

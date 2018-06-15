@@ -603,7 +603,7 @@ redef class ModelBuilder
 
 		# search documentation
 		# in src first so the documentation of the package code can be distinct for the documentation of the package usage
-		var readme = dirpath.join_path("README.md")
+		var readme = dirpath.join_path("README.docdown.md")
 		if not readme.file_exists then readme = dirpath.join_path("README")
 		if readme.file_exists then
 			var mdoc = load_markdown(readme)

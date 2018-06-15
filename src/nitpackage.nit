@@ -17,6 +17,7 @@ module nitpackage
 
 import frontend
 import doc::commands::commands_main
+import doc::commands::commands_md
 
 redef class ToolContext
 
@@ -50,13 +51,23 @@ redef class ToolContext
 	# --check-readme
 	var opt_check_readme = new OptionBool("Check README.md files", "--check-readme")
 
+	# --gen-readme
+	var opt_gen_readme = new OptionBool("Generate README.md files", "--gen-readme")
+
+	# --check-docdown
+	var opt_check_docdown = new OptionBool("Check README.docdown.md files", "--check-docdown")
+
+	# --copy-docdown
+	var opt_copy_docdown = new OptionBool("Copy README.md files to README.docdown.md", "--copy-docdown")
+
 	redef init do
 		super
 		option_context.add_option(opt_expand, opt_force)
 		option_context.add_option(opt_check_ini, opt_gen_ini)
 		option_context.add_option(opt_check_makefile, opt_gen_makefile)
 		option_context.add_option(opt_check_man, opt_gen_man)
-		option_context.add_option(opt_check_readme)
+		option_context.add_option(opt_check_readme, opt_gen_readme)
+		option_context.add_option(opt_check_docdown, opt_copy_docdown)
 	end
 end
 
@@ -64,6 +75,22 @@ private class NitPackagePhase
 	super Phase
 
 	redef fun process_mainmodule(mainmodule, mmodules) do
+		var modelbuilder = toolcontext.modelbuilder
+		var model = modelbuilder.model
+
+		# prepare markdown parser
+		var cmd_parser = new CommandParser(model, mainmodule, modelbuilder)
+		var md_parser = new MdParser
+		md_parser.github_mode = true
+		md_parser.wikilinks_mode = true
+		md_parser.post_processors.add new MDocProcessSynopsis
+		md_parser.post_processors.add new MDocProcessCodes
+		md_parser.post_processors.add new MDocProcessImages("out", ".")
+		md_parser.post_processors.add new MDocProcessCommands(cmd_parser, toolcontext)
+		md_parser.post_processors.add new MDocProcessSummary
+		model.mdoc_parser = md_parser
+
+		# process packages
 		var mpackages = extract_mpackages(mmodules)
 		for mpackage in mpackages do
 
@@ -95,6 +122,12 @@ private class NitPackagePhase
 			# Check README.md
 			if toolcontext.opt_check_readme.value then
 				mpackage.check_readme(toolcontext)
+				continue
+			end
+
+			# Check README.docdown
+			if toolcontext.opt_check_docdown.value then
+				mpackage.check_docdown(toolcontext)
 				continue
 			end
 
@@ -130,6 +163,26 @@ private class NitPackagePhase
 			# Create manpages
 			if toolcontext.opt_gen_man.value then
 				mpackage.gen_man(toolcontext, mainmodule)
+			end
+
+			# Copy README.md as README.docdown.md
+			if toolcontext.opt_copy_docdown.value then
+				if not mpackage.has_docdown or toolcontext.opt_force.value then
+					var path = mpackage.copy_docdown(toolcontext)
+					if path != null then
+						toolcontext.info("copied README `{path}`", 0)
+					end
+				end
+			end
+
+			# Create README.md
+			if toolcontext.opt_gen_readme.value then
+				if not mpackage.has_readme or toolcontext.opt_force.value then
+					var path = mpackage.gen_readme(toolcontext, mainmodule)
+					if path != null then
+						toolcontext.info("generated README `{path}`", 0)
+					end
+				end
 			end
 		end
 	end
@@ -430,6 +483,53 @@ redef class MPackage
 			toolcontext.error(location, "No `README.md` file for `{name}`")
 			return
 		end
+	end
+
+	private fun check_docdown(toolcontext: ToolContext) do
+		if not has_docdown then
+			toolcontext.error(location, "No `README.docdown` file for `{name}`")
+			return
+		end
+	end
+
+	private fun copy_docdown(toolcontext: ToolContext): nullable String do
+		if not has_readme then
+			toolcontext.error(location, "No `README.md` file for `{name}`")
+			return null
+		end
+
+		var readme_path = self.readme_path.as(not null)
+		var docdown_path = self.docdown_path.as(not null)
+		sys.system "cp {readme_path} {docdown_path}"
+		return docdown_path
+	end
+
+	private fun gen_readme(toolcontext: ToolContext, mainmodule: MModule): nullable String do
+		if not has_docdown then
+			toolcontext.error(location, "No `README.docdown.md` file for `{name}`")
+			return null
+		end
+
+		var model = toolcontext.modelbuilder.model
+
+		var docdown_path = self.docdown_path.as(not null)
+		var docdown = docdown_path.to_path.read_all
+
+		var renderer = new MDocMdRenderer
+		var ast = model.mdoc_parser.parse(docdown)
+		ast.mdoc = mdoc_or_fallback
+		model.mdoc_parser.post_process(ast)
+		ast.debug
+		var md = renderer.render(ast)
+
+		print md
+		# md = md.trim # FIXME hack to remove last empty line added by nitmd
+		# md = md.replace("\n\n\n", "\n\n") # FIXME hack to remove double spacing added by nitmd
+		# md = "{md}\n"
+
+		var readme_path = self.readme_path.as(not null)
+		md.write_to_file(readme_path)
+		return readme_path
 	end
 end
 
