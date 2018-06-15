@@ -30,6 +30,7 @@ For an example of a larger project merging many _nitcorn_ applications into one 
 take a look at the configuration of `http://xymus.net/` at `../contrib/xymus_net/xymus_net.nit`.
 
 Larger projects using _nitcorn_ can be found in the `contrib/` folder:
+
 * _opportunity_ is a meetup planner heavily based on _nitcorn_.
 * _tnitter_ is a micro-blogging platform with a simple Web and RESTful interface.
 * _benitlux_ uses a custom `Action` to subscribe people to a mailing list and define a RESTful interface.

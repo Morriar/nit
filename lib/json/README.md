@@ -85,10 +85,10 @@ The metadata allows to avoid repeating an object and its resolves cycles in the 
 
 For more information on Nit serialization, see: ../serialization/README.md
 
-
 # Read JSON
 
 There are a total of 3 API to read JSON:
+
 * `JsonDeserializer` reads JSON to recreate complex Nit objects (discussed here),
 * the module `json::dynamic` provides an easy API to explore JSON objects,
 * the module `json::static` offers a low-level service to parse JSON and create basic Nit objects.

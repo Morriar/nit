@@ -30,4 +30,4 @@ These files can be generated in a number of different ways:
 * Using Xcode to assign images to each slot, create the folder and the file `Contents.json`.
 
 * Write or modify the file `Contents.json` manually.
-	It is in Json format and easily readable.
+  It is in Json format and easily readable.

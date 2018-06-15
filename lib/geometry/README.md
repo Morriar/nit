@@ -25,7 +25,7 @@ This API provides two different types of Quadtree : Static and Dynamic (respecti
 * Static: When you create the QuadTree, you need to specify the region that it will cover
 
 * Dynamic: You just need to fill the quadtree with objects, and when the threshold is reached,
-it will automatically divide the current region, depending on the distribution of objects already in the region.
+  it will automatically divide the current region, depending on the distribution of objects already in the region.
 
 # Polygons
 
@@ -34,10 +34,10 @@ Some basic polygon services.
 This module contains interesting algorithms for `ConvexPolygon`only at the moment. A Convex polygon can be defined as follow :
 
 * All its interior angles are less than 180°. this means that all the vertices of the polygon
-will point outwards, away from the interior of the shape.
+  will point outwards, away from the interior of the shape.
 
 * Every point on every line segment between two points inside or on the boundary of the polygon
-remains inside or on the boundary.
+  remains inside or on the boundary.
 
 * The polygon is entirely contained in a closed half-plane defined by each of its edges.
 
