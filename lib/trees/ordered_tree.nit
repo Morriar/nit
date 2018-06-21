@@ -87,12 +87,8 @@ class OrderedTree[E: Object]
 	# assert tree.to_formatted_string == str
 	# ~~~
 	#
+	# FIXME This is unsafe as it only support tress of type OrderedTree[String]
 	# TODO accept more format (like with indents)
-	#
-	# FIXME This is unsafe:
-	# * returned nodes are of the type TreeNode[Int, String]
-	# * self is typed by Tree[K, E]
-	#
 	# TODO Should we declare this as a top_level function?
 	init from_string(str: String) do
 		var lines = str.split("\n")
