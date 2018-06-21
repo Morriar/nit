@@ -295,6 +295,44 @@ class OrderedTree[E: Object]
 		return lmd(sub[e].first)
 	end
 
+	# Keyroot of `e`
+	#
+	# Example:
+	# ~~~
+	# var tree = new OrderedTree[String].from_string("""
+	# a
+	#  b
+	#   d
+	#  c
+	#   e
+	#    g
+	#   f
+	#    h
+	#    i""")
+	# assert tree.keyroot("a") == "a"
+	# assert tree.keyroot("b") == "a"
+	# assert tree.keyroot("d") == "a"
+	# assert tree.keyroot("c") == "c"
+	# assert tree.keyroot("e") == "c"
+	# assert tree.keyroot("g") == "c"
+	# assert tree.keyroot("f") == "f"
+	# assert tree.keyroot("h") == "f"
+	# assert tree.keyroot("i") == "i"
+	# ~~~
+	fun keyroot(e: E): E do
+		var p = parent(e)
+		if p == null then return e
+		if sub.has_key(p) and sub[p].first == e then return keyroot(p)
+		return e
+	end
+
+	# Keyroots for each nodes
+	fun keyroots: Map[E, E] do
+		var res = new HashMap[E, E]
+		for node in self do res[node] = keyroot(node)
+		return res
+	end
+
 	# print the full tree on `o`
 	# Write a ASCII-style tree and use the `display` method to label elements
 	redef fun write_to(stream)
