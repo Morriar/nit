@@ -271,6 +271,30 @@ class OrderedTree[E: Object]
 		end
 	end
 
+	# Left-most descendant of `e`
+	#
+	# Usage:
+	# ~~~
+	# var tree = new OrderedTree[String].from_string("""
+	# a
+	#  b
+	#   d
+	#  c
+	#   e
+	#    g
+	#   f
+	#    h
+	#    i""")
+	# assert tree.lmd("a") == "d"
+	# assert tree.lmd("d") == "d"
+	# assert tree.lmd("c") == "g"
+	# assert tree.lmd("i") == "i"
+	# ~~~
+	fun lmd(e: E): E do
+		if not sub.has_key(e) then return e
+		return lmd(sub[e].first)
+	end
+
 	# print the full tree on `o`
 	# Write a ASCII-style tree and use the `display` method to label elements
 	redef fun write_to(stream)
