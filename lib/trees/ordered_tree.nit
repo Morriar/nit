@@ -416,6 +416,26 @@ class OrderedTree[E: Object]
 		end
 		return res
 	end
+
+	# Display `self` with dot.
+	fun show_dot do
+		var f = new ProcessWriter("dot", "-Txlib")
+		f.write "digraph \{\n"
+		for root in roots do
+			recursive_dot(f, root)
+		end
+		f.write "\}\n"
+		f.close
+	end
+
+	# Translate the tree in dot format recursively starting from `node`.
+	private fun recursive_dot(f: ProcessWriter, e: E) do
+		f.write "\"{e}\";\n"
+		var p = parent(e)
+		if p != null then f.write "\"{p}\" -> \"{e}\"[dir=back];\n"
+		if not sub.has_key(e) then return
+		for child in sub[e] do recursive_dot(f, child)
+	end
 end
 
 # An Iterator over an OrderedTree
