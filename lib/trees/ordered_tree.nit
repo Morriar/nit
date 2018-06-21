@@ -63,6 +63,135 @@ class OrderedTree[E: Object]
 	super Collection[E]
 	super Cloneable
 
+	# Initialize this tree from a string representation
+	#
+	# Mainly used for testing purpose.
+	#
+	# Format:
+	# * root must be on the first column
+	# * nodes are indented with a space character defining their depth in tree
+	# * empty lines are skip
+	#
+	# Usage:
+	# ~~~
+	# var str = """
+	# root
+	#  a
+	#   b
+	#    c
+	#   d
+	#    e
+	#     f"""
+	#
+	# var tree = new OrderedTree[String].from_string(str)
+	# assert tree.to_formatted_string == str
+	# ~~~
+	#
+	# TODO accept more format (like with indents)
+	#
+	# FIXME This is unsafe:
+	# * returned nodes are of the type TreeNode[Int, String]
+	# * self is typed by Tree[K, E]
+	#
+	# TODO Should we declare this as a top_level function?
+	init from_string(str: String) do
+		var lines = str.split("\n")
+		if lines.is_empty then return
+		var root = lines.first.trim
+		add(null, root)
+		var parents = new List[E]
+		parents.add root
+		for i in [1..lines.length[ do
+			var line = lines[i]
+			if line.is_empty then continue
+			var node = line.trim
+			var space = line.space_before
+			if space > depth(parents.last) then
+				add(parents.last, node)
+				parents.add node
+			else
+				while space <= depth(parents.last) do
+					parents.pop
+				end
+				add(parents.last, node)
+				parents.add node
+			end
+		end
+	end
+
+	# Build this tree from a source file formatted as expected by `from_string`
+	init from_file(file: String) do
+		assert file.file_exists
+		var r = new FileReader.open(file)
+		from_string(r.read_all)
+		r.close
+	end
+
+	# Output `self` in a `from_string` compatible format.
+	#
+	# Mainly used for debug and tests.
+	#
+	# Usage:
+	# ~~~
+	# var tree = new OrderedTree[String]
+	# tree.add(null, "a")
+	# tree.add("a", "b")
+	# tree.add("b", "c")
+	# tree.add("c", "d")
+	# tree.add("b", "e")
+	# tree.add("e", "f")
+	# tree.add("f", "g")
+	#
+	# var t_str = """
+	# a
+	#  b
+	#   c
+	#    d
+	#   e
+	#    f
+	#     g"""
+	#
+	# assert tree.to_formatted_string == t_str
+	# ~~~
+	fun to_formatted_string: String do
+		var buffer = new Buffer
+		for root in roots do
+			to_formatted_node(buffer, root)
+		end
+		return buffer.write_to_string.trim
+	end
+
+	# Write `e` formatted representation into `buffer`.
+	private fun to_formatted_node(buffer: Buffer, e: E) do
+		buffer.append "{" " * depth(e)}{e}\n"
+		if not sub.has_key(e) then return
+		for child in sub[e] do
+			to_formatted_node(buffer, child)
+		end
+	end
+
+	# Depth in tree of `e`
+	#
+	# Computes the length of the path from `e` to one of the `roots`.
+	#
+	# Usage:
+	# ~~~
+	# var tree = new OrderedTree[String]
+	# tree.add(null, "a")
+	# tree.add("a", "b")
+	# tree.add("b", "c")
+	# tree.add("c", "d")
+	# assert tree.depth("a") == 0
+	# assert tree.depth("b") == 1
+	# assert tree.depth("c") == 2
+	# assert tree.depth("d") == 3
+	# ~~~
+	fun depth(e: E): Int do
+		var p = parent(e)
+		if p == null then return 0
+		return depth(p) + 1
+	end
+
 	# The roots of the tree (in sequence)
 	var roots = new Array[E]
 
