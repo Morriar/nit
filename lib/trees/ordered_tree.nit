@@ -333,6 +333,91 @@ class OrderedTree[E: Object]
 		return res
 	end
 
+	# Pre-order sequence
+	#
+	# Return a list of nodes contained in `self` following a pre-order sequence.
+	#
+	# See https://en.wikipedia.org/wiki/Tree_traversal#Pre-order.
+	#
+	# Example:
+	# ~~~
+	# var tree = new OrderedTree[String].from_string("""
+	# a
+	#  b
+	#   d
+	#  c
+	#   e
+	#    g
+	#   f
+	#    h
+	#    i""")
+	# assert tree.preorder.to_s == "[a,b,d,c,e,g,f,h,i]"
+	# ~~~
+	fun preorder: Array[E] do
+		var nodes = new Array[E]
+		for root in roots do
+			preorder_node(nodes, root)
+		end
+		return nodes
+	end
+
+	# Recursive post-order on `node` children.
+	private fun preorder_node(nodes: Array[E], node: E) do
+		nodes.add node
+		if sub.has_key(node) then
+			for child in sub[node] do
+				preorder_node(nodes, child)
+			end
+		end
+	end
+
+	# Post-order sequence
+	#
+	# Return a list of nodes contained in `self` following a post-order sequence.
+	#
+	# See https://en.wikipedia.org/wiki/Tree_traversal#Post-order.
+	#
+	# Example:
+	# ~~~
+	# var tree = new OrderedTree[String].from_string("""
+	# a
+	#  b
+	#   d
+	#  c
+	#   e
+	#    g
+	#   f
+	#    h
+	#    i""")
+	# assert tree.postorder.to_s == "[d,b,g,e,h,i,f,c,a]"
+	#
+	# tree = new OrderedTree[String].from_string("""
+	# 6
+	#  5
+	#   2
+	#    1
+	#   3
+	#   4""")
+	# assert tree.postorder.to_s == "[1,2,3,4,5,6]"
+	# ~~~
+	fun postorder: Array[E] do
+		var nodes = new Array[E]
+		for root in roots do
+			postorder_node(nodes, root)
+		end
+		return nodes
+	end
+
+	# Recursive post-order on `node` children.
+	private fun postorder_node(nodes: Array[E], node: E) do
+		if sub.has_key(node) then
+			for child in sub[node] do
+				postorder_node(nodes, child)
+			end
+		end
+		nodes.add node
+	end
+
 	# print the full tree on `o`
 	# Write a ASCII-style tree and use the `display` method to label elements
 	redef fun write_to(stream)
