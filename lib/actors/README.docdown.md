@@ -8,7 +8,6 @@ based on Celluloid (https://github.com/celluloid/celluloid).
 An actor is an entity which receives messages and does some kind of computation based on it.
 An actor has a mailbox in which it receives its messages, and process them one at a time.
 
-
 ## `actor` annotation
 
 The `actors` module introduces the annotation `actor` which is to be used on classes.
@@ -37,15 +36,15 @@ Actors are not automatically garbage collected, but you have solutions to termin
 if you need to. For this, you need to use the `async` property of your annotated class :
 
 * `async.terminate` sends a shutdown message to the actor telling him to stop, so he'll finish
-processing every other messages in his mailbox before terminating properly. Every other messages sent
-to this actor after he received the shutdown message won't be processed.
+  processing every other messages in his mailbox before terminating properly. Every other messages sent
+  to this actor after he received the shutdown message won't be processed.
 * `async.terminate_now` sends a shutdown message too, but this time it places it first, so
-if the actor is processing one message now, the next one will be the shutdown message, discarding
-every messages in its mailbox.
+  if the actor is processing one message now, the next one will be the shutdown message, discarding
+  every messages in its mailbox.
 * `async.wait_termination` wait for the actor to terminate properly. This call is synchronous.
 * `async.kill`. If you really need this actor to stop, without any regards of what he was doing
-or in which state he'll leave the memory, you can with this call. it's synchronous but not really
-blocking, since it's direcly canceling the native pthread associated to the actor.
+  or in which state he'll leave the memory, you can with this call. it's synchronous but not really
+  blocking, since it's direcly canceling the native pthread associated to the actor.
 
 For now, there isn't any mecanism to recreate and actor after it was terminated.
 Sending messages after terminating it results in unspecified behaviour.
@@ -64,7 +63,6 @@ actor, `active_actors` is empty.
 
 You can use this property as a mean of synchronisation in some specific cases (for example if you're
 using actors for fork/join parallelism instead of concurrency).
-
 
 ## Examples
 
