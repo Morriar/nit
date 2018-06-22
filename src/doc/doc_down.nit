@@ -63,18 +63,60 @@ redef class Model
 	var mdoc_parser: MdParser is noautoinit, writable
 end
 
+# A Markdown post-processor for MDoc comments
+class MDocPostProcessor
+	super MdPostProcessor
+
+	# ToolContext used to parse pieces of code
+	var toolcontext: ToolContext
+
+	private fun warn(location: Location, cat: String, message: String) do
+		toolcontext.warning(location, cat, message)
+		toolcontext.check_errors
+	end
+
+	private fun location(nit_location: Location, md_location: MdLocation): Location do
+		var location = new Location(
+			nit_location.file,
+			nit_location.line_start + md_location.line_start - 1,
+			nit_location.line_start + md_location.line_end - 1,
+			nit_location.column_start + md_location.column_start,
+			nit_location.column_start + md_location.column_end)
+		return location
+	end
+end
+
 # MDoc post-processors
 
 # Post-processing for `MDoc::synopsis`
 #
 # This post-processor creates a `MdHeading` from the first node of a `MDoc::mdoc_document`
 class MDocProcessSynopsis
-	super MdPostProcessor
+	super MDocPostProcessor
 
 	redef fun post_process(parser, document) do
+		var mdoc = document.mdoc
+		if mdoc == null then return
+
+		var mentity = mdoc.original_mentity
+		if mentity == null then return
+
 		var first = document.first_child
 		if first == null then return
-		if first isa MdHeading then return
+
+		# Check rule for README
+		if mdoc.original_mentity isa MGroup then
+			if not first isa MdHeading or first.level != 1 then
+				warn(location(mdoc.location, first.location), "mdoc",
+					"Warning: README synopsis should be a MdHeading 1")
+			end
+		else
+			if not first isa MdParagraph then
+				warn(location(mdoc.location, first.location), "mdoc",
+					"Warning: MDoc synopsis should be a MdParagraph")
+			end
+		end
+
 		if first isa MdParagraph then
 			var heading = new MdHeading(first.location, 1)
 
@@ -95,13 +137,15 @@ end
 # This post-processor attach the Nit AST to each `MdCode` and `MdCodeBlock` that
 # contains Nit code.
 class MDocProcessCodes
-	super MdPostProcessor
-
-	# ToolContext used to parse pieces of code
-	var toolcontext = new ToolContext is lazy
+	super MDocPostProcessor
 
 	# Visit each `MdCode` and `MdCodeBlock`
 	redef fun visit(node) do
+		var doc = document
+		if doc == null then return
+		var mdoc = doc.mdoc
+		if mdoc == null then return
+
 		if node isa MdCode then
 			node.nit_ast = toolcontext.parse_something(node.literal)
 			return
@@ -109,17 +153,29 @@ class MDocProcessCodes
 		if node isa MdCodeBlock then
 			var literal = node.literal
 			if literal != null then
+				var ast = null
 				if node isa MdFencedCodeBlock then
 					var meta = node.info or else "nit"
 					if meta == "nit" or meta == "nitish" then
-						node.nit_ast = toolcontext.parse_something(literal)
+						ast = toolcontext.parse_something(literal)
 					end
 				end
 				if node isa MdIndentedCodeBlock then
-					node.nit_ast = toolcontext.parse_something(literal)
+					ast = toolcontext.parse_something(literal)
 					return
 				end
+				node.nit_ast = ast
+				if (node.info == null or node.info == "nit") and ast isa AError then
+					var location = new Location(
+						mdoc.location.file,
+						node.location.line_start + 1 + ast.location.line_start,
+						node.location.line_start + 1 + ast.location.line_end,
+						node.location.column_start + ast.location.column_start - 2,
+						node.location.column_start + ast.location.column_end - 2)
+					warn(location, "mdoc-check", ast.message)
+				end
 			end
+			return
 		end
 		super
 	end
@@ -131,10 +187,7 @@ end
 # The original `MdImage::destination` is replaced with the destination of the
 # copied file.
 class MDocProcessImages
-	super MdPostProcessor
-
-	# ToolContext to display errors
-	var toolcontext = new ToolContext is lazy
+	super MDocPostProcessor
 
 	# Output directory where files are copied
 	var output_directory: String
@@ -151,6 +204,7 @@ class MDocProcessImages
 		if mdoc == null then return
 
 		if node isa MdImage then
+			print "a:"
 			# Keep absolute links as is
 			var link = node.destination
 			if link.has_prefix("http://") or link.has_prefix("https://") then return
@@ -187,7 +241,8 @@ class MDocProcessImages
 			end
 
 			# Something went bad
-			toolcontext.error(mdoc.location, "Error: cannot find local image `{link}`")
+			warn(location(mdoc.location, node.location), "mdoc",
+				"Error: cannot find local image `{link}`")
 			super
 			return
 		end
@@ -319,13 +374,10 @@ end
 #
 # This post-processor attaches the `DocCommands` linked to each `MdWikilink`.
 class MDocProcessCommands
-	super MdPostProcessor
+	super MDocPostProcessor
 
 	# Parser used to process doc commands
 	var parser: CommandParser
-
-	# ToolContext to display errors
-	var toolcontext: ToolContext
 
 	# Visit each `MdWikilink`
 	redef fun visit(node) do
@@ -344,11 +396,11 @@ class MDocProcessCommands
 			var error = parser.error
 
 			if error isa CmdError then
-				toolcontext.error(mdoc.location, error.to_s)
+				warn(location(mdoc.location, node.location), "mdoc", error.to_s)
 				return
 			end
 			if error isa CmdWarning then
-				toolcontext.warning(mdoc.location, "mdoc", error.to_s)
+				warn(location(mdoc.location, node.location), "mdoc", error.to_s)
 			end
 			node.command = command
 		end
