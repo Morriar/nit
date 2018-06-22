@@ -17,21 +17,13 @@
 # Generate API documentation in HTML format from Nit source code.
 module nitdoc
 
+import doc_tool
 import doc::static
 
 redef class ToolContext
 
-	# Nitdoc generation phase
-	var docphase: Phase = new Nitdoc(self, null)
-
 	# Directory where the Nitdoc is rendered
 	var opt_dir = new OptionString("Output directory", "-d", "--dir")
-
-	# Do not generate documentation for attributes
-	var opt_no_attributes = new OptionBool("Ignore the attributes", "--no-attributes")
-
-	# Do not generate documentation for private properties
-	var opt_private = new OptionBool("Also generate private API", "--private")
 
 	# Use a shareurl instead of copy shared files
 	#
@@ -82,7 +74,6 @@ redef class ToolContext
 	redef init do
 		super
 		option_context.add_option(
-			opt_dir, opt_no_attributes, opt_private,
 			opt_share_dir, opt_shareurl, opt_custom_title,
 			opt_custom_footer, opt_custom_intro, opt_custom_brand,
 			opt_piwik_tracker, opt_piwik_site_id,
@@ -100,51 +91,32 @@ redef class DocModel
 end
 
 # Nitdoc phase explores the model and generate pages for each mentity found
-private class Nitdoc
-	super Phase
+class Nitdoc
+	super DocTool
 
-	redef fun process_mainmodule(mainmodule, mmodules)
-	do
-		var modelbuilder = toolcontext.modelbuilder
-		var model = modelbuilder.model
+	redef fun tool_description do
+		var tpl = new Template
+		tpl.add "Usage: nitdoc [OPTION]... <file.nit>...\n"
+		tpl.add "Generates HTML pages of API documentation from Nit source files."
+		return tpl.write_to_string
+	end
 
-		var min_visibility = private_visibility
-		if not toolcontext.opt_private.value then min_visibility = protected_visibility
-		var accept_attribute = true
-		if toolcontext.opt_no_attributes.value then accept_attribute = false
+	redef var mdoc_post_processors is lazy do
+		var processors = super
+		processors.add new MDocProcessImages(output_dir, "/")
+		return processors
+	end
 
-		var catalog = new Catalog(toolcontext.modelbuilder)
-		catalog.build_catalog(mainmodule.model.mpackages)
+	# Static documentation to build
+	var doc = new DocModel(model, mainmodule, modelbuilder, catalog, filter) is lazy
 
-		var filter = new ModelFilter(
-			min_visibility,
-			accept_attribute = accept_attribute,
-			accept_fictive = true,
-			accept_generated = true,
-			accept_test = false,
-			accept_redef = true,
-			accept_extern = true,
-			accept_empty_doc = true,
-			accept_example = true,
-			accept_broken = false)
+	# Output directory
+	var output_dir: String = toolcontext.opt_dir.value or else "doc"
 
-		var doc = new DocModel(model, mainmodule, modelbuilder, catalog, filter)
+	redef fun execute do
 
-		# Prepare output dir
 		var test_mode = toolcontext.opt_test.value
 		var no_render = toolcontext.opt_norender.value
-		var output_dir = toolcontext.opt_dir.value or else "doc"
-
-		var md_parser = new MdParser
-		md_parser.github_mode = true
-		md_parser.wikilinks_mode = true
-		md_parser.post_processors.add new MDocProcessSynopsis
-		md_parser.post_processors.add new MDocProcessCodes
-		md_parser.post_processors.add new MDocProcessImages(output_dir, ".")
-		md_parser.post_processors.add new MDocProcessMEntityLinks(model, mainmodule)
-		md_parser.post_processors.add new MDocProcessCommands(doc.cmd_parser)
-		md_parser.post_processors.add new MDocProcessSummary
-		model.mdoc_parser = md_parser
 
 		doc.no_dot = toolcontext.opt_nodot.value
 		doc.no_code = toolcontext.opt_nocode.value
@@ -157,7 +129,7 @@ private class Nitdoc
 		doc.tracker_url = toolcontext.opt_piwik_tracker.value
 		doc.piwik_site_id = toolcontext.opt_piwik_site_id.value
 
-
+		# Prepare output dir
 		if not no_render then
 			output_dir.mkdir
 			# Copy assets
@@ -234,52 +206,5 @@ private class Nitdoc
 	end
 end
 
-redef class Catalog
-
-	# Build the catalog from `mpackages`
-	fun build_catalog(mpackages: Array[MPackage]) do
-		# Compute the poset
-		for p in mpackages do
-			var g = p.root
-			assert g != null
-			modelbuilder.scan_group(g)
-
-			deps.add_node(p)
-			for gg in p.mgroups do for m in gg.mmodules do
-				for im in m.in_importation.direct_greaters do
-					var ip = im.mpackage
-					if ip == null or ip == p then continue
-					deps.add_edge(p, ip)
-				end
-			end
-		end
-		# Build the catalog
-		for mpackage in mpackages do
-			package_page(mpackage)
-			git_info(mpackage)
-			mpackage_stats(mpackage)
-		end
-	end
-end
-
-# build toolcontext
-var toolcontext = new ToolContext
-var tpl = new Template
-tpl.add "Usage: nitdoc [OPTION]... <file.nit>...\n"
-tpl.add "Generates HTML pages of API documentation from Nit source files."
-toolcontext.tooldescription = tpl.write_to_string
-
-# process options
-toolcontext.process_options(args)
-var arguments = toolcontext.option_context.rest
-
-# build model
-var model = new Model
-var mbuilder = new ModelBuilder(model, toolcontext)
-var mmodules = mbuilder.parse_full(arguments)
-
-# process
-if mmodules.is_empty then return
-print "Parsing code..."
-mbuilder.run_phases
-toolcontext.run_global_phases(mmodules)
+var nitdoc = new Nitdoc
+nitdoc.start
