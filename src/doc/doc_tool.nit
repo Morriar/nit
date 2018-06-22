@@ -103,7 +103,7 @@ class DocTool
 		accept_extern = true,
 		accept_empty_doc = true,
 		accept_example = true,
-		accept_broken = false)
+		accept_broken = false) is lazy
 
 	# Tool catalog of mpackages
 	var catalog: Catalog is noinit
