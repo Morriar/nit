@@ -23,8 +23,8 @@
 # * Display inheritance lists
 module nitx
 
-import frontend
-import doc::term
+import doc_tool
+import term
 import prompt
 
 redef class ToolContext
@@ -42,24 +42,26 @@ end
 #
 # Using `prompt`, the command line can be turned on an interactive tool.
 class Nitx
+	super DocTool
 
-	# Model that contains the informations to display
-	var model: Model
-
-	# Mainmodule for class linearization
-	var mainmodule: MModule
-
-	# ModelBuilder to access AST nodes
-	var modelbuilder: ModelBuilder
-
-	# Catalog if any
-	var catalog: nullable Catalog = null is optional
+	redef var tool_description do
+		var tpl = new Template
+		tpl.add "Usage: nitx [OPTION]... <file.nit>... [query]\n"
+		tpl.add "Displays pieces of API information from Nit source files."
+		return tpl.write_to_string
+	end
 
 	# Do not use colors in the output
-	var no_color = false is optional
+	var no_color: Bool = toolcontext.opt_no_color.value is lazy
 
 	# Displays the welcome message and start prompt.
-	fun start do
+	redef fun start do
+		var q = toolcontext.opt_command.value
+		if q != null then # shortcut prompt
+			print ""
+			do_command(q)
+			return
+		end
 		welcome
 		prompt
 	end
@@ -81,7 +83,7 @@ class Nitx
 	fun help do
 		# TODO automatize that
 		print "\nCommands:\n"
-		for usage, doc in parser.commands_usage do
+		for usage, doc in cmd_parser.commands_usage do
 			var l = usage.length / 8
 			print "\t{usage}{"\t" * (3 - l)}{doc}"
 		end
@@ -103,9 +105,6 @@ class Nitx
 		prompt
 	end
 
-	# Parser used to process doc commands
-	var parser = new CommandParser(model, mainmodule, modelbuilder, catalog) is lazy
-
 	# Processes the query string and performs it.
 	fun do_command(str: String) do
 		if str == ":q" then
@@ -114,72 +113,9 @@ class Nitx
 			help
 			return
 		end
-		parser.execute(str, no_color)
+		cmd_parser.execute(str, no_color)
 	end
 end
 
-redef class Catalog
-	# Build the catalog for Nitx
-	private fun build_catalog(model: Model, filter: nullable ModelFilter) do
-		# Compute the poset
-		for p in model.collect_mpackages(filter) do
-			var g = p.root
-			assert g != null
-			modelbuilder.scan_group(g)
-
-			deps.add_node(p)
-			for gg in p.mgroups do for m in gg.mmodules do
-				for im in m.in_importation.direct_greaters do
-					var ip = im.mpackage
-					if ip == null or ip == p then continue
-					deps.add_edge(p, ip)
-				end
-			end
-		end
-		# Build the catalog
-		for mpackage in model.collect_mpackages(filter) do
-			package_page(mpackage)
-			git_info(mpackage)
-			mpackage_stats(mpackage)
-		end
-	end
-end
-
-# build toolcontext
-var toolcontext = new ToolContext
-var tpl = new Template
-tpl.add "Usage: nitx [OPTION]... <file.nit>... [query]\n"
-tpl.add "Displays pieces of API information from Nit source files."
-toolcontext.tooldescription = tpl.write_to_string
-
-# process options
-toolcontext.process_options(args)
-var arguments = toolcontext.option_context.rest
-
-# build model
-var model = new Model
-var mbuilder = new ModelBuilder(model, toolcontext)
-var mmodules = mbuilder.parse_full(arguments)
-
-# process
-if mmodules.is_empty then return
-mbuilder.run_phases
-toolcontext.run_global_phases(mmodules)
-var mainmodule = toolcontext.make_main_module(mmodules)
-
-# build views
-var catalog = null
-if toolcontext.opt_catalog.value then
-	catalog = new Catalog(mbuilder)
-	catalog.build_catalog(model)
-end
-
-# start nitx
-var nitx = new Nitx(model, mainmodule, mbuilder, catalog, toolcontext.opt_no_color.value)
-var q = toolcontext.opt_command.value
-if q != null then # shortcut prompt
-	print ""
-	nitx.do_command(q)
-	return
-end
+var nitx = new Nitx
 nitx.start
