@@ -12,6 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# TODO use docdown.md instead of docdown
+# TODO check codes
+# TODO check link names
+# TODO check commands
+
+# TODO check all mdocs
+
 module nitreadme
 
 import doc::doc_tool
@@ -50,6 +57,12 @@ class NitReadme
 		tpl.add "Usage: nitpackage [OPTION]... <file.nit>...\n"
 		tpl.add "Helpful features about packages."
 		return tpl.write_to_string
+	end
+
+	redef var mdoc_post_processors is lazy do
+		var post_processors = super
+		post_processors.add new MDocProcessImages(toolcontext, "/dev/null", "path")
+		return post_processors
 	end
 
 	redef fun execute do
@@ -127,6 +140,18 @@ redef class MPackage
 			toolcontext.error(location, "No `README.docdown` file for `{name}`")
 			return
 		end
+		var mdoc = mdoc_or_fallback
+		if mdoc == null then
+			toolcontext.error(location, "No `mdoc` for `{name}`")
+			return
+		end
+		mdoc.mdoc_document
+		# for mentity in model.collect_mentities do
+			# var smdoc = mentity.mdoc_or_fallback
+			# if smdoc != null then smdoc.mdoc_document
+		# end
+		# var checker = new MDocChecker(toolcontext)
+		# checker.check_mdoc(self)
 	end
 
 	private fun copy_docdown(toolcontext: ToolContext): nullable String do
@@ -160,6 +185,88 @@ redef class MPackage
 		var readme_path = self.readme_path.as(not null)
 		md.write_to_file(readme_path)
 		return readme_path
+	end
+end
+
+class MDocChecker
+	super MdVisitor
+
+	var toolcontext: ToolContext
+
+	private var current_mentity: MEntity is noinit
+
+	private var current_mdoc: MDoc is noinit
+
+	fun check_mdoc(mentity: MEntity) do
+		var mdoc = mentity.mdoc_or_fallback
+		if mdoc == null then
+			toolcontext.error(mentity.location, "No `mdoc` for `{mentity.name}`")
+			return
+		end
+
+		self.current_mdoc = mdoc
+		self.current_mentity = mentity
+
+		var document = mdoc.mdoc_document
+		check_synopsis(document)
+		enter_visit(document)
+	end
+
+	fun check_synopsis(document: MdDocument) do
+		if not current_mentity isa MPackage then return
+
+		var first = document.first_child
+		if not first isa MdHeading then
+			print "no heading"
+			return
+		end
+		if first.level != 1 then
+			print "no level 1"
+			return
+		end
+	end
+
+	redef fun visit(node) do node.check_mdoc(self)
+end
+
+redef class MdNode
+	fun check_mdoc(v: MDocChecker) do visit_all(v)
+end
+
+redef class MdCode
+	redef fun check_mdoc(v) do
+		# print literal
+		super
+	end
+end
+
+redef class MdCodeBlock
+	redef fun check_mdoc(v) do
+		if info != null and info != "nit" then return
+
+		var ast = nit_ast
+		if ast == null then return
+
+		if ast isa AError then
+			var offset = 0
+			var mdoc_location = v.current_mdoc.location
+			var location = new Location(
+				mdoc_location.file,
+				self.location.line_start + offset + 1 + ast.location.line_start,
+				self.location.line_start + offset + 1 + ast.location.line_end,
+				self.location.column_start + ast.location.column_start - 2,
+				self.location.column_start + ast.location.column_end - 2)
+			v.toolcontext.warning(location, "mdoc-check", ast.message)
+			v.toolcontext.check_errors
+		end
+		super
+	end
+end
+
+redef class MdWikilink
+	redef fun check_mdoc(v) do
+		print "wik"
+		super
 	end
 end
 
