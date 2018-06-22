@@ -15,7 +15,7 @@
 # Runs a webserver based on nitcorn that render things from model.
 module nitweb
 
-import frontend
+import doc_tool
 import doc::api
 
 redef class ToolContext
@@ -32,51 +32,35 @@ redef class ToolContext
 	# Directory for embedded images and files
 	var opt_tmp_dir = new OptionString("Temporary file directory", "--tmp-dir")
 
-	# --no-private
-	var opt_no_private = new OptionBool("Do not show private entities", "--no-private")
-
-	# --no-fictive
-	var opt_no_fictive = new OptionBool("Do not show fictive entities", "--no-fictive")
-
-	# --no-test
-	var opt_no_test = new OptionBool("Do not show test related entities", "--no-test")
-
-	# --no-attribute
-	var opt_no_attribute = new OptionBool("Do not show attributes", "--no-attribute")
-
-	# --no-empty-doc
-	var opt_no_empty_doc = new OptionBool("Do not undocumented entities", "--no-empty-doc")
-
-	# Web rendering phase.
-	var webphase: Phase = new NitwebPhase(self, null)
-
 	init do
 		super
-		option_context.add_option(opt_config, opt_host, opt_port, opt_no_private,
-			opt_no_fictive, opt_no_test, opt_no_attribute, opt_no_empty_doc, opt_tmp_dir)
+		option_context.add_option(opt_config, opt_host, opt_port, opt_tmp_dir)
 	end
 end
 
 # Phase that builds the model and wait for http request to serve pages.
-private class NitwebPhase
-	super Phase
+class Nitweb
+	super DocTool
 
-	# Build the nitweb config from `toolcontext` options.
-	fun build_config(toolcontext: ToolContext, mainmodule: MModule): NitwebConfig do
+	redef var tool_description do
+		var tpl = new Template
+		tpl.add "Usage: nitweb [OPTION]... <file.nit>...\n"
+		tpl.add "Run a webserver based on nitcorn that serves pages about model."
+		return tpl.write_to_string
+	end
 
-		var model = toolcontext.modelbuilder.model
+	redef var mdoc_post_processors is lazy do
+		var processors = super
+		processors.add new MDocProcessImages(config.tmp_dir, "/")
+		return processors
+	end
 
-		var filter = new ModelFilter(
-			if toolcontext.opt_no_private.value then protected_visibility else private_visibility,
-			accept_fictive = not toolcontext.opt_no_fictive.value,
-			accept_empty_doc = not toolcontext.opt_no_empty_doc.value,
-			accept_test = not toolcontext.opt_no_test.value,
-			accept_attribute = not toolcontext.opt_no_attribute.value
-		)
+	# Tool Config
+	var config = new NitwebConfig(toolcontext, model, mainmodule, modelbuilder, filter, catalog) is lazy
 
-		var catalog = build_catalog(toolcontext.modelbuilder, filter)
+	redef fun execute do
+		var app = new App
 
-		var config = new NitwebConfig(model, mainmodule, toolcontext.modelbuilder, filter, catalog)
 		var config_file = toolcontext.opt_config.value
 		if config_file == null then config.default_config_file = "nitweb.ini"
 		config.parse_options(args)
@@ -86,15 +70,7 @@ private class NitwebPhase
 		if opt_port >= 0 then config.ini["app.port"] = opt_port.to_s
 		var opt_tmp_dir = toolcontext.opt_tmp_dir.value
 		if opt_tmp_dir != null then config.tmp_dir = opt_tmp_dir
-		return config
-	end
 
-	redef fun process_mainmodule(mainmodule, mmodules)
-	do
-		var config = build_config(toolcontext, mainmodule)
-		config.model.mdoc_parser = config.mdoc_parser
-
-		var app = new App
 
 		app.use_before("/*", new SessionInit)
 		app.use_before("/*", new RequestClock)
@@ -105,59 +81,9 @@ private class NitwebPhase
 		app.use("/*", new StaticHandler(config.tmp_dir))
 		app.use("/*", new StaticHandler(toolcontext.share_dir / "nitweb", "index.html"))
 		app.use_after("/*", new ConsoleLog)
-
 		app.listen(config.app_host, config.app_port)
 	end
-
-	# Build the catalog
-	#
-	# This method should be called at nitweb startup.
-	fun build_catalog(modelbuilder: ModelBuilder, filter: nullable ModelFilter): Catalog do
-		var catalog = new Catalog(modelbuilder)
-		var mpackages = modelbuilder.model.collect_mpackages(filter)
-		# Compute the poset
-		for p in mpackages do
-			var g = p.root
-			assert g != null
-			modelbuilder.scan_group(g)
-
-			catalog.deps.add_node(p)
-			for gg in p.mgroups do for m in gg.mmodules do
-				for im in m.in_importation.direct_greaters do
-					var ip = im.mpackage
-					if ip == null or ip == p then continue
-					catalog.deps.add_edge(p, ip)
-				end
-			end
-		end
-		# Build the catalog
-		for mpackage in mpackages do
-			catalog.package_page(mpackage)
-			catalog.git_info(mpackage)
-			catalog.mpackage_stats(mpackage)
-		end
-		return catalog
-	end
-
 end
 
-# build toolcontext
-var toolcontext = new ToolContext
-var tpl = new Template
-tpl.add "Usage: nitweb [OPTION]... <file.nit>...\n"
-tpl.add "Run a webserver based on nitcorn that serves pages about model."
-toolcontext.tooldescription = tpl.write_to_string
-
-# process options
-toolcontext.process_options(args)
-var arguments = toolcontext.option_context.rest
-
-# build model
-var model = new Model
-var mbuilder = new ModelBuilder(model, toolcontext)
-var mmodules = mbuilder.parse_full(arguments)
-
-# process
-if mmodules.is_empty then return
-mbuilder.run_phases
-toolcontext.run_global_phases(mmodules)
+var nitweb = new Nitweb
+nitweb.start
