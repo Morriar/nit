@@ -43,7 +43,7 @@ To test a method you have to instanciate its class:
 
 `nitunit` is used to test Nit files:
 
-~~~sh
+~~~bash
 	$ nitunit foo.nit
 ~~~
 
@@ -73,7 +73,7 @@ end
 
 Test suite can be executed using the same `nitunit` command:
 
-~~~sh
+~~~bash
 	$ nitunit foo.nit
 ~~~
 
@@ -82,7 +82,7 @@ followed by the name of the module to test.
 So for the module `foo.nit` the test suite will be called `test_foo.nit`.
 Otherwise, you can use the `-t` option to specify the test suite module name:
 
-~~~sh
+~~~bash
 	$ nitunit foo.nit -t my_test_suite.nit
 ~~~
 
@@ -220,7 +220,7 @@ In the previous example, the execution order would be:
 Write test suites for big modules can be a pepetitive and boring task...
 To make it easier, `nitunit` can generate test skeletons for Nit modules:
 
-~~~sh
+~~~bash
 	$ nitunit --gen-suite foo.nit
 ~~~
 

@@ -21,7 +21,7 @@
 #
 # Usage:
 #
-# ~~~sh
+# ~~~bash
 # > refund (<input_file> <output_file> | [OPTIONS])
 # ~~~
 #

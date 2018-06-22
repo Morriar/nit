@@ -94,7 +94,7 @@ This is the main config file of your wiki. For more details see [Configure the w
 
 Just move to the directory where you want to store your source files and type:
 
-~~~sh
+~~~bash
 nitiwiki init
 ~~~
 
@@ -209,7 +209,7 @@ This nesting of trails can be used to have sections and sub-sections.
 
 Once you have done your changes, use:
 
-~~~sh
+~~~bash
 nitiwiki --status
 ~~~
 
@@ -217,7 +217,7 @@ This will show the impacts of your changes on the wiki structure.
 
 Then type:
 
-~~~sh
+~~~bash
 nitiwiki --render
 ~~~
 
@@ -365,7 +365,7 @@ in order to correctly pull changes.
 To automatically update your wiki when changes are pushed on the
 origin repository you can use the following command in a git hook:
 
-~~~sh
+~~~bash
 nitiwiki --fetch --render
 ~~~
 
@@ -382,7 +382,7 @@ after changes or set a cron on a different server that you can control.
 Using the following command in your cron will update the web server instance
 from git:
 
-~~~sh
+~~~bash
 nitiwiki --fetch --render --rsync
 ~~~
 

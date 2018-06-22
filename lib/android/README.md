@@ -23,7 +23,7 @@ it may be possible to support other platforms with some tweaks.
 		You will probably need to tweak it to you system or update the download URL
 		to the latest SDK tools from https://developer.android.com/studio/index.html#command-tools
 
-		~~~
+		~~~bash
 		# Fetch and extract SDK tools
 		mkdir -p ~/Android/Sdk
 		cd ~/Android/Sdk
@@ -43,13 +43,13 @@ it may be possible to support other platforms with some tweaks.
 3.	Set the environment variable ANDROID_HOME to the SDK installation directory, usually `~/Android/Sdk/`.
 	Use the following command to setup the variable for bash.
 
-	~~~
+	~~~bash
 	echo "export ANDROID_HOME=~/Android/Sdk/" >> ~/.bashrc
 	~~~
 
 4.	Install Java 8 JDK, on Debian/Ubuntu systems you can use the following command:
 
-	~~~
+	~~~bash
 	sudo apt install openjdk-8-jdk
 	~~~
 
@@ -143,7 +143,7 @@ as they change between versions of the Java SDK. You should instead use a
 command similar to the following, replacing `KEYSTORE_PATH` and `KEY_ALIAS`
 with the desired values.
 
-    ~~~
+    ~~~bash
     keytool -genkey -keystore KEYSTORE_PATH -alias KEY_ALIAS -sigalg MD5withRSA -keyalg RSA -keysize 1024 -validity 10000
     ~~~
 
@@ -154,7 +154,7 @@ optionally `TSA_SERVER`. These settings can be set in a startup script such as
     You can use the following commands by replacing the right-hand values
 to your own configuration.
 
-    ~~~
+    ~~~bash
     export KEYSTORE=keystore_path
     export KEY_ALIAS=key_alias
     export TSA_SERVER=timestamp_authority_server_url # Optional

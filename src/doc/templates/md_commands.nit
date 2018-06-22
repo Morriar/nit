@@ -212,7 +212,7 @@ redef class CmdIniCloneCommand
 		if command == null then return ""
 
 		var tpl = new Template
-		tpl.addn "~~~sh"
+		tpl.addn "~~~bash"
 		tpl.addn command
 		tpl.addn "~~~"
 		return tpl.write_to_string
@@ -289,7 +289,7 @@ redef class CmdMainCompile
 		if command == null then return ""
 
 		var tpl = new Template
-		tpl.addn "~~~sh"
+		tpl.addn "~~~bash"
 		tpl.addn command
 		tpl.addn "~~~"
 		return tpl.write_to_string
@@ -331,7 +331,7 @@ redef class CmdTesting
 		if command == null then return ""
 
 		var tpl = new Template
-		tpl.addn "~~~sh"
+		tpl.addn "~~~bash"
 		tpl.addn command
 		tpl.addn "~~~"
 		return tpl.write_to_string

@@ -631,7 +631,7 @@ end
 #
 # On some Linux systems `bash_completion` allow the program to control command line behaviour.
 #
-# ~~~sh
+# ~~~bash
 # $ nitls [TAB][TAB]
 # file1.nit              file2.nit              file3.nit
 #

@@ -26,7 +26,7 @@
 #
 # Typical usage on the output of `gcc -E` (it would be the same with `clang`):
 #
-# ~~~sh
+# ~~~bash
 # gcc -E /usr/include/SDL/SDL_image.h | header_keeper SDL_image.h > preprocessed_header.h
 # ~~~
 #

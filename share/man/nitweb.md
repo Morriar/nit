@@ -14,7 +14,7 @@ nitweb [*options*] FILE...
 
 Usage:
 
-~~~sh
+~~~bash
 nitweb --host localhost --port 3000 lib/core/
 ~~~
 

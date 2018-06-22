@@ -25,7 +25,7 @@
 # the static code, and ignores the code into their brackets. The result is
 # printed to sdtout.
 #
-# ~~~sh
+# ~~~bash
 # cat Pre-Processed/CGGeometry.h | header_static > Pre-Processed/static_header.h
 # ~~~
 #

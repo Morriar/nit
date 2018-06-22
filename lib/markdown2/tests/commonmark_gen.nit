@@ -18,7 +18,7 @@
 #
 # Usage:
 #
-# ~~~sh
+# ~~~bash
 # commonmark_gen <commonmark_tests.json> <output directory>
 # ~~~
 module commonmark_gen

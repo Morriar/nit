@@ -183,7 +183,7 @@ There is two main ways to achieve this goal:
 * The mixin option (`-m module`) imports an additional module before compiling.
   It can be used to load platform specific implementations of the _app.nit_ portable UI.
 
-  ~~~
+  ~~~bash
   # GNU/Linux version, using GTK
   nitc calculator.nit -m linux
 

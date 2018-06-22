@@ -21,7 +21,7 @@ The `--expand` option is used to move singleton packages in their own directory.
 For example, to move all singleton packages from `lib/` into directories, one can
 use the following command.
 
-~~~sh
+~~~bash
 nitpackage --expand lib/
 ~~~
 
@@ -32,14 +32,14 @@ The `--gen-ini` option is used to create `package.ini` files.
 For example, the following command will create a `package.ini` stub for each package
 that does not already have a one.
 
-~~~sh
+~~~bash
 nitpackage --gen-ini lib/
 ~~~
 
 The `--force` option can be used to force the creation of the INI stub even if the package
 already contains one.
 
-~~~sh
+~~~bash
 nitpackage --gen-ini -f lib/
 ~~~
 

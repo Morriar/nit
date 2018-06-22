@@ -1,3 +1,3 @@
-~~~sh
+~~~bash
 nitunit tests
 ~~~
