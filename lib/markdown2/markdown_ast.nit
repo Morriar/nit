@@ -94,6 +94,12 @@ abstract class MdNode
 		prev = null
 	end
 
+	# Replace `self` by `node`
+	fun replace(node: MdNode) do
+		insert_before(node)
+		unlink
+	end
+
 	# Insert `sibling` after `self`.
 	fun insert_after(sibling: MdNode) do
 		sibling.unlink
