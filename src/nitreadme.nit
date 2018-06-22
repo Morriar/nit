@@ -25,6 +25,9 @@ redef class ToolContext
 	# --check-readme
 	var opt_check_readme = new OptionBool("Check README.md files", "--check-readme")
 
+	# --gen-readme
+	var opt_gen_readme = new OptionBool("Generate README.md files", "--gen-readme")
+
 	# --check-docdown
 	var opt_check_docdown = new OptionBool("Check README.docdown.md files", "--check-docdown")
 
@@ -34,7 +37,7 @@ redef class ToolContext
 	redef init do
 		super
 		option_context.add_option(opt_force)
-		option_context.add_option(opt_check_readme)
+		option_context.add_option(opt_check_readme, opt_gen_readme)
 		option_context.add_option(opt_check_docdown, opt_copy_docdown)
 	end
 end
@@ -82,6 +85,16 @@ class NitReadme
 					end
 				end
 			end
+
+			# Generate README.md
+			if toolcontext.opt_gen_readme.value then
+				if not mpackage.has_readme or toolcontext.opt_force.value then
+					var path = mpackage.gen_readme(toolcontext, mainmodule)
+					if path != null then
+						toolcontext.info("generated README `{path}`", 0)
+					end
+				end
+			end
 		end
 	end
 
@@ -106,6 +119,7 @@ redef class MPackage
 			toolcontext.error(location, "No `README.md` file for `{name}`")
 			return
 		end
+		# TODO check synchro from docdown
 	end
 
 	private fun check_docdown(toolcontext: ToolContext) do
@@ -125,6 +139,27 @@ redef class MPackage
 		var docdown_path = self.docdown_path.as(not null)
 		sys.system "cp {readme_path} {docdown_path}"
 		return docdown_path
+	end
+
+	private fun gen_readme(toolcontext: ToolContext, mainmodule: MModule): nullable String do
+		if not has_docdown then
+			toolcontext.error(location, "No `README.docdown.md` file for `{name}`")
+			return null
+		end
+
+		var model = toolcontext.modelbuilder.model
+
+		var docdown_path = self.docdown_path.as(not null)
+		var docdown = docdown_path.to_path.read_all
+
+		var renderer = new MDocMdRenderer
+		var ast = model.mdoc_parser.parse(docdown)
+		ast.mdoc = mdoc_or_fallback
+		model.mdoc_parser.post_process(ast)
+		var md = renderer.render(ast)
+		var readme_path = self.readme_path.as(not null)
+		md.write_to_file(readme_path)
+		return readme_path
 	end
 end
 
