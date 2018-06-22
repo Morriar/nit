@@ -143,6 +143,9 @@ redef class MEntity
 		end
 		return poset
 	end
+
+	# Does `self` contains `mentity`?
+	fun has_mentity(mentity: MEntity, filter: nullable ModelFilter): Bool is abstract
 end
 
 redef class Model
@@ -261,6 +264,8 @@ redef class Model
 		end
 		return res
 	end
+
+	redef fun has_mentity(mentity, filter) do return mentity.model == self
 end
 
 redef class MPackage
@@ -414,6 +419,18 @@ redef class MPackage
 		end
 		return res
 	end
+
+	redef fun has_mentity(mentity, filter) do
+		if mentity == self then return true
+		if mentity isa MPackage then return false
+		if mentity isa MGroup then return mentity.mpackage == self
+		if mentity isa MModule then return mentity.mpackage == self
+		if mentity isa MClass then return mentity.intro.mmodule.mpackage == self
+		if mentity isa MProperty then return mentity.intro.mclassdef.mmodule.mpackage == self
+		if mentity isa MClassDef then return mentity.mmodule.mpackage == self
+		if mentity isa MPropDef then return mentity.mclassdef.mmodule.mpackage == self
+		return false
+	end
 end
 
 redef class MGroup
@@ -469,6 +486,18 @@ redef class MGroup
 			if filter == null or filter.accept_mentity(mmodule) then res.add(mmodule)
 		end
 		return res
+	end
+
+	redef fun has_mentity(mentity, filter) do
+		if mentity == self then return true
+		if mentity isa MPackage then return false
+		if mentity isa MGroup then return false
+		if mentity isa MModule then return mentity.mgroup == self
+		if mentity isa MClass then return mentity.intro.mmodule.mgroup == self
+		if mentity isa MProperty then return mentity.intro.mclassdef.mmodule.mgroup == self
+		if mentity isa MClassDef then return mentity.mmodule.mgroup == self
+		if mentity isa MPropDef then return mentity.mclassdef.mmodule.mgroup == self
+		return false
 	end
 end
 
@@ -636,6 +665,18 @@ redef class MModule
 			if mproperty isa MVirtualTypeProp then res.add(mproperty)
 		end
 		return res
+	end
+
+	redef fun has_mentity(mentity, filter) do
+		if mentity == self then return true
+		if mentity isa MPackage then return false
+		if mentity isa MGroup then return false
+		if mentity isa MModule then return false
+		if mentity isa MClass then return mentity.intro.mmodule == self
+		if mentity isa MProperty then return mentity.intro.mclassdef.mmodule == self
+		if mentity isa MClassDef then return mentity.mmodule == self
+		if mentity isa MPropDef then return mentity.mclassdef.mmodule == self
+		return false
 	end
 end
 
@@ -963,6 +1004,18 @@ redef class MClass
 		end
 		return set
 	end
+
+	redef fun has_mentity(mentity, filter) do
+		if mentity == self then return true
+		if mentity isa MPackage then return false
+		if mentity isa MGroup then return false
+		if mentity isa MModule then return false
+		if mentity isa MClass then return false
+		if mentity isa MProperty then return mentity.intro.mclassdef.mclass == self
+		if mentity isa MClassDef then return mentity.mclass == self
+		if mentity isa MPropDef then return mentity.mclassdef.mclass == self
+		return false
+	end
 end
 
 redef class MClassDef
@@ -1069,6 +1122,18 @@ redef class MClassDef
 		end
 		return res
 	end
+
+	redef fun has_mentity(mentity, filter) do
+		if mentity == self then return true
+		if mentity isa MPackage then return false
+		if mentity isa MGroup then return false
+		if mentity isa MModule then return false
+		if mentity isa MClass then return false
+		if mentity isa MClassDef then return false
+		if mentity isa MProperty then return mentity.intro.mclassdef == self
+		if mentity isa MPropDef then return mentity.mclassdef == self
+		return false
+	end
 end
 
 redef class MProperty
@@ -1111,6 +1176,18 @@ redef class MProperty
 			end
 		end
 		return res
+	end
+
+	redef fun has_mentity(mentity, filter) do
+		if mentity == self then return true
+		if mentity isa MPackage then return false
+		if mentity isa MGroup then return false
+		if mentity isa MModule then return false
+		if mentity isa MClass then return false
+		if mentity isa MClassDef then return false
+		if mentity isa MProperty then return false
+		if mentity isa MPropDef then return mentity.mproperty == self
+		return false
 	end
 end
 
@@ -1176,4 +1253,6 @@ redef class MPropDef
 		end
 		return res
 	end
+
+	redef fun has_mentity(mentity, filter) do return mentity == self
 end
