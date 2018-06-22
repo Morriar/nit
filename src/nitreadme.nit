@@ -22,6 +22,8 @@ redef class ToolContext
 	# --check-readme
 	var opt_check_readme = new OptionBool("Check README.md files", "--check-readme")
 
+	# --check-docdown
+	var opt_check_docdown = new OptionBool("Check README.docdown.md files", "--check-docdown")
 	redef init do
 		super
 		option_context.add_option(opt_check_readme)
@@ -55,6 +57,12 @@ class NitReadme
 				mpackage.check_readme(toolcontext)
 				continue
 			end
+
+			# Check README.docdown
+			if toolcontext.opt_check_docdown.value then
+				mpackage.check_docdown(toolcontext)
+				continue
+			end
 		end
 	end
 
@@ -77,6 +85,13 @@ redef class MPackage
 	private fun check_readme(toolcontext: ToolContext) do
 		if not has_readme then
 			toolcontext.error(location, "No `README.md` file for `{name}`")
+			return
+		end
+	end
+
+	private fun check_docdown(toolcontext: ToolContext) do
+		if not has_docdown then
+			toolcontext.error(location, "No `README.docdown` file for `{name}`")
 			return
 		end
 	end
