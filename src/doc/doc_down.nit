@@ -254,7 +254,7 @@ end
 #
 # This post-processor attaches a `MEntity` to each span code containing a valid name.
 class MDocProcessMEntityLinks
-	super MdPostProcessor
+	super MDocPostProcessor
 
 	# Model where the names are matched with the entities
 	var model: Model
@@ -264,6 +264,37 @@ class MDocProcessMEntityLinks
 
 	# Filter to apply on matches
 	var filter = new ModelFilter
+
+	# TODO
+	var name_pt = "[a-zA-Z_][a-zA-Z0-9_=]*"
+	# TODO
+	var name_re: Regex = name_pt.to_re
+
+	# TODO
+	var qname_pt = "{name_pt}(::{name_pt})*"
+
+	# TODO
+	var qname_re: Regex = qname_pt.to_re
+
+	var brackets_pt = "\\[.*\\]"
+	var parens_pt = "\\(.*\\)"
+
+	#
+	var signature_re: Regex = "\\(([^(]*)(,([^(])*)*\\)".to_re
+
+	var reference_pt = "^{qname_pt}({brackets_pt}|{parens_pt})?$"
+	var reference_re: Regex = reference_pt.to_re
+
+	var keywords = [
+		"end", "not", "null", "var", "do", "then", "catch", "else", "loop", "is",
+		"import", "module", "package", "class", "enum", "universal", "interface", "extern",
+		"abstract", "intern", "new", "private", "public", "protected", "intrude", "readable",
+		"writable", "redef", "if", "while", "for", "with", "assert", "and", "or", "in", "is",
+		"isa", "once", "break", "contrinue", "return", "abort", "nullable", "special"]
+
+	var bool_mentity: nullable MEntity is lazy do
+		return model.mentity_by_full_name("core::Bool")
+	end
 
 	# Visit each `MdCode`
 	redef fun visit(node) do
@@ -285,44 +316,141 @@ class MDocProcessMEntityLinks
 		var mdoc = document.mdoc
 		if mdoc == null then return null
 
-		var mentity = mdoc.original_mentity
-		if mentity == null then return null
+		var original_mentity = mdoc.original_mentity
+		if original_mentity == null then return null
 
-		# Check parameters
-		if mentity isa MMethod and link_mparameters(mentity.intro, text) then
-			return null # Do not link parameters
-		end
-		if mentity isa MMethodDef and link_mparameters(mentity, text) then
-			return null # Do not link parameters
-		end
+		# TODO + / - * ... ?
+		# if not text.has(name_re) then return null
 
-		var model = mentity.model
-		var query = text.replace("nullable", "").trim
-
-		if text.has("::") then
-			# Direct name match in model
-			var match = model.mentity_by_full_name(query, filter)
-			if match != null then return match
-			# TODO check visi and reach
+		if not text.has(reference_re) then
+			# print text
 			return null
 		end
 
-		# Check entity
-		var mentities = model.mentities_by_name(query, filter)
-		if mentities.is_empty then return null
-		var match = mentities.first
+		# Check qualified names
+		var qn_match = text.search(qname_re)
+		if qn_match == null then return null
+		var qname = qn_match.to_s
+
+		# Check keywords
+		if qname == "self" then return original_mentity
+		if qname == "true" or qname == "false" then return bool_mentity
+		if keywords.has(qname) then return null
+
+		# Check parameter names
+		if original_mentity isa MMethod and link_mparameters(original_mentity.intro, text) then
+			return null # Do not link parameters
+		 else if original_mentity isa MMethodDef and link_mparameters(original_mentity, text) then
+			return null # Do not link parameters
+		end
+
+		# Find by full name
+		do
+			var mentity = model.mentity_by_full_name(qname, filter)
+			if mentity != null then return mentity
+		end
+
+		# Find by name
+		var mentities = model.mentities_by_name(qname, filter)
+		if mentities.length == 1 then return mentities.first
+
 		if mentities.length > 1 then
-			var res = filter_matches(mentity, mentities)
-			if res.is_empty then return null
-			var best_score = 0
-			for match2, score in res do
-				if score > best_score then
-					match = match2
-					best_score = score
+			mentities = disambiguise(original_mentity, mentities)
+			if mentities.length == 1 then return mentities.first
+			# TODO tmp warning
+			if mentities.length > 1 then return null
+				# print original_mentity.full_name
+				# print text
+				# for mentity in mentities do
+					# print mentity.full_name
+				# end
+				# print ""
+			# end
+			# return null
+		end
+
+		var mpackage_name = null
+		var mmodule_name = null
+		var mclass_name = null
+		var mprop_name = null
+
+		var parts = qname.split("::")
+		if parts.length == 1 then
+			if qname == "self" then return original_mentity
+			if qname == "true" or qname == "false" then return bool_mentity
+			if keywords.has(qname) then return null
+			mprop_name = qname
+		else
+			for part in parts do
+				if part.is_upper then
+					mprop_name = part
+				else if part.chars.first.is_upper then
+					mclass_name = part
+				else
+					if mclass_name != null then
+						mprop_name = part
+					else if mpackage_name != null then
+						mmodule_name = part
+					else
+						mpackage_name = part
+					end
 				end
 			end
 		end
-		return match
+
+		# Match full names
+		if mpackage_name != null then
+			var full_name = mpackage_name
+			if mmodule_name != null then
+				full_name = "{full_name}::{mmodule_name}"
+			else if mclass_name != null then
+				full_name = "{full_name}::{class_name}"
+				if mprop_name != null then
+					full_name = "{full_name}::{mprop_name}"
+				end
+			end
+			var mentity = model.mentity_by_full_name(full_name, filter)
+			if mentity != null then return mentity
+		end
+
+		# Match semi-qualified names
+		if mclass_name != null and mprop_name != null then
+			var mclass = null
+			var mclasses = model.mentities_by_name(mclass_name)
+			if mclasses.is_empty then return null
+
+			if mclasses.length == 1 then
+				mclass = mclasses.first
+			else
+				mclasses = disambiguise(original_mentity, mclasses)
+			end
+			if mclasses.length == 1 then
+				mclass = mclasses.first
+			else
+				return null
+			end
+			# TODO error
+				# print original_mentity
+				# print text
+				# print mclasses
+
+			var mprops = model.mentities_by_name(mprop_name)
+			if mprops.is_empty then return null
+			if mprops.length == 1 then return mprops.first
+			mprops = disambiguise(mclass, mprops)
+			if mprops.length == 1 then return mprops.first
+			# TODO error
+			# print original_mentity
+			# print text
+			# for mprop in mprops do
+				# print mprop
+			# end
+		end
+
+		# TODO error
+		# print original_mentity
+		# print text
+		return null
 	end
 
 	# Check if `text` matches with a `mmethoddef` parameter
@@ -367,6 +495,73 @@ class MDocProcessMEntityLinks
 			end
 		end
 		return 1
+	end
+
+	private fun disambiguise(original_mentity: MEntity, mentities: Array[MEntity]): Array[MEntity] do
+		var matches = new Array[MEntity]
+		if original_mentity isa MPropDef then original_mentity = original_mentity.mclassdef
+		if original_mentity isa MProperty then original_mentity = original_mentity.intro.mclassdef
+		if original_mentity isa MClassDef then
+			matches = has_mentities(original_mentity, mentities)
+			if matches.length >= 1 then return matches
+			original_mentity = original_mentity.mclass
+		end
+		if original_mentity isa MClass then
+			matches = has_mentities(original_mentity, mentities)
+			if matches.length >= 1 then return matches
+			for parent in original_mentity.collect_ancestors(mainmodule, filter) do
+				matches.add_all has_mentities(parent, mentities)
+			end
+			if matches.length >= 1 then return matches
+			original_mentity = original_mentity.intro_mmodule
+		end
+		if original_mentity isa MModule then
+			matches = has_mentities(original_mentity, mentities)
+			if matches.length >= 1 then return matches
+			for parent in original_mentity.collect_parents(mainmodule, filter) do
+				matches.add_all has_mentities(parent, mentities)
+			end
+			if matches.length >= 1 then return matches
+			for parent in original_mentity.collect_ancestors(mainmodule, filter) do
+				matches.add_all has_mentities(parent, mentities)
+			end
+			if matches.length >= 1 then return matches
+			var mgroup = original_mentity.mgroup
+			if mgroup != null then original_mentity = mgroup
+		end
+		if original_mentity isa MGroup then
+			matches = has_mentities(original_mentity, mentities)
+			if matches.length >= 1 then return matches
+			for parent in original_mentity.collect_parents(mainmodule, filter) do
+				matches.add_all has_mentities(parent, mentities)
+			end
+			if matches.length >= 1 then return matches
+			for parent in original_mentity.collect_ancestors(mainmodule, filter) do
+				matches.add_all has_mentities(parent, mentities)
+			end
+			if matches.length >= 1 then return matches
+			original_mentity = original_mentity.mpackage
+		end
+		if original_mentity isa MPackage then
+			matches = has_mentities(original_mentity, mentities)
+			if matches.length >= 1 then return matches
+			for parent in original_mentity.collect_ancestors(mainmodule, filter) do
+				matches.add_all has_mentities(parent, mentities)
+			end
+			if matches.length >= 1 then return matches
+			for parent in original_mentity.collect_ancestors(mainmodule, filter) do
+				matches.add_all has_mentities(parent, mentities)
+			end
+		end
+		return matches
+	end
+
+	private fun has_mentities(original_mentity: MEntity, mentities: Array[MEntity]): Array[MEntity] do
+		var matches = new Array[MEntity]
+		for mentity in mentities do
+			if original_mentity.has_mentity(mentity, filter) then matches.add mentity
+		end
+		return matches
 	end
 end
 
