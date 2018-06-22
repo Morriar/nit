@@ -8,6 +8,7 @@ It is used in information filtering, information retrieval, indexing and
 relevancy rankings.
 
 The `vsm` package provides the following features:
+
 * Vector comparison with cosine similarity.
 * Vector indexing and matching with tf * idf.
 * File indexing and matching to free text queries.

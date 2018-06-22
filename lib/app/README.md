@@ -85,10 +85,10 @@ _app.nit_ offers the submodule `app::data_store` to easily save the application 
 The service is accessible by the method `App::data_store`. The `DataStore` itself defines 2 methods:
 
 * `DataStore::[]=` saves and associates any serializable instances to a `String` key.
-Pass `null` to clear the value associated to a key.
+  Pass `null` to clear the value associated to a key.
 
 * `DataStore::[]` returns the object associated to a `String` key.
-It returns `null` if nothing is associated to the key.
+  It returns `null` if nothing is associated to the key.
 
 ### Usage Example
 
