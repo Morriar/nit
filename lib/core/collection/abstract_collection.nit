@@ -489,7 +489,7 @@ interface Set[E]
 	protected fun new_set: Set[E] is abstract
 end
 
-# MapRead are abstract associative collections: `key` -> `item`.
+# MapRead are abstract associative collections: *key* -> *item*.
 interface MapRead[K, V]
 	# Get the item at `key`
 	#
@@ -641,7 +641,7 @@ interface MapRead[K, V]
 	end
 end
 
-# Maps are associative collections: `key` -> `item`.
+# Maps are associative collections: *key* -> *item*.
 #
 # The main operator over maps is [].
 #

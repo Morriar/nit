@@ -153,7 +153,7 @@ class DocTool
 		var post_processors = new Array[MdPostProcessor]
 		post_processors.add new MDocProcessSynopsis(toolcontext)
 		post_processors.add new MDocProcessCodes(toolcontext)
-		post_processors.add new MDocProcessMEntityLinks(model, mainmodule)
+		post_processors.add new MDocProcessMEntityLinks(toolcontext, model, mainmodule)
 		post_processors.add new MDocProcessCommands(toolcontext, cmd_parser)
 		post_processors.add new MDocProcessSummary
 		return post_processors

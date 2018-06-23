@@ -16,8 +16,8 @@ Methods with self calls are not supported.
 
 A method or function annotated with `is threaded` has its return value changed during compilation.
 You will get a subclass of `Thread`, even if there wasn't a return value before. You can know if the threaded method is done with the `is_done` boolean from `Thread`.
-A call to the `join` method will block the execution until the threaded method is done, or immediatly return if it's already done.
-`join` will return an object typed with the orginial return type, or `null` if there wasn't.
+A call to the `Thread::join` method will block the execution until the threaded method is done, or immediatly return if it's already done.
+`Thread::join` will return an object typed with the orginial return type, or `null` if there wasn't.
 
 ## Known limitations:
 

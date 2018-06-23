@@ -405,14 +405,18 @@ class MdInlineParser
 	private fun parse_backticks: Bool do
 		var column_before = column
 		var ticks = match(re_ticks_here)
-		if ticks == null then return false
+		if ticks == null then
+			column = column_before
+			return false
+		end
 
 		var after_open_ticks = index
 		var matched = match(re_ticks)
 		while matched != null do
 			if matched == ticks then
-				var content = input.substring(after_open_ticks, index - after_open_ticks - ticks.length)
-				content = content.trim
+				var ocontent = input.substring(after_open_ticks, index - after_open_ticks - ticks.length)
+				column = column_before + ocontent.length + ticks.length
+				var content = ocontent.trim
 				content = content.replace(re_whitespace, " ")
 				var node = new MdCode(new MdLocation(line, column_before, line, column), matched.to_s, content.trim)
 				append_node(node)
@@ -423,7 +427,7 @@ class MdInlineParser
 		end
 		# If we got here, we didn't match a closing backtick sequence
 		index = after_open_ticks
-		column = after_open_ticks + 1
+		column = column_before
 		append_text(ticks)
 		return true
 	end

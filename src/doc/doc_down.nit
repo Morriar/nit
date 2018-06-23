@@ -107,12 +107,12 @@ class MDocProcessSynopsis
 		# Check rule for README
 		if mdoc.original_mentity isa MGroup then
 			if not first isa MdHeading or first.level != 1 then
-				warn(location(mdoc.location, first.location), "mdoc",
+				warn(location(mdoc.location, first.location), "mdoc-struct",
 					"Warning: README synopsis should be a MdHeading 1")
 			end
 		else
 			if not first isa MdParagraph then
-				warn(location(mdoc.location, first.location), "mdoc",
+				warn(location(mdoc.location, first.location), "mdoc-struct",
 					"Warning: MDoc synopsis should be a MdParagraph")
 			end
 		end
@@ -172,7 +172,7 @@ class MDocProcessCodes
 						node.location.line_start + 1 + ast.location.line_end,
 						node.location.column_start + ast.location.column_start - 2,
 						node.location.column_start + ast.location.column_end - 2)
-					warn(location, "mdoc-check", ast.message)
+					warn(location, "mdoc-code", ast.message)
 				end
 			end
 			return
@@ -241,8 +241,8 @@ class MDocProcessImages
 			end
 
 			# Something went bad
-			warn(location(mdoc.location, node.location), "mdoc",
-				"Error: cannot find local image `{link}`")
+			warn(location(mdoc.location, node.location), "mdoc-resources",
+				"Warning: cannot find local image `{link}`")
 			super
 			return
 		end
@@ -299,7 +299,8 @@ class MDocProcessMEntityLinks
 	# Visit each `MdCode`
 	redef fun visit(node) do
 		if node isa MdCode then
-			var mentity = try_find_mentity(node.literal.trim)
+			var text = node.literal.trim
+			var mentity = try_find_mentity(text)
 			if mentity != null then
 				node.nit_mentity = mentity
 			end
@@ -357,16 +358,11 @@ class MDocProcessMEntityLinks
 		if mentities.length > 1 then
 			mentities = disambiguise(original_mentity, mentities)
 			if mentities.length == 1 then return mentities.first
-			# TODO tmp warning
-			if mentities.length > 1 then return null
-				# print original_mentity.full_name
-				# print text
-				# for mentity in mentities do
-					# print mentity.full_name
-				# end
-				# print ""
-			# end
-			# return null
+			# TODO Show warning?
+			if mentities.length > 1 then
+				# warn_conflicts(mdoc, node, mentities)
+				return null
+			end
 		end
 
 		var mpackage_name = null
@@ -427,30 +423,39 @@ class MDocProcessMEntityLinks
 			if mclasses.length == 1 then
 				mclass = mclasses.first
 			else
+				# TODO Show warning?
+				if mclasses.length > 1 then
+					# warn_conflicts(mdoc, node, mentities)
+				end
 				return null
 			end
-			# TODO error
-				# print original_mentity
-				# print text
-				# print mclasses
 
 			var mprops = model.mentities_by_name(mprop_name)
 			if mprops.is_empty then return null
 			if mprops.length == 1 then return mprops.first
 			mprops = disambiguise(mclass, mprops)
 			if mprops.length == 1 then return mprops.first
-			# TODO error
-			# print original_mentity
-			# print text
-			# for mprop in mprops do
-				# print mprop
-			# end
+			# TODO Show warning?
+			if mprops.length > 1 then
+				# warn_conflicts(mdoc, node, mentities)
+			end
 		end
-
-		# TODO error
-		# print original_mentity
-		# print text
 		return null
+	end
+
+	private fun warn_conflicts(mdoc: MDoc, node: MdNode, conflicts: Array[MEntity]) do
+		print node.location
+		var conflict_str = new Buffer
+		var i = 0
+		for conflict in conflicts do
+			conflict_str.append "`{conflict.full_name}`"
+			if i < conflicts.length - 2 then conflict_str.append ", "
+			if i < conflicts.length - 1 then conflict_str.append " and "
+			i += 1
+		end
+		var message = "Warning: Reference conflict between {conflict_str}"
+		print location(mdoc.location, node.location)
+		warn(location(mdoc.location, node.location), "mdoc-refs", message)
 	end
 
 	# Check if `text` matches with a `mmethoddef` parameter
@@ -461,40 +466,6 @@ class MDocProcessMEntityLinks
 			if param.name == text then return true
 		end
 		return false
-	end
-
-	private fun filter_matches(mentity: MEntity, matches: Array[MEntity]): Map[MEntity, Int] do
-		var res = new HashMap[MEntity, Int]
-		for match in matches do
-			var score = accept_match(mentity, match)
-			if score > 0 then res[match] = score
-		end
-		return res
-	end
-
-	private fun accept_match(mentity, match: MEntity): Int do
-		if mentity isa MProperty then mentity = mentity.intro
-		if mentity isa MPropDef then
-			# if match isa MPropDef then match = match.mproperty
-			if match isa MProperty then
-				var mclass = mentity.mclassdef.mclass
-				if mclass.collect_accessible_mproperties(mainmodule, filter).has(match) then
-					return 10
-				end
-				return 0
-			end
-		end
-		if mentity isa MClass then mentity = mentity.intro
-		if mentity isa MClassDef then
-			if match isa MPropDef then match = match.mproperty
-			if match isa MProperty then
-				if mentity.mclass.collect_accessible_mproperties(mainmodule, filter).has(match) then
-					return 10
-				end
-				return 0
-			end
-		end
-		return 1
 	end
 
 	private fun disambiguise(original_mentity: MEntity, mentities: Array[MEntity]): Array[MEntity] do
@@ -565,6 +536,24 @@ class MDocProcessMEntityLinks
 	end
 end
 
+class MDocProcessTextReferences
+	super MDocProcessMEntityLinks
+
+	# Visit each `MdCode`
+	redef fun visit(node) do
+		if node isa MdText then
+			var text = node.literal.trim
+			for word in text.split(" ") do
+				var mentity = try_find_mentity(word)
+				if mentity != null then
+					node.nit_mentities.add mentity
+				end
+			end
+		end
+		super
+	end
+end
+
 # Post-processing for doc commands
 #
 # This post-processor attaches the `DocCommands` linked to each `MdWikilink`.
@@ -591,11 +580,11 @@ class MDocProcessCommands
 			var error = parser.error
 
 			if error isa CmdError then
-				warn(location(mdoc.location, node.location), "mdoc", error.to_s)
+				warn(location(mdoc.location, node.location), "mdoc-cmd", error.to_s)
 				return
 			end
 			if error isa CmdWarning then
-				warn(location(mdoc.location, node.location), "mdoc", error.to_s)
+				warn(location(mdoc.location, node.location), "mdoc-cmd", error.to_s)
 			end
 			node.command = command
 		end
@@ -647,6 +636,11 @@ redef class MdCode
 
 	# Nit AST of this code span if any
 	var nit_ast: nullable ANode = null is writable
+end
+
+redef class MdText
+	# TODO
+	var nit_mentities = new Array[MEntity]
 end
 
 redef class MdWikilink

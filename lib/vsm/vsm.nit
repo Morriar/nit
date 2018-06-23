@@ -32,6 +32,8 @@ class Vector
 
 	# Cosine similarity of `self` and `other`.
 	#
+	# Used to compare two vectors.
+	#
 	# Gives the proximity in the range `[0.0 .. 1.0]` where 0.0 means that the
 	# two vectors are orthogonal and 1.0 means that they are identical.
 	#
@@ -114,6 +116,23 @@ class Vector
 
 	redef fun to_s do
 		return "[{join(", ", ":")}]"
+	end
+
+	# Sort dimensions by their weigth
+	fun sorted_dimensions: Array[nullable Object] do
+		var sorter = new TermComparator(self)
+		var res = keys.to_a
+		sorter.sort(res)
+		return res
+	end
+
+	fun tmp: ArrayMap[nullable Object, Float] do
+		var res = new ArrayMap[nullable Object, Float]
+		var keys = sorted_dimensions
+		for key in keys do
+			res[key] = self[key]
+		end
+		return res
 	end
 end
 
@@ -212,7 +231,7 @@ class VSMIndex
 	end
 end
 
-# A VSM index to store strings
+# A VSMIndex for string indexing and matching
 class StringIndex
 	super VSMIndex
 
@@ -234,6 +253,7 @@ class StringIndex
 	fun match_string(query: String): Array[IndexMatch[DOC]] do
 		var vector = parse_string(query)
 		var doc = new Document("", "", vector)
+		print doc.terms_frequency
 		return match_vector(doc.terms_frequency)
 	end
 
@@ -252,7 +272,7 @@ class StringIndex
 	end
 end
 
-# A VSMIndex to index files
+# A VSMIndex for file indexing and matching
 class FileIndex
 	super StringIndex
 
@@ -397,4 +417,13 @@ class IndexMatchSorter
 	redef fun compare(a, b) do
 		return b.similarity <=> a.similarity
 	end
+end
+
+# Compare terms by their weight
+private class TermComparator
+	super Comparator
+
+	var vector: Vector
+
+	redef fun compare(a,b) do return self.vector[b] <=> self.vector[a]
 end

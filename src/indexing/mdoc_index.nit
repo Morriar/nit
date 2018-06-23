@@ -18,6 +18,7 @@
 module mdoc_index
 
 import commands_docdown
+import vsm::bm25
 import nlp
 import md5
 
@@ -43,16 +44,25 @@ class MDocIndex
 		var mdoc = mentity.mdoc_or_fallback
 		if mdoc != null then
 			var ast = mdoc.mdoc_document
-			content = text_renderer.render(ast)
+			content = text_renderer.render(ast).to_lower
 		end
 
 		var md5 = content.md5
-		if has_cache(md5) then return load_cache(md5)
+		var vector
+		if has_cache(md5) then
+			vector = load_cache(md5)
+		else
+			vector = parse_string(content)
+			save_cache(md5, vector)
+		end
 
-		var vector = parse_string(content)
-		save_cache(md5, vector)
+		vector[mentity.name.to_lower] += 1.0
 
 		return vector
+	end
+
+	redef fun match_string(string) do
+		return super(string.to_lower)
 	end
 
 	init do cache_dir.mkdir
@@ -86,7 +96,10 @@ class MDocIndex
 	end
 
 	# By default we blacklist things like symbols and numbers
-	redef var blacklist_pos = [".", ",", "''", "``", ":", "POS", "CD", "-RRB-", "-LRB-", "SYM"]
+	redef var blacklist_pos = [
+		".", ",", "''", "``", ":", "-RRB-", "-LRB-",
+		"CC", "CD", "DT", "IN", "LS", "POS", "PRP$", "SYM", "TO", "WDT"
+	]
 
 	# Default stoplist includes most of the symbols not recognized by StanfordNLP
 	#

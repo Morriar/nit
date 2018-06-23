@@ -56,6 +56,13 @@ redef class MdNode
 	fun render_raw_text(v: RawTextVisitor) do visit_all(v)
 end
 
+redef class MdBlock
+	redef fun render_raw_text(v) do
+		visit_all(v)
+		v.add "\n"
+	end
+end
+
 redef class MdCode
 	redef fun render_raw_text(v) do v.add literal
 end

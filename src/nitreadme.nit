@@ -23,6 +23,7 @@ module nitreadme
 
 import doc::doc_tool
 import doc::templates::md_commands
+import mdoc_index
 
 redef class ToolContext
 
@@ -60,12 +61,23 @@ class NitReadme
 	end
 
 	redef var mdoc_post_processors is lazy do
-		var post_processors = super
+		var post_processors = new Array[MdPostProcessor]
+		post_processors.add new MDocProcessSynopsis(toolcontext)
+		post_processors.add new MDocProcessCodes(toolcontext)
+		# post_processors.add new MDocProcessMEntityLinks(toolcontext, model, mainmodule)
+		post_processors.add new MDocProcessTextReferences(toolcontext, model, mainmodule)
+		post_processors.add new MDocProcessCommands(toolcontext, cmd_parser)
 		post_processors.add new MDocProcessImages(toolcontext, "/dev/null", "path")
+		post_processors.add new MDocProcessSummary
 		return post_processors
 	end
 
 	redef fun execute do
+
+		var nlp_proc = new NLPClient("http://localhost:9000")
+		var mdoc_index = new CommentsIndex(nlp_proc)
+		mdoc_index.index_model(model)
+
 		# process packages
 		var mpackages = extract_mpackages(mmodules)
 		for mpackage in mpackages do
@@ -85,7 +97,7 @@ class NitReadme
 
 			# Check README.docdown
 			if toolcontext.opt_check_docdown.value then
-				mpackage.check_docdown(toolcontext)
+				mpackage.check_docdown(toolcontext, mdoc_index)
 				continue
 			end
 
@@ -123,6 +135,27 @@ class NitReadme
 	end
 end
 
+class CommentsIndex
+	super MDocIndex
+
+	fun index_model(model: Model) do
+
+		var filter = new ModelFilter(
+			min_visibility = protected_visibility,
+			accept_attribute = false,
+			accept_fictive = false,
+			accept_broken = false
+		)
+
+		for mentity in model.collect_mentities(filter) do
+			if mentity isa MClassDef then continue
+			if mentity isa MPropDef then continue
+			index_mentity(mentity)
+		end
+		update_index
+	end
+end
+
 redef class MPackage
 
 	# README
@@ -135,17 +168,31 @@ redef class MPackage
 		# TODO check synchro from docdown
 	end
 
-	private fun check_docdown(toolcontext: ToolContext) do
-		if not has_docdown then
-			toolcontext.error(location, "No `README.docdown` file for `{name}`")
-			return
-		end
+	private fun check_docdown(toolcontext: ToolContext, index: CommentsIndex) do
+		# if not has_docdown then
+			# toolcontext.error(location, "No `README.docdown` file for `{name}`")
+			# return
+		# end
 		var mdoc = mdoc_or_fallback
 		if mdoc == null then
 			toolcontext.error(location, "No `mdoc` for `{name}`")
 			return
 		end
-		mdoc.mdoc_document
+		# mdoc.mdoc_document
+		# var aligner = new MDocAligner(toolcontext.modelbuilder.model)
+		# aligner.align(mdoc)
+
+		# for doc in index.documents do
+			# if doc.mentity.full_name.has_prefix("vsm") then
+				# print doc.mentity.full_name
+				# print doc.tfidf.tmp.join(", ", ": ")
+				# print ""
+			# end
+		# end
+
+		var test = new SuggestVisitor(index, self)
+		test.enter_visit(mdoc.mdoc_document)
+
 		# for mentity in model.collect_mentities do
 			# var smdoc = mentity.mdoc_or_fallback
 			# if smdoc != null then smdoc.mdoc_document
@@ -188,85 +235,136 @@ redef class MPackage
 	end
 end
 
-class MDocChecker
+class SuggestVisitor
 	super MdVisitor
 
-	var toolcontext: ToolContext
+	var mdoc_index: CommentsIndex
 
-	private var current_mentity: MEntity is noinit
+	var mpackage: MPackage
 
-	private var current_mdoc: MDoc is noinit
+	redef fun visit(node) do
+		if node isa MdHeading or node isa MdParagraph then
+			var v = new RawTextVisitor
+			var text = v.render(node)
+			print text
+			print ""
+			var matches = mdoc_index.match_string(text)
+			var i = 0
 
-	fun check_mdoc(mentity: MEntity) do
-		var mdoc = mentity.mdoc_or_fallback
-		if mdoc == null then
-			toolcontext.error(mentity.location, "No `mdoc` for `{mentity.name}`")
+			var res = new Array[vsm::IndexMatch[MDocDocument]]
+			var avg = 0.0
+			var std = 0.0
+			for match in matches do
+				if not match.document.mentity.full_name.has_prefix("{mpackage.full_name}::") then continue
+				if match.document.mentity.full_name.has_suffix("=") then continue
+				res.add match
+				avg += match.similarity
+			end
+			avg = avg / matches.length.to_f
+			for r in res do
+				std += (r.similarity - avg).pow(2.0)
+			end
+			std = (std / matches.length.to_f).sqrt
+			print avg
+			print std
+
+			var th = avg + std
+			print th
+
+			for match in res do
+				if match.similarity < th then continue
+				# if i >= 3 then break
+				print "> {match}"
+				print "  {match.document.tfidf}"
+				i += 1
+			end
+			print ""
 			return
 		end
+		node.visit_all(self)
+	end
+end
 
-		self.current_mdoc = mdoc
-		self.current_mentity = mentity
+class MDocAligner
+	super MdVisitor
 
-		var document = mdoc.mdoc_document
-		check_synopsis(document)
-		enter_visit(document)
+	var model: Model is writable
+
+	var filter: nullable ModelFilter = null is optional, writable
+
+	private var references_visitor = new MDocReferencesVisitor is lazy
+
+	fun align(mdoc: MDoc) do
+		enter_visit mdoc.mdoc_document
+		print "Block: {total_block}, Spans: {total_spans}, Texts: {total_texts}, MEntities: {total_matches}"
 	end
 
-	fun check_synopsis(document: MdDocument) do
-		if not current_mentity isa MPackage then return
+	var total_block = 0
+	var total_spans = 0
+	var total_texts = 0
+	var total_matches = 0
 
-		var first = document.first_child
-		if not first isa MdHeading then
-			print "no heading"
-			return
+	redef fun visit(node) do
+		if node isa MdHeading or node isa MdParagraph then
+			total_block += 1
+			var mentities = references_visitor.collect_mentities(node)
+			total_spans += references_visitor.spans
+			total_texts += references_visitor.texts
+			total_matches += mentities.length
+
+			if references_visitor.texts > 0 then
+				var renderer = new MarkdownRenderer
+				var md = renderer.render(node)
+				print md
+				print ""
+				print "{references_visitor.spans} spans"
+				for mentity in mentities do
+					print "> {mentity.full_name}"
+				end
+				print ""
+				print ""
+			end
 		end
-		if first.level != 1 then
-			print "no level 1"
-			return
-		end
+		node.visit_all(self)
+	end
+end
+
+class MDocReferencesVisitor
+	super MdVisitor
+
+	var spans = 0
+	var texts = 0
+
+	private var mentities: Array[MEntity] is noinit
+
+	fun collect_mentities(node: MdNode): Array[MEntity] do
+		spans = 0
+		texts = 0
+		mentities = new Array[MEntity]
+		enter_visit(node)
+		return mentities
 	end
 
-	redef fun visit(node) do node.check_mdoc(self)
+	redef fun visit(node) do node.extract_references(self)
 end
 
 redef class MdNode
-	fun check_mdoc(v: MDocChecker) do visit_all(v)
+	private fun extract_references(v: MDocReferencesVisitor) do visit_all(v)
 end
 
 redef class MdCode
-	redef fun check_mdoc(v) do
-		# print literal
-		super
+	redef fun extract_references(v) do
+		v.spans += 1
+		var mentity = self.nit_mentity
+		if mentity == null then return
+		v.mentities.add mentity
 	end
 end
 
-redef class MdCodeBlock
-	redef fun check_mdoc(v) do
-		if info != null and info != "nit" then return
-
-		var ast = nit_ast
-		if ast == null then return
-
-		if ast isa AError then
-			var offset = 0
-			var mdoc_location = v.current_mdoc.location
-			var location = new Location(
-				mdoc_location.file,
-				self.location.line_start + offset + 1 + ast.location.line_start,
-				self.location.line_start + offset + 1 + ast.location.line_end,
-				self.location.column_start + ast.location.column_start - 2,
-				self.location.column_start + ast.location.column_end - 2)
-			v.toolcontext.warning(location, "mdoc-check", ast.message)
-			v.toolcontext.check_errors
-		end
-		super
-	end
-end
-
-redef class MdWikilink
-	redef fun check_mdoc(v) do
-		print "wik"
-		super
+redef class MdText
+	redef fun extract_references(v) do
+		v.texts += 1
+		v.mentities.add_all nit_mentities
 	end
 end
 

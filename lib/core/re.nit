@@ -126,7 +126,7 @@ end
 
 # A regular expression pattern
 #
-# Used as a `Pattern` on intances of `Text` to call `has`, `search_all`, `replace`, etc.
+# Used as a `Pattern` on intances of `Text` to call `Text::has`, `search_all`, `replace`, etc.
 #
 # Example:
 #

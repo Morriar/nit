@@ -24,8 +24,8 @@
 # the `pop_tests` module.
 #
 # You then need to build the app that will be tested by nitunit as shown in the
-# `test_example_hello` method.
-# Calling `run_test` will automatically set the `host` and `port` used for testing.
+# `TestExampleHello::test_example_hello` method.
+# Calling `run_test` will automatically set the `TestPopcorn::host` and `TestPopcorn::port` used for testing.
 #
 # Redefine the `client_test` method to write your scenario.
 # Here we use `curl` to access some URI on the app.
@@ -40,7 +40,7 @@
 #	super TestPopcorn
 #	test
 #
-#	fun example_hello is test do
+#	fun test_example_hello is test do
 #		var app = new App
 #		app.use("/", new HelloHandler)
 #		run_test(app)
