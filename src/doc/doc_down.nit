@@ -544,6 +544,7 @@ class MDocProcessTextReferences
 		if node isa MdText then
 			var text = node.literal.trim
 			for word in text.split(" ") do
+				if word.length < 3 or not word.chars.first.is_upper then continue
 				var mentity = try_find_mentity(word)
 				if mentity != null then
 					node.nit_mentities.add mentity

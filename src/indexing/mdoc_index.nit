@@ -18,7 +18,7 @@
 module mdoc_index
 
 import commands_docdown
-import vsm::bm25
+# import vsm::bm25
 import nlp
 import md5
 
