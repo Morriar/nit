@@ -44,7 +44,8 @@ class MDocIndex
 		var mdoc = mentity.mdoc_or_fallback
 		if mdoc != null then
 			var ast = mdoc.mdoc_document
-			content = text_renderer.render(ast).to_lower
+			var text = text_renderer.render(ast)
+			content = "{text}\n{text.to_lower}"
 		end
 
 		var md5 = content.md5
@@ -56,13 +57,14 @@ class MDocIndex
 			save_cache(md5, vector)
 		end
 
+		vector[mentity.name] += 1.0
 		vector[mentity.name.to_lower] += 1.0
 
 		return vector
 	end
 
 	redef fun match_string(string) do
-		return super(string.to_lower)
+		return super("{string}\n{string.to_lower}")
 	end
 
 	init do cache_dir.mkdir

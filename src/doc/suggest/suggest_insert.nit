@@ -66,55 +66,55 @@ class Test
 			print md
 			print ""
 
-			var main_refs = node.main_targets
-			if main_refs.length > 0 then
-				print "> Main Targets:"
-				for mentity in main_refs.sort.reversed do
-					print "> * {mentity.full_name} ({main_refs[mentity]})"
+			# var main_refs = node.main_targets
+			# if main_refs.length > 0 then
+				# print "> Main Targets:"
+				# for mentity in main_refs.sort.reversed do
+					# print "> * {mentity.full_name} ({main_refs[mentity]})"
+				# end
+				# print ""
+			# end
+
+			# var target_refs = node.target_mentities
+			# if target_refs.length > 0 then
+				# print "> Targets:"
+				# for mentity in target_refs.sort.reversed do
+					# print "> * {mentity.full_name} ({target_refs[mentity]})"
+				# end
+				# print ""
+			# end
+
+			var span_refs = node.span_references
+			if span_refs.length > 0 then
+				print "> Span references:"
+				for mentity in span_refs do
+					print "> * {mentity.full_name}"
 				end
-				print ""
 			end
 
-			var target_refs = node.target_mentities
-			if target_refs.length > 0 then
-				print "> Targets:"
-				for mentity in target_refs.sort.reversed do
-					print "> * {mentity.full_name} ({target_refs[mentity]})"
+			var text_refs = node.text_references
+			if text_refs.length > 0 then
+				print "> Text references:"
+				for mentity in text_refs do
+					print "> * {mentity.full_name}"
 				end
-				print ""
 			end
 
-			# var span_refs = node.span_references
-			# if span_refs.length > 0 then
-			#	print "> Span references:"
-			#	for mentity in span_refs do
-			#		print "> * {mentity.full_name}"
-			#	end
-			# end
-            #
-			# var text_refs = node.text_references
-			# if text_refs.length > 0 then
-			#	print "> Text references:"
-			#	for mentity in text_refs do
-			#		print "> * {mentity.full_name}"
-			#	end
-			# end
-            #
-			# var name_refs = node.name_references
-			# if name_refs.length > 0 then
-			#	print "> Name references:"
-			#	for mentity in name_refs do
-			#		print "> * {mentity.full_name}"
-			#	end
-			# end
-            #
-			# var nlp_refs = node.nlp_references
-			# if nlp_refs.length > 0 then
-			#	print "> NLP references:"
-			#	for mentity in nlp_refs do
-			#		print "> * {mentity.full_name}"
-			#	end
-			# end
+			var name_refs = node.name_references
+			if name_refs.length > 0 then
+				print "> Name references:"
+				for mentity in name_refs do
+					print "> * {mentity.full_name}"
+				end
+			end
+
+			var nlp_refs = node.nlp_references
+			if nlp_refs.length > 0 then
+				print "> NLP references:"
+				for match in nlp_refs do
+					print "> * {match.document.mentity.full_name} ({match.similarity})"
+				end
+			end
 			print ""
 			print ""
 		end

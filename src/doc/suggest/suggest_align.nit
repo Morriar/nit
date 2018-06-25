@@ -72,10 +72,7 @@ class MDocNLPReferencesVisitor
 		var text = v.render(node)
 
 		var matches = new MDocNLPMatches.from_matches(mdoc_index.match_string(text))
-		for match in matches.filter_namespace(context.full_name).above_threshold.limit(3) do
-			var mentity = match.document.mentity
-			node.nlp_references.add mentity
-		end
+		node.nlp_references = matches.filter_attributes.filter_namespace(context.full_name).above_threshold #.limit(3) do
 		# matches = new MDocNLPMatches.from_matches(name_index.match_string(text))
 		# for match in matches.filter_namespace(context.full_name).above_threshold.limit(1) do
 			# var mentity = match.document.mentity
@@ -84,7 +81,7 @@ class MDocNLPReferencesVisitor
 	end
 end
 
-private class MDocNLPMatches
+class MDocNLPMatches
 	super Array[vsm::IndexMatch[MDocDocument]]
 
 	init from_matches(matches: Array[vsm::IndexMatch[MDocDocument]]) do
@@ -108,6 +105,14 @@ private class MDocNLPMatches
 	end
 
 	var threshold: Float is lazy do return avg + std_dev
+
+	fun filter_attributes: MDocNLPMatches do
+		var res = new MDocNLPMatches
+		for match in self do
+			if not match.document.mentity.name.has_suffix("=") then res.add match
+		end
+		return res
+	end
 
 	fun filter_namespace(namespace: String): MDocNLPMatches do
 		var res = new MDocNLPMatches
@@ -174,7 +179,7 @@ redef class MdNode
 
 	var target_mentities = new Counter[MEntity]
 	var name_references = new Array[MEntity]
-	var nlp_references = new Array[MEntity]
+	var nlp_references = new MDocNLPMatches
 
 	private fun extract_nlp_references(v: MDocNLPReferencesVisitor) do visit_all(v)
 
@@ -224,7 +229,7 @@ redef class MdBlock
 	redef fun name_references do
 		var res = new Array[MEntity]
 		for child in children do
-			res.add_all child.nlp_references
+			for ref in child.nlp_references do res.add ref.document.mentity
 		end
 		return res
 	end
@@ -238,7 +243,7 @@ redef class MdBlock
 	end
 
 	redef fun nlp_references do
-		var res = new Array[MEntity]
+		var res = new MDocNLPMatches
 		for child in children do
 			res.add_all child.nlp_references
 		end
@@ -249,14 +254,14 @@ end
 redef class MdHeading
 	redef fun nlp_nodes do return 1
 	redef var name_references = new Array[MEntity]
-	redef var nlp_references = new Array[MEntity]
+	redef var nlp_references = new MDocNLPMatches
 	redef fun extract_nlp_references(v) do v.extract_nlp_references(self)
 
 	redef var target_mentities is lazy do
 		var res = new Counter[MEntity]
 		for ref in span_references do res[ref] += 5
 		for ref in text_references do res[ref] += 3
-		for ref in nlp_references do res[ref] += 1
+		for ref in nlp_references do res[ref.document.mentity] += 1
 		var next = self.next
 		while next != null do
 			if next isa MdHeading and next.level <= level then break
@@ -270,14 +275,14 @@ end
 redef class MdParagraph
 	redef fun nlp_nodes do return 1
 	redef var name_references = new Array[MEntity]
-	redef var nlp_references = new Array[MEntity]
+	redef var nlp_references = new MDocNLPMatches
 	redef fun extract_nlp_references(v) do v.extract_nlp_references(self)
 
 	redef var target_mentities is lazy do
 		var res = new Counter[MEntity]
 		for ref in span_references do res[ref] += 5
 		for ref in text_references do res[ref] += 3
-		for ref in nlp_references do res[ref] += 1
+		for ref in nlp_references do res[ref.document.mentity] += 1
 		return res
 	end
 end
