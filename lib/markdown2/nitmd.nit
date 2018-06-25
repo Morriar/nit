@@ -15,6 +15,7 @@
 # A Markdown parser for Nit.
 module nitmd
 
+import markdown_metrics
 import markdown_html_rendering
 import markdown_md_rendering
 import markdown_man_rendering
@@ -23,38 +24,62 @@ import markdown_latex_rendering
 import config
 
 var opt_to = new OptionString("Specify output format (html, md, man, latex)", "-t", "--to")
+var opt_metrics = new OptionBool("Collect metrics about the document", "--metrics")
+var opt_csv = new OptionString("Export metrics to CSV file", "--csv")
 
 var usage = new Buffer
-usage.append "Usage: nitmd [-t format] [file.md]\n"
+usage.append "Usage: nitmd [-t format] [file.md ...]\n"
 usage.append "Translate Markdown documents to other formats.\n\n"
 usage.append "If no argument, read the Markdown input from `stdin`."
 
 var config = new Config
-config.add_option(opt_to)
+config.add_option(opt_to, opt_metrics, opt_csv)
 config.tool_description = usage.write_to_string
-
 config.parse_options(args)
-if config.args.length > 1 then
-	config.usage
-	exit 1
-end
 
-var md
+var parser = new MdParser
+
+# Read stdin
+var md = null
 if config.args.is_empty then
 	md = sys.stdin.read_all
-else
-	var file = config.args.first
-	if not file.file_exists then
-		print "'{file}' not found"
-		exit 1
-	end
-	md = file.to_path.read_all
 end
 
-# Parse the input
-var parser = new MdParser
-var node = parser.parse(md)
+# Show metrics
+if opt_metrics.value then
+	# Only collect metrics
+	var collector = new MdMetricsCollector(parser)
+	var metrics: MdMetrics
+	if md != null then
+		metrics = collector.analyze_strings([md])
+	else
+		metrics = collector.analyze_files(config.args)
+	end
+	var csv = opt_csv.value
+	if csv == null then
+		print metrics.to_console
+	else
+		metrics.to_csv.write_to_file(csv)
+	end
+	exit 0
+end
 
+# Parse inputs
+var documents = new Array[MdDocument]
+if md != null then
+	documents.add parser.parse(md)
+else
+	for file in config.args do
+		if not file.file_exists then
+			print "Error: '{file}' not found"
+			continue
+		end
+		md = file.to_path.read_all
+		documents.add parser.parse(md)
+	end
+end
+
+# Render the output
 var renderer: MdRenderer
 var to = opt_to.value
 if to == null or to == "html" then
@@ -70,4 +95,6 @@ else
 	exit 1
 	return
 end
-printn renderer.render(node)
+for document in documents do
+	printn renderer.render(document)
+end
