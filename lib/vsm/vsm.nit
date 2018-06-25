@@ -24,37 +24,6 @@ module vsm
 
 import counter
 
-# TODO
-abstract class Index
-
-	# Kind of documents stored in this index
-	#
-	# Clients can redefine this type to specialize the index.
-	type DOC: nullable Object
-
-	# Documents index
-	var documents = new HashSet[DOC]
-
-	# Index a document
-	#
-	# With each new document, the index must be updated.
-	# By default, the method `update_index` is called after each call to
-	# `index_document`.
-	#
-	# When processing batch documents, use `auto_update = false` to disable
-	# the auto update of the index.
-	fun index_document(doc: DOC, auto_update: nullable Bool) do
-		documents.add doc
-		if auto_update == null or auto_update then update_index
-	end
-
-	# Update the index
-	#
-	# Must be called manually after indexing new document with the option
-	# `auto_update = false`.
-	fun update_index do end
-end
-
 # A n-dimensions vector
 #
 # *n-dimensions* vectors are used to represent a text document or an object.
@@ -157,7 +126,6 @@ class Vector
 		return res
 	end
 
-	# TODO
 	fun tmp: ArrayMap[nullable Object, Float] do
 		var res = new ArrayMap[nullable Object, Float]
 		var keys = sorted_dimensions
@@ -173,9 +141,14 @@ end
 # Using VSMIndex you can index documents associated with their vector.
 # Documents can then be matched to query vectors.
 class VSMIndex
-	super Index
 
-	redef type DOC: VSMDocument
+	# Kind of documents stored in this index
+	#
+	# Clients can redefine this type to specialize the index.
+	type DOC: Document
+
+	# Documents index
+	var documents = new HashSet[DOC]
 
 	# Inversed index
 	#
@@ -219,7 +192,7 @@ class VSMIndex
 		return matches
 	end
 
-	# Index a VSMDocument
+	# Index a document
 	#
 	# With each new document, the `inverse_doc_frequency` must be updated.
 	# By default, the method `update_index` is called after each call to
@@ -227,7 +200,7 @@ class VSMIndex
 	#
 	# When processing batch documents, use `auto_update = false` to disable
 	# the auto update of the index.
-	redef fun index_document(doc, auto_update) do
+	fun index_document(doc: DOC, auto_update: nullable Bool) do
 		for term, count in doc.terms_count do
 			terms_doc_count.inc(term)
 			if not inversed_index.has_key(term) then
@@ -235,7 +208,8 @@ class VSMIndex
 			end
 			inversed_index[term].add doc
 		end
-		super
+		documents.add doc
+		if auto_update == null or auto_update then update_index
 	end
 
 	# Update the index
@@ -243,7 +217,7 @@ class VSMIndex
 	# Recompute the `inverse_doc_frequency` values.
 	# Must be called manually after indexing new document with the option
 	# `auto_update = false`.
-	redef fun update_index do
+	fun update_index do
 		for doc in documents do
 			for term, ccount in doc.terms_count do
 				inverse_doc_frequency[term] = (documents.length.to_f / terms_doc_count[term]).log
@@ -257,39 +231,6 @@ class VSMIndex
 	end
 end
 
-# A Document to add in a VSMIndex
-class VSMDocument
-
-	# Count of all terms found in the document
-	#
-	# Used to compute the document `terms_frequency`.
-	var terms_count: Vector
-
-	# Frequency of each term found in the document
-	#
-	# Used to match the document against the `VSMIndex::inverse_doc_frequency`.
-	var terms_frequency: Vector is lazy do
-		var all_terms = 0.0
-		for t, c in terms_count do all_terms += c
-
-		var vector = new Vector
-		for t, c in terms_count do
-			vector[t] = c / all_terms
-		end
-		return vector
-	end
-
-	# Term frequency–Inverse document frequency for each term
-	#
-	# A high weight in tf–idf is reached by a high term frequency
-	# (in the given document) and a low document frequency of the term in the
-	# whole collection of documents
-	var tfidf: Vector = terms_count is lazy
-
-	redef fun to_s do return "{terms_count}"
-end
-
-
 # A VSMIndex for string indexing and matching
 class StringIndex
 	super VSMIndex
@@ -301,7 +242,7 @@ class StringIndex
 	# See `index_document`.
 	fun index_string(title, uri, string: String, auto_update: nullable Bool): DOC do
 		var vector = parse_string(string)
-		var doc = new VSMDocument(vector)
+		var doc = new Document(title, uri, vector)
 		index_document(doc, auto_update)
 		return doc
 	end
@@ -343,7 +284,7 @@ class FileIndex
 	fun index_file(path: String, auto_update: nullable Bool): nullable DOC do
 		if not accept_file(path) then return null
 		var vector = parse_file(path)
-		var doc = new VSMDocument(vector)
+		var doc = new Document(path, path, vector)
 		index_document(doc, auto_update)
 		return doc
 	end
@@ -413,6 +354,43 @@ class FileIndex
 	var blacklist_exts = new Array[String] is writable
 end
 
+# A Document to add in a VSMIndex
+class Document
+
+	# Document title
+	var title: String
+
+	# Document URI
+	var uri: String
+
+	# Count of all terms found in the document
+	#
+	# Used to compute the document `terms_frequency`.
+	var terms_count: Vector
+
+	# Frequency of each term found in the document
+	#
+	# Used to match the document against the `VSMIndex::inverse_doc_frequency`.
+	var terms_frequency: Vector is lazy do
+		var all_terms = 0.0
+		for t, c in terms_count do all_terms += c
+
+		var vector = new Vector
+		for t, c in terms_count do
+			vector[t] = c / all_terms
+		end
+		return vector
+	end
+
+	# Term frequency–Inverse document frequency for each term
+	#
+	# A high weight in tf–idf is reached by a high term frequency
+	# (in the given document) and a low document frequency of the term in the
+	# whole collection of documents
+	var tfidf: Vector = terms_count is lazy
+
+	redef fun to_s do return "{title}"
+end
 
 # A match to a `request` in an `Index`
 class IndexMatch[DOC: Document]
