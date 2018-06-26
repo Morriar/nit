@@ -387,7 +387,7 @@ class Document
 	# A high weight in tf–idf is reached by a high term frequency
 	# (in the given document) and a low document frequency of the term in the
 	# whole collection of documents
-	var tfidf: Vector = terms_count is lazy
+	var tfidf: Vector = new Vector.from(terms_count) is lazy
 
 	redef fun to_s do return "{title}"
 end
@@ -403,7 +403,7 @@ class IndexMatch[DOC: Document]
 	#
 	# Result is in the range 0.0 .. 1.1 where 0.0 means no similarity and 1.0
 	# means perfect similarity.
-	var similarity: Float
+	var similarity: Float is writable
 
 	redef fun to_s do return "{document} ({similarity})"
 end

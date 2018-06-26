@@ -15,16 +15,14 @@
 module suggest_align
 
 import doc::templates::md_commands
-import code_index
+import mentities_index
 import mdoc_index
 import name_index
 intrude import model_index
 
 class MDocAligner
 
-	var mdoc_index: MDocIndex
-
-	var name_index: NameIndex
+	var mentity_index: MEntityIndex
 
 	var md_parser: MdParser
 
@@ -37,8 +35,17 @@ class MDocAligner
 
 	fun align_mdoc(mdoc: MDoc) do
 		var document = mdoc.mdoc_document
+		# enhance_model(document)
 		align_document(document)
 	end
+
+	# fun enhance_model(document: MdDocument) do
+		# var v: MdVisitor = new MDocStructureVisitor
+		# v.enter_visit(document)
+#
+		# v = new MDocAlignerVisitor
+		# v.enter_visit(document)
+	# end
 
 	fun align_document(document: MdDocument) do
 		# align_references(document) FIXME we expect MDocProcessMEntityLinks did it's job
@@ -46,19 +53,23 @@ class MDocAligner
 		# TODO extract code data
 	end
 
-	var nlp_visitor = new MDocNLPReferencesVisitor(mdoc_index, name_index, context) is lazy
+	var nlp_visitor = new MDocNLPReferencesVisitor(mentity_index, context) is lazy
 
 	fun align_nlp(document: MdDocument) do
 		nlp_visitor.enter_visit(document)
 	end
 end
 
+# class MDocStructureVisitor
+	# super MdVisitor
+#
+	# redef fun visit(node) do node.enhance_structure(self)
+# end
+
 class MDocNLPReferencesVisitor
 	super MdVisitor
 
-	var mdoc_index: MDocIndex
-
-	var name_index: NameIndex
+	var mentity_index: MEntityIndex
 
 	var context: MEntity
 
@@ -71,8 +82,22 @@ class MDocNLPReferencesVisitor
 		var v = new RawTextVisitor
 		var text = v.render(node)
 
-		var matches = new MDocNLPMatches.from_matches(mdoc_index.match_string(text))
-		node.nlp_references = matches.filter_attributes.filter_namespace(context.full_name).above_threshold #.limit(3) do
+		var vector = new Vector
+		vector.inc "in: {context.full_name}"
+
+		for word in text.split("[ \n]+".to_re) do
+			vector.inc "comment: {word}"
+			vector.inc "name: {word}"
+			vector.inc "sign: {word}"
+		end
+
+		# var nlp_vector = mentity_index.parse_vector(text)
+		# for lemma, freq in nlp_vector do
+			# vector["sign: {lemma or else "null"}"] += freq
+			# vector["nlp: {lemma or else "null"}"] += freq
+		# end
+		var matches = new MDocNLPMatches.from_matches(mentity_index.match_vector(vector)).limit(5)
+		node.nlp_references = matches#.filter_attributes.filter_namespace(context.full_name)#.above_threshold #.limit(3) do
 		# matches = new MDocNLPMatches.from_matches(name_index.match_string(text))
 		# for match in matches.filter_namespace(context.full_name).above_threshold.limit(1) do
 			# var mentity = match.document.mentity
@@ -81,11 +106,42 @@ class MDocNLPReferencesVisitor
 	end
 end
 
-class MDocNLPMatches
-	super Array[vsm::IndexMatch[MDocDocument]]
+class MEntityMatches
+	super HashMap[MEntity, Float]
 
-	init from_matches(matches: Array[vsm::IndexMatch[MDocDocument]]) do
+	redef fun [](mentity) do
+		if not has_key(mentity) then return 0.0
+		return super
+	end
+end
+
+class MDocNLPMatches
+	super Array[vsm::IndexMatch[MEntityDocument]]
+
+	init from_matches(matches: Array[vsm::IndexMatch[MEntityDocument]]) do
 		self.add_all matches
+	end
+
+	fun boost_mentity(mentity: MEntity, boost: Float) do
+		var matched = false
+		for match in self do
+			if match.document.mentity != mentity then continue
+			match.similarity += 1.0
+			matched = true
+		end
+		if not matched then
+			self.add new vsm::IndexMatch[MEntityDocument](new MEntityDocument(mentity), boost)
+		end
+	end
+
+	fun sort: MDocNLPMatches do
+		var sorter = new IndexMatchSorter
+		sorter.sort(self)
+		return self
+	end
+
+	fun boost_mentities(mentities: Array[MEntity], boost: Float) do
+		for mentity in mentities do boost_mentity(mentity, boost)
 	end
 
 	var avg: Float is lazy do
@@ -141,75 +197,90 @@ class MDocNLPMatches
 	end
 end
 
+# class MDocAlignerVisitor
+	# super MdVisitor
+#
+	# redef fun visit(node) do node.align(self)
+# end
+
 # MdNode redefs
 
 redef class MdNode
 
-	fun spans: Int do
-		var res = 0
-		for child in children do
-			res += child.spans
-		end
-		return res
-	end
+	# Preliminary targets
+	# var preliminary_targets: MDocNLPMatches is lazy do
+	#	var matches = new MDocNLPMatches
+	#	for ref in nlp_references do
+	#		matches.add new vsm::IndexMatch[MDocDocument](ref.document, ref.similarity)
+	#	end
+	#	matches.boost_mentities(span_references, 1.0)
+	#	return matches
+	# end
 
-	fun span_references: Array[MEntity] do
-		var res = new Array[MEntity]
-		for child in children do
-			res.add_all child.span_references
-		end
-		return res
-	end
+	# fun enhance_structure(v: MDocStructureVisitor) do visit_all(v)
 
-	fun text_references: Array[MEntity] do
-		var res = new Array[MEntity]
-		for child in children do
-			res.add_all child.text_references
-		end
-		return res
-	end
+	# fun align(v: MDocAlignerVisitor) do visit_all(v)
 
-	fun nlp_nodes: Int do
-		var res = 0
-		for child in children do
-			res += child.nlp_nodes
-		end
-		return res
-	end
+	# fun spans: Int do
+		# var res = 0
+		# for child in children do
+			# res += child.spans
+		# end
+		# return res
+	# end
 
-	var target_mentities = new Counter[MEntity]
-	var name_references = new Array[MEntity]
+	var span_references = new Array[MEntity]
+
+	# fun text_references: Array[MEntity] do
+	#	var res = new Array[MEntity]
+	#	for child in children do
+	#		res.add_all child.text_references
+	#	end
+	#	return res
+	# end
+    #
+	# fun nlp_nodes: Int do
+	#	var res = 0
+	#	for child in children do
+	#		res += child.nlp_nodes
+	#	end
+	#	return res
+	# end
+
+	# var target_mentities = new Counter[MEntity]
+	# fun target_mentities: MDocNLPMatches is abstract
+	# var name_references = new Array[MEntity]
 	var nlp_references = new MDocNLPMatches
 
 	private fun extract_nlp_references(v: MDocNLPReferencesVisitor) do visit_all(v)
 
-	fun main_targets: Counter[MEntity] do
-		var roots = new Counter[MEntity]
+	# fun main_targets: Counter[MEntity] do
+		# var roots = new Counter[MEntity]
+#
+		# var targets = target_mentities
+		# if targets.is_empty then return roots
 
-		var targets = target_mentities
-		if targets.is_empty then return roots
+		# var filters = [
+			# new MEntityKindFilter[MPackage],
+			# new MEntityKindFilter[MGroup],
+			# new MEntityKindFilter[MModule],
+			# new MEntityKindFilter[MClass],
+			# new MEntityKindFilter[MClassDef],
+			# new MEntityKindFilter[MProperty],
+			# new MEntityKindFilter[MPropDef]: MEntityKindFilter[MEntity]]
 
-		var filters = [
-			new MEntityKindFilter[MPackage],
-			new MEntityKindFilter[MGroup],
-			new MEntityKindFilter[MModule],
-			new MEntityKindFilter[MClass],
-			new MEntityKindFilter[MClassDef],
-			new MEntityKindFilter[MProperty],
-			new MEntityKindFilter[MPropDef]: MEntityKindFilter[MEntity]]
-
-		for filter in filters do
-			var mentities = filter.filter(targets.keys)
-			for mentity in mentities do
-				for root in roots.keys do
-					if root.has_mentity(mentity) then
-						roots[root] += targets[mentity]
-						continue label mentities
-					end
-				end
-				roots[mentity] += targets[mentity]
-			end label mentities
-		end
+		# for filter in filters do
+			# var mentities = filter.filter(targets.keys)
+			# for mentity in mentities do
+				# for root in roots.keys do
+					# if root.has_mentity(mentity) then
+						# roots[root] += targets[mentity]
+						# continue label mentities
+					# end
+				# end
+				# roots[mentity] += targets[mentity]
+			# end label mentities
+		# end
 
 		# var kinds_sorter = new MEntityKindComparator
 		# var mentities = targets.keys.to_a
@@ -221,74 +292,216 @@ redef class MdNode
 			# else if mentity isa MGroup then
 			# end
 		# end
-		return roots
-	end
+		# return roots
+	# end
+end
+
+redef class MdDocument
+	# redef var target_mentities is lazy do
+	#	var matches = new MDocNLPMatches
+	#	for match in preliminary_targets.sort do
+	#		if match.document.mentity isa MPackage then
+	#			matches.add new vsm::IndexMatch[MDocDocument](match.document, match.similarity)
+	#		end
+	#	end
+	#	if matches.is_empty then
+	#		for match in preliminary_targets do
+	#			if match.document.mentity isa MGroup then
+	#				matches.add new vsm::IndexMatch[MDocDocument](match.document, match.similarity)
+	#			end
+	#		end
+	#	end
+	#	if matches.is_empty then
+	#		for match in preliminary_targets do
+	#		   if match.document.mentity isa MModule then
+	#			   matches.add new vsm::IndexMatch[MDocDocument](match.document, match.similarity)
+	#			end
+	#		end
+	#	end
+	#	return matches
+	# end
 end
 
 redef class MdBlock
-	redef fun name_references do
-		var res = new Array[MEntity]
-		for child in children do
-			for ref in child.nlp_references do res.add ref.document.mentity
-		end
-		return res
-	end
+	# redef var preliminary_targets is lazy do
+		# var matches = super
+		# for child in children do
+			# for submatch in child.preliminary_targets do
+				# matches.boost_mentity(submatch.document.mentity, submatch.similarity)
+			# end
+		# end
+		# return matches
+	# end
 
-	redef var target_mentities is lazy do
-		var res = new Counter[MEntity]
-		for child in children do
-			res.add_all child.target_mentities
-		end
-		return res
-	end
+	# var parent_section: nullable MdHeading = null
+	# var prev_blocks = new Array[MdBlock]
+	# var next_block = new Array[MdBlock]
+	# var children_blocks = new Array[MdBlock]
 
-	redef fun nlp_references do
-		var res = new MDocNLPMatches
-		for child in children do
-			res.add_all child.nlp_references
-		end
-		return res
-	end
+	# redef fun enhance_structure(v) do
+		# for child in children do
+
+		# end
+	# end
+
+	# redef fun name_references do
+	#	var res = new Array[MEntity]
+	#	for child in children do
+	#		for ref in child.nlp_references do res.add ref.document.mentity
+	#	end
+	#	return res
+	# end
+
+	# redef var target_mentities is lazy do
+		# var res = new Counter[MEntity]
+		# for child in children do
+			# res.add_all child.target_mentities
+		# end
+		# return res
+	# end
+
+	# redef fun nlp_references do
+		# var res = new MDocNLPMatches
+		# for child in children do
+			# res.add_all child.nlp_references
+		# end
+		# return res
+	# end
 end
 
 redef class MdHeading
-	redef fun nlp_nodes do return 1
-	redef var name_references = new Array[MEntity]
-	redef var nlp_references = new MDocNLPMatches
+
+	# redef var target_mentities is lazy do
+	#	var parent = self.parent
+	#	if level == 1 and parent isa MdDocument then
+	#		# TODO packages with only one module
+	#		return parent.target_mentities
+	#	end
+	#	var matches = new MDocNLPMatches
+	#	for match in preliminary_targets do
+	#		matches.boost_mentity(match.document.mentity, match.similarity)
+	#	end
+	#	var next = self.next
+	#	while next != null do
+	#		if next isa MdHeading and next.level <= level then break
+	#		for submatch in next.preliminary_targets do
+	#			matches.boost_mentity(submatch.document.mentity, submatch.similarity)
+	#		end
+	#		next = next.next
+	#	end
+	#	if level == 2 then
+	#		var res = new MDocNLPMatches
+	#		# TODO select class or module
+	#		for m in matches do
+	#			if m.document.mentity isa MModule or m.document.mentity isa MClass then
+	#				res.add m
+	#			end
+	#		end
+	#		return res
+	#	end
+	#	if level == 3 then
+	#		var res = new MDocNLPMatches
+	#		# TODO select class or module
+	#		for m in matches do
+	#			if m.document.mentity isa MClass or m.document.mentity isa MProperty then
+	#				res.add m
+	#			end
+	#		end
+	#		return res
+	#	end
+	#	if level >= 4 then
+	#		var res = new MDocNLPMatches
+	#		# TODO select class or module
+	#		for m in matches do
+	#			if m.document.mentity isa MProperty then
+	#				res.add m
+	#			end
+	#		end
+	#		return res
+	#	end
+    #
+	#	return matches
+	# end
+
+	# TODO Already used
+
+	# redef var preliminary_targets is lazy do
+		# var matches = super
+		# var next = self.next
+		# while next != null do
+			# if next isa MdHeading and next.level <= level then break
+			# for submatch in next.preliminary_targets do
+				# matches.boost_mentity(submatch.document.mentity, submatch.similarity)
+			# end
+			# next = next.next
+		# end
+		# return matches
+	# end
+
+    #
+	# var prev_sections = new Array[MdBlock]
+	# var next_sections = new Array[MdBlock]
+	# var children_sections = new Array[MdBlock]
+    #
+	# redef fun nlp_nodes do return 1
+	# redef var name_references = new Array[MEntity]
+	# redef var nlp_references = new MDocNLPMatches
 	redef fun extract_nlp_references(v) do v.extract_nlp_references(self)
 
-	redef var target_mentities is lazy do
-		var res = new Counter[MEntity]
-		for ref in span_references do res[ref] += 5
-		for ref in text_references do res[ref] += 3
-		for ref in nlp_references do res[ref.document.mentity] += 1
-		var next = self.next
-		while next != null do
-			if next isa MdHeading and next.level <= level then break
-			res.add_all next.target_mentities
-			next = next.next
-		end
-		return res
-	end
+	# redef var target_mentities is lazy do
+		# var res = new Counter[MEntity]
+		# for ref in span_references do res[ref] += 5
+		# for ref in text_references do res[ref] += 3
+		# for ref in nlp_references do res[ref.document.mentity] += 1
+		# var next = self.next
+		# while next != null do
+			# if next isa MdHeading and next.level <= level then break
+			# res.add_all next.target_mentities
+			# next = next.next
+		# end
+		# return res
+	# end
 end
 
 redef class MdParagraph
-	redef fun nlp_nodes do return 1
-	redef var name_references = new Array[MEntity]
-	redef var nlp_references = new MDocNLPMatches
+	# redef fun nlp_nodes do return 1
+	# redef var name_references = new Array[MEntity]
+	# redef var nlp_references = new MDocNLPMatches
 	redef fun extract_nlp_references(v) do v.extract_nlp_references(self)
 
-	redef var target_mentities is lazy do
-		var res = new Counter[MEntity]
-		for ref in span_references do res[ref] += 5
-		for ref in text_references do res[ref] += 3
-		for ref in nlp_references do res[ref.document.mentity] += 1
-		return res
-	end
+	# redef var target_mentities is lazy do
+		# var res = new Counter[MEntity]
+		# for ref in span_references do res[ref] += 5
+		# for ref in text_references do res[ref] += 3
+		# for ref in nlp_references do res[ref.document.mentity] += 1
+		# return res
+	# end
+
+	# redef var target_mentities is lazy do
+	#	var matches = new MDocNLPMatches
+	#	for match in preliminary_targets do
+	#		matches.boost_mentity(match.document.mentity, match.similarity)
+	#	end
+	#	var prev = self.prev
+	#	while prev != null do
+	#		if prev isa MdHeading then break
+	#		for match in prev.preliminary_targets do
+	#			matches.boost_mentity(match.document.mentity, match.similarity)
+	#		end
+	#		break
+	#		# prev = prev.prev
+	#	end
+	#	return matches
+	# end
+    #
+    #
+	# redef fun align(v) do
+	#	super
+	# end
 end
 
 redef class MdCode
-	redef fun spans do return 1
+	# redef fun spans do return 1
 
 	redef fun span_references do
 		var res = new Array[MEntity]
@@ -299,7 +512,7 @@ redef class MdCode
 end
 
 redef class MdText
-	redef fun text_references do return nit_mentities
+	# redef fun text_references do return nit_mentities
 end
 
 # Compare two matches by their MEntity kind
@@ -325,3 +538,16 @@ class MEntityKindFilter[E: MEntity]
 		return res
 	end
 end
+
+# Pour un paragraphe
+	# Monter le poids via la section parente
+	# Monter le poids via les paragraphes avant / aprés
+	# Heurstique mod/class/prop
+
+# Pour un section
+	# Monter le poids via la section parentes
+	# Monter le poids via les children
+	# Heuristique mod/class/prop
+
+# Pour un document
+	# Monter les poids via les enfants

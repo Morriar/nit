@@ -24,6 +24,7 @@ module nitreadme
 import doc::doc_tool
 import suggest_insert
 import name_index
+import mentities_index
 
 redef class ToolContext
 
@@ -65,7 +66,7 @@ class NitReadme
 		post_processors.add new MDocProcessSynopsis(toolcontext)
 		post_processors.add new MDocProcessCodes(toolcontext)
 		post_processors.add new MDocProcessMEntityLinks(toolcontext, model, mainmodule)
-		post_processors.add new MDocProcessTextReferences(toolcontext, model, mainmodule)
+		# post_processors.add new MDocProcessTextReferences(toolcontext, model, mainmodule)
 		post_processors.add new MDocProcessCommands(toolcontext, cmd_parser)
 		post_processors.add new MDocProcessImages(toolcontext, "/dev/null", "path")
 		post_processors.add new MDocProcessSummary
@@ -75,16 +76,54 @@ class NitReadme
 	redef fun execute do
 
 		var nlp_proc = new NLPClient("http://localhost:9000")
-		var mdoc_index = new CommentsIndex(nlp_proc)
-		mdoc_index.index_model(model)
+		# var mdoc_index = new CommentsIndex(nlp_proc)
+		# mdoc_index.index_model(model)
 
-		var name_index = new NameIndex(nlp_proc, null, toolcontext)
+		# var name_index = new NameIndex(nlp_proc, null, toolcontext)
 		# for mentity in model.collect_mentities(filter) do
 			# if mentity isa MModule or mentity isa MClassDef then
 				# name_index.index_mentity(mentity)
 			# end
 		# end
 		# name_index.update_index
+
+		var mentity_index = new MEntityIndex(nlp_proc)
+		mentity_index.index_model(model, filter)
+
+		# var v = new Vector
+		# v.inc "name: VSMIndex"
+		# v.inc "name: vsm"
+		# v.inc "full_name: vsm::StringIndex"
+		# v.inc "sign: IndexMatch"
+		# v.inc "sign: auto"
+		# v.inc "sign: update"
+		# v.inc "sign: IndexMatch"
+		# v.inc "sign: similarity"
+		# v.inc "in: vsm"
+		# v.inc "!visibility: private"
+		# v.inc "!kind: MClassDef"
+		# v.inc "!kind: MPropDef"
+		# v.inc "kind: MProperty"
+		# v.inc "kind: MMethod"
+		# v.inc "!kind: MMethodDef"
+		# v.inc "!setter: true"
+		# v.inc "name: inversed_index"
+		# v.inc "name: inversed_index"
+		# v.inc "kind: MAttribute"
+		# v.inc "!is_intro: false"
+		# v.inc "nlp: Vector"
+		# v.inc "nlp: cosine"
+		# v.inc "nlp: similarity"
+		# v.inc ""
+		# var i = 10
+		# for match in mentity_index.match_vector(v) do
+			# i -= 1
+			# if i == 0 then break
+			# print match
+			# print match.document.terms_count
+			# print ""
+		# end
+		# print "------------------"
 
 		# process packages
 		var mpackages = extract_mpackages(mmodules)
@@ -105,7 +144,7 @@ class NitReadme
 
 			# Check README.docdown
 			if toolcontext.opt_check_docdown.value then
-				mpackage.check_docdown(toolcontext, mdoc_index, name_index)
+				mpackage.check_docdown(toolcontext, mentity_index)
 				continue
 			end
 
@@ -179,7 +218,7 @@ redef class MPackage
 		# TODO check synchro from docdown
 	end
 
-	private fun check_docdown(toolcontext: ToolContext, mdoc_index: CommentsIndex, name_index: NameIndex) do
+	private fun check_docdown(toolcontext: ToolContext, mentity_index: MEntityIndex) do
 		# if not has_docdown then
 			# toolcontext.error(location, "No `README.docdown` file for `{name}`")
 			# return
@@ -189,7 +228,7 @@ redef class MPackage
 			toolcontext.error(location, "No `mdoc` for `{name}`")
 			return
 		end
-		# mdoc.mdoc_document
+		mdoc.mdoc_document
 		# var aligner = new MDocAligner(toolcontext.modelbuilder.model)
 		# aligner.align(mdoc)
 
@@ -201,7 +240,7 @@ redef class MPackage
 			# end
 		# end
 
-		var aligner = new MDocAligner(mdoc_index, name_index, toolcontext.modelbuilder.model.mdoc_parser, self)
+		var aligner = new MDocAligner(mentity_index, toolcontext.modelbuilder.model.mdoc_parser, self)
 		aligner.align_mdoc(mdoc)
 
 		var suggest = new MDocSuggester(self)

@@ -30,10 +30,10 @@ class MDocSuggester
 
 		var v = new Test
 		v.enter_visit(document)
-		print "Total: {document.spans} spans, {document.span_references.length} span names"
-		print "Total: {document.nlp_nodes} blocks, {document.text_references.length} text matches"
-		print "Total: {document.nlp_nodes} blocks, {document.name_references.length} nlp names"
-		print "Total: {document.nlp_nodes} blocks, {document.nlp_references.length} nlp matches"
+		# print "Total: {document.spans} spans, {document.span_references.length} span names"
+		# print "Total: {document.nlp_nodes} blocks, {document.text_references.length} text matches"
+		# print "Total: {document.nlp_nodes} blocks, {document.name_references.length} nlp names"
+		# print "Total: {document.nlp_nodes} blocks, {document.nlp_references.length} nlp matches"
 	end
 
 	fun suggest_links(document: MdDocument) do
@@ -61,10 +61,26 @@ class Test
 	var renderer = new MarkdownRenderer
 
 	redef fun visit(node) do
+		# if node isa MdDocument then
+			# print "> Document soft targets:"
+			# for ref in node.target_mentities.sort do
+				# print "> * {ref.document.mentity.full_name} ({ref.similarity})"
+			# end
+			# print ""
+			# node.visit_all(self)
+			# return
+		# end
+
 		if node isa MdHeading or node isa MdParagraph then
 			var md = renderer.render(node)
 			print md
 			print ""
+
+			# print "> Heading soft targets:"
+			# for ref in node.target_mentities.sort do
+				# print "> * {ref.document.mentity.full_name} ({ref.similarity})"
+			# end
+			# print ""
 
 			# var main_refs = node.main_targets
 			# if main_refs.length > 0 then
@@ -84,38 +100,47 @@ class Test
 				# print ""
 			# end
 
-			var span_refs = node.span_references
-			if span_refs.length > 0 then
-				print "> Span references:"
-				for mentity in span_refs do
-					print "> * {mentity.full_name}"
-				end
-			end
+			# var prelim_refs = node.preliminary_targets
+			# if prelim_refs.length > 0 then
+			#	print "> Prelim references:"
+			#	for doc in prelim_refs.sort do
+			#		print "> * {doc.document.mentity.full_name} ({doc.similarity})"
+			#	end
+			# end
 
-			var text_refs = node.text_references
-			if text_refs.length > 0 then
-				print "> Text references:"
-				for mentity in text_refs do
-					print "> * {mentity.full_name}"
-				end
-			end
-
-			var name_refs = node.name_references
-			if name_refs.length > 0 then
-				print "> Name references:"
-				for mentity in name_refs do
-					print "> * {mentity.full_name}"
-				end
-			end
-
+			# var span_refs = node.span_references
+			# if span_refs.length > 0 then
+			#	print "> Span references:"
+			#	for mentity in span_refs do
+			#		print "> * {mentity.full_name}"
+			#	end
+			# end
+            #
+			# var text_refs = node.text_references
+			# if text_refs.length > 0 then
+			#	print "> Text references:"
+			#	for mentity in text_refs do
+			#		print "> * {mentity.full_name}"
+			#	end
+			# end
+            #
+			# var name_refs = node.name_references
+			# if name_refs.length > 0 then
+			#	print "> Name references:"
+			#	for mentity in name_refs do
+			#		print "> * {mentity.full_name}"
+			#	end
+			# end
+            #
 			var nlp_refs = node.nlp_references
 			if nlp_refs.length > 0 then
 				print "> NLP references:"
 				for match in nlp_refs do
 					print "> * {match.document.mentity.full_name} ({match.similarity})"
+					# print ">   {match.document.terms_count}"
 				end
+				print ""
 			end
-			print ""
 			print ""
 		end
 		node.visit_all(self)
