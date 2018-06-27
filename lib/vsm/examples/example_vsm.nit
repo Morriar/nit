@@ -16,7 +16,7 @@
 #
 # This example shows of to index files from the system and retrieve them
 # with text queries.
-module example_vsm
+module example_vsm is example
 
 import vsm
 import config

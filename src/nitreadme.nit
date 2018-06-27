@@ -87,8 +87,8 @@ class NitReadme
 		# end
 		# name_index.update_index
 
-		var mentity_index = new MEntityIndex(nlp_proc)
-		mentity_index.index_model(model, filter)
+		var mentity_index = new MEntityIndex(toolcontext, nlp_proc)
+		mentity_index.index_model(model, null)
 
 		# var v = new Vector
 		# v.inc "name: VSMIndex"

@@ -153,7 +153,7 @@ class MDocProcessCodes
 		if node isa MdCodeBlock then
 			var literal = node.literal
 			if literal != null then
-				var ast = null
+				var ast: nullable ANode = null
 				if node isa MdFencedCodeBlock then
 					var meta = node.info or else "nit"
 					if meta == "nit" or meta == "nitish" then
@@ -164,6 +164,20 @@ class MDocProcessCodes
 					ast = toolcontext.parse_something(literal)
 					return
 				end
+				# if ast != null and not ast isa AError and not ast isa AModule then
+					# if ast isa ABlockExpr then
+						# var n_propdef = new AMainMethPropdef
+						# n_propdef.n_block = ast
+#
+						# var n_classdef = new AMainClassdef
+						# n_classdef.n_propdefs.add n_propdef
+#
+						# var mod = new AModule
+						# mod.location = new Location
+						# mod.n_classdefs.add n_classdef
+						# ast = mod
+					# end
+				# end
 				node.nit_ast = ast
 				if (node.info == null or node.info == "nit") and ast isa AError then
 					var location = new Location(
@@ -204,7 +218,6 @@ class MDocProcessImages
 		if mdoc == null then return
 
 		if node isa MdImage then
-			print "a:"
 			# Keep absolute links as is
 			var link = node.destination
 			if link.has_prefix("http://") or link.has_prefix("https://") then return
@@ -288,7 +301,7 @@ class MDocProcessMEntityLinks
 	var keywords = [
 		"end", "not", "null", "var", "do", "then", "catch", "else", "loop", "is",
 		"import", "module", "package", "class", "enum", "universal", "interface", "extern",
-		"abstract", "intern", "new", "private", "public", "protected", "intrude", "readable",
+		"abstract", "intern", "fun", "new", "private", "public", "protected", "intrude", "readable",
 		"writable", "redef", "if", "while", "for", "with", "assert", "and", "or", "in", "is",
 		"isa", "once", "break", "contrinue", "return", "abort", "nullable", "special"]
 
@@ -324,7 +337,6 @@ class MDocProcessMEntityLinks
 		# if not text.has(name_re) then return null
 
 		if not text.has(reference_re) then
-			# print text
 			return null
 		end
 
@@ -444,7 +456,6 @@ class MDocProcessMEntityLinks
 	end
 
 	private fun warn_conflicts(mdoc: MDoc, node: MdNode, conflicts: Array[MEntity]) do
-		print node.location
 		var conflict_str = new Buffer
 		var i = 0
 		for conflict in conflicts do
@@ -454,7 +465,6 @@ class MDocProcessMEntityLinks
 			i += 1
 		end
 		var message = "Warning: Reference conflict between {conflict_str}"
-		print location(mdoc.location, node.location)
 		warn(location(mdoc.location, node.location), "mdoc-refs", message)
 	end
 

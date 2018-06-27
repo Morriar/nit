@@ -22,9 +22,11 @@ class MEntityIndex
 
 	redef type DOC: MEntityDocument
 
+	var toolcontext: ToolContext
+
 	var nlp_processor: NLPProcessor
 
-	fun index_model(model: Model, filter: ModelFilter) do
+	fun index_model(model: Model, filter: nullable ModelFilter) do
 		for mentity in model.collect_mentities(filter) do
 			index_mentity(mentity)
 		end
@@ -64,7 +66,7 @@ class MEntityIndex
 		return matches
 	end
 
-	fun parse_vector(string: String): Vector do
+	fun vectorize_string(string: String): Vector do
 		var md5 = string.md5
 		if has_cache(md5) then return load_cache(md5)
 		var vector = new Vector
@@ -84,6 +86,21 @@ class MEntityIndex
 		save_cache(md5, vector)
 		return vector
 	end
+
+	# Transform `node` in a Vector
+	fun vectorize_node(node: ANode, load_rt: nullable Bool): Vector do
+		if load_rt != null and load_rt then
+			if node isa AModule then
+				toolcontext.modelbuilder.load_rt_module(null, node, "")
+				toolcontext.modelbuilder.run_phases
+			end
+		end
+		var visitor = new CodeIndexVisitor
+		visitor.enter_visit(node)
+		return visitor.vector
+	end
+
+	# Caching
 
 	init do cache_dir.mkdir
 
@@ -160,13 +177,23 @@ class MEntityDocument
 		mentity.build_base_vector(terms_count)
 		mentity.build_sign_vector(terms_count)
 		mentity.build_nlp_vector(terms_count, index)
+		mentity.build_code_vector(terms_count, index)
 	end
-
 	# TODO supers
 	# TODO children
 	# TODO NLP
 	# TODO code
 	# TODO examples
+end
+
+redef class Vector
+	fun inc_all(values: Collection[nullable Object]) do
+		for value in values do inc value
+	end
+
+	redef fun add_all(values) do
+		for value, count in values do self[value] += count
+	end
 end
 
 redef class MEntity
@@ -197,7 +224,7 @@ redef class MEntity
 		var text_renderer = new RawTextVisitor
 		var ast = mdoc.mdoc_document
 		var text = text_renderer.render(ast).to_lower
-		var nlp_vector = index.parse_vector(text)
+		var nlp_vector = index.vectorize_string(text)
 		for k, v in nlp_vector do
 			vector["nlp: {k or else "null"}"] += v
 		end
@@ -238,6 +265,14 @@ redef class MEntity
 			vector["{prefix}: {sname}"] += 1.0
 		end
 		# TODO nlp names
+	end
+
+	fun build_code_vector(vector: Vector, index: MEntityIndex) do
+		var node = index.toolcontext.modelbuilder.mentity2node(self)
+		if node == null then return
+		for key, count in index.vectorize_node(node) do
+			vector[key] += count
+		end
 	end
 end
 
@@ -444,5 +479,113 @@ redef class MPropDef
 				parse_type(vector, "sign", mtype)
 			end
 		end
+	end
+end
+
+# Code index visitor
+#
+# Used to build a VSM Vector from a Nit ANode.
+private class CodeIndexVisitor
+	super Visitor
+
+	var vector = new Vector
+
+	redef fun visit(node) do node.accept_code_index_visitor(self)
+end
+
+redef class ANode
+	private fun accept_code_index_visitor(v: CodeIndexVisitor) do visit_all(v)
+end
+
+redef class AStdImport
+	redef fun accept_code_index_visitor(v) do
+		var mmodule = self.mmodule
+		if mmodule != null then
+			v.vector.inc "import: {mmodule.full_name}"
+		end
+		super
+	end
+end
+
+redef class AStdClassdef
+	redef fun accept_code_index_visitor(v) do
+		var mclassdef = self.mclassdef
+		if mclassdef != null then
+			if not mclassdef.is_intro then
+				v.vector.inc "redef: {mclassdef.full_name}"
+				v.vector.inc "redef: {mclassdef.mclass.full_name}"
+			end
+		end
+		super
+	end
+end
+
+redef class ASuperPropdef
+	redef fun accept_code_index_visitor(v) do
+		var mtype = self.n_type.mtype
+		if mtype isa MClassType then
+			v.vector.inc "super: {mtype.mclass.intro.full_name}"
+			v.vector.inc "super: {mtype.mclass.full_name}"
+		end
+		super
+	end
+end
+
+redef class APropdef
+	redef fun accept_code_index_visitor(v) do
+		var mpropdef = self.mpropdef
+		if mpropdef != null then
+			if mpropdef.mclassdef.name == "Sys" and mpropdef.name == "main" then
+				visit_all(v)
+				return
+			end
+			if not mpropdef.is_intro then
+				v.vector.inc "redef: {mpropdef.mproperty.intro.full_name}"
+				v.vector.inc "redef: {mpropdef.mproperty.full_name}"
+			end
+		end
+		super
+	end
+end
+
+redef class ASendExpr
+	redef fun accept_code_index_visitor(v) do
+		var callsite = self.callsite
+		if callsite != null then
+			var args = callsite.signaturemap.as(not null).map.length
+			v.vector.inc "call: {callsite.mpropdef.full_name}({args})"
+			v.vector.inc "call: {callsite.mpropdef.mproperty.full_name}({args})"
+			var recv = callsite.recv
+			if recv isa MClassType then
+				v.vector.inc "call: {recv.mclass.full_name}"
+			end
+		end
+		super
+	end
+end
+
+redef class ANewExpr
+	redef fun accept_code_index_visitor(v) do
+		var callsite = self.callsite
+		if callsite != null then
+			# TODO named consts
+			var recv = callsite.recv
+			if recv isa MClassType then
+				v.vector.inc "new: {callsite.recv.as(MClassType).mclass.full_name}"
+			end
+		end
+		visit_all(v)
+	end
+end
+
+redef class TId
+	redef fun accept_code_index_visitor(v) do
+		v.vector.inc "tid: {text}"
+	end
+end
+
+redef class TClassid
+	redef fun accept_code_index_visitor(v) do
+		v.vector.inc "tid: {text}"
 	end
 end

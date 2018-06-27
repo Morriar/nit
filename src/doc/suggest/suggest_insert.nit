@@ -75,6 +75,32 @@ class Test
 			var md = renderer.render(node)
 			print md
 			print ""
+			var nlp_refs = node.nlp_references
+			if nlp_refs.length > 0 then
+				print "> NLP references:"
+				for match in nlp_refs do
+					print "> * {match.document.mentity.full_name} ({match.similarity})"
+					# print ">   {match.document.terms_count}"
+				end
+				print ""
+			end
+			print ""
+		else if node isa MdCodeBlock then
+			print "~~~"
+			print node.literal or else ""
+			print "~~~"
+			print ""
+			var refs = node.code_references
+			if refs.length > 0 then
+				print "> Code references:"
+				for match in refs do
+					print "> * {match.document.mentity.full_name} ({match.similarity})"
+					# print ">   {match.document.terms_count}"
+				end
+				print ""
+			end
+			print ""
+		end
 
 			# print "> Heading soft targets:"
 			# for ref in node.target_mentities.sort do
@@ -132,17 +158,17 @@ class Test
 			#	end
 			# end
             #
-			var nlp_refs = node.nlp_references
-			if nlp_refs.length > 0 then
-				print "> NLP references:"
-				for match in nlp_refs do
-					print "> * {match.document.mentity.full_name} ({match.similarity})"
-					# print ">   {match.document.terms_count}"
-				end
-				print ""
-			end
-			print ""
-		end
+			# var nlp_refs = node.nlp_references
+			# if nlp_refs.length > 0 then
+			#	print "> NLP references:"
+			#	for match in nlp_refs do
+			#		print "> * {match.document.mentity.full_name} ({match.similarity})"
+			#		# print ">   {match.document.terms_count}"
+			#	end
+			#	print ""
+			# end
+			# print ""
+		# end
 		node.visit_all(self)
 	end
 end

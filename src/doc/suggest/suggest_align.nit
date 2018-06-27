@@ -28,36 +28,19 @@ class MDocAligner
 
 	var context: MEntity
 
-	fun align_markdown(markdown: String) do
-		var document = md_parser.parse(markdown)
-		align_document(document)
-	end
-
 	fun align_mdoc(mdoc: MDoc) do
 		var document = mdoc.mdoc_document
-		# enhance_model(document)
-		align_document(document)
-	end
 
-	# fun enhance_model(document: MdDocument) do
-		# var v: MdVisitor = new MDocStructureVisitor
-		# v.enter_visit(document)
-#
-		# v = new MDocAlignerVisitor
-		# v.enter_visit(document)
-	# end
+		# Align pieces of code
+		code_visitor.enter_visit(document)
 
-	fun align_document(document: MdDocument) do
-		# align_references(document) FIXME we expect MDocProcessMEntityLinks did it's job
-		align_nlp(document)
-		# TODO extract code data
-	end
-
-	var nlp_visitor = new MDocNLPReferencesVisitor(mentity_index, context) is lazy
-
-	fun align_nlp(document: MdDocument) do
+		# Align NLP
 		nlp_visitor.enter_visit(document)
+
 	end
+
+	var code_visitor = new MDocCodeReferencesVisitor(mentity_index, context) is lazy
+	var nlp_visitor = new MDocNLPReferencesVisitor(mentity_index, context) is lazy
 end
 
 # class MDocStructureVisitor
@@ -65,6 +48,61 @@ end
 #
 	# redef fun visit(node) do node.enhance_structure(self)
 # end
+
+class MDocCodeReferencesVisitor
+	super MdVisitor
+
+	var mentity_index: MEntityIndex
+
+	var context: MEntity
+
+	# TODO
+	var name_pt = "[a-zA-Z_][a-zA-Z0-9_=]*"
+	# TODO
+	var name_re: Regex = name_pt.to_re
+
+	var keywords = [
+		"end", "not", "null", "var", "do", "then", "catch", "else", "loop", "is",
+		"import", "module", "package", "class", "enum", "universal", "interface", "extern",
+		"abstract", "intern", "fun", "new", "private", "public", "protected", "intrude", "readable",
+		"writable", "redef", "if", "while", "for", "with", "assert", "and", "or", "in", "is",
+		"isa", "once", "break", "contrinue", "return", "abort", "nullable", "special",
+		"self", "true", "false"]
+
+	redef fun visit(node) do
+		if node isa MdCodeBlock then
+			var vector = new Vector
+			if node.nit_ast != null then
+				var code_vector = mentity_index.vectorize_node(node.nit_ast.as(not null), true)
+				# print code_vector
+				if not code_vector.is_empty then
+					for key, count in code_vector do
+						vector[key] += count
+					end
+				end
+				print vector
+			end
+			var info = node.info
+			if vector.is_empty and (info == null or info == "nitish" or info == "nit") then
+				var literal = node.literal
+				if literal != null then
+					for name in literal.search_all(name_re) do
+						if not keywords.has(name.to_s.trim) then vector.inc "tid: {name}"
+					end
+				end
+			end
+			if vector.not_empty then
+				vector.inc "in: {context.full_name}"
+				vector.inc "!kind: MPropDef"
+				vector.inc "!kind: MClassDef"
+				var index_matches = mentity_index.match_vector(vector)
+				var matches = new MDocNLPMatches.from_matches(index_matches).limit(5)
+				node.code_references = matches
+			end
+		end
+		node.visit_all(self)
+	end
+end
 
 class MDocNLPReferencesVisitor
 	super MdVisitor
@@ -76,33 +114,56 @@ class MDocNLPReferencesVisitor
 	# Number of nodes visited
 	var nodes: Int is noinit
 
-	redef fun visit(node) do node.extract_nlp_references(self)
+	redef fun visit(node) do
+		if node isa MdHeading or node isa MdParagraph then
+			var v = new RawTextVisitor
+			var text = v.render(node)
 
-	fun extract_nlp_references(node: MdNode) do
-		var v = new RawTextVisitor
-		var text = v.render(node)
+			var vector = new Vector
+			vector.inc "in: {context.full_name}"
+			vector.inc "!kind: MPropDef"
+			vector.inc "!kind: MClassDef"
+			vector.inc "!kind: MAttribute"
+			vector.inc "!setter: true"
 
-		var vector = new Vector
-		vector.inc "in: {context.full_name}"
+			for ref in node.span_references do
+				vector.inc "full_name: {ref.full_name}"
+			end
 
-		for word in text.split("[ \n]+".to_re) do
-			vector.inc "comment: {word}"
-			vector.inc "name: {word}"
-			vector.inc "sign: {word}"
+			for word in text.split("[ \n]+".to_re) do
+				vector.inc "name: {word}"
+				vector.inc "comment: {word}"
+				vector.inc "sign: {word}"
+				vector.inc "tid: {word}"
+			end
+
+			var nlp_vector = mentity_index.vectorize_string(text)
+			for lemma, freq in nlp_vector do
+				vector["name: {lemma or else "null"}"] += freq
+				vector["name: {(lemma or else "null").as(String).capitalize}"] += freq
+				vector["comment: {lemma or else "null"}"] += freq
+				vector["comment: {(lemma or else "null").as(String).capitalize}"] += freq
+				vector["nlp: {lemma or else "null"}"] += freq
+				vector["sign: {lemma or else "null"}"] += freq
+				vector["sign: {(lemma or else "null").as(String).capitalize}"] += freq
+				vector["tid: {lemma or else "null"}"] += freq
+				vector["tid: {(lemma or else "null").as(String).capitalize}"] += freq
+			end
+			var matches = new MDocNLPMatches.from_matches(mentity_index.match_vector(vector)).limit(5)
+			node.nlp_references = matches#.filter_attributes.filter_namespace(context.full_name)#.above_threshold #.limit(3) do
+			# matches = new MDocNLPMatches.from_matches(name_index.match_string(text))
+			# for match in matches.filter_namespace(context.full_name).above_threshold.limit(1) do
+				# var mentity = match.document.mentity
+				# node.name_references.add mentity
+			# end
 		end
+		node.visit_all(self)
+	end
+end
 
-		# var nlp_vector = mentity_index.parse_vector(text)
-		# for lemma, freq in nlp_vector do
-			# vector["sign: {lemma or else "null"}"] += freq
-			# vector["nlp: {lemma or else "null"}"] += freq
-		# end
-		var matches = new MDocNLPMatches.from_matches(mentity_index.match_vector(vector)).limit(5)
-		node.nlp_references = matches#.filter_attributes.filter_namespace(context.full_name)#.above_threshold #.limit(3) do
-		# matches = new MDocNLPMatches.from_matches(name_index.match_string(text))
-		# for match in matches.filter_namespace(context.full_name).above_threshold.limit(1) do
-			# var mentity = match.document.mentity
-			# node.name_references.add mentity
-		# end
+redef class String
+	fun capitalize: String do
+		return "{chars.first.to_upper}{substring(1, length)}"
 	end
 end
 
@@ -252,8 +313,6 @@ redef class MdNode
 	# var name_references = new Array[MEntity]
 	var nlp_references = new MDocNLPMatches
 
-	private fun extract_nlp_references(v: MDocNLPReferencesVisitor) do visit_all(v)
-
 	# fun main_targets: Counter[MEntity] do
 		# var roots = new Counter[MEntity]
 #
@@ -369,6 +428,10 @@ redef class MdBlock
 	# end
 end
 
+redef class MdCodeBlock
+	var code_references = new MDocNLPMatches
+end
+
 redef class MdHeading
 
 	# redef var target_mentities is lazy do
@@ -446,7 +509,6 @@ redef class MdHeading
 	# redef fun nlp_nodes do return 1
 	# redef var name_references = new Array[MEntity]
 	# redef var nlp_references = new MDocNLPMatches
-	redef fun extract_nlp_references(v) do v.extract_nlp_references(self)
 
 	# redef var target_mentities is lazy do
 		# var res = new Counter[MEntity]
@@ -467,7 +529,6 @@ redef class MdParagraph
 	# redef fun nlp_nodes do return 1
 	# redef var name_references = new Array[MEntity]
 	# redef var nlp_references = new MDocNLPMatches
-	redef fun extract_nlp_references(v) do v.extract_nlp_references(self)
 
 	# redef var target_mentities is lazy do
 		# var res = new Counter[MEntity]
