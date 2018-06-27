@@ -12,6 +12,48 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# TODO
+# Index, common interface, better typing, better query
+# Index: parse queries
+	# ~filter: levenv
+
+# Index file, filename
+# Better code match
+# Enrich index match: matched origin
+
+# MDSectionVisitor
+# Visitor children by sections
+
+# Align MD
+# Select best children (section, par, doc, list, code)
+# Select best prev/next (par, section, code, list)
+# Select best parent (par, section, code, list)
+# Enrich queries
+
+# MDblock: concern (intro, contrib, authors, defs, features, example...)
+# MdDocStructure concerns // match module // match fca (vectors)
+
+#BM25
+# Index Comparator (validation)
+	#
+	# Sections
+	# Paragraphs
+	# metric kind (NLP, SPANS, etc)
+	# Extract md
+	# Compare md both documents
+	# Rappel / Precision
+	# Ranking
+
+# Select cards:
+# Author: names from ini, catalog
+# COntribute: contrib, license links files
+# License
+# Example: (match classes, props, "example", "code")
+# UML
+# List defs
+# List features
+# see also
+
 import vsm
 import nlp
 import model_collect
@@ -40,28 +82,71 @@ class MEntityIndex
 		return document
 	end
 
+	# var boost_re: Regex = "boost(\([1-9][0-9]*\))?".to_re
+
+	fun match_query(query: Vector): MDocMatches do
+		return new MDocMatches.from_matches(match_vector(query))
+	end
+
 	redef fun match_vector(query) do
-		var documents = new HashSet[DOC]
+		# Clean query modifiers
+		var cleaned_query = new Vector
+		var must_have_keys = new Array[String]
+		var not_have_keys = new Array[String]
 		for term, count in query do
-			if inversed_index.has_key(term) then
-				documents.add_all inversed_index[term]
+			var boost = 0.0
+			if term isa String then
+				if term.has_prefix("+") then
+					term = term.substring(1, term.length)
+					must_have_keys.add term
+				else if term.has_prefix("-") then
+					term = term.substring(1, term.length)
+					not_have_keys.add term
+					continue
+				else if term.has_prefix("!") then
+					term = term.substring(1, term.length)
+					boost = 10.0
+				end
 			end
+			cleaned_query[term] += count + boost
 		end
+
+		# Locate documents
+		var documents = new HashSet[DOC]
+		for key in cleaned_query.keys do
+			if inversed_index.has_key(key) then documents.add_all inversed_index[key]
+		end
+
+		# Filter must have keys
 		var documents2 = new HashSet[DOC]
 		for doc in documents do
-			for term, count in query do
-				if not term isa String then continue
-				if not term.chars.first == '!' then continue
-				if doc.terms_frequency.has_key(term.substring(1, term.length)) then continue label docs
+			for key in must_have_keys do
+				if not doc.terms_count.has_key(key) then continue label docs
 			end
 			documents2.add doc
 		end label docs
-		var matches = new Array[vsm::IndexMatch[DOC]]
+
+		# Filter must not have keys
+		var documents3 = new HashSet[DOC]
 		for doc in documents2 do
-			var sim = query.cosine_similarity(doc.tfidf)
+			for key in not_have_keys do
+				if doc.terms_count.has_key(key) then continue label docs
+			end
+			documents3.add doc
+		end label docs
+
+		# Cosine similarity
+		var matches = new Array[vsm::IndexMatch[DOC]]
+		for doc in documents3 do
+			var sim = cleaned_query.cosine_similarity(doc.tfidf)
 			if sim == 0.0 then continue
-			matches.add new vsm::IndexMatch[DOC](doc, sim)
+			var match = new vsm::IndexMatch[DOC](doc, sim)
+			for term in cleaned_query.keys do
+				if doc.terms_count.has_key(term) then match.matched_terms.add term
+			end
+			matches.add match
 		end
+
 		sorter.sort(matches)
 		return matches
 	end
@@ -181,9 +266,60 @@ class MEntityDocument
 	end
 	# TODO supers
 	# TODO children
-	# TODO NLP
-	# TODO code
-	# TODO examples
+end
+
+class MDocMatches
+	super Array[vsm::IndexMatch[MEntityDocument]]
+
+	init from_matches(matches: Array[vsm::IndexMatch[MEntityDocument]]) do
+		self.add_all matches
+	end
+
+	fun sort: MDocMatches do
+		var sorter = new IndexMatchSorter
+		sorter.sort(self)
+		return self
+	end
+
+	var avg: Float is lazy do
+		var sum = 0.0
+		for match in self do
+			sum += match.similarity
+		end
+		return sum / self.length.to_f
+	end
+
+	var std_dev: Float is lazy do
+		var sum = 0.0
+		for match in self do
+			sum += (match.similarity - avg).pow(2.0)
+		end
+		return (sum / self.length.to_f).sqrt
+	end
+
+	var threshold: Float is lazy do return avg + (std_dev * 2.0)
+
+	fun above_threshold: MDocMatches do
+		var res = new MDocMatches
+		for match in self do
+			if match.similarity > threshold then res.add match
+		end
+		return res
+	end
+
+	fun limit(count: Int): MDocMatches do
+		var res = new MDocMatches
+		for match in self do
+			if count <= 0 then break
+			res.add match
+			count -= 1
+		end
+		return res
+	end
+end
+
+redef class vsm::IndexMatch[DOC]
+	var matched_terms = new Array[nullable Object]
 end
 
 redef class Vector

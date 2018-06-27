@@ -80,6 +80,7 @@ class Test
 				print "> NLP references:"
 				for match in nlp_refs do
 					print "> * {match.document.mentity.full_name} ({match.similarity})"
+					# print ">   {match.matched_terms.join(", ")}"
 					# print ">   {match.document.terms_count}"
 				end
 				print ""
@@ -95,6 +96,7 @@ class Test
 				print "> Code references:"
 				for match in refs do
 					print "> * {match.document.mentity.full_name} ({match.similarity})"
+					# print ">   {match.matched_terms.join(", ")}"
 					# print ">   {match.document.terms_count}"
 				end
 				print ""

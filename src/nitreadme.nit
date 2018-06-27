@@ -91,6 +91,13 @@ class NitReadme
 		mentity_index.index_model(model, null)
 
 		# var v = new Vector
+		# v.inc "full_name: vsm"
+		# v.inc "name: index"
+		# v.inc "boost: full_name"
+		# v.inc "boost: full_name: vsm"
+		# v.inc "boost: full_name; 5"
+		# v.inc "boost: full_name: vsm; 10"
+		# v.inc "-in: core::flat"
 		# v.inc "name: VSMIndex"
 		# v.inc "name: vsm"
 		# v.inc "full_name: vsm::StringIndex"
@@ -115,7 +122,7 @@ class NitReadme
 		# v.inc "nlp: cosine"
 		# v.inc "nlp: similarity"
 		# v.inc ""
-		# var i = 10
+		# var i = 4
 		# for match in mentity_index.match_vector(v) do
 			# i -= 1
 			# if i == 0 then break
@@ -124,6 +131,7 @@ class NitReadme
 			# print ""
 		# end
 		# print "------------------"
+		# if true then return
 
 		# process packages
 		var mpackages = extract_mpackages(mmodules)
