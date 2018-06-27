@@ -251,7 +251,7 @@ redef class MPackage
 		var aligner = new MDocAligner(mentity_index, toolcontext.modelbuilder.model.mdoc_parser, self)
 		aligner.align_mdoc(mdoc)
 
-		var suggest = new MDocSuggester(self)
+		var suggest = new MDocSuggester(self, mentity_index)
 		suggest.suggest(mdoc.mdoc_document)
 
 		# for mentity in model.collect_mentities do

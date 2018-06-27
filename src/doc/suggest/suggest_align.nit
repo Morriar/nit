@@ -77,8 +77,31 @@ class MDocCodeReferencesVisitor
 				# print code_vector
 				if not code_vector.is_empty then
 					for key, count in code_vector do
-						vector[key] += count
+						if not key isa String then continue
+						if key.has_prefix("import: ") then
+							vector["full_name: {key.substring(8, key.length)}"] += count
+						else if key.has_prefix("call: ") then
+							vector["full_name: {key.substring(6, key.length)}"] += count
+						else if key.has_prefix("new: ") then
+							vector["full_name: {key.substring(5, key.length)}"] += count
+						end
+
+						# vector["{key or else "null"}"] += count
 					end
+
+					var example_query = new Vector
+					example_query.add_all code_vector
+					example_query.inc "+in: {context.full_name}"
+					example_query.inc "+is_example: true"
+					example_query.inc "+kind: MModule"
+					var example_all_matches = mentity_index.match_query(example_query)
+					var example_matches = new MDocMatches
+					for match in example_all_matches do
+						match.similarity = code_vector.cosine_similarity(match.document.code_vector)
+						if match.similarity > 0.0 then example_matches.add match
+					end
+					node.example_references = example_matches.sort.above_threshold
+					# .limit(3)
 				end
 				# print vector
 			end
@@ -92,10 +115,11 @@ class MDocCodeReferencesVisitor
 				end
 			end
 			if vector.not_empty then
-				vector.inc "in: {context.full_name}"
-				vector.inc "-kind: MPropDef"
-				vector.inc "-kind: MClassDef"
-				node.code_references = mentity_index.match_query(vector).limit(5)
+				# vector.inc "+in: {context.full_name}"
+				# vector.inc "-kind: MPropDef"
+				# vector.inc "-kind: MClassDef"
+				node.code_references = mentity_index.match_query(vector).filter_context(context)
+				#.limit(5)
 			end
 		end
 		node.visit_all(self)
@@ -287,6 +311,7 @@ end
 
 redef class MdCodeBlock
 	var code_references = new MDocMatches
+	var example_references = new MDocMatches
 end
 
 redef class MdCode

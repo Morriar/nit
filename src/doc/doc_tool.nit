@@ -15,6 +15,7 @@
 module doc_tool
 
 import frontend
+import frontend::parse_examples
 import doc::commands
 
 redef class ToolContext

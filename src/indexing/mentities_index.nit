@@ -258,11 +258,15 @@ class MEntityDocument
 	redef var title is lazy do return mentity.full_name
 	redef var uri is lazy do return mentity.full_name
 
+	var code_vector = new Vector
+
 	fun build_vector(index: MEntityIndex) do
 		mentity.build_base_vector(terms_count)
 		mentity.build_sign_vector(terms_count)
 		mentity.build_nlp_vector(terms_count, index)
-		mentity.build_code_vector(terms_count, index)
+		mentity.build_code_vector(code_vector, index)
+
+		terms_count.add_all code_vector
 	end
 	# TODO supers
 	# TODO children
@@ -297,12 +301,21 @@ class MDocMatches
 		return (sum / self.length.to_f).sqrt
 	end
 
-	var threshold: Float is lazy do return avg + (std_dev * 2.0)
+	var threshold: Float is lazy do return avg + std_dev
 
 	fun above_threshold: MDocMatches do
 		var res = new MDocMatches
 		for match in self do
 			if match.similarity > threshold then res.add match
+		end
+		return res
+	end
+
+	fun filter_context(context: MEntity): MDocMatches do
+		var res = new MDocMatches
+		for match in self do
+			if not match.document.mentity.full_name.has_prefix(context.full_name) then continue
+			res.add match
 		end
 		return res
 	end
@@ -338,6 +351,7 @@ redef class MEntity
 		vector.inc "name: {name}"
 		vector.inc "kind: {class_name}"
 		vector.inc "visibility: {visibility.to_s}"
+		vector.inc "is_example: {is_example}"
 
 		var mdoc = mdoc_or_fallback
 		if mdoc == null then return
@@ -716,12 +730,12 @@ end
 
 redef class TId
 	redef fun accept_code_index_visitor(v) do
-		v.vector.inc "tid: {text}"
+		# v.vector.inc "tid: {text}"
 	end
 end
 
 redef class TClassid
 	redef fun accept_code_index_visitor(v) do
-		v.vector.inc "tid: {text}"
+		# v.vector.inc "tid: {text}"
 	end
 end
