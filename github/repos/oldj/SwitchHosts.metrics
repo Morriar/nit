@@ -1,0 +1,21 @@
+{
+	"repo": "oldj/SwitchHosts",
+	"readme": "github/repos/oldj/SwitchHosts.json",
+	"lines": 114,
+	"words": 524,
+	"chars": 3517,
+	"heading 1": 1,
+	"heading 2": 6,
+	"heading 3": 5,
+	"MdDocument": 1,
+	"MdHeading": 12,
+	"MdText": 64,
+	"MdUnorderedList": 6,
+	"MdListItem": 18,
+	"MdParagraph": 25,
+	"MdFencedCodeBlock": 6,
+	"loc_sum": 30,
+	"loc_avg": 5.0,
+	"loc_min": 2,
+	"loc_max": 12
+}

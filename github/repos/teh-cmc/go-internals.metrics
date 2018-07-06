@@ -1,0 +1,20 @@
+{
+	"repo": "teh-cmc/go-internals",
+	"readme": "github/repos/teh-cmc/go-internals.json",
+	"lines": 46,
+	"words": 228,
+	"chars": 1949,
+	"heading 1": 1,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdParagraph": 19,
+	"MdText": 33,
+	"MdThematicBreak": 2,
+	"MdUnorderedList": 4,
+	"MdListItem": 13,
+	"MdEmphasis": 3,
+	"MdStrongEmphasis": 5,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

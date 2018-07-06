@@ -1,0 +1,23 @@
+{
+	"repo": "service-mocker/service-mocker",
+	"readme": "github/repos/service-mocker/service-mocker.json",
+	"lines": 119,
+	"words": 290,
+	"chars": 3829,
+	"heading 1": 1,
+	"heading 2": 7,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 44,
+	"MdParagraph": 23,
+	"MdSoftLineBreak": 6,
+	"MdStrongEmphasis": 4,
+	"MdBlockQuote": 1,
+	"MdFencedCodeBlock": 7,
+	"MdUnorderedList": 2,
+	"MdListItem": 6,
+	"loc_sum": 41,
+	"loc_avg": 5.0,
+	"loc_min": 2,
+	"loc_max": 12
+}

@@ -1,0 +1,20 @@
+{
+	"repo": "rdpeng/ProgrammingAssignment2",
+	"readme": "github/repos/rdpeng/ProgrammingAssignment2.json",
+	"lines": 106,
+	"words": 919,
+	"chars": 4213,
+	"heading 3": 4,
+	"MdDocument": 1,
+	"MdHeading": 4,
+	"MdText": 65,
+	"MdParagraph": 21,
+	"MdSoftLineBreak": 36,
+	"MdOrderedList": 3,
+	"MdListItem": 11,
+	"MdIndentedCodeBlock": 2,
+	"loc_sum": 26,
+	"loc_avg": 13.0,
+	"loc_min": 12,
+	"loc_max": 14
+}

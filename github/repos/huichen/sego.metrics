@@ -1,0 +1,18 @@
+{
+	"repo": "huichen/sego",
+	"readme": "github/repos/huichen/sego.json",
+	"lines": 44,
+	"words": 32,
+	"chars": 991,
+	"heading 1": 3,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdText": 16,
+	"MdParagraph": 4,
+	"MdSoftLineBreak": 1,
+	"MdFencedCodeBlock": 2,
+	"loc_sum": 23,
+	"loc_avg": 11.0,
+	"loc_min": 2,
+	"loc_max": 21
+}

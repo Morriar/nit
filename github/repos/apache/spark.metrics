@@ -1,0 +1,19 @@
+{
+	"repo": "apache/spark",
+	"readme": "github/repos/apache/spark.json",
+	"lines": 106,
+	"words": 472,
+	"chars": 3916,
+	"heading 1": 1,
+	"heading 2": 9,
+	"MdDocument": 1,
+	"MdHeading": 10,
+	"MdText": 62,
+	"MdParagraph": 22,
+	"MdSoftLineBreak": 25,
+	"MdIndentedCodeBlock": 8,
+	"loc_sum": 16,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

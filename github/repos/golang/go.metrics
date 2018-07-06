@@ -1,0 +1,18 @@
+{
+	"repo": "golang/go",
+	"readme": "github/repos/golang/go.json",
+	"lines": 45,
+	"words": 162,
+	"chars": 1607,
+	"heading 1": 1,
+	"heading 3": 2,
+	"heading 4": 2,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 29,
+	"MdParagraph": 10,
+	"MdSoftLineBreak": 12,
+	"MdEmphasis": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

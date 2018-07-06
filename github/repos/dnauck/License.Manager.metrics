@@ -1,0 +1,20 @@
+{
+	"repo": "dnauck/License.Manager",
+	"readme": "github/repos/dnauck/License.Manager.json",
+	"lines": 52,
+	"words": 253,
+	"chars": 2128,
+	"heading 1": 1,
+	"heading 2": 5,
+	"heading 3": 3,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 27,
+	"MdThematicBreak": 3,
+	"MdParagraph": 17,
+	"MdUnorderedList": 2,
+	"MdListItem": 10,
+	"MdEmphasis": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

@@ -1,0 +1,17 @@
+{
+	"repo": "jhaddix/tbhm",
+	"readme": "github/repos/jhaddix/tbhm.json",
+	"lines": 30,
+	"words": 136,
+	"chars": 1303,
+	"heading 1": 1,
+	"heading 2": 1,
+	"MdDocument": 1,
+	"MdHeading": 2,
+	"MdText": 9,
+	"MdParagraph": 19,
+	"MdUnorderedList": 2,
+	"MdListItem": 13,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

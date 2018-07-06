@@ -1,0 +1,21 @@
+{
+	"repo": "andrewssobral/bgslibrary",
+	"readme": "github/repos/andrewssobral/bgslibrary.json",
+	"lines": 101,
+	"words": 450,
+	"chars": 6779,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdHeading": 4,
+	"MdText": 53,
+	"MdParagraph": 34,
+	"MdStrongEmphasis": 11,
+	"MdUnorderedList": 11,
+	"MdListItem": 32,
+	"MdEmphasis": 4,
+	"MdFencedCodeBlock": 2,
+	"loc_sum": 18,
+	"loc_avg": 9.0,
+	"loc_min": 8,
+	"loc_max": 10
+}

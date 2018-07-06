@@ -1,0 +1,20 @@
+{
+	"repo": "Konloch/bytecode-viewer",
+	"readme": "github/repos/Konloch/bytecode-viewer.json",
+	"lines": 83,
+	"words": 582,
+	"chars": 3723,
+	"heading 1": 1,
+	"MdDocument": 1,
+	"MdHeading": 1,
+	"MdText": 58,
+	"MdParagraph": 55,
+	"MdSoftLineBreak": 2,
+	"MdUnorderedList": 3,
+	"MdListItem": 39,
+	"MdFencedCodeBlock": 1,
+	"loc_sum": 8,
+	"loc_avg": 8.0,
+	"loc_min": 8,
+	"loc_max": 8
+}

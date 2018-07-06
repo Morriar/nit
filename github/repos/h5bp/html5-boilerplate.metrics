@@ -1,0 +1,20 @@
+{
+	"repo": "h5bp/html5-boilerplate",
+	"readme": "github/repos/h5bp/html5-boilerplate.json",
+	"lines": 93,
+	"words": 379,
+	"chars": 3730,
+	"heading 1": 1,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdParagraph": 38,
+	"MdSoftLineBreak": 20,
+	"MdText": 72,
+	"MdUnorderedList": 5,
+	"MdListItem": 29,
+	"MdOrderedList": 1,
+	"MdEmphasis": 6,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

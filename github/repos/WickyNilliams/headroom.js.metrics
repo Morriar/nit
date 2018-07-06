@@ -1,0 +1,22 @@
+{
+	"repo": "WickyNilliams/headroom.js",
+	"readme": "github/repos/WickyNilliams/headroom.js.json",
+	"lines": 182,
+	"words": 1011,
+	"chars": 6805,
+	"heading 1": 1,
+	"heading 2": 7,
+	"heading 3": 8,
+	"MdDocument": 1,
+	"MdHeading": 16,
+	"MdParagraph": 27,
+	"MdStrongEmphasis": 2,
+	"MdText": 52,
+	"MdFencedCodeBlock": 9,
+	"MdUnorderedList": 1,
+	"MdListItem": 3,
+	"loc_sum": 81,
+	"loc_avg": 9.0,
+	"loc_min": 2,
+	"loc_max": 43
+}

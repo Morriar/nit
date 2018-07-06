@@ -1,0 +1,17 @@
+{
+	"repo": "wavesplatform/waves-documentation",
+	"readme": "github/repos/wavesplatform/waves-documentation.json",
+	"lines": 16,
+	"words": 185,
+	"chars": 1357,
+	"heading 1": 1,
+	"MdDocument": 1,
+	"MdHeading": 1,
+	"MdText": 17,
+	"MdParagraph": 10,
+	"MdStrongEmphasis": 4,
+	"MdUnorderedList": 1,
+	"MdListItem": 8,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

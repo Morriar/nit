@@ -1,0 +1,19 @@
+{
+	"repo": "atom/atom",
+	"readme": "github/repos/atom/atom.json",
+	"lines": 82,
+	"words": 405,
+	"chars": 4581,
+	"heading 2": 5,
+	"heading 3": 5,
+	"MdDocument": 1,
+	"MdParagraph": 31,
+	"MdText": 66,
+	"MdSoftLineBreak": 7,
+	"MdHeading": 10,
+	"MdUnorderedList": 3,
+	"MdListItem": 10,
+	"MdOrderedList": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

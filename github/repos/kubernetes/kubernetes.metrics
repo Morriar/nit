@@ -1,0 +1,21 @@
+{
+	"repo": "kubernetes/kubernetes",
+	"readme": "github/repos/kubernetes/kubernetes.json",
+	"lines": 87,
+	"words": 253,
+	"chars": 3329,
+	"heading 1": 1,
+	"heading 2": 3,
+	"heading 5": 2,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 43,
+	"MdParagraph": 13,
+	"MdThematicBreak": 2,
+	"MdSoftLineBreak": 13,
+	"MdFencedCodeBlock": 2,
+	"loc_sum": 8,
+	"loc_avg": 4.0,
+	"loc_min": 4,
+	"loc_max": 4
+}

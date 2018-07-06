@@ -1,0 +1,23 @@
+{
+	"repo": "chriskempson/base16-shell",
+	"readme": "github/repos/chriskempson/base16-shell.json",
+	"lines": 65,
+	"words": 338,
+	"chars": 2550,
+	"heading 1": 1,
+	"heading 2": 4,
+	"heading 3": 3,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 31,
+	"MdParagraph": 13,
+	"MdUnorderedList": 1,
+	"MdListItem": 3,
+	"MdFencedCodeBlock": 3,
+	"MdIndentedCodeBlock": 1,
+	"MdStrongEmphasis": 2,
+	"loc_sum": 19,
+	"loc_avg": 4.0,
+	"loc_min": 2,
+	"loc_max": 6
+}

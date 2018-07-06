@@ -1,0 +1,23 @@
+{
+	"repo": "Fuco1/smartparens",
+	"readme": "github/repos/Fuco1/smartparens.json",
+	"lines": 142,
+	"words": 480,
+	"chars": 5679,
+	"heading 1": 1,
+	"heading 2": 5,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 70,
+	"MdParagraph": 40,
+	"MdSoftLineBreak": 42,
+	"MdStrongEmphasis": 1,
+	"MdUnorderedList": 5,
+	"MdListItem": 15,
+	"MdFencedCodeBlock": 3,
+	"loc_sum": 7,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 3
+}

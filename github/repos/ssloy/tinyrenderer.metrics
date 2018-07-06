@@ -1,0 +1,20 @@
+{
+	"repo": "ssloy/tinyrenderer",
+	"readme": "github/repos/ssloy/tinyrenderer.json",
+	"lines": 55,
+	"words": 530,
+	"chars": 3849,
+	"heading 1": 2,
+	"MdDocument": 1,
+	"MdHeading": 2,
+	"MdText": 17,
+	"MdThematicBreak": 2,
+	"MdParagraph": 16,
+	"MdStrongEmphasis": 4,
+	"MdEmphasis": 1,
+	"MdFencedCodeBlock": 1,
+	"loc_sum": 11,
+	"loc_avg": 11.0,
+	"loc_min": 11,
+	"loc_max": 11
+}

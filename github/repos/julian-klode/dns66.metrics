@@ -1,0 +1,19 @@
+{
+	"repo": "julian-klode/dns66",
+	"readme": "github/repos/julian-klode/dns66.json",
+	"lines": 112,
+	"words": 667,
+	"chars": 5123,
+	"heading 1": 1,
+	"heading 2": 8,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 74,
+	"MdParagraph": 26,
+	"MdSoftLineBreak": 40,
+	"MdUnorderedList": 1,
+	"MdListItem": 4,
+	"MdOrderedList": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

@@ -1,0 +1,16 @@
+{
+	"repo": "google/protobuf",
+	"readme": "github/repos/google/protobuf.json",
+	"lines": 86,
+	"words": 1136,
+	"chars": 10376,
+	"heading 1": 1,
+	"heading 2": 5,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 80,
+	"MdParagraph": 19,
+	"MdSoftLineBreak": 29,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

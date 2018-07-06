@@ -1,0 +1,18 @@
+{
+	"repo": "ionic-team/ionic",
+	"readme": "github/repos/ionic-team/ionic.json",
+	"lines": 54,
+	"words": 196,
+	"chars": 2191,
+	"heading 1": 2,
+	"heading 3": 6,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 29,
+	"MdParagraph": 11,
+	"MdSoftLineBreak": 10,
+	"MdUnorderedList": 1,
+	"MdListItem": 2,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

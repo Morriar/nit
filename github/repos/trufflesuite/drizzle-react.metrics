@@ -1,0 +1,22 @@
+{
+	"repo": "trufflesuite/drizzle-react",
+	"readme": "github/repos/trufflesuite/drizzle-react.json",
+	"lines": 141,
+	"words": 850,
+	"chars": 5357,
+	"heading 1": 1,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdText": 35,
+	"MdParagraph": 16,
+	"MdSoftLineBreak": 1,
+	"MdStrongEmphasis": 2,
+	"MdOrderedList": 1,
+	"MdListItem": 5,
+	"MdFencedCodeBlock": 8,
+	"loc_sum": 93,
+	"loc_avg": 11.0,
+	"loc_min": 2,
+	"loc_max": 37
+}

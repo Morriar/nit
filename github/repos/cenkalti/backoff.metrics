@@ -1,0 +1,18 @@
+{
+	"repo": "cenkalti/backoff",
+	"readme": "github/repos/cenkalti/backoff.json",
+	"lines": 31,
+	"words": 119,
+	"chars": 1493,
+	"heading 1": 1,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdText": 14,
+	"MdParagraph": 6,
+	"MdSoftLineBreak": 3,
+	"MdUnorderedList": 1,
+	"MdListItem": 3,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

@@ -1,0 +1,21 @@
+{
+	"repo": "scottjehl/picturefill",
+	"readme": "github/repos/scottjehl/picturefill.json",
+	"lines": 54,
+	"words": 293,
+	"chars": 2976,
+	"heading 1": 1,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 46,
+	"MdParagraph": 18,
+	"MdUnorderedList": 4,
+	"MdListItem": 9,
+	"MdEmphasis": 2,
+	"MdFencedCodeBlock": 2,
+	"loc_sum": 11,
+	"loc_avg": 5.0,
+	"loc_min": 5,
+	"loc_max": 6
+}

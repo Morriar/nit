@@ -1,0 +1,20 @@
+{
+	"repo": "Dogfalo/materialize",
+	"readme": "github/repos/Dogfalo/materialize.json",
+	"lines": 92,
+	"words": 380,
+	"chars": 4298,
+	"heading 2": 8,
+	"heading 3": 2,
+	"MdDocument": 1,
+	"MdHeading": 10,
+	"MdText": 59,
+	"MdUnorderedList": 3,
+	"MdListItem": 19,
+	"MdParagraph": 29,
+	"MdFencedCodeBlock": 1,
+	"loc_sum": 4,
+	"loc_avg": 4.0,
+	"loc_min": 4,
+	"loc_max": 4
+}

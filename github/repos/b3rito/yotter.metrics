@@ -1,0 +1,19 @@
+{
+	"repo": "b3rito/yotter",
+	"readme": "github/repos/b3rito/yotter.json",
+	"lines": 44,
+	"words": 591,
+	"chars": 2027,
+	"heading 1": 5,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 15,
+	"MdParagraph": 10,
+	"MdOrderedList": 1,
+	"MdListItem": 5,
+	"MdIndentedCodeBlock": 2,
+	"loc_sum": 24,
+	"loc_avg": 12.0,
+	"loc_min": 2,
+	"loc_max": 22
+}

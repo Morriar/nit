@@ -1,0 +1,23 @@
+{
+	"repo": "NetEaseGame/ATX",
+	"readme": "github/repos/NetEaseGame/ATX.json",
+	"lines": 244,
+	"words": 309,
+	"chars": 6703,
+	"heading 1": 1,
+	"heading 2": 16,
+	"MdDocument": 1,
+	"MdHeading": 17,
+	"MdText": 117,
+	"MdParagraph": 82,
+	"MdSoftLineBreak": 10,
+	"MdFencedCodeBlock": 10,
+	"MdOrderedList": 3,
+	"MdListItem": 43,
+	"MdUnorderedList": 13,
+	"MdStrongEmphasis": 5,
+	"loc_sum": 52,
+	"loc_avg": 5.0,
+	"loc_min": 2,
+	"loc_max": 11
+}

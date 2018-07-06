@@ -1,0 +1,23 @@
+{
+	"repo": "zyedidia/micro",
+	"readme": "github/repos/zyedidia/micro.json",
+	"lines": 226,
+	"words": 1176,
+	"chars": 9818,
+	"heading 1": 7,
+	"heading 3": 8,
+	"MdDocument": 1,
+	"MdHeading": 15,
+	"MdParagraph": 91,
+	"MdSoftLineBreak": 20,
+	"MdText": 136,
+	"MdUnorderedList": 11,
+	"MdListItem": 46,
+	"MdThematicBreak": 1,
+	"MdIndentedCodeBlock": 1,
+	"MdFencedCodeBlock": 8,
+	"loc_sum": 20,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 4
+}

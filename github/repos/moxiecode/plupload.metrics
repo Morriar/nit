@@ -1,0 +1,23 @@
+{
+	"repo": "moxiecode/plupload",
+	"readme": "github/repos/moxiecode/plupload.json",
+	"lines": 141,
+	"words": 954,
+	"chars": 8683,
+	"heading 1": 1,
+	"heading 3": 7,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 104,
+	"MdParagraph": 51,
+	"MdSoftLineBreak": 43,
+	"MdUnorderedList": 6,
+	"MdListItem": 30,
+	"MdEmphasis": 3,
+	"MdFencedCodeBlock": 2,
+	"MdHardLineBreak": 1,
+	"loc_sum": 4,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

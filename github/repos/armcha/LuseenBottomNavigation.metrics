@@ -1,0 +1,23 @@
+{
+	"repo": "armcha/LuseenBottomNavigation",
+	"readme": "github/repos/armcha/LuseenBottomNavigation.json",
+	"lines": 186,
+	"words": 611,
+	"chars": 5469,
+	"heading 1": 2,
+	"heading 2": 5,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 43,
+	"MdParagraph": 29,
+	"MdSoftLineBreak": 8,
+	"MdFencedCodeBlock": 16,
+	"MdUnorderedList": 1,
+	"MdListItem": 3,
+	"MdStrongEmphasis": 3,
+	"MdIndentedCodeBlock": 1,
+	"loc_sum": 83,
+	"loc_avg": 4.0,
+	"loc_min": 2,
+	"loc_max": 14
+}

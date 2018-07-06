@@ -1,0 +1,17 @@
+{
+	"repo": "shadowsocks/shadowsocks-qt5",
+	"readme": "github/repos/shadowsocks/shadowsocks-qt5.json",
+	"lines": 30,
+	"words": 70,
+	"chars": 908,
+	"heading 1": 1,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdHeading": 4,
+	"MdText": 16,
+	"MdParagraph": 11,
+	"MdUnorderedList": 1,
+	"MdListItem": 5,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

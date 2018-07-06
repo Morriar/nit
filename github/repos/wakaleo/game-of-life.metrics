@@ -1,0 +1,16 @@
+{
+	"repo": "wakaleo/game-of-life",
+	"readme": "github/repos/wakaleo/game-of-life.json",
+	"lines": 32,
+	"words": 423,
+	"chars": 3091,
+	"heading 2": 5,
+	"MdDocument": 1,
+	"MdParagraph": 14,
+	"MdText": 29,
+	"MdHeading": 5,
+	"MdUnorderedList": 1,
+	"MdListItem": 7,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

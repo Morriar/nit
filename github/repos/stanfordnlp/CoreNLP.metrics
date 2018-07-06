@@ -1,0 +1,19 @@
+{
+	"repo": "stanfordnlp/CoreNLP",
+	"readme": "github/repos/stanfordnlp/CoreNLP.json",
+	"lines": 66,
+	"words": 736,
+	"chars": 6855,
+	"heading 1": 1,
+	"heading 3": 2,
+	"heading 4": 3,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 55,
+	"MdParagraph": 25,
+	"MdSoftLineBreak": 8,
+	"MdOrderedList": 2,
+	"MdListItem": 10,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

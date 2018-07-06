@@ -1,0 +1,16 @@
+{
+	"repo": "sindresorhus/awesome",
+	"readme": "github/repos/sindresorhus/awesome.json",
+	"lines": 587,
+	"words": 1840,
+	"chars": 39368,
+	"heading 2": 25,
+	"MdDocument": 1,
+	"MdHeading": 25,
+	"MdText": 203,
+	"MdUnorderedList": 47,
+	"MdListItem": 444,
+	"MdParagraph": 446,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

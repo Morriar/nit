@@ -1,0 +1,21 @@
+{
+	"repo": "asmuth/zdb",
+	"readme": "github/repos/asmuth/zdb.json",
+	"lines": 72,
+	"words": 471,
+	"chars": 2891,
+	"heading 1": 1,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 21,
+	"MdParagraph": 12,
+	"MdSoftLineBreak": 6,
+	"MdUnorderedList": 1,
+	"MdListItem": 6,
+	"MdIndentedCodeBlock": 3,
+	"loc_sum": 36,
+	"loc_avg": 12.0,
+	"loc_min": 2,
+	"loc_max": 30
+}

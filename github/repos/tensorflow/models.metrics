@@ -1,0 +1,15 @@
+{
+	"repo": "tensorflow/models",
+	"readme": "github/repos/tensorflow/models.json",
+	"lines": 20,
+	"words": 160,
+	"chars": 1320,
+	"heading 1": 1,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdText": 16,
+	"MdParagraph": 7,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

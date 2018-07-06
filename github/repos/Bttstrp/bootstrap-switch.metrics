@@ -1,0 +1,22 @@
+{
+	"repo": "Bttstrp/bootstrap-switch",
+	"readme": "github/repos/Bttstrp/bootstrap-switch.json",
+	"lines": 75,
+	"words": 252,
+	"chars": 3241,
+	"heading 1": 1,
+	"heading 2": 6,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 42,
+	"MdParagraph": 25,
+	"MdSoftLineBreak": 3,
+	"MdUnorderedList": 4,
+	"MdListItem": 13,
+	"MdFencedCodeBlock": 3,
+	"loc_sum": 9,
+	"loc_avg": 3.0,
+	"loc_min": 2,
+	"loc_max": 5
+}

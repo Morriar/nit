@@ -1,0 +1,22 @@
+{
+	"repo": "electron/electron",
+	"readme": "github/repos/electron/electron.json",
+	"lines": 99,
+	"words": 337,
+	"chars": 4335,
+	"heading 2": 7,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdParagraph": 22,
+	"MdSoftLineBreak": 20,
+	"MdText": 57,
+	"MdHeading": 8,
+	"MdFencedCodeBlock": 3,
+	"MdUnorderedList": 2,
+	"MdListItem": 7,
+	"MdStrongEmphasis": 1,
+	"loc_sum": 16,
+	"loc_avg": 5.0,
+	"loc_min": 2,
+	"loc_max": 9
+}

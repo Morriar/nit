@@ -1,0 +1,19 @@
+{
+	"repo": "fagongzi/gateway",
+	"readme": "github/repos/fagongzi/gateway.json",
+	"lines": 74,
+	"words": 70,
+	"chars": 1742,
+	"heading 2": 7,
+	"heading 3": 6,
+	"heading 1": 1,
+	"MdDocument": 1,
+	"MdParagraph": 36,
+	"MdSoftLineBreak": 2,
+	"MdHeading": 14,
+	"MdText": 54,
+	"MdUnorderedList": 3,
+	"MdListItem": 19,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

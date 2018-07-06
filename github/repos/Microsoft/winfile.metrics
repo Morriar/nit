@@ -1,0 +1,19 @@
+{
+	"repo": "Microsoft/winfile",
+	"readme": "github/repos/Microsoft/winfile.json",
+	"lines": 123,
+	"words": 915,
+	"chars": 6676,
+	"heading 1": 1,
+	"heading 2": 7,
+	"heading 3": 2,
+	"MdDocument": 1,
+	"MdHeading": 10,
+	"MdText": 89,
+	"MdParagraph": 50,
+	"MdSoftLineBreak": 24,
+	"MdOrderedList": 3,
+	"MdListItem": 23,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

@@ -1,0 +1,21 @@
+{
+	"repo": "anfederico/Clairvoyant",
+	"readme": "github/repos/anfederico/Clairvoyant.json",
+	"lines": 180,
+	"words": 859,
+	"chars": 6564,
+	"heading 2": 8,
+	"heading 4": 6,
+	"MdDocument": 1,
+	"MdParagraph": 12,
+	"MdText": 31,
+	"MdSoftLineBreak": 11,
+	"MdHeading": 14,
+	"MdFencedCodeBlock": 8,
+	"MdUnorderedList": 1,
+	"MdListItem": 3,
+	"loc_sum": 107,
+	"loc_avg": 13.0,
+	"loc_min": 2,
+	"loc_max": 34
+}

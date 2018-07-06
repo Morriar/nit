@@ -1,0 +1,21 @@
+{
+	"repo": "presidentbeef/brakeman",
+	"readme": "github/repos/presidentbeef/brakeman.json",
+	"lines": 172,
+	"words": 763,
+	"chars": 6094,
+	"heading 1": 14,
+	"MdDocument": 1,
+	"MdParagraph": 52,
+	"MdSoftLineBreak": 5,
+	"MdHeading": 14,
+	"MdText": 83,
+	"MdIndentedCodeBlock": 18,
+	"MdEmphasis": 1,
+	"MdUnorderedList": 2,
+	"MdListItem": 8,
+	"loc_sum": 41,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 5
+}

@@ -1,0 +1,20 @@
+{
+	"repo": "jgilfelt/SystemBarTint",
+	"readme": "github/repos/jgilfelt/SystemBarTint.json",
+	"lines": 99,
+	"words": 588,
+	"chars": 4816,
+	"heading 1": 1,
+	"heading 2": 4,
+	"heading 4": 1,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 33,
+	"MdParagraph": 14,
+	"MdFencedCodeBlock": 4,
+	"MdIndentedCodeBlock": 1,
+	"loc_sum": 40,
+	"loc_avg": 8.0,
+	"loc_min": 3,
+	"loc_max": 14
+}

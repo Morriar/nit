@@ -1,0 +1,22 @@
+{
+	"repo": "tj/co",
+	"readme": "github/repos/tj/co.json",
+	"lines": 213,
+	"words": 614,
+	"chars": 5383,
+	"heading 1": 1,
+	"heading 2": 8,
+	"heading 3": 7,
+	"MdDocument": 1,
+	"MdHeading": 16,
+	"MdText": 79,
+	"MdParagraph": 27,
+	"MdSoftLineBreak": 20,
+	"MdFencedCodeBlock": 8,
+	"MdUnorderedList": 2,
+	"MdListItem": 7,
+	"loc_sum": 85,
+	"loc_avg": 10.0,
+	"loc_min": 2,
+	"loc_max": 33
+}

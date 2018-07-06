@@ -1,0 +1,23 @@
+{
+	"repo": "BurntSushi/ripgrep",
+	"readme": "github/repos/BurntSushi/ripgrep.json",
+	"lines": 358,
+	"words": 1686,
+	"chars": 14365,
+	"heading 2": 1,
+	"heading 3": 11,
+	"MdDocument": 1,
+	"MdHeading": 12,
+	"MdText": 287,
+	"MdParagraph": 72,
+	"MdSoftLineBreak": 107,
+	"MdUnorderedList": 5,
+	"MdListItem": 22,
+	"MdStrongEmphasis": 23,
+	"MdEmphasis": 1,
+	"MdFencedCodeBlock": 20,
+	"loc_sum": 49,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 6
+}

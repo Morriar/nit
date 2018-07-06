@@ -1,0 +1,20 @@
+{
+	"repo": "justjavac/free-programming-books-zh_CN",
+	"readme": "github/repos/justjavac/free-programming-books-zh_CN.json",
+	"lines": 727,
+	"words": 1606,
+	"chars": 37801,
+	"heading 1": 1,
+	"heading 2": 7,
+	"heading 3": 48,
+	"heading 4": 1,
+	"MdDocument": 1,
+	"MdHeading": 57,
+	"MdText": 158,
+	"MdParagraph": 551,
+	"MdUnorderedList": 77,
+	"MdListItem": 545,
+	"MdSoftLineBreak": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

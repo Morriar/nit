@@ -1,0 +1,20 @@
+{
+	"repo": "vinta/awesome-python",
+	"readme": "github/repos/vinta/awesome-python.json",
+	"lines": 1346,
+	"words": 9301,
+	"chars": 92331,
+	"heading 1": 5,
+	"heading 2": 91,
+	"MdDocument": 1,
+	"MdHeading": 96,
+	"MdText": 973,
+	"MdParagraph": 964,
+	"MdUnorderedList": 152,
+	"MdListItem": 872,
+	"MdThematicBreak": 2,
+	"MdEmphasis": 84,
+	"MdStrongEmphasis": 2,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

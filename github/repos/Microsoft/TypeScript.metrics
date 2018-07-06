@@ -1,0 +1,21 @@
+{
+	"repo": "Microsoft/TypeScript",
+	"readme": "github/repos/Microsoft/TypeScript.json",
+	"lines": 100,
+	"words": 528,
+	"chars": 4931,
+	"heading 1": 1,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdParagraph": 23,
+	"MdSoftLineBreak": 6,
+	"MdText": 43,
+	"MdHeading": 7,
+	"MdFencedCodeBlock": 7,
+	"MdUnorderedList": 2,
+	"MdListItem": 10,
+	"loc_sum": 27,
+	"loc_avg": 3.0,
+	"loc_min": 2,
+	"loc_max": 14
+}

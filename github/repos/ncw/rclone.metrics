@@ -1,0 +1,17 @@
+{
+	"repo": "ncw/rclone",
+	"readme": "github/repos/ncw/rclone.json",
+	"lines": 62,
+	"words": 235,
+	"chars": 2069,
+	"heading 2": 1,
+	"MdDocument": 1,
+	"MdParagraph": 38,
+	"MdText": 43,
+	"MdSoftLineBreak": 11,
+	"MdUnorderedList": 3,
+	"MdListItem": 31,
+	"MdHeading": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

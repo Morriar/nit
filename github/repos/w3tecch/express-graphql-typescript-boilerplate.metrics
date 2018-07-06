@@ -1,0 +1,23 @@
+{
+	"repo": "w3tecch/express-graphql-typescript-boilerplate",
+	"readme": "github/repos/w3tecch/express-graphql-typescript-boilerplate.json",
+	"lines": 213,
+	"words": 3069,
+	"chars": 11039,
+	"heading 1": 1,
+	"heading 2": 7,
+	"heading 3": 12,
+	"MdDocument": 1,
+	"MdHeading": 20,
+	"MdText": 102,
+	"MdParagraph": 58,
+	"MdUnorderedList": 14,
+	"MdListItem": 51,
+	"MdSoftLineBreak": 2,
+	"MdFencedCodeBlock": 2,
+	"MdThematicBreak": 1,
+	"loc_sum": 109,
+	"loc_avg": 54.0,
+	"loc_min": 35,
+	"loc_max": 74
+}

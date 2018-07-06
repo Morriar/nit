@@ -1,0 +1,23 @@
+{
+	"repo": "gsdios/SDCycleScrollView",
+	"readme": "github/repos/gsdios/SDCycleScrollView.json",
+	"lines": 62,
+	"words": 143,
+	"chars": 2187,
+	"heading 1": 1,
+	"heading 2": 2,
+	"heading 3": 3,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 25,
+	"MdParagraph": 20,
+	"MdIndentedCodeBlock": 1,
+	"MdThematicBreak": 1,
+	"MdSoftLineBreak": 1,
+	"MdOrderedList": 1,
+	"MdListItem": 4,
+	"loc_sum": 7,
+	"loc_avg": 7.0,
+	"loc_min": 7,
+	"loc_max": 7
+}

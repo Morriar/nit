@@ -1,0 +1,22 @@
+{
+	"repo": "soffes/SAMKeychain",
+	"readme": "github/repos/soffes/SAMKeychain.json",
+	"lines": 88,
+	"words": 323,
+	"chars": 3601,
+	"heading 1": 1,
+	"heading 2": 6,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 40,
+	"MdParagraph": 18,
+	"MdSoftLineBreak": 5,
+	"MdFencedCodeBlock": 4,
+	"MdOrderedList": 1,
+	"MdListItem": 2,
+	"loc_sum": 23,
+	"loc_avg": 5.0,
+	"loc_min": 2,
+	"loc_max": 12
+}

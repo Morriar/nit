@@ -1,0 +1,16 @@
+{
+	"repo": "google/blockly",
+	"readme": "github/repos/google/blockly.json",
+	"lines": 18,
+	"words": 101,
+	"chars": 1015,
+	"heading 1": 1,
+	"MdDocument": 1,
+	"MdHeading": 1,
+	"MdText": 11,
+	"MdParagraph": 6,
+	"MdSoftLineBreak": 2,
+	"MdStrongEmphasis": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

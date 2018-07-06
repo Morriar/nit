@@ -1,0 +1,20 @@
+{
+	"repo": "firefly-iii/firefly-iii",
+	"readme": "github/repos/firefly-iii/firefly-iii.json",
+	"lines": 145,
+	"words": 1015,
+	"chars": 11556,
+	"heading 2": 6,
+	"heading 3": 9,
+	"MdDocument": 1,
+	"MdUnorderedList": 8,
+	"MdListItem": 56,
+	"MdParagraph": 83,
+	"MdHeading": 15,
+	"MdText": 135,
+	"MdEmphasis": 4,
+	"MdStrongEmphasis": 3,
+	"MdOrderedList": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

@@ -1,0 +1,23 @@
+{
+	"repo": "TypeStrong/atom-typescript",
+	"readme": "github/repos/TypeStrong/atom-typescript.json",
+	"lines": 179,
+	"words": 633,
+	"chars": 5897,
+	"heading 1": 4,
+	"heading 2": 15,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdHeading": 20,
+	"MdText": 161,
+	"MdParagraph": 55,
+	"MdSoftLineBreak": 41,
+	"MdStrongEmphasis": 9,
+	"MdOrderedList": 1,
+	"MdListItem": 26,
+	"MdUnorderedList": 4,
+	"MdEmphasis": 4,
+	"MdThematicBreak": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

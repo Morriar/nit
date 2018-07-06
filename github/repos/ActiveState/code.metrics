@@ -1,0 +1,19 @@
+{
+	"repo": "ActiveState/code",
+	"readme": "github/repos/ActiveState/code.json",
+	"lines": 44,
+	"words": 300,
+	"chars": 2023,
+	"heading 1": 1,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 30,
+	"MdParagraph": 14,
+	"MdSoftLineBreak": 5,
+	"MdEmphasis": 3,
+	"MdOrderedList": 1,
+	"MdListItem": 4,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

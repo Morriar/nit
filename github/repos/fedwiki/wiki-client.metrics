@@ -1,0 +1,15 @@
+{
+	"repo": "fedwiki/wiki-client",
+	"readme": "github/repos/fedwiki/wiki-client.json",
+	"lines": 33,
+	"words": 157,
+	"chars": 1328,
+	"heading 1": 3,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdText": 22,
+	"MdParagraph": 6,
+	"MdSoftLineBreak": 12,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

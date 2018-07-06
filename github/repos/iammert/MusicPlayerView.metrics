@@ -1,0 +1,20 @@
+{
+	"repo": "iammert/MusicPlayerView",
+	"readme": "github/repos/iammert/MusicPlayerView.json",
+	"lines": 154,
+	"words": 447,
+	"chars": 4117,
+	"heading 1": 6,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdHeading": 10,
+	"MdText": 38,
+	"MdParagraph": 21,
+	"MdSoftLineBreak": 8,
+	"MdFencedCodeBlock": 14,
+	"MdIndentedCodeBlock": 1,
+	"loc_sum": 61,
+	"loc_avg": 4.0,
+	"loc_min": 2,
+	"loc_max": 14
+}

@@ -1,0 +1,22 @@
+{
+	"repo": "master-nevi/UPnAtom",
+	"readme": "github/repos/master-nevi/UPnAtom.json",
+	"lines": 63,
+	"words": 367,
+	"chars": 3509,
+	"heading 3": 6,
+	"heading 6": 5,
+	"MdDocument": 1,
+	"MdParagraph": 26,
+	"MdSoftLineBreak": 4,
+	"MdText": 46,
+	"MdHeading": 11,
+	"MdUnorderedList": 5,
+	"MdListItem": 20,
+	"MdFencedCodeBlock": 3,
+	"MdStrongEmphasis": 3,
+	"loc_sum": 6,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

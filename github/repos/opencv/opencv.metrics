@@ -1,0 +1,18 @@
+{
+	"repo": "opencv/opencv",
+	"readme": "github/repos/opencv/opencv.json",
+	"lines": 21,
+	"words": 59,
+	"chars": 664,
+	"heading 2": 1,
+	"heading 3": 2,
+	"heading 4": 1,
+	"MdDocument": 1,
+	"MdHeading": 4,
+	"MdText": 16,
+	"MdUnorderedList": 2,
+	"MdListItem": 9,
+	"MdParagraph": 10,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

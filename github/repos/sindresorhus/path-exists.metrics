@@ -1,0 +1,22 @@
+{
+	"repo": "sindresorhus/path-exists",
+	"readme": "github/repos/sindresorhus/path-exists.json",
+	"lines": 53,
+	"words": 151,
+	"chars": 1435,
+	"heading 1": 1,
+	"heading 2": 5,
+	"heading 3": 2,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 22,
+	"MdBlockQuote": 2,
+	"MdParagraph": 9,
+	"MdFencedCodeBlock": 2,
+	"MdUnorderedList": 1,
+	"MdListItem": 1,
+	"loc_sum": 10,
+	"loc_avg": 5.0,
+	"loc_min": 2,
+	"loc_max": 8
+}

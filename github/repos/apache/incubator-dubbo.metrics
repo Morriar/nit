@@ -1,0 +1,18 @@
+{
+	"repo": "apache/incubator-dubbo",
+	"readme": "github/repos/apache/incubator-dubbo.json",
+	"lines": 29,
+	"words": 192,
+	"chars": 2681,
+	"heading 1": 1,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdText": 21,
+	"MdParagraph": 14,
+	"MdSoftLineBreak": 4,
+	"MdUnorderedList": 2,
+	"MdListItem": 11,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

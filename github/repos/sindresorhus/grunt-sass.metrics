@@ -1,0 +1,23 @@
+{
+	"repo": "sindresorhus/grunt-sass",
+	"readme": "github/repos/sindresorhus/grunt-sass.json",
+	"lines": 100,
+	"words": 249,
+	"chars": 3008,
+	"heading 1": 1,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 42,
+	"MdParagraph": 12,
+	"MdBlockQuote": 1,
+	"MdUnorderedList": 1,
+	"MdListItem": 3,
+	"MdFencedCodeBlock": 3,
+	"MdEmphasis": 1,
+	"MdStrongEmphasis": 1,
+	"loc_sum": 44,
+	"loc_avg": 14.0,
+	"loc_min": 2,
+	"loc_max": 22
+}

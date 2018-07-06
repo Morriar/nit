@@ -1,0 +1,23 @@
+{
+	"repo": "Semantic-Org/Semantic-UI",
+	"readme": "github/repos/Semantic-Org/Semantic-UI.json",
+	"lines": 115,
+	"words": 679,
+	"chars": 7384,
+	"heading 1": 1,
+	"heading 2": 4,
+	"heading 4": 10,
+	"MdDocument": 1,
+	"MdParagraph": 39,
+	"MdHeading": 15,
+	"MdText": 121,
+	"MdUnorderedList": 5,
+	"MdListItem": 17,
+	"MdStrongEmphasis": 12,
+	"MdFencedCodeBlock": 1,
+	"MdSoftLineBreak": 18,
+	"loc_sum": 2,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

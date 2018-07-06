@@ -1,0 +1,23 @@
+{
+	"repo": "antirez/redis",
+	"readme": "github/repos/antirez/redis.json",
+	"lines": 447,
+	"words": 3178,
+	"chars": 20544,
+	"heading 2": 20,
+	"heading 1": 1,
+	"MdDocument": 1,
+	"MdParagraph": 117,
+	"MdText": 339,
+	"MdEmphasis": 8,
+	"MdHeading": 21,
+	"MdUnorderedList": 12,
+	"MdListItem": 48,
+	"MdSoftLineBreak": 111,
+	"MdIndentedCodeBlock": 17,
+	"MdOrderedList": 1,
+	"loc_sum": 69,
+	"loc_avg": 4.0,
+	"loc_min": 2,
+	"loc_max": 14
+}

@@ -1,0 +1,20 @@
+{
+	"repo": "orhanobut/logger",
+	"readme": "github/repos/orhanobut/logger.json",
+	"lines": 134,
+	"words": 375,
+	"chars": 4255,
+	"heading 3": 10,
+	"MdDocument": 1,
+	"MdParagraph": 15,
+	"MdText": 31,
+	"MdSoftLineBreak": 3,
+	"MdHeading": 10,
+	"MdFencedCodeBlock": 12,
+	"MdUnorderedList": 2,
+	"MdListItem": 4,
+	"loc_sum": 54,
+	"loc_avg": 4.0,
+	"loc_min": 2,
+	"loc_max": 10
+}

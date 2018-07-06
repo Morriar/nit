@@ -1,0 +1,21 @@
+{
+	"repo": "kesenhoo/android-training-course-in-chinese",
+	"readme": "github/repos/kesenhoo/android-training-course-in-chinese.json",
+	"lines": 70,
+	"words": 143,
+	"chars": 3045,
+	"heading 1": 1,
+	"heading 2": 5,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 88,
+	"MdParagraph": 31,
+	"MdStrongEmphasis": 3,
+	"MdSoftLineBreak": 12,
+	"MdUnorderedList": 1,
+	"MdListItem": 19,
+	"MdOrderedList": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

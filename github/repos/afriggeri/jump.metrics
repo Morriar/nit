@@ -1,0 +1,16 @@
+{
+	"repo": "afriggeri/jump",
+	"readme": "github/repos/afriggeri/jump.json",
+	"lines": 56,
+	"words": 326,
+	"chars": 1877,
+	"MdDocument": 1,
+	"MdParagraph": 14,
+	"MdText": 32,
+	"MdIndentedCodeBlock": 3,
+	"MdSoftLineBreak": 13,
+	"loc_sum": 15,
+	"loc_avg": 5.0,
+	"loc_min": 2,
+	"loc_max": 9
+}

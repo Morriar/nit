@@ -1,0 +1,20 @@
+{
+	"repo": "facebook/react-native",
+	"readme": "github/repos/facebook/react-native.json",
+	"lines": 81,
+	"words": 652,
+	"chars": 5994,
+	"heading 1": 1,
+	"heading 2": 5,
+	"heading 3": 3,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 65,
+	"MdParagraph": 32,
+	"MdUnorderedList": 4,
+	"MdListItem": 16,
+	"MdStrongEmphasis": 8,
+	"MdThematicBreak": 6,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

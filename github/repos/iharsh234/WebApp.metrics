@@ -1,0 +1,19 @@
+{
+	"repo": "iharsh234/WebApp",
+	"readme": "github/repos/iharsh234/WebApp.json",
+	"lines": 84,
+	"words": 314,
+	"chars": 3190,
+	"heading 1": 2,
+	"heading 2": 8,
+	"heading 3": 5,
+	"MdDocument": 1,
+	"MdHeading": 15,
+	"MdText": 41,
+	"MdParagraph": 26,
+	"MdSoftLineBreak": 4,
+	"MdUnorderedList": 3,
+	"MdListItem": 13,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

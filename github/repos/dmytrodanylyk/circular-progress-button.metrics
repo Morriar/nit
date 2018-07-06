@@ -1,0 +1,21 @@
+{
+	"repo": "dmytrodanylyk/circular-progress-button",
+	"readme": "github/repos/dmytrodanylyk/circular-progress-button.json",
+	"lines": 92,
+	"words": 365,
+	"chars": 3870,
+	"heading 3": 7,
+	"MdDocument": 1,
+	"MdParagraph": 12,
+	"MdText": 24,
+	"MdStrongEmphasis": 3,
+	"MdFencedCodeBlock": 3,
+	"MdHeading": 7,
+	"MdUnorderedList": 1,
+	"MdListItem": 3,
+	"MdSoftLineBreak": 3,
+	"loc_sum": 32,
+	"loc_avg": 10.0,
+	"loc_min": 4,
+	"loc_max": 22
+}

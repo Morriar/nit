@@ -1,0 +1,19 @@
+{
+	"repo": "openebs/maya",
+	"readme": "github/repos/openebs/maya.json",
+	"lines": 56,
+	"words": 473,
+	"chars": 4314,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 72,
+	"MdParagraph": 27,
+	"MdSoftLineBreak": 1,
+	"MdEmphasis": 17,
+	"MdUnorderedList": 5,
+	"MdListItem": 18,
+	"MdStrongEmphasis": 4,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

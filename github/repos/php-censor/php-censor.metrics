@@ -1,0 +1,21 @@
+{
+	"repo": "php-censor/php-censor",
+	"readme": "github/repos/php-censor/php-censor.json",
+	"lines": 241,
+	"words": 781,
+	"chars": 8359,
+	"heading 2": 10,
+	"MdDocument": 1,
+	"MdParagraph": 56,
+	"MdSoftLineBreak": 22,
+	"MdStrongEmphasis": 3,
+	"MdText": 102,
+	"MdUnorderedList": 10,
+	"MdListItem": 38,
+	"MdHeading": 10,
+	"MdFencedCodeBlock": 14,
+	"loc_sum": 62,
+	"loc_avg": 4.0,
+	"loc_min": 2,
+	"loc_max": 16
+}

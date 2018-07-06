@@ -227,33 +227,33 @@ redef class MdCodeBlock
 	end
 end
 
-redef class MdHtmlBlock
-	redef fun collect_metrics(v) do
-		print literal or else " NULL"
-		print ""
-	end
-end
-
-redef class MdHtmlInline
-	redef fun collect_metrics(v) do
-		# print literal
-	end
-end
-
-redef class MdCode
-	redef fun collect_metrics(v) do
-		# print literal
-	end
-end
-
-redef class MdLink
-	redef fun collect_metrics(v) do
-		# print destination
-	end
-end
-
-redef class MdImage
-	redef fun collect_metrics(v) do
-		# print destination
-	end
-end
+# redef class MdHtmlBlock
+#	redef fun collect_metrics(v) do
+#		# print literal or else " NULL"
+#		# print ""
+#	end
+# end
+#
+# redef class MdHtmlInline
+#	redef fun collect_metrics(v) do
+#		# print literal
+#	end
+# end
+#
+# redef class MdCode
+#	redef fun collect_metrics(v) do
+#		# print literal
+#	end
+# end
+#
+# redef class MdLink
+#	redef fun collect_metrics(v) do
+#		# print destination
+#	end
+# end
+#
+# redef class MdImage
+#	redef fun collect_metrics(v) do
+#		# print destination
+#	end
+# end

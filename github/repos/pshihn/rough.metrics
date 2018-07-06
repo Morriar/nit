@@ -1,0 +1,22 @@
+{
+	"repo": "pshihn/rough",
+	"readme": "github/repos/pshihn/rough.json",
+	"lines": 129,
+	"words": 391,
+	"chars": 4191,
+	"heading 1": 1,
+	"heading 2": 7,
+	"heading 3": 4,
+	"MdDocument": 1,
+	"MdHeading": 12,
+	"MdText": 49,
+	"MdParagraph": 24,
+	"MdEmphasis": 2,
+	"MdSoftLineBreak": 1,
+	"MdFencedCodeBlock": 8,
+	"MdStrongEmphasis": 5,
+	"loc_sum": 41,
+	"loc_avg": 5.0,
+	"loc_min": 2,
+	"loc_max": 16
+}

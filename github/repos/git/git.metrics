@@ -1,0 +1,17 @@
+{
+	"repo": "git/git",
+	"readme": "github/repos/git/git.json",
+	"lines": 65,
+	"words": 380,
+	"chars": 3133,
+	"heading 1": 1,
+	"MdDocument": 1,
+	"MdHeading": 1,
+	"MdText": 56,
+	"MdParagraph": 14,
+	"MdSoftLineBreak": 30,
+	"MdUnorderedList": 1,
+	"MdListItem": 4,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

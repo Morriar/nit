@@ -1,0 +1,21 @@
+{
+	"repo": "xinghongfei/awesome-view",
+	"readme": "github/repos/xinghongfei/awesome-view.json",
+	"lines": 74,
+	"words": 249,
+	"chars": 4379,
+	"heading 2": 2,
+	"heading 4": 4,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 39,
+	"MdBlockQuote": 3,
+	"MdParagraph": 25,
+	"MdOrderedList": 5,
+	"MdListItem": 18,
+	"MdHardLineBreak": 7,
+	"MdSoftLineBreak": 13,
+	"MdUnorderedList": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

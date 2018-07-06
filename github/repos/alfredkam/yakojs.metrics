@@ -1,0 +1,19 @@
+{
+	"repo": "alfredkam/yakojs",
+	"readme": "github/repos/alfredkam/yakojs.json",
+	"lines": 70,
+	"words": 291,
+	"chars": 3141,
+	"heading 2": 1,
+	"heading 3": 6,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 54,
+	"MdParagraph": 38,
+	"MdSoftLineBreak": 10,
+	"MdStrongEmphasis": 2,
+	"MdUnorderedList": 7,
+	"MdListItem": 26,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

@@ -1,0 +1,19 @@
+{
+	"repo": "ncase/loopy",
+	"readme": "github/repos/ncase/loopy.json",
+	"lines": 25,
+	"words": 75,
+	"chars": 801,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdParagraph": 12,
+	"MdHeading": 1,
+	"MdText": 11,
+	"MdSoftLineBreak": 1,
+	"MdHardLineBreak": 1,
+	"MdUnorderedList": 2,
+	"MdListItem": 5,
+	"MdThematicBreak": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

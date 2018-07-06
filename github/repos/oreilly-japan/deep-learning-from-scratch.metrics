@@ -1,0 +1,22 @@
+{
+	"repo": "oreilly-japan/deep-learning-from-scratch",
+	"readme": "github/repos/oreilly-japan/deep-learning-from-scratch.json",
+	"lines": 59,
+	"words": 163,
+	"chars": 1109,
+	"heading 1": 1,
+	"heading 2": 5,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 30,
+	"MdThematicBreak": 2,
+	"MdParagraph": 14,
+	"MdSoftLineBreak": 8,
+	"MdUnorderedList": 1,
+	"MdListItem": 3,
+	"MdFencedCodeBlock": 1,
+	"loc_sum": 6,
+	"loc_avg": 6.0,
+	"loc_min": 6,
+	"loc_max": 6
+}

@@ -1,0 +1,16 @@
+{
+	"repo": "purescript/purescript",
+	"readme": "github/repos/purescript/purescript.json",
+	"lines": 27,
+	"words": 55,
+	"chars": 1327,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdParagraph": 15,
+	"MdText": 5,
+	"MdHeading": 3,
+	"MdUnorderedList": 3,
+	"MdListItem": 12,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

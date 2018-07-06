@@ -1,0 +1,23 @@
+{
+	"repo": "choojs/choo",
+	"readme": "github/repos/choojs/choo.json",
+	"lines": 600,
+	"words": 2724,
+	"chars": 29254,
+	"heading 2": 15,
+	"heading 3": 37,
+	"MdDocument": 1,
+	"MdHeading": 52,
+	"MdText": 372,
+	"MdUnorderedList": 5,
+	"MdListItem": 33,
+	"MdParagraph": 99,
+	"MdStrongEmphasis": 8,
+	"MdFencedCodeBlock": 8,
+	"MdSoftLineBreak": 185,
+	"MdEmphasis": 9,
+	"loc_sum": 73,
+	"loc_avg": 9.0,
+	"loc_min": 2,
+	"loc_max": 31
+}

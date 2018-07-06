@@ -1,0 +1,21 @@
+{
+	"repo": "meteor/meteor",
+	"readme": "github/repos/meteor/meteor.json",
+	"lines": 75,
+	"words": 166,
+	"chars": 2687,
+	"heading 1": 1,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdHeading": 4,
+	"MdParagraph": 27,
+	"MdSoftLineBreak": 5,
+	"MdText": 28,
+	"MdUnorderedList": 4,
+	"MdListItem": 13,
+	"MdFencedCodeBlock": 4,
+	"loc_sum": 10,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 3
+}

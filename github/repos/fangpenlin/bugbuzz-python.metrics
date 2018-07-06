@@ -1,0 +1,20 @@
+{
+	"repo": "fangpenlin/bugbuzz-python",
+	"readme": "github/repos/fangpenlin/bugbuzz-python.json",
+	"lines": 92,
+	"words": 298,
+	"chars": 2666,
+	"heading 1": 8,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 34,
+	"MdParagraph": 23,
+	"MdUnorderedList": 3,
+	"MdListItem": 8,
+	"MdFencedCodeBlock": 8,
+	"MdStrongEmphasis": 2,
+	"loc_sum": 18,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 4
+}

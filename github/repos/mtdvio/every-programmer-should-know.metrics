@@ -1,0 +1,21 @@
+{
+	"repo": "mtdvio/every-programmer-should-know",
+	"readme": "github/repos/mtdvio/every-programmer-should-know.json",
+	"lines": 216,
+	"words": 909,
+	"chars": 14770,
+	"heading 1": 1,
+	"heading 3": 28,
+	"MdDocument": 1,
+	"MdHeading": 29,
+	"MdText": 157,
+	"MdParagraph": 142,
+	"MdEmphasis": 3,
+	"MdHardLineBreak": 6,
+	"MdSoftLineBreak": 1,
+	"MdThematicBreak": 1,
+	"MdUnorderedList": 28,
+	"MdListItem": 136,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

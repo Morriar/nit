@@ -1,0 +1,17 @@
+{
+	"repo": "timqian/my-headline",
+	"readme": "github/repos/timqian/my-headline.json",
+	"lines": 37,
+	"words": 36,
+	"chars": 487,
+	"heading 1": 2,
+	"heading 2": 7,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 13,
+	"MdParagraph": 10,
+	"MdUnorderedList": 1,
+	"MdListItem": 2,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

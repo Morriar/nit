@@ -1,0 +1,21 @@
+{
+	"repo": "apache/incubator-echarts",
+	"readme": "github/repos/apache/incubator-echarts.json",
+	"lines": 160,
+	"words": 332,
+	"chars": 5462,
+	"heading 1": 1,
+	"heading 2": 7,
+	"heading 3": 4,
+	"heading 4": 15,
+	"MdDocument": 1,
+	"MdHeading": 27,
+	"MdText": 76,
+	"MdParagraph": 59,
+	"MdSoftLineBreak": 4,
+	"MdStrongEmphasis": 2,
+	"MdUnorderedList": 22,
+	"MdListItem": 51,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

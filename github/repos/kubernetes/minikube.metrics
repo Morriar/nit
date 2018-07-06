@@ -1,0 +1,23 @@
+{
+	"repo": "kubernetes/minikube",
+	"readme": "github/repos/kubernetes/minikube.json",
+	"lines": 191,
+	"words": 939,
+	"chars": 9187,
+	"heading 1": 1,
+	"heading 2": 7,
+	"heading 3": 10,
+	"MdDocument": 1,
+	"MdHeading": 18,
+	"MdText": 76,
+	"MdParagraph": 43,
+	"MdSoftLineBreak": 6,
+	"MdFencedCodeBlock": 6,
+	"MdUnorderedList": 9,
+	"MdListItem": 28,
+	"MdStrongEmphasis": 2,
+	"loc_sum": 72,
+	"loc_avg": 12.0,
+	"loc_min": 2,
+	"loc_max": 40
+}

@@ -1,0 +1,20 @@
+{
+	"repo": "eugenp/tutorials",
+	"readme": "github/repos/eugenp/tutorials.json",
+	"lines": 43,
+	"words": 155,
+	"chars": 1793,
+	"heading 1": 5,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 26,
+	"MdParagraph": 11,
+	"MdSoftLineBreak": 4,
+	"MdStrongEmphasis": 5,
+	"MdHardLineBreak": 1,
+	"MdUnorderedList": 2,
+	"MdListItem": 4,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

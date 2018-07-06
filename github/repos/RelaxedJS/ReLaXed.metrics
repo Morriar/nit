@@ -1,0 +1,21 @@
+{
+	"repo": "RelaxedJS/ReLaXed",
+	"readme": "github/repos/RelaxedJS/ReLaXed.json",
+	"lines": 171,
+	"words": 1010,
+	"chars": 9288,
+	"heading 1": 1,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 63,
+	"MdParagraph": 37,
+	"MdFencedCodeBlock": 4,
+	"MdUnorderedList": 3,
+	"MdListItem": 16,
+	"MdStrongEmphasis": 1,
+	"loc_sum": 9,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 3
+}

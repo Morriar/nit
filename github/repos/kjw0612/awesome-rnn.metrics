@@ -1,0 +1,21 @@
+{
+	"repo": "kjw0612/awesome-rnn",
+	"readme": "github/repos/kjw0612/awesome-rnn.json",
+	"lines": 433,
+	"words": 4290,
+	"chars": 44010,
+	"heading 1": 1,
+	"heading 2": 9,
+	"heading 3": 9,
+	"heading 4": 15,
+	"MdDocument": 1,
+	"MdHeading": 34,
+	"MdText": 749,
+	"MdParagraph": 346,
+	"MdEmphasis": 123,
+	"MdUnorderedList": 121,
+	"MdListItem": 341,
+	"MdSoftLineBreak": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

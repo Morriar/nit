@@ -1,0 +1,20 @@
+{
+	"repo": "joeyhoer/starter",
+	"readme": "github/repos/joeyhoer/starter.json",
+	"lines": 29,
+	"words": 147,
+	"chars": 1026,
+	"heading 1": 1,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdText": 18,
+	"MdParagraph": 11,
+	"MdUnorderedList": 1,
+	"MdListItem": 4,
+	"MdIndentedCodeBlock": 2,
+	"loc_sum": 4,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

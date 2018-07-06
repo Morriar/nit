@@ -1,0 +1,22 @@
+{
+	"repo": "lodash/lodash",
+	"readme": "github/repos/lodash/lodash.json",
+	"lines": 81,
+	"words": 209,
+	"chars": 3133,
+	"heading 1": 1,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 42,
+	"MdParagraph": 20,
+	"MdSoftLineBreak": 10,
+	"MdFencedCodeBlock": 4,
+	"MdUnorderedList": 3,
+	"MdListItem": 10,
+	"MdStrongEmphasis": 1,
+	"loc_sum": 24,
+	"loc_avg": 6.0,
+	"loc_min": 2,
+	"loc_max": 15
+}

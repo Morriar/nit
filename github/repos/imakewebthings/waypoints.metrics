@@ -1,0 +1,21 @@
+{
+	"repo": "imakewebthings/waypoints",
+	"readme": "github/repos/imakewebthings/waypoints.json",
+	"lines": 34,
+	"words": 153,
+	"chars": 1674,
+	"heading 1": 1,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdHeading": 4,
+	"MdText": 19,
+	"MdParagraph": 9,
+	"MdFencedCodeBlock": 1,
+	"MdUnorderedList": 1,
+	"MdListItem": 3,
+	"MdEmphasis": 1,
+	"loc_sum": 7,
+	"loc_avg": 7.0,
+	"loc_min": 7,
+	"loc_max": 7
+}

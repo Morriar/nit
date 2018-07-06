@@ -1,0 +1,18 @@
+{
+	"repo": "javierbyte/control-user-cursor",
+	"readme": "github/repos/javierbyte/control-user-cursor.json",
+	"lines": 49,
+	"words": 156,
+	"chars": 1372,
+	"heading 1": 1,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdHeading": 4,
+	"MdText": 11,
+	"MdParagraph": 7,
+	"MdFencedCodeBlock": 2,
+	"loc_sum": 25,
+	"loc_avg": 12.0,
+	"loc_min": 12,
+	"loc_max": 13
+}

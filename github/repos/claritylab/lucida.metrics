@@ -1,0 +1,23 @@
+{
+	"repo": "claritylab/lucida",
+	"readme": "github/repos/claritylab/lucida.json",
+	"lines": 465,
+	"words": 4980,
+	"chars": 24523,
+	"heading 1": 1,
+	"heading 2": 5,
+	"heading 3": 2,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 434,
+	"MdParagraph": 84,
+	"MdSoftLineBreak": 163,
+	"MdUnorderedList": 8,
+	"MdListItem": 27,
+	"MdFencedCodeBlock": 15,
+	"MdOrderedList": 3,
+	"loc_sum": 83,
+	"loc_avg": 5.0,
+	"loc_min": 2,
+	"loc_max": 15
+}

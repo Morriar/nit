@@ -1,0 +1,23 @@
+{
+	"repo": "flutter/flutter",
+	"readme": "github/repos/flutter/flutter.json",
+	"lines": 170,
+	"words": 777,
+	"chars": 6663,
+	"heading 1": 1,
+	"heading 3": 4,
+	"heading 2": 5,
+	"MdDocument": 1,
+	"MdHeading": 10,
+	"MdText": 103,
+	"MdParagraph": 51,
+	"MdUnorderedList": 12,
+	"MdListItem": 37,
+	"MdStrongEmphasis": 9,
+	"MdSoftLineBreak": 31,
+	"MdFencedCodeBlock": 2,
+	"loc_sum": 42,
+	"loc_avg": 21.0,
+	"loc_min": 13,
+	"loc_max": 29
+}

@@ -1,0 +1,18 @@
+{
+	"repo": "EbookFoundation/free-programming-books",
+	"readme": "github/repos/EbookFoundation/free-programming-books.json",
+	"lines": 91,
+	"words": 235,
+	"chars": 4454,
+	"heading 1": 1,
+	"heading 2": 2,
+	"heading 3": 8,
+	"MdDocument": 1,
+	"MdParagraph": 57,
+	"MdText": 26,
+	"MdHeading": 11,
+	"MdUnorderedList": 7,
+	"MdListItem": 49,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

@@ -1,0 +1,22 @@
+{
+	"repo": "josephmisiti/awesome-machine-learning",
+	"readme": "github/repos/josephmisiti/awesome-machine-learning.json",
+	"lines": 1384,
+	"words": 12445,
+	"chars": 129421,
+	"heading 1": 1,
+	"heading 2": 31,
+	"heading 4": 72,
+	"heading 3": 9,
+	"MdDocument": 1,
+	"MdHeading": 113,
+	"MdText": 961,
+	"MdParagraph": 1053,
+	"MdSoftLineBreak": 16,
+	"MdUnorderedList": 116,
+	"MdListItem": 944,
+	"MdStrongEmphasis": 1,
+	"MdEmphasis": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

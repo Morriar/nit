@@ -1,0 +1,19 @@
+{
+	"repo": "francistao/LearningNotes",
+	"readme": "github/repos/francistao/LearningNotes.json",
+	"lines": 225,
+	"words": 777,
+	"chars": 14406,
+	"heading 1": 1,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 41,
+	"MdThematicBreak": 8,
+	"MdUnorderedList": 26,
+	"MdListItem": 156,
+	"MdParagraph": 165,
+	"MdSoftLineBreak": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

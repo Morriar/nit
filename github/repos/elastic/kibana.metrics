@@ -1,0 +1,21 @@
+{
+	"repo": "elastic/kibana",
+	"readme": "github/repos/elastic/kibana.json",
+	"lines": 78,
+	"words": 788,
+	"chars": 5372,
+	"heading 1": 1,
+	"heading 2": 4,
+	"heading 3": 3,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 94,
+	"MdParagraph": 28,
+	"MdUnorderedList": 5,
+	"MdListItem": 16,
+	"MdSoftLineBreak": 18,
+	"MdEmphasis": 2,
+	"MdStrongEmphasis": 12,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

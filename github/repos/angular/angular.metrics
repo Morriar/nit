@@ -1,0 +1,16 @@
+{
+	"repo": "angular/angular",
+	"readme": "github/repos/angular/angular.json",
+	"lines": 32,
+	"words": 73,
+	"chars": 1892,
+	"heading 1": 1,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdParagraph": 5,
+	"MdSoftLineBreak": 5,
+	"MdHeading": 4,
+	"MdText": 11,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

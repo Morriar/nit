@@ -1,0 +1,21 @@
+{
+	"repo": "vulpino/jolteon",
+	"readme": "github/repos/vulpino/jolteon.json",
+	"lines": 51,
+	"words": 270,
+	"chars": 2081,
+	"heading 1": 1,
+	"heading 2": 3,
+	"heading 3": 2,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 34,
+	"MdParagraph": 21,
+	"MdUnorderedList": 3,
+	"MdListItem": 14,
+	"MdFencedCodeBlock": 1,
+	"loc_sum": 7,
+	"loc_avg": 7.0,
+	"loc_min": 7,
+	"loc_max": 7
+}

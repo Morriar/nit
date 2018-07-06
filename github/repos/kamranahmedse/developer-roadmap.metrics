@@ -1,0 +1,18 @@
+{
+	"repo": "kamranahmedse/developer-roadmap",
+	"readme": "github/repos/kamranahmedse/developer-roadmap.json",
+	"lines": 55,
+	"words": 305,
+	"chars": 2371,
+	"heading 2": 10,
+	"MdDocument": 1,
+	"MdParagraph": 21,
+	"MdBlockQuote": 2,
+	"MdText": 30,
+	"MdHeading": 10,
+	"MdUnorderedList": 3,
+	"MdListItem": 9,
+	"MdStrongEmphasis": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

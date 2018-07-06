@@ -1,0 +1,23 @@
+{
+	"repo": "KrauseFx/TSMessages",
+	"readme": "github/repos/KrauseFx/TSMessages.json",
+	"lines": 161,
+	"words": 1192,
+	"chars": 7242,
+	"heading 1": 5,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdParagraph": 37,
+	"MdStrongEmphasis": 13,
+	"MdText": 52,
+	"MdHeading": 8,
+	"MdSoftLineBreak": 4,
+	"MdIndentedCodeBlock": 1,
+	"MdFencedCodeBlock": 5,
+	"MdUnorderedList": 1,
+	"MdListItem": 7,
+	"loc_sum": 67,
+	"loc_avg": 11.0,
+	"loc_min": 2,
+	"loc_max": 24
+}

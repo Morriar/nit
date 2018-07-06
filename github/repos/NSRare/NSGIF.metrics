@@ -1,0 +1,22 @@
+{
+	"repo": "NSRare/NSGIF",
+	"readme": "github/repos/NSRare/NSGIF.json",
+	"lines": 72,
+	"words": 406,
+	"chars": 3079,
+	"heading 2": 6,
+	"heading 3": 3,
+	"MdDocument": 1,
+	"MdParagraph": 19,
+	"MdText": 31,
+	"MdSoftLineBreak": 3,
+	"MdEmphasis": 1,
+	"MdHeading": 9,
+	"MdFencedCodeBlock": 5,
+	"MdUnorderedList": 1,
+	"MdListItem": 4,
+	"loc_sum": 17,
+	"loc_avg": 3.0,
+	"loc_min": 2,
+	"loc_max": 4
+}

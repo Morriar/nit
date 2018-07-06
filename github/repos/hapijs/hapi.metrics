@@ -1,0 +1,20 @@
+{
+	"repo": "hapijs/hapi",
+	"readme": "github/repos/hapijs/hapi.json",
+	"lines": 54,
+	"words": 226,
+	"chars": 2718,
+	"heading 3": 1,
+	"heading 1": 2,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 43,
+	"MdParagraph": 15,
+	"MdStrongEmphasis": 11,
+	"MdSoftLineBreak": 6,
+	"MdUnorderedList": 2,
+	"MdListItem": 5,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

@@ -1,0 +1,20 @@
+{
+	"repo": "basscss/basscss",
+	"readme": "github/repos/basscss/basscss.json",
+	"lines": 115,
+	"words": 294,
+	"chars": 3079,
+	"heading 1": 1,
+	"heading 2": 10,
+	"heading 3": 6,
+	"MdDocument": 1,
+	"MdHeading": 17,
+	"MdText": 50,
+	"MdParagraph": 30,
+	"MdSoftLineBreak": 16,
+	"MdThematicBreak": 4,
+	"MdUnorderedList": 2,
+	"MdListItem": 10,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

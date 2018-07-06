@@ -1,0 +1,22 @@
+{
+	"repo": "logzio/elasticsearch-stress-test",
+	"readme": "github/repos/logzio/elasticsearch-stress-test.json",
+	"lines": 78,
+	"words": 600,
+	"chars": 4100,
+	"heading 1": 1,
+	"heading 3": 7,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 64,
+	"MdParagraph": 15,
+	"MdUnorderedList": 1,
+	"MdListItem": 3,
+	"MdSoftLineBreak": 22,
+	"MdStrongEmphasis": 1,
+	"MdFencedCodeBlock": 5,
+	"loc_sum": 10,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

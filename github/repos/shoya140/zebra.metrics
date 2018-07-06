@@ -1,0 +1,18 @@
+{
+	"repo": "shoya140/zebra",
+	"readme": "github/repos/shoya140/zebra.json",
+	"lines": 15,
+	"words": 30,
+	"chars": 246,
+	"heading 1": 1,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdText": 9,
+	"MdParagraph": 6,
+	"MdUnorderedList": 1,
+	"MdListItem": 5,
+	"MdOrderedList": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

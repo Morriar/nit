@@ -1,0 +1,19 @@
+{
+	"repo": "lipis/flag-icon-css",
+	"readme": "github/repos/lipis/flag-icon-css.json",
+	"lines": 77,
+	"words": 227,
+	"chars": 2099,
+	"heading 1": 1,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 39,
+	"MdParagraph": 12,
+	"MdSoftLineBreak": 15,
+	"MdFencedCodeBlock": 6,
+	"loc_sum": 16,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 4
+}

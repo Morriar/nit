@@ -1,0 +1,21 @@
+{
+	"repo": "Mayeu/ansible-playbook-rabbitmq",
+	"readme": "github/repos/Mayeu/ansible-playbook-rabbitmq.json",
+	"lines": 201,
+	"words": 726,
+	"chars": 6392,
+	"heading 1": 2,
+	"heading 2": 7,
+	"heading 3": 7,
+	"MdDocument": 1,
+	"MdHeading": 16,
+	"MdText": 100,
+	"MdParagraph": 29,
+	"MdSoftLineBreak": 45,
+	"MdIndentedCodeBlock": 3,
+	"MdFencedCodeBlock": 7,
+	"loc_sum": 51,
+	"loc_avg": 5.0,
+	"loc_min": 2,
+	"loc_max": 15
+}

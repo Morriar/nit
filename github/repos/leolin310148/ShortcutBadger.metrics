@@ -1,0 +1,21 @@
+{
+	"repo": "leolin310148/ShortcutBadger",
+	"readme": "github/repos/leolin310148/ShortcutBadger.json",
+	"lines": 292,
+	"words": 1794,
+	"chars": 8427,
+	"heading 1": 7,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 76,
+	"MdParagraph": 64,
+	"MdUnorderedList": 23,
+	"MdListItem": 32,
+	"MdSoftLineBreak": 1,
+	"MdIndentedCodeBlock": 7,
+	"loc_sum": 34,
+	"loc_avg": 4.0,
+	"loc_min": 2,
+	"loc_max": 14
+}

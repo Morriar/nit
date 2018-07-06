@@ -1,0 +1,22 @@
+{
+	"repo": "yohang/Finite",
+	"readme": "github/repos/yohang/Finite.json",
+	"lines": 105,
+	"words": 265,
+	"chars": 3476,
+	"heading 1": 1,
+	"heading 2": 3,
+	"heading 3": 4,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 21,
+	"MdParagraph": 11,
+	"MdSoftLineBreak": 10,
+	"MdUnorderedList": 1,
+	"MdListItem": 6,
+	"MdFencedCodeBlock": 3,
+	"loc_sum": 53,
+	"loc_avg": 17.0,
+	"loc_min": 6,
+	"loc_max": 31
+}

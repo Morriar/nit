@@ -1,0 +1,23 @@
+{
+	"repo": "impress/impress.js",
+	"readme": "github/repos/impress/impress.js.json",
+	"lines": 127,
+	"words": 892,
+	"chars": 7380,
+	"heading 1": 1,
+	"heading 2": 7,
+	"heading 3": 6,
+	"MdDocument": 1,
+	"MdHeading": 14,
+	"MdText": 89,
+	"MdParagraph": 46,
+	"MdSoftLineBreak": 2,
+	"MdStrongEmphasis": 3,
+	"MdIndentedCodeBlock": 2,
+	"MdUnorderedList": 5,
+	"MdListItem": 17,
+	"loc_sum": 7,
+	"loc_avg": 3.0,
+	"loc_min": 3,
+	"loc_max": 4
+}

@@ -1,0 +1,22 @@
+{
+	"repo": "asteris-llc/vaultfs",
+	"readme": "github/repos/asteris-llc/vaultfs.json",
+	"lines": 82,
+	"words": 226,
+	"chars": 2262,
+	"heading 1": 4,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 28,
+	"MdParagraph": 12,
+	"MdSoftLineBreak": 9,
+	"MdStrongEmphasis": 1,
+	"MdUnorderedList": 1,
+	"MdListItem": 4,
+	"MdFencedCodeBlock": 5,
+	"loc_sum": 25,
+	"loc_avg": 5.0,
+	"loc_min": 2,
+	"loc_max": 9
+}

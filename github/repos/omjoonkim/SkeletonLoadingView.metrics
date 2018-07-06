@@ -1,0 +1,19 @@
+{
+	"repo": "omjoonkim/SkeletonLoadingView",
+	"readme": "github/repos/omjoonkim/SkeletonLoadingView.json",
+	"lines": 43,
+	"words": 72,
+	"chars": 1292,
+	"heading 1": 1,
+	"heading 2": 3,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 10,
+	"MdParagraph": 6,
+	"MdFencedCodeBlock": 2,
+	"loc_sum": 17,
+	"loc_avg": 8.0,
+	"loc_min": 4,
+	"loc_max": 13
+}

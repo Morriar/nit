@@ -1,0 +1,20 @@
+{
+	"repo": "bazelbuild/bazel",
+	"readme": "github/repos/bazelbuild/bazel.json",
+	"lines": 54,
+	"words": 227,
+	"chars": 2172,
+	"heading 1": 1,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdHeading": 4,
+	"MdParagraph": 23,
+	"MdEmphasis": 1,
+	"MdText": 28,
+	"MdUnorderedList": 4,
+	"MdListItem": 18,
+	"MdStrongEmphasis": 4,
+	"MdSoftLineBreak": 11,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

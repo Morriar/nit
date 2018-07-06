@@ -1,0 +1,22 @@
+{
+	"repo": "hehonghui/android-tech-frontier",
+	"readme": "github/repos/hehonghui/android-tech-frontier.json",
+	"lines": 87,
+	"words": 182,
+	"chars": 3285,
+	"heading 1": 1,
+	"heading 2": 10,
+	"MdDocument": 1,
+	"MdHeading": 11,
+	"MdText": 69,
+	"MdParagraph": 46,
+	"MdThematicBreak": 1,
+	"MdUnorderedList": 5,
+	"MdListItem": 32,
+	"MdBlockQuote": 1,
+	"MdOrderedList": 3,
+	"MdStrongEmphasis": 2,
+	"MdSoftLineBreak": 6,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

@@ -1,0 +1,20 @@
+{
+	"repo": "nodemailer/nodemailer",
+	"readme": "github/repos/nodemailer/nodemailer.json",
+	"lines": 78,
+	"words": 292,
+	"chars": 4280,
+	"heading 1": 1,
+	"heading 2": 4,
+	"heading 4": 6,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdHeading": 12,
+	"MdText": 34,
+	"MdParagraph": 18,
+	"MdSoftLineBreak": 10,
+	"MdStrongEmphasis": 1,
+	"MdThematicBreak": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

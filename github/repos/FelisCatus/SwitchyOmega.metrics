@@ -1,0 +1,20 @@
+{
+	"repo": "FelisCatus/SwitchyOmega",
+	"readme": "github/repos/FelisCatus/SwitchyOmega.json",
+	"lines": 152,
+	"words": 878,
+	"chars": 7100,
+	"heading 1": 1,
+	"heading 2": 11,
+	"MdDocument": 1,
+	"MdHeading": 12,
+	"MdText": 109,
+	"MdParagraph": 35,
+	"MdSoftLineBreak": 41,
+	"MdStrongEmphasis": 2,
+	"MdIndentedCodeBlock": 1,
+	"loc_sum": 15,
+	"loc_avg": 15.0,
+	"loc_min": 15,
+	"loc_max": 15
+}

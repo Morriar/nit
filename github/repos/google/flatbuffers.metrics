@@ -1,0 +1,20 @@
+{
+	"repo": "google/flatbuffers",
+	"readme": "github/repos/google/flatbuffers.json",
+	"lines": 60,
+	"words": 240,
+	"chars": 2614,
+	"heading 1": 1,
+	"heading 2": 5,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 45,
+	"MdParagraph": 22,
+	"MdSoftLineBreak": 10,
+	"MdStrongEmphasis": 3,
+	"MdUnorderedList": 3,
+	"MdListItem": 15,
+	"MdEmphasis": 3,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

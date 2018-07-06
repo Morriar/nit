@@ -1,0 +1,22 @@
+{
+	"repo": "bkaradzic/bgfx",
+	"readme": "github/repos/bkaradzic/bgfx.json",
+	"lines": 335,
+	"words": 1038,
+	"chars": 13562,
+	"heading 1": 1,
+	"heading 2": 33,
+	"MdDocument": 1,
+	"MdHeading": 34,
+	"MdText": 174,
+	"MdParagraph": 86,
+	"MdSoftLineBreak": 76,
+	"MdUnorderedList": 6,
+	"MdListItem": 39,
+	"MdHardLineBreak": 13,
+	"MdIndentedCodeBlock": 1,
+	"loc_sum": 25,
+	"loc_avg": 25.0,
+	"loc_min": 25,
+	"loc_max": 25
+}

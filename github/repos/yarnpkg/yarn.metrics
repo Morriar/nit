@@ -1,0 +1,18 @@
+{
+	"repo": "yarnpkg/yarn",
+	"readme": "github/repos/yarnpkg/yarn.json",
+	"lines": 60,
+	"words": 313,
+	"chars": 3163,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdThematicBreak": 1,
+	"MdParagraph": 18,
+	"MdStrongEmphasis": 9,
+	"MdText": 36,
+	"MdHeading": 6,
+	"MdUnorderedList": 2,
+	"MdListItem": 9,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

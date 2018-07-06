@@ -1,0 +1,23 @@
+{
+	"repo": "lunet-io/markdig",
+	"readme": "github/repos/lunet-io/markdig.json",
+	"lines": 209,
+	"words": 1729,
+	"chars": 14672,
+	"heading 1": 1,
+	"heading 2": 10,
+	"heading 3": 4,
+	"MdDocument": 1,
+	"MdHeading": 15,
+	"MdText": 167,
+	"MdParagraph": 86,
+	"MdBlockQuote": 2,
+	"MdStrongEmphasis": 15,
+	"MdUnorderedList": 13,
+	"MdListItem": 57,
+	"MdFencedCodeBlock": 4,
+	"loc_sum": 47,
+	"loc_avg": 11.0,
+	"loc_min": 3,
+	"loc_max": 23
+}

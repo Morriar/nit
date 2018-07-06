@@ -1,0 +1,22 @@
+{
+	"repo": "google/material-design-lite",
+	"readme": "github/repos/google/material-design-lite.json",
+	"lines": 90,
+	"words": 468,
+	"chars": 4006,
+	"heading 1": 1,
+	"heading 3": 2,
+	"heading 2": 5,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 50,
+	"MdParagraph": 18,
+	"MdSoftLineBreak": 26,
+	"MdBlockQuote": 5,
+	"MdStrongEmphasis": 1,
+	"MdFencedCodeBlock": 2,
+	"loc_sum": 7,
+	"loc_avg": 3.0,
+	"loc_min": 2,
+	"loc_max": 5
+}

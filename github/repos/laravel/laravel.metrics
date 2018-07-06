@@ -1,0 +1,17 @@
+{
+	"repo": "laravel/laravel",
+	"readme": "github/repos/laravel/laravel.json",
+	"lines": 63,
+	"words": 295,
+	"chars": 3763,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 31,
+	"MdParagraph": 32,
+	"MdUnorderedList": 2,
+	"MdListItem": 24,
+	"MdStrongEmphasis": 5,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

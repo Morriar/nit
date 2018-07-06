@@ -1,0 +1,22 @@
+{
+	"repo": "commercialhaskell/stack-ide",
+	"readme": "github/repos/commercialhaskell/stack-ide.json",
+	"lines": 77,
+	"words": 248,
+	"chars": 2141,
+	"heading 1": 1,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 38,
+	"MdParagraph": 16,
+	"MdSoftLineBreak": 15,
+	"MdUnorderedList": 1,
+	"MdListItem": 3,
+	"MdIndentedCodeBlock": 2,
+	"MdFencedCodeBlock": 2,
+	"loc_sum": 15,
+	"loc_avg": 3.0,
+	"loc_min": 2,
+	"loc_max": 5
+}

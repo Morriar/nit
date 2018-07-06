@@ -1,0 +1,23 @@
+{
+	"repo": "AlloyTeam/AlloyLever",
+	"readme": "github/repos/AlloyTeam/AlloyLever.json",
+	"lines": 140,
+	"words": 429,
+	"chars": 4909,
+	"heading 4": 2,
+	"heading 2": 11,
+	"heading 1": 1,
+	"MdDocument": 1,
+	"MdHeading": 14,
+	"MdText": 51,
+	"MdParagraph": 38,
+	"MdStrongEmphasis": 2,
+	"MdUnorderedList": 6,
+	"MdListItem": 22,
+	"MdFencedCodeBlock": 6,
+	"MdSoftLineBreak": 1,
+	"loc_sum": 40,
+	"loc_avg": 6.0,
+	"loc_min": 2,
+	"loc_max": 11
+}

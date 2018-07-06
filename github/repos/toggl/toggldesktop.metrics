@@ -1,0 +1,23 @@
+{
+	"repo": "toggl/toggldesktop",
+	"readme": "github/repos/toggl/toggldesktop.json",
+	"lines": 184,
+	"words": 456,
+	"chars": 4441,
+	"heading 1": 6,
+	"heading 2": 9,
+	"heading 3": 3,
+	"MdDocument": 1,
+	"MdParagraph": 65,
+	"MdHeading": 18,
+	"MdText": 71,
+	"MdUnorderedList": 8,
+	"MdListItem": 35,
+	"MdEmphasis": 2,
+	"MdFencedCodeBlock": 11,
+	"MdSoftLineBreak": 1,
+	"loc_sum": 27,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 6
+}

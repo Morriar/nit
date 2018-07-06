@@ -1,0 +1,19 @@
+{
+	"repo": "tayllan/awesome-algorithms",
+	"readme": "github/repos/tayllan/awesome-algorithms.json",
+	"lines": 173,
+	"words": 1267,
+	"chars": 13573,
+	"heading 1": 1,
+	"heading 2": 7,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 100,
+	"MdParagraph": 137,
+	"MdSoftLineBreak": 1,
+	"MdUnorderedList": 17,
+	"MdListItem": 126,
+	"MdEmphasis": 7,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

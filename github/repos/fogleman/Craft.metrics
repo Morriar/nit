@@ -1,0 +1,22 @@
+{
+	"repo": "fogleman/Craft",
+	"readme": "github/repos/fogleman/Craft.json",
+	"lines": 218,
+	"words": 1528,
+	"chars": 9867,
+	"heading 2": 1,
+	"heading 3": 9,
+	"heading 4": 13,
+	"MdDocument": 1,
+	"MdHeading": 23,
+	"MdText": 113,
+	"MdParagraph": 76,
+	"MdUnorderedList": 3,
+	"MdListItem": 31,
+	"MdSoftLineBreak": 11,
+	"MdIndentedCodeBlock": 15,
+	"loc_sum": 37,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 6
+}

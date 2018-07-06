@@ -1,0 +1,22 @@
+{
+	"repo": "rich-iannone/DiagrammeR",
+	"readme": "github/repos/rich-iannone/DiagrammeR.json",
+	"lines": 678,
+	"words": 5267,
+	"chars": 28578,
+	"heading 2": 7,
+	"MdDocument": 1,
+	"MdParagraph": 58,
+	"MdText": 287,
+	"MdStrongEmphasis": 19,
+	"MdFencedCodeBlock": 38,
+	"MdHeading": 7,
+	"MdEmphasis": 2,
+	"MdIndentedCodeBlock": 1,
+	"MdOrderedList": 1,
+	"MdListItem": 3,
+	"loc_sum": 435,
+	"loc_avg": 11.0,
+	"loc_min": 2,
+	"loc_max": 40
+}

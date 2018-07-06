@@ -1,0 +1,19 @@
+{
+	"repo": "Erkaman/cute-deferred-shading",
+	"readme": "github/repos/Erkaman/cute-deferred-shading.json",
+	"lines": 53,
+	"words": 208,
+	"chars": 1730,
+	"heading 1": 2,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 37,
+	"MdParagraph": 10,
+	"MdSoftLineBreak": 19,
+	"MdFencedCodeBlock": 1,
+	"loc_sum": 2,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

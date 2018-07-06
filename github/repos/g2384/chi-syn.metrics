@@ -1,0 +1,19 @@
+{
+	"repo": "g2384/chi-syn",
+	"readme": "github/repos/g2384/chi-syn.json",
+	"lines": 43,
+	"words": 68,
+	"chars": 839,
+	"heading 2": 2,
+	"heading 3": 6,
+	"MdDocument": 1,
+	"MdParagraph": 21,
+	"MdHeading": 8,
+	"MdText": 32,
+	"MdUnorderedList": 6,
+	"MdListItem": 14,
+	"MdBlockQuote": 4,
+	"MdSoftLineBreak": 3,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

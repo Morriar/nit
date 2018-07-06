@@ -1,0 +1,23 @@
+{
+	"repo": "sindresorhus/gulp-ftp",
+	"readme": "github/repos/sindresorhus/gulp-ftp.json",
+	"lines": 76,
+	"words": 115,
+	"chars": 1267,
+	"heading 1": 1,
+	"heading 2": 5,
+	"heading 3": 1,
+	"heading 4": 5,
+	"MdDocument": 1,
+	"MdHeading": 12,
+	"MdText": 33,
+	"MdBlockQuote": 1,
+	"MdParagraph": 10,
+	"MdFencedCodeBlock": 2,
+	"MdEmphasis": 1,
+	"MdHardLineBreak": 5,
+	"loc_sum": 19,
+	"loc_avg": 9.0,
+	"loc_min": 2,
+	"loc_max": 17
+}

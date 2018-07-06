@@ -1,0 +1,23 @@
+{
+	"repo": "kedebug/yohub",
+	"readme": "github/repos/kedebug/yohub.json",
+	"lines": 55,
+	"words": 509,
+	"chars": 3965,
+	"heading 1": 1,
+	"heading 3": 4,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 49,
+	"MdParagraph": 18,
+	"MdEmphasis": 5,
+	"MdUnorderedList": 3,
+	"MdListItem": 6,
+	"MdStrongEmphasis": 2,
+	"MdFencedCodeBlock": 1,
+	"MdSoftLineBreak": 12,
+	"loc_sum": 4,
+	"loc_avg": 4.0,
+	"loc_min": 4,
+	"loc_max": 4
+}

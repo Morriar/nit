@@ -1,0 +1,21 @@
+{
+	"repo": "blueimp/jQuery-File-Upload",
+	"readme": "github/repos/blueimp/jQuery-File-Upload.json",
+	"lines": 108,
+	"words": 828,
+	"chars": 7136,
+	"heading 1": 1,
+	"heading 2": 9,
+	"heading 3": 7,
+	"MdDocument": 1,
+	"MdHeading": 17,
+	"MdText": 116,
+	"MdParagraph": 49,
+	"MdHardLineBreak": 19,
+	"MdUnorderedList": 6,
+	"MdListItem": 37,
+	"MdStrongEmphasis": 18,
+	"MdSoftLineBreak": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

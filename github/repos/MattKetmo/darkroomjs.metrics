@@ -1,0 +1,22 @@
+{
+	"repo": "MattKetmo/darkroomjs",
+	"readme": "github/repos/MattKetmo/darkroomjs.json",
+	"lines": 103,
+	"words": 423,
+	"chars": 2744,
+	"heading 1": 1,
+	"heading 2": 8,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 41,
+	"MdParagraph": 15,
+	"MdSoftLineBreak": 10,
+	"MdStrongEmphasis": 2,
+	"MdUnorderedList": 1,
+	"MdListItem": 3,
+	"MdFencedCodeBlock": 3,
+	"loc_sum": 40,
+	"loc_avg": 13.0,
+	"loc_min": 5,
+	"loc_max": 27
+}

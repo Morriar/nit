@@ -1,0 +1,17 @@
+{
+	"repo": "liut/imsto",
+	"readme": "github/repos/liut/imsto.json",
+	"lines": 28,
+	"words": 46,
+	"chars": 549,
+	"heading 1": 1,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdText": 12,
+	"MdUnorderedList": 2,
+	"MdListItem": 10,
+	"MdParagraph": 10,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

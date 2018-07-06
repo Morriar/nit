@@ -1,0 +1,20 @@
+{
+	"repo": "wasabeef/awesome-android-ui",
+	"readme": "github/repos/wasabeef/awesome-android-ui.json",
+	"lines": 380,
+	"words": 2507,
+	"chars": 54471,
+	"heading 1": 19,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdHeading": 22,
+	"MdText": 689,
+	"MdParagraph": 41,
+	"MdUnorderedList": 2,
+	"MdListItem": 20,
+	"MdEmphasis": 2,
+	"MdHardLineBreak": 1,
+	"MdSoftLineBreak": 274,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

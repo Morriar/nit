@@ -1,0 +1,19 @@
+{
+	"repo": "adereth/dactyl-keyboard",
+	"readme": "github/repos/adereth/dactyl-keyboard.json",
+	"lines": 45,
+	"words": 196,
+	"chars": 1953,
+	"heading 1": 1,
+	"heading 2": 2,
+	"heading 3": 3,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 35,
+	"MdParagraph": 22,
+	"MdStrongEmphasis": 4,
+	"MdUnorderedList": 3,
+	"MdListItem": 11,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

@@ -1,0 +1,18 @@
+{
+	"repo": "bitcoin/bitcoin",
+	"readme": "github/repos/bitcoin/bitcoin.json",
+	"lines": 77,
+	"words": 377,
+	"chars": 3351,
+	"heading 1": 1,
+	"heading 2": 5,
+	"heading 3": 2,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 57,
+	"MdParagraph": 16,
+	"MdSoftLineBreak": 23,
+	"MdStrongEmphasis": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

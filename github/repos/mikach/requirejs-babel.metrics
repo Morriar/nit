@@ -1,0 +1,18 @@
+{
+	"repo": "mikach/requirejs-babel",
+	"readme": "github/repos/mikach/requirejs-babel.json",
+	"lines": 32,
+	"words": 55,
+	"chars": 516,
+	"heading 1": 1,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdText": 8,
+	"MdParagraph": 3,
+	"MdFencedCodeBlock": 3,
+	"loc_sum": 12,
+	"loc_avg": 4.0,
+	"loc_min": 3,
+	"loc_max": 5
+}

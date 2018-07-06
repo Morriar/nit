@@ -1,0 +1,21 @@
+{
+	"repo": "kingdido999/zooming",
+	"readme": "github/repos/kingdido999/zooming.json",
+	"lines": 54,
+	"words": 184,
+	"chars": 2318,
+	"heading 1": 1,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 44,
+	"MdParagraph": 22,
+	"MdUnorderedList": 3,
+	"MdListItem": 12,
+	"MdStrongEmphasis": 1,
+	"MdFencedCodeBlock": 1,
+	"loc_sum": 3,
+	"loc_avg": 3.0,
+	"loc_min": 3,
+	"loc_max": 3
+}

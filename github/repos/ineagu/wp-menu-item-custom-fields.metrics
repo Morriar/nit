@@ -1,0 +1,23 @@
+{
+	"repo": "ineagu/wp-menu-item-custom-fields",
+	"readme": "github/repos/ineagu/wp-menu-item-custom-fields.json",
+	"lines": 67,
+	"words": 274,
+	"chars": 2745,
+	"heading 1": 1,
+	"heading 2": 3,
+	"heading 3": 11,
+	"MdDocument": 1,
+	"MdHeading": 15,
+	"MdText": 75,
+	"MdParagraph": 18,
+	"MdStrongEmphasis": 9,
+	"MdHardLineBreak": 6,
+	"MdEmphasis": 2,
+	"MdOrderedList": 1,
+	"MdListItem": 10,
+	"MdSoftLineBreak": 1,
+	"MdUnorderedList": 7,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

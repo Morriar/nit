@@ -1,0 +1,21 @@
+{
+	"repo": "almasaeed2010/AdminLTE",
+	"readme": "github/repos/almasaeed2010/AdminLTE.json",
+	"lines": 58,
+	"words": 290,
+	"chars": 3481,
+	"heading 1": 1,
+	"heading 3": 7,
+	"heading 2": 1,
+	"heading 4": 1,
+	"MdDocument": 1,
+	"MdHeading": 10,
+	"MdText": 45,
+	"MdParagraph": 25,
+	"MdSoftLineBreak": 5,
+	"MdStrongEmphasis": 7,
+	"MdUnorderedList": 3,
+	"MdListItem": 13,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

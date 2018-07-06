@@ -1,0 +1,23 @@
+{
+	"repo": "chalk/chalk",
+	"readme": "github/repos/chalk/chalk.json",
+	"lines": 315,
+	"words": 998,
+	"chars": 10774,
+	"heading 3": 8,
+	"heading 2": 12,
+	"MdDocument": 1,
+	"MdBlockQuote": 1,
+	"MdParagraph": 114,
+	"MdText": 129,
+	"MdHeading": 20,
+	"MdUnorderedList": 9,
+	"MdListItem": 84,
+	"MdFencedCodeBlock": 9,
+	"MdOrderedList": 1,
+	"MdEmphasis": 3,
+	"loc_sum": 76,
+	"loc_avg": 8.0,
+	"loc_min": 2,
+	"loc_max": 41
+}

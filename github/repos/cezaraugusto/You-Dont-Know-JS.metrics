@@ -1,0 +1,21 @@
+{
+	"repo": "cezaraugusto/You-Dont-Know-JS",
+	"readme": "github/repos/cezaraugusto/You-Dont-Know-JS.json",
+	"lines": 83,
+	"words": 633,
+	"chars": 6319,
+	"heading 2": 8,
+	"heading 1": 1,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 67,
+	"MdParagraph": 32,
+	"MdBlockQuote": 2,
+	"MdUnorderedList": 3,
+	"MdListItem": 10,
+	"MdStrongEmphasis": 3,
+	"MdSoftLineBreak": 5,
+	"MdEmphasis": 3,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

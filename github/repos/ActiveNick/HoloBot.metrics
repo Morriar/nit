@@ -1,0 +1,19 @@
+{
+	"repo": "ActiveNick/HoloBot",
+	"readme": "github/repos/ActiveNick/HoloBot.json",
+	"lines": 55,
+	"words": 672,
+	"chars": 5535,
+	"heading 1": 1,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 73,
+	"MdParagraph": 35,
+	"MdUnorderedList": 6,
+	"MdListItem": 27,
+	"MdStrongEmphasis": 11,
+	"MdEmphasis": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

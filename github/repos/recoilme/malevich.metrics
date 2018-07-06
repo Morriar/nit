@@ -1,0 +1,21 @@
+{
+	"repo": "recoilme/malevich",
+	"readme": "github/repos/recoilme/malevich.json",
+	"lines": 121,
+	"words": 731,
+	"chars": 3404,
+	"heading 1": 1,
+	"heading 2": 9,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdHeading": 11,
+	"MdText": 20,
+	"MdParagraph": 9,
+	"MdFencedCodeBlock": 7,
+	"MdOrderedList": 1,
+	"MdListItem": 4,
+	"loc_sum": 73,
+	"loc_avg": 10.0,
+	"loc_min": 2,
+	"loc_max": 21
+}

@@ -1,0 +1,15 @@
+{
+	"repo": "odoo/odoo",
+	"readme": "github/repos/odoo/odoo.json",
+	"lines": 34,
+	"words": 87,
+	"chars": 1903,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdParagraph": 6,
+	"MdSoftLineBreak": 16,
+	"MdHeading": 2,
+	"MdText": 36,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

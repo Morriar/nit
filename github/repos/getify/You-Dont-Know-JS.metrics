@@ -1,0 +1,19 @@
+{
+	"repo": "getify/You-Dont-Know-JS",
+	"readme": "github/repos/getify/You-Dont-Know-JS.json",
+	"lines": 58,
+	"words": 440,
+	"chars": 5132,
+	"heading 1": 1,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 51,
+	"MdParagraph": 22,
+	"MdSoftLineBreak": 5,
+	"MdStrongEmphasis": 3,
+	"MdUnorderedList": 1,
+	"MdListItem": 6,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

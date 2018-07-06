@@ -1,0 +1,16 @@
+{
+	"repo": "kennytilton/cells",
+	"readme": "github/repos/kennytilton/cells.json",
+	"lines": 13,
+	"words": 88,
+	"chars": 845,
+	"heading 1": 1,
+	"heading 4": 1,
+	"MdDocument": 1,
+	"MdHeading": 2,
+	"MdText": 12,
+	"MdParagraph": 5,
+	"MdStrongEmphasis": 2,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

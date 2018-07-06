@@ -1,0 +1,23 @@
+{
+	"repo": "ichord/At.js",
+	"readme": "github/repos/ichord/At.js.json",
+	"lines": 68,
+	"words": 244,
+	"chars": 2251,
+	"heading 4": 3,
+	"heading 3": 7,
+	"MdDocument": 1,
+	"MdParagraph": 23,
+	"MdStrongEmphasis": 3,
+	"MdText": 53,
+	"MdHardLineBreak": 2,
+	"MdHeading": 10,
+	"MdUnorderedList": 5,
+	"MdListItem": 16,
+	"MdSoftLineBreak": 1,
+	"MdFencedCodeBlock": 2,
+	"loc_sum": 10,
+	"loc_avg": 5.0,
+	"loc_min": 5,
+	"loc_max": 5
+}

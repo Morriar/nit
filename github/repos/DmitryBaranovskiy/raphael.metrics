@@ -1,0 +1,22 @@
+{
+	"repo": "DmitryBaranovskiy/raphael",
+	"readme": "github/repos/DmitryBaranovskiy/raphael.json",
+	"lines": 76,
+	"words": 240,
+	"chars": 2636,
+	"heading 1": 1,
+	"heading 2": 9,
+	"MdDocument": 1,
+	"MdHeading": 10,
+	"MdText": 42,
+	"MdParagraph": 29,
+	"MdUnorderedList": 6,
+	"MdListItem": 17,
+	"MdFencedCodeBlock": 1,
+	"MdSoftLineBreak": 2,
+	"MdStrongEmphasis": 1,
+	"loc_sum": 4,
+	"loc_avg": 4.0,
+	"loc_min": 4,
+	"loc_max": 4
+}

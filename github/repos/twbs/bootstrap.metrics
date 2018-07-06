@@ -1,0 +1,23 @@
+{
+	"repo": "twbs/bootstrap",
+	"readme": "github/repos/twbs/bootstrap.json",
+	"lines": 178,
+	"words": 873,
+	"chars": 9506,
+	"heading 2": 11,
+	"heading 3": 2,
+	"MdDocument": 1,
+	"MdHeading": 13,
+	"MdText": 99,
+	"MdUnorderedList": 6,
+	"MdListItem": 33,
+	"MdParagraph": 53,
+	"MdSoftLineBreak": 11,
+	"MdFencedCodeBlock": 1,
+	"MdOrderedList": 1,
+	"MdStrongEmphasis": 2,
+	"loc_sum": 25,
+	"loc_avg": 25.0,
+	"loc_min": 25,
+	"loc_max": 25
+}

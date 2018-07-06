@@ -1,0 +1,16 @@
+{
+	"repo": "flyingmachine/foreman",
+	"readme": "github/repos/flyingmachine/foreman.json",
+	"lines": 13,
+	"words": 28,
+	"chars": 292,
+	"heading 1": 1,
+	"heading 2": 1,
+	"MdDocument": 1,
+	"MdHeading": 2,
+	"MdText": 8,
+	"MdParagraph": 3,
+	"MdSoftLineBreak": 3,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

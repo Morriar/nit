@@ -1,0 +1,20 @@
+{
+	"repo": "nsubstitute/NSubstitute",
+	"readme": "github/repos/nsubstitute/NSubstitute.json",
+	"lines": 128,
+	"words": 870,
+	"chars": 6210,
+	"heading 1": 1,
+	"heading 3": 5,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 35,
+	"MdParagraph": 23,
+	"MdUnorderedList": 2,
+	"MdListItem": 4,
+	"MdIndentedCodeBlock": 10,
+	"loc_sum": 49,
+	"loc_avg": 4.0,
+	"loc_min": 2,
+	"loc_max": 7
+}

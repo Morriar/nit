@@ -1,0 +1,23 @@
+{
+	"repo": "skywind3000/kcp",
+	"readme": "github/repos/skywind3000/kcp.json",
+	"lines": 208,
+	"words": 615,
+	"chars": 8062,
+	"heading 1": 10,
+	"heading 4": 6,
+	"MdDocument": 1,
+	"MdHeading": 16,
+	"MdText": 106,
+	"MdParagraph": 82,
+	"MdOrderedList": 2,
+	"MdListItem": 54,
+	"MdFencedCodeBlock": 7,
+	"MdSoftLineBreak": 2,
+	"MdUnorderedList": 5,
+	"MdStrongEmphasis": 4,
+	"loc_sum": 27,
+	"loc_avg": 3.0,
+	"loc_min": 2,
+	"loc_max": 10
+}

@@ -1,0 +1,19 @@
+{
+	"repo": "apache/drill",
+	"readme": "github/repos/apache/drill.json",
+	"lines": 33,
+	"words": 338,
+	"chars": 3096,
+	"heading 1": 1,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 28,
+	"MdParagraph": 10,
+	"MdSoftLineBreak": 7,
+	"MdUnorderedList": 1,
+	"MdListItem": 4,
+	"MdHardLineBreak": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

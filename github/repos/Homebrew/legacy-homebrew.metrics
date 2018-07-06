@@ -1,0 +1,16 @@
+{
+	"repo": "Homebrew/legacy-homebrew",
+	"readme": "github/repos/Homebrew/legacy-homebrew.json",
+	"lines": 7,
+	"words": 41,
+	"chars": 412,
+	"heading 1": 1,
+	"MdDocument": 1,
+	"MdHeading": 1,
+	"MdText": 7,
+	"MdParagraph": 4,
+	"MdUnorderedList": 1,
+	"MdListItem": 2,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

@@ -1,0 +1,17 @@
+{
+	"repo": "bitcoinbook/bitcoinbook",
+	"readme": "github/repos/bitcoinbook/bitcoinbook.json",
+	"lines": 60,
+	"words": 699,
+	"chars": 6346,
+	"heading 1": 6,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdParagraph": 22,
+	"MdText": 47,
+	"MdHeading": 8,
+	"MdUnorderedList": 1,
+	"MdListItem": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

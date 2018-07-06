@@ -1,0 +1,20 @@
+{
+	"repo": "getredash/redash",
+	"readme": "github/repos/getredash/redash.json",
+	"lines": 54,
+	"words": 325,
+	"chars": 3264,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdParagraph": 18,
+	"MdSoftLineBreak": 3,
+	"MdStrongEmphasis": 8,
+	"MdEmphasis": 6,
+	"MdText": 42,
+	"MdOrderedList": 1,
+	"MdListItem": 10,
+	"MdHeading": 6,
+	"MdUnorderedList": 3,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

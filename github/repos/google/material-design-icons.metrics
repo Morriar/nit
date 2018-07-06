@@ -1,0 +1,23 @@
+{
+	"repo": "google/material-design-icons",
+	"readme": "github/repos/google/material-design-icons.json",
+	"lines": 41,
+	"words": 225,
+	"chars": 1998,
+	"heading 1": 1,
+	"heading 3": 4,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 33,
+	"MdParagraph": 10,
+	"MdUnorderedList": 1,
+	"MdListItem": 2,
+	"MdFencedCodeBlock": 1,
+	"MdSoftLineBreak": 1,
+	"MdEmphasis": 1,
+	"loc_sum": 3,
+	"loc_avg": 3.0,
+	"loc_min": 3,
+	"loc_max": 3
+}

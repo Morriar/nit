@@ -1,0 +1,23 @@
+{
+	"repo": "dotnet/roslyn",
+	"readme": "github/repos/dotnet/roslyn.json",
+	"lines": 98,
+	"words": 444,
+	"chars": 17042,
+	"heading 2": 1,
+	"heading 3": 8,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 137,
+	"MdParagraph": 37,
+	"MdSoftLineBreak": 17,
+	"MdStrongEmphasis": 12,
+	"MdUnorderedList": 5,
+	"MdListItem": 22,
+	"MdFencedCodeBlock": 1,
+	"MdBlockQuote": 1,
+	"loc_sum": 3,
+	"loc_avg": 3.0,
+	"loc_min": 3,
+	"loc_max": 3
+}

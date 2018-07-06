@@ -1,0 +1,22 @@
+{
+	"repo": "1c7/chinese-independent-developer",
+	"readme": "github/repos/1c7/chinese-independent-developer.json",
+	"lines": 811,
+	"words": 2045,
+	"chars": 46848,
+	"heading 2": 2,
+	"heading 4": 186,
+	"heading 3": 34,
+	"MdDocument": 1,
+	"MdHeading": 222,
+	"MdText": 875,
+	"MdParagraph": 314,
+	"MdStrongEmphasis": 3,
+	"MdHardLineBreak": 2,
+	"MdSoftLineBreak": 4,
+	"MdThematicBreak": 35,
+	"MdUnorderedList": 185,
+	"MdListItem": 305,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

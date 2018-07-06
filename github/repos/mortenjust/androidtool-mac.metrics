@@ -1,0 +1,23 @@
+{
+	"repo": "mortenjust/androidtool-mac",
+	"readme": "github/repos/mortenjust/androidtool-mac.json",
+	"lines": 73,
+	"words": 395,
+	"chars": 3271,
+	"heading 1": 2,
+	"heading 2": 8,
+	"heading 3": 3,
+	"MdDocument": 1,
+	"MdHeading": 13,
+	"MdText": 56,
+	"MdParagraph": 31,
+	"MdStrongEmphasis": 1,
+	"MdUnorderedList": 4,
+	"MdListItem": 15,
+	"MdSoftLineBreak": 6,
+	"MdIndentedCodeBlock": 1,
+	"loc_sum": 2,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

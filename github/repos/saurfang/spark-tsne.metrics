@@ -1,0 +1,18 @@
+{
+	"repo": "saurfang/spark-tsne",
+	"readme": "github/repos/saurfang/spark-tsne.json",
+	"lines": 25,
+	"words": 113,
+	"chars": 1476,
+	"heading 1": 1,
+	"heading 2": 1,
+	"MdDocument": 1,
+	"MdHeading": 2,
+	"MdText": 17,
+	"MdParagraph": 7,
+	"MdSoftLineBreak": 8,
+	"MdUnorderedList": 1,
+	"MdListItem": 2,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

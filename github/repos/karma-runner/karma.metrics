@@ -1,0 +1,21 @@
+{
+	"repo": "karma-runner/karma",
+	"readme": "github/repos/karma-runner/karma.json",
+	"lines": 125,
+	"words": 440,
+	"chars": 5118,
+	"heading 1": 1,
+	"heading 2": 9,
+	"heading 3": 3,
+	"MdDocument": 1,
+	"MdHeading": 13,
+	"MdText": 78,
+	"MdParagraph": 34,
+	"MdSoftLineBreak": 18,
+	"MdEmphasis": 2,
+	"MdBlockQuote": 2,
+	"MdUnorderedList": 3,
+	"MdListItem": 18,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

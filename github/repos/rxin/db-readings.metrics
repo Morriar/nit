@@ -1,0 +1,18 @@
+{
+	"repo": "rxin/db-readings",
+	"readme": "github/repos/rxin/db-readings.json",
+	"lines": 112,
+	"words": 2097,
+	"chars": 16892,
+	"heading 1": 1,
+	"heading 2": 10,
+	"MdDocument": 1,
+	"MdHeading": 11,
+	"MdText": 56,
+	"MdParagraph": 47,
+	"MdOrderedList": 1,
+	"MdListItem": 43,
+	"MdUnorderedList": 9,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

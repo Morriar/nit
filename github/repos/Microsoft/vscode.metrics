@@ -1,0 +1,18 @@
+{
+	"repo": "Microsoft/vscode",
+	"readme": "github/repos/Microsoft/vscode.json",
+	"lines": 55,
+	"words": 291,
+	"chars": 3587,
+	"heading 1": 1,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 40,
+	"MdParagraph": 23,
+	"MdSoftLineBreak": 5,
+	"MdUnorderedList": 3,
+	"MdListItem": 13,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

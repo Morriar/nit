@@ -1,0 +1,23 @@
+{
+	"repo": "athityakumar/colorls",
+	"readme": "github/repos/athityakumar/colorls.json",
+	"lines": 223,
+	"words": 926,
+	"chars": 8656,
+	"heading 1": 10,
+	"heading 3": 2,
+	"MdDocument": 1,
+	"MdHeading": 12,
+	"MdText": 142,
+	"MdParagraph": 88,
+	"MdSoftLineBreak": 4,
+	"MdEmphasis": 3,
+	"MdUnorderedList": 6,
+	"MdListItem": 48,
+	"MdOrderedList": 2,
+	"MdFencedCodeBlock": 10,
+	"loc_sum": 21,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 3
+}

@@ -1,0 +1,20 @@
+{
+	"repo": "freeCodeCamp/freeCodeCamp",
+	"readme": "github/repos/freeCodeCamp/freeCodeCamp.json",
+	"lines": 126,
+	"words": 767,
+	"chars": 6636,
+	"heading 2": 1,
+	"heading 3": 7,
+	"heading 4": 8,
+	"MdDocument": 1,
+	"MdParagraph": 57,
+	"MdSoftLineBreak": 10,
+	"MdHeading": 16,
+	"MdText": 93,
+	"MdUnorderedList": 9,
+	"MdListItem": 39,
+	"MdStrongEmphasis": 6,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

@@ -1,0 +1,23 @@
+{
+	"repo": "nvbn/thefuck",
+	"readme": "github/repos/nvbn/thefuck.json",
+	"lines": 493,
+	"words": 2529,
+	"chars": 22115,
+	"heading 1": 1,
+	"heading 2": 10,
+	"MdDocument": 1,
+	"MdHeading": 11,
+	"MdText": 502,
+	"MdParagraph": 206,
+	"MdEmphasis": 15,
+	"MdSoftLineBreak": 22,
+	"MdFencedCodeBlock": 22,
+	"MdUnorderedList": 6,
+	"MdListItem": 165,
+	"MdStrongEmphasis": 2,
+	"loc_sum": 141,
+	"loc_avg": 6.0,
+	"loc_min": 2,
+	"loc_max": 18
+}

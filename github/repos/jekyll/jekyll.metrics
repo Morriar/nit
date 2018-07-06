@@ -1,0 +1,18 @@
+{
+	"repo": "jekyll/jekyll",
+	"readme": "github/repos/jekyll/jekyll.json",
+	"lines": 60,
+	"words": 307,
+	"chars": 3641,
+	"heading 1": 1,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdParagraph": 19,
+	"MdSoftLineBreak": 10,
+	"MdText": 39,
+	"MdUnorderedList": 2,
+	"MdListItem": 11,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

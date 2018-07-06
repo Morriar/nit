@@ -1,0 +1,23 @@
+{
+	"repo": "Matt-Esch/virtual-dom",
+	"readme": "github/repos/Matt-Esch/virtual-dom.json",
+	"lines": 160,
+	"words": 1078,
+	"chars": 7722,
+	"heading 1": 1,
+	"heading 2": 9,
+	"heading 3": 2,
+	"MdDocument": 1,
+	"MdHeading": 12,
+	"MdText": 60,
+	"MdParagraph": 24,
+	"MdSoftLineBreak": 7,
+	"MdFencedCodeBlock": 6,
+	"MdUnorderedList": 2,
+	"MdListItem": 7,
+	"MdStrongEmphasis": 1,
+	"loc_sum": 62,
+	"loc_avg": 10.0,
+	"loc_min": 2,
+	"loc_max": 35
+}

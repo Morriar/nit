@@ -1,0 +1,20 @@
+{
+	"repo": "gztchan/awesome-design",
+	"readme": "github/repos/gztchan/awesome-design.json",
+	"lines": 569,
+	"words": 1772,
+	"chars": 29794,
+	"heading 1": 1,
+	"heading 4": 3,
+	"heading 2": 20,
+	"MdDocument": 1,
+	"MdHeading": 24,
+	"MdText": 117,
+	"MdParagraph": 489,
+	"MdSoftLineBreak": 6,
+	"MdBlockQuote": 1,
+	"MdUnorderedList": 28,
+	"MdListItem": 483,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

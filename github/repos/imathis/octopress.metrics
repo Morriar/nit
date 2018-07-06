@@ -1,0 +1,20 @@
+{
+	"repo": "imathis/octopress",
+	"readme": "github/repos/imathis/octopress.json",
+	"lines": 46,
+	"words": 427,
+	"chars": 3239,
+	"heading 2": 5,
+	"heading 4": 1,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 37,
+	"MdParagraph": 18,
+	"MdOrderedList": 1,
+	"MdListItem": 7,
+	"MdStrongEmphasis": 6,
+	"MdSoftLineBreak": 2,
+	"MdUnorderedList": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

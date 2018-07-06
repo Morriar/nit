@@ -1,0 +1,18 @@
+{
+	"repo": "jinzhu/gorm",
+	"readme": "github/repos/jinzhu/gorm.json",
+	"lines": 41,
+	"words": 105,
+	"chars": 1881,
+	"heading 1": 1,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 21,
+	"MdParagraph": 18,
+	"MdSoftLineBreak": 6,
+	"MdUnorderedList": 2,
+	"MdListItem": 13,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

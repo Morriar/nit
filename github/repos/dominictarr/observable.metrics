@@ -1,0 +1,22 @@
+{
+	"repo": "dominictarr/observable",
+	"readme": "github/repos/dominictarr/observable.json",
+	"lines": 174,
+	"words": 488,
+	"chars": 3477,
+	"heading 1": 2,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 36,
+	"MdParagraph": 18,
+	"MdSoftLineBreak": 6,
+	"MdFencedCodeBlock": 10,
+	"MdEmphasis": 1,
+	"MdUnorderedList": 1,
+	"MdListItem": 3,
+	"loc_sum": 97,
+	"loc_avg": 9.0,
+	"loc_min": 2,
+	"loc_max": 16
+}

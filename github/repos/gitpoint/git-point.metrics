@@ -1,0 +1,18 @@
+{
+	"repo": "gitpoint/git-point",
+	"readme": "github/repos/gitpoint/git-point.json",
+	"lines": 123,
+	"words": 536,
+	"chars": 7106,
+	"heading 2": 9,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 58,
+	"MdUnorderedList": 3,
+	"MdListItem": 23,
+	"MdParagraph": 37,
+	"MdSoftLineBreak": 14,
+	"MdStrongEmphasis": 3,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

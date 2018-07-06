@@ -1,0 +1,23 @@
+{
+	"repo": "mist64/xhyve",
+	"readme": "github/repos/mist64/xhyve.json",
+	"lines": 225,
+	"words": 3155,
+	"chars": 11028,
+	"heading 1": 1,
+	"heading 2": 11,
+	"MdDocument": 1,
+	"MdHeading": 12,
+	"MdParagraph": 76,
+	"MdText": 137,
+	"MdEmphasis": 8,
+	"MdUnorderedList": 10,
+	"MdListItem": 41,
+	"MdIndentedCodeBlock": 8,
+	"MdStrongEmphasis": 15,
+	"MdSoftLineBreak": 8,
+	"loc_sum": 68,
+	"loc_avg": 8.0,
+	"loc_min": 2,
+	"loc_max": 28
+}

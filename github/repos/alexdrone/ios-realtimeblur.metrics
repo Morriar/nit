@@ -1,0 +1,19 @@
+{
+	"repo": "alexdrone/ios-realtimeblur",
+	"readme": "github/repos/alexdrone/ios-realtimeblur.json",
+	"lines": 47,
+	"words": 152,
+	"chars": 1391,
+	"heading 1": 1,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdText": 13,
+	"MdParagraph": 9,
+	"MdIndentedCodeBlock": 4,
+	"MdSoftLineBreak": 2,
+	"loc_sum": 12,
+	"loc_avg": 3.0,
+	"loc_min": 2,
+	"loc_max": 4
+}

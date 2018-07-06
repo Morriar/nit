@@ -1,0 +1,22 @@
+{
+	"repo": "libuv/libuv",
+	"readme": "github/repos/libuv/libuv.json",
+	"lines": 356,
+	"words": 1068,
+	"chars": 9145,
+	"heading 2": 10,
+	"heading 3": 11,
+	"MdDocument": 1,
+	"MdParagraph": 73,
+	"MdHeading": 21,
+	"MdText": 154,
+	"MdSoftLineBreak": 45,
+	"MdUnorderedList": 5,
+	"MdListItem": 24,
+	"MdFencedCodeBlock": 24,
+	"MdStrongEmphasis": 1,
+	"loc_sum": 71,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 7
+}

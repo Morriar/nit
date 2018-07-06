@@ -1,0 +1,22 @@
+{
+	"repo": "amitmerchant1990/electron-markdownify",
+	"readme": "github/repos/amitmerchant1990/electron-markdownify.json",
+	"lines": 123,
+	"words": 368,
+	"chars": 4443,
+	"heading 2": 8,
+	"MdDocument": 1,
+	"MdParagraph": 35,
+	"MdHeading": 8,
+	"MdText": 44,
+	"MdUnorderedList": 7,
+	"MdListItem": 26,
+	"MdFencedCodeBlock": 1,
+	"MdThematicBreak": 1,
+	"MdBlockQuote": 1,
+	"MdSoftLineBreak": 2,
+	"loc_sum": 12,
+	"loc_avg": 12.0,
+	"loc_min": 12,
+	"loc_max": 12
+}

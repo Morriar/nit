@@ -1,0 +1,22 @@
+{
+	"repo": "Templarian/MaterialDesign",
+	"readme": "github/repos/Templarian/MaterialDesign.json",
+	"lines": 66,
+	"words": 371,
+	"chars": 3826,
+	"heading 1": 1,
+	"heading 2": 4,
+	"heading 3": 4,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 54,
+	"MdParagraph": 20,
+	"MdSoftLineBreak": 3,
+	"MdStrongEmphasis": 2,
+	"MdEmphasis": 2,
+	"MdFencedCodeBlock": 1,
+	"loc_sum": 3,
+	"loc_avg": 3.0,
+	"loc_min": 3,
+	"loc_max": 3
+}

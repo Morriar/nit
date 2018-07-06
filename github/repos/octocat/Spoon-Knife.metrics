@@ -1,0 +1,15 @@
+{
+	"repo": "octocat/Spoon-Knife",
+	"readme": "github/repos/octocat/Spoon-Knife.json",
+	"lines": 10,
+	"words": 109,
+	"chars": 780,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdHeading": 1,
+	"MdText": 13,
+	"MdParagraph": 4,
+	"MdEmphasis": 3,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

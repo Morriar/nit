@@ -1,0 +1,23 @@
+{
+	"repo": "vinc3m1/RoundedImageView",
+	"readme": "github/repos/vinc3m1/RoundedImageView.json",
+	"lines": 128,
+	"words": 543,
+	"chars": 4610,
+	"heading 1": 1,
+	"heading 2": 5,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 50,
+	"MdParagraph": 29,
+	"MdSoftLineBreak": 2,
+	"MdUnorderedList": 4,
+	"MdListItem": 17,
+	"MdStrongEmphasis": 6,
+	"MdFencedCodeBlock": 4,
+	"MdIndentedCodeBlock": 1,
+	"loc_sum": 59,
+	"loc_avg": 11.0,
+	"loc_min": 8,
+	"loc_max": 14
+}

@@ -1,0 +1,18 @@
+{
+	"repo": "vimeo/psalm",
+	"readme": "github/repos/vimeo/psalm.json",
+	"lines": 53,
+	"words": 163,
+	"chars": 2218,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdParagraph": 12,
+	"MdSoftLineBreak": 3,
+	"MdText": 28,
+	"MdHeading": 4,
+	"MdFencedCodeBlock": 4,
+	"loc_sum": 8,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

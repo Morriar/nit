@@ -1,0 +1,16 @@
+{
+	"repo": "signalapp/Signal-Android",
+	"readme": "github/repos/signalapp/Signal-Android.json",
+	"lines": 70,
+	"words": 423,
+	"chars": 3775,
+	"heading 1": 3,
+	"heading 2": 9,
+	"MdDocument": 1,
+	"MdHeading": 12,
+	"MdText": 45,
+	"MdParagraph": 25,
+	"MdSoftLineBreak": 4,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

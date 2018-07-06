@@ -1,0 +1,20 @@
+{
+	"repo": "JonAbrams/synth",
+	"readme": "github/repos/JonAbrams/synth.json",
+	"lines": 51,
+	"words": 321,
+	"chars": 2928,
+	"heading 1": 1,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 41,
+	"MdParagraph": 24,
+	"MdStrongEmphasis": 3,
+	"MdEmphasis": 2,
+	"MdSoftLineBreak": 1,
+	"MdUnorderedList": 3,
+	"MdListItem": 15,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

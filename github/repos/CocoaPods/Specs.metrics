@@ -1,0 +1,17 @@
+{
+	"repo": "CocoaPods/Specs",
+	"readme": "github/repos/CocoaPods/Specs.json",
+	"lines": 16,
+	"words": 46,
+	"chars": 575,
+	"heading 1": 1,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdText": 9,
+	"MdParagraph": 4,
+	"MdUnorderedList": 1,
+	"MdListItem": 2,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

@@ -1,0 +1,23 @@
+{
+	"repo": "udacity/create-your-own-adventure",
+	"readme": "github/repos/udacity/create-your-own-adventure.json",
+	"lines": 85,
+	"words": 602,
+	"chars": 4003,
+	"heading 1": 1,
+	"heading 2": 3,
+	"heading 3": 6,
+	"MdDocument": 1,
+	"MdHeading": 10,
+	"MdText": 64,
+	"MdParagraph": 15,
+	"MdSoftLineBreak": 35,
+	"MdIndentedCodeBlock": 1,
+	"MdStrongEmphasis": 1,
+	"MdUnorderedList": 1,
+	"MdListItem": 4,
+	"loc_sum": 2,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

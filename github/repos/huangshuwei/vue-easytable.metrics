@@ -1,0 +1,23 @@
+{
+	"repo": "huangshuwei/vue-easytable",
+	"readme": "github/repos/huangshuwei/vue-easytable.json",
+	"lines": 70,
+	"words": 136,
+	"chars": 2540,
+	"heading 1": 1,
+	"heading 2": 7,
+	"MdDocument": 1,
+	"MdParagraph": 24,
+	"MdSoftLineBreak": 1,
+	"MdHeading": 8,
+	"MdText": 29,
+	"MdUnorderedList": 1,
+	"MdListItem": 16,
+	"MdFencedCodeBlock": 2,
+	"MdBlockQuote": 1,
+	"MdStrongEmphasis": 1,
+	"loc_sum": 12,
+	"loc_avg": 6.0,
+	"loc_min": 2,
+	"loc_max": 10
+}

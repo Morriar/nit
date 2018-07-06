@@ -1,0 +1,19 @@
+{
+	"repo": "jayphelps/git-blame-someone-else",
+	"readme": "github/repos/jayphelps/git-blame-someone-else.json",
+	"lines": 28,
+	"words": 79,
+	"chars": 971,
+	"heading 1": 1,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdHeading": 4,
+	"MdText": 9,
+	"MdBlockQuote": 1,
+	"MdParagraph": 5,
+	"MdFencedCodeBlock": 2,
+	"loc_sum": 6,
+	"loc_avg": 3.0,
+	"loc_min": 2,
+	"loc_max": 4
+}

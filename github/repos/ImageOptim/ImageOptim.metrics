@@ -1,0 +1,20 @@
+{
+	"repo": "ImageOptim/ImageOptim",
+	"readme": "github/repos/ImageOptim/ImageOptim.json",
+	"lines": 30,
+	"words": 65,
+	"chars": 787,
+	"heading 1": 1,
+	"heading 2": 1,
+	"MdDocument": 1,
+	"MdHeading": 2,
+	"MdText": 13,
+	"MdParagraph": 6,
+	"MdUnorderedList": 1,
+	"MdListItem": 2,
+	"MdFencedCodeBlock": 3,
+	"loc_sum": 9,
+	"loc_avg": 3.0,
+	"loc_min": 2,
+	"loc_max": 4
+}

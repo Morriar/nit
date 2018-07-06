@@ -1,0 +1,22 @@
+{
+	"repo": "racaljk/hosts",
+	"readme": "github/repos/racaljk/hosts.json",
+	"lines": 73,
+	"words": 299,
+	"chars": 3468,
+	"heading 3": 3,
+	"heading 2": 4,
+	"heading 4": 1,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 59,
+	"MdParagraph": 19,
+	"MdBlockQuote": 5,
+	"MdSoftLineBreak": 6,
+	"MdOrderedList": 2,
+	"MdListItem": 10,
+	"MdUnorderedList": 4,
+	"MdStrongEmphasis": 4,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

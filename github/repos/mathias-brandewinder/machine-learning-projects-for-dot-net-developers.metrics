@@ -1,0 +1,19 @@
+{
+	"repo": "mathias-brandewinder/machine-learning-projects-for-dot-net-developers",
+	"readme": "github/repos/mathias-brandewinder/machine-learning-projects-for-dot-net-developers.json",
+	"lines": 22,
+	"words": 92,
+	"chars": 821,
+	"heading 1": 1,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdText": 13,
+	"MdParagraph": 2,
+	"MdSoftLineBreak": 8,
+	"MdFencedCodeBlock": 1,
+	"loc_sum": 2,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

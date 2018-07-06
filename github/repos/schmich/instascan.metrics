@@ -1,0 +1,23 @@
+{
+	"repo": "schmich/instascan",
+	"readme": "github/repos/schmich/instascan.json",
+	"lines": 205,
+	"words": 1213,
+	"chars": 9027,
+	"heading 1": 1,
+	"heading 2": 8,
+	"heading 3": 13,
+	"MdDocument": 1,
+	"MdHeading": 22,
+	"MdText": 129,
+	"MdParagraph": 65,
+	"MdEmphasis": 2,
+	"MdFencedCodeBlock": 4,
+	"MdUnorderedList": 16,
+	"MdListItem": 51,
+	"MdHardLineBreak": 1,
+	"loc_sum": 62,
+	"loc_avg": 15.0,
+	"loc_min": 2,
+	"loc_max": 32
+}

@@ -1,0 +1,21 @@
+{
+	"repo": "BVLC/caffe",
+	"readme": "github/repos/BVLC/caffe.json",
+	"lines": 46,
+	"words": 223,
+	"chars": 2487,
+	"heading 1": 1,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdHeading": 4,
+	"MdText": 23,
+	"MdParagraph": 16,
+	"MdSoftLineBreak": 4,
+	"MdUnorderedList": 2,
+	"MdListItem": 7,
+	"MdIndentedCodeBlock": 1,
+	"loc_sum": 7,
+	"loc_avg": 7.0,
+	"loc_min": 7,
+	"loc_max": 7
+}

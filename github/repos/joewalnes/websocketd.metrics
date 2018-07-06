@@ -1,0 +1,23 @@
+{
+	"repo": "joewalnes/websocketd",
+	"readme": "github/repos/joewalnes/websocketd.json",
+	"lines": 131,
+	"words": 617,
+	"chars": 4909,
+	"heading 1": 1,
+	"heading 2": 7,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 60,
+	"MdParagraph": 32,
+	"MdStrongEmphasis": 4,
+	"MdFencedCodeBlock": 4,
+	"MdSoftLineBreak": 1,
+	"MdUnorderedList": 3,
+	"MdListItem": 12,
+	"MdEmphasis": 2,
+	"loc_sum": 42,
+	"loc_avg": 10.0,
+	"loc_min": 2,
+	"loc_max": 21
+}

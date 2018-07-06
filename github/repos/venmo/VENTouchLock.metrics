@@ -1,0 +1,21 @@
+{
+	"repo": "venmo/VENTouchLock",
+	"readme": "github/repos/venmo/VENTouchLock.json",
+	"lines": 59,
+	"words": 509,
+	"chars": 3736,
+	"heading 1": 1,
+	"heading 2": 4,
+	"heading 3": 4,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 36,
+	"MdParagraph": 17,
+	"MdFencedCodeBlock": 3,
+	"MdUnorderedList": 1,
+	"MdListItem": 5,
+	"loc_sum": 10,
+	"loc_avg": 3.0,
+	"loc_min": 2,
+	"loc_max": 6
+}

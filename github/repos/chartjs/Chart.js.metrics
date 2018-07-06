@@ -1,0 +1,23 @@
+{
+	"repo": "chartjs/Chart.js",
+	"readme": "github/repos/chartjs/Chart.js.json",
+	"lines": 58,
+	"words": 275,
+	"chars": 3246,
+	"heading 1": 1,
+	"heading 2": 6,
+	"heading 3": 1,
+	"heading 4": 2,
+	"MdDocument": 1,
+	"MdHeading": 10,
+	"MdText": 41,
+	"MdParagraph": 20,
+	"MdEmphasis": 1,
+	"MdFencedCodeBlock": 2,
+	"MdUnorderedList": 3,
+	"MdListItem": 6,
+	"loc_sum": 4,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

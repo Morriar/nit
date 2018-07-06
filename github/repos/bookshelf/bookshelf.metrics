@@ -1,0 +1,22 @@
+{
+	"repo": "bookshelf/bookshelf",
+	"readme": "github/repos/bookshelf/bookshelf.json",
+	"lines": 187,
+	"words": 1269,
+	"chars": 12190,
+	"heading 1": 1,
+	"heading 2": 8,
+	"heading 3": 7,
+	"MdDocument": 1,
+	"MdHeading": 16,
+	"MdParagraph": 49,
+	"MdSoftLineBreak": 4,
+	"MdText": 106,
+	"MdFencedCodeBlock": 5,
+	"MdUnorderedList": 3,
+	"MdListItem": 26,
+	"loc_sum": 68,
+	"loc_avg": 13.0,
+	"loc_min": 4,
+	"loc_max": 27
+}

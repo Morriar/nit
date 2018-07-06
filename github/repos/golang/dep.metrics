@@ -1,0 +1,20 @@
+{
+	"repo": "golang/dep",
+	"readme": "github/repos/golang/dep.json",
+	"lines": 59,
+	"words": 296,
+	"chars": 2737,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdHeading": 4,
+	"MdText": 37,
+	"MdParagraph": 11,
+	"MdStrongEmphasis": 1,
+	"MdEmphasis": 1,
+	"MdFencedCodeBlock": 3,
+	"MdSoftLineBreak": 9,
+	"loc_sum": 7,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 3
+}

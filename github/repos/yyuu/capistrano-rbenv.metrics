@@ -1,0 +1,22 @@
+{
+	"repo": "yyuu/capistrano-rbenv",
+	"readme": "github/repos/yyuu/capistrano-rbenv.json",
+	"lines": 66,
+	"words": 313,
+	"chars": 2582,
+	"heading 1": 1,
+	"heading 2": 5,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 65,
+	"MdParagraph": 31,
+	"MdIndentedCodeBlock": 3,
+	"MdFencedCodeBlock": 1,
+	"MdUnorderedList": 2,
+	"MdListItem": 23,
+	"MdOrderedList": 1,
+	"loc_sum": 10,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 4
+}

@@ -1,0 +1,22 @@
+{
+	"repo": "json-porn-api/demo",
+	"readme": "github/repos/json-porn-api/demo.json",
+	"lines": 79,
+	"words": 413,
+	"chars": 3693,
+	"heading 1": 1,
+	"heading 2": 3,
+	"heading 3": 1,
+	"heading 4": 4,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 44,
+	"MdParagraph": 14,
+	"MdSoftLineBreak": 6,
+	"MdFencedCodeBlock": 7,
+	"MdBlockQuote": 1,
+	"loc_sum": 33,
+	"loc_avg": 4.0,
+	"loc_min": 3,
+	"loc_max": 7
+}

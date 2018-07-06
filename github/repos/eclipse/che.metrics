@@ -1,0 +1,19 @@
+{
+	"repo": "eclipse/che",
+	"readme": "github/repos/eclipse/che.json",
+	"lines": 56,
+	"words": 387,
+	"chars": 4440,
+	"heading 1": 1,
+	"heading 3": 7,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 54,
+	"MdParagraph": 22,
+	"MdSoftLineBreak": 12,
+	"MdUnorderedList": 3,
+	"MdListItem": 11,
+	"MdStrongEmphasis": 4,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

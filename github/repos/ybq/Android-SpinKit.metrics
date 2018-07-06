@@ -1,0 +1,23 @@
+{
+	"repo": "ybq/Android-SpinKit",
+	"readme": "github/repos/ybq/Android-SpinKit.json",
+	"lines": 90,
+	"words": 269,
+	"chars": 3415,
+	"heading 1": 1,
+	"heading 2": 5,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 27,
+	"MdBlockQuote": 2,
+	"MdParagraph": 7,
+	"MdOrderedList": 2,
+	"MdListItem": 5,
+	"MdFencedCodeBlock": 5,
+	"MdUnorderedList": 3,
+	"MdSoftLineBreak": 13,
+	"loc_sum": 30,
+	"loc_avg": 6.0,
+	"loc_min": 4,
+	"loc_max": 9
+}

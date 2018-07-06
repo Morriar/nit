@@ -1,0 +1,23 @@
+{
+	"repo": "nexe/nexe",
+	"readme": "github/repos/nexe/nexe.json",
+	"lines": 247,
+	"words": 1603,
+	"chars": 10760,
+	"heading 2": 9,
+	"heading 3": 5,
+	"heading 4": 27,
+	"MdDocument": 1,
+	"MdHeading": 41,
+	"MdText": 150,
+	"MdUnorderedList": 41,
+	"MdListItem": 115,
+	"MdParagraph": 106,
+	"MdEmphasis": 2,
+	"MdSoftLineBreak": 5,
+	"MdFencedCodeBlock": 5,
+	"loc_sum": 33,
+	"loc_avg": 6.0,
+	"loc_min": 2,
+	"loc_max": 18
+}

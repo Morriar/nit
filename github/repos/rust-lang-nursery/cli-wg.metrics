@@ -1,0 +1,18 @@
+{
+	"repo": "rust-lang-nursery/cli-wg",
+	"readme": "github/repos/rust-lang-nursery/cli-wg.json",
+	"lines": 31,
+	"words": 137,
+	"chars": 1254,
+	"heading 1": 1,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdText": 20,
+	"MdParagraph": 14,
+	"MdSoftLineBreak": 2,
+	"MdUnorderedList": 2,
+	"MdListItem": 9,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

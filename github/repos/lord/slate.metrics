@@ -1,0 +1,23 @@
+{
+	"repo": "lord/slate",
+	"readme": "github/repos/lord/slate.json",
+	"lines": 119,
+	"words": 768,
+	"chars": 7015,
+	"heading 2": 6,
+	"heading 3": 3,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 65,
+	"MdUnorderedList": 5,
+	"MdListItem": 38,
+	"MdParagraph": 50,
+	"MdStrongEmphasis": 11,
+	"MdOrderedList": 1,
+	"MdEmphasis": 1,
+	"MdFencedCodeBlock": 1,
+	"loc_sum": 7,
+	"loc_avg": 7.0,
+	"loc_min": 7,
+	"loc_max": 7
+}

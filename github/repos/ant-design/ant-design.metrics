@@ -1,0 +1,22 @@
+{
+	"repo": "ant-design/ant-design",
+	"readme": "github/repos/ant-design/ant-design.json",
+	"lines": 106,
+	"words": 226,
+	"chars": 4694,
+	"heading 1": 1,
+	"heading 2": 10,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdHeading": 12,
+	"MdText": 36,
+	"MdParagraph": 33,
+	"MdSoftLineBreak": 7,
+	"MdUnorderedList": 3,
+	"MdListItem": 21,
+	"MdFencedCodeBlock": 4,
+	"loc_sum": 12,
+	"loc_avg": 3.0,
+	"loc_min": 2,
+	"loc_max": 5
+}

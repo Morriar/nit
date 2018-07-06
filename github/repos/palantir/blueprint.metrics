@@ -1,0 +1,22 @@
+{
+	"repo": "palantir/blueprint",
+	"readme": "github/repos/palantir/blueprint.json",
+	"lines": 131,
+	"words": 745,
+	"chars": 8325,
+	"heading 1": 1,
+	"heading 3": 11,
+	"heading 2": 5,
+	"MdDocument": 1,
+	"MdHeading": 17,
+	"MdText": 113,
+	"MdParagraph": 54,
+	"MdEmphasis": 2,
+	"MdSoftLineBreak": 7,
+	"MdUnorderedList": 9,
+	"MdListItem": 28,
+	"MdStrongEmphasis": 1,
+	"MdOrderedList": 2,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

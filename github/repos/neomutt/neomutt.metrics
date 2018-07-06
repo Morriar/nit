@@ -1,0 +1,20 @@
+{
+	"repo": "neomutt/neomutt",
+	"readme": "github/repos/neomutt/neomutt.json",
+	"lines": 244,
+	"words": 1119,
+	"chars": 13436,
+	"heading 1": 1,
+	"heading 2": 5,
+	"heading 3": 2,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 217,
+	"MdParagraph": 24,
+	"MdSoftLineBreak": 187,
+	"MdUnorderedList": 2,
+	"MdListItem": 10,
+	"MdStrongEmphasis": 2,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

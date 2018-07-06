@@ -1,0 +1,22 @@
+{
+	"repo": "google/android-classyshark",
+	"readme": "github/repos/google/android-classyshark.json",
+	"lines": 72,
+	"words": 307,
+	"chars": 3026,
+	"heading 1": 2,
+	"heading 3": 8,
+	"MdDocument": 1,
+	"MdHeading": 10,
+	"MdText": 33,
+	"MdParagraph": 26,
+	"MdUnorderedList": 4,
+	"MdListItem": 18,
+	"MdSoftLineBreak": 2,
+	"MdOrderedList": 1,
+	"MdIndentedCodeBlock": 1,
+	"loc_sum": 14,
+	"loc_avg": 14.0,
+	"loc_min": 14,
+	"loc_max": 14
+}

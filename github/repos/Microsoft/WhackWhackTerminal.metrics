@@ -1,0 +1,20 @@
+{
+	"repo": "Microsoft/WhackWhackTerminal",
+	"readme": "github/repos/Microsoft/WhackWhackTerminal.json",
+	"lines": 33,
+	"words": 191,
+	"chars": 1662,
+	"heading 1": 2,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdParagraph": 15,
+	"MdHeading": 4,
+	"MdText": 29,
+	"MdUnorderedList": 1,
+	"MdListItem": 8,
+	"MdStrongEmphasis": 1,
+	"MdOrderedList": 1,
+	"MdSoftLineBreak": 6,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

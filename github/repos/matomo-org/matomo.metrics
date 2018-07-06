@@ -1,0 +1,20 @@
+{
+	"repo": "matomo-org/matomo",
+	"readme": "github/repos/matomo-org/matomo.json",
+	"lines": 120,
+	"words": 695,
+	"chars": 5440,
+	"heading 1": 1,
+	"heading 2": 15,
+	"MdDocument": 1,
+	"MdHeading": 16,
+	"MdText": 67,
+	"MdParagraph": 42,
+	"MdSoftLineBreak": 9,
+	"MdBlockQuote": 2,
+	"MdUnorderedList": 3,
+	"MdListItem": 16,
+	"MdStrongEmphasis": 2,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

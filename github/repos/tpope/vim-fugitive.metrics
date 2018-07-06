@@ -1,0 +1,22 @@
+{
+	"repo": "tpope/vim-fugitive",
+	"readme": "github/repos/tpope/vim-fugitive.json",
+	"lines": 112,
+	"words": 629,
+	"chars": 4685,
+	"heading 1": 1,
+	"heading 2": 5,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 107,
+	"MdParagraph": 24,
+	"MdSoftLineBreak": 46,
+	"MdUnorderedList": 1,
+	"MdListItem": 5,
+	"MdIndentedCodeBlock": 2,
+	"MdBlockQuote": 2,
+	"loc_sum": 6,
+	"loc_avg": 3.0,
+	"loc_min": 2,
+	"loc_max": 4
+}

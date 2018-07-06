@@ -1,0 +1,23 @@
+{
+	"repo": "iron/iron",
+	"readme": "github/repos/iron/iron.json",
+	"lines": 222,
+	"words": 894,
+	"chars": 7302,
+	"heading 1": 2,
+	"heading 2": 12,
+	"MdDocument": 1,
+	"MdHeading": 14,
+	"MdText": 99,
+	"MdParagraph": 42,
+	"MdSoftLineBreak": 45,
+	"MdBlockQuote": 1,
+	"MdFencedCodeBlock": 4,
+	"MdEmphasis": 2,
+	"MdUnorderedList": 4,
+	"MdListItem": 12,
+	"loc_sum": 61,
+	"loc_avg": 15.0,
+	"loc_min": 3,
+	"loc_max": 37
+}

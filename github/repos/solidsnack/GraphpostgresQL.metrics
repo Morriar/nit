@@ -1,0 +1,19 @@
+{
+	"repo": "solidsnack/GraphpostgresQL",
+	"readme": "github/repos/solidsnack/GraphpostgresQL.json",
+	"lines": 81,
+	"words": 300,
+	"chars": 2121,
+	"heading 1": 6,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 40,
+	"MdParagraph": 10,
+	"MdSoftLineBreak": 9,
+	"MdFencedCodeBlock": 4,
+	"MdStrongEmphasis": 2,
+	"loc_sum": 25,
+	"loc_avg": 6.0,
+	"loc_min": 2,
+	"loc_max": 14
+}

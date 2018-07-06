@@ -1,0 +1,23 @@
+{
+	"repo": "daneden/animate.css",
+	"readme": "github/repos/daneden/animate.css.json",
+	"lines": 234,
+	"words": 1465,
+	"chars": 8711,
+	"heading 1": 1,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 149,
+	"MdParagraph": 26,
+	"MdEmphasis": 3,
+	"MdFencedCodeBlock": 15,
+	"MdOrderedList": 2,
+	"MdListItem": 3,
+	"MdSoftLineBreak": 20,
+	"MdStrongEmphasis": 1,
+	"loc_sum": 112,
+	"loc_avg": 7.0,
+	"loc_min": 2,
+	"loc_max": 27
+}

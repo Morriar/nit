@@ -1,0 +1,21 @@
+{
+	"repo": "Devlight/InfiniteCycleViewPager",
+	"readme": "github/repos/Devlight/InfiniteCycleViewPager.json",
+	"lines": 220,
+	"words": 766,
+	"chars": 7935,
+	"heading 1": 10,
+	"MdDocument": 1,
+	"MdHeading": 10,
+	"MdText": 81,
+	"MdParagraph": 39,
+	"MdSoftLineBreak": 10,
+	"MdFencedCodeBlock": 9,
+	"MdUnorderedList": 1,
+	"MdListItem": 10,
+	"MdHardLineBreak": 16,
+	"loc_sum": 55,
+	"loc_avg": 6.0,
+	"loc_min": 2,
+	"loc_max": 14
+}

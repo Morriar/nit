@@ -1,0 +1,17 @@
+{
+	"repo": "misd-service-development/guzzle-bundle",
+	"readme": "github/repos/misd-service-development/guzzle-bundle.json",
+	"lines": 32,
+	"words": 92,
+	"chars": 1355,
+	"heading 1": 1,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 17,
+	"MdParagraph": 9,
+	"MdUnorderedList": 2,
+	"MdListItem": 3,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

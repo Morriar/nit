@@ -1,0 +1,18 @@
+{
+	"repo": "facette/facette",
+	"readme": "github/repos/facette/facette.json",
+	"lines": 50,
+	"words": 166,
+	"chars": 1884,
+	"heading 1": 1,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdText": 30,
+	"MdParagraph": 12,
+	"MdSoftLineBreak": 9,
+	"MdUnorderedList": 1,
+	"MdListItem": 5,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

@@ -1,0 +1,20 @@
+{
+	"repo": "Hironsan/BossSensor",
+	"readme": "github/repos/Hironsan/BossSensor.json",
+	"lines": 61,
+	"words": 101,
+	"chars": 1383,
+	"heading 1": 1,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 23,
+	"MdParagraph": 19,
+	"MdUnorderedList": 1,
+	"MdListItem": 5,
+	"MdFencedCodeBlock": 3,
+	"loc_sum": 10,
+	"loc_avg": 3.0,
+	"loc_min": 2,
+	"loc_max": 6
+}

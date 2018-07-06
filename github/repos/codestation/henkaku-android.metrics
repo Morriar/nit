@@ -1,0 +1,18 @@
+{
+	"repo": "codestation/henkaku-android",
+	"readme": "github/repos/codestation/henkaku-android.json",
+	"lines": 30,
+	"words": 80,
+	"chars": 751,
+	"heading 1": 1,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 19,
+	"MdParagraph": 10,
+	"MdOrderedList": 1,
+	"MdListItem": 5,
+	"MdStrongEmphasis": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

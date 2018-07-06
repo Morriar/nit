@@ -1,0 +1,23 @@
+{
+	"repo": "bendc/animateplus",
+	"readme": "github/repos/bendc/animateplus.json",
+	"lines": 354,
+	"words": 1470,
+	"chars": 10607,
+	"heading 1": 1,
+	"heading 2": 9,
+	"heading 3": 12,
+	"MdDocument": 1,
+	"MdHeading": 22,
+	"MdText": 178,
+	"MdParagraph": 55,
+	"MdSoftLineBreak": 63,
+	"MdFencedCodeBlock": 14,
+	"MdUnorderedList": 3,
+	"MdListItem": 17,
+	"MdStrongEmphasis": 4,
+	"loc_sum": 123,
+	"loc_avg": 8.0,
+	"loc_min": 4,
+	"loc_max": 22
+}

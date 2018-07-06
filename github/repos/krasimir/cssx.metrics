@@ -1,0 +1,22 @@
+{
+	"repo": "krasimir/cssx",
+	"readme": "github/repos/krasimir/cssx.json",
+	"lines": 169,
+	"words": 587,
+	"chars": 5015,
+	"heading 1": 1,
+	"heading 2": 11,
+	"MdDocument": 1,
+	"MdHeading": 12,
+	"MdText": 49,
+	"MdBlockQuote": 1,
+	"MdParagraph": 36,
+	"MdThematicBreak": 6,
+	"MdUnorderedList": 7,
+	"MdListItem": 30,
+	"MdFencedCodeBlock": 8,
+	"loc_sum": 68,
+	"loc_avg": 8.0,
+	"loc_min": 2,
+	"loc_max": 27
+}

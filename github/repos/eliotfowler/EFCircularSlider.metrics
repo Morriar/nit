@@ -1,0 +1,23 @@
+{
+	"repo": "eliotfowler/EFCircularSlider",
+	"readme": "github/repos/eliotfowler/EFCircularSlider.json",
+	"lines": 210,
+	"words": 892,
+	"chars": 7163,
+	"heading 1": 1,
+	"heading 2": 7,
+	"heading 4": 1,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 74,
+	"MdParagraph": 57,
+	"MdFencedCodeBlock": 14,
+	"MdSoftLineBreak": 1,
+	"MdStrongEmphasis": 3,
+	"MdUnorderedList": 1,
+	"MdListItem": 5,
+	"loc_sum": 40,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 8
+}

@@ -1,0 +1,18 @@
+{
+	"repo": "NetEase/pomelo",
+	"readme": "github/repos/NetEase/pomelo.json",
+	"lines": 114,
+	"words": 610,
+	"chars": 5563,
+	"heading 2": 6,
+	"heading 3": 5,
+	"MdDocument": 1,
+	"MdHeading": 11,
+	"MdText": 71,
+	"MdParagraph": 59,
+	"MdSoftLineBreak": 17,
+	"MdUnorderedList": 9,
+	"MdListItem": 50,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

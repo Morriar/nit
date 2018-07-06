@@ -1,0 +1,23 @@
+{
+	"repo": "discordapp/lilliput",
+	"readme": "github/repos/discordapp/lilliput.json",
+	"lines": 276,
+	"words": 1371,
+	"chars": 10690,
+	"heading 1": 1,
+	"heading 2": 4,
+	"heading 3": 6,
+	"MdDocument": 1,
+	"MdHeading": 11,
+	"MdText": 190,
+	"MdParagraph": 56,
+	"MdSoftLineBreak": 65,
+	"MdStrongEmphasis": 3,
+	"MdFencedCodeBlock": 28,
+	"MdUnorderedList": 2,
+	"MdListItem": 9,
+	"loc_sum": 56,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

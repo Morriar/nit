@@ -1,0 +1,20 @@
+{
+	"repo": "OfficeDev/office-content",
+	"readme": "github/repos/OfficeDev/office-content.json",
+	"lines": 54,
+	"words": 433,
+	"chars": 3568,
+	"heading 1": 1,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdHeading": 4,
+	"MdText": 37,
+	"MdParagraph": 23,
+	"MdUnorderedList": 3,
+	"MdListItem": 6,
+	"MdEmphasis": 1,
+	"MdSoftLineBreak": 1,
+	"MdStrongEmphasis": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

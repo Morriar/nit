@@ -1,0 +1,16 @@
+{
+	"repo": "spring-projects/spring-framework",
+	"readme": "github/repos/spring-projects/spring-framework.json",
+	"lines": 49,
+	"words": 172,
+	"chars": 2242,
+	"heading 1": 1,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 40,
+	"MdParagraph": 8,
+	"MdSoftLineBreak": 19,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

@@ -1,0 +1,21 @@
+{
+	"repo": "rstacruz/hicat",
+	"readme": "github/repos/rstacruz/hicat.json",
+	"lines": 67,
+	"words": 273,
+	"chars": 1723,
+	"heading 1": 1,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 24,
+	"MdParagraph": 10,
+	"MdSoftLineBreak": 4,
+	"MdIndentedCodeBlock": 6,
+	"MdStrongEmphasis": 1,
+	"MdBlockQuote": 1,
+	"loc_sum": 23,
+	"loc_avg": 3.0,
+	"loc_min": 2,
+	"loc_max": 13
+}

@@ -1,0 +1,20 @@
+{
+	"repo": "danistefanovic/build-your-own-x",
+	"readme": "github/repos/danistefanovic/build-your-own-x.json",
+	"lines": 390,
+	"words": 2222,
+	"chars": 35253,
+	"heading 1": 1,
+	"heading 2": 4,
+	"heading 4": 25,
+	"MdDocument": 1,
+	"MdParagraph": 299,
+	"MdStrongEmphasis": 1,
+	"MdText": 63,
+	"MdHeading": 30,
+	"MdUnorderedList": 26,
+	"MdListItem": 295,
+	"MdSoftLineBreak": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

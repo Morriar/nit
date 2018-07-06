@@ -1,0 +1,19 @@
+{
+	"repo": "adobe-fonts/source-han-sans",
+	"readme": "github/repos/adobe-fonts/source-han-sans.json",
+	"lines": 40,
+	"words": 270,
+	"chars": 2740,
+	"heading 1": 1,
+	"heading 2": 5,
+	"heading 3": 2,
+	"MdDocument": 1,
+	"MdParagraph": 13,
+	"MdText": 33,
+	"MdHeading": 8,
+	"MdEmphasis": 2,
+	"MdUnorderedList": 2,
+	"MdListItem": 4,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

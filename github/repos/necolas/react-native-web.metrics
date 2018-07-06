@@ -1,0 +1,23 @@
+{
+	"repo": "necolas/react-native-web",
+	"readme": "github/repos/necolas/react-native-web.json",
+	"lines": 241,
+	"words": 2658,
+	"chars": 11893,
+	"heading 1": 1,
+	"heading 2": 7,
+	"heading 3": 6,
+	"MdDocument": 1,
+	"MdHeading": 14,
+	"MdText": 170,
+	"MdParagraph": 39,
+	"MdStrongEmphasis": 3,
+	"MdSoftLineBreak": 106,
+	"MdUnorderedList": 4,
+	"MdListItem": 17,
+	"MdFencedCodeBlock": 1,
+	"loc_sum": 21,
+	"loc_avg": 21.0,
+	"loc_min": 21,
+	"loc_max": 21
+}

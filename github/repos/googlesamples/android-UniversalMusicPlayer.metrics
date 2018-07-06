@@ -1,0 +1,18 @@
+{
+	"repo": "googlesamples/android-UniversalMusicPlayer",
+	"readme": "github/repos/googlesamples/android-UniversalMusicPlayer.json",
+	"lines": 63,
+	"words": 232,
+	"chars": 2250,
+	"heading 1": 1,
+	"heading 2": 5,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 39,
+	"MdParagraph": 14,
+	"MdSoftLineBreak": 18,
+	"MdUnorderedList": 3,
+	"MdListItem": 5,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

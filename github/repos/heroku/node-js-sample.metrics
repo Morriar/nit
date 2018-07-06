@@ -1,0 +1,20 @@
+{
+	"repo": "heroku/node-js-sample",
+	"readme": "github/repos/heroku/node-js-sample.json",
+	"lines": 39,
+	"words": 98,
+	"chars": 1240,
+	"heading 1": 1,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdHeading": 4,
+	"MdText": 13,
+	"MdParagraph": 11,
+	"MdFencedCodeBlock": 2,
+	"MdUnorderedList": 1,
+	"MdListItem": 5,
+	"loc_sum": 9,
+	"loc_avg": 4.0,
+	"loc_min": 4,
+	"loc_max": 5
+}

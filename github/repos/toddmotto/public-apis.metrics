@@ -1,0 +1,19 @@
+{
+	"repo": "toddmotto/public-apis",
+	"readme": "github/repos/toddmotto/public-apis.json",
+	"lines": 793,
+	"words": 10004,
+	"chars": 73593,
+	"heading 1": 1,
+	"heading 2": 1,
+	"heading 3": 46,
+	"MdDocument": 1,
+	"MdHeading": 48,
+	"MdText": 1537,
+	"MdParagraph": 96,
+	"MdUnorderedList": 1,
+	"MdListItem": 46,
+	"MdSoftLineBreak": 595,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

@@ -1,0 +1,22 @@
+{
+	"repo": "Maximus5/ConEmu",
+	"readme": "github/repos/Maximus5/ConEmu.json",
+	"lines": 85,
+	"words": 380,
+	"chars": 3513,
+	"heading 2": 8,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 54,
+	"MdParagraph": 32,
+	"MdSoftLineBreak": 11,
+	"MdIndentedCodeBlock": 1,
+	"MdHardLineBreak": 3,
+	"MdUnorderedList": 3,
+	"MdListItem": 16,
+	"loc_sum": 4,
+	"loc_avg": 4.0,
+	"loc_min": 4,
+	"loc_max": 4
+}

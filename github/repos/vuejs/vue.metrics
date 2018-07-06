@@ -1,0 +1,20 @@
+{
+	"repo": "vuejs/vue",
+	"readme": "github/repos/vuejs/vue.json",
+	"lines": 289,
+	"words": 1691,
+	"chars": 15402,
+	"heading 4": 2,
+	"heading 2": 9,
+	"MdDocument": 1,
+	"MdParagraph": 22,
+	"MdText": 66,
+	"MdUnorderedList": 2,
+	"MdListItem": 6,
+	"MdHeading": 11,
+	"MdSoftLineBreak": 14,
+	"MdThematicBreak": 1,
+	"MdStrongEmphasis": 2,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

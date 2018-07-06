@@ -1,0 +1,19 @@
+{
+	"repo": "x64dbg/x64dbg",
+	"readme": "github/repos/x64dbg/x64dbg.json",
+	"lines": 86,
+	"words": 337,
+	"chars": 5104,
+	"heading 1": 1,
+	"heading 2": 7,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 69,
+	"MdParagraph": 55,
+	"MdOrderedList": 1,
+	"MdListItem": 45,
+	"MdEmphasis": 1,
+	"MdUnorderedList": 3,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

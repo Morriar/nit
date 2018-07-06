@@ -1,0 +1,20 @@
+{
+	"repo": "facebook/stetho",
+	"readme": "github/repos/facebook/stetho.json",
+	"lines": 129,
+	"words": 574,
+	"chars": 4487,
+	"heading 1": 1,
+	"heading 2": 4,
+	"heading 3": 4,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 64,
+	"MdParagraph": 20,
+	"MdSoftLineBreak": 20,
+	"MdFencedCodeBlock": 9,
+	"loc_sum": 46,
+	"loc_avg": 5.0,
+	"loc_min": 2,
+	"loc_max": 12
+}

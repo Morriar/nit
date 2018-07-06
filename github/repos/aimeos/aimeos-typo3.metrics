@@ -1,0 +1,23 @@
+{
+	"repo": "aimeos/aimeos-typo3",
+	"readme": "github/repos/aimeos/aimeos-typo3.json",
+	"lines": 146,
+	"words": 791,
+	"chars": 5841,
+	"heading 1": 1,
+	"heading 2": 6,
+	"heading 3": 7,
+	"MdDocument": 1,
+	"MdHeading": 14,
+	"MdText": 63,
+	"MdParagraph": 56,
+	"MdSoftLineBreak": 3,
+	"MdUnorderedList": 10,
+	"MdListItem": 38,
+	"MdStrongEmphasis": 3,
+	"MdFencedCodeBlock": 3,
+	"loc_sum": 27,
+	"loc_avg": 9.0,
+	"loc_min": 2,
+	"loc_max": 23
+}

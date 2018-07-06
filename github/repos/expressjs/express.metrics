@@ -1,0 +1,22 @@
+{
+	"repo": "expressjs/express",
+	"readme": "github/repos/expressjs/express.json",
+	"lines": 154,
+	"words": 397,
+	"chars": 4777,
+	"heading 2": 9,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdParagraph": 36,
+	"MdText": 61,
+	"MdSoftLineBreak": 12,
+	"MdFencedCodeBlock": 9,
+	"MdHeading": 10,
+	"MdUnorderedList": 2,
+	"MdListItem": 13,
+	"MdStrongEmphasis": 1,
+	"loc_sum": 28,
+	"loc_avg": 3.0,
+	"loc_min": 2,
+	"loc_max": 9
+}

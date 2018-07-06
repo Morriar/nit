@@ -1,0 +1,21 @@
+{
+	"repo": "googlesamples/android-topeka",
+	"readme": "github/repos/googlesamples/android-topeka.json",
+	"lines": 87,
+	"words": 316,
+	"chars": 3141,
+	"heading 1": 1,
+	"heading 3": 5,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 36,
+	"MdParagraph": 13,
+	"MdSoftLineBreak": 13,
+	"MdFencedCodeBlock": 2,
+	"MdUnorderedList": 1,
+	"MdListItem": 2,
+	"loc_sum": 23,
+	"loc_avg": 11.0,
+	"loc_min": 6,
+	"loc_max": 17
+}

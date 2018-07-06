@@ -1,0 +1,23 @@
+{
+	"repo": "norman/friendly_id",
+	"readme": "github/repos/norman/friendly_id.json",
+	"lines": 147,
+	"words": 515,
+	"chars": 4500,
+	"heading 1": 1,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdParagraph": 34,
+	"MdSoftLineBreak": 23,
+	"MdHeading": 7,
+	"MdText": 68,
+	"MdStrongEmphasis": 2,
+	"MdIndentedCodeBlock": 2,
+	"MdUnorderedList": 2,
+	"MdListItem": 8,
+	"MdFencedCodeBlock": 8,
+	"loc_sum": 27,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 6
+}

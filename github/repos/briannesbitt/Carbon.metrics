@@ -1,0 +1,20 @@
+{
+	"repo": "briannesbitt/Carbon",
+	"readme": "github/repos/briannesbitt/Carbon.json",
+	"lines": 95,
+	"words": 167,
+	"chars": 2829,
+	"heading 1": 1,
+	"heading 2": 2,
+	"heading 3": 2,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 9,
+	"MdParagraph": 4,
+	"MdSoftLineBreak": 6,
+	"MdFencedCodeBlock": 5,
+	"loc_sum": 59,
+	"loc_avg": 11.0,
+	"loc_min": 2,
+	"loc_max": 37
+}

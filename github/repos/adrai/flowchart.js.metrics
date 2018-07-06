@@ -1,0 +1,19 @@
+{
+	"repo": "adrai/flowchart.js",
+	"readme": "github/repos/adrai/flowchart.js.json",
+	"lines": 133,
+	"words": 2122,
+	"chars": 5819,
+	"heading 1": 1,
+	"heading 2": 8,
+	"MdDocument": 1,
+	"MdParagraph": 15,
+	"MdHeading": 9,
+	"MdText": 36,
+	"MdFencedCodeBlock": 4,
+	"MdSoftLineBreak": 12,
+	"loc_sum": 68,
+	"loc_avg": 17.0,
+	"loc_min": 2,
+	"loc_max": 62
+}

@@ -1,0 +1,20 @@
+{
+	"repo": "voisine/breadwallet-ios",
+	"readme": "github/repos/voisine/breadwallet-ios.json",
+	"lines": 63,
+	"words": 335,
+	"chars": 2932,
+	"heading 2": 1,
+	"heading 3": 6,
+	"MdDocument": 1,
+	"MdParagraph": 33,
+	"MdHeading": 7,
+	"MdText": 52,
+	"MdStrongEmphasis": 7,
+	"MdUnorderedList": 2,
+	"MdListItem": 20,
+	"MdEmphasis": 1,
+	"MdThematicBreak": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

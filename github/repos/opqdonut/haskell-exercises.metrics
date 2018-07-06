@@ -1,0 +1,22 @@
+{
+	"repo": "opqdonut/haskell-exercises",
+	"readme": "github/repos/opqdonut/haskell-exercises.json",
+	"lines": 105,
+	"words": 558,
+	"chars": 3259,
+	"heading 1": 1,
+	"heading 2": 5,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 65,
+	"MdParagraph": 29,
+	"MdSoftLineBreak": 19,
+	"MdOrderedList": 1,
+	"MdListItem": 17,
+	"MdIndentedCodeBlock": 6,
+	"MdUnorderedList": 2,
+	"loc_sum": 17,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 7
+}

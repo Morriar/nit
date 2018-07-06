@@ -1,0 +1,21 @@
+{
+	"repo": "Riim/Rionite",
+	"readme": "github/repos/Riim/Rionite.json",
+	"lines": 125,
+	"words": 426,
+	"chars": 3136,
+	"heading 1": 1,
+	"heading 2": 2,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdHeading": 4,
+	"MdText": 26,
+	"MdParagraph": 15,
+	"MdFencedCodeBlock": 7,
+	"MdUnorderedList": 1,
+	"MdListItem": 5,
+	"loc_sum": 84,
+	"loc_avg": 12.0,
+	"loc_min": 2,
+	"loc_max": 28
+}

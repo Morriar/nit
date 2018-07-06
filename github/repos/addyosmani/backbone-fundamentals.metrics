@@ -1,0 +1,20 @@
+{
+	"repo": "addyosmani/backbone-fundamentals",
+	"readme": "github/repos/addyosmani/backbone-fundamentals.json",
+	"lines": 38,
+	"words": 306,
+	"chars": 2326,
+	"heading 1": 1,
+	"heading 2": 4,
+	"heading 3": 1,
+	"heading 4": 1,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 29,
+	"MdParagraph": 14,
+	"MdSoftLineBreak": 1,
+	"MdUnorderedList": 2,
+	"MdListItem": 7,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

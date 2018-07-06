@@ -1,0 +1,20 @@
+{
+	"repo": "resume/resume.github.com",
+	"readme": "github/repos/resume/resume.github.com.json",
+	"lines": 16,
+	"words": 80,
+	"chars": 650,
+	"heading 1": 1,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdHeading": 2,
+	"MdParagraph": 5,
+	"MdStrongEmphasis": 4,
+	"MdText": 17,
+	"MdEmphasis": 1,
+	"MdIndentedCodeBlock": 1,
+	"loc_sum": 2,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

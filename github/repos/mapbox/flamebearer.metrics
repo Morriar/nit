@@ -1,0 +1,21 @@
+{
+	"repo": "mapbox/flamebearer",
+	"readme": "github/repos/mapbox/flamebearer.json",
+	"lines": 29,
+	"words": 112,
+	"chars": 1200,
+	"heading 1": 1,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdHeading": 4,
+	"MdText": 15,
+	"MdParagraph": 5,
+	"MdSoftLineBreak": 2,
+	"MdFencedCodeBlock": 1,
+	"MdUnorderedList": 1,
+	"MdListItem": 3,
+	"loc_sum": 9,
+	"loc_avg": 9.0,
+	"loc_min": 9,
+	"loc_max": 9
+}

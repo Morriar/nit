@@ -1,0 +1,22 @@
+{
+	"repo": "KnpLabs/ConsoleServiceProvider",
+	"readme": "github/repos/KnpLabs/ConsoleServiceProvider.json",
+	"lines": 98,
+	"words": 468,
+	"chars": 3405,
+	"heading 1": 1,
+	"heading 2": 5,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 62,
+	"MdParagraph": 17,
+	"MdFencedCodeBlock": 6,
+	"MdSoftLineBreak": 12,
+	"MdUnorderedList": 2,
+	"MdListItem": 5,
+	"loc_sum": 28,
+	"loc_avg": 4.0,
+	"loc_min": 2,
+	"loc_max": 10
+}

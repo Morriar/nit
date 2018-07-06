@@ -1,0 +1,18 @@
+{
+	"repo": "cucumber/cucumber-ruby",
+	"readme": "github/repos/cucumber/cucumber-ruby.json",
+	"lines": 41,
+	"words": 124,
+	"chars": 1849,
+	"heading 1": 1,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdParagraph": 18,
+	"MdSoftLineBreak": 6,
+	"MdHeading": 4,
+	"MdText": 26,
+	"MdUnorderedList": 2,
+	"MdListItem": 10,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

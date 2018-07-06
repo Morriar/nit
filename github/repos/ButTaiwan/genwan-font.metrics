@@ -1,0 +1,21 @@
+{
+	"repo": "ButTaiwan/genwan-font",
+	"readme": "github/repos/ButTaiwan/genwan-font.json",
+	"lines": 85,
+	"words": 30,
+	"chars": 1429,
+	"heading 1": 2,
+	"heading 2": 6,
+	"heading 3": 9,
+	"MdDocument": 1,
+	"MdHeading": 17,
+	"MdText": 49,
+	"MdParagraph": 20,
+	"MdSoftLineBreak": 11,
+	"MdBlockQuote": 2,
+	"MdUnorderedList": 1,
+	"MdListItem": 2,
+	"MdThematicBreak": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

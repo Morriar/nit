@@ -1,0 +1,22 @@
+{
+	"repo": "intel-iot-devkit/mraa",
+	"readme": "github/repos/intel-iot-devkit/mraa.json",
+	"lines": 167,
+	"words": 450,
+	"chars": 5345,
+	"heading 1": 9,
+	"heading 2": 12,
+	"MdDocument": 1,
+	"MdHeading": 21,
+	"MdText": 64,
+	"MdParagraph": 40,
+	"MdSoftLineBreak": 23,
+	"MdUnorderedList": 8,
+	"MdListItem": 23,
+	"MdFencedCodeBlock": 3,
+	"MdBlockQuote": 1,
+	"loc_sum": 13,
+	"loc_avg": 4.0,
+	"loc_min": 2,
+	"loc_max": 7
+}

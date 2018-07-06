@@ -1,0 +1,22 @@
+{
+	"repo": "facebook/react",
+	"readme": "github/repos/facebook/react.json",
+	"lines": 78,
+	"words": 546,
+	"chars": 5373,
+	"heading 1": 1,
+	"heading 2": 4,
+	"heading 3": 4,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 57,
+	"MdParagraph": 28,
+	"MdUnorderedList": 3,
+	"MdListItem": 12,
+	"MdStrongEmphasis": 4,
+	"MdFencedCodeBlock": 1,
+	"loc_sum": 11,
+	"loc_avg": 11.0,
+	"loc_min": 11,
+	"loc_max": 11
+}

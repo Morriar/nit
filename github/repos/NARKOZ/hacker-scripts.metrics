@@ -1,0 +1,23 @@
+{
+	"repo": "NARKOZ/hacker-scripts",
+	"readme": "github/repos/NARKOZ/hacker-scripts.json",
+	"lines": 60,
+	"words": 421,
+	"chars": 3307,
+	"heading 1": 1,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdText": 23,
+	"MdParagraph": 13,
+	"MdEmphasis": 1,
+	"MdBlockQuote": 8,
+	"MdHardLineBreak": 1,
+	"MdFencedCodeBlock": 2,
+	"MdSoftLineBreak": 1,
+	"MdThematicBreak": 1,
+	"loc_sum": 20,
+	"loc_avg": 10.0,
+	"loc_min": 8,
+	"loc_max": 12
+}

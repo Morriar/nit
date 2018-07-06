@@ -1,0 +1,19 @@
+{
+	"repo": "papers-we-love/papers-we-love",
+	"readme": "github/repos/papers-we-love/papers-we-love.json",
+	"lines": 122,
+	"words": 486,
+	"chars": 7916,
+	"heading 3": 5,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdParagraph": 90,
+	"MdText": 42,
+	"MdStrongEmphasis": 1,
+	"MdEmphasis": 4,
+	"MdHeading": 8,
+	"MdUnorderedList": 4,
+	"MdListItem": 78,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

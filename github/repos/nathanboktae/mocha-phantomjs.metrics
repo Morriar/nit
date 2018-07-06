@@ -1,0 +1,22 @@
+{
+	"repo": "nathanboktae/mocha-phantomjs",
+	"readme": "github/repos/nathanboktae/mocha-phantomjs.json",
+	"lines": 174,
+	"words": 1284,
+	"chars": 8380,
+	"heading 1": 7,
+	"heading 2": 3,
+	"heading 3": 4,
+	"MdDocument": 1,
+	"MdHeading": 14,
+	"MdText": 79,
+	"MdParagraph": 25,
+	"MdEmphasis": 2,
+	"MdFencedCodeBlock": 6,
+	"MdUnorderedList": 1,
+	"MdListItem": 3,
+	"loc_sum": 84,
+	"loc_avg": 14.0,
+	"loc_min": 2,
+	"loc_max": 30
+}

@@ -1,0 +1,22 @@
+{
+	"repo": "leehomyc/Faster-High-Res-Neural-Inpainting",
+	"readme": "github/repos/leehomyc/Faster-High-Res-Neural-Inpainting.json",
+	"lines": 62,
+	"words": 399,
+	"chars": 3169,
+	"heading 2": 1,
+	"heading 3": 2,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdText": 31,
+	"MdParagraph": 16,
+	"MdStrongEmphasis": 5,
+	"MdOrderedList": 1,
+	"MdListItem": 6,
+	"MdUnorderedList": 2,
+	"MdFencedCodeBlock": 3,
+	"loc_sum": 18,
+	"loc_avg": 6.0,
+	"loc_min": 2,
+	"loc_max": 8
+}

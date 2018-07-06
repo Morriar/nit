@@ -1,0 +1,23 @@
+{
+	"repo": "twitter/hogan.js",
+	"readme": "github/repos/twitter/hogan.js.json",
+	"lines": 156,
+	"words": 449,
+	"chars": 4373,
+	"heading 2": 12,
+	"heading 1": 1,
+	"MdDocument": 1,
+	"MdHeading": 13,
+	"MdText": 69,
+	"MdParagraph": 34,
+	"MdSoftLineBreak": 17,
+	"MdFencedCodeBlock": 6,
+	"MdUnorderedList": 3,
+	"MdListItem": 5,
+	"MdIndentedCodeBlock": 2,
+	"MdStrongEmphasis": 2,
+	"loc_sum": 35,
+	"loc_avg": 4.0,
+	"loc_min": 2,
+	"loc_max": 10
+}

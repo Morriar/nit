@@ -1,0 +1,21 @@
+{
+	"repo": "adobe/brackets",
+	"readme": "github/repos/adobe/brackets.json",
+	"lines": 119,
+	"words": 722,
+	"chars": 6517,
+	"heading 2": 4,
+	"heading 4": 8,
+	"MdDocument": 1,
+	"MdHeading": 12,
+	"MdText": 111,
+	"MdParagraph": 28,
+	"MdSoftLineBreak": 40,
+	"MdEmphasis": 3,
+	"MdUnorderedList": 3,
+	"MdListItem": 12,
+	"MdStrongEmphasis": 9,
+	"MdThematicBreak": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

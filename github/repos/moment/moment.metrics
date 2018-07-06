@@ -1,0 +1,18 @@
+{
+	"repo": "moment/moment",
+	"readme": "github/repos/moment/moment.json",
+	"lines": 65,
+	"words": 297,
+	"chars": 3911,
+	"heading 2": 5,
+	"MdDocument": 1,
+	"MdParagraph": 17,
+	"MdText": 48,
+	"MdSoftLineBreak": 10,
+	"MdStrongEmphasis": 1,
+	"MdHeading": 5,
+	"MdUnorderedList": 1,
+	"MdListItem": 6,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

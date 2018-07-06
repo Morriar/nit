@@ -1,0 +1,21 @@
+{
+	"repo": "doctrine/doctrine2",
+	"readme": "github/repos/doctrine/doctrine2.json",
+	"lines": 52,
+	"words": 334,
+	"chars": 3430,
+	"heading 5": 2,
+	"heading 3": 1,
+	"heading 2": 1,
+	"MdDocument": 1,
+	"MdParagraph": 11,
+	"MdText": 39,
+	"MdSoftLineBreak": 7,
+	"MdHeading": 4,
+	"MdEmphasis": 1,
+	"MdThematicBreak": 2,
+	"MdUnorderedList": 5,
+	"MdListItem": 9,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

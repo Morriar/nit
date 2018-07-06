@@ -1,0 +1,23 @@
+{
+	"repo": "codecentric/spring-boot-admin",
+	"readme": "github/repos/codecentric/spring-boot-admin.json",
+	"lines": 129,
+	"words": 372,
+	"chars": 5245,
+	"heading 1": 1,
+	"heading 2": 7,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 66,
+	"MdParagraph": 50,
+	"MdSoftLineBreak": 18,
+	"MdUnorderedList": 3,
+	"MdListItem": 24,
+	"MdStrongEmphasis": 2,
+	"MdEmphasis": 10,
+	"MdFencedCodeBlock": 2,
+	"loc_sum": 14,
+	"loc_avg": 7.0,
+	"loc_min": 2,
+	"loc_max": 12
+}

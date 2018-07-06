@@ -1,0 +1,21 @@
+{
+	"repo": "d3/d3",
+	"readme": "github/repos/d3/d3.json",
+	"lines": 58,
+	"words": 194,
+	"chars": 2293,
+	"heading 1": 1,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdText": 25,
+	"MdParagraph": 14,
+	"MdStrongEmphasis": 2,
+	"MdUnorderedList": 1,
+	"MdListItem": 5,
+	"MdFencedCodeBlock": 7,
+	"loc_sum": 14,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

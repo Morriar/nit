@@ -1,0 +1,19 @@
+{
+	"repo": "krasimir/react-in-patterns",
+	"readme": "github/repos/krasimir/react-in-patterns.json",
+	"lines": 79,
+	"words": 226,
+	"chars": 3659,
+	"heading 1": 1,
+	"heading 2": 6,
+	"heading 3": 3,
+	"MdDocument": 1,
+	"MdHeading": 10,
+	"MdText": 17,
+	"MdParagraph": 46,
+	"MdUnorderedList": 13,
+	"MdListItem": 41,
+	"MdEmphasis": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

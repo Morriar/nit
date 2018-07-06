@@ -1,0 +1,22 @@
+{
+	"repo": "roots/sage",
+	"readme": "github/repos/roots/sage.json",
+	"lines": 121,
+	"words": 783,
+	"chars": 5493,
+	"heading 1": 1,
+	"heading 2": 10,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdHeading": 12,
+	"MdParagraph": 38,
+	"MdSoftLineBreak": 2,
+	"MdText": 59,
+	"MdUnorderedList": 7,
+	"MdListItem": 26,
+	"MdFencedCodeBlock": 3,
+	"loc_sum": 34,
+	"loc_avg": 11.0,
+	"loc_min": 2,
+	"loc_max": 29
+}

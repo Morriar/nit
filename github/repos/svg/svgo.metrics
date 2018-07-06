@@ -1,0 +1,23 @@
+{
+	"repo": "svg/svgo",
+	"readme": "github/repos/svg/svgo.json",
+	"lines": 197,
+	"words": 1089,
+	"chars": 11171,
+	"heading 2": 6,
+	"heading 3": 2,
+	"MdDocument": 1,
+	"MdParagraph": 31,
+	"MdStrongEmphasis": 2,
+	"MdText": 164,
+	"MdThematicBreak": 1,
+	"MdHeading": 8,
+	"MdSoftLineBreak": 44,
+	"MdFencedCodeBlock": 15,
+	"MdUnorderedList": 2,
+	"MdListItem": 17,
+	"loc_sum": 52,
+	"loc_avg": 3.0,
+	"loc_min": 2,
+	"loc_max": 24
+}

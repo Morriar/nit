@@ -1,0 +1,19 @@
+{
+	"repo": "sebyddd/SDVersion",
+	"readme": "github/repos/sebyddd/SDVersion.json",
+	"lines": 346,
+	"words": 1592,
+	"chars": 9961,
+	"heading 2": 8,
+	"heading 3": 23,
+	"MdDocument": 1,
+	"MdParagraph": 9,
+	"MdText": 42,
+	"MdHeading": 31,
+	"MdFencedCodeBlock": 19,
+	"MdIndentedCodeBlock": 8,
+	"loc_sum": 221,
+	"loc_avg": 8.0,
+	"loc_min": 2,
+	"loc_max": 36
+}

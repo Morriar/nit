@@ -1,0 +1,23 @@
+{
+	"repo": "rdpeng/RepData_PeerAssessment1",
+	"readme": "github/repos/rdpeng/RepData_PeerAssessment1.json",
+	"lines": 169,
+	"words": 1172,
+	"chars": 7776,
+	"heading 2": 4,
+	"heading 3": 5,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 140,
+	"MdParagraph": 43,
+	"MdSoftLineBreak": 45,
+	"MdUnorderedList": 2,
+	"MdListItem": 24,
+	"MdStrongEmphasis": 14,
+	"MdOrderedList": 7,
+	"MdFencedCodeBlock": 1,
+	"loc_sum": 4,
+	"loc_avg": 4.0,
+	"loc_min": 4,
+	"loc_max": 4
+}

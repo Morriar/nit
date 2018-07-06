@@ -1,0 +1,19 @@
+{
+	"repo": "jtleek/datasharing",
+	"readme": "github/repos/jtleek/datasharing.json",
+	"lines": 193,
+	"words": 1955,
+	"chars": 13086,
+	"heading 1": 4,
+	"heading 3": 5,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 158,
+	"MdParagraph": 63,
+	"MdUnorderedList": 3,
+	"MdListItem": 37,
+	"MdSoftLineBreak": 62,
+	"MdOrderedList": 7,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

@@ -1,0 +1,18 @@
+{
+	"repo": "q2a/question2answer",
+	"readme": "github/repos/q2a/question2answer.json",
+	"lines": 63,
+	"words": 329,
+	"chars": 2758,
+	"heading 2": 1,
+	"MdDocument": 1,
+	"MdHeading": 1,
+	"MdText": 63,
+	"MdParagraph": 39,
+	"MdUnorderedList": 2,
+	"MdListItem": 31,
+	"MdEmphasis": 10,
+	"MdThematicBreak": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

@@ -1,0 +1,19 @@
+{
+	"repo": "tastejs/todomvc",
+	"readme": "github/repos/tastejs/todomvc.json",
+	"lines": 89,
+	"words": 635,
+	"chars": 5955,
+	"heading 1": 1,
+	"heading 3": 1,
+	"heading 2": 4,
+	"heading 4": 9,
+	"MdDocument": 1,
+	"MdHeading": 15,
+	"MdBlockQuote": 1,
+	"MdParagraph": 13,
+	"MdText": 29,
+	"MdSoftLineBreak": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

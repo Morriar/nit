@@ -1,0 +1,22 @@
+{
+	"repo": "vigetlabs/blendid",
+	"readme": "github/repos/vigetlabs/blendid.json",
+	"lines": 29,
+	"words": 118,
+	"chars": 1317,
+	"heading 1": 1,
+	"heading 2": 2,
+	"MdDocument": 1,
+	"MdHeading": 3,
+	"MdParagraph": 5,
+	"MdSoftLineBreak": 1,
+	"MdStrongEmphasis": 1,
+	"MdText": 10,
+	"MdEmphasis": 1,
+	"MdFencedCodeBlock": 1,
+	"MdThematicBreak": 1,
+	"loc_sum": 5,
+	"loc_avg": 5.0,
+	"loc_min": 5,
+	"loc_max": 5
+}

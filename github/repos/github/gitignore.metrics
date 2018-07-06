@@ -1,0 +1,21 @@
+{
+	"repo": "github/gitignore",
+	"readme": "github/repos/github/gitignore.json",
+	"lines": 85,
+	"words": 543,
+	"chars": 3964,
+	"heading 1": 1,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 75,
+	"MdParagraph": 22,
+	"MdSoftLineBreak": 27,
+	"MdUnorderedList": 2,
+	"MdListItem": 12,
+	"MdStrongEmphasis": 5,
+	"MdEmphasis": 3,
+	"MdOrderedList": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

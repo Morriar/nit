@@ -1,0 +1,23 @@
+{
+	"repo": "googlesamples/android-architecture",
+	"readme": "github/repos/googlesamples/android-architecture.json",
+	"lines": 141,
+	"words": 887,
+	"chars": 9959,
+	"heading 1": 1,
+	"heading 2": 5,
+	"heading 3": 7,
+	"MdDocument": 1,
+	"MdHeading": 13,
+	"MdText": 124,
+	"MdParagraph": 46,
+	"MdSoftLineBreak": 21,
+	"MdUnorderedList": 2,
+	"MdListItem": 8,
+	"MdStrongEmphasis": 3,
+	"MdFencedCodeBlock": 2,
+	"loc_sum": 4,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

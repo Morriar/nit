@@ -1,0 +1,21 @@
+{
+	"repo": "gulpjs/gulp",
+	"readme": "github/repos/gulpjs/gulp.json",
+	"lines": 316,
+	"words": 1128,
+	"chars": 9272,
+	"heading 2": 9,
+	"MdDocument": 1,
+	"MdParagraph": 31,
+	"MdText": 70,
+	"MdHeading": 9,
+	"MdUnorderedList": 5,
+	"MdListItem": 13,
+	"MdStrongEmphasis": 8,
+	"MdFencedCodeBlock": 7,
+	"MdSoftLineBreak": 4,
+	"loc_sum": 193,
+	"loc_avg": 27.0,
+	"loc_min": 2,
+	"loc_max": 81
+}

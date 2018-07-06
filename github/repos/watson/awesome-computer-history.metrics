@@ -1,0 +1,19 @@
+{
+	"repo": "watson/awesome-computer-history",
+	"readme": "github/repos/watson/awesome-computer-history.json",
+	"lines": 157,
+	"words": 1271,
+	"chars": 14421,
+	"heading 1": 1,
+	"heading 2": 7,
+	"heading 3": 9,
+	"MdDocument": 1,
+	"MdHeading": 17,
+	"MdText": 111,
+	"MdParagraph": 106,
+	"MdUnorderedList": 19,
+	"MdListItem": 101,
+	"MdEmphasis": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

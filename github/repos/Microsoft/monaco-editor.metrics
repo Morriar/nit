@@ -1,0 +1,22 @@
+{
+	"repo": "Microsoft/monaco-editor",
+	"readme": "github/repos/Microsoft/monaco-editor.json",
+	"lines": 99,
+	"words": 715,
+	"chars": 5757,
+	"heading 1": 1,
+	"heading 2": 9,
+	"MdDocument": 1,
+	"MdHeading": 10,
+	"MdText": 91,
+	"MdParagraph": 47,
+	"MdFencedCodeBlock": 1,
+	"MdUnorderedList": 4,
+	"MdListItem": 21,
+	"MdStrongEmphasis": 10,
+	"MdBlockQuote": 1,
+	"loc_sum": 2,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

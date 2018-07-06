@@ -1,0 +1,20 @@
+{
+	"repo": "coreos/dbtester",
+	"readme": "github/repos/coreos/dbtester.json",
+	"lines": 252,
+	"words": 2882,
+	"chars": 17063,
+	"heading 1": 1,
+	"heading 5": 5,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 39,
+	"MdParagraph": 39,
+	"MdUnorderedList": 9,
+	"MdListItem": 25,
+	"MdFencedCodeBlock": 4,
+	"loc_sum": 87,
+	"loc_avg": 21.0,
+	"loc_min": 14,
+	"loc_max": 40
+}

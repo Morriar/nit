@@ -1,0 +1,21 @@
+{
+	"repo": "matlink/gplayweb",
+	"readme": "github/repos/matlink/gplayweb.json",
+	"lines": 114,
+	"words": 556,
+	"chars": 4424,
+	"heading 1": 5,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 66,
+	"MdParagraph": 39,
+	"MdIndentedCodeBlock": 10,
+	"MdSoftLineBreak": 3,
+	"MdUnorderedList": 2,
+	"MdListItem": 22,
+	"loc_sum": 28,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 10
+}

@@ -1,0 +1,18 @@
+{
+	"repo": "gabrielecirulli/2048",
+	"readme": "github/repos/gabrielecirulli/2048.json",
+	"lines": 39,
+	"words": 217,
+	"chars": 2280,
+	"heading 1": 1,
+	"heading 3": 2,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 32,
+	"MdParagraph": 15,
+	"MdUnorderedList": 1,
+	"MdListItem": 4,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

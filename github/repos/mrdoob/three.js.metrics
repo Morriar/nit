@@ -1,0 +1,20 @@
+{
+	"repo": "mrdoob/three.js",
+	"readme": "github/repos/mrdoob/three.js.json",
+	"lines": 87,
+	"words": 198,
+	"chars": 3069,
+	"heading 1": 1,
+	"heading 4": 1,
+	"heading 3": 2,
+	"MdDocument": 1,
+	"MdHeading": 4,
+	"MdText": 21,
+	"MdParagraph": 7,
+	"MdSoftLineBreak": 12,
+	"MdFencedCodeBlock": 2,
+	"loc_sum": 38,
+	"loc_avg": 19.0,
+	"loc_min": 2,
+	"loc_max": 36
+}

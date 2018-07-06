@@ -1,0 +1,22 @@
+{
+	"repo": "revel/revel",
+	"readme": "github/repos/revel/revel.json",
+	"lines": 46,
+	"words": 79,
+	"chars": 1317,
+	"heading 1": 1,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdHeading": 5,
+	"MdText": 14,
+	"MdParagraph": 15,
+	"MdSoftLineBreak": 2,
+	"MdStrongEmphasis": 1,
+	"MdIndentedCodeBlock": 3,
+	"MdUnorderedList": 3,
+	"MdListItem": 7,
+	"loc_sum": 7,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 3
+}

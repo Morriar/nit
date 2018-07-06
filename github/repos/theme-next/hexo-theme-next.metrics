@@ -1,0 +1,23 @@
+{
+	"repo": "theme-next/hexo-theme-next",
+	"readme": "github/repos/theme-next/hexo-theme-next.json",
+	"lines": 133,
+	"words": 478,
+	"chars": 6705,
+	"heading 1": 1,
+	"heading 2": 8,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdHeading": 10,
+	"MdText": 73,
+	"MdUnorderedList": 4,
+	"MdListItem": 13,
+	"MdParagraph": 27,
+	"MdFencedCodeBlock": 4,
+	"MdHardLineBreak": 1,
+	"MdStrongEmphasis": 1,
+	"loc_sum": 17,
+	"loc_avg": 4.0,
+	"loc_min": 3,
+	"loc_max": 7
+}

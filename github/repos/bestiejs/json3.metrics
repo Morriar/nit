@@ -1,0 +1,23 @@
+{
+	"repo": "bestiejs/json3",
+	"readme": "github/repos/bestiejs/json3.json",
+	"lines": 146,
+	"words": 984,
+	"chars": 8139,
+	"heading 1": 4,
+	"heading 2": 11,
+	"heading 3": 2,
+	"MdDocument": 1,
+	"MdHeading": 17,
+	"MdText": 144,
+	"MdParagraph": 48,
+	"MdStrongEmphasis": 10,
+	"MdUnorderedList": 7,
+	"MdListItem": 29,
+	"MdEmphasis": 3,
+	"MdIndentedCodeBlock": 5,
+	"loc_sum": 36,
+	"loc_avg": 7.0,
+	"loc_min": 3,
+	"loc_max": 13
+}

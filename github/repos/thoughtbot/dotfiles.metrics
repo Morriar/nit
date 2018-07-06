@@ -1,0 +1,23 @@
+{
+	"repo": "thoughtbot/dotfiles",
+	"readme": "github/repos/thoughtbot/dotfiles.json",
+	"lines": 264,
+	"words": 1102,
+	"chars": 8863,
+	"heading 1": 1,
+	"heading 2": 10,
+	"MdDocument": 1,
+	"MdHeading": 11,
+	"MdText": 192,
+	"MdParagraph": 80,
+	"MdIndentedCodeBlock": 17,
+	"MdSoftLineBreak": 35,
+	"MdUnorderedList": 7,
+	"MdListItem": 42,
+	"MdStrongEmphasis": 1,
+	"MdEmphasis": 1,
+	"loc_sum": 63,
+	"loc_avg": 3.0,
+	"loc_min": 2,
+	"loc_max": 8
+}

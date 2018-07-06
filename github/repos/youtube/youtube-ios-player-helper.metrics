@@ -1,0 +1,22 @@
+{
+	"repo": "youtube/youtube-ios-player-helper",
+	"readme": "github/repos/youtube/youtube-ios-player-helper.json",
+	"lines": 46,
+	"words": 195,
+	"chars": 1841,
+	"heading 1": 1,
+	"heading 2": 5,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 25,
+	"MdParagraph": 13,
+	"MdSoftLineBreak": 5,
+	"MdIndentedCodeBlock": 1,
+	"MdOrderedList": 3,
+	"MdListItem": 6,
+	"MdFencedCodeBlock": 2,
+	"loc_sum": 6,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

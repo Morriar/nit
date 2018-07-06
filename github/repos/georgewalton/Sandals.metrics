@@ -1,0 +1,20 @@
+{
+	"repo": "georgewalton/Sandals",
+	"readme": "github/repos/georgewalton/Sandals.json",
+	"lines": 233,
+	"words": 847,
+	"chars": 6522,
+	"heading 1": 1,
+	"heading 2": 7,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 51,
+	"MdParagraph": 29,
+	"MdFencedCodeBlock": 5,
+	"MdSoftLineBreak": 10,
+	"MdIndentedCodeBlock": 1,
+	"loc_sum": 25,
+	"loc_avg": 4.0,
+	"loc_min": 2,
+	"loc_max": 8
+}

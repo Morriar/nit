@@ -1,0 +1,22 @@
+{
+	"repo": "opencontainers/runc",
+	"readme": "github/repos/opencontainers/runc.json",
+	"lines": 254,
+	"words": 2163,
+	"chars": 8966,
+	"heading 1": 1,
+	"heading 2": 4,
+	"heading 3": 5,
+	"heading 4": 3,
+	"MdDocument": 1,
+	"MdHeading": 13,
+	"MdText": 97,
+	"MdParagraph": 27,
+	"MdSoftLineBreak": 22,
+	"MdBlockQuote": 1,
+	"MdFencedCodeBlock": 12,
+	"loc_sum": 127,
+	"loc_avg": 10.0,
+	"loc_min": 2,
+	"loc_max": 51
+}

@@ -1,0 +1,19 @@
+{
+	"repo": "gwuhaolin/dive-into-webpack",
+	"readme": "github/repos/gwuhaolin/dive-into-webpack.json",
+	"lines": 44,
+	"words": 79,
+	"chars": 1590,
+	"heading 1": 1,
+	"heading 2": 3,
+	"MdDocument": 1,
+	"MdHeading": 4,
+	"MdText": 26,
+	"MdParagraph": 17,
+	"MdUnorderedList": 1,
+	"MdListItem": 5,
+	"MdBlockQuote": 3,
+	"MdStrongEmphasis": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

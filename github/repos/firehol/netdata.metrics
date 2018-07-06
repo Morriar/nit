@@ -1,0 +1,22 @@
+{
+	"repo": "firehol/netdata",
+	"readme": "github/repos/firehol/netdata.json",
+	"lines": 371,
+	"words": 1511,
+	"chars": 14895,
+	"heading 1": 1,
+	"heading 2": 9,
+	"MdDocument": 1,
+	"MdHeading": 10,
+	"MdText": 304,
+	"MdBlockQuote": 2,
+	"MdParagraph": 140,
+	"MdEmphasis": 6,
+	"MdStrongEmphasis": 118,
+	"MdSoftLineBreak": 100,
+	"MdThematicBreak": 8,
+	"MdUnorderedList": 7,
+	"MdListItem": 113,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

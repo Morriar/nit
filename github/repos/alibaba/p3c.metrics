@@ -1,0 +1,22 @@
+{
+	"repo": "alibaba/p3c",
+	"readme": "github/repos/alibaba/p3c.json",
+	"lines": 46,
+	"words": 472,
+	"chars": 3958,
+	"heading 1": 1,
+	"heading 2": 4,
+	"MdDocument": 1,
+	"MdParagraph": 23,
+	"MdText": 29,
+	"MdHeading": 5,
+	"MdBlockQuote": 1,
+	"MdEmphasis": 4,
+	"MdUnorderedList": 3,
+	"MdListItem": 13,
+	"MdHardLineBreak": 1,
+	"MdSoftLineBreak": 2,
+	"MdOrderedList": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

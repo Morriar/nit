@@ -1,0 +1,19 @@
+{
+	"repo": "trusktr/seti.vim",
+	"readme": "github/repos/trusktr/seti.vim.json",
+	"lines": 55,
+	"words": 92,
+	"chars": 1066,
+	"heading 1": 1,
+	"heading 2": 1,
+	"heading 3": 6,
+	"MdDocument": 1,
+	"MdHeading": 8,
+	"MdText": 21,
+	"MdParagraph": 7,
+	"MdFencedCodeBlock": 6,
+	"loc_sum": 12,
+	"loc_avg": 2.0,
+	"loc_min": 2,
+	"loc_max": 2
+}

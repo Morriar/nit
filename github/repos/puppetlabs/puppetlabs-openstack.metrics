@@ -1,0 +1,22 @@
+{
+	"repo": "puppetlabs/puppetlabs-openstack",
+	"readme": "github/repos/puppetlabs/puppetlabs-openstack.json",
+	"lines": 232,
+	"words": 1314,
+	"chars": 9336,
+	"heading 3": 1,
+	"MdDocument": 1,
+	"MdParagraph": 74,
+	"MdText": 118,
+	"MdSoftLineBreak": 54,
+	"MdOrderedList": 1,
+	"MdListItem": 29,
+	"MdUnorderedList": 9,
+	"MdFencedCodeBlock": 4,
+	"MdHeading": 1,
+	"MdIndentedCodeBlock": 1,
+	"loc_sum": 45,
+	"loc_avg": 9.0,
+	"loc_min": 4,
+	"loc_max": 15
+}

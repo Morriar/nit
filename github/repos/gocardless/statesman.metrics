@@ -1,0 +1,23 @@
+{
+	"repo": "gocardless/statesman",
+	"readme": "github/repos/gocardless/statesman.json",
+	"lines": 462,
+	"words": 1630,
+	"chars": 14460,
+	"heading 2": 9,
+	"heading 4": 26,
+	"heading 1": 1,
+	"MdDocument": 1,
+	"MdParagraph": 60,
+	"MdText": 161,
+	"MdSoftLineBreak": 54,
+	"MdUnorderedList": 3,
+	"MdListItem": 7,
+	"MdHeading": 36,
+	"MdFencedCodeBlock": 25,
+	"MdThematicBreak": 1,
+	"loc_sum": 197,
+	"loc_avg": 7.0,
+	"loc_min": 2,
+	"loc_max": 33
+}

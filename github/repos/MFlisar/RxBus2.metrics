@@ -1,0 +1,23 @@
+{
+	"repo": "MFlisar/RxBus2",
+	"readme": "github/repos/MFlisar/RxBus2.json",
+	"lines": 202,
+	"words": 1394,
+	"chars": 9233,
+	"heading 3": 4,
+	"heading 5": 9,
+	"MdDocument": 1,
+	"MdHeading": 13,
+	"MdText": 85,
+	"MdParagraph": 33,
+	"MdUnorderedList": 3,
+	"MdListItem": 16,
+	"MdEmphasis": 8,
+	"MdStrongEmphasis": 1,
+	"MdOrderedList": 2,
+	"MdFencedCodeBlock": 11,
+	"loc_sum": 104,
+	"loc_avg": 9.0,
+	"loc_min": 2,
+	"loc_max": 21
+}

@@ -1,0 +1,23 @@
+{
+	"repo": "doug/depthjs",
+	"readme": "github/repos/doug/depthjs.json",
+	"lines": 141,
+	"words": 947,
+	"chars": 7725,
+	"heading 1": 1,
+	"heading 2": 6,
+	"heading 4": 7,
+	"heading 3": 3,
+	"MdDocument": 1,
+	"MdHeading": 17,
+	"MdText": 61,
+	"MdParagraph": 29,
+	"MdSoftLineBreak": 13,
+	"MdUnorderedList": 1,
+	"MdListItem": 3,
+	"MdIndentedCodeBlock": 3,
+	"loc_sum": 47,
+	"loc_avg": 15.0,
+	"loc_min": 4,
+	"loc_max": 39
+}

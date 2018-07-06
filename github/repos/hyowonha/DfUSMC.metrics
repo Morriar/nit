@@ -1,0 +1,23 @@
+{
+	"repo": "hyowonha/DfUSMC",
+	"readme": "github/repos/hyowonha/DfUSMC.json",
+	"lines": 64,
+	"words": 267,
+	"chars": 2400,
+	"heading 1": 1,
+	"heading 2": 5,
+	"MdDocument": 1,
+	"MdHeading": 6,
+	"MdText": 23,
+	"MdParagraph": 22,
+	"MdEmphasis": 1,
+	"MdUnorderedList": 3,
+	"MdListItem": 12,
+	"MdOrderedList": 2,
+	"MdFencedCodeBlock": 2,
+	"MdStrongEmphasis": 3,
+	"loc_sum": 12,
+	"loc_avg": 6.0,
+	"loc_min": 5,
+	"loc_max": 7
+}

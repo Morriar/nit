@@ -1,0 +1,22 @@
+{
+	"repo": "google/python-fire",
+	"readme": "github/repos/google/python-fire.json",
+	"lines": 95,
+	"words": 501,
+	"chars": 3337,
+	"heading 1": 1,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 72,
+	"MdParagraph": 21,
+	"MdEmphasis": 2,
+	"MdSoftLineBreak": 20,
+	"MdUnorderedList": 1,
+	"MdListItem": 5,
+	"MdFencedCodeBlock": 2,
+	"loc_sum": 14,
+	"loc_avg": 7.0,
+	"loc_min": 3,
+	"loc_max": 11
+}

@@ -1,0 +1,16 @@
+{
+	"repo": "phacility/phabricator",
+	"readme": "github/repos/phacility/phabricator.json",
+	"lines": 32,
+	"words": 146,
+	"chars": 1221,
+	"MdDocument": 1,
+	"MdParagraph": 19,
+	"MdStrongEmphasis": 4,
+	"MdText": 23,
+	"MdUnorderedList": 1,
+	"MdListItem": 9,
+	"MdThematicBreak": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

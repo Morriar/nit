@@ -1,0 +1,21 @@
+{
+	"repo": "Wox-launcher/Wox",
+	"readme": "github/repos/Wox-launcher/Wox.json",
+	"lines": 66,
+	"words": 224,
+	"chars": 2672,
+	"heading 1": 1,
+	"heading 2": 6,
+	"MdDocument": 1,
+	"MdHeading": 7,
+	"MdText": 59,
+	"MdParagraph": 31,
+	"MdSoftLineBreak": 2,
+	"MdStrongEmphasis": 5,
+	"MdUnorderedList": 8,
+	"MdListItem": 25,
+	"MdEmphasis": 1,
+	"MdOrderedList": 1,
+	"loc_sum": 0,
+	"loc_avg": 0.0
+}

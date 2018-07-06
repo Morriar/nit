@@ -1,0 +1,22 @@
+{
+	"repo": "hkalbertl/jquery.appendGrid",
+	"readme": "github/repos/hkalbertl/jquery.appendGrid.json",
+	"lines": 71,
+	"words": 276,
+	"chars": 2428,
+	"heading 1": 1,
+	"heading 2": 8,
+	"MdDocument": 1,
+	"MdHeading": 9,
+	"MdText": 45,
+	"MdParagraph": 18,
+	"MdStrongEmphasis": 5,
+	"MdUnorderedList": 3,
+	"MdListItem": 9,
+	"MdFencedCodeBlock": 2,
+	"MdSoftLineBreak": 1,
+	"loc_sum": 22,
+	"loc_avg": 11.0,
+	"loc_min": 5,
+	"loc_max": 17
+}
