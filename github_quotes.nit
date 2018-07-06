@@ -61,50 +61,21 @@ class Loader
 	var md_parser = new MdParser
 
 	fun analyse_titles do
-		# var docs = 0
-		var total = 0
-		# var is_name = 0
-		# var has_name = 0
+		var v = new MdTitleVisitor
 		for repo in load_repos do
-			# docs += 1
-
 			var ast = md_parser.parse(repo.readme.as(not null))
-			var v = new MdTitleVisitor(repo.name)
 			v.enter_visit(ast)
-			# total += v.count
-			# if v.is_name then is_name += 1
-			# if v.has_name then has_name += 1
-
-			# if v.titles.not_empty then
-				# print repo
-				total += v.notes.length
-				# for t, l in v.titles do print "\t{t}\t{l}"
-			# end
-			# Extract title 1
-				# count title 1 / doc
-				# print title 1
-				# kind
-					# project name
-					# intent
-					# project name + intent
-					# other
 		end
-		print total.to_f
-		# print is_name
-		# print has_name
+		for k in v.counter.sort.reversed do
+			print " * {k}: {v.counter[k]}"
+		end
 	end
 end
 
 class MdTitleVisitor
 	super MdVisitor
 
-	var repo_name: String
-	var count = 0
-	var is_name = false
-	var has_name = false
-	var notes = new Array[MdNode]
-	var licenses = new Array[MdNode]
-	var cites = new Array[MdNode]
+	var counter = new Counter[String]
 
 	redef fun visit(node) do
 		if not node isa MdBlockQuote then
@@ -113,20 +84,29 @@ class MdTitleVisitor
 		end
 
 		var text = node.raw_text
-		if text.to_lower.has("note") then
-			notes.add node
-		else if text.to_lower.has("lic") or text.to_lower.has("(c") then
-			licenses.add node
-		else if text.to_lower.has("\"") or text.to_lower.has("@") or text.to_lower.has("--") or text.to_lower.has("“") or text.to_lower.has("«") then
-			cites.add node
+		var ltext = text.to_lower
+
+		if ltext.has("note") then
+			counter.inc "notes"
+		else if ltext.has("step") then
+			counter.inc "process"
+		else if ltext.has("can") or ltext.has("simple") then
+			counter.inc "features"
+		else if ltext.has("looking") or ltext.has("don't") or ltext.has("limited") or ltext.has("no further") or ltext.has("remember") or ltext.has("disclaimer") or ltext.has("deprecated") or ltext.has("construction") or ltext.has("important") or ltext.has("bug") then
+			counter.inc "warning"
+		else if ltext.has("lic") or ltext.has("(c") then
+			counter.inc "license"
+		else if ltext.has("install") or ltext.has("download") then
+			counter.inc "install"
+		else if ltext.has("version") or ltext.has("v?[0-9]+(.[a-zA-Z0-9])+".to_re) then
+			counter.inc "version"
+		else if text.has("\"") or text.has("@") or text.has("--") or text.has("“") or text.has("«") then
+			counter.inc "cites"
 		else
-			print "\t{text}\n"
+			counter.inc "features"
 		end
 	end
 end
 
 var loader = new Loader
 loader.analyse_titles
-
-# is_name		91 + 0
-# has_name		88 + 0

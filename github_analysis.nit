@@ -119,17 +119,7 @@ class Loader
 			end
 
 			# TODO ana titles % sections
-			# TODO ana code blcoks
 			# TODO ana blockquote
-			# TODO ana lists
-			# TODO ana html
-
-			# TODO ana code
-			# TODO ana link
-			# TODO ana image
-			# TODO ana emph/bold
-			# TODO ana html
-
 		end
 
 		data.to_csv(repos_dir / "metrics.csv")

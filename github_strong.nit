@@ -123,6 +123,3 @@ end
 
 var loader = new Loader
 loader.analyse_titles
-
-# is_name		91 + 0
-# has_name		88 + 0
