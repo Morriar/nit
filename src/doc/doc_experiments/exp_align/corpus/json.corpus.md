@@ -1,10 +1,14 @@
 # read and write JSON formatted text
 
+> name: json
+
 These services can be useful to communicate with a remote server or client,
 save data locally or even debug and understand the structure of a Nit object.
 There is a single API to write JSON, and three API to read depending on the use case.
 
 ## Write JSON
+
+> name: json
 
 Writing Nit objects to JSON format can be useful to communicate with a remote service,
 save data locally or even debug and understand the structure of an object.
@@ -17,6 +21,8 @@ share the same features.
 > span: json::JsonSerializer
 > span: json::serialization_write::Serializable::serialize_to_json
 > span: json::JsonSerializer
+> name: json
+> name: json
 
 ### Write plain JSON
 
@@ -25,6 +31,8 @@ This format is non-Nit program, it cannot be fully deserialized back to Nit obje
 The argument `pretty=true` generates JSON for humans, with more spaces and line breaks.
 
 > span: json::serialization_write::Serializable::serialize_to_json
+> name: json
+> name: json
 
 The Nit objects to write must subclass `Serializable` and implement its services.
 Most classes from the `core` library are already supported, including collections, numeric values, etc.
@@ -37,6 +45,8 @@ For your local objects, you can annotate them with `serialize` to automate subcl
 > span: serialization::Serializable
 
 #### Example
+
+> name: json::examples
 
 ~~~
 class Person
@@ -90,6 +100,8 @@ assert charlie.serialize_to_json(pretty=true, plain=true) == """
 
 ### Write JSON with metadata
 
+> name: json
+
 By default, `serialize_to_json` and `JsonSerializer` include metadate in the generated JSON.
 This metadata is used by `JsonDeserializer` when reading the JSON code to recreate
 the Nit object with the exact original type.
@@ -98,12 +110,18 @@ The metadata allows to avoid repeating an object and its resolves cycles in the 
 > span: json::serialization_write::Serializable::serialize_to_json
 > span: json::JsonSerializer
 > span: json::JsonDeserializer
+> name: json
+> name: json
 
 For more information on Nit serialization, see: ../serialization/README.md
+
+> name: serialization
 
 ## Read JSON
 
 There are a total of 3 API to read JSON:
+
+> name: json
 
 * `JsonDeserializer` reads JSON to recreate complex Nit objects (discussed here),
 * the module `json::dynamic` provides an easy API to explore JSON objects,
@@ -112,6 +130,11 @@ There are a total of 3 API to read JSON:
 > span: json::JsonDeserializer
 > span: json::dynamic
 > span: json::static
+> name: json
+> name: core::Object
+> name: json
+> name: json
+> name: core::Object
 
 The class `JsonDeserializer` reads JSON code to recreate objects.
 It can use the metadata in the JSON code, to recreate precise Nit objects.
@@ -122,6 +145,9 @@ Errors are reported to the attribute `JsonDeserializer::errors`.
 > span: core::Map
 > span: core::Array
 > span: serialization::Deserializer::errors
+> name: json
+> name: core::Object
+> name: json
 
 The type to recreate is either declared or inferred:
 
@@ -136,6 +162,7 @@ The type to recreate is either declared or inferred:
 > span: json::JsonDeserializer::class_name_heuristic
 > span: json::JsonDeserializer
 > span: serialization::Deserializer::deserialize
+> name: json
 
 The method `deserialize_json` is a shortcut to `JsonDeserializer` which prints
 errors to the console. It is fit only for small scripts and other quick and dirty usage.
@@ -144,6 +171,8 @@ errors to the console. It is fit only for small scripts and other quick and dirt
 > span: json::JsonDeserializer
 
 #### Example
+
+> name: json::examples
 
 ~~~
 class Triangle
@@ -197,6 +226,9 @@ When reading JSON, some attributes expected by Nit classes may be missing.
 The JSON object may come from an external API using optional attributes or
 from a previous version of your program without the attributes.
 When an attribute is not found, the deserialization engine acts in one of three ways:
+
+> name: json
+> name: json
 
 1. If the attribute has a default value or if it is annotated by `lazy`,
    the engine leave the attribute to the default value. No error is raised.

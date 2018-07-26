@@ -15,6 +15,9 @@ This group also provides two optional modules with thread-safe collections:
 
 > span: pthreads::redef_collections
 > span: pthreads::concurrent_collections
+> name: core::collection
+> name: core::collection
+> name: core::collection
 
 Theses services are implemented using the POSIX threads.
 
@@ -30,6 +33,7 @@ A call to the `join` method will block the execution until the threaded method i
 > span: pthreads::Thread::is_done
 > span: pthreads::Thread::join
 > span: pthreads::Thread::join
+> name: core::Boolean
 
 ## Known limitations:
 

@@ -13,6 +13,8 @@ See http://nlp.stanford.edu/software/corenlp.shtml.
 
 ## NLPProcessor
 
+> name: nlp::NLPProcessor
+
 ### Java client
 
 ~~~nitish
@@ -29,7 +31,11 @@ end
 
 ### NLPServer
 
+> name: nlp::NLPServer
+
 The NLPServer provides a wrapper around the StanfordCoreNLPServer.
+
+> name: nlp::NLPServer
 
 See `https://stanfordnlp.github.io/CoreNLP/corenlp-server.html`.
 
@@ -41,7 +47,13 @@ srv.start
 
 ### NLPClient
 
+> name: nlp::NLPClient
+
 The NLPClient is used as a NLPProcessor with a NLPServer backend.
+
+> name: nlp::NLPClient
+> name: nlp::NLPProcessor
+> name: nlp::NLPServer
 
 ~~~nitish
 var cli = new NLPClient("http://localhost:9000")
@@ -50,8 +62,15 @@ var doc = cli.process("String to analyze")
 
 ## NLPIndex
 
+> name: nlp::NLPIndex
+
 NLPIndex extends the StringIndex to use a NLPProcessor to tokenize, lemmatize and
 tag the terms of a document.
+
+> name: nlp::NLPIndex
+> name: vsm::StringIndex
+> name: nlp::NLPProcessor
+> name: Document
 
 ~~~nitish
 var index = new NLPIndex(proc)

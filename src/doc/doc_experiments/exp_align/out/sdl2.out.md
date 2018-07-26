@@ -2,6 +2,7 @@
 
 > span: sdl2
 > span: sdl2::image
+> name: sdl2::SDL
 
 The main entry point of this project, `sdl2`, exposes some features of the base
 library: video, events, syswm, etc. The alternative entry point `sdl2::image` offers
@@ -10,6 +11,7 @@ mainly `SDLSurface::load` to load images from PNG, JPG or TIF files.
 > span: sdl2
 > span: sdl2::image
 > span: sdl2::image::SDLSurface::load
+> name: sdl2::image::SDLSurface::load
 
 You can also import `sdl2::all` to get `sdl2` and all its sister libraries, which is only
 `sdl2::image` at this point.
@@ -17,6 +19,8 @@ You can also import `sdl2::all` to get `sdl2` and all its sister libraries, whic
 > span: sdl2::all
 > span: sdl2
 > span: sdl2::image
+> name: sdl2::all
+> name: sdl2::SDLMouseEvent::which
 
 ## Examples
 

@@ -1,5 +1,7 @@
 # Abstract serialization services
 
+> name: serialization
+
 The serialization services are based on the `serialize` and the `noserialize` annotations,
 the `Serializable` interface and the implementations of `Serializer` and `Deserializer`.
 

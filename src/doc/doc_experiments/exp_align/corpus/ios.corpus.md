@@ -1,5 +1,8 @@
 # iOS support for _app.nit_
 
+> name: ios
+> name: app
+
 ## System configuration
 
 Configure your system for OS X by installing Xcode and brew.
@@ -29,6 +32,9 @@ for portable applications working on GNU/Linux, OS X, iOS and Android.
 
 > span: examples/calculator/
 > span: contrib/tnitter/calculator/
+> name: examples::Calculator
+> name: tnitter
+> name: android
 
 ## Application icon
 
@@ -44,3 +50,5 @@ These files can be generated in a number of different ways:
 
 * Write or modify the file `Contents.json` manually.
   It is in Json format and easily readable.
+
+> name: json

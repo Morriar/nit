@@ -14,12 +14,14 @@
 
 import markdown2
 import markdown2::markdown_md_rendering
+import counter
 
 class ReadmeComparator
 
 	var lib: nullable String = null
 
 	fun compare_files(orig, dest: String) do
+		print "lib\tspan_r\tspan_p\tname_r\tname_p"
 		var parser = new ReadmeParser
 		var doc_orig = parser.parse_file(orig)
 		var doc_dest = parser.parse_file(dest)
@@ -28,9 +30,14 @@ class ReadmeComparator
 	end
 
 	fun compare_docs(orig, dest: MdDocument) do
-		var tot_r = 0.0
-		var tot_p = 0.0
-		var count = 0
+		var spans_r = 0.0
+		var spans_p = 0.0
+		var spans_count = 0
+
+		var names_r = 0.0
+		var names_p = 0.0
+		var names_count = 0
+
 		for block in orig.children do
 			if not block isa MdBlock then continue
 			if block isa MdBlockQuote then continue
@@ -42,18 +49,29 @@ class ReadmeComparator
 			var orig_spans = block.span_refs
 			var dest_spans = oblock.span_refs
 			if orig_spans.is_empty and dest_spans.is_empty then continue
-			var r = recall(orig_spans, dest_spans)
-			var p = precision(orig_spans, dest_spans)
-			# print "r: {r}\t{if r < 100.0 then "\t" else ""}p: {p}"
-			tot_r += r
-			tot_p += p
-			count += 1
+			var span_r = recall(orig_spans, dest_spans)
+			var span_p = precision(orig_spans, dest_spans)
+			# print "span_r: {span_r}\t{if span_r < 100.0 then "\t" else ""}span_p: {span_p}"
+			spans_r += span_r
+			spans_p += span_p
+			spans_count += 1
 
+			# names
+			var orig_names = block.name_refs
+			var dest_names = oblock.name_refs
+			if orig_names.is_empty and dest_names.is_empty then continue
+			var name_r = recall(orig_names, dest_names)
+			var name_p = precision(orig_names, dest_names)
+			# print "name_r: {name_r}\t{if name_r < 100.0 then "\t" else ""}name_p: {name_p}"
+			names_r += name_r
+			names_p += name_p
+			names_count += 1
 
-			# TODO compare names
 			# TODO compare matches
 		end
-		print "{lib or else "NULL"}\ttot_r\t{tot_r / count.to_f}\ttot_p\t{tot_p / count.to_f}"
+		printn "{lib or else "NULL"}\t"
+		printn "{spans_r / spans_count.to_f}\t{spans_p / spans_count.to_f}\t"
+		printn "{names_r / names_count.to_f}\t{names_p / names_count.to_f}\n"
 	end
 
 	fun print_block(block: MdBlock) do
@@ -144,6 +162,25 @@ redef class MdBlock
 	end
 end
 
+class MdMetrics
+	super MdVisitor
+
+	var lib: String is noinit
+	var lines: Int is noinit
+	var counter = new Counter[String]
+
+	fun collect(lib: String) do
+		self.lib = lib
+		var readme = "lib/{lib}/README.docdown.md"
+		var content = readme.to_path.read_all
+		self.lines = content.split("\n").length
+	end
+
+	fun pretty_print do
+		print "{lib}\t{lines}"
+	end
+end
+
 # if args.length != 2 then
 	# print "./corpus <corpus file> <try match>"
 	# exit 1
@@ -161,12 +198,17 @@ for file in files do
 	# print ""
 	# print file
 	var lib = file.replace(".corpus.md", "")
-	sys.system "./nitreadme lib/{lib} --check-docdown > src/doc/doc_experiments/exp_align/out/{lib}.out.md"
+	var mc = new MdMetrics
+	mc.collect(lib)
+	mc.pretty_print
 
-	var comparator = new ReadmeComparator
-	comparator.compare_files(
-		"src/doc/doc_experiments/exp_align/corpus/{lib}.corpus.md",
-		"src/doc/doc_experiments/exp_align/out/{lib}.out.md")
+
+	# sys.system "./nitreadme lib/{lib} --check-docdown > src/doc/doc_experiments/exp_align/out/{lib}.out.md"
+
+	# var comparator = new ReadmeComparator
+	# comparator.compare_files(
+		# "src/doc/doc_experiments/exp_align/corpus/{lib}.corpus.md",
+		# "src/doc/doc_experiments/exp_align/out/{lib}.out.md")
 
 	# break
 end

@@ -1,6 +1,10 @@
 # Android platform support and APIs
 
+> name: android
+
 ## Compilation for Android
+
+> name: android
 
 The compiler generates an APK file as the output when the `android`
 module is imported by the compilation target. The path to the generated
@@ -12,6 +16,9 @@ file can be specified using the `-o` and `--dir` options.
 
 To compile Android apps from a 64 bits GNU/Linux host you can reuse an existing Android Studio
 installation or make a clean install with command line tools only.
+
+> name: android
+> name: android
 
 Note that this guide supports only 64 bits GNU/Linux hosts with support for a Java 8 JDK,
 it may be possible to support other platforms with some tweaks.
@@ -55,10 +62,16 @@ it may be possible to support other platforms with some tweaks.
    sudo apt install openjdk-8-jdk
    ~~~
 
+> name: android
+
 ## Configure the Android application
 
 The _app.nit_ framework and this project offers some services to
 customize the generated Android application.
+
+> name: android
+> name: app
+> name: android
 
 ### Annotations
 
@@ -90,8 +103,13 @@ customize the generated Android application.
   Its usefulness will be extended in the future to customize user applications.
 
 > span: lib/app/README.md
+> name: android
+> name: android
+> name: android
 
 ### Android implementation
+
+> name: android
 
 There is two core implementation for Nit apps on Android.
 `android::nit_activity` is used by apps with standard windows and native UI controls.
@@ -101,6 +119,8 @@ There is two core implementation for Nit apps on Android.
 > span: android::game
 > span: mnit
 > span: gamnit
+> name: android
+> name: app
 
 Clients don't have to select the core implementation, it is imported by other relevant modules.
 For example, a module importing `app::ui` and `android` will trigger the importation of `android::nit_activity`.
@@ -110,6 +130,8 @@ For example, a module importing `app::ui` and `android` will trigger the importa
 > span: android::nit_activity
 
 ### Lock app orientation
+
+> name: app
 
 Importing `android::landscape` or `android::portrait` locks the generated
 application in the specified orientation. This can be useful for games and
@@ -124,6 +146,10 @@ Resources specific to the Android platform should be placed in an `android/` fol
 The folder should adopt the structure of a normal Android project, e.g., a custom XML resource file can be placed
 at `android/res/values/color.xml` to be compiled with the Android application.
 
+> name: android
+> name: android
+> name: android
+
 The application icon should also be placed in the `android/` folder.
 Place the classic bitmap version at `android/res/mipmap-hdpi/ic_launcher.png` (and others),
 and the adaptive version at `android/res/mipmap-anydpi-v26/ic_launcher.xml`.
@@ -131,6 +157,8 @@ The Nit compiler detects these files and uses them as the application icon.
 
 Additional `android/` folders may be placed next to more specific Nit modules to change the Android resources
 for application variants. The more specific resources will have priority over the project level `android/` files.
+
+> name: android
 
 ## Compilation modes
 
@@ -140,6 +168,8 @@ The compilation mode is specified as an argument to `nitc`, only
 `--release` can be specified as debug is the default behavior.
 
 > span: nitc
+> name: android
+> name: android
 
 ### Debug mode
 
@@ -184,3 +214,4 @@ APK file, it can then be published on the Play Store.
    required passwords as needed by `jarsigner`.
 
 > span: nitc
+> name: android

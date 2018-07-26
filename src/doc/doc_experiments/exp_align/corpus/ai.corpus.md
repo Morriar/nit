@@ -13,7 +13,8 @@ Contents:
 
 See the `examples` subdirectory for examples:
 
-> span: lib/ai/examples/
+> span: ai>examples>
+> name: ai>examples>
 
 * `examples/queens.nit`
 * `examples/puzzle.nit`

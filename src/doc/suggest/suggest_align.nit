@@ -63,12 +63,20 @@ class MDocSpanReferencesVisitor
 				if not block isa MdBlock then continue
 				if block isa MdBlockQuote then continue
 				span_refs.clear
+				name_refs.clear
 				visit(block)
 				print md_renderer.render(block)
 				if span_refs.not_empty then
 					for ref in span_refs do
 						print "> span: {ref.full_name}"
 					end
+				end
+				if name_refs.not_empty then
+					for ref in name_refs do
+						print "> name: {ref.full_name}"
+					end
+					print ""
+				else if span_refs.not_empty then
 					print ""
 				end
 			end
@@ -76,11 +84,14 @@ class MDocSpanReferencesVisitor
 	end
 
 	var span_refs = new Array[MEntity]
+	var name_refs = new Array[MEntity]
 
 	redef fun visit(node) do
 		if node isa MdCode then
 			var ref = node.nit_mentity
 			if ref != null then span_refs.add ref
+		else if node isa MdText then
+			name_refs.add_all node.nit_mentities
 		end
 		node.visit_all(self)
 	end

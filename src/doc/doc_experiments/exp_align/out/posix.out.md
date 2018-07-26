@@ -6,4 +6,5 @@ import `posix::ext`.
 
 > span: posix
 > span: posix::ext
+> name: core
 

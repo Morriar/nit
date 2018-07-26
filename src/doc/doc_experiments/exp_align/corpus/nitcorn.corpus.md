@@ -12,6 +12,7 @@ _nitcorn_ provides `FileServer`, a simple `Action` to serve static files.
 > span: nitcorn::HttpResponse
 > span: nitcorn::FileServer
 > span: nitcorn::Action
+> name: nitcorn
 
 `HttpRequest` contains the GET and POST arguments as well as session data it one exists.
 The produced `HttpResponse` should contain the HTTP status code, the body,
@@ -19,6 +20,11 @@ session data to preserve or create a session, and optionally list files to appen
 
 > span: nitcorn::HttpRequest
 > span: nitcorn::HttpResponse
+> name: nitcorn::HttpRequest::get
+> name: nitcorn::HttpRequest::post
+> name: nitcorn::HttpResponse::status_code
+> name: nitcorn::HttpResponse::body
+> name: nitcorn::HttpResponse::session
 
 Each `Action` may be associated to many instances of `Route`.
 These routes can simply identify the root of a service,
@@ -26,8 +32,12 @@ but also define parameters within the URI.
 
 > span: nitcorn::Action
 > span: nitcorn::Route
+> name: nitcorn::Route
 
 _nitcorn_ instances are configured dynamically in Nit code with the interfaces and routes created as needed.
+
+> name: nitcorn
+> name: nitcorn::Route
 
 _nitcorn_ plays well with other Nit services and tools such as `serialization`, `mongodb`, `sqlite` and `nitiwiki`.
 It also benefits from the full power of the Nit language:
@@ -37,6 +47,7 @@ and the FFI enables calling services in different languages.
 > span: serialization
 > span: mongodb
 > span: sqlite
+> name: nitcorn
 
 ## Examples
 
@@ -44,6 +55,7 @@ A minimal example follows with a custom `Action` and using `FileServer`.
 
 > span: nitcorn::Action
 > span: nitcorn::FileServer
+> name: nitcorn::examples
 
 More general examples are available at `lib/nitcorn/examples/`.
 For an example of a larger project merging many _nitcorn_ applications into one server,
@@ -51,16 +63,25 @@ take a look at the configuration of `http://xymus.net/` at `../contrib/xymus_net
 
 > span: lib/nitcorn/examples/
 > span: contrib/xymun_net/xymus_net.nit/
+> name: nitcorn::examples
+> name: nitcorn::examples
+> name: nitcorn
 
 Larger projects using _nitcorn_ can be found in the `contrib/` folder:
 
+> span: nitcorn::examples
 > span: contrib/
+> name: nitcorn
 
 * _opportunity_ is a meetup planner heavily based on _nitcorn_.
 * _tnitter_ is a micro-blogging platform with a simple Web and RESTful interface.
 * _benitlux_ uses a custom `Action` to subscribe people to a mailing list and define a RESTful interface.
 
 > span: nitcorn::Action
+> name: opportunity
+> name: nitcorn
+> name: tnitter
+> name: benitlux
 
 ### Simple hello world server
 
@@ -113,6 +134,8 @@ factory.run
 This nitcorn library is a fork from an independent project originally created in 2013 by
 Jean-Philippe Caissy, Guillaume Auger, Frederic Sevillano, Justin Michaud-Ouellette,
 Stephan Michaud and Maxime Bélanger.
+
+> name: nitcorn
 
 It has been adapted to a library, and is currently maintained, by Alexis Laferrière.
 

@@ -38,6 +38,11 @@ It relies on the following sequence of events, represented here by their callbac
 > span: app::AppComponent::on_restart
 > span: app::AppComponent::on_restart
 > span: app::AppComponent::on_stop
+> name: core::time
+> name: app
+> name: app
+> name: app
+> name: app
 
 ![_app.nit_ life-cycle](path/resources/ab03b885463901ade4ae1a9adfaefeff.png)
 
@@ -53,6 +58,8 @@ Life-cycle events related to saving and restoring the application state are prov
 > span: app::data_store
 > span: app::AppComponent::on_restore_state
 > span: app::AppComponent::on_save_state
+> name: app
+> name: app
 
 These events are synchronized to the native platforms applications
 The `App` instance is the first to be notified of these events.
@@ -61,6 +68,8 @@ So all UI elements can react separately to live-cycle events.
 
 > span: app::App
 > span: app::ui
+> name: poset::POSetElement::depth
+> name: poset::poset::POSet::elements
 
 ## User Interface
 
@@ -84,12 +93,14 @@ Here is a subset of the most useful controls and views:
 > span: app::TextInput
 > span: app::HorizontalLayout
 > span: app::VerticalLayout
+> name: app::TextView::text
 
 Each control is notified of input events by callbacks to `on_event`.
 All controls have observers that are also notified of the events.
 So there is two ways  to customize the behavior on a given event:
 
 > span: app::AppObserver::on_event
+> name: app::ui::AppComponent::observers
 
 * Create a subclass of the wanted `Control`, let's say `Button`, and specialize `on_event`.
 
@@ -107,6 +118,7 @@ The example at `examples/ui_example.nit` shows off most features of `app::ui` in
 You can also take a look at the calculator (`../../examples/calculator/src/calculator.nit`) which is a concrete usage example.
 
 > span: app::ui
+> name: core::Queue::take
 
 ### Platform-specific UI
 
@@ -115,6 +127,8 @@ You can go beyond the portable UI API of _app.nit_ by using the natives services
 The suggested approach is to use platform specific modules to customize the application on a precise platform.
 See the calculator example for an adaptation of the UI on Android,
 the interesting module is in this repository at ../../examples/calculator/src/android_calculator.nit
+
+> name: android::platform
 
 ## Persistent State with data_store
 
@@ -133,6 +147,7 @@ The service is accessible by the method `App::data_store`. The `DataStore` itsel
 
 > span: core::String
 > span: core::String
+> name: app::CompositeControl::clear
 
 ### Usage Example
 
@@ -178,6 +193,8 @@ the full example at `examples/http_request_example.nit`.
 > span: app::http_request
 > span: app::AsyncHttpRequest
 > span: app::AsyncHttpRequest
+> name: core::Process::execute
+> name: core::flat::FlatString::full
 
 ## Metadata annotations
 
@@ -215,6 +232,24 @@ The _app.nit_ framework defines three annotations to customize the application p
 > span: ios
 > span: android
 > span: ios
+> name: meta::Class::name
+> name: meta::Class::name
+> name: app::ui::App::window
+> name: meta::Class::name
+> name: core::flat::FlatString::full
+> name: app::CompositeControl::has
+> name: core::string_search::Text::prefix
+> name: core::Object::hash
+> name: core::union_find::DisjointSet::find
+> name: android::platform
+> name: json::serialization_read::JsonDeserializer::root
+> name: android>nit_compile>android>app>libs>
+> name: core::StringReader::source
+> name: pthreads::extra
+> name: app::Control::parent
+> name: meta::Class::name
+> name: json::serialization_read::JsonDeserializer::root
+> name: core::Buffer::lower
 
 ### Usage Example
 
@@ -230,10 +265,16 @@ end
 
 The Nit compiler detects the target platform from the importations and generates the appropriate application format and package.
 
+> name: android::platform
+> name: core::Text::format
+
 Applications using only the portable services of _app.nit_ require some special care at compilation.
 Such an application, let's say `calculator.nit`, does not depend on a specific platform and use the portable UI.
 The target platform must be specified to the compiler for it to produce the correct application package.
 There is two main ways to achieve this goal:
+
+> name: android::platform
+> name: android::platform
 
 * The mixin option (`-m module`) imports an additional module before compiling.
   It can be used to load platform specific implementations of the _app.nit_ portable UI.
@@ -263,4 +304,7 @@ There is two main ways to achieve this goal:
   ~~~
 
 > span: android
+> name: app::AsyncHttpRequest::before
+> name: android::platform
+> name: android::platform
 

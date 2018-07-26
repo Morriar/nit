@@ -6,6 +6,7 @@ The threads can be manipulated and synchronized using the classes `Thread`,
 > span: pthreads::Thread
 > span: pthreads::Mutex
 > span: pthreads::Barrier
+> name: pthreads::threadpool::ThreadPool::threads
 
 This group also provides two optional modules with thread-safe collections:
 
@@ -21,6 +22,9 @@ Theses services are implemented using the POSIX threads.
 You can also use the `is threaded` annotation on methods, which makes them run on their own thread.
 Methods with self calls are not supported.
 
+> name: core::Sys::run
+> name: pthreads>
+
 A method or function annotated with `is threaded` has its return value changed during compilation.
 You will get a subclass of `Thread`, even if there wasn't a return value before. You can know if the threaded method is done with the `is_done` boolean from `Thread`.
 A call to the `join` method will block the execution until the threaded method is done, or immediatly return if it's already done.
@@ -28,6 +32,9 @@ A call to the `join` method will block the execution until the threaded method i
 
 > span: pthreads::Thread
 > span: pthreads::Thread
+> name: pthreads::AtomicInt::value
+> name: pthreads::pthreads::NativePthreadKey::get
+> name: pthreads::AtomicInt::value
 
 ## Known limitations:
 

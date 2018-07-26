@@ -1,5 +1,7 @@
 # _app.nit_, a framework for portable applications
 
+> name: app
+
 The framework provides services to manage common needs of modern mobile applications:
 
 * Life-cycle
@@ -12,10 +14,14 @@ The framework provides services to manage common needs of modern mobile applicat
 The features offered by _app.nit_ are common to all platforms, but
 may not be available on all devices.
 
+> name: app
+
 ## Application Life-Cycle
 
 The _app.nit_ application life-cycle is compatible with all target platforms.
 It relies on the following sequence of events, represented here by their callback method name:
+
+> name: app
 
 1. `on_create`: The application is being created.
    You should build the UI at this time and launch services.
@@ -38,6 +44,10 @@ It relies on the following sequence of events, represented here by their callbac
 > span: app::AppComponent::on_restart
 > span: app::AppComponent::on_restart
 > span: app::AppComponent::on_stop
+> name: app::App
+> name: app::App
+> name: app::App
+> name: app::App
 
 ![_app.nit_ life-cycle](doc/app-nit-lifecycle.png)
 
@@ -53,6 +63,8 @@ Life-cycle events related to saving and restoring the application state are prov
 > span: app::data_store
 > span: app::AppComponent::on_restore_state
 > span: app::AppComponent::on_save_state
+> name: app::App
+> name: app::App
 
 These events are synchronized to the native platforms applications
 The `App` instance is the first to be notified of these events.
@@ -103,20 +115,29 @@ So there is two ways  to customize the behavior on a given event:
 
 ### Usage Example
 
+> name: app::examples
+
 The example at `examples/ui_example.nit` shows off most features of `app::ui` in a minimal program.
 You can also take a look at the calculator (`../../examples/calculator/src/calculator.nit`) which is a concrete usage example.
 
 > span: lib/app/examples/ui_examples.nit
 > span: app::ui
 > span: /examples/calculator/src/calculator.nit
+> name: app::examples
+> name: app::calculator
+> name: app::examples
 
 ### Platform-specific UI
 
 You can go beyond the portable UI API of _app.nit_ by using the natives services of a platform.
 
+> name: app
+
 The suggested approach is to use platform specific modules to customize the application on a precise platform.
 See the calculator example for an adaptation of the UI on Android,
 the interesting module is in this repository at ../../examples/calculator/src/android_calculator.nit
+
+> name: examples::calculator
 
 ## Persistent State with data_store
 
@@ -126,6 +147,7 @@ The service is accessible by the method `App::data_store`. The `DataStore` itsel
 > span: app::data_store
 > span: app::data_store::App::data_store
 > span: app::DataStore
+> name: app
 
 * `DataStore::[]=` saves and associates any serializable instances to a `String` key.
   Pass `null` to clear the value associated to a key.
@@ -183,10 +205,13 @@ the full example at `examples/http_request_example.nit`.
 > span: app::AsyncHttpRequest
 > span: app::AsyncHttpRequest
 > span: lib/app/examples/http_request_example.nit
+> name: app::examples
 
 ## Metadata annotations
 
 The _app.nit_ framework defines three annotations to customize the application package.
+
+> name: app
 
 * `app_name` takes a single argument, the visible name of the application.
   This name is used for launchers and window title.
@@ -233,6 +258,8 @@ Such an application, let's say `calculator.nit`, does not depend on a specific p
 The target platform must be specified to the compiler for it to produce the correct application package.
 There is two main ways to achieve this goal:
 
+> name: app
+
 * The mixin option (`-m module`) imports an additional module before compiling.
   It can be used to load platform specific implementations of the _app.nit_ portable UI.
 
@@ -261,4 +288,4 @@ There is two main ways to achieve this goal:
   ~~~
 
 > span: android
-
+> name: app

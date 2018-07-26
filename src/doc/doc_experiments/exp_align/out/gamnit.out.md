@@ -1,12 +1,23 @@
 # Portable game and multimedia framework for Nit
 
+> name: android::game
+
 _gamnit_ is a modular framework to create portable 2D or 3D apps in Nit.
 It is based on the portability framework _app.nit_ and the OpenGL ES 2.0 standard.
+
+> name: gamnit
+> name: android::audio::NativeMediaPlayer::create
 
 ## System configuration
 
 To compile the _gamnit_ apps packaged with the Nit repository on GNU/Linux you need to install the dev version of a few libraries and some tools.
 On Debian 8.2, this command should install everything needed:
+
+> name: gamnit::Shader::compile
+> name: gamnit
+> name: egl::EGLDisplay::version
+> name: core::Process::command
+> name: sdl2::SDLInitFlags::everything
 
 ~~~bash
 apt-get install libgles2-mesa-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev inkscape
@@ -21,6 +32,9 @@ pacman -S mingw-w64-x86_64-angleproject-git mingw-w64-x86_64-SDL2 mingw-w64-x86_
 While macOS isn't supported, it can create iOS apps.
 You need to install and setup Xcode, and you may install the GLSL shader validation tool via `brew`:
 
+> name: android::audio::NativeMediaPlayer::create
+> name: gamnit::GamnitDisplay::setup
+
 ~~~bash
 brew install glslang
 ~~~
@@ -28,6 +42,9 @@ brew install glslang
 ## Services by submodules
 
 _gamnit_ is modular, different services of the framework are available through different submodules:
+
+> name: gamnit
+> name: gamnit::flat_core::GroupedArray::available
 
 * The main entrypoint `gamnit` provides low-level abstractions over some services of OpenGL ES 2.0, like textures, shaders and programs.
   It defines the basic methods to implement in order to obtain a working game:
@@ -81,4 +98,26 @@ _gamnit_ is modular, different services of the framework are available through d
 > span: gamnit::Model
 > span: gamnit::keys
 > span: gamnit>model_parsers>
+> name: gamnit::GamnitProgram::use
+> name: android::game
+> name: gamnit::CustomTexture::fill
+> name: gamnit::TextSprites::sprites
+> name: gamnit::ObjDef::objects
+> name: gamnit::TextSprites::sprites
+> name: android::game
+> name: gamnit::cameras::CameraAnchor::camera
+> name: gamnit::TextSprites::sprites
+> name: gamnit::cameras::CameraAnchor::camera
+> name: core::Protocol::origin
+> name: opts::opts::OptionContext::build
+> name: app>doc>
+> name: gamnit::Server::clients
+> name: android::game
+> name: gamnit::CustomTexture::fill
+> name: poset::poset::POSet::elements
+> name: sdl2::SDLMessageBoxFlags::information
+> name: gamnit::Camera::position
+> name: gamnit
+> name: opts::OptionContext::parse
+> name: gamnit::more_models::Sys::models
 
