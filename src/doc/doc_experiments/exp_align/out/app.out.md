@@ -39,7 +39,7 @@ It relies on the following sequence of events, represented here by their callbac
 > span: app::AppComponent::on_restart
 > span: app::AppComponent::on_stop
 
-![_app.nit_ life-cycle](doc/app-nit-lifecycle.png)
+![_app.nit_ life-cycle](path/resources/ab03b885463901ade4ae1a9adfaefeff.png)
 
 Life-cycle events related to saving and restoring the application state are provided by two special callback methods:
 
@@ -106,9 +106,7 @@ So there is two ways  to customize the behavior on a given event:
 The example at `examples/ui_example.nit` shows off most features of `app::ui` in a minimal program.
 You can also take a look at the calculator (`../../examples/calculator/src/calculator.nit`) which is a concrete usage example.
 
-> span: lib/app/examples/ui_examples.nit
 > span: app::ui
-> span: /examples/calculator/src/calculator.nit
 
 ### Platform-specific UI
 
@@ -133,9 +131,7 @@ The service is accessible by the method `App::data_store`. The `DataStore` itsel
 * `DataStore::[]` returns the object associated to a `String` key.
   It returns `null` if nothing is associated to the key.
 
-> span: app::DataStore[]=
 > span: core::String
-> span: app::DataStore[]
 > span: core::String
 
 ### Usage Example
@@ -182,7 +178,6 @@ the full example at `examples/http_request_example.nit`.
 > span: app::http_request
 > span: app::AsyncHttpRequest
 > span: app::AsyncHttpRequest
-> span: lib/app/examples/http_request_example.nit
 
 ## Metadata annotations
 
@@ -213,6 +208,13 @@ The _app.nit_ framework defines three annotations to customize the application p
   If there is no arguments, the parent folder of the annotated module is used.
   In case of name conflicts in the resource files, the files from the project root have the lowest priority,
   those associated to modules lower in the importation hierarchy have higher priority.
+
+> span: android
+> span: ios
+> span: android
+> span: ios
+> span: android
+> span: ios
 
 ### Usage Example
 

@@ -35,8 +35,6 @@ class refinement can be used to customize default services and merge many applic
 and the FFI enables calling services in different languages.
 
 > span: serialization
-> span: mongodb
-> span: sqlite
 
 ## Examples
 
@@ -49,12 +47,7 @@ More general examples are available at `lib/nitcorn/examples/`.
 For an example of a larger project merging many _nitcorn_ applications into one server,
 take a look at the configuration of `http://xymus.net/` at `../contrib/xymus_net/xymus_net.nit`.
 
-> span: lib/nitcorn/examples/
-> span: contrib/xymun_net/xymus_net.nit/
-
 Larger projects using _nitcorn_ can be found in the `contrib/` folder:
-
-> span: contrib/
 
 * _opportunity_ is a meetup planner heavily based on _nitcorn_.
 * _tnitter_ is a micro-blogging platform with a simple Web and RESTful interface.

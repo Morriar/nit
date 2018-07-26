@@ -17,36 +17,43 @@ import markdown2::markdown_md_rendering
 
 class ReadmeComparator
 
+	var lib: nullable String = null
+
 	fun compare_files(orig, dest: String) do
 		var parser = new ReadmeParser
 		var doc_orig = parser.parse_file(orig)
 		var doc_dest = parser.parse_file(dest)
+		lib = orig.basename.replace(".corpus.md", "")
 		compare_docs(doc_orig, doc_dest)
 	end
 
 	fun compare_docs(orig, dest: MdDocument) do
+		var tot_r = 0.0
+		var tot_p = 0.0
+		var count = 0
 		for block in orig.children do
 			if not block isa MdBlock then continue
 			if block isa MdBlockQuote then continue
 
 			var oblock = dest.match_block(block)
 			if oblock == null then continue
-			compare_blocks(block, oblock)
+
+			# spans
+			var orig_spans = block.span_refs
+			var dest_spans = oblock.span_refs
+			if orig_spans.is_empty and dest_spans.is_empty then continue
+			var r = recall(orig_spans, dest_spans)
+			var p = precision(orig_spans, dest_spans)
+			# print "r: {r}\t{if r < 100.0 then "\t" else ""}p: {p}"
+			tot_r += r
+			tot_p += p
+			count += 1
+
+
+			# TODO compare names
+			# TODO compare matches
 		end
-	end
-
-	fun compare_blocks(orig, dest: MdBlock) do
-		var orig_spans = orig.span_refs
-		var dest_spans = dest.span_refs
-		# compare spans
-		# compare names
-		# compare matches
-
-		# rappel / precision
-		if orig_spans.is_empty and dest_spans.is_empty then return
-		var p = precision(orig_spans, dest_spans)
-		var r = recall(orig_spans, dest_spans)
-		print "p: {p}\tr: {r}"
+		print "{lib or else "NULL"}\ttot_r\t{tot_r / count.to_f}\ttot_p\t{tot_p / count.to_f}"
 	end
 
 	fun print_block(block: MdBlock) do
@@ -56,19 +63,21 @@ class ReadmeComparator
 	end
 
 	fun precision(relevant, retrieved: Array[String]): Float do
-		if retrieved.is_empty then return 100.0
-		var union = new ArraySet[String]
-		union.add_all relevant
-		union.add_all retrieved
-		return union.length.to_f / retrieved.length.to_f * 100.0
+		if retrieved.is_empty then return 0.0
+		var inter = new Array[String]
+		for doc in relevant do
+			if retrieved.has(doc) then inter.add doc
+		end
+		return inter.length.to_f / retrieved.length.to_f * 100.0
 	end
 
 	fun recall(relevant, retrieved: Array[String]): Float do
 		if relevant.is_empty then return 100.0
-		var union = new ArraySet[String]
-		union.add_all relevant
-		union.add_all retrieved
-		return union.length.to_f / relevant.length.to_f * 100.0
+		var inter = new Array[String]
+		for doc in relevant do
+			if retrieved.has(doc) then inter.add doc
+		end
+		return inter.length.to_f / relevant.length.to_f * 100.0
 	end
 
 end
@@ -135,13 +144,29 @@ redef class MdBlock
 	end
 end
 
-if args.length != 2 then
-	print "./corpus <corpus file> <try match>"
-	exit 1
+# if args.length != 2 then
+	# print "./corpus <corpus file> <try match>"
+	# exit 1
+# end
+
+# var orig = args.first
+# var dest = args.last
+
+var corpus_path = "src/doc/doc_experiments/exp_align/corpus"
+(corpus_path / "../out").mkdir
+var files = corpus_path.files
+default_comparator.sort(files)
+for file in files do
+
+	# print ""
+	# print file
+	var lib = file.replace(".corpus.md", "")
+	sys.system "./nitreadme lib/{lib} --check-docdown > src/doc/doc_experiments/exp_align/out/{lib}.out.md"
+
+	var comparator = new ReadmeComparator
+	comparator.compare_files(
+		"src/doc/doc_experiments/exp_align/corpus/{lib}.corpus.md",
+		"src/doc/doc_experiments/exp_align/out/{lib}.out.md")
+
+	# break
 end
-
-var orig = args.first
-var dest = args.last
-
-var comparator = new ReadmeComparator
-comparator.compare_files(orig, dest)

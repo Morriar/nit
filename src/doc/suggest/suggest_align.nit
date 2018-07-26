@@ -31,11 +31,13 @@ class MDocAligner
 	fun align_mdoc(mdoc: MDoc) do
 		var document = mdoc.mdoc_document
 
+		span_visitor.enter_visit(document)
+
 		# Align pieces of code
-		code_visitor.enter_visit(document)
+		# code_visitor.enter_visit(document)
 
 		# Align NLP
-		nlp_visitor.enter_visit(document)
+		# nlp_visitor.enter_visit(document)
 
 		# Create document structure
 		var sections_builder = new MDocSectionBuilder
@@ -45,8 +47,43 @@ class MDocAligner
 		section_visitor.enter_section(root)
 	end
 
+	var span_visitor = new MDocSpanReferencesVisitor is lazy
 	var code_visitor = new MDocCodeReferencesVisitor(mentity_index, context) is lazy
 	var nlp_visitor = new MDocNLPReferencesVisitor(mentity_index, context) is lazy
+end
+
+class MDocSpanReferencesVisitor
+	super MdVisitor
+
+	var md_renderer = new MarkdownRenderer
+
+	redef fun enter_visit(node) do
+		if node isa MdDocument then
+			for block in node.children do
+				if not block isa MdBlock then continue
+				if block isa MdBlockQuote then continue
+				span_refs.clear
+				visit(block)
+				print md_renderer.render(block)
+				if span_refs.not_empty then
+					for ref in span_refs do
+						print "> span: {ref.full_name}"
+					end
+					print ""
+				end
+			end
+		end
+	end
+
+	var span_refs = new Array[MEntity]
+
+	redef fun visit(node) do
+		if node isa MdCode then
+			var ref = node.nit_mentity
+			if ref != null then span_refs.add ref
+		end
+		node.visit_all(self)
+	end
 end
 
 class MDocCodeReferencesVisitor

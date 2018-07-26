@@ -26,18 +26,9 @@ This parser passes all tests inside http://daringfireball.net/projects/downloads
 
 ## Testing
 
-The NitUnit test suite can be found in `tests`.
+The NitUnit test suite can be found in `test_markdown.nit`.
 
-> span: markdown>tests
-
-Minimalists tests are prefixed with `test_process*`. All tests from daringfireball are prefixed with `test_daring*`.
-
-> name: markdown::tests
-> name: markdown::tests_process*
-> name: markdown::tests_daring*
-> match: markdown::tests
-> match: markdown::tests::test_process*
-> match: markdown::tests::test_daring*
+Minimalists tests are prefixed with `process_*`. All tests from daringfireball are prefixed with `process_daring*`.
 
 Run the test suite:
 

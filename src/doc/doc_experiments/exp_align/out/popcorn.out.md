@@ -44,6 +44,8 @@ Then, load [http://localhost:3000](http://localhost:3000) in a browser to see th
 
 Here the output using the `curl` command:
 
+> span: curl
+
 ~~~bash
 $ curl localhost:3000
 <h1>Hello World!</h1>
@@ -88,7 +90,6 @@ Where:
 * `MyHandler` is the name of the handler you will add to the app.
 * `METHOD` can be replaced by `get`, `post`, `put` or `delete`.
 
-> span: popcorn::MyHandler
 > span: popcorn::Handler::get
 > span: popcorn::Handler::post
 > span: popcorn::Handler::put
@@ -344,8 +345,6 @@ Query strings such as `?q=foo`are not part of the route path.
 
 Popcorn uses the `Handler::match(uri)` method to match the route paths.
 
-> span: popcorn::Handler::match
-
 Here are some examples of route paths based on strings.
 
 This route path will match requests to the root route, `/`.
@@ -396,6 +395,7 @@ The following example declares a handler `UserHome` that responds with the `user
 name.
 
 > span: popcorn::UserHome
+> span: popcorn::pop_auth::Session::user
 
 ~~~
 import popcorn
@@ -470,12 +470,6 @@ receive a `404 Not found` error.
 * `res.send()` Send a response of various types.
 * `res.error()` Set the response status code and send its message as the response body.
 
-> span: nitcorn::HttpResponse::html
-> span: nitcorn::HttpResponse::json
-> span: nitcorn::HttpResponse::redirect
-> span: nitcorn::HttpResponse::send
-> span: nitcorn::HttpResponse::error
-
 ## Response cycle
 
 When the popcorn `App` receives a request, the response cycle is the following:
@@ -515,8 +509,6 @@ Middleware handlers can perform the following tasks:
 If a middleware handler makes a call to `res.send()`, it provoques the end the
 request-response cycle and the response is sent to the client.
 
-> span: nitcorn::HttpResponse::send
-
 ### Ultra simple logger example
 
 Here is an example of a simple “Hello World” Popcorn application.
@@ -549,13 +541,10 @@ By using the `MyLogger` handler to the route `/*` we ensure that every requests
 (even 404 ones) pass through the middleware handler.
 This handler just prints “Request Logged!” when a request is received.
 
-> span: popcorn::MyLogger
-
 Be default, the order of middleware execution is that are loaded first are also executed first.
 To ensure our middleware `MyLogger` will be executed before all the other, we add it
 with the `use_before` method.
 
-> span: popcorn::MyLogger
 > span: popcorn::Router::use_before
 
 ### Ultra cool, more advanced logger example
@@ -633,10 +622,8 @@ to display the time it took to process the request.
 Because of the `use_after` method, the `LogHandler` middleware will be executed after
 all the others.
 
-> span: popcorn::LogHandler
 > span: popcorn::example_advanced_logger::HttpRequest::timer
 > span: popcorn::Router::use_after
-> span: popcorn::LogHandler
 
 The app now uses the `RequestTimeHandler` middleware for every requests received
 by the Popcorn app.
@@ -646,7 +633,6 @@ log line.
 
 > span: popcorn::RequestTimeHandler
 > span: popcorn::HelloHandler
-> span: popcorn::LogHandler
 
 Because you have access to the request object, the response object, and all the
 Popcorn API, the possibilities with middleware functions are endless.
@@ -666,11 +652,7 @@ be used to develop your app faster.
 > span: popcorn::ConsoleLog
 > span: popcorn::RequestClock
 > span: popcorn::SessionInit
-> span: #Sessions
-> span: popcorn::StaticServer
-> span: #Serving static files with Popcorn
 > span: popcorn::Router
-> span: #Mountable routers
 
 ## Mountable routers
 
@@ -723,8 +705,6 @@ app.listen("localhost", 3000)
 
 The app will now be able to handle requests to /user and /user/profile, as well
 as call the `Time` middleware handler that is specific to the route.
-
-> span: popcorn::Time
 
 ## Error handling
 
@@ -862,7 +842,7 @@ In this example, we will show how to store and list user with a Mongo database.
 First let's define a handler that access the database to list all the user.
 The mongo database reference is passed to the UserList handler through the `db` attribute.
 
-> span: popcorn::UserList::db
+> span: popcorn::pop_repos::AppConfig::db
 
 Then we define a handler that displays the user creation form on GET requests.
 POST requests are used to save the user data.

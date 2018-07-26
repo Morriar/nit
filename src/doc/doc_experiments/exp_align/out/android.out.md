@@ -89,8 +89,6 @@ customize the generated Android application.
   only be used by low-level implementations of Nit on Android.
   Its usefulness will be extended in the future to customize user applications.
 
-> span: lib/app/README.md
-
 ### Android implementation
 
 There is two core implementation for Nit apps on Android.
@@ -139,8 +137,6 @@ Theses modes are also applied to the generated Android projects.
 The compilation mode is specified as an argument to `nitc`, only
 `--release` can be specified as debug is the default behavior.
 
-> span: nitc
-
 ### Debug mode
 
 Debug mode enables compiling to an APK file without handling signing keys
@@ -148,8 +144,6 @@ and their password. The APK file can be installed to a local device with
 USB debugging enabled, but it cannot be published on the Play Store.
 
 By default, `nitc` will compile Android applications in debug mode.
-
-> span: nitc
 
 ### Release mode
 
@@ -183,4 +177,3 @@ APK file, it can then be published on the Play Store.
 3. Call `nitc` with the `--release` options. You will be prompted for the
    required passwords as needed by `jarsigner`.
 
-> span: nitc

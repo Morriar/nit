@@ -23,5 +23,3 @@ You can also import `sdl2::all` to get `sdl2` and all its sister libraries, whic
 See the `minimal` example within this project at `examples/minimal` for a simple example
 of how to use this project.
 
-> span: sdl2::examples
-> span: lib/sdl2/examples/minimal/

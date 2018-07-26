@@ -71,8 +71,8 @@ class MDocPostProcessor
 	var toolcontext: ToolContext
 
 	private fun warn(location: Location, cat: String, message: String) do
-		toolcontext.warning(location, cat, message)
-		toolcontext.check_errors
+		# toolcontext.warning(location, cat, message)
+		# toolcontext.check_errors
 	end
 
 	private fun location(nit_location: Location, md_location: MdLocation): Location do

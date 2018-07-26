@@ -3,14 +3,19 @@
 The serialization services are based on the `serialize` and the `noserialize` annotations,
 the `Serializable` interface and the implementations of `Serializer` and `Deserializer`.
 
+> span: serialization::Serializer::serialize
 > span: serialization::Serializable
 > span: serialization::Serializer
 > span: serialization::Deserializer
 
 ## The `serialize` annotation
 
+> span: serialization::Serializer::serialize
+
 A class annotated with `serialize` identifies it as a subclass of Serializable and
 triggers the generation of customized serialization and deserialization services.
+
+> span: serialization::Serializer::serialize
 
 ~~~
 import serialization
@@ -35,21 +40,20 @@ By definition of a serializable class, an instance can be serialized to a stream
 The deserialized instance will not be the same instance, but they should be equal.
 So, in this case, we can compare both instances with `==` to test their equality.
 
-> span: serialization::Peson
-> span: core::Object::==
 > span: core::Object::hash
-> span: core::Object::==
 
 Some conditions applies to the classes that can be annotated as `serialize`.
 All attributes of the class must be serializable, runtime errors will be
 raised when trying to serialize non-serializable attributes.
+
+> span: serialization::Serializer::serialize
 
 In the class `Person`, all attributes are typed with classes the standards library.
 These common types are defined defined as serializable by this project.
 The attributes could also be typed with user-defined `serialize`
 classes or any other subclass of `Serializable`.
 
-> span: serialization::Peson
+> span: serialization::Serializer::serialize
 > span: serialization::Serializable
 
 ~~~
@@ -67,7 +71,11 @@ end
 
 ### Scope of the `serialize` annotation
 
+> span: serialization::Serializer::serialize
+
 `serialize` can annotate class definitions, modules and attributes:
+
+> span: serialization::Serializer::serialize
 
 * The annotation on a class applies only to the class definition,
   only attributes declared locally will be serialized.
@@ -92,11 +100,17 @@ end
   end
   ~~~
 
+> span: serialization::Serializer::serialize
+> span: serialization::Serializer::serialize
+> span: serialization::Serializer::serialize
 > span: serialization::Serializable
+> span: serialization::Serializer::serialize
 
 ## The `noserialize` annotation
 
 The `noserialize` annotation mark an exception in a `serialize` module or class definition.
+
+> span: serialization::Serializer::serialize
 
 * By default a module is `noserialize`. There is no need to declare it as such.
 
@@ -117,6 +131,8 @@ The `noserialize` annotation mark an exception in a `serialize` module or class 
   end
   ~~~
 
+> span: serialization::Serializer::serialize
+> span: serialization::Serializer::serialize
 > span: serialization::Serializable
 
 ## The `serialize_as` annotation
@@ -144,6 +160,8 @@ end
 The annotation `serialize` should be enough for most cases,
 but in some cases you need more control over the serialization process.
 
+> span: serialization::Serializer::serialize
+
 For more control, create a subclass to `Serializable` and redefine `core_serialize_to`.
 This method should use `Serializer::serialize_attribute` to serialize its components.
 `serialize_attribute` works as a dictionary and organize attributes with a key.
@@ -163,7 +181,7 @@ The method should only act on known class names, and call super otherwise.
 The following example cannot use the `serialize` annotations
 because some of the arguments to the `User` class need special treatment:
 
-> span: serialization::User
+> span: serialization::Serializer::serialize
 
 * The `name` attribute is perfectly normal, it can be serialized and deserialized
   directly.
@@ -176,16 +194,13 @@ because some of the arguments to the `User` class need special treatment:
   serialize the path to its source on the file system.
   The data is reloaded on deserialization.
 
-> span: serialization::User::name
-> span: serialization::User::password
-> span: serialization::User::avatar
+> span: meta::Class::name
 
 For this customization, the following code snippet implements
 two serialization services: `User::core_serialize_to` and
 `Deserializer::deserialize_class`.
 
-> span: serialization::User::core_serialize_to
-> span: serialization::Deserializazer::deserialize_class
+> span: serialization::Deserializer::deserialize_class
 
 ~~~
 module user_credentials
@@ -264,6 +279,7 @@ classes specific to the business domain.
 To write (and read) instances of these classes to a persistent format
 you must use implementations of `Serializer` and `Deserializer`.
 
+> span: serialization::Serializer::serialize
 > span: serialization::Serializable
 > span: serialization::Serializer
 > span: serialization::Deserializer
@@ -272,8 +288,6 @@ The main implementations of these services are `JsonSerializer` and `JsonDeseria
 from the `json_serialization` module.
 
 > span: json::JsonSerializer
-> span: json::JsonDeserializer
-> span: json::json_serialization
 
 ~~~
 import json
@@ -333,8 +347,6 @@ It does so by parsing a Nit module, group or project to find all known
 parameterized types of generic classes.
 It will then generating a Nit module to handle deserialization of these types.
 
-> span: nitc::nitserial
-
 Usage steps to serialize parameterized types:
 
 * Write your program, let's call it `my_prog.nit`,
@@ -348,8 +360,6 @@ Usage steps to serialize parameterized types:
   `nitc my_prog.nit -m my_prog_serial.nit`
 
 > span: core::Array
-> span: nitc::nitserial
-> span: nitc::nitc
 
 This was a simple example, in practical cases you may need
 to use more than one generated file.

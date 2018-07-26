@@ -12,7 +12,7 @@ This module provides a Nit object oriented interface to access the Github api.
 
 Token can also be recovered from user config with `get_github_oauth`.
 
-> span: github::GithubCurl::get_github_oauth
+> span: github::github_curl::Sys::get_github_oauth
 
 [[doc: get_github_oauth]]
 

@@ -77,7 +77,7 @@ class DocTool
 	#
 	# Initializes the `model`, `modelbuilder`, `mmodules` and `mainmodule`.
 	private fun parse_code do
-		print "Parsing code..."
+		# print "Parsing code..."
 		var model = new Model
 		var modelbuilder = new ModelBuilder(model,  toolcontext)
 		var mmodules = modelbuilder.parse_full(arguments)
