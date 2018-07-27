@@ -21,37 +21,13 @@ In practice, it adds a new property `async` to the annotated class.
 When using `async` on your annotated class, this means that you want your calls to be asynchronous,
 executed by the actor.
 
-> span: actors::ClockAgent::async
-> span: actors::Agent::async
-> span: actors::Creature::async
-> span: actors::FannkuchRedux::async
-> span: actors::Worker::async
-> span: actors::A::async
-> span: actors::ThreadRing::async
-> span: actors::ClockAgent::async
-> span: actors::Agent::async
-> span: actors::Creature::async
-> span: actors::FannkuchRedux::async
-> span: actors::Worker::async
-> span: actors::A::async
-> span: actors::ThreadRing::async
-
 For instance, if you call `a.async.foo` and `foo` doesn't have a return value, it will send
 a message to the mailbox of the actor attached to `a` which will process it asynchronously.
-
-> span: actors::A::foo
-> span: actors::ProxyA::foo
-> span: actors::A::foo
-> span: actors::ProxyA::foo
 
 On the other hand, if you call `a.async.bar` and `bar` returns an`Int`, it will still send
 a message to the actor, but you'll get a `Future[Int]` to be able to retrieve the value.
 When using `join` on the future, the calling thread will wait until the value of the future is set.
 
-> span: actors::A::bar
-> span: actors::ProxyA::bar
-> span: actors::A::bar
-> span: actors::ProxyA::bar
 > span: core::Int
 > span: actors::Future
 > span: actors::Future::join
@@ -62,40 +38,10 @@ When you annotate a class with `actor` and create an instance of it with `new`, 
 automatically created (which means you can completely skip the use of the actors if you
 don't need them for a specific program).
 
-> span: core::NativeArray::new
-> span: core::hash_collection::Map::new
-> span: core::hash_collection::Set::new
-> span: core::CString::new
-> span: core::Buffer::new
-> span: core::TimeT::new
-> span: pthreads::AtomicInt::new
-> span: pthreads::pthreads::NativePthreadAttr::new
-> span: pthreads::pthreads::NativePthreadMutex::new
-> span: pthreads::pthreads::NativePthreadMutexAttr::new
-> span: pthreads::pthreads::NativePthreadKey::new
-> span: pthreads::pthreads::NativePthreadCond::new
-> span: pthreads::extra::NativePthreadBarrier::new
-
 The `async` added property is actually created lazily when you use it.
-
-> span: actors::ClockAgent::async
-> span: actors::Agent::async
-> span: actors::Creature::async
-> span: actors::FannkuchRedux::async
-> span: actors::Worker::async
-> span: actors::A::async
-> span: actors::ThreadRing::async
 
 Actors are not automatically garbage collected, but you have solutions to terminate them
 if you need to. For this, you need to use the `async` property of your annotated class :
-
-> span: actors::ClockAgent::async
-> span: actors::Agent::async
-> span: actors::Creature::async
-> span: actors::FannkuchRedux::async
-> span: actors::Worker::async
-> span: actors::A::async
-> span: actors::ThreadRing::async
 
 * `async.terminate` sends a shutdown message to the actor telling him to stop, so he'll finish
   processing every other messages in his mailbox before terminating properly. Every other messages sent
@@ -111,7 +57,6 @@ if you need to. For this, you need to use the `async` property of your annotated
 > span: actors::Proxy::terminate
 > span: actors::Proxy::terminate_now
 > span: actors::Proxy::wait_termination
-> span: actors::Actor::kill
 > span: actors::Proxy::kill
 
 For now, there isn't any mecanism to recreate and actor after it was terminated.
@@ -133,8 +78,6 @@ actor, `active_actors` is empty.
 > span: core::Sys
 > span: pthreads::ReverseBlockingQueue
 > span: core::Collection::is_empty
-> span: core::MapRead::is_empty
-> span: core::Text::is_empty
 > span: actors::actors::Sys::active_actors
 
 You can use this property as a mean of synchronisation in some specific cases (for example if you're

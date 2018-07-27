@@ -8,6 +8,7 @@ This parser is inspired by the famous TxtMark for Java (https://github.com/rjesc
 `nitmd` can be used as a standalone tool:
 
 > span: nitmd
+> span: markdown::nitmd
 
 ~~~bash
 $ nitmd file.md

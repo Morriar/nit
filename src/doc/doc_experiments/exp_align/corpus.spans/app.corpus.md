@@ -39,7 +39,7 @@ It relies on the following sequence of events, represented here by their callbac
 > span: app::AppComponent::on_restart
 > span: app::AppComponent::on_stop
 
-![_app.nit_ life-cycle](path/resources/ab03b885463901ade4ae1a9adfaefeff.png)
+![_app.nit_ life-cycle](doc/app-nit-lifecycle.png)
 
 Life-cycle events related to saving and restoring the application state are provided by two special callback methods:
 
@@ -60,12 +60,7 @@ Other UI elements, from the `ui` submodule, are notified of the same events usin
 So all UI elements can react separately to live-cycle events.
 
 > span: app::App
-> span: android>ui>
-> span: ios>ui>
 > span: app::ui
-> span: linux::ui
-> span: android::ui
-> span: ios::ui
 
 ## User Interface
 
@@ -129,7 +124,6 @@ _app.nit_ offers the submodule `app::data_store` to easily save the application 
 The service is accessible by the method `App::data_store`. The `DataStore` itself defines 2 methods:
 
 > span: app::data_store
-> span: app::data_store::App::data_store
 > span: app::DataStore
 
 * `DataStore::[]=` saves and associates any serializable instances to a `String` key.
@@ -219,28 +213,6 @@ The _app.nit_ framework defines three annotations to customize the application p
   In case of name conflicts in the resource files, the files from the project root have the lowest priority,
   those associated to modules lower in the importation hierarchy have higher priority.
 
-> span: android
-> span: android>
-> span: android>nit_compile>android>
-> span: android::android
-> span: ios
-> span: ios>
-> span: ios::ios
-> span: android
-> span: android>
-> span: android>nit_compile>android>
-> span: android::android
-> span: ios
-> span: ios>
-> span: ios::ios
-> span: android
-> span: android>
-> span: android>nit_compile>android>
-> span: android::android
-> span: ios
-> span: ios>
-> span: ios::ios
-
 ### Usage Example
 
 ~~~
@@ -288,7 +260,3 @@ There is two main ways to achieve this goal:
   ~~~
 
 > span: android
-> span: android>
-> span: android>nit_compile>android>
-> span: android::android
-

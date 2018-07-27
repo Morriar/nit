@@ -75,21 +75,25 @@ class MDocSpanReferencesVisitor
 				visit(block)
 				print md_renderer.render(block)
 				if refs.not_empty then
+					var need_space = false
 					for ref in refs do
 						if ref isa MdRefPath and ref.path != null then
 							print "> span: {ref.path.as(not null)}"
+							need_space = true
 						end
 						if ref isa MdRefCommand and ref.command != null then
 							print "> span: {ref.command.as(not null)} {ref.args.join(" ")}".trim
+							need_space = true
 						end
 						if ref isa MdRefName then
 							for n in ref.mentities do
 								print "> span: {n.full_name}".trim
+								need_space = true
 								# break
 							end
 						end
 					end
-					print ""
+					if need_space then print ""
 				end
 				# if span_refs.not_empty then
 					# for ref in span_refs do

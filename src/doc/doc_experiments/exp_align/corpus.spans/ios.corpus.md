@@ -19,7 +19,6 @@ Let's use the `hello_ios` example in the folder `lib/ios/examples/`.
 Compile with: `nitc hello_world.nit`
 
 > span: nitc hello_world.nit
-
 Run in the simulator with: `ios-sim hello_world.app`
 
 ## Sample portable applications
@@ -36,6 +35,8 @@ To associate icons to your application, create the directory `ios/AppIcon.appico
 These files can be generated in a number of different ways:
 
 * Using the tool `svg_to_icons` packaged with the Nit repository at `contrib/inkscape_tools/bin/svg_to_icons`.
+
+> span: svg_to_icons
 
 * Using Xcode to assign images to each slot, create the folder and the file `Contents.json`.
 

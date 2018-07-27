@@ -181,7 +181,7 @@ class MdSpans
 	end
 end
 
-var corpus_path = "src/doc/doc_experiments/exp_align/corpus"
+var corpus_path = "src/doc/doc_experiments/exp_align/corpus.spans"
 (corpus_path / "../out").mkdir
 var files = corpus_path.files
 default_comparator.sort(files)
@@ -200,7 +200,7 @@ for file in files do
 
 	var comparator = new ReadmeComparator
 	comparator.compare_files(
-		"src/doc/doc_experiments/exp_align/corpus/{lib}.corpus.md",
+		"src/doc/doc_experiments/exp_align/corpus.spans/{lib}.corpus.md",
 		"src/doc/doc_experiments/exp_align/out/{lib}.out.md")
 
 	# break

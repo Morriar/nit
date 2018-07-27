@@ -70,12 +70,12 @@ _gamnit_ is modular, different services of the framework are available through d
 > span: gamnit::flat_core::App::sprites
 > span: gamnit::flat_core::App::world_camera
 > span: gamnit::Camera::position
-> span: gamnit::Light::position
+> span: gamnit::App::reset_depth
 > span: gamnit::Vec3::z
 > span: gamnit::Camera::position
-> span: gamnit::Light::position
 > span: gamnit::flat_core::App::ui_sprites
 > span: gamnit::flat_core::App::ui_camera
+> span: gamnit::App::reset_depth
 > span: gamnit>depth>
 > span: gamnit::Actor
 > span: gamnit>flat>

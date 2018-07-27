@@ -100,10 +100,7 @@ There is two core implementation for Nit apps on Android.
 > span: android::nit_activity
 > span: android::game
 > span: mnit
-> span: mnit>
 > span: gamnit
-> span: gamnit>
-> span: gamnit::gamnit
 
 Clients don't have to select the core implementation, it is imported by other relevant modules.
 For example, a module importing `app::ui` and `android` will trigger the importation of `android::nit_activity`.

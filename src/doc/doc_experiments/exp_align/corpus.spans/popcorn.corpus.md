@@ -44,12 +44,6 @@ Then, load [http://localhost:3000](http://localhost:3000) in a browser to see th
 
 Here the output using the `curl` command:
 
-> span: curl
-> span: curl>
-> span: curl::curl
-> span: curl::curl::Sys::curl
-> span: curl::curl::CurlRequest::curl
-
 ~~~bash
 $ curl localhost:3000
 <h1>Hello World!</h1>
@@ -94,6 +88,7 @@ Where:
 * `MyHandler` is the name of the handler you will add to the app.
 * `METHOD` can be replaced by `get`, `post`, `put` or `delete`.
 
+> span: popcorn::MyHandler
 > span: popcorn::Handler::get
 > span: popcorn::Handler::post
 > span: popcorn::Handler::put
@@ -141,15 +136,11 @@ init method to start serving the files directly.
 For example, use the following code to serve images, CSS files, and JavaScript files
 in a directory named `public`:
 
-> span: popcorn>examples>static_files>public>
-
 ~~~
 app.use("/", new StaticHandler("public/"))
 ~~~
 
 Now, you can load the files that are in the `public` directory:
-
-> span: popcorn>examples>static_files>public>
 
 ~~~raw
 http://localhost:3000/images/trollface.jpg
@@ -353,6 +344,8 @@ Query strings such as `?q=foo`are not part of the route path.
 
 Popcorn uses the `Handler::match(uri)` method to match the route paths.
 
+> span: popcorn::Handler::match
+
 Here are some examples of route paths based on strings.
 
 This route path will match requests to the root route, `/`.
@@ -403,7 +396,6 @@ The following example declares a handler `UserHome` that responds with the `user
 name.
 
 > span: popcorn::UserHome
-> span: popcorn::pop_auth::Session::user
 
 ~~~
 import popcorn
@@ -479,19 +471,10 @@ receive a `404 Not found` error.
 * `res.error()` Set the response status code and send its message as the response body.
 
 > span: popcorn::pop_handlers::HttpResponse::html
-> span: json
-> span: json>
-> span: json::json
-> span: github::GithubError::json
 > span: popcorn::pop_json::HttpResponse::json
 > span: popcorn::pop_handlers::HttpResponse::redirect
 > span: popcorn::pop_handlers::HttpResponse::send
-> span: json::error
-> span: core::error
-> span: core::MaybeError::error
-> span: popcorn::ValidationResult::error
 > span: popcorn::pop_handlers::HttpResponse::error
-> span: popcorn::ConsoleLog::error
 
 ## Response cycle
 
@@ -566,10 +549,13 @@ By using the `MyLogger` handler to the route `/*` we ensure that every requests
 (even 404 ones) pass through the middleware handler.
 This handler just prints “Request Logged!” when a request is received.
 
+> span: popcorn::MyLogger
+
 Be default, the order of middleware execution is that are loaded first are also executed first.
 To ensure our middleware `MyLogger` will be executed before all the other, we add it
 with the `use_before` method.
 
+> span: popcorn::MyLogger
 > span: popcorn::Router::use_before
 
 ### Ultra cool, more advanced logger example
@@ -647,8 +633,10 @@ to display the time it took to process the request.
 Because of the `use_after` method, the `LogHandler` middleware will be executed after
 all the others.
 
+> span: popcorn::LogHandler
 > span: popcorn::example_advanced_logger::HttpRequest::timer
 > span: popcorn::Router::use_after
+> span: popcorn::LogHandler
 
 The app now uses the `RequestTimeHandler` middleware for every requests received
 by the Popcorn app.
@@ -658,6 +646,7 @@ log line.
 
 > span: popcorn::RequestTimeHandler
 > span: popcorn::HelloHandler
+> span: popcorn::LogHandler
 
 Because you have access to the request object, the response object, and all the
 Popcorn API, the possibilities with middleware functions are endless.
@@ -731,6 +720,8 @@ app.listen("localhost", 3000)
 
 The app will now be able to handle requests to /user and /user/profile, as well
 as call the `Time` middleware handler that is specific to the route.
+
+> span: popcorn::Time
 
 ## Error handling
 
@@ -868,7 +859,6 @@ In this example, we will show how to store and list user with a Mongo database.
 First let's define a handler that access the database to list all the user.
 The mongo database reference is passed to the UserList handler through the `db` attribute.
 
-> span: popcorn::pop_repos::AppConfig::db
 > span: popcorn::UserList::db
 
 Then we define a handler that displays the user creation form on GET requests.
