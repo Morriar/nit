@@ -18,28 +18,21 @@ class RefParser
 	fun parse(string: String): MdRef do
 		if is_option(string) then
 			return new MdRefOption(string)
-		else if is_path(string) then
-			return new MdRefPath(string)
 		else if is_command(string) then
 			return new MdRefCommand(string)
-		else if is_file(string) then
-			return new MdRefFile(string)
+		else if is_path(string) or is_file(string) then
+			return new MdRefPath(string)
 		else if is_annot(string) then
 			return new MdRefAnnot(string)
 		else if is_name(string) then
 			return new MdRefName(string)
 		else if is_qname(string) then
 			return new MdRefQName(string)
-		else if is_signature(string) then
+		else if is_signature(string) or is_generic(string) or is_call(string) then
 			return new MdRefSignature(string)
-		else if is_generic(string) then
-			return new MdRefGeneric(string)
-		else if is_call(string) then
-			return new MdRefCall(string)
 		else
 			return new MdRefOther(string)
 		end
-
 	end
 
 	var option_re: Regex = "^--?[a-zA-Z0-9]+".to_re
@@ -49,7 +42,7 @@ class RefParser
 	end
 
 	fun is_path(string: String): Bool do
-		return string.has("/")
+		return string != "/" and string.has("/")
 	end
 
 	var file_re: Regex = "\\.(nit|html|md|json)$".to_re
@@ -110,6 +103,8 @@ end
 
 abstract class MdRef
 	var string: String
+
+	redef fun to_s do return "{class_name}\{{string}\}"
 end
 
 class MdRefOption
@@ -124,10 +119,6 @@ class MdRefCommand
 	super MdRef
 end
 
-class MdRefFile
-	super MdRef
-end
-
 class MdRefAnnot
 	super MdRef
 end
@@ -137,19 +128,11 @@ class MdRefName
 end
 
 class MdRefQName
-	super MdRef
+	super MdRefName
 end
 
 class MdRefSignature
-	super MdRef
-end
-
-class MdRefGeneric
-	super MdRef
-end
-
-class MdRefCall
-	super MdRef
+	super MdRefName
 end
 
 class MdRefOther

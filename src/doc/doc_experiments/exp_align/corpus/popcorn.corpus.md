@@ -472,11 +472,11 @@ receive a `404 Not found` error.
 * `res.send()` Send a response of various types.
 * `res.error()` Set the response status code and send its message as the response body.
 
-> span: nitcorn::HttpResponse::html
-> span: nitcorn::HttpResponse::json
-> span: nitcorn::HttpResponse::redirect
-> span: nitcorn::HttpResponse::send
-> span: nitcorn::HttpResponse::error
+> span: popcorn::pop_handlers::HttpResponse::html
+> span: popcorn::pop_json::HttpResponse::json
+> span: popcorn::pop_handlers::HttpResponse::redirect
+> span: popcorn::pop_handlers::HttpResponse::send
+> span: popcorn::pop_handlers::HttpResponse::error
 
 ## Response cycle
 
@@ -517,7 +517,7 @@ Middleware handlers can perform the following tasks:
 If a middleware handler makes a call to `res.send()`, it provoques the end the
 request-response cycle and the response is sent to the client.
 
-> span: nitcorn::HttpResponse::send
+> span: popcorn::pop_handlers::HttpResponse::send
 
 ### Ultra simple logger example
 
@@ -661,18 +661,15 @@ be used to develop your app faster.
 * `RequestClock`: initializes requests clock.
 * `ConsoleLog`: displays resquest and response status in console (can be used with `RequestClock`).
 * `SessionInit`: initializes requests session (see the `Sessions` section).
-* `StaticServer`: serves static files (see the `Serving static files with Popcorn` section).
+* `StaticHandler`: serves static files (see the `Serving static files with Popcorn` section).
 * `Router`: a mountable mini-app (see the `Mountable routers` section).
 
 > span: popcorn::RequestClock
 > span: popcorn::ConsoleLog
 > span: popcorn::RequestClock
 > span: popcorn::SessionInit
-> span: #Sessions
-> span: popcorn::StaticServer
-> span: #Serving static files with Popcorn
+> span: popcorn::StaticHandler
 > span: popcorn::Router
-> span: #Mountable routers
 
 ## Mountable routers
 

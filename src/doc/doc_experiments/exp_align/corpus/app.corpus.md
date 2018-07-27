@@ -120,9 +120,9 @@ So there is two ways  to customize the behavior on a given event:
 The example at `examples/ui_example.nit` shows off most features of `app::ui` in a minimal program.
 You can also take a look at the calculator (`../../examples/calculator/src/calculator.nit`) which is a concrete usage example.
 
-> span: lib/app/examples/ui_examples.nit
+> span: lib/app/examples/ui_example.nit
 > span: app::ui
-> span: /examples/calculator/src/calculator.nit
+> span: lib/app/../../examples/calculator/src/calculator.nit
 > name: app::examples
 > name: app::calculator
 > name: app::examples
@@ -145,7 +145,6 @@ _app.nit_ offers the submodule `app::data_store` to easily save the application 
 The service is accessible by the method `App::data_store`. The `DataStore` itself defines 2 methods:
 
 > span: app::data_store
-> span: app::data_store::App::data_store
 > span: app::DataStore
 > name: app
 
@@ -155,9 +154,9 @@ The service is accessible by the method `App::data_store`. The `DataStore` itsel
 * `DataStore::[]` returns the object associated to a `String` key.
   It returns `null` if nothing is associated to the key.
 
-> span: app::DataStore[]=
+> span: app::DataStore::[]=
 > span: core::String
-> span: app::DataStore[]
+> span: app::DataStore::[]
 > span: core::String
 
 ### Usage Example

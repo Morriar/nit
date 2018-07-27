@@ -152,7 +152,7 @@ class NitReadme
 
 			# Check README.docdown
 			if toolcontext.opt_check_docdown.value then
-				mpackage.check_docdown(toolcontext, mentity_index)
+				mpackage.check_docdown(toolcontext, mainmodule, mentity_index)
 				continue
 			end
 
@@ -226,7 +226,7 @@ redef class MPackage
 		# TODO check synchro from docdown
 	end
 
-	private fun check_docdown(toolcontext: ToolContext, mentity_index: MEntityIndex) do
+	private fun check_docdown(toolcontext: ToolContext, mainmodule: MModule, mentity_index: MEntityIndex) do
 		# if not has_docdown then
 			# toolcontext.error(location, "No `README.docdown` file for `{name}`")
 			# return
@@ -248,7 +248,7 @@ redef class MPackage
 			# end
 		# end
 
-		var aligner = new MDocAligner(mentity_index, toolcontext.modelbuilder.model.mdoc_parser, self)
+		var aligner = new MDocAligner(model, mainmodule, mentity_index, toolcontext.modelbuilder.model.mdoc_parser, self)
 		aligner.align_mdoc(mdoc)
 
 		# var suggest = new MDocSuggester(self, mentity_index)

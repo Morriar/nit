@@ -102,7 +102,7 @@ customize the generated Android application.
   only be used by low-level implementations of Nit on Android.
   Its usefulness will be extended in the future to customize user applications.
 
-> span: lib/app/README.md
+> span: lib/android/../app/README.md
 > name: android
 > name: android
 > name: android
@@ -213,5 +213,6 @@ APK file, it can then be published on the Play Store.
 3. Call `nitc` with the `--release` options. You will be prompted for the
    required passwords as needed by `jarsigner`.
 
+> span: nitc
 > span: nitc
 > name: android

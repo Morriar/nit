@@ -21,7 +21,7 @@ class ReadmeComparator
 	var lib: nullable String = null
 
 	fun compare_files(orig, dest: String) do
-		print "lib\tspan_r\tspan_p\tname_r\tname_p"
+		# print "lib\tspan_r\tspan_p\tname_r\tname_p"
 		var parser = new ReadmeParser
 		var doc_orig = parser.parse_file(orig)
 		var doc_dest = parser.parse_file(dest)
@@ -162,25 +162,6 @@ redef class MdBlock
 	end
 end
 
-class MdMetrics
-	super MdVisitor
-
-	var lib: String is noinit
-	var lines: Int is noinit
-	var counter = new Counter[String]
-
-	fun collect(lib: String) do
-		self.lib = lib
-		var readme = "lib/{lib}/README.docdown.md"
-		var content = readme.to_path.read_all
-		self.lines = content.split("\n").length
-	end
-
-	fun pretty_print do
-		print "{lib}\t{lines}"
-	end
-end
-
 # if args.length != 2 then
 	# print "./corpus <corpus file> <try match>"
 	# exit 1
@@ -188,6 +169,17 @@ end
 
 # var orig = args.first
 # var dest = args.last
+
+class MdSpans
+	super MdVisitor
+
+	redef fun visit(node) do
+		if node isa MdCode then
+			print node.literal
+		end
+		node.visit_all(self)
+	end
+end
 
 var corpus_path = "src/doc/doc_experiments/exp_align/corpus"
 (corpus_path / "../out").mkdir
@@ -198,17 +190,18 @@ for file in files do
 	# print ""
 	# print file
 	var lib = file.replace(".corpus.md", "")
-	var mc = new MdMetrics
-	mc.collect(lib)
-	mc.pretty_print
 
+	sys.system "./nitreadme lib/{lib} --check-docdown > src/doc/doc_experiments/exp_align/out/{lib}.out.md"
 
-	# sys.system "./nitreadme lib/{lib} --check-docdown > src/doc/doc_experiments/exp_align/out/{lib}.out.md"
+	# var md = "src/doc/doc_experiments/exp_align/corpus/{lib}.corpus.md".to_path.read_all
+	# var doc = (new MdParser).parse(md)
+	# var v = new MdSpans
+	# v.enter_visit(doc)
 
-	# var comparator = new ReadmeComparator
-	# comparator.compare_files(
-		# "src/doc/doc_experiments/exp_align/corpus/{lib}.corpus.md",
-		# "src/doc/doc_experiments/exp_align/out/{lib}.out.md")
+	var comparator = new ReadmeComparator
+	comparator.compare_files(
+		"src/doc/doc_experiments/exp_align/corpus/{lib}.corpus.md",
+		"src/doc/doc_experiments/exp_align/out/{lib}.out.md")
 
 	# break
 end

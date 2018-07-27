@@ -6,7 +6,6 @@ The threads can be manipulated and synchronized using the classes `Thread`,
 > span: pthreads::Thread
 > span: pthreads::Mutex
 > span: pthreads::Barrier
-> name: pthreads::threadpool::ThreadPool::threads
 
 This group also provides two optional modules with thread-safe collections:
 
@@ -22,8 +21,6 @@ Theses services are implemented using the POSIX threads.
 You can also use the `is threaded` annotation on methods, which makes them run on their own thread.
 Methods with self calls are not supported.
 
-> name: core::Sys::run
-> name: pthreads>
 
 A method or function annotated with `is threaded` has its return value changed during compilation.
 You will get a subclass of `Thread`, even if there wasn't a return value before. You can know if the threaded method is done with the `is_done` boolean from `Thread`.
@@ -31,10 +28,15 @@ A call to the `join` method will block the execution until the threaded method i
 `join` will return an object typed with the orginial return type, or `null` if there wasn't.
 
 > span: pthreads::Thread
+> span: pthreads::Thread::is_done
+> span: pthreads::JoinTask::is_done
 > span: pthreads::Thread
-> name: pthreads::AtomicInt::value
-> name: pthreads::pthreads::NativePthreadKey::get
-> name: pthreads::AtomicInt::value
+> span: pthreads::pthreads::NativePthread::join
+> span: pthreads::Thread::join
+> span: pthreads::JoinTask::join
+> span: pthreads::pthreads::NativePthread::join
+> span: pthreads::Thread::join
+> span: pthreads::JoinTask::join
 
 ## Known limitations:
 
@@ -46,5 +48,8 @@ A call to the `join` method will block the execution until the threaded method i
 
 * See: `man pthreads`
 * See: `examples/concurrent_array_and_barrier.nit`
-* See: ̀ examples/threaded_example.nit`
+* See: `examples/threaded_example.nit`
+
+> span: lib/pthreads/examples/concurrent_array_and_barrier.nit
+> span: lib/pthreads/examples/threaded_example.nit
 

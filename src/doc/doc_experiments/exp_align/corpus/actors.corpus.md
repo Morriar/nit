@@ -81,10 +81,10 @@ if you need to. For this, you need to use the `async` property of your annotated
   or in which state he'll leave the memory, you can with this call. it's synchronous but not really
   blocking, since it's direcly canceling the native pthread associated to the actor.
 
-> span: actors::Poxy::terminate
-> span: actors::Poxy::terminate_now
-> span: actors::Poxy::wait_termination
-> span: actors::Poxy::kill
+> span: actors::Proxy::terminate
+> span: actors::Proxy::terminate_now
+> span: actors::Proxy::wait_termination
+> span: actors::Proxy::kill
 > name: actors::Actor
 > name: actors::Message
 > name: actors::Actor::mailbox
@@ -137,6 +137,6 @@ You can find example of differents small programs implemented with Nit actors in
 directory. For a really simple example, you can check `examples/simple`.
 
 > span: actors>examples>
-> span: lib/actors/exemples/simple
+> span: lib/actors/examples/simple
 > name: actors
 > name: actors::examples::simple

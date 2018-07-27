@@ -30,8 +30,6 @@ assert user != null
 assert user.login == "Morriar"
 ~~~
 
-> name: github::GithubAPI
-
 ### Authentification
 
 
@@ -39,8 +37,6 @@ assert user.login == "Morriar"
 Token can also be recovered from user config with `get_github_oauth`.
 
 > span: github::github_curl::Sys::get_github_oauth
-> name: github::RenameAction::from
-> name: config
 
 ### `get_github_oauth` - # Gets the Github token from `git` configuration
 
@@ -48,11 +44,7 @@ Token can also be recovered from user config with `get_github_oauth`.
 Return the value of `git config --get github.oauthtoken`
 or `""` if no key exists.
 
-> name: github::github_curl::Sys::get_github_oauth
-
 ### Retrieving user data
-
-> name: curl::CurlHTTPRequest::data
 
 ### `load_user` - # Get the Github user with `login`
 
@@ -105,13 +97,7 @@ Should be accessed from `GithubAPI::load_user`.
 
 * `name=` - # User public name if any.
 
-> name: github::GithubAPI::load_user
-> name: github::User
-> name: github::User
-
 ### Retrieving repo data
-
-> name: curl::CurlHTTPRequest::data
 
 ### `load_repo` - # Get the Github repo with `full_name`.
 
@@ -166,13 +152,7 @@ Should be accessed from `GithubAPI::load_repo`.
 
 * `owner=` - # Get the repo owner.
 
-> name: github::GithubAPI::load_repo
-> name: github::Repo
-> name: github::Repo
-
 ### Other data
-
-> name: curl::CurlHTTPRequest::data
 
 * `api$Branch` - # A Github branch.
 
@@ -222,8 +202,6 @@ Should be accessed from `GithubAPI::load_repo`.
 
 * `api$User` - # A Github user
 
-> name: github::api
-
 ### Advanced uses
 
 #### Caching
@@ -253,8 +231,6 @@ Returns `null` in case of `error`.
     assert err.name == "GithubAPIError"
     assert err.message == "Not Found"
 
-> name: github::GithubAPI::get
-
 #### Change the user agent
 
 ### `user_agent` - # User agent used for HTTP requests.
@@ -264,8 +240,6 @@ Default is `nit_github_api`.
 
 See <https://developer.github.com/v3/#user-agent-required>
 
-> name: github::GithubAPI::user_agent
-
 #### Debugging
 
 ### `verbose_lvl` - # Verbosity level.
@@ -274,31 +248,20 @@ See <https://developer.github.com/v3/#user-agent-required>
 * `0`: only errors (default)
 * `1`: verbose
 
-> name: github::GithubAPI::verbose_lvl
-
 #### Using with GitLab
 
 If URL scheme of GitLab API follows the one of Github API, it may be possible to
 configure this wrapper to use a custom URL.
-
-> name: popcorn::Router::use
 
 ### `api_url` - # Github API base url.
 
 
 Default is `https://api.github.com` and should not be changed.
 
-> name: github::GithubAPI::api_url
-
 ## Creating hooks
-
-> name: github::hooks
 
 Using this API you can create Github hooks able to respond to actions performed
 on a repository.
-
-> name: github::hooks
-> name: nitcorn::HttpServer::respond
 
 ### `hooks` - # Github hook event listening with `nitcorn`.
 
@@ -335,20 +298,11 @@ var listener = new LogHookListener(api, "127.0.0.1", 8080)
 # listener.listen # uncomment to start listening
 ~~~
 
-> name: github::hooks
-
 ## Dealing with events
-
-> name: github::events
 
 GithubAPI can trigger different events depending on the hook configuration.
 
-> name: github::GithubAPI
-> name: github::events
-
 ### `GithubEvent` - # Github event stub.
-
-> name: github::GithubEvent
 
 * `events$CommitCommentEvent` - # Triggered when a commit comment is created.
 
@@ -381,6 +335,4 @@ GithubAPI can trigger different events depending on the hook configuration.
 * `events$PushEvent` - # Triggered when a repository branch is pushed to.
 
 * `events$StatusEvent` - # Triggered when the status of a Git commit changes.
-
-> name: github::events
 

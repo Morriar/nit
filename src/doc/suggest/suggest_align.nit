@@ -19,8 +19,12 @@ import mentities_index
 import mdoc_index
 import name_index
 intrude import model_index
+import align_refs
 
 class MDocAligner
+
+	var model: Model
+	var mainmodule: MModule
 
 	var mentity_index: MEntityIndex
 
@@ -31,6 +35,8 @@ class MDocAligner
 	fun align_mdoc(mdoc: MDoc) do
 		var document = mdoc.mdoc_document
 
+		span_align.align_spans(document, context)
+
 		span_visitor.enter_visit(document)
 
 		# Align pieces of code
@@ -40,13 +46,14 @@ class MDocAligner
 		# nlp_visitor.enter_visit(document)
 
 		# Create document structure
-		var sections_builder = new MDocSectionBuilder
-		var root = sections_builder.build_root(document)
+		# var sections_builder = new MDocSectionBuilder
+		# var root = sections_builder.build_root(document)
 
-		var section_visitor = new MDocSectionVisitor
-		section_visitor.enter_section(root)
+		# var section_visitor = new MDocSectionVisitor
+		# section_visitor.enter_section(root)
 	end
 
+	var span_align = new MdSpanAlign(model, mainmodule) is lazy
 	var span_visitor = new MDocSpanReferencesVisitor is lazy
 	var code_visitor = new MDocCodeReferencesVisitor(mentity_index, context) is lazy
 	var nlp_visitor = new MDocNLPReferencesVisitor(mentity_index, context) is lazy
@@ -62,36 +69,56 @@ class MDocSpanReferencesVisitor
 			for block in node.children do
 				if not block isa MdBlock then continue
 				if block isa MdBlockQuote then continue
+				refs.clear
 				span_refs.clear
 				name_refs.clear
 				visit(block)
 				print md_renderer.render(block)
-				if span_refs.not_empty then
-					for ref in span_refs do
-						print "> span: {ref.full_name}"
-					end
-				end
-				if name_refs.not_empty then
-					for ref in name_refs do
-						print "> name: {ref.full_name}"
+				if refs.not_empty then
+					for ref in refs do
+						if ref isa MdRefPath and ref.path != null then
+							print "> span: {ref.path.as(not null)}"
+						end
+						if ref isa MdRefCommand and ref.command != null then
+							print "> span: {ref.command.as(not null)} {ref.args.join(" ")}".trim
+						end
+						if ref isa MdRefName then
+							for n in ref.mentities do
+								print "> span: {n.full_name}".trim
+								# break
+							end
+						end
 					end
 					print ""
-				else if span_refs.not_empty then
-					print ""
 				end
+				# if span_refs.not_empty then
+					# for ref in span_refs do
+						# print "> span: {ref.full_name}"
+					# end
+				# end
+				# if name_refs.not_empty then
+					# for ref in name_refs do
+						# print "> name: {ref.full_name}"
+					# end
+					# print ""
+				# else if span_refs.not_empty then
+					# print ""
+				# end
 			end
 		end
 	end
 
 	var span_refs = new Array[MEntity]
 	var name_refs = new Array[MEntity]
+	var refs = new Array[MdRef]
 
 	redef fun visit(node) do
 		if node isa MdCode then
-			var ref = node.nit_mentity
-			if ref != null then span_refs.add ref
-		else if node isa MdText then
-			name_refs.add_all node.nit_mentities
+		#	var ref = node.nit_mentity
+		#	if ref != null then span_refs.add ref
+			if node.md_ref != null then refs.add node.md_ref.as(not null)
+		# else if node isa MdText then
+		#	name_refs.add_all node.nit_mentities
 		end
 		node.visit_all(self)
 	end

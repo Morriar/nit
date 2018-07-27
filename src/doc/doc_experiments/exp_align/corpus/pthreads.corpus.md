@@ -33,7 +33,6 @@ A call to the `join` method will block the execution until the threaded method i
 > span: pthreads::Thread::is_done
 > span: pthreads::Thread::join
 > span: pthreads::Thread::join
-> name: core::Boolean
 
 ## Known limitations:
 
@@ -45,8 +44,7 @@ A call to the `join` method will block the execution until the threaded method i
 
 * See: `man pthreads`
 * See: `examples/concurrent_array_and_barrier.nit`
-* See: ̀ examples/threaded_example.nit`
+* See: `examples/threaded_example.nit`
 
-> span: man
 > span: lib/pthreads/examples/concurrent_array_and_barrier.nit
 > span: lib/pthreads/examples/threaded_example.nit

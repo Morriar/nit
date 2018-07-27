@@ -1,16 +1,8 @@
 # read and write JSON formatted text
 
-> name: core::Reader::read
-> name: core::Writer::write
-> name: json::serialization_read::JsonDeserializer::text
-
 These services can be useful to communicate with a remote server or client,
 save data locally or even debug and understand the structure of a Nit object.
 There is a single API to write JSON, and three API to read depending on the use case.
-
-> name: core::exec::Process::data
-> name: core::Writer::write
-> name: core::Reader::read
 
 ## Write JSON
 
@@ -25,9 +17,6 @@ share the same features.
 > span: json::JsonSerializer
 > span: json::serialization_write::Serializable::serialize_to_json
 > span: json::JsonSerializer
-> name: core::Text::format
-> name: core::exec::Process::data
-> name: core::Writer::write
 
 ### Write plain JSON
 
@@ -36,7 +25,6 @@ This format is non-Nit program, it cannot be fully deserialized back to Nit obje
 The argument `pretty=true` generates JSON for humans, with more spaces and line breaks.
 
 > span: json::serialization_write::Serializable::serialize_to_json
-> name: core::Text::format
 
 The Nit objects to write must subclass `Serializable` and implement its services.
 Most classes from the `core` library are already supported, including collections, numeric values, etc.
@@ -45,10 +33,9 @@ For your local objects, you can annotate them with `serialize` to automate subcl
 
 > span: serialization::Serializable
 > span: core
-> span: serialization::Serializer::serialize
+> span: core>
+> span: core::core
 > span: serialization::Serializable
-> name: core::Writer::write
-> name: core::numeric
 
 #### Example
 
@@ -119,8 +106,6 @@ For more information on Nit serialization, see: ../serialization/README.md
 
 There are a total of 3 API to read JSON:
 
-> name: core::Reader::read
-
 * `JsonDeserializer` reads JSON to recreate complex Nit objects (discussed here),
 * the module `json::dynamic` provides an easy API to explore JSON objects,
 * the module `json::static` offers a low-level service to parse JSON and create basic Nit objects.
@@ -138,7 +123,6 @@ Errors are reported to the attribute `JsonDeserializer::errors`.
 > span: core::Map
 > span: core::Array
 > span: serialization::Deserializer::errors
-> name: serialization::AttributeTypeError::attribute
 
 The type to recreate is either declared or inferred:
 
@@ -153,18 +137,12 @@ The type to recreate is either declared or inferred:
 > span: json::JsonDeserializer::class_name_heuristic
 > span: json::JsonDeserializer
 > span: serialization::Deserializer::deserialize
-> name: json::JsonKeyError::key
-> name: meta::Class::name
-> name: serialization::AttributeTypeError::attribute
-> name: json::static
-> name: meta::Class::name
 
 The method `deserialize_json` is a shortcut to `JsonDeserializer` which prints
 errors to the console. It is fit only for small scripts and other quick and dirty usage.
 
 > span: json::serialization_read::Text::deserialize_json
 > span: json::JsonDeserializer
-> name: serialization::Deserializer::errors
 
 #### Example
 
@@ -216,15 +194,10 @@ assert deserializer.errors.is_empty # If false, `object` is invalid
 
 #### Missing attributes and default values
 
-> name: core::MinHeap::default
-> name: core::MapRead::values
-
 When reading JSON, some attributes expected by Nit classes may be missing.
 The JSON object may come from an external API using optional attributes or
 from a previous version of your program without the attributes.
 When an attribute is not found, the deserialization engine acts in one of three ways:
-
-> name: serialization::AttributeTypeError::attribute
 
 1. If the attribute has a default value or if it is annotated by `lazy`,
    the engine leave the attribute to the default value. No error is raised.
@@ -234,19 +207,6 @@ When an attribute is not found, the deserialization engine acts in one of three 
    The caller must check for `errors` and must not read from the attribute.
 
 > span: serialization::Deserializer::errors
-> name: serialization::AttributeTypeError::attribute
-> name: core::MinHeap::default
-> name: json::JsonValue::value
-> name: serialization::AttributeTypeError::attribute
-> name: core::MinHeap::default
-> name: json::error
-> name: json::static
-> name: serialization::AttributeTypeError::attribute
-> name: serialization::AttributeTypeError::attribute
-> name: json::error
-> name: json::error
-> name: core::hash_collection::HashSetIterator::set
-> name: core::Reader::read
 
 ~~~
 class MyConfig

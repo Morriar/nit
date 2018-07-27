@@ -178,10 +178,6 @@ because some of the arguments to the `User` class need special treatment:
   serialize the path to its source on the file system.
   The data is reloaded on deserialization.
 
-> span: serialization::User::name
-> span: serialization::User::password
-> span: serialization::User::avatar
-
 For this customization, the following code snippet implements
 two serialization services: `User::core_serialize_to` and
 `Deserializer::deserialize_class`.
@@ -320,6 +316,8 @@ The serialization has some limitations:
   deal with generic types. A solution is to use `nitserial`,
   the next section explores this subject.
 
+> span: nitserial
+
 ## Dealing with generic types
 
 One limitation of the serialization support in the compiler is with generic types.
@@ -335,7 +333,7 @@ It does so by parsing a Nit module, group or project to find all known
 parameterized types of generic classes.
 It will then generating a Nit module to handle deserialization of these types.
 
-> span: nitc::nitserial
+> span: nitserial
 
 Usage steps to serialize parameterized types:
 
@@ -350,8 +348,8 @@ Usage steps to serialize parameterized types:
   `nitc my_prog.nit -m my_prog_serial.nit`
 
 > span: core::Array
-> span: nitc::nitserial
-> span: nitc::nitc
+> span: nitserial my_prog.nit
+> span: nitc my_prog.nit -m my_prog_serial.nit
 
 This was a simple example, in practical cases you may need
 to use more than one generated file.

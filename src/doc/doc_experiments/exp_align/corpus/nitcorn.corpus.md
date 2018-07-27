@@ -47,6 +47,7 @@ and the FFI enables calling services in different languages.
 > span: serialization
 > span: mongodb
 > span: sqlite
+> span: nitiwiki
 > name: nitcorn
 
 ## Examples
@@ -62,14 +63,12 @@ For an example of a larger project merging many _nitcorn_ applications into one 
 take a look at the configuration of `http://xymus.net/` at `../contrib/xymus_net/xymus_net.nit`.
 
 > span: lib/nitcorn/examples/
-> span: contrib/xymun_net/xymus_net.nit/
 > name: nitcorn::examples
 > name: nitcorn::examples
 > name: nitcorn
 
 Larger projects using _nitcorn_ can be found in the `contrib/` folder:
 
-> span: nitcorn::examples
 > span: contrib/
 > name: nitcorn
 

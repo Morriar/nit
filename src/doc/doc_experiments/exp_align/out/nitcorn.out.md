@@ -12,10 +12,6 @@ _nitcorn_ provides `FileServer`, a simple `Action` to serve static files.
 > span: nitcorn::HttpResponse
 > span: nitcorn::FileServer
 > span: nitcorn::Action
-> name: template::template::Template::content
-> name: nitcorn::HttpRequest::method
-> name: nitcorn
-> name: json::static
 
 `HttpRequest` contains the GET and POST arguments as well as session data it one exists.
 The produced `HttpResponse` should contain the HTTP status code, the body,
@@ -23,10 +19,6 @@ session data to preserve or create a session, and optionally list files to appen
 
 > span: nitcorn::HttpRequest
 > span: nitcorn::HttpResponse
-> name: core::Process::arguments
-> name: pthreads::pthreads::NativePthread::create
-> name: more_collections::more_collections::UnrolledIterator::list
-> name: nitcorn::HttpResponse::files
 
 Each `Action` may be associated to many instances of `Route`.
 These routes can simply identify the root of a service,
@@ -34,14 +26,8 @@ but also define parameters within the URI.
 
 > span: nitcorn::Action
 > span: nitcorn::Route
-> name: nitcorn::FileServer::root
 
 _nitcorn_ instances are configured dynamically in Nit code with the interfaces and routes created as needed.
-
-> name: nitcorn
-> name: nitcorn::ErrorTemplate::code
-> name: nitcorn::VirtualHost::interfaces
-> name: curl::CURLStatusCode::created
 
 _nitcorn_ plays well with other Nit services and tools such as `serialization`, `mongodb`, `sqlite` and `nitiwiki`.
 It also benefits from the full power of the Nit language:
@@ -49,10 +35,9 @@ class refinement can be used to customize default services and merge many applic
 and the FFI enables calling services in different languages.
 
 > span: serialization
-> name: nitcorn
-> name: curl::CurlMail::from
-> name: more_collections::more_collections::UnrolledNode::full
-> name: core::sorter::Comparator::merge
+> span: serialization>
+> span: serialization::serialization
+> span: nitiwiki
 
 ## Examples
 
@@ -65,21 +50,17 @@ More general examples are available at `lib/nitcorn/examples/`.
 For an example of a larger project merging many _nitcorn_ applications into one server,
 take a look at the configuration of `http://xymus.net/` at `../contrib/xymus_net/xymus_net.nit`.
 
-> name: nitcorn>examples>
-> name: nitcorn
-> name: core::Queue::take
+> span: lib/nitcorn/examples/
 
 Larger projects using _nitcorn_ can be found in the `contrib/` folder:
 
-> name: nitcorn
+> span: contrib/
 
 * _opportunity_ is a meetup planner heavily based on _nitcorn_.
 * _tnitter_ is a micro-blogging platform with a simple Web and RESTful interface.
 * _benitlux_ uses a custom `Action` to subscribe people to a mailing list and define a RESTful interface.
 
 > span: nitcorn::Action
-> name: nitcorn
-> name: more_collections::more_collections::UnrolledIterator::list
 
 ### Simple hello world server
 
@@ -132,10 +113,6 @@ factory.run
 This nitcorn library is a fork from an independent project originally created in 2013 by
 Jean-Philippe Caissy, Guillaume Auger, Frederic Sevillano, Justin Michaud-Ouellette,
 Stephan Michaud and Maxime Bélanger.
-
-> name: nitcorn
-> name: curl::CurlMail::from
-> name: curl::CURLStatusCode::created
 
 It has been adapted to a library, and is currently maintained, by Alexis Laferrière.
 

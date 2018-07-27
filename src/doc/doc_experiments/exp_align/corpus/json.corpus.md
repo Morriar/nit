@@ -41,7 +41,6 @@ For your local objects, you can annotate them with `serialize` to automate subcl
 
 > span: serialization::Serializable
 > span: core
-> span: serialization::Serializer::serialize
 > span: serialization::Serializable
 
 #### Example
