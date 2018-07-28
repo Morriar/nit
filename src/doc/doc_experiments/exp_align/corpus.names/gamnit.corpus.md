@@ -14,7 +14,7 @@ To compile the _gamnit_ apps packaged with the Nit repository on GNU/Linux you n
 On Debian 8.2, this command should install everything needed:
 
 > name: gamnit
-> name: app
+> name: linux
 
 ~~~bash
 apt-get install libgles2-mesa-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev inkscape
@@ -74,31 +74,25 @@ _gamnit_ is modular, different services of the framework are available through d
 
 * `network` provides a simple communication framework for multiplayer client/server games.
 
-> span: gamnit
-> span: gamnit::gamnit::App::frame_core
-> span: gamnit::gamnit::App::accept_event
-> span: gamnit>flat>
-> span: gamnit::flat_core::App::update
-> span: gamnit::flat_core::App::sprites
-> span: gamnit::flat_core::App::world_camera
-> span: gamnit::Camera::position
-> span: gamnit::App::reset_depth
-> span: gamnit::Vec3::z
-> span: gamnit::Camera::position
-> span: gamnit::flat_core::App::ui_sprites
-> span: gamnit::flat_core::App::ui_camera
-> span: gamnit::App::reset_depth
-> span: gamnit>depth>
-> span: gamnit::Actor
-> span: gamnit>flat>
-> span: gamnit::flat_core::App::update
-> span: gamnit::flat_core::App::ui_sprites
-> span: gamnit::depth_core::App::actors
-> span: gamnit::Actor
-> span: gamnit::Model
-> span: gamnit::limit_fps
-> span: gamnit::keys
-> span: gamnit::keys::App::pressed_keys
-> span: gamnit>model_parsers>
-> span: gamnit>network>
+> name: gamnit::textures
+> name: gamnit::Texture
+> name: gamnit::Shader
+> name: gamnit::programs
+> name: gamnit::flat_core::App::update
+> name: gamnit::Sprite
+> name: gamnit::flat_core::App::update
+> name: gamnit::Sprite
+> name: gamnit::Sprite
+> name: gamnit::Camera
+> name: gamnit::Sprite
+> name: gamnit::Camera
+> name: gamnit::display
+> name: gamnit
+> name: gamnit::keys
+> name: gamnit::MtlFileParser::parse
+> name: gamnit::ObjFileParser::parse
+> name: gamnit::Model
+> name: gamnit::client
+> name: gamnit::server
+> name: gamnit::Server
 > name: opengles

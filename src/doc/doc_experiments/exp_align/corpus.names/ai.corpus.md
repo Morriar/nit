@@ -8,16 +8,10 @@ Contents:
 * see `backtrack`
 * see `search`
 
-> span: ai::backtrack
-> span: ai::search
-
 See the `examples` subdirectory for examples:
 
-> span: ai>examples>
 > name: ai>examples>
 
 * `examples/queens.nit`
 * `examples/puzzle.nit`
 
-> span: lib/ai/examples/queens.nit
-> span: lib/ai/examples/puzzle.nit

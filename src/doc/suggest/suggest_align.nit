@@ -20,6 +20,8 @@ import mdoc_index
 import name_index
 intrude import model_index
 import align_refs
+import align_text
+import align_block
 
 class MDocAligner
 
@@ -36,6 +38,8 @@ class MDocAligner
 		var document = mdoc.mdoc_document
 
 		span_align.align_spans(document, context)
+		text_align.align_texts(document, context)
+		block_align.align_blocks(document, context)
 
 		span_visitor.enter_visit(document)
 
@@ -54,6 +58,8 @@ class MDocAligner
 	end
 
 	var span_align = new MdSpanAlign(model, mainmodule) is lazy
+	var text_align = new MdTextAlign(model, mainmodule) is lazy
+	var block_align = new MdBlockAlign(model, mainmodule) is lazy
 	var span_visitor = new MDocSpanReferencesVisitor is lazy
 	var code_visitor = new MDocCodeReferencesVisitor(mentity_index, context) is lazy
 	var nlp_visitor = new MDocNLPReferencesVisitor(mentity_index, context) is lazy
@@ -70,44 +76,70 @@ class MDocSpanReferencesVisitor
 				if not block isa MdBlock then continue
 				if block isa MdBlockQuote then continue
 				refs.clear
+				block_refs.clear
+				text_refs.clear
 				span_refs.clear
 				name_refs.clear
 				visit(block)
 				print md_renderer.render(block)
-				if refs.not_empty then
+				# if refs.not_empty then
+				#	var need_space = false
+				#	for ref in refs do
+				#		if ref isa MdRefPath and ref.path != null then
+				#			print "> span: {ref.path.as(not null)}"
+				#			need_space = true
+				#		end
+				#		if ref isa MdRefCommand and ref.command != null then
+				#			print "> span: {ref.command.as(not null)} {ref.args.join(" ")}".trim
+				#			need_space = true
+				#		end
+				#		if ref isa MdRefName then
+				#			for n in ref.mentities do
+				#				print "> span: {n.full_name}".trim
+				#				need_space = true
+				#				# break
+				#			end
+				#		end
+				#	end
+				#	if need_space then print ""
+				# end
+				# if text_refs.not_empty then
+				#	var need_space = false
+				#	for ref in text_refs do
+				#		for mentity in ref.mentities do
+				#			print "> name: {mentity.full_name}"
+				#			need_space = true
+				#		end
+				#	end
+				#	if need_space then print ""
+				# end
+				if block_refs.not_empty then
 					var need_space = false
-					for ref in refs do
+					for ref in block_refs do
 						if ref isa MdRefPath and ref.path != null then
-							print "> span: {ref.path.as(not null)}"
+							print "> match: {ref.path.as(not null)}"
 							need_space = true
 						end
 						if ref isa MdRefCommand and ref.command != null then
-							print "> span: {ref.command.as(not null)} {ref.args.join(" ")}".trim
+							print "> match: {ref.command.as(not null)} {ref.args.join(" ")}".trim
 							need_space = true
 						end
 						if ref isa MdRefName then
 							for n in ref.mentities do
-								print "> span: {n.full_name}".trim
+								print "> match: {n.full_name}".trim
 								need_space = true
 								# break
+							end
+						end
+						if ref isa MdRefText then
+							for mentity in ref.mentities do
+								print "> match: {mentity.full_name}"
+								need_space = true
 							end
 						end
 					end
 					if need_space then print ""
 				end
-				# if span_refs.not_empty then
-					# for ref in span_refs do
-						# print "> span: {ref.full_name}"
-					# end
-				# end
-				# if name_refs.not_empty then
-					# for ref in name_refs do
-						# print "> name: {ref.full_name}"
-					# end
-					# print ""
-				# else if span_refs.not_empty then
-					# print ""
-				# end
 			end
 		end
 	end
@@ -115,14 +147,21 @@ class MDocSpanReferencesVisitor
 	var span_refs = new Array[MEntity]
 	var name_refs = new Array[MEntity]
 	var refs = new Array[MdRef]
+	var text_refs = new Array[MdRefText]
+	var block_refs = new Array[MdRef]
 
 	redef fun visit(node) do
+		if node isa MdBlock then
+			block_refs.add_all node.model_refs
+			node.visit_all(self)
+			return
+		end
 		if node isa MdCode then
 		#	var ref = node.nit_mentity
 		#	if ref != null then span_refs.add ref
 			if node.md_ref != null then refs.add node.md_ref.as(not null)
-		# else if node isa MdText then
-		#	name_refs.add_all node.nit_mentities
+		else if node isa MdText then
+			text_refs.add_all node.md_refs
 		end
 		node.visit_all(self)
 	end
@@ -241,14 +280,14 @@ class MDocNLPReferencesVisitor
 			var nlp_vector = mentity_index.vectorize_string(text)
 			for lemma, freq in nlp_vector do
 				vector["name: {lemma or else "null"}"] += freq
-				vector["name: {(lemma or else "null").as(String).capitalize}"] += freq
+				# vector["name: {(lemma or else "null").as(String).capitalize}"] += freq
 				# vector["comment: {lemma or else "null"}"] += freq
 				# vector["comment: {(lemma or else "null").as(String).capitalize}"] += freq
 				vector["nlp: {lemma or else "null"}"] += freq
 				vector["sign: {lemma or else "null"}"] += freq
-				vector["sign: {(lemma or else "null").as(String).capitalize}"] += freq
+				# vector["sign: {(lemma or else "null").as(String).capitalize}"] += freq
 				vector["tid: {lemma or else "null"}"] += freq
-				vector["tid: {(lemma or else "null").as(String).capitalize}"] += freq
+				# vector["tid: {(lemma or else "null").as(String).capitalize}"] += freq
 			end
 			node.nlp_references = mentity_index.match_query(vector).above_threshold#.limit(5)
 		end
@@ -256,11 +295,11 @@ class MDocNLPReferencesVisitor
 	end
 end
 
-redef class String
-	fun capitalize: String do
-		return "{chars.first.to_upper}{substring(1, length)}"
-	end
-end
+# redef class String
+	# fun capitalize: String do
+		# return "{chars.first.to_upper}{substring(1, length)}"
+	# end
+# end
 
 class MDocSection
 

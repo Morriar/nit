@@ -1,5 +1,7 @@
 # Nit wrapper for Stanford CoreNLP
 
+> name: nlp::stanford
+
 Stanford CoreNLP provides a set of natural language analysis tools which can take
 raw text input and give the base forms of words, their parts of speech, whether
 they are names of companies, people, etc., normalize dates, times, and numeric
@@ -7,9 +9,16 @@ quantities, and mark up the structure of sentences in terms of phrases and word
 dependencies, indicate which noun phrases refer to the same entities, indicate
 sentiment, etc.
 
+> name: nlp::stanford
+
 This wrapper needs the Stanford CoreNLP jars that run on Java 1.8+.
 
+> name: nlp::stanford
+
 See http://nlp.stanford.edu/software/corenlp.shtml.
+
+> name: nlp
+> name: nlp::stanford
 
 ## NLPProcessor
 
@@ -70,7 +79,7 @@ tag the terms of a document.
 > name: nlp::NLPIndex
 > name: vsm::StringIndex
 > name: nlp::NLPProcessor
-> name: Document
+> name: vsm::Document
 
 ~~~nitish
 var index = new NLPIndex(proc)

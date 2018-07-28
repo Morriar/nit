@@ -10,18 +10,19 @@ The compiler generates an APK file as the output when the `android`
 module is imported by the compilation target. The path to the generated
 file can be specified using the `-o` and `--dir` options.
 
-> span: android
-
 ## Host system configuration
 
 To compile Android apps from a 64 bits GNU/Linux host you can reuse an existing Android Studio
 installation or make a clean install with command line tools only.
 
 > name: android
+> name: linux
 > name: android
 
 Note that this guide supports only 64 bits GNU/Linux hosts with support for a Java 8 JDK,
 it may be possible to support other platforms with some tweaks.
+
+> name: linux
 
 1. Install the required SDK packages using one of these two methods:
 
@@ -63,13 +64,17 @@ it may be possible to support other platforms with some tweaks.
    ~~~
 
 > name: android
+> name: android
+> name: android
+> name: android
 
 ## Configure the Android application
+
+> name: android
 
 The _app.nit_ framework and this project offers some services to
 customize the generated Android application.
 
-> name: android
 > name: app
 > name: android
 
@@ -102,7 +107,9 @@ customize the generated Android application.
   only be used by low-level implementations of Nit on Android.
   Its usefulness will be extended in the future to customize user applications.
 
-> span: lib/android/../app/README.md
+> name: app
+> name: android
+> name: android
 > name: android
 > name: android
 > name: android
@@ -115,19 +122,14 @@ There is two core implementation for Nit apps on Android.
 `android::nit_activity` is used by apps with standard windows and native UI controls.
 `android::game` is used by, well, games and the game frameworks `mnit` and `gamnit`.
 
-> span: android::nit_activity
-> span: android::game
-> span: mnit
-> span: gamnit
 > name: android
 > name: app
+> name: android>ui>
+> name: android::game
 
 Clients don't have to select the core implementation, it is imported by other relevant modules.
 For example, a module importing `app::ui` and `android` will trigger the importation of `android::nit_activity`.
 
-> span: app::ui
-> span: android
-> span: android::nit_activity
 
 ### Lock app orientation
 
@@ -136,9 +138,6 @@ For example, a module importing `app::ui` and `android` will trigger the importa
 Importing `android::landscape` or `android::portrait` locks the generated
 application in the specified orientation. This can be useful for games and
 other multimedia applications.
-
-> span: android::landscape
-> span: android::portrait
 
 ### Resources and application icon
 
@@ -167,7 +166,6 @@ Theses modes are also applied to the generated Android projects.
 The compilation mode is specified as an argument to `nitc`, only
 `--release` can be specified as debug is the default behavior.
 
-> span: nitc
 > name: android
 > name: android
 
@@ -179,7 +177,6 @@ USB debugging enabled, but it cannot be published on the Play Store.
 
 By default, `nitc` will compile Android applications in debug mode.
 
-> span: nitc
 
 ### Release mode
 
@@ -212,7 +209,3 @@ APK file, it can then be published on the Play Store.
 
 3. Call `nitc` with the `--release` options. You will be prompted for the
    required passwords as needed by `jarsigner`.
-
-> span: nitc
-> span: nitc
-> name: android

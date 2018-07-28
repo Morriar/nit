@@ -10,19 +10,19 @@ index terms.
 > name: vsm
 > name: vsm::Vector
 > name: vsm::Document
+> name: vsm::Vector
 
 It is used in information filtering, information retrieval, indexing and
 relevancy rankings.
 
 The `vsm` package provides the following features:
 
-> span: vsm
-
 * Vector comparison with cosine similarity.
 * Vector indexing and matching with tf * idf.
 * File indexing and matching to free text queries.
 
 > name: vsm::Vector
+> name: vsm::IndexMatch::similarity
 > name: vsm::Vector
 
 ## Vectors
@@ -42,6 +42,7 @@ build vectors.
 
 > name: vsm::Document
 > name: vsm::Document::terms
+> name: vsm::Document
 > name: vsm::Vector
 
 ### Creating a vector
@@ -93,7 +94,7 @@ Documents can then be matched to query vectors.
 
 > name: vsm::VSMIndex
 > name: vsm::Document
-> name: vsm::vector
+> name: vsm::Vector
 > name: vsm::Document
 > name: vsm::Vector
 

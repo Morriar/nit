@@ -53,12 +53,14 @@ redef class MdCode
 end
 
 redef class MdRef
+	var confidence = 0.0
 	fun align_ref(v: MdSpanAlign) do end
 	fun sort_refs(v: MdSpanAlign) do end
 end
 
 redef class MdRefPath
 
+	redef var confidence is lazy do return if path == null then 0.0 else 100.0
 	var path: nullable Path = null
 
 	redef fun align_ref(v) do
@@ -84,6 +86,7 @@ end
 
 redef class MdRefCommand
 
+	redef var confidence is lazy do return if command == null then 0.0 else 100.0
 	var command: nullable String = null
 	var args = new Array[String]
 
@@ -97,6 +100,11 @@ redef class MdRefCommand
 end
 
 redef class MdRefName
+
+	redef var confidence is lazy do
+		if mentities.is_empty then return 0.0
+		return 100.0 / mentities.length.to_f
+	end
 
 	var mentities = new Array[MEntity]
 

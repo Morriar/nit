@@ -1,20 +1,30 @@
 # Android platform support and APIs
 
+> name: android
+> name: android::platform
+
 ## Compilation for Android
+
+> name: android
 
 The compiler generates an APK file as the output when the `android`
 module is imported by the compilation target. The path to the generated
 file can be specified using the `-o` and `--dir` options.
-
-> span: android
 
 ## Host system configuration
 
 To compile Android apps from a 64 bits GNU/Linux host you can reuse an existing Android Studio
 installation or make a clean install with command line tools only.
 
+> name: android
+> name: linux
+> name: android
+
 Note that this guide supports only 64 bits GNU/Linux hosts with support for a Java 8 JDK,
 it may be possible to support other platforms with some tweaks.
+
+> name: linux
+> name: java
 
 1. Install the required SDK packages using one of these two methods:
 
@@ -55,10 +65,28 @@ it may be possible to support other platforms with some tweaks.
    sudo apt install openjdk-8-jdk
    ~~~
 
+> name: android
+> name: android::assets_and_resources::NativeAssetManager::open
+> name: android::assets_and_resources::AssetManager::open
+> name: android::Category::tab
+> name: android
+> name: android::Action::run
+> name: android::shared_preferences_api10::SharedPreferences::setup
+> name: android
+> name: android
+> name: android::shared_preferences_api10::SharedPreferences::setup
+> name: java
+
 ## Configure the Android application
+
+> name: android
 
 The _app.nit_ framework and this project offers some services to
 customize the generated Android application.
+
+> name: app
+> name: android::Service
+> name: android
 
 ### Annotations
 
@@ -89,51 +117,83 @@ customize the generated Android application.
   only be used by low-level implementations of Nit on Android.
   Its usefulness will be extended in the future to customize user applications.
 
-> span: lib/android/../app/README.md
+> name: app
+> name: android
+> name: android
+> name: android>examples>
+> name: android::Extra
+> name: android::ASensorEvent::version
+> name: android::ResourcesManager::integer
+> name: android
+> name: android
+> name: java
+> name: android::NativeScanResult::level
+> name: android
 
 ### Android implementation
+
+> name: android
 
 There is two core implementation for Nit apps on Android.
 `android::nit_activity` is used by apps with standard windows and native UI controls.
 `android::game` is used by, well, games and the game frameworks `mnit` and `gamnit`.
 
-> span: android::nit_activity
-> span: android::game
-> span: mnit
-> span: mnit>
-> span: gamnit
-> span: gamnit>
-> span: gamnit::gamnit
+> name: core
+> name: android
+> name: android::assets_and_resources::ResourcesManager::native
+> name: android::input_events::AndroidMotionEvent::native
+> name: android::Activity::native
+> name: android::Service::native
+> name: android::ui::Control::native
+> name: android>ui>
+> name: android::ui
+> name: android::game
 
 Clients don't have to select the core implementation, it is imported by other relevant modules.
 For example, a module importing `app::ui` and `android` will trigger the importation of `android::nit_activity`.
 
-> span: app::ui
-> span: android
-> span: android::nit_activity
+> name: core
+> name: android>examples>
 
 ### Lock app orientation
+
+> name: app
 
 Importing `android::landscape` or `android::portrait` locks the generated
 application in the specified orientation. This can be useful for games and
 other multimedia applications.
 
-> span: android::landscape
-> span: android::portrait
-
 ### Resources and application icon
+
+> name: android::assets_and_resources::NativeContext::resources
 
 Resources specific to the Android platform should be placed in an `android/` folder at the root of the project.
 The folder should adopt the structure of a normal Android project, e.g., a custom XML resource file can be placed
 at `android/res/values/color.xml` to be compiled with the Android application.
+
+> name: android::assets_and_resources::NativeContext::resources
+> name: android
+> name: android::platform
+> name: android
+> name: android
 
 The application icon should also be placed in the `android/` folder.
 Place the classic bitmap version at `android/res/mipmap-hdpi/ic_launcher.png` (and others),
 and the adaptive version at `android/res/mipmap-anydpi-v26/ic_launcher.xml`.
 The Nit compiler detects these files and uses them as the application icon.
 
+> name: android::assets_and_resources::AssetManager::bitmap
+> name: android::ASensorEvent::version
+> name: android::ASensorEvent::version
+
 Additional `android/` folders may be placed next to more specific Nit modules to change the Android resources
 for application variants. The more specific resources will have priority over the project level `android/` files.
+
+> name: android
+> name: android::assets_and_resources::NativeContext::resources
+> name: android::assets_and_resources::NativeContext::resources
+> name: android::audio::SoundPool::priority
+> name: android::NativeScanResult::level
 
 ## Compilation modes
 
@@ -142,22 +202,49 @@ Theses modes are also applied to the generated Android projects.
 The compilation mode is specified as an argument to `nitc`, only
 `--release` can be specified as debug is the default behavior.
 
-> span: nitc
+> name: android
+> name: android::platform
+> name: android::audio::NativeMediaPlayer::release
+> name: android::audio::NativeSoundPool::release
+> name: android
+> name: android::audio::NativeAudioManager::mode
+> name: android::Category::default
 
 ### Debug mode
+
+> name: android::audio::NativeAudioManager::mode
 
 Debug mode enables compiling to an APK file without handling signing keys
 and their password. The APK file can be installed to a local device with
 USB debugging enabled, but it cannot be published on the Play Store.
 
+> name: android::audio::NativeAudioManager::mode
+> name: android::Bundle::keys
+> name: android::NativeView::enabled
+> name: android::AndroidSensor::enabled
+> name: android::audio::NativeSoundPool::play
+> name: android::SoundPool::play
+
 By default, `nitc` will compile Android applications in debug mode.
 
-> span: nitc
+> name: android::Category::default
+> name: android
+> name: android::audio::NativeAudioManager::mode
 
 ### Release mode
 
+> name: android::audio::NativeMediaPlayer::release
+> name: android::audio::NativeSoundPool::release
+> name: android::audio::NativeAudioManager::mode
+
 Building in release mode will use your private key to sign the
 APK file, it can then be published on the Play Store.
+
+> name: android::audio::NativeMediaPlayer::release
+> name: android::audio::NativeSoundPool::release
+> name: android::audio::NativeAudioManager::mode
+> name: android::audio::NativeSoundPool::play
+> name: android::SoundPool::play
 
 1. Have a keystore with a valid key to sign your APK file.
 
@@ -186,6 +273,11 @@ APK file, it can then be published on the Play Store.
 3. Call `nitc` with the `--release` options. You will be prompted for the
    required passwords as needed by `jarsigner`.
 
-> span: nitc
-> span: nitc
+> name: android::NativeNotificationBuilder::create
+> name: android::audio::NativeMediaPlayer::create
+> name: android::Category::default
+> name: java
+> name: android::Extra::replacing
+> name: android::Extra::replacing
+> name: android::Action::call
 

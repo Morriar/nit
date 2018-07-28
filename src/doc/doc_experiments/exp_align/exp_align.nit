@@ -48,13 +48,14 @@ class ReadmeComparator
 			# spans
 			var orig_spans = block.span_refs
 			var dest_spans = oblock.span_refs
-			if orig_spans.is_empty and dest_spans.is_empty then continue
-			var span_r = recall(orig_spans, dest_spans)
-			var span_p = precision(orig_spans, dest_spans)
-			# print "span_r: {span_r}\t{if span_r < 100.0 then "\t" else ""}span_p: {span_p}"
-			spans_r += span_r
-			spans_p += span_p
-			spans_count += 1
+			if orig_spans.not_empty and dest_spans.not_empty then
+				var span_r = recall(orig_spans, dest_spans)
+				var span_p = precision(orig_spans, dest_spans)
+				# print "span_r: {span_r}\t{if span_r < 100.0 then "\t" else ""}span_p: {span_p}"
+				spans_r += span_r
+				spans_p += span_p
+				spans_count += 1
+			end
 
 			# names
 			var orig_names = block.name_refs
@@ -70,7 +71,7 @@ class ReadmeComparator
 			# TODO compare matches
 		end
 		printn "{lib or else "NULL"}\t"
-		printn "{spans_r / spans_count.to_f}\t{spans_p / spans_count.to_f}\t"
+		# printn "{spans_r / spans_count.to_f}\t{spans_p / spans_count.to_f}\t"
 		printn "{names_r / names_count.to_f}\t{names_p / names_count.to_f}\n"
 	end
 
@@ -181,7 +182,7 @@ class MdSpans
 	end
 end
 
-var corpus_path = "src/doc/doc_experiments/exp_align/corpus.spans"
+var corpus_path = "src/doc/doc_experiments/exp_align/corpus.names"
 (corpus_path / "../out").mkdir
 var files = corpus_path.files
 default_comparator.sort(files)
@@ -190,7 +191,7 @@ for file in files do
 	# print ""
 	# print file
 	var lib = file.replace(".corpus.md", "")
-
+#
 	sys.system "./nitreadme lib/{lib} --check-docdown > src/doc/doc_experiments/exp_align/out/{lib}.out.md"
 
 	# var md = "src/doc/doc_experiments/exp_align/corpus/{lib}.corpus.md".to_path.read_all
@@ -200,8 +201,12 @@ for file in files do
 
 	var comparator = new ReadmeComparator
 	comparator.compare_files(
-		"src/doc/doc_experiments/exp_align/corpus.spans/{lib}.corpus.md",
+		"src/doc/doc_experiments/exp_align/corpus.names/{lib}.corpus.md",
 		"src/doc/doc_experiments/exp_align/out/{lib}.out.md")
 
 	# break
+	# sys.system "meld " +
+		# "src/doc/doc_experiments/exp_align/corpus.names/{lib}.corpus.md " +
+		# "src/doc/doc_experiments/exp_align/out/{lib}.out.md"
+
 end

@@ -6,37 +6,33 @@ Dynamic content is served by subclassing `Action` and implementing `answer`.
 This method receives an `HttpRequest` and must return an `HttpResponse`.
 _nitcorn_ provides `FileServer`, a simple `Action` to serve static files.
 
-> span: nitcorn::Action
-> span: nitcorn::reactor::Action::answer
-> span: nitcorn::HttpRequest
-> span: nitcorn::HttpResponse
-> span: nitcorn::FileServer
-> span: nitcorn::Action
 > name: nitcorn
 
 `HttpRequest` contains the GET and POST arguments as well as session data it one exists.
 The produced `HttpResponse` should contain the HTTP status code, the body,
 session data to preserve or create a session, and optionally list files to append.
 
-> span: nitcorn::HttpRequest
-> span: nitcorn::HttpResponse
-> name: nitcorn::HttpRequest::get
-> name: nitcorn::HttpRequest::post
-> name: nitcorn::HttpResponse::status_code
+> name: nitcorn::Session
+> name: nitcorn::HttpRequest::body
 > name: nitcorn::HttpResponse::body
-> name: nitcorn::HttpResponse::session
+> name: nitcorn::Session
+> name: nitcorn::Session
+> name: nitcorn::HttpResponse::files
 
 Each `Action` may be associated to many instances of `Route`.
 These routes can simply identify the root of a service,
 but also define parameters within the URI.
 
-> span: nitcorn::Action
-> span: nitcorn::Route
+> name: nitcorn::Routes
 > name: nitcorn::Route
+> name: nitcorn::HttpRequest::uri
 
 _nitcorn_ instances are configured dynamically in Nit code with the interfaces and routes created as needed.
 
 > name: nitcorn
+> name: nitcorn::Interfaces
+> name: nitcorn::Interface
+> name: nitcorn::Routes
 > name: nitcorn::Route
 
 _nitcorn_ plays well with other Nit services and tools such as `serialization`, `mongodb`, `sqlite` and `nitiwiki`.
@@ -44,43 +40,36 @@ It also benefits from the full power of the Nit language:
 class refinement can be used to customize default services and merge many applications in a single server,
 and the FFI enables calling services in different languages.
 
-> span: serialization
-> span: mongodb
-> span: sqlite
-> span: nitiwiki
 > name: nitcorn
 
 ## Examples
 
+> name: nitcorn>examples>
+
 A minimal example follows with a custom `Action` and using `FileServer`.
 
-> span: nitcorn::Action
-> span: nitcorn::FileServer
-> name: nitcorn::examples
+> name: nitcorn>examples>
 
 More general examples are available at `lib/nitcorn/examples/`.
 For an example of a larger project merging many _nitcorn_ applications into one server,
 take a look at the configuration of `http://xymus.net/` at `../contrib/xymus_net/xymus_net.nit`.
 
-> span: lib/nitcorn/examples/
-> name: nitcorn::examples
-> name: nitcorn::examples
+> name: nitcorn>examples>
+> name: nitcorn>examples>
 > name: nitcorn
 
 Larger projects using _nitcorn_ can be found in the `contrib/` folder:
 
-> span: contrib/
 > name: nitcorn
 
 * _opportunity_ is a meetup planner heavily based on _nitcorn_.
 * _tnitter_ is a micro-blogging platform with a simple Web and RESTful interface.
 * _benitlux_ uses a custom `Action` to subscribe people to a mailing list and define a RESTful interface.
 
-> span: nitcorn::Action
 > name: opportunity
 > name: nitcorn
-> name: tnitter
-> name: benitlux
+> name: nitcorn::restful
+> name: nitcorn::restful
 
 ### Simple hello world server
 

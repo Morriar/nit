@@ -5,10 +5,11 @@
 This group introduces the `actors` module which contains the abstraction of a Nit Actor Model,
 based on Celluloid (https://github.com/celluloid/celluloid).
 
-> span: actors
 > name: actors
 
 ## What is an actor ?
+
+> name: actors::Actor
 
 An actor is an entity which receives messages and does some kind of computation based on it.
 An actor has a mailbox in which it receives its messages, and process them one at a time.
@@ -16,7 +17,7 @@ An actor has a mailbox in which it receives its messages, and process them one a
 > name: actors::Actor
 > name: actors::Message
 > name: actors::Actor
-> name: actors::Actor::mailbox
+> name: actors::Mailbox
 > name: actors::Message
 
 ## `actor` annotation
@@ -24,7 +25,6 @@ An actor has a mailbox in which it receives its messages, and process them one a
 The `actors` module introduces the annotation `actor` which is to be used on classes.
 This annotation transform a normal Nit class into an actor.
 
-> span: actors
 > name: actors::Actor
 
 In practice, it adds a new property `async` to the annotated class.
@@ -37,18 +37,19 @@ For instance, if you call `a.async.foo` and `foo` doesn't have a return value, i
 a message to the mailbox of the actor attached to `a` which will process it asynchronously.
 
 > name: actors::Message
-> name: actors::Actor::mailbox
+> name: actors::Mailbox
 > name: actors::Actor
 
 On the other hand, if you call `a.async.bar` and `bar` returns an`Int`, it will still send
 a message to the actor, but you'll get a `Future[Int]` to be able to retrieve the value.
 When using `join` on the future, the calling thread will wait until the value of the future is set.
 
-> span: core::Int
-> span: actors::Future
-> span: actors::Future::join
+> name: actors::Message
 > name: actors::Actor
+> name: actors::Future::value
 > name: actors::Future
+> name: pthreads::Thread
+> name: actors::Future::value
 > name: actors::Future
 
 ## Managing actors
@@ -81,17 +82,23 @@ if you need to. For this, you need to use the `async` property of your annotated
   or in which state he'll leave the memory, you can with this call. it's synchronous but not really
   blocking, since it's direcly canceling the native pthread associated to the actor.
 
-> span: actors::Proxy::terminate
-> span: actors::Proxy::terminate_now
-> span: actors::Proxy::wait_termination
-> span: actors::Proxy::kill
-> name: actors::Actor
-> name: actors::Message
-> name: actors::Actor::mailbox
 > name: actors::Message
 > name: actors::Actor
 > name: actors::Message
-> name: actors::Actor::mailbox
+> name: actors::Mailbox
+> name: actors::Message
+> name: actors::Actor
+> name: actors::Message
+> name: actors::Message
+> name: actors::Actor
+> name: actors::Message
+> name: actors::Message
+> name: actors::Message
+> name: actors::Mailbox
+> name: actors::Actor
+> name: actors::Actor
+> name: pthreads::Thread
+> name: actors::Actor
 
 For now, there isn't any mecanism to recreate and actor after it was terminated.
 Sending messages after terminating it results in unspecified behaviour.
@@ -109,7 +116,7 @@ To prevent that, we added a mecanism that waits before all your actors finished 
 before quitting.
 
 > name: actors::Actor
-> name: actors::Thread
+> name: pthreads::Thread
 > name: actors::Actor
 
 It's materialized by the `active_actors` property added to `Sys` which is a `ReverseBlockingQueue`.
@@ -117,11 +124,6 @@ In short, the `is_empty` method on this list is blocking until the list is effec
 When every actors finished working, and we're sure they won't even send another message to another
 actor, `active_actors` is empty.
 
-> span: actors::actors::Sys::active_actors
-> span: core::Sys
-> span: pthreads::ReverseBlockingQueue
-> span: core::Collection::is_empty
-> span: actors::actors::Sys::active_actors
 > name: actors::Actor
 > name: actors::Message
 > name: actors::Actor
@@ -133,10 +135,13 @@ using actors for fork/join parallelism instead of concurrency).
 
 ## Examples
 
+> name: actors>examples>
+
 You can find example of differents small programs implemented with Nit actors in the `examples`
 directory. For a really simple example, you can check `examples/simple`.
 
-> span: actors>examples>
-> span: lib/actors/examples/simple
+> name: actors>examples>
 > name: actors
-> name: actors::examples::simple
+> name: actors::simple
+> name: actors>examples>
+
