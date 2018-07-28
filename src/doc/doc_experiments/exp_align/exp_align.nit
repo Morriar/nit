@@ -38,6 +38,14 @@ class ReadmeComparator
 		var names_p = 0.0
 		var names_count = 0
 
+		var exs_r = 0.0
+		var exs_p = 0.0
+		var exs_count = 0
+
+		var codes_r = 0.0
+		var codes_p = 0.0
+		var codes_count = 0
+
 		var matches_r = 0.0
 		var matches_p = 0.0
 		var matches_count = 0
@@ -48,6 +56,9 @@ class ReadmeComparator
 
 			var oblock = dest.match_block(block)
 			if oblock == null then continue
+			# print block
+			# print oblock
+			# print "--------"
 
 			# spans
 			var orig_spans = block.span_refs
@@ -64,13 +75,41 @@ class ReadmeComparator
 			# names
 			var orig_names = block.name_refs
 			var dest_names = oblock.name_refs
-			if orig_names.is_empty and dest_names.is_empty then continue
-			var name_r = recall(orig_names, dest_names)
-			var name_p = precision(orig_names, dest_names)
-			# print "name_r: {name_r}\t{if name_r < 100.0 then "\t" else ""}name_p: {name_p}"
-			names_r += name_r
-			names_p += name_p
-			names_count += 1
+			if orig_names.not_empty and dest_names.not_empty then
+				var name_r = recall(orig_names, dest_names)
+				var name_p = precision(orig_names, dest_names)
+				# print "name_r: {name_r}\t{if name_r < 100.0 then "\t" else ""}name_p: {name_p}"
+				names_r += name_r
+				names_p += name_p
+				names_count += 1
+			end
+
+			# examples
+			var orig_exs = block.example_refs
+			var dest_exs = oblock.example_refs
+			if orig_exs.not_empty and dest_exs.not_empty then
+				var ex_r = recall(orig_exs, dest_exs)
+				var ex_p = precision(orig_exs, dest_exs)
+				# print "name_r: {name_r}\t{if name_r < 100.0 then "\t" else ""}name_p: {name_p}"
+				exs_r += ex_r
+				exs_p += ex_p
+				exs_count += 1
+			end
+
+			# code reds
+			var orig_codes = block.code_refs
+			var dest_codes = oblock.code_refs
+			if orig_codes.not_empty and dest_codes.not_empty then
+				# print orig_codes
+				# print dest_codes
+				var code_r = recall(orig_codes, dest_codes)
+				var code_p = precision(orig_codes, dest_codes)
+				# print code_r
+				# print "name_r: {name_r}\t{if name_r < 100.0 then "\t" else ""}name_p: {name_p}"
+				codes_r += code_r
+				codes_p += code_p
+				codes_count += 1
+			end
 
 			# matches
 			var orig_matches = block.matches
@@ -86,7 +125,9 @@ class ReadmeComparator
 		printn "{lib or else "NULL"}\t"
 		# printn "{spans_r / spans_count.to_f}\t{spans_p / spans_count.to_f}\t"
 		# printn "{names_r / names_count.to_f}\t{names_p / names_count.to_f}\n"
-		printn "{matches_r / matches_count.to_f}\t{matches_p / matches_count.to_f}\n"
+		printn "{exs_r / exs_count.to_f}\t{exs_p / exs_count.to_f}\t"
+		printn "{codes_r / codes_count.to_f}\t{codes_p / codes_count.to_f}\n"
+		# printn "{matches_r / matches_count.to_f}\t{matches_p / matches_count.to_f}\n"
 	end
 
 	fun print_block(block: MdBlock) do
@@ -143,7 +184,11 @@ redef class MdDocument
 
 	fun match_block(orig: MdBlock): nullable MdBlock do
 		for block in blocks do
-			if orig.raw_text == block.raw_text then return block
+			if orig isa MdCodeBlock and block isa MdCodeBlock then
+				if orig.literal.to_s == block.literal.to_s then return block
+			else
+				if orig.raw_text == block.raw_text then return block
+			end
 		end
 		return null
 	end
@@ -152,12 +197,16 @@ end
 redef class MdBlock
 	var span_refs = new Array[String]
 	var name_refs = new Array[String]
+	var example_refs = new Array[String]
+	var code_refs = new Array[String]
 	var matches = new Array[String]
 
 	fun parse_entry(lines: Array[String]) do
 		for line in lines do
 			if line.has_prefix("span: ") then span_refs.add line.replace("span: ", "")
 			if line.has_prefix("name: ") then name_refs.add line.replace("name: ", "")
+			if line.has_prefix("code: ") then code_refs.add line.replace("code: ", "")
+			if line.has_prefix("example: ") then example_refs.add line.replace("example: ", "")
 			if line.has_prefix("match: ") then matches.add line.replace("matches: ", "")
 		end
 	end
@@ -169,6 +218,12 @@ redef class MdBlock
 		end
 		for ref in name_refs do
 			b.append "> name: {ref}\n"
+		end
+		for ref in example_refs do
+			b.append "> example: {ref}\n"
+		end
+		for ref in code_refs do
+			b.append "> code: {ref}\n"
 		end
 		for ref in matches do
 			b.append "> match: {ref}\n"
@@ -196,17 +251,21 @@ class MdSpans
 	end
 end
 
-var corpus_path = "src/doc/doc_experiments/exp_align/corpus.matches"
+var corpus_path = "src/doc/doc_experiments/exp_align/corpus.codes"
 (corpus_path / "../out").mkdir
 var files = corpus_path.files
 default_comparator.sort(files)
-for file in files do
 
+var libs = ["app", "json", "nitcorn", "nlp", "popcorn", "serialization", "vsm"]
+
+for file in files do
 	# print ""
 	# print file
 	var lib = file.replace(".corpus.md", "")
+	if not libs.has(lib) then continue
+	# if lib != "vsm" then continue
 #
-	sys.system "./nitreadme lib/{lib} --check-docdown > src/doc/doc_experiments/exp_align/out/{lib}.out.md"
+	sys.system "./nitreadme lib/{lib} --keep-going --check-docdown > src/doc/doc_experiments/exp_align/out/{lib}.out.md 2>/dev/null"
 
 	# var md = "src/doc/doc_experiments/exp_align/corpus/{lib}.corpus.md".to_path.read_all
 	# var doc = (new MdParser).parse(md)
@@ -215,7 +274,7 @@ for file in files do
 
 	var comparator = new ReadmeComparator
 	comparator.compare_files(
-		"src/doc/doc_experiments/exp_align/corpus.matches/{lib}.corpus.md",
+		"src/doc/doc_experiments/exp_align/corpus.codes/{lib}.corpus.md",
 		"src/doc/doc_experiments/exp_align/out/{lib}.out.md")
 
 	# break

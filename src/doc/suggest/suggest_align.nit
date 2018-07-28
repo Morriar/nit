@@ -22,6 +22,7 @@ intrude import model_index
 import align_refs
 import align_text
 import align_block
+import align_code_blocks
 
 class MDocAligner
 
@@ -37,9 +38,10 @@ class MDocAligner
 	fun align_mdoc(mdoc: MDoc) do
 		var document = mdoc.mdoc_document
 
-		span_align.align_spans(document, context)
-		text_align.align_texts(document, context)
-		block_align.align_blocks(document, context)
+		# span_align.align_spans(document, context)
+		# text_align.align_texts(document, context)
+		# block_align.align_blocks(document, context)
+		code_block_align.align_code_blocks(document, context)
 
 		span_visitor.enter_visit(document)
 
@@ -60,6 +62,7 @@ class MDocAligner
 	var span_align = new MdCodeAlign(model, mainmodule) is lazy
 	var text_align = new MdTextAlign(model, mainmodule) is lazy
 	var block_align = new MdBlockAlign(model, mainmodule) is lazy
+	var code_block_align = new MdCodeBlockAlign(mentity_index) is lazy
 	var span_visitor = new MDocSpanReferencesVisitor is lazy
 	var code_visitor = new MDocCodeReferencesVisitor(mentity_index, context) is lazy
 	var nlp_visitor = new MDocNLPReferencesVisitor(mentity_index, context) is lazy
@@ -76,6 +79,8 @@ class MDocSpanReferencesVisitor
 				if not block isa MdBlock then continue
 				if block isa MdBlockQuote then continue
 				refs.clear
+				code_refs.clear
+				example_refs.clear
 				block_refs.clear
 				text_refs.clear
 				span_refs.clear
@@ -113,8 +118,20 @@ class MDocSpanReferencesVisitor
 				#	end
 				#	if need_space then print ""
 				# end
+
+				var need_space = false
+				for ref in example_refs do
+					print "> example: {ref.mentity.full_name}"
+					need_space = true
+				end
+				for ref in code_refs do
+					print "> code: {ref.mentity.full_name}"
+					need_space = true
+				end
+				if need_space then print ""
+
 				if block_refs.not_empty then
-					var need_space = false
+					need_space = false
 					for ref in block_refs do
 						if ref isa MdRefMEntity then
 							print "> match: {ref.mentity.full_name}"
@@ -154,10 +171,16 @@ class MDocSpanReferencesVisitor
 	var refs = new Array[MdRef]
 	var text_refs = new Array[MdRefText]
 	var block_refs = new Array[MdRef]
+	var code_refs = new Array[MdRefCode]
+	var example_refs = new Array[MdRefCode]
 
 	redef fun visit(node) do
 		if node isa MdBlock then
 			block_refs.add_all node.model_refs
+			if node isa MdCodeBlock then
+				code_refs.add_all node.code_refs
+				example_refs.add_all node.example_refs
+			end
 			return
 		# else if node isa MdCode then
 		#	var ref = node.nit_mentity

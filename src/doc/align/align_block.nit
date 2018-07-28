@@ -79,6 +79,10 @@ redef class MdBlock
 			end
 		end
 
+		# TODO NLP Refs
+		# TODO scaffold refs
+		# TODO structure refs
+
 
 		var res = new Array[MdRefMEntity]
 		for key in scores.sorted_keys do

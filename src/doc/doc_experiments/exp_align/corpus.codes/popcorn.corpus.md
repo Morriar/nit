@@ -93,6 +93,9 @@ class MyHandler
 end
 ~~~
 
+> code: popcorn::Handler
+> code: popcorn::popcorn
+
 Where:
 
 * `MyHandler` is the name of the handler you will add to the app.
@@ -128,11 +131,21 @@ var app = new App
 app.use("/", new MyHandler)
 ~~~
 
+> code: popcorn::Handler
+> code: popcorn::App
+> code: popcorn::Router::use
+> code: popcorn::popcorn
+
 Respond to a request to the `/user` route:
 
 ~~~
 app.use("/user", new MyHandler)
 ~~~
+
+> code: popcorn::Handler
+> code: popcorn::App
+> code: popcorn::Router::use
+> code: popcorn::popcorn
 
 For more details about routing, see the routing section.
 
@@ -149,6 +162,11 @@ in a directory named `public`:
 ~~~
 app.use("/", new StaticHandler("public/"))
 ~~~
+
+> code: nitcorn::StaticHandler
+> code: popcorn::App
+> code: popcorn::Router::use
+> code: popcorn::popcorn
 
 Now, you can load the files that are in the `public` directory:
 
@@ -168,6 +186,11 @@ app.use("/", new StaticHandler("public/"))
 app.use("/", new StaticHandler("files/"))
 ~~~
 
+> code: nitcorn::StaticHandler
+> code: popcorn::App
+> code: popcorn::Router::use
+> code: popcorn::popcorn
+
 Popcorn looks up the files in the order in which you set the static directories
 with the `use` method.
 
@@ -178,6 +201,11 @@ static directory, as shown below:
 ~~~
 app.use("/static/", new StaticHandler("public/"))
 ~~~
+
+> code: nitcorn::StaticHandler
+> code: popcorn::App
+> code: popcorn::Router::use
+> code: popcorn::popcorn
 
 Now, you can load the files that are in the public directory from the `/static`
 path prefix.
@@ -201,6 +229,11 @@ This can be achieved by specifying a default file in the StaticHandler:
 ~~~
 app.use("/static/", new StaticHandler("public/", "default.html"))
 ~~~
+
+> code: nitcorn::StaticHandler
+> code: popcorn::App
+> code: popcorn::Router::use
+> code: popcorn::popcorn
 
 This way all non-matched queries to the StaticHandler will be answered with the
 `default.html` file.
@@ -226,7 +259,7 @@ var app = new App
 app.use("/", new HelloHandler)
 ~~~
 
-> example: popcorn::example_router
+> example: popcorn::example_hello
 > code: nitcorn::HttpResponse
 > code: popcorn::Handler::get
 > code: popcorn::pop_handlers::HttpResponse::send
@@ -297,7 +330,6 @@ app.listen("localhost", 3000)
 
 > example: popcorn::example_query_string
 > code: nitcorn::HttpRequest
-> code: template::Template::addn
 > code: nitcorn::HttpResponse
 > code: popcorn::App
 > code: template::Template
@@ -339,7 +371,6 @@ app.listen("localhost", 3000)
 
 > example: popcorn::example_post_handler
 > code: nitcorn::HttpRequest
-> code: template::Template::addn
 > code: nitcorn::HttpResponse
 > code: nitcorn::HttpRequest::body
 > code: popcorn::App
@@ -370,7 +401,6 @@ class AllHandler
 end
 ~~~
 
-> example: popcorn::example_simple_logger
 > code: nitcorn::HttpResponse
 > code: popcorn::pop_handlers::HttpResponse::send
 > code: popcorn::Handler::all
@@ -393,7 +423,6 @@ class MergeHandler
 end
 ~~~
 
-> example: popcorn::example_advanced_logger
 > code: nitcorn::HttpRequest::method
 > code: nitcorn::HttpRequest
 > code: popcorn::Handler::all
@@ -426,7 +455,7 @@ var app = new App
 app.use("/", new MyHandler)
 ~~~
 
-> example: popcorn::example_router
+> example: popcorn::example_hello
 > code: nitcorn::HttpResponse
 > code: popcorn::Handler::get
 > code: popcorn::pop_handlers::HttpResponse::send
@@ -833,7 +862,7 @@ app.use("/*", new SimpleErrorHandler)
 app.listen("localhost", 3000)
 ~~~
 
-> example: popcorn::example_simple_logger
+> example: popcorn::example_hello
 > code: nitcorn::HttpResponse
 > code: nitcorn::HttpResponse::status_code
 > code: popcorn::Router::use
@@ -1042,8 +1071,6 @@ app.listen("localhost", 3000)
 > example: popcorn::example_mongodb
 > code: json::JsonObject
 > code: nitcorn::HttpResponse
-> code: core::MapRead::[]
-> code: template::Template::add
 > code: nitcorn::HttpRequest
 > code: core::HashMap
 > code: mongodb::MongoDb::collection
@@ -1055,7 +1082,6 @@ app.listen("localhost", 3000)
 > code: popcorn::Router::use
 > code: mongodb::MongoCollection
 > code: mongodb::MongoDb
-> code: core::Map::[]=
 > code: popcorn::App
 > code: popcorn::popcorn::App::listen
 > code: popcorn::Handler::post
@@ -1083,7 +1109,7 @@ app.use("/*", new StaticHandler("my-ng-app/", "index.html"))
 app.listen("localhost", 3000)
 ~~~
 
-> example: popcorn::example_static_default
+> example: popcorn::example_angular
 > code: popcorn::App
 > code: popcorn::popcorn::App::listen
 > code: popcorn::Router::use

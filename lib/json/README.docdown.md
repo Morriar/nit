@@ -27,6 +27,8 @@ For your local objects, you can annotate them with `serialize` to automate subcl
 #### Example
 
 ~~~
+import json
+
 class Person
     serialize
 
@@ -113,6 +115,8 @@ errors to the console. It is fit only for small scripts and other quick and dirt
 #### Example
 
 ~~~
+import json
+
 class Triangle
     serialize
 
@@ -173,6 +177,8 @@ When an attribute is not found, the deserialization engine acts in one of three 
    The caller must check for `errors` and must not read from the attribute.
 
 ~~~
+import json
+
 class MyConfig
     serialize
 

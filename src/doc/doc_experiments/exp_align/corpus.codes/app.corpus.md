@@ -123,7 +123,6 @@ redef class App
 end
 ~~~
 
-> example: app::ui_example
 > code: app::App
 > code: app::data_store::App::data_store
 > code: app::DataStore
@@ -216,4 +215,8 @@ There is two main ways to achieve this goal:
 
   # ...
   ~~~
+
+> example: calculator
+> code: calculator
+> code: android
 

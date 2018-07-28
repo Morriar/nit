@@ -26,13 +26,10 @@ class Person
 end
 ~~~
 
-> example: serialization::custom_serialization
-> code: serialization::Serializer
 > code: serialization::Serializable
-> code: serialization::Deserializer
 > code: serialization::serialization
+> code: core::Object::==
 > code: core::Object::hash
-> code: serialization::Serializable::core_serialize_to
 
 The `Person` class also defines `==` and `hash`, this is optional but we will use it to make an important point.
 By definition of a serializable class, an instance can be serialized to a stream, then deserialized.
@@ -77,15 +74,10 @@ class Partnership
 end
 ~~~
 
-> example: serialization::custom_serialization
-> code: serialization::Serializer
 > code: serialization::Serializable
-> code: core::Object::hash
-> code: serialization::Serializable::core_serialize_to
-> code: core::Numeric::+
-> code: core::Numeric::*
-> code: serialization::Deserializer
 > code: serialization::serialization
+> code: core::Object::==
+> code: core::Object::hash
 
 ### Scope of the `serialize` annotation
 
@@ -117,6 +109,9 @@ end
   end
   ~~~
 
+> code: serialization::Serializable
+> code: serialization::serialization
+
 ## The `noserialize` annotation
 
 The `noserialize` annotation mark an exception in a `serialize` module or class definition.
@@ -142,6 +137,9 @@ The `noserialize` annotation mark an exception in a `serialize` module or class 
   end
   ~~~
 
+> code: serialization::Serializable
+> code: serialization::serialization
+
 ## The `serialize_as` annotation
 
 By default, an attribute is identified in the serialization format by its Nit name.
@@ -164,13 +162,8 @@ class UserCredentials
 end
 ~~~
 
-> example: serialization::custom_serialization
-> code: serialization::Serializer
 > code: serialization::Serializable
-> code: core::Text::+
-> code: serialization::Deserializer
 > code: serialization::serialization
-> code: serialization::Serializable::core_serialize_to
 
 ## Custom serializable classes
 
@@ -275,12 +268,10 @@ end
 
 ~~~
 
-> example: serialization::custom_serialization
 > code: serialization::Deserializer
 > code: serialization::Serializer
+> code: serialization::Serializer::serialize_attribute
 > code: serialization::Deserializer::deserialize_attribute
-> code: core::Text
-> code: core::Numeric::unary -
 > code: serialization::Serializable
 > code: serialization::serialization
 > code: core::file::Text::to_path
@@ -325,7 +316,14 @@ reader.close
 assert couple == deserialize_couple
 ~~~
 
-> code: json::json
+> code: json
+> code: serialization::JsonSerializer
+> code: serialization::JsonSerializer::serialize
+> code: serialization::JsonDeserializer
+> code: serialization::JsonDeserializer::deserialize
+> code: serialization::serialization
+> code: core::FileReader
+> code: core::FileReader::close
 
 ## Limitations and TODO
 

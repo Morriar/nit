@@ -91,7 +91,6 @@ factory.run
 > code: nitcorn::VirtualHost::routes
 > code: nitcorn::Action
 > code: nitcorn::ServerConfig
-> code: core::SimpleCollection::add
 > code: nitcorn::FileServer
 > code: core::HashMap
 > code: nitcorn::HttpResponse::body=
@@ -100,7 +99,6 @@ factory.run
 > code: nitcorn::HttpRequest::get_args
 > code: nitcorn::HttpFactory::config
 > code: nitcorn::ServerConfig::virtual_hosts
-> code: core::abstract_text::Map::join
 > code: nitcorn::HttpFactory::run
 > code: nitcorn::reactor::Action::answer
 > code: nitcorn::nitcorn

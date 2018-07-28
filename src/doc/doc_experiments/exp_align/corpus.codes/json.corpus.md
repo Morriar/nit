@@ -78,14 +78,11 @@ assert charlie.serialize_to_json(pretty=true, plain=true) == """
 }"""
 ~~~
 
-> code: serialization::Serializer
 > code: core::Map
 > code: core::Map::[]=
 > code: serialization::Serializable
 > code: json::serialization_write::Serializable::serialize_to_json
-> code: serialization::Deserializer
 > code: json::json
-> code: serialization::Serializable::core_serialize_to
 
 ### Write JSON with metadata
 
@@ -172,12 +169,9 @@ assert deserializer.errors.is_empty # If false, `object` is invalid
 ~~~
 
 > code: json::JsonDeserializer
-> code: serialization::Serializer
 > code: serialization::Serializable
 > code: serialization::Deserializer::errors
 > code: serialization::Deserializer::deserialize
-> code: core::abstract_text::Object::to_s
-> code: serialization::Serializable::core_serialize_to
 > code: serialization::Deserializer
 > code: json::json
 
@@ -264,11 +258,8 @@ assert obj.player_name == "Bob"
 ~~~
 
 > code: json::JsonDeserializer
-> code: serialization::Serializer
 > code: serialization::Deserializer::errors
 > code: serialization::Deserializer::deserialize
 > code: serialization::Serializable
 > code: serialization::Deserializer
 > code: json::json
-> code: serialization::Serializable::core_serialize_to
-

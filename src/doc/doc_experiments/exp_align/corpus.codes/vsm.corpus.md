@@ -34,12 +34,10 @@ assert vector["term2"] == 1.0
 assert vector.norm.is_approx(2.236, 0.001)
 ~~~
 
-> example: vsm::example_vsm
 > code: vsm::Vector
 > code: core::MapRead::[]
 > code: core::Map::[]=
 > code: vsm::Vector::norm
-> code: core::Float::is_approx
 > code: vsm::vsm
 
 ### Comparing vectors
@@ -63,10 +61,8 @@ var s2 = query.cosine_similarity(v2)
 assert s1 > s2
 ~~~
 
-> example: vsm::example_vsm
 > code: vsm::Vector
 > code: core::Map::[]=
-> code: core::Comparable::>
 > code: vsm::Vector::cosine_similarity
 > code: vsm::vsm
 
@@ -110,14 +106,11 @@ var matches = index.match_vector(query)
 assert matches.first.document == d1
 ~~~
 
-> example: vsm::example_vsm
 > code: vsm::Vector
 > code: core::Map::[]=
 > code: vsm::VSMIndex
 > code: vsm::Document
-> code: core::Collection::first
 > code: vsm::VSMIndex::index_document
-> code: core::HashSet
 > code: vsm::IndexMatch::document
 > code: vsm::IndexMatch
 > code: vsm::VSMIndex::documents
@@ -141,12 +134,9 @@ var matches = index.match_string("this sample")
 assert matches.first.document == d1
 ~~~
 
-> example: vsm::example_vsm
 > code: vsm::StringIndex
 > code: vsm::StringIndex::index_string
-> code: core::Collection::first
 > code: vsm::Document
-> code: core::HashSet
 > code: vsm::IndexMatch::document
 > code: vsm::IndexMatch
 > code: vsm::VSMIndex::documents
@@ -165,7 +155,6 @@ var index = new FileIndex
 index.index_files(["/path/to/doc/1", "/path/to/doc/2"])
 ~~~
 
-> example: vsm::example_vsm
 > code: vsm::FileIndex
 > code: vsm::FileIndex::index_files
 > code: vsm::vsm
