@@ -41,7 +41,8 @@ class MDocAligner
 		# span_align.align_spans(document, context)
 		# text_align.align_texts(document, context)
 		# block_align.align_blocks(document, context)
-		code_block_align.align_code_blocks(document, context)
+		# code_block_align.align_code_blocks(document, context)
+		nlp_align.align_nlp(document, context)
 
 		span_visitor.enter_visit(document)
 
@@ -63,6 +64,7 @@ class MDocAligner
 	var text_align = new MdTextAlign(model, mainmodule) is lazy
 	var block_align = new MdBlockAlign(model, mainmodule) is lazy
 	var code_block_align = new MdCodeBlockAlign(mentity_index) is lazy
+	var nlp_align = new MdNLPAlign(mentity_index) is lazy
 	var span_visitor = new MDocSpanReferencesVisitor is lazy
 	var code_visitor = new MDocCodeReferencesVisitor(mentity_index, context) is lazy
 	var nlp_visitor = new MDocNLPReferencesVisitor(mentity_index, context) is lazy
@@ -119,13 +121,22 @@ class MDocSpanReferencesVisitor
 				#	if need_space then print ""
 				# end
 
+				# Code refs
+				# var need_space = false
+				# for ref in example_refs do
+				#	print "> example: {ref.mentity.full_name}"
+				#	need_space = true
+				# end
+				# for ref in code_refs do
+				#	print "> code: {ref.mentity.full_name}"
+				#	need_space = true
+				# end
+				# if need_space then print ""
+
+				# NLP refs
 				var need_space = false
-				for ref in example_refs do
-					print "> example: {ref.mentity.full_name}"
-					need_space = true
-				end
-				for ref in code_refs do
-					print "> code: {ref.mentity.full_name}"
+				for ref in nlp_refs do
+					print "> nlp: {ref.mentity.full_name}"
 					need_space = true
 				end
 				if need_space then print ""
@@ -172,11 +183,13 @@ class MDocSpanReferencesVisitor
 	var text_refs = new Array[MdRefText]
 	var block_refs = new Array[MdRef]
 	var code_refs = new Array[MdRefCode]
+	var nlp_refs = new Array[MdRefNLP]
 	var example_refs = new Array[MdRefCode]
 
 	redef fun visit(node) do
 		if node isa MdBlock then
 			block_refs.add_all node.model_refs
+			nlp_refs.add_all node.nlp_refs
 			if node isa MdCodeBlock then
 				code_refs.add_all node.code_refs
 				example_refs.add_all node.example_refs

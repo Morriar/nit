@@ -16,6 +16,8 @@ module align_block
 
 import align_refs
 import align_text
+import align_code_blocks
+import align_nlp
 
 class MdBlockAlign
 	super MdVisitor
@@ -53,6 +55,9 @@ class MdBlockRefsVisitor
 			refs.add_all node.md_refs
 		else if node isa MdCode then
 			if node.md_ref != null then refs.add node.md_ref.as(not null)
+		else if node isa MdCodeBlock then
+			refs.add_all node.example_refs
+			refs.add_all node.code_refs
 		end
 		node.visit_all(self)
 	end
@@ -77,12 +82,18 @@ redef class MdBlock
 					scores[r.mentity] += r.confidence
 				end
 			end
+			if ref isa MdRefCode then
+				if not scores.has_key(ref.mentity) then scores[ref.mentity] = 0.0
+				scores[ref.mentity] += ref.confidence
+			end
+			if ref isa MdRefNLP then
+				if not scores.has_key(ref.mentity) then scores[ref.mentity] = 0.0
+				scores[ref.mentity] += ref.confidence
+			end
 		end
 
-		# TODO NLP Refs
 		# TODO scaffold refs
 		# TODO structure refs
-
 
 		var res = new Array[MdRefMEntity]
 		for key in scores.sorted_keys do
