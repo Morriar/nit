@@ -25,7 +25,6 @@ You can also import `sdl2::all` to get `sdl2` and all its sister libraries, whic
 
 > match: sdl2::all
 > match: sdl2::image
-> match: sdl2::SDLMouseEvent::which
 > match: sdl2
 
 ## Examples

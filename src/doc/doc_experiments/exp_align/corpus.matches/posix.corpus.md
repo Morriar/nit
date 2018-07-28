@@ -10,5 +10,4 @@ import `posix::ext`.
 > match: posix
 > match: posix::posix
 > match: posix::ext
-> match: core
 

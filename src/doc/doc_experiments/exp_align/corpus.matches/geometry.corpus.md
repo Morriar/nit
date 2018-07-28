@@ -1,19 +1,16 @@
 # Basic geometry data structures and services
 
 > match: geometry
-> match: geometry::geometry
-> match: geometry::QuadTree::data
 
 ## Points and Lines
 
-> match: geometry::APolygon::points
+> match: geometry::points_and_lines
 > match: geometry::Point
 > match: geometry::Line
 
 The very basics of geometry needs, for two and three-dimensional space.
 
 > match: geometry
-> match: geometry::geometry
 
 ## Boxes and detection collision
 
@@ -25,11 +22,12 @@ It means a simple and fast way to test collision but not really accurate since i
 
 > match: geometry::boxes
 > match: geometry::Box
-> match: geometry::APolygon::points
 > match: geometry::Point
 > match: geometry::Line
 
 ## Quadtrees
+
+> matches: geometry::quadtree
 
 A QuadTree is a tree data structure in which each internal node has exactly four children
 They're most often used to partition two-dimensional space by recursively subdividing
@@ -45,10 +43,13 @@ it into four quadrants or regions.
 
 Quadtrees are using Boxed objects to determine their distribution in the 2D space.
 
+> match: geometry::quadtree
+> match: geometry::QuadTree
 > match: geometry::Boxed
 
 This API provides two different types of Quadtree : Static and Dynamic (respectively `SQuadTree` and `DQuadTree`).
 
+> match: geometry::QuadTree
 > match: geometry::SQuadTree
 > match: geometry::DQuadTree
 > match: geometry::quadtree
@@ -75,7 +76,6 @@ This module contains interesting algorithms for `ConvexPolygon`only at the momen
 > match: geometry::Polygon
 > match: geometry::ConvexPolygon
 > match: geometry::polygon
-> match: geometry::Boxed::contains
 
 * All its interior angles are less than 180°. this means that all the vertices of the polygon
   will point outwards, away from the interior of the shape.
@@ -93,16 +93,15 @@ This module contains interesting algorithms for `ConvexPolygon`only at the momen
 > match: geometry::Point
 > match: geometry::Line
 > match: geometry::polygon
-> match: geometry::polygon::APolygon::vertices
 > match: geometry::APolygon::points
 > match: geometry::angles
-> match: geometry::Boxed::contains
 
 A polygon which is not convex is called concave. Convex polygon are used because most
 geometric problems are simpler and faster on convex objects than on non-convex ones.
 
 > match: geometry::Polygon
 > match: geometry::polygon
+> name: geometry::geometry
 
 Services provided :
 

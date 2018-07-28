@@ -38,6 +38,10 @@ class ReadmeComparator
 		var names_p = 0.0
 		var names_count = 0
 
+		var matches_r = 0.0
+		var matches_p = 0.0
+		var matches_count = 0
+
 		for block in orig.children do
 			if not block isa MdBlock then continue
 			if block isa MdBlockQuote then continue
@@ -68,11 +72,21 @@ class ReadmeComparator
 			names_p += name_p
 			names_count += 1
 
-			# TODO compare matches
+			# matches
+			var orig_matches = block.matches
+			var dest_matches = oblock.matches
+			if orig_matches.is_empty and dest_matches.is_empty then continue
+			var match_r = recall(orig_matches, dest_matches)
+			var match_p = precision(orig_matches, dest_matches)
+			# print "name_r: {name_r}\t{if name_r < 100.0 then "\t" else ""}name_p: {name_p}"
+			matches_r += match_r
+			matches_p += match_p
+			matches_count += 1
 		end
 		printn "{lib or else "NULL"}\t"
 		# printn "{spans_r / spans_count.to_f}\t{spans_p / spans_count.to_f}\t"
-		printn "{names_r / names_count.to_f}\t{names_p / names_count.to_f}\n"
+		# printn "{names_r / names_count.to_f}\t{names_p / names_count.to_f}\n"
+		printn "{matches_r / matches_count.to_f}\t{matches_p / matches_count.to_f}\n"
 	end
 
 	fun print_block(block: MdBlock) do
@@ -182,7 +196,7 @@ class MdSpans
 	end
 end
 
-var corpus_path = "src/doc/doc_experiments/exp_align/corpus.names"
+var corpus_path = "src/doc/doc_experiments/exp_align/corpus.matches"
 (corpus_path / "../out").mkdir
 var files = corpus_path.files
 default_comparator.sort(files)
@@ -201,7 +215,7 @@ for file in files do
 
 	var comparator = new ReadmeComparator
 	comparator.compare_files(
-		"src/doc/doc_experiments/exp_align/corpus.names/{lib}.corpus.md",
+		"src/doc/doc_experiments/exp_align/corpus.matches/{lib}.corpus.md",
 		"src/doc/doc_experiments/exp_align/out/{lib}.out.md")
 
 	# break

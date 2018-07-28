@@ -1,8 +1,6 @@
 # Android platform support and APIs
 
 > match: android
-> match: android::android
-> match: android::platform
 
 ## Compilation for Android
 
@@ -28,7 +26,6 @@ Note that this guide supports only 64 bits GNU/Linux hosts with support for a Ja
 it may be possible to support other platforms with some tweaks.
 
 > match: linux
-> match: java
 
 1. Install the required SDK packages using one of these two methods:
 
@@ -71,12 +68,6 @@ it may be possible to support other platforms with some tweaks.
 
 > match: android
 > match: android::android
-> match: android::Category::tab
-> match: java
-> match: android::shared_preferences_api10::SharedPreferences::setup
-> match: android::Action::run
-> match: android::assets_and_resources::NativeAssetManager::open
-> match: android::assets_and_resources::AssetManager::open
 
 ## Configure the Android application
 
@@ -89,7 +80,6 @@ customize the generated Android application.
 > match: app
 > match: android
 > match: android::android
-> match: android::Service
 
 ### Annotations
 
@@ -125,10 +115,7 @@ customize the generated Android application.
 > match: android::Extra
 > match: android>examples>
 > match: app
-> match: android::ResourcesManager::integer
 > match: java
-> match: android::NativeScanResult::level
-> match: android::ASensorEvent::version
 
 ### Android implementation
 
@@ -151,19 +138,12 @@ There is two core implementation for Nit apps on Android.
 > match: gamnit::gamnit
 > match: gamnit
 > match: gamnit>
-> match: android::Service::native
-> match: android::Activity::native
-> match: android::ui::Control::native
-> match: android::assets_and_resources::ResourcesManager::native
-> match: android::input_events::AndroidMotionEvent::native
 
 Clients don't have to select the core implementation, it is imported by other relevant modules.
 For example, a module importing `app::ui` and `android` will trigger the importation of `android::nit_activity`.
 
 > match: app::ui
 > match: android::nit_activity
-> match: core
-> match: android>examples>
 > match: android
 
 ### Lock app orientation
@@ -179,33 +159,30 @@ other multimedia applications.
 
 ### Resources and application icon
 
-> match: android::assets_and_resources::NativeContext::resources
+> match: android::assets_and_resources
 
 Resources specific to the Android platform should be placed in an `android/` folder at the root of the project.
 The folder should adopt the structure of a normal Android project, e.g., a custom XML resource file can be placed
 at `android/res/values/color.xml` to be compiled with the Android application.
 
-> match: android
-> match: android::android
+> match: android::assets_and_resources
 > match: android::assets_and_resources::NativeContext::resources
-> match: android::platform
 
 The application icon should also be placed in the `android/` folder.
 Place the classic bitmap version at `android/res/mipmap-hdpi/ic_launcher.png` (and others),
 and the adaptive version at `android/res/mipmap-anydpi-v26/ic_launcher.xml`.
 The Nit compiler detects these files and uses them as the application icon.
 
+> match: android::assets_and_resources
 > match: android::assets_and_resources::AssetManager::bitmap
-> match: android::ASensorEvent::version
 
 Additional `android/` folders may be placed next to more specific Nit modules to change the Android resources
 for application variants. The more specific resources will have priority over the project level `android/` files.
 
+> match: android::assets_and_resources
 > match: android::assets_and_resources::NativeContext::resources
 > match: android::android
 > match: android
-> match: android::audio::SoundPool::priority
-> match: android::NativeScanResult::level
 
 ## Compilation modes
 
@@ -214,50 +191,23 @@ Theses modes are also applied to the generated Android projects.
 The compilation mode is specified as an argument to `nitc`, only
 `--release` can be specified as debug is the default behavior.
 
-> match: android
-> match: android::android
 > match: android::platform
-> match: android::audio::NativeMediaPlayer::release
-> match: android::audio::NativeSoundPool::release
-> match: android::audio::NativeAudioManager::mode
-> match: android::Category::default
 
 ### Debug mode
-
-> match: android::audio::NativeAudioManager::mode
 
 Debug mode enables compiling to an APK file without handling signing keys
 and their password. The APK file can be installed to a local device with
 USB debugging enabled, but it cannot be published on the Play Store.
 
-> match: android::audio::NativeAudioManager::mode
-> match: android::Bundle::keys
-> match: android::NativeView::enabled
-> match: android::AndroidSensor::enabled
-> match: android::audio::NativeSoundPool::play
-> match: android::SoundPool::play
-
 By default, `nitc` will compile Android applications in debug mode.
 
 > match: android
 > match: android::android
-> match: android::Category::default
-> match: android::audio::NativeAudioManager::mode
 
 ### Release mode
 
-> match: android::audio::NativeMediaPlayer::release
-> match: android::audio::NativeSoundPool::release
-> match: android::audio::NativeAudioManager::mode
-
 Building in release mode will use your private key to sign the
 APK file, it can then be published on the Play Store.
-
-> match: android::audio::NativeMediaPlayer::release
-> match: android::audio::NativeSoundPool::release
-> match: android::audio::NativeAudioManager::mode
-> match: android::audio::NativeSoundPool::play
-> match: android::SoundPool::play
 
 1. Have a keystore with a valid key to sign your APK file.
 
@@ -285,11 +235,3 @@ APK file, it can then be published on the Play Store.
 
 3. Call `nitc` with the `--release` options. You will be prompted for the
    required passwords as needed by `jarsigner`.
-
-> match: android::Extra::replacing
-> match: java
-> match: android::Action::call
-> match: android::audio::NativeMediaPlayer::create
-> match: android::NativeNotificationBuilder::create
-> match: android::Category::default
-

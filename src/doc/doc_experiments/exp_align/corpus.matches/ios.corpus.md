@@ -1,30 +1,22 @@
 # iOS support for _app.nit_
 
-> match: ios
-> match: ios::ios
-> match: app
-> match: ios::app
+> name: ios
+> name: app
 
 ## System configuration
-
-> match: ios::UIButtonType::system
 
 Configure your system for OS X by installing Xcode and brew.
 Follow the instructions in `README.md` at the root of the repository.
 
-> match: ios::UIButtonType::system
-
 Optionally, install ios-sim to run compiled apps in the simulator: `brew install ios-sim`
 
-> match: ios
-> match: ios::ios
+> name: ios
 
 ## Compile and run a simple application
 
 Let's use the `hello_ios` example in the folder `lib/ios/examples/`.
 
-> match: ios::hello_ios
-> match: ios>examples>
+> name: ios>examples>
 
 Compile with: `nitc hello_world.nit`
 
@@ -35,20 +27,17 @@ Run in the simulator with: `ios-sim hello_world.app`
 See the calculator example at `examples/calculator` and the Tnitter client at `contrib/tnitter/`
 for portable applications working on GNU/Linux, OS X, iOS and Android.
 
-> match: ios>examples>
-> match: ios::UISwitch::on
-> match: linux
-> match: ios
-> match: ios::ios
-> match: android
+> name: ios>examples>
+> name: examples::Calculator
+> name: tnitter
+> name: linux
+> name: ios
+> name: android
 
 ## Application icon
 
 To associate icons to your application, create the directory `ios/AppIcon.appiconset` and fill it with standard icons and `Contents.json`.
 These files can be generated in a number of different ways:
-
-> match: ios::UIStackViewDistribution::fill
-> match: ios::UIStackViewAlignment::fill
 
 * Using the tool `svg_to_icons` packaged with the Nit repository at `contrib/inkscape_tools/bin/svg_to_icons`.
 
@@ -57,5 +46,5 @@ These files can be generated in a number of different ways:
 * Write or modify the file `Contents.json` manually.
   It is in Json format and easily readable.
 
-> match: json
+> name: json
 

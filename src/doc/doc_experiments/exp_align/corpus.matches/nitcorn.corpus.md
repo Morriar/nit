@@ -6,99 +6,70 @@ Dynamic content is served by subclassing `Action` and implementing `answer`.
 This method receives an `HttpRequest` and must return an `HttpResponse`.
 _nitcorn_ provides `FileServer`, a simple `Action` to serve static files.
 
-> match: nitcorn::Action
-> match: nitcorn::reactor::Action::answer
-> match: nitcorn::HttpRequest
-> match: nitcorn::HttpResponse
-> match: nitcorn::FileServer
-> match: nitcorn
-> match: nitcorn::nitcorn
-> match: nitcorn::HttpRequest::method
-> match: nitcorn::HttpResponse::files
+> name: nitcorn
 
 `HttpRequest` contains the GET and POST arguments as well as session data it one exists.
 The produced `HttpResponse` should contain the HTTP status code, the body,
 session data to preserve or create a session, and optionally list files to append.
 
-> match: nitcorn::Session
-> match: nitcorn::sessions::HttpResponse::session
-> match: nitcorn::sessions::HttpRequest::session
-> match: nitcorn::HttpResponse
-> match: nitcorn::HttpRequest
-> match: nitcorn::HttpResponse::files
-> match: nitcorn::http_request::HttpRequestParser::body
-> match: nitcorn::HttpResponse::body
-> match: nitcorn::ErrorTemplate::body
-> match: nitcorn::HttpRequest::body
+> name: nitcorn::Session
+> name: nitcorn::HttpRequest::body
+> name: nitcorn::HttpResponse::body
+> name: nitcorn::Session
+> name: nitcorn::Session
+> name: nitcorn::HttpResponse::files
 
 Each `Action` may be associated to many instances of `Route`.
 These routes can simply identify the root of a service,
 but also define parameters within the URI.
 
-> match: nitcorn::Route
-> match: nitcorn::Action
-> match: nitcorn::Routes
-> match: nitcorn::HttpRequest::uri
-> match: nitcorn::Routes::routes
-> match: nitcorn::FileServer::root
-> match: nitcorn::VirtualHost::routes
+> name: nitcorn::Routes
+> name: nitcorn::Route
+> name: nitcorn::HttpRequest::uri
 
 _nitcorn_ instances are configured dynamically in Nit code with the interfaces and routes created as needed.
 
-> match: nitcorn::Interfaces
-> match: nitcorn::nitcorn
-> match: nitcorn
-> match: nitcorn::VirtualHost::interfaces
-> match: nitcorn::Routes
-> match: nitcorn::Interface
-> match: nitcorn::Route
-> match: nitcorn::VirtualHost::routes
-> match: nitcorn::Routes::routes
+> name: nitcorn
+> name: nitcorn::Interfaces
+> name: nitcorn::Interface
+> name: nitcorn::Routes
+> name: nitcorn::Route
 
 _nitcorn_ plays well with other Nit services and tools such as `serialization`, `mongodb`, `sqlite` and `nitiwiki`.
 It also benefits from the full power of the Nit language:
 class refinement can be used to customize default services and merge many applications in a single server,
 and the FFI enables calling services in different languages.
 
-> match: nitcorn
-> match: nitcorn::nitcorn
-> match: serialization
-> match: serialization>
-> match: serialization::serialization
+> name: nitcorn
 
 ## Examples
 
-> match: nitcorn>examples>
+> name: nitcorn>examples>
 
 A minimal example follows with a custom `Action` and using `FileServer`.
 
-> match: nitcorn::Action
-> match: nitcorn::FileServer
-> match: nitcorn>examples>
+> name: nitcorn>examples>
 
 More general examples are available at `lib/nitcorn/examples/`.
 For an example of a larger project merging many _nitcorn_ applications into one server,
 take a look at the configuration of `http://xymus.net/` at `../contrib/xymus_net/xymus_net.nit`.
 
-> match: nitcorn>examples>
-> match: nitcorn::MyData::more
-> match: nitcorn
-> match: nitcorn::nitcorn
+> name: nitcorn>examples>
+> name: nitcorn>examples>
+> name: nitcorn
 
 Larger projects using _nitcorn_ can be found in the `contrib/` folder:
 
-> match: nitcorn
-> match: nitcorn::nitcorn
+> name: nitcorn
 
 * _opportunity_ is a meetup planner heavily based on _nitcorn_.
 * _tnitter_ is a micro-blogging platform with a simple Web and RESTful interface.
 * _benitlux_ uses a custom `Action` to subscribe people to a mailing list and define a RESTful interface.
 
-> match: nitcorn::Interface
-> match: nitcorn::restful
-> match: nitcorn::Action
-> match: nitcorn
-> match: nitcorn::nitcorn
+> name: opportunity
+> name: nitcorn
+> name: nitcorn::restful
+> name: nitcorn::restful
 
 ### Simple hello world server
 
@@ -152,8 +123,7 @@ This nitcorn library is a fork from an independent project originally created in
 Jean-Philippe Caissy, Guillaume Auger, Frederic Sevillano, Justin Michaud-Ouellette,
 Stephan Michaud and Maxime Bélanger.
 
-> match: nitcorn
-> match: nitcorn::nitcorn
+> name: nitcorn
 
 It has been adapted to a library, and is currently maintained, by Alexis Laferrière.
 

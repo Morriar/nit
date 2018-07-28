@@ -10,9 +10,6 @@ dependencies, indicate which noun phrases refer to the same entities, indicate
 sentiment, etc.
 
 > match: nlp::stanford
-> match: nlp::NLPClient::language
-> match: nlp::NLPDocument::sentences
-> match: nlp::NLPToken::word
 
 This wrapper needs the Stanford CoreNLP jars that run on Java 1.8+.
 
@@ -21,7 +18,6 @@ This wrapper needs the Stanford CoreNLP jars that run on Java 1.8+.
 See http://nlp.stanford.edu/software/corenlp.shtml.
 
 > match: nlp
-> match: nlp::nlp
 > match: nlp::stanford
 
 ## NLPProcessor

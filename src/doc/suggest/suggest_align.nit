@@ -57,7 +57,7 @@ class MDocAligner
 		# section_visitor.enter_section(root)
 	end
 
-	var span_align = new MdSpanAlign(model, mainmodule) is lazy
+	var span_align = new MdCodeAlign(model, mainmodule) is lazy
 	var text_align = new MdTextAlign(model, mainmodule) is lazy
 	var block_align = new MdBlockAlign(model, mainmodule) is lazy
 	var span_visitor = new MDocSpanReferencesVisitor is lazy
@@ -116,27 +116,32 @@ class MDocSpanReferencesVisitor
 				if block_refs.not_empty then
 					var need_space = false
 					for ref in block_refs do
-						if ref isa MdRefPath and ref.path != null then
-							print "> match: {ref.path.as(not null)}"
+						if ref isa MdRefMEntity then
+							print "> match: {ref.mentity.full_name}"
+							# ({ref.confidence})"
 							need_space = true
 						end
-						if ref isa MdRefCommand and ref.command != null then
-							print "> match: {ref.command.as(not null)} {ref.args.join(" ")}".trim
-							need_space = true
-						end
-						if ref isa MdRefName then
-							for n in ref.mentities do
-								print "> match: {n.full_name}".trim
-								need_space = true
-								# break
-							end
-						end
-						if ref isa MdRefText then
-							for mentity in ref.mentities do
-								print "> match: {mentity.full_name}"
-								need_space = true
-							end
-						end
+						# if ref isa MdRefPath and ref.path != null then
+						#	print "> match: {ref.path.as(not null)}"
+						#	need_space = true
+						# end
+						# if ref isa MdRefCommand and ref.command != null then
+						#	print "> match: {ref.command.as(not null)} {ref.args.join(" ")}".trim
+						#	need_space = true
+						# end
+						# if ref isa MdRefName then
+						#	for n in ref.model_refs do
+						#		print "> match: {n.mentity.full_name}".trim
+						#		need_space = true
+						#		# break
+						#	end
+						# end
+						# if ref isa MdRefText then
+						#	for n in ref.model_refs do
+						#		print "> match: {n.mentity.full_name}"
+						#		need_space = true
+						#	end
+						# end
 					end
 					if need_space then print ""
 				end
@@ -153,15 +158,13 @@ class MDocSpanReferencesVisitor
 	redef fun visit(node) do
 		if node isa MdBlock then
 			block_refs.add_all node.model_refs
-			node.visit_all(self)
 			return
-		end
-		if node isa MdCode then
+		# else if node isa MdCode then
 		#	var ref = node.nit_mentity
 		#	if ref != null then span_refs.add ref
-			if node.md_ref != null then refs.add node.md_ref.as(not null)
-		else if node isa MdText then
-			text_refs.add_all node.md_refs
+			# if node.md_ref != null then refs.add node.md_ref.as(not null)
+		# else if node isa MdText then
+			# text_refs.add_all node.md_refs
 		end
 		node.visit_all(self)
 	end

@@ -59,9 +59,46 @@ class MdBlockRefsVisitor
 end
 
 redef class MdBlock
-	var model_refs: Array[MdRef] is lazy do
+	var model_refs: Array[MdRefMEntity] is lazy do
 		var v = new MdBlockRefsVisitor
 		v.enter_visit(self)
-		return v.refs
+
+		var scores = new ScoreMap
+		for ref in v.refs do
+			if ref isa MdRefName then
+				for r in ref.model_refs do
+					if not scores.has_key(r.mentity) then scores[r.mentity] = 0.0
+					scores[r.mentity] += r.confidence
+				end
+			end
+			if ref isa MdRefText then
+				for r in ref.model_refs do
+					if not scores.has_key(r.mentity) then scores[r.mentity] = 0.0
+					scores[r.mentity] += r.confidence
+				end
+			end
+		end
+
+
+		var res = new Array[MdRefMEntity]
+		for key in scores.sorted_keys do
+			res.add new MdRefMEntity(self, "", scores[key], key)
+		end
+		return res
 	end
+end
+
+private class ScoreMap
+	super Comparator
+	super HashMap[MEntity, Float]
+
+	redef type COMPARED: MEntity
+
+	fun sorted_keys: Array[MEntity] do
+		var res = keys.to_a
+		sort(res)
+		return res
+	end
+
+	redef fun compare(a, b) do return self[b] <=> self[a]
 end

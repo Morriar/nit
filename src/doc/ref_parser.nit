@@ -14,24 +14,31 @@
 
 module ref_parser
 
-class RefParser
-	fun parse(string: String): MdRef do
+import align_base
+
+class MdCodeParser
+
+	fun parse_code(node: MdCode): nullable MdRef do
+		return parse_string(node, node.literal.trim)
+	end
+
+	fun parse_string(node: MdNode, string: String): MdRef do
 		if is_option(string) then
-			return new MdRefOption(string)
+			return new MdRefOption(node, string)
 		else if is_command(string) then
-			return new MdRefCommand(string)
+			return new MdRefCommand(node, string)
 		else if is_path(string) or is_file(string) then
-			return new MdRefPath(string)
+			return new MdRefPath(node, string)
 		else if is_annot(string) then
-			return new MdRefAnnot(string)
+			return new MdRefAnnot(node, string)
 		else if is_name(string) then
-			return new MdRefName(string)
+			return new MdRefName(node, string)
 		else if is_qname(string) then
-			return new MdRefQName(string)
+			return new MdRefQName(node, string)
 		else if is_signature(string) or is_generic(string) or is_call(string) then
-			return new MdRefSignature(string)
+			return new MdRefSignature(node, string)
 		else
-			return new MdRefOther(string)
+			return new MdRefOther(node, string)
 		end
 	end
 
@@ -100,48 +107,3 @@ class RefParser
 		return string.has(annot_re)
 	end
 end
-
-abstract class MdRef
-	var string: String
-
-	redef fun to_s do return "{class_name}\{{string}\}"
-end
-
-class MdRefOption
-	super MdRef
-end
-
-class MdRefPath
-	super MdRef
-end
-
-class MdRefCommand
-	super MdRef
-end
-
-class MdRefAnnot
-	super MdRef
-end
-
-class MdRefName
-	super MdRef
-end
-
-class MdRefQName
-	super MdRefName
-end
-
-class MdRefSignature
-	super MdRefName
-end
-
-class MdRefOther
-	super MdRef
-end
-
-# var lines = "spans.uniq".to_path.read_all.split("\n")
-
-# var parser = new RefParser
-# for line in lines do
-	# parser.parse(line)
-# end

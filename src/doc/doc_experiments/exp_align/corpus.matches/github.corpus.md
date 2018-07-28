@@ -1,27 +1,16 @@
 # Nit wrapper for Github API
 
 > match: github
-> match: github::github
-> match: github::api
-> match: github::ContributorStats::api
-> match: github::GithubWallet::api
-> match: github::HookListener::api
 
 This module provides a Nit object oriented interface to access the Github api.
 
 > match: github
 > match: github::github
 > match: github::api
-> match: github::ContributorStats::api
-> match: github::GithubWallet::api
-> match: github::HookListener::api
 
 ## Accessing the API
 
 > match: github::api
-> match: github::ContributorStats::api
-> match: github::GithubWallet::api
-> match: github::HookListener::api
 
 ### `GithubAPI` - # Client to Github API
 
@@ -53,21 +42,14 @@ assert user.login == "Morriar"
 
 ### Authentification
 
-
-
 > match: github::GithubCurl::auth
 > match: github::GithubAPI::auth
-> match: github::TestGithubCurl::auth
 
 Token can also be recovered from user config with `get_github_oauth`.
 
 > match: github::User
 > match: github::github_curl::Sys::get_github_oauth
 > match: config
-> match: github::Comment::user
-> match: github::PullRef::user
-> match: github::Issue::user
-> match: github::Loader::config
 
 ### `get_github_oauth` - # Gets the Github token from `git` configuration
 
@@ -80,9 +62,6 @@ or `""` if no key exists.
 ### Retrieving user data
 
 > match: github::User
-> match: github::Issue::user
-> match: github::PullRef::user
-> match: github::Comment::user
 
 ### `load_user` - # Get the Github user with `login`
 
@@ -137,17 +116,10 @@ Should be accessed from `GithubAPI::load_user`.
 
 > match: github::User
 > match: github::GithubAPI::load_user
-> match: github::Issue::user
-> match: github::PullRef::user
-> match: github::Comment::user
 
 ### Retrieving repo data
 
 > match: github::Repo
-> match: github::PullRef::repo
-> match: github::GithubEvent::repo
-> match: github::LoaderJob::repo
-> match: github::RepoEntity::repo
 
 ### `load_repo` - # Get the Github repo with `full_name`.
 
@@ -204,10 +176,6 @@ Should be accessed from `GithubAPI::load_repo`.
 
 > match: github::Repo
 > match: github::GithubAPI::load_repo
-> match: github::PullRef::repo
-> match: github::GithubEvent::repo
-> match: github::LoaderJob::repo
-> match: github::RepoEntity::repo
 
 ### Other data
 
@@ -262,9 +230,6 @@ Should be accessed from `GithubAPI::load_repo`.
 > match: github
 > match: github::github
 > match: github::api
-> match: github::ContributorStats::api
-> match: github::GithubWallet::api
-> match: github::HookListener::api
 
 ### Advanced uses
 
@@ -305,10 +270,7 @@ Returns `null` in case of `error`.
 
 #### Change the user agent
 
-> match: github::User
-> match: github::Issue::user
-> match: github::PullRef::user
-> match: github::Comment::user
+[[doc: github::GithubAPI::user_agent]]
 
 ### `user_agent` - # User agent used for HTTP requests.
 
@@ -322,7 +284,6 @@ See <https://developer.github.com/v3/#user-agent-required>
 > match: github
 > match: github::GithubCurl::user_agent
 > match: github::GithubAPI::user_agent
-> match: github::TestGithubCurl::user_agent
 
 #### Debugging
 
@@ -339,6 +300,7 @@ See <https://developer.github.com/v3/#user-agent-required>
 If URL scheme of GitLab API follows the one of Github API, it may be possible to
 configure this wrapper to use a custom URL.
 
+> match: github::GithubAPI::api_url
 > match: github::api
 > match: github
 > match: github::github
@@ -364,9 +326,6 @@ on a repository.
 > match: github
 > match: github::github
 > match: github::hooks
-> match: github::ContributorStats::api
-> match: github::GithubWallet::api
-> match: github::HookListener::api
 
 ### `hooks` - # Github hook event listening with `nitcorn`.
 

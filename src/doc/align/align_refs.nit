@@ -15,12 +15,11 @@
 module align_refs
 
 import ref_parser
-import doc_down
 
-class MdSpanAlign
+class MdCodeAlign
 	super MdVisitor
 
-	var ref_parser = new RefParser
+	var ref_parser = new MdCodeParser
 
 	var model: Model
 
@@ -38,7 +37,9 @@ class MdSpanAlign
 			node.visit_all(self)
 			return
 		end
-		var ref = ref_parser.parse(node.literal.trim)
+		var ref = ref_parser.parse_code(node)
+		if ref == null then return
+
 		node.md_ref = ref
 		ref.align_ref(self)
 		ref.sort_refs(self)
@@ -53,15 +54,11 @@ redef class MdCode
 end
 
 redef class MdRef
-	var confidence = 0.0
-	fun align_ref(v: MdSpanAlign) do end
-	fun sort_refs(v: MdSpanAlign) do end
+	fun align_ref(v: MdCodeAlign) do end
+	fun sort_refs(v: MdCodeAlign) do end
 end
 
 redef class MdRefPath
-
-	redef var confidence is lazy do return if path == null then 0.0 else 100.0
-	var path: nullable Path = null
 
 	redef fun align_ref(v) do
 		if string.file_exists then
@@ -86,10 +83,6 @@ end
 
 redef class MdRefCommand
 
-	redef var confidence is lazy do return if command == null then 0.0 else 100.0
-	var command: nullable String = null
-	var args = new Array[String]
-
 	redef fun align_ref(v) do
 		var parts = string.split(" ")
 		if not parts.is_empty then
@@ -101,29 +94,28 @@ end
 
 redef class MdRefName
 
-	redef var confidence is lazy do
-		if mentities.is_empty then return 0.0
-		return 100.0 / mentities.length.to_f
-	end
-
-	var mentities = new Array[MEntity]
-
 	redef fun align_ref(v) do
-		mentities.add_all align_name(string, v.model)
+		model_refs.add_all align_name(string, v.model)
 	end
 
-	fun align_name(string: String, model: Model): Array[MEntity] do
-		return model.mentities_by_name(string)
+	fun align_name(string: String, model: Model): Array[MdRefMEntity] do
+		var refs = new Array[MdRefMEntity]
+		var mentities = model.mentities_by_name(string)
+		for mentity in mentities do
+			var confidence = 100.0 / mentities.length.to_f
+			refs.add new MdRefMEntity(node, string, confidence, mentity)
+		end
+		return refs
 	end
 
-	fun align_qname(string: String, model: Model, mainmodule: MModule): Array[MEntity] do
+	fun align_qname(string: String, model: Model, mainmodule: MModule): Array[MdRefMEntity] do
+		var refs = new Array[MdRefMEntity]
+
 		# Match full_name
 		var mentity = model.mentity_by_full_name(string)
-		if mentity != null then return [mentity]
+		if mentity != null then return [new MdRefMEntity(node, string, 100.0, mentity)]
 
 		# Match partial name
-		var mentities = new Array[MEntity]
-
 		var pack_name = null
 		var group_name = null
 		# var mod_name = null
@@ -167,41 +159,43 @@ redef class MdRefName
 		for mprop in mprops do
 			for mclass in mclasses do
 				if mclass.collect_accessible_mproperties(mainmodule).has(mprop) then
-					mentities.add mprop
+					var confidence = 100.0 / mprops.length.to_f
+					refs.add new MdRefMEntity(node, string, confidence, mprop)
 				end
 			end
 		end
 
-		return mentities
+		return refs
 	end
 
 	redef fun sort_refs(v) do
-		var res = new Array[MEntity]
+		var res = new Array[MdRefMEntity]
 		var has_mpackage = false
 		var has_mgroup = false
 		var has_mmodule = false
-		for mentity in mentities do
-			if mentity isa MPackage then has_mpackage = true
-			if mentity isa MGroup then has_mgroup = true
-			if mentity isa MModule then has_mmodule = true
+		for ref in model_refs do
+			if ref.mentity isa MPackage then has_mpackage = true
+			if ref.mentity isa MGroup then has_mgroup = true
+			if ref.mentity isa MModule then has_mmodule = true
 		end
-		for mentity in mentities do
+		for ref in model_refs do
+			var mentity = ref.mentity
 			if not v.context.has_mentity(mentity) then continue
 			if has_mpackage and mentity isa MPackage then
-				res.add mentity
+				res.add ref
 			else if not has_mpackage and has_mgroup and mentity isa MGroup then
-				res.add mentity
+				res.add ref
 			else if not has_mpackage and not has_mgroup and has_mmodule and mentity isa MModule then
-				res.add mentity
+				res.add ref
 			else if not has_mpackage and not has_mgroup and not has_mmodule then
 				if mentity isa MClass or mentity isa MProperty then
-					res.add mentity
+					res.add ref
 				end
 			end
 		end
 		# print res
 		if res.not_empty then
-			mentities = res
+			model_refs = res
 		end
 		# print mentities
 	end
@@ -210,7 +204,7 @@ end
 redef class MdRefQName
 
 	redef fun align_ref(v) do
-		mentities.add_all align_qname(string, v.model, v.mainmodule)
+		model_refs.add_all align_qname(string, v.model, v.mainmodule)
 	end
 end
 
@@ -222,25 +216,9 @@ redef class MdRefSignature
 		string = string.replace("\\[.*\\]".to_re, "")
 		string = string.replace(".*\\.".to_re, "")
 		if string.has("::") then
-			mentities.add_all align_qname(string, v.model, v.mainmodule)
+			model_refs.add_all align_qname(string, v.model, v.mainmodule)
 		else
-			mentities.add_all align_name(string, v.model)
+			model_refs.add_all align_name(string, v.model)
 		end
-	end
-end
-
-class MRefComparator
-	super Comparator
-
-	var context: MEntity
-
-	redef type COMPARED: MEntity
-
-	redef fun compare(a, b) do
-		var has_a = context.has_mentity(a)
-		var has_b = context.has_mentity(b)
-		if has_a and not has_b then return -1
-		if has_b and not has_a then return 1
-		return 0
 	end
 end

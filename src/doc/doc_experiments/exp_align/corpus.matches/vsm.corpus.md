@@ -1,18 +1,14 @@
 # Vector Space Model
 
-> match: vsm::Vector
-> match: vsm::vsm::TermComparator::vector
+> match: vsm
 
 Vector Space Model (VSM) is an algebraic model for representing text documents
 (and any objects, in general) as vectors of identifiers, such as, for example,
 index terms.
 
-> match: vsm::Vector
-> match: vsm::vsm::TermComparator::vector
 > match: vsm
 > match: vsm::vsm
-> match: vsm::VSMIndex::documents
-> match: vsm>examples>
+> match: vsm::Vector
 > match: vsm::Document
 
 It is used in information filtering, information retrieval, indexing and
@@ -27,7 +23,10 @@ The `vsm` package provides the following features:
 * File indexing and matching to free text queries.
 
 > match: vsm::Vector
-> match: vsm::vsm::TermComparator::vector
+> match: vsm::Vector::cosine_similarity
+> match: vsm::VSMIndex
+> match: vsm::StringIndex
+> match: vsm::FileIndex
 > match: vsm::IndexMatch::similarity
 
 ## Vectors
@@ -42,7 +41,6 @@ Each dimension represent an attribute of the document or object.
 > match: vsm
 > match: vsm::VSMIndex::documents
 > match: vsm::vsm
-> match: vsm::vsm::TermComparator::vector
 > match: vsm::IndexMatch::document
 
 For text document, the count of each term found in the document if often used to

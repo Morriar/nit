@@ -1,7 +1,11 @@
 # Simple library for basic artificial intelligence algorithms
 
+> match: ai
+
 This library provides some frameworks for basic algorithms used for artificial intelligence.
 It offers simple generic classes to extends.
+
+> match: ai
 
 Contents:
 
@@ -18,3 +22,5 @@ See the `examples` subdirectory for examples:
 * `examples/queens.nit`
 * `examples/puzzle.nit`
 
+> match: ai::examples::queens
+> match: ai::examples::puzzle

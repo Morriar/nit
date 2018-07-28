@@ -1,13 +1,11 @@
 # A markdown parser for Nit
 
 > match: markdown
-> match: markdown::markdown
 
 Markdown documentation can be found in http://daringfireball.net/projects/markdown/.
 This parser is inspired by the famous TxtMark for Java (https://github.com/rjeschke/txtmark).
 
 > match: markdown
-> match: markdown::markdown
 
 ## Usage
 
@@ -19,7 +17,7 @@ $ nitmd file.md
 
 Or you can use it programmatically by importing the `markdown` module.
 
-> match: markdown
+> match: markdown::markdown
 
 ## Differences with Markdown specification
 
@@ -37,8 +35,6 @@ This parser passes all tests inside http://daringfireball.net/projects/downloads
 > match: markdown::markdown
 > match: markdown::LinkRef::title
 > match: markdown::HeadLine::title
-> match: markdown::MDBlock::text
-> match: markdown::MDLine::text
 
 ## Testing
 

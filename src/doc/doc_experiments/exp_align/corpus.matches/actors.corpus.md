@@ -1,22 +1,16 @@
 # Nit Actor Model
 
-> match: actors::Actor
-> match: actors::Mailbox::actor
-> match: actors::Proxy::actor
+> match: actors
 
 This group introduces the `actors` module which contains the abstraction of a Nit Actor Model,
 based on Celluloid (https://github.com/celluloid/celluloid).
 
 > match: actors::Actor
-> match: actors::Mailbox::actor
-> match: actors::Proxy::actor
 > match: actors
 
 ## What is an actor ?
 
 > match: actors::Actor
-> match: actors::Mailbox::actor
-> match: actors::Proxy::actor
 
 An actor is an entity which receives messages and does some kind of computation based on it.
 An actor has a mailbox in which it receives its messages, and process them one at a time.
@@ -24,8 +18,6 @@ An actor has a mailbox in which it receives its messages, and process them one a
 > match: actors::Actor
 > match: actors::Mailbox
 > match: actors::Message
-> match: actors::Proxy::actor
-> match: actors::Mailbox::actor
 > match: actors::Actor::mailbox
 
 ## `actor` annotation
@@ -33,18 +25,14 @@ An actor has a mailbox in which it receives its messages, and process them one a
 The `actors` module introduces the annotation `actor` which is to be used on classes.
 This annotation transform a normal Nit class into an actor.
 
+> match: actors::actors
 > match: actors::Actor
-> match: actors::Mailbox::actor
-> match: actors::Proxy::actor
-> match: actors
 
 In practice, it adds a new property `async` to the annotated class.
 When using `async` on your annotated class, this means that you want your calls to be asynchronous,
 executed by the actor.
 
 > match: actors::Actor
-> match: actors::Proxy::actor
-> match: actors::Mailbox::actor
 > match: actors::FannkuchRedux::async
 > match: actors::Worker::async
 > match: actors::A::async
@@ -61,14 +49,7 @@ a message to the mailbox of the actor attached to `a` which will process it asyn
 > match: actors::Message
 > match: actors::A::foo
 > match: actors::ProxyA::foo
-> match: actors::Actor::instance
 > match: actors::Actor::mailbox
-> match: actors::Mailbox::actor
-> match: actors::Proxy::actor
-> match: actors::AgentMessagegreet::message
-> match: actors::Future::value
-> match: actors::AgentMessagegreet_back::message
-> match: actors::ThreadRingMessagesend_token::message
 
 On the other hand, if you call `a.async.bar` and `bar` returns an`Int`, it will still send
 a message to the actor, but you'll get a `Future[Int]` to be able to retrieve the value.
@@ -101,24 +82,8 @@ automatically created (which means you can completely skip the use of the actors
 don't need them for a specific program).
 
 > match: actors::Actor
-> match: actors::Actor::instance
 > match: actors::actors
 > match: actors
-> match: actors::Proxy::actor
-> match: actors::Mailbox::actor
-> match: core::NativeArray::new
-> match: pthreads::AtomicInt::new
-> match: pthreads::pthreads::NativePthreadAttr::new
-> match: pthreads::pthreads::NativePthreadMutex::new
-> match: pthreads::pthreads::NativePthreadMutexAttr::new
-> match: pthreads::pthreads::NativePthreadKey::new
-> match: pthreads::pthreads::NativePthreadCond::new
-> match: pthreads::extra::NativePthreadBarrier::new
-> match: core::TimeT::new
-> match: core::Buffer::new
-> match: core::CString::new
-> match: core::hash_collection::Set::new
-> match: core::hash_collection::Map::new
 
 The `async` added property is actually created lazily when you use it.
 
@@ -159,29 +124,19 @@ if you need to. For this, you need to use the `async` property of your annotated
 > match: actors::Message
 > match: actors::Actor
 > match: actors::Mailbox
-> match: actors::Proxy::actor
-> match: actors::Mailbox::actor
 > match: actors::Proxy::terminate
 > match: actors::Actor::mailbox
-> match: actors::AgentMessagegreet::other
-> match: actors::AgentMessagegreet::message
-> match: actors::ThreadRingMessagesend_token::message
-> match: actors::AgentMessagegreet_back::message
 > match: actors::Proxy::terminate_now
 > match: actors::Proxy::wait_termination
 > match: actors::Actor::kill
 > match: actors::Proxy::kill
-> match: actors::ProxyThreadRing::next
-> match: actors::ThreadRing::next
-> match: actors::SynchronizedCounter::wait
 
 For now, there isn't any mecanism to recreate and actor after it was terminated.
 Sending messages after terminating it results in unspecified behaviour.
 
 > match: actors::Actor
+> match: actors::Proxy::terminate
 > match: actors::Message
-> match: actors::Proxy::actor
-> match: actors::Mailbox::actor
 
 ## Waiting for all actors to finish processing
 
@@ -198,9 +153,6 @@ before quitting.
 > match: actors::actors
 > match: actors::Actor
 > match: actors::Message
-> match: actors::Worker::work
-> match: actors::ProxyWorker::work
-> match: actors::chameneosredux::Sys::work
 
 It's materialized by the `active_actors` property added to `Sys` which is a `ReverseBlockingQueue`.
 In short, the `is_empty` method on this list is blocking until the list is effectively empty.
@@ -211,7 +163,6 @@ actor, `active_actors` is empty.
 > match: actors::actors::Sys::active_actors
 > match: actors::Message
 > match: pthreads::ReverseBlockingQueue
-> match: core::Sys
 > match: actors
 > match: actors::actors
 > match: actors::Actor::working
@@ -231,7 +182,6 @@ using actors for fork/join parallelism instead of concurrency).
 > match: actors
 > match: actors::actors
 > match: actors::Actor
-> match: actors::Future::join
 
 ## Examples
 
