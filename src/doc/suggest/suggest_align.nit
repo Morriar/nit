@@ -38,11 +38,11 @@ class MDocAligner
 	fun align_mdoc(mdoc: MDoc) do
 		var document = mdoc.mdoc_document
 
-		# span_align.align_spans(document, context)
-		# text_align.align_texts(document, context)
-		# block_align.align_blocks(document, context)
-		# code_block_align.align_code_blocks(document, context)
+		span_align.align_spans(document, context)
+		text_align.align_texts(document, context)
+		code_block_align.align_code_blocks(document, context)
 		nlp_align.align_nlp(document, context)
+		block_align.align_blocks(document, context)
 
 		span_visitor.enter_visit(document)
 
@@ -80,6 +80,7 @@ class MDocSpanReferencesVisitor
 			for block in node.children do
 				if not block isa MdBlock then continue
 				if block isa MdBlockQuote then continue
+				nlp_refs.clear
 				refs.clear
 				code_refs.clear
 				example_refs.clear
@@ -134,45 +135,22 @@ class MDocSpanReferencesVisitor
 				# if need_space then print ""
 
 				# NLP refs
+				# var need_space = false
+				# for ref in nlp_refs do
+					# print "> name: {ref.mentity.full_name}"
+					# need_space = true
+				# end
+				# if need_space then print ""
+
 				var need_space = false
-				for ref in nlp_refs do
-					print "> nlp: {ref.mentity.full_name}"
-					need_space = true
+				for ref in block_refs do
+					if ref isa MdRefMEntity then
+						print "> match: {ref.mentity.full_name}"
+						# ({ref.confidence})"
+						need_space = true
+					end
 				end
 				if need_space then print ""
-
-				if block_refs.not_empty then
-					need_space = false
-					for ref in block_refs do
-						if ref isa MdRefMEntity then
-							print "> match: {ref.mentity.full_name}"
-							# ({ref.confidence})"
-							need_space = true
-						end
-						# if ref isa MdRefPath and ref.path != null then
-						#	print "> match: {ref.path.as(not null)}"
-						#	need_space = true
-						# end
-						# if ref isa MdRefCommand and ref.command != null then
-						#	print "> match: {ref.command.as(not null)} {ref.args.join(" ")}".trim
-						#	need_space = true
-						# end
-						# if ref isa MdRefName then
-						#	for n in ref.model_refs do
-						#		print "> match: {n.mentity.full_name}".trim
-						#		need_space = true
-						#		# break
-						#	end
-						# end
-						# if ref isa MdRefText then
-						#	for n in ref.model_refs do
-						#		print "> match: {n.mentity.full_name}"
-						#		need_space = true
-						#	end
-						# end
-					end
-					if need_space then print ""
-				end
 			end
 		end
 	end

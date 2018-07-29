@@ -3,18 +3,19 @@
 _gamnit_ is a modular framework to create portable 2D or 3D apps in Nit.
 It is based on the portability framework _app.nit_ and the OpenGL ES 2.0 standard.
 
-> name: gamnit
-> name: app
-> name: app
-> name: opengles
+> match: gamnit
+> match: gamnit::gamnit
+> match: app
+> match: opengles
 
 ## System configuration
 
 To compile the _gamnit_ apps packaged with the Nit repository on GNU/Linux you need to install the dev version of a few libraries and some tools.
 On Debian 8.2, this command should install everything needed:
 
-> name: gamnit
-> name: linux
+> match: gamnit
+> match: gamnit::gamnit
+> match: linux
 
 ~~~bash
 apt-get install libgles2-mesa-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev inkscape
@@ -29,7 +30,7 @@ pacman -S mingw-w64-x86_64-angleproject-git mingw-w64-x86_64-SDL2 mingw-w64-x86_
 While macOS isn't supported, it can create iOS apps.
 You need to install and setup Xcode, and you may install the GLSL shader validation tool via `brew`:
 
-> name: ios
+> match: ios
 
 ~~~bash
 brew install glslang
@@ -39,7 +40,8 @@ brew install glslang
 
 _gamnit_ is modular, different services of the framework are available through different submodules:
 
-> name: gamnit
+> match: gamnit
+> match: gamnit::gamnit
 
 * The main entrypoint `gamnit` provides low-level abstractions over some services of OpenGL ES 2.0, like textures, shaders and programs.
   It defines the basic methods to implement in order to obtain a working game:
@@ -74,25 +76,57 @@ _gamnit_ is modular, different services of the framework are available through d
 
 * `network` provides a simple communication framework for multiplayer client/server games.
 
-> name: gamnit::textures
-> name: gamnit::Texture
-> name: gamnit::Shader
-> name: gamnit::programs
-> name: gamnit::flat_core::App::update
-> name: gamnit::Sprite
-> name: gamnit::flat_core::App::update
-> name: gamnit::Sprite
-> name: gamnit::Sprite
-> name: gamnit::Camera
-> name: gamnit::Sprite
-> name: gamnit::Camera
-> name: gamnit::display
-> name: gamnit
-> name: gamnit::keys
-> name: gamnit::MtlFileParser::parse
-> name: gamnit::ObjFileParser::parse
-> name: gamnit::Model
-> name: gamnit::client
-> name: gamnit::server
-> name: gamnit::Server
-> name: opengles
+> match: gamnit::Camera
+> match: gamnit::Sprite
+> match: gamnit::Actor
+> match: gamnit::Model
+> match: gamnit::Server
+> match: gamnit::keys
+> match: gamnit
+> match: gamnit::flat_core::App::world_camera
+> match: gamnit>model_parsers>
+> match: gamnit::keys::App::pressed_keys
+> match: gamnit::depth_core::App::actors
+> match: gamnit::flat_core::App::ui_camera
+> match: gamnit::gamnit::App::frame_core
+> match: gamnit::Light::position
+> match: gamnit::Camera::position
+> match: gamnit::ObjDef::objects
+> match: gamnit::GamnitProgram::use
+> match: gamnit::textures
+> match: gamnit::gamnit
+> match: gamnit::programs
+> match: gamnit::more_models::Sys::models
+> match: gamnit::display
+> match: gamnit::client
+> match: gamnit::server
+> match: gamnit::Texture
+> match: gamnit::Shader
+> match: gamnit::flat_core::App::sprites
+> match: gamnit::flat_core::App::update
+> match: gamnit>flat>
+> match: gamnit::virtual_gamepad::VirtualGamepad::sprites
+> match: gamnit::TextSprites::sprites
+> match: gamnit::LightCastingShadows::camera
+> match: gamnit::virtual_gamepad::RoundControl::sprites
+> match: gamnit::cameras::CameraAnchor::camera
+> match: gamnit::BlinnPhongProgram::camera
+> match: gamnit::flat_core::SpriteContext::sprites
+> match: gamnit::flat_core::Point3d::sprites
+> match: gamnit>network>
+> match: gamnit::limit_fps
+> match: gamnit::Vec3::z
+> match: gamnit::gamnit::App::accept_event
+> match: gamnit::AbsoluteSubtexture::top
+> match: gamnit::MtlFileParser::parse
+> match: gamnit::ObjFileParser::parse
+> match: gamnit::UICamera::top
+> match: gamnit::Material::draw
+> match: gamnit::Sprite::rotation
+> match: gamnit::ShadowDepthProgram::rotation
+> match: gamnit::SelectionProgram::rotation
+> match: gamnit::ParticleSystem::draw
+> match: gamnit::flat_core::SpriteContext::draw
+> match: gamnit::flat_core::SpriteSet::draw
+> match: gamnit>depth>
+

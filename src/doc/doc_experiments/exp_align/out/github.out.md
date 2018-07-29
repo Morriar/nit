@@ -1,8 +1,37 @@
 # Nit wrapper for Github API
 
+> match: github::github
+> match: github
+> match: github::api
+> match: github::ContributorStats::api
+> match: github::GithubWallet::api
+> match: github::HookListener::api
+> match: github::GithubEntity
+> match: github::GithubFile
+> match: github>
+
 This module provides a Nit object oriented interface to access the Github api.
 
+> match: github::github
+> match: github
+> match: github::api
+> match: github::HookListener::api
+> match: github::ContributorStats::api
+> match: github::GithubWallet::api
+> match: github::GithubAPI
+> match: github::Repo
+> match: github::User
+
 ## Accessing the API
+
+> match: github::api
+> match: github::HookListener::api
+> match: github::ContributorStats::api
+> match: github::GithubWallet::api
+> match: github::GithubAPI
+> match: github::github
+> match: github::Repo
+> match: github::User
 
 ### `GithubAPI` - # Client to Github API
 
@@ -30,11 +59,41 @@ assert user != null
 assert user.login == "Morriar"
 ~~~
 
+> match: github::GithubAPI
+> match: github>
+> match: github
+> match: github::GithubWallet::api
+
 ### Authentification
 
+> match: github::GithubAPI::auth
+> match: github::Loader
+> match: github::RepoEntity::repo
+> match: github::IssueRepo
+> match: github::CommitRepo
 
+
+
+> match: github::GithubCurl::auth
+> match: github::GithubAPI::auth
+> match: github::TestGithubCurl::auth
+> match: github>
+> match: github
+> match: github::Loader
 
 Token can also be recovered from user config with `get_github_oauth`.
+
+> match: github::User
+> match: github::github_curl::Sys::get_github_oauth
+> match: config
+> match: github::Comment::user
+> match: github::Issue::user
+> match: github::PullRef::user
+> match: github::Loader::config
+> match: github::GithubAPI::load_auth_user
+> match: github::GithubAPI::load_user
+> match: github>
+> match: github
 
 ### `get_github_oauth` - # Gets the Github token from `git` configuration
 
@@ -42,7 +101,19 @@ Token can also be recovered from user config with `get_github_oauth`.
 Return the value of `git config --get github.oauthtoken`
 or `""` if no key exists.
 
+> match: github::github_curl::Sys::get_github_oauth
+> match: github>
+> match: github
+
 ### Retrieving user data
+
+> match: github::User
+> match: github::PullRef::user
+> match: github::Issue::user
+> match: github::Comment::user
+> match: github::GithubAPI::load_user
+> match: github::GithubAPI::load_auth_user
+> match: github::GitUser
 
 ### `load_user` - # Get the Github user with `login`
 
@@ -95,7 +166,24 @@ Should be accessed from `GithubAPI::load_user`.
 
 * `name=` - # User public name if any.
 
+> match: github::User
+> match: github::GithubAPI::load_user
+> match: github::Issue::user
+> match: github::PullRef::user
+> match: github::Comment::user
+> match: github>
+> match: github
+> match: github::GithubAPI::load_auth_user
+
 ### Retrieving repo data
+
+> match: github::Repo
+> match: github::PullRef::repo
+> match: github::LoaderJob::repo
+> match: github::GithubEvent::repo
+> match: github::RepoEntity::repo
+> match: github::GithubAPI::load_repo
+> match: github::Repo::name
 
 ### `load_repo` - # Get the Github repo with `full_name`.
 
@@ -150,7 +238,22 @@ Should be accessed from `GithubAPI::load_repo`.
 
 * `owner=` - # Get the repo owner.
 
+> match: github::Repo
+> match: github::GithubAPI::load_repo
+> match: github::PullRef::repo
+> match: github::GithubEvent::repo
+> match: github::LoaderJob::repo
+> match: github::RepoEntity::repo
+> match: github>
+> match: github
+
 ### Other data
+
+> match: github::GithubAPI::get
+> match: github::LoaderConfig::tokens
+> match: github::GitUser
+> match: github::LoaderConfig::db_host
+> match: github::LoaderConfig::db_name
 
 * `api$Branch` - # A Github branch.
 
@@ -200,13 +303,49 @@ Should be accessed from `GithubAPI::load_repo`.
 
 * `api$User` - # A Github user
 
+> match: github::github
+> match: github::api
+> match: github
+> match: github::GithubWallet::api
+> match: github::ContributorStats::api
+> match: github::HookListener::api
+> match: github::Repo
+> match: github::User
+> match: github::Issue::number
+> match: github::User::login
+
 ### Advanced uses
+
+> match: github::GithubCurl::header
+> match: github::LoaderConfig::no_colors
+> match: github::GithubWallet::no_colors
+> match: github::GithubAPI::get
+> match: github::GithubCurl::auth
 
 #### Caching
 
+> match: github::cache::GithubAPI::clear_cache
+> match: github::cache::GithubAPI::has_cache
+> match: github::cache::GithubAPI::cache
+> match: github::cache::GithubAPI::store
+> match: github::cache::GithubAPI::enable_cache
 
+
+
+> match: github::cache
+> match: github::cache::GithubAPI::cache
+> match: github>
+> match: github
+> match: github::cache::GithubAPI::clear_cache
+> match: github::cache::GithubAPI::has_cache
 
 #### Custom requests
+
+> match: github::GithubAPI::load_pull
+> match: github::PullRequestEvent::number
+> match: github::PullRequest::merged
+> match: github::PullRequest::mergeable
+> match: github::ReviewComment::pull_number
 
 ### `get` - # Execute a GET request on Github API.
 
@@ -229,7 +368,25 @@ Returns `null` in case of `error`.
     assert err.name == "GithubAPIError"
     assert err.message == "Not Found"
 
+> match: github::GithubAPI
+> match: github
+> match: github::github
+> match: github::GithubAPI::get
+> match: github>
+> match: github::Repo
+> match: github::User
+> match: github::GithubAPI::load_commit
+
 #### Change the user agent
+
+> match: github::User
+> match: github::Issue::user
+> match: github::PullRef::user
+> match: github::Comment::user
+> match: github::GithubAPI::user_agent
+> match: github::GithubAPI::load_user
+> match: github::GithubCurl::user_agent
+> match: github::GithubAPI::load_auth_user
 
 ### `user_agent` - # User agent used for HTTP requests.
 
@@ -238,7 +395,21 @@ Default is `nit_github_api`.
 
 See <https://developer.github.com/v3/#user-agent-required>
 
+> match: github::GithubAPI
+> match: github
+> match: github::github
+> match: github::GithubAPI::user_agent
+> match: github::TestGithubCurl::user_agent
+> match: github::GithubCurl::user_agent
+> match: github>
+> match: github::Repo
+> match: github::User
+
 #### Debugging
+
+> match: github::GithubWallet::verbose
+> match: github::HookListener::verbosity
+> match: github::Loader
 
 ### `verbose_lvl` - # Verbosity level.
 
@@ -246,20 +417,65 @@ See <https://developer.github.com/v3/#user-agent-required>
 * `0`: only errors (default)
 * `1`: verbose
 
+> match: github::GithubAPI::verbose_lvl
+> match: github>
+> match: github
+> match: github::GithubAPI::message
+
 #### Using with GitLab
+
+> match: github::GithubCurl::header
+> match: github::LoaderConfig::no_colors
+> match: github::GithubWallet::no_colors
+> match: github::GithubAPI::get
+> match: github::GithubCurl::auth
 
 If URL scheme of GitLab API follows the one of Github API, it may be possible to
 configure this wrapper to use a custom URL.
+
+> match: github::api
+> match: github
+> match: github::github
+> match: github::HookListener::api
+> match: github::GithubWallet::api
+> match: github::ContributorStats::api
+> match: github::PullRequest::patch_url
+> match: github::User::avatar_url
+> match: github>
+> match: github::GithubAPI::api_url
 
 ### `api_url` - # Github API base url.
 
 
 Default is `https://api.github.com` and should not be changed.
 
+> match: github::GithubAPI::api_url
+> match: github>
+> match: github
+> match: github::Loader
+
 ## Creating hooks
+
+> match: github::hooks
+> match: github::hooks::HookAction
+> match: github::HookListener
+> match: github::HookListener::apply_event
+> match: github>
+> match: github
 
 Using this API you can create Github hooks able to respond to actions performed
 on a repository.
+
+> match: github
+> match: github::hooks
+> match: github::github
+> match: github::api
+> match: github::HookListener::api
+> match: github::ContributorStats::api
+> match: github::GithubWallet::api
+> match: github::GithubAPI
+> match: github>
+> match: github::hooks::HookAction
 
 ### `hooks` - # Github hook event listening with `nitcorn`.
 
@@ -296,11 +512,38 @@ var listener = new LogHookListener(api, "127.0.0.1", 8080)
 # listener.listen # uncomment to start listening
 ~~~
 
+> match: github::hooks
+> match: github>
+> match: github
+> match: github::hooks::HookAction
+> match: github::HookListener
+> match: github::HookListener::apply_event
+
 ## Dealing with events
+
+> match: github::events
+> match: github::GithubAPI::load_issue_event
+> match: github::IssueEvent::id
+> match: github::GithubEvent::id
+> match: github::IssueEvent::event
+> match: github::IssueEvent::assignee
 
 GithubAPI can trigger different events depending on the hook configuration.
 
+> match: github::GithubAPI
+> match: github::events
+> match: github::GithubAPI::load_issue_event
+> match: github::LoaderConfig
+> match: github::IssuesEvent
+> match: github::IssueEvent::id
+> match: github::HookListener::apply_event
+
 ### `GithubEvent` - # Github event stub.
+
+> match: github::GithubEvent
+> match: github>
+> match: github
+> match: github::Loader
 
 * `events$CommitCommentEvent` - # Triggered when a commit comment is created.
 
@@ -333,4 +576,13 @@ GithubAPI can trigger different events depending on the hook configuration.
 * `events$PushEvent` - # Triggered when a repository branch is pushed to.
 
 * `events$StatusEvent` - # Triggered when the status of a Git commit changes.
+
+> match: github
+> match: github::github
+> match: github::events
+> match: github::GithubAPI::load_issue_event
+> match: github::GithubEvent
+> match: github::IssueEvent::id
+> match: github::GithubEvent::id
+> match: github::IssueEvent
 

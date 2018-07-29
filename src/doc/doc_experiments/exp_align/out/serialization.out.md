@@ -1,12 +1,41 @@
 # Abstract serialization services
 
+> match: serialization::serialization
+> match: serialization
+> match: serialization::Serializer
+> match: serialization::Deserializer
+> match: serialization::engine_tools::Object::serialization_hash
+> match: serialization::inspect::InspectSerializer
+
 The serialization services are based on the `serialize` and the `noserialize` annotations,
 the `Serializable` interface and the implementations of `Serializer` and `Deserializer`.
 
+> match: serialization::Serializer
+> match: serialization::Deserializer
+> match: serialization::Serializable
+> match: serialization
+> match: serialization::serialization
+> match: serialization>
+> match: serialization::E::semi_private
+
 ## The `serialize` annotation
+
+> match: serialization>
+> match: serialization
+> match: serialization::Serializable::serialize_to
+> match: serialization::E::semi_private
+> match: serialization::Serializer::serialize_reference
 
 A class annotated with `serialize` identifies it as a subclass of Serializable and
 triggers the generation of customized serialization and deserialization services.
+
+> match: serialization::Serializable
+> match: serialization
+> match: serialization::serialization
+> match: serialization>
+> match: serialization::Deserializer
+> match: serialization::Serializer
+> match: serialization::Serializer::serialize
 
 ~~~
 import serialization
@@ -26,27 +55,50 @@ class Person
 end
 ~~~
 
-> example: serialization::custom_serialization
-> code: serialization::Serializer
-> code: serialization::Serializable
-> code: serialization::Deserializer
-> code: serialization::serialization
-> code: core::Object::hash
-> code: serialization::Serializable::core_serialize_to
+> match: serialization::custom_serialization
+> match: serialization::Serializer
+> match: serialization::Serializable
+> match: serialization::serialization
+> match: serialization::Deserializer
+> match: core::Object::hash
+> match: serialization::Serializable::core_serialize_to
 
 The `Person` class also defines `==` and `hash`, this is optional but we will use it to make an important point.
 By definition of a serializable class, an instance can be serialized to a stream, then deserialized.
 The deserialized instance will not be the same instance, but they should be equal.
 So, in this case, we can compare both instances with `==` to test their equality.
 
+> match: core::Object::==
+> match: serialization::Serializable
+> match: core::Object::hash
+> match: serialization::inspect::InspectSerializer::stream
+> match: serialization>
+> match: serialization
+> match: serialization::Deserializer::deserialize_class_intern
+> match: serialization::SafeDeserializer::check_subtypes
+
 Some conditions applies to the classes that can be annotated as `serialize`.
 All attributes of the class must be serializable, runtime errors will be
 raised when trying to serialize non-serializable attributes.
+
+> match: serialization::Serializable
+> match: serialization::Deserializer::errors
+> match: serialization::Serializer::serialize
+> match: serialization>
+> match: serialization
+> match: serialization::Serializer::serialize_attribute
+> match: serialization::Deserializer::keep_going
 
 In the class `Person`, all attributes are typed with classes the standards library.
 These common types are defined defined as serializable by this project.
 The attributes could also be typed with user-defined `serialize`
 classes or any other subclass of `Serializable`.
+
+> match: serialization::Serializable
+> match: serialization>
+> match: serialization
+> match: serialization::Serializer::serialize_attribute
+> match: serialization::AttributeTypeError::expected_type
 
 ~~~
 import serialization
@@ -77,19 +129,31 @@ class Partnership
 end
 ~~~
 
-> example: serialization::custom_serialization
-> code: serialization::Serializer
-> code: serialization::Serializable
-> code: core::Object::hash
-> code: serialization::Serializable::core_serialize_to
-> code: core::Numeric::+
-> code: core::Numeric::*
-> code: serialization::Deserializer
-> code: serialization::serialization
+> match: serialization::custom_serialization
+> match: serialization::Serializer
+> match: serialization::Serializable
+> match: core::Object::hash
+> match: core::Numeric::+
+> match: core::Numeric::*
+> match: serialization::serialization
+> match: serialization::Serializable::core_serialize_to
+> match: serialization::Deserializer
 
 ### Scope of the `serialize` annotation
 
+> match: serialization>
+> match: serialization
+> match: serialization::Serializable::serialize_to
+> match: serialization::E::semi_private
+> match: serialization::Serializer::serialize_reference
+
 `serialize` can annotate class definitions, modules and attributes:
+
+> match: serialization>
+> match: serialization
+> match: serialization::Serializable
+> match: serialization::E::semi_private
+> match: serialization::Serializer::serialize_attribute
 
 * The annotation on a class applies only to the class definition,
   only attributes declared locally will be serialized.
@@ -117,9 +181,33 @@ end
   end
   ~~~
 
+> match: serialization::Serializable
+> match: serialization::AttributeTypeError::attribute
+> match: serialization>
+> match: serialization
+> match: serialization::Serializer::serialize_attribute
+> match: serialization::E::semi_private
+> match: serialization::Serializer::try_to_serialize
+> match: serialization::custom_serialization
+> match: serialization::serialization
+> match: core::Text::+
+> match: serialization::Serializer
+> match: serialization::Deserializer
+> match: serialization::Serializable::core_serialize_to
+
 ## The `noserialize` annotation
 
+> match: serialization::E::semi_private
+> match: serialization>
+> match: serialization
+
 The `noserialize` annotation mark an exception in a `serialize` module or class definition.
+
+> match: serialization>
+> match: serialization
+> match: serialization::E::semi_private
+> match: serialization::Serializable
+> match: serialization::Serializable::serialize_to
 
 * By default a module is `noserialize`. There is no need to declare it as such.
 
@@ -142,13 +230,52 @@ The `noserialize` annotation mark an exception in a `serialize` module or class 
   end
   ~~~
 
+> match: serialization::Serializable
+> match: serialization::AttributeTypeError::attribute
+> match: serialization::Serializer::serialize
+> match: serialization>
+> match: serialization
+> match: serialization::E::semi_private
+> match: serialization::Deserializer::keep_going
+> match: serialization::Serializer::serialize_attribute
+> match: serialization::Deserializer::deserialize_attribute
+> match: serialization::Serializer::try_to_serialize
+> match: serialization::SafeDeserializer::check_subtypes
+> match: serialization::Serializer::serialize_core
+> match: serialization::custom_serialization
+> match: core::Text::+
+> match: serialization::serialization
+> match: serialization::Serializer
+> match: serialization::Deserializer
+> match: serialization::Serializable::core_serialize_to
+
 ## The `serialize_as` annotation
+
+> match: serialization>
+> match: serialization
+> match: serialization::E::semi_private
 
 By default, an attribute is identified in the serialization format by its Nit name.
 The `serialize_as` attribute changes this behavior and sets the name of an attribute in the serialization format.
 
+> match: serialization::AttributeTypeError::attribute
+> match: serialization
+> match: serialization::serialization
+> match: serialization>
+> match: serialization::AttributeTypeError::expected_type
+> match: serialization::AttributeError::attribute_name
+> match: serialization::Deserializer::deserialize_attribute
+
 This annotation can be useful to change the name of an attribute to what is expected by a remote service.
 Or to use identifiers in the serialization format that are reserved keywords in Nit (like `class` and `type`).
+
+> match: serialization
+> match: serialization::AttributeTypeError::attribute
+> match: serialization::serialization
+> match: serialization>
+> match: serialization::Serializer
+> match: serialization::Deserializer::deserialize_attribute
+> match: serialization::E::phantom
 
 ~~~
 import serialization
@@ -164,30 +291,70 @@ class UserCredentials
 end
 ~~~
 
-> example: serialization::custom_serialization
-> code: serialization::Serializer
-> code: serialization::Serializable
-> code: core::Text::+
-> code: serialization::Deserializer
-> code: serialization::serialization
-> code: serialization::Serializable::core_serialize_to
+> match: serialization::custom_serialization
+> match: serialization::Serializer
+> match: core::Text::+
+> match: serialization::Serializable
+> match: serialization::serialization
+> match: serialization::Deserializer
+> match: serialization::Serializable::core_serialize_to
 
 ## Custom serializable classes
 
+> match: serialization::Serializable
+> match: serialization::Serializer::serialize_attribute
+> match: serialization>
+> match: serialization
+> match: serialization::Serializer::try_to_serialize
+
 The annotation `serialize` should be enough for most cases,
 but in some cases you need more control over the serialization process.
+
+> match: serialization
+> match: serialization::serialization
+> match: serialization>
+> match: serialization::Serializer::serialize_reference
+> match: serialization::Serializer::serialize_attribute
+> match: serialization::Serializer::current_object
 
 For more control, create a subclass to `Serializable` and redefine `core_serialize_to`.
 This method should use `Serializer::serialize_attribute` to serialize its components.
 `serialize_attribute` works as a dictionary and organize attributes with a key.
 
+> match: serialization::Serializer::serialize_attribute
+> match: serialization::Serializable::core_serialize_to
+> match: serialization::Serializable
+> match: serialization::Serializer::serialize
+> match: serialization>
+> match: serialization
+
 You will also need to redefine `Deserializer::deserialize_class` to support this specific class.
 The method should only act on known class names, and call super otherwise.
 
+> match: serialization::Deserializer::deserialize_class
+> match: serialization>
+> match: serialization
+> match: serialization::Serializable::core_serialize_to
+> match: serialization::Deserializer::deserialize_class_intern
+
 ### Example: the User class
+
+> match: serialization>examples>
+> match: serialization>
+> match: serialization
+> match: serialization::Serializable
+> match: serialization::DirectSerializable
+> match: serialization::Serializable::from_deserializer
 
 The following example cannot use the `serialize` annotations
 because some of the arguments to the `User` class need special treatment:
+
+> match: serialization>examples>
+> match: serialization>
+> match: serialization
+> match: serialization::Serializable
+> match: serialization::DirectSerializable
+> match: serialization::E::semi_private
 
 * The `name` attribute is perfectly normal, it can be serialized and deserialized
   directly.
@@ -200,9 +367,29 @@ because some of the arguments to the `User` class need special treatment:
   serialize the path to its source on the file system.
   The data is reloaded on deserialization.
 
+> match: serialization::AttributeTypeError::attribute
+> match: meta::Class::name
+> match: serialization::Serializer::serialize
+> match: serialization>
+> match: serialization
+> match: serialization::Deserializer::deserialize_attribute
+> match: serialization::E::semi_private
+> match: serialization::Deserializer::keep_going
+> match: serialization::SafeDeserializer::check_subtypes
+> match: serialization::Serializer::serialize_attribute
+> match: serialization::AttributeMissingError
+> match: serialization::Serializer::try_to_serialize
+
 For this customization, the following code snippet implements
 two serialization services: `User::core_serialize_to` and
 `Deserializer::deserialize_class`.
+
+> match: serialization::Deserializer::deserialize_class
+> match: serialization::serialization
+> match: serialization
+> match: serialization::Serializer
+> match: serialization::Deserializer
+> match: serialization>
 
 ~~~
 module user_credentials
@@ -275,32 +462,60 @@ end
 
 ~~~
 
-> example: serialization::custom_serialization
-> code: serialization::Deserializer
-> code: serialization::Serializer
-> code: serialization::Deserializer::deserialize_attribute
-> code: core::Text
-> code: core::Numeric::unary -
-> code: serialization::Serializable
-> code: serialization::serialization
-> code: core::file::Text::to_path
-> code: core::Path::read_all
-> code: serialization::Serializable::core_serialize_to
-> code: core::Path
-> code: serialization::Deserializer::deserialize_class
+> match: serialization::custom_serialization
+> match: serialization::Deserializer
+> match: serialization::Serializer
+> match: serialization::Deserializer::deserialize_attribute
+> match: core::Text
+> match: core::Numeric::unary -
+> match: serialization::Serializable
+> match: serialization::serialization
+> match: core::file::Text::to_path
+> match: core::Path::read_all
+> match: serialization::Serializable::core_serialize_to
+> match: serialization::Deserializer::deserialize_class
+> match: core::Path
 
 See the documentation of the module `serialization::serialization` for more
 information on the services to redefine.
 
+> match: serialization::serialization
+> match: serialization::Serializer
+> match: serialization>
+> match: serialization
+> match: serialization::engine_tools::Object::serialization_hash
+
 ## Serialization services
+
+> match: serialization::serialization
+> match: serialization
+> match: serialization::Serializer
+> match: serialization::Deserializer
+> match: serialization::engine_tools::Object::serialization_hash
+> match: serialization::inspect::InspectSerializer
 
 The `serialize` annotation and the `Serializable` class are used on
 classes specific to the business domain.
 To write (and read) instances of these classes to a persistent format
 you must use implementations of `Serializer` and `Deserializer`.
 
+> match: serialization::Serializable
+> match: serialization::Serializer
+> match: serialization::Deserializer
+> match: serialization>
+> match: serialization
+> match: serialization::E
+> match: serialization::Serializer::serialize_attribute
+
 The main implementations of these services are `JsonSerializer` and `JsonDeserializer`,
 from the `json_serialization` module.
+
+> match: json::JsonSerializer
+> match: serialization::Deserializer
+> match: serialization::Serializer
+> match: serialization>
+> match: serialization
+> match: serialization::Deserializer::deserialize_class_intern
 
 ~~~
 import json
@@ -325,11 +540,24 @@ reader.close
 assert couple == deserialize_couple
 ~~~
 
-> code: json::json
+> match: json::json
 
 ## Limitations and TODO
 
+> match: serialization>examples>
+> match: serialization::caching::AsyncCache::last_id
+> match: serialization::inspect::InspectSerializer::first_object
+> match: serialization::inspect::InspectSerializer::first_attribute_serialized
+> match: serialization::A::i
+
 The serialization has some limitations:
+
+> match: serialization::serialization
+> match: serialization
+> match: serialization::engine_tools::Object::serialization_hash
+> match: serialization::inspect::InspectSerializer
+> match: serialization::engine_tools::Object::is_same_serialized
+> match: serialization::Serializer
 
 * A limitation of the JSON parser prevents deserializing from files
   with more than one object.
@@ -347,19 +575,60 @@ The serialization has some limitations:
   deal with generic types. A solution is to use `nitserial`,
   the next section explores this subject.
 
+> match: serialization
+> match: serialization::serialization
+> match: serialization::Serializer
+> match: serialization::Deserializer
+> match: serialization::Serializer::serialize
+> match: json
+> match: serialization>
+> match: serialization::engine_tools::Object::serialization_hash
+> match: serialization::Deserializer::deserialize_class_intern
+> match: serialization::AttributeTypeError::expected_type
+> match: serialization::Deserializer::deserialize_class
+> match: serialization::Serializer::current_object
+> match: serialization::AttributeError::attribute_name
+
 ## Dealing with generic types
+
+> match: serialization::AttributeTypeError::expected_type
+> match: serialization::AttributeTypeError
+> match: serialization::engine_tools::Text::strip_nullable
+> match: serialization::RestrictedJsonSerializer
+> match: serialization>
 
 One limitation of the serialization support in the compiler is with generic types.
 For example, the `Array` class is generic and serializable.
 However, the runtime types of Array instances are parameterized and are unknown to the compiler.
 So the compiler won't support serializing instances of `Array[MySerializable]`.
 
+> match: core::Array
+> match: serialization::Serializable
+> match: serialization
+> match: serialization::serialization
+> match: serialization>examples>
+> match: serialization>
+> match: serialization::Serializer::serialize_attribute
+> match: serialization::Deserializer::deserialize_class_intern
+
 The tool `nitserial` solves this problem at the level of user modules.
 It does so by parsing a Nit module, group or project to find all known
 parameterized types of generic classes.
 It will then generating a Nit module to handle deserialization of these types.
 
+> match: serialization>
+> match: serialization
+> match: serialization::SafeDeserializer::check_subtypes
+> match: serialization::SafeDeserializer::whitelist
+
 Usage steps to serialize parameterized types:
+
+> match: serialization::Serializer::serialize
+> match: serialization>
+> match: serialization
+> match: serialization::SafeDeserializer::whitelist
+> match: serialization::Serializable::serialize_to
+> match: serialization::AsyncCache
 
 * Write your program, let's call it `my_prog.nit`,
   it must use some parameterized serializable types.
@@ -371,6 +640,17 @@ Usage steps to serialize parameterized types:
 * Compile your program by mixing in the generated module with:
   `nitc my_prog.nit -m my_prog_serial.nit`
 
+> match: serialization::Serializable
+> match: core::Array
+> match: serialization>
+> match: serialization
+> match: serialization::E::phantom
+> match: serialization::Deserializer::deserialize_class_intern
+> match: serialization::Serializer::try_to_serialize
+> match: serialization::Serializer::serialize_attribute
+> match: serialization::Serializer::serialize_core
+> match: serialization::AsyncCache::use_even
+
 This was a simple example, in practical cases you may need
 to use more than one generated file.
 For example, on a client/server system, an instance can be created
@@ -378,4 +658,11 @@ server-side, serialized and the used client-side.
 In this case, two files will be generated by nitserial,
 one for the server and one for the client.
 Both the files should be compiled with both the client and the server.
+
+> match: serialization>examples>
+> match: serialization>
+> match: serialization
+> match: serialization::Deserializer::deserialize_class_intern
+> match: serialization::SafeDeserializer::check_subtypes
+> match: serialization::Serializable
 

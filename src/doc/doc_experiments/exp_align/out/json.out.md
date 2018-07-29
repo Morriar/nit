@@ -1,10 +1,30 @@
 # read and write JSON formatted text
 
+> match: json::json
+> match: json
+> match: json::serialization_read::JsonDeserializer::text
+> match: json::JsonParseError
+> match: json>
+
 These services can be useful to communicate with a remote server or client,
 save data locally or even debug and understand the structure of a Nit object.
 There is a single API to write JSON, and three API to read depending on the use case.
 
+> match: json
+> match: json::json
+> match: json>
+> match: json::JsonSerializer::plain_json
+> match: json::JsonValue
+> match: json::JsonDeserializer::class_name_heuristic
+
 ## Write JSON
+
+> match: json::json
+> match: json
+> match: json::JsonSerializer::pretty_json
+> match: json::serialization_write::JsonSerializer::new_line_and_indent
+> match: json::JsonSerializer::stream
+> match: json::serialization_write::JsonSerializer::indent_level
 
 Writing Nit objects to JSON format can be useful to communicate with a remote service,
 save data locally or even debug and understand the structure of an object.
@@ -13,18 +33,53 @@ There is two related services to write JSON object, the method
 The method `serialize_to_json` is actually a shortcut to `JsonSerializer`, both
 share the same features.
 
+> match: json::serialization_write::Serializable::serialize_to_json
+> match: json::JsonSerializer
+> match: json
+> match: json::json
+> match: json>
+> match: json::JsonSerializer::plain_json
+> match: json::JsonDeserializer::class_name_heuristic
+> match: json::serialization_read::JsonDeserializer::convert_object
+
 ### Write plain JSON
+
+> match: json
+> match: json::json
+> match: json::serialization_write::Serializable::to_json
+> match: json>
+> match: json::serialization_write::Serializable::to_pretty_json
+> match: json::serialization_write::Serializable::serialize_to_json
 
 Passing the argument `plain=true` to `serialize_to_json` generates plain and clean JSON.
 This format is non-Nit program, it cannot be fully deserialized back to Nit objects.
 The argument `pretty=true` generates JSON for humans, with more spaces and line breaks.
+
+> match: json
+> match: json::json
+> match: json::serialization_write::Serializable::serialize_to_json
+> match: json>
+> match: json::JsonSerializer::plain_json
+> match: json::serialization_write::Serializable::to_pretty_json
 
 The Nit objects to write must subclass `Serializable` and implement its services.
 Most classes from the `core` library are already supported, including collections, numeric values, etc.
 For your local objects, you can annotate them with `serialize` to automate subclassing
 `Serializable` and the implementation of its services.
 
+> match: serialization::Serializable
+> match: core::core
+> match: core>
+> match: core
+> match: json>
+> match: json
+> match: json::JsonSerializer::plain_json
+> match: json::JsonDeserializer::class_name_heuristic
+> match: json::serialization_read::JsonDeserializer::convert_object
+
 #### Example
+
+> match: json::static::Text::parse_json
 
 ~~~
 import json
@@ -78,38 +133,104 @@ assert charlie.serialize_to_json(pretty=true, plain=true) == """
 }"""
 ~~~
 
-> code: serialization::Serializer
-> code: core::Map
-> code: core::Map::[]=
-> code: serialization::Serializable
-> code: json::serialization_write::Serializable::serialize_to_json
-> code: serialization::Deserializer
-> code: json::json
-> code: serialization::Serializable::core_serialize_to
+> match: serialization::Serializer
+> match: core::Map
+> match: core::Map::[]=
+> match: serialization::Serializable
+> match: serialization::Deserializer
+> match: json::serialization_write::Serializable::serialize_to_json
+> match: json::json
+> match: serialization::Serializable::core_serialize_to
 
 ### Write JSON with metadata
+
+> match: json
+> match: json::json
+> match: json>
+> match: json::JsonSerializer::plain_json
+> match: json::JsonSerializer::pretty_json
 
 By default, `serialize_to_json` and `JsonSerializer` include metadate in the generated JSON.
 This metadata is used by `JsonDeserializer` when reading the JSON code to recreate
 the Nit object with the exact original type.
 The metadata allows to avoid repeating an object and its resolves cycles in the serialized objects.
 
+> match: json
+> match: json::json
+> match: json::serialization_write::Serializable::serialize_to_json
+> match: json::JsonSerializer
+> match: json::JsonDeserializer
+> match: json>
+> match: json::JsonSerializer::plain_json
+> match: json::serialization_read::JsonDeserializer::convert_object
+
 For more information on Nit serialization, see: ../serialization/README.md
+
+> match: serialization
+> match: json>
+> match: json
+> match: json::serialization_write::Serializable::accept_json_serializer
+> match: json::JsonSerializer
+> match: json::JsonSerializer::plain_json
 
 ## Read JSON
 
+> match: json
+> match: json::json
+> match: json::JsonObject
+> match: json::JsonArray
+> match: json::JsonSerializer::stream
+> match: json::JsonDeserializer
+> match: json::JsonValue::is_error
+
 There are a total of 3 API to read JSON:
+
+> match: json
+> match: json::json
+> match: json>
+> match: json::JsonStore::has_key
+> match: json::JsonSerializer::plain_json
 
 * `JsonDeserializer` reads JSON to recreate complex Nit objects (discussed here),
 * the module `json::dynamic` provides an easy API to explore JSON objects,
 * the module `json::static` offers a low-level service to parse JSON and create basic Nit objects.
+
+> match: json
+> match: json::json
+> match: json::static
+> match: json::dynamic
+> match: json::JsonDeserializer
+> match: json>
+> match: json::JsonValue
+> match: json::serialization_read::JsonDeserializer::convert_object
+> match: json::JsonSerializer
+> match: json::JsonSerializer::plain_json
+> match: json::JsonObject
+> match: json::serialization_write::Serializable::serialize_to_json
 
 The class `JsonDeserializer` reads JSON code to recreate objects.
 It can use the metadata in the JSON code, to recreate precise Nit objects.
 Otherwise, JSON objects are recreated to simple Nit types: `Map`, `Array`, etc.
 Errors are reported to the attribute `JsonDeserializer::errors`.
 
+> match: json
+> match: json::json
+> match: serialization::Deserializer::errors
+> match: core::Array
+> match: core::Map
+> match: json::JsonDeserializer
+> match: json>
+> match: json::JsonSerializer::plain_json
+> match: json::JsonDeserializer::class_name_heuristic
+> match: json::serialization_read::JsonDeserializer::convert_object
+
 The type to recreate is either declared or inferred:
+
+> match: json>
+> match: json
+> match: json::JsonDeserializer::class_name_heuristic
+> match: json::JsonSerializer::plain_json
+> match: json::serialization_read::Text::deserialize_json
 
 1. The JSON object defines a `__class` key with the name of the Nit class as value.
    This attribute is generated by the `JsonSerializer` with other metadata,
@@ -118,10 +239,34 @@ The type to recreate is either declared or inferred:
 3. If all else fails, `JsonDeserializer` uses the static type of the attribute,
    or the type name passed to `deserialize`.
 
+> match: json::JsonDeserializer::class_name_heuristic
+> match: json::JsonSerializer
+> match: serialization::Deserializer::deserialize
+> match: json::JsonDeserializer
+> match: json
+> match: json::static
+> match: json::json
+> match: json::JsonValue::value
+> match: json::JsonKeyError::key
+> match: json>
+> match: json::JsonSerializer::plain_json
+> match: json::serialization_write::Serializable::serialize_to_json
+> match: json::serialization_read::JsonDeserializer::text
+> match: json::JsonDeserializer::attributes_path
+
 The method `deserialize_json` is a shortcut to `JsonDeserializer` which prints
 errors to the console. It is fit only for small scripts and other quick and dirty usage.
 
+> match: json::serialization_read::Text::deserialize_json
+> match: json::JsonDeserializer
+> match: json>
+> match: json
+> match: json::JsonDeserializer::class_name_heuristic
+> match: json::JsonSerializer::plain_json
+
 #### Example
+
+> match: json::static::Text::parse_json
 
 ~~~
 import json
@@ -171,22 +316,35 @@ object = deserializer.deserialize("Triangle")
 assert deserializer.errors.is_empty # If false, `object` is invalid
 ~~~
 
-> code: json::JsonDeserializer
-> code: serialization::Serializer
-> code: serialization::Serializable
-> code: serialization::Deserializer::errors
-> code: serialization::Deserializer::deserialize
-> code: core::abstract_text::Object::to_s
-> code: serialization::Serializable::core_serialize_to
-> code: serialization::Deserializer
-> code: json::json
+> match: json::JsonDeserializer
+> match: serialization::Serializer
+> match: serialization::Serializable
+> match: serialization::Deserializer::errors
+> match: core::abstract_text::Object::to_s
+> match: serialization::Deserializer::deserialize
+> match: serialization::Deserializer
+> match: serialization::Serializable::core_serialize_to
+> match: json::json
 
 #### Missing attributes and default values
+
+> match: json::JsonValue::is_error
+> match: json>
+> match: json
+> match: json::JsonValue::is_numeric
+> match: json::JsonValue::is_string
 
 When reading JSON, some attributes expected by Nit classes may be missing.
 The JSON object may come from an external API using optional attributes or
 from a previous version of your program without the attributes.
 When an attribute is not found, the deserialization engine acts in one of three ways:
+
+> match: json
+> match: json::json
+> match: json>
+> match: json::JsonDeserializer::class_name_heuristic
+> match: json::JsonSerializer::plain_json
+> match: json::serialization_write::JsonSerializer::first_attribute
 
 1. If the attribute has a default value or if it is annotated by `lazy`,
    the engine leave the attribute to the default value. No error is raised.
@@ -194,6 +352,21 @@ When an attribute is not found, the deserialization engine acts in one of three 
    the attribute to `null`. No error is raised.
 3. Otherwise, the engine raises an error and does not set the attribute.
    The caller must check for `errors` and must not read from the attribute.
+
+> match: json::error
+> match: serialization::Deserializer::errors
+> match: json::static
+> match: json::JsonValue::value
+> match: json>
+> match: json
+> match: json::JsonDeserializer::class_name_heuristic
+> match: json::serialization_read::Text::deserialize_json
+> match: json::JsonValue::is_error
+> match: json::JsonValue::to_error
+> match: json::JsonKeyError
+> match: json::JsonParseError::location
+> match: json::serialization_write::JsonSerializer::first_attribute
+> match: json::JsonParseError
 
 ~~~
 import json
@@ -263,12 +436,12 @@ assert obj isa MyConfig
 assert obj.player_name == "Bob"
 ~~~
 
-> code: json::JsonDeserializer
-> code: serialization::Serializer
-> code: serialization::Deserializer::errors
-> code: serialization::Deserializer::deserialize
-> code: serialization::Serializable
-> code: serialization::Deserializer
-> code: json::json
-> code: serialization::Serializable::core_serialize_to
+> match: json::JsonDeserializer
+> match: serialization::Serializer
+> match: serialization::Deserializer::errors
+> match: serialization::Deserializer::deserialize
+> match: serialization::Serializable
+> match: serialization::Deserializer
+> match: json::json
+> match: serialization::Serializable::core_serialize_to
 

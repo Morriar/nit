@@ -165,7 +165,8 @@ Resources specific to the Android platform should be placed in an `android/` fol
 The folder should adopt the structure of a normal Android project, e.g., a custom XML resource file can be placed
 at `android/res/values/color.xml` to be compiled with the Android application.
 
-> match: android::assets_and_resources
+> match: android
+> match: android::android
 > match: android::assets_and_resources::NativeContext::resources
 
 The application icon should also be placed in the `android/` folder.
@@ -191,6 +192,8 @@ Theses modes are also applied to the generated Android projects.
 The compilation mode is specified as an argument to `nitc`, only
 `--release` can be specified as debug is the default behavior.
 
+> match: android
+> match: android::android
 > match: android::platform
 
 ### Debug mode

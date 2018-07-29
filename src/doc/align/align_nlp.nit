@@ -45,7 +45,7 @@ class MdNLPAlign
 		if text.is_empty then return
 
 		var vector = new Vector
-		vector.inc "in: {context.full_name}"
+		vector.inc "+in: {context.full_name}"
 		vector.inc "-kind: MPropDef"
 		vector.inc "-kind: MClassDef"
 		vector.inc "-kind: MAttribute"
@@ -64,20 +64,20 @@ class MdNLPAlign
 		# end
 
 		var nlp_vector = mentity_index.vectorize_string(text)
-		print nlp_vector
+		# print nlp_vector
 		for lemma, freq in nlp_vector do
-			vector[lemma] = freq
+			# vector[lemma] = freq
 			# vector["name: {lemma or else "null"}"] += freq
 			# vector["name: {(lemma or else "null").as(String).capitalize}"] += freq
-			# vector["comment: {lemma or else "null"}"] += freq
+			vector["comment: {lemma or else "null"}"] += freq
 			# vector["comment: {(lemma or else "null").as(String).capitalize}"] += freq
-			# vector["nlp: {lemma or else "null"}"] += freq
+			vector["nlp: {lemma or else "null"}"] += freq
 			# vector["sign: {lemma or else "null"}"] += freq
 			# vector["sign: {(lemma or else "null").as(String).capitalize}"] += freq
 			# vector["tid: {lemma or else "null"}"] += freq
 			# vector["tid: {(lemma or else "null").as(String).capitalize}"] += freq
 		end
-		# node.nlp_refs = matches_to_refs(mentity_index.match_query(vector).above_threshold, node)
+		node.nlp_refs = matches_to_refs(mentity_index.match_query(vector).above_threshold.limit(5), node)
 		#.limit(5)
 	end
 

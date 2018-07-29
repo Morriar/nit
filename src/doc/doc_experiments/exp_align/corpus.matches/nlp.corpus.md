@@ -38,6 +38,17 @@ for sentence in doc.sentences do
 end
 ~~~
 
+> match: nlp::NLPToken
+> match: nlp::NLPJavaProcessor
+> match: nlp::NLPToken::pos
+> match: nlp::NLPToken::lemma
+> match: nlp::NLPSentence
+> match: nlp::NLPProcessor::process
+> match: nlp::NLPDocument::sentences
+> match: nlp::NLPSentence::tokens
+> match: nlp::NLPDocument
+> match: nlp::nlp
+
 ### NLPServer
 
 > match: nlp::NLPServer
@@ -48,11 +59,17 @@ The NLPServer provides a wrapper around the StanfordCoreNLPServer.
 
 See `https://stanfordnlp.github.io/CoreNLP/corenlp-server.html`.
 
-~~~nitish
+~~~nit
+import nlp
+
 var cp = "/path/to/StanfordCoreNLP/jars"
 var srv = new NLPServer(cp, 9000)
 srv.start
 ~~~
+
+> match: nlp::NLPServer
+> match: pthreads::Thread::start
+> match: nlp::nlp
 
 ### NLPClient
 
@@ -64,10 +81,16 @@ The NLPClient is used as a NLPProcessor with a NLPServer backend.
 > match: nlp::NLPProcessor
 > match: nlp::NLPServer
 
-~~~nitish
+~~~nit
+import nlp
+
 var cli = new NLPClient("http://localhost:9000")
 var doc = cli.process("String to analyze")
 ~~~
+
+> match: nlp::NLPClient
+> match: nlp::NLPProcessor::process
+> match: nlp::nlp
 
 ## NLPIndex
 
@@ -79,16 +102,29 @@ tag the terms of a document.
 > match: nlp::NLPIndex
 > match: nlp::NLPProcessor
 
-~~~nitish
+~~~nit
+import nlp
+
+var proc = new NLPJavaProcessor("path/to/StanfordCoreNLP/jars")
 var index = new NLPIndex(proc)
 
 var d1 = index.index_string("Doc 1", "/uri/1", "this is a sample")
 var d2 = index.index_string("Doc 2", "/uri/2", "this and this is another example")
 assert index.documents.length == 2
 
-matches = index.match_string("this sample")
+var matches = index.match_string("this sample")
 assert matches.first.document == d1
 ~~~
+
+> match: nlp::NLPIndex
+> match: vsm::StringIndex::index_string
+> match: vsm::Document
+> match: vsm::IndexMatch
+> match: vsm::VSMIndex::documents
+> match: vsm::IndexMatch::document
+> match: nlp::NLPJavaProcessor
+> match: vsm::StringIndex::match_string
+> match: nlp::nlp
 
 ## TODO
 

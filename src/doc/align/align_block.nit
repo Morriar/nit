@@ -58,6 +58,8 @@ class MdBlockRefsVisitor
 		else if node isa MdCodeBlock then
 			refs.add_all node.example_refs
 			refs.add_all node.code_refs
+		else if node isa MdBlock then
+			refs.add_all node.nlp_refs
 		end
 		node.visit_all(self)
 	end

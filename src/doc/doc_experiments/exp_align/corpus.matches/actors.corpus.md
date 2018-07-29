@@ -56,8 +56,8 @@ a message to the actor, but you'll get a `Future[Int]` to be able to retrieve th
 When using `join` on the future, the calling thread will wait until the value of the future is set.
 
 > match: actors::Future
-> match: actors::Message
 > match: actors::Actor
+> match: actors::Message
 > match: core::Int
 > match: actors::A::bar
 > match: actors::ProxyA::bar
@@ -70,6 +70,7 @@ When using `join` on the future, the calling thread will wait until the value of
 > match: actors::AgentMessagegreet_back::message
 > match: actors::Future::join
 > match: actors::SynchronizedCounter::wait
+> match: actors::Future::set_value
 
 ## Managing actors
 
@@ -94,6 +95,11 @@ The `async` added property is actually created lazily when you use it.
 > match: actors::Worker::async
 > match: actors::A::async
 > match: actors::ThreadRing::async
+> match: actors::A::async
+> match: actors::Worker::async
+> match: actors::FannkuchRedux::async
+> match: actors::ClockAgent::async
+> match: actors::Agent::async
 
 Actors are not automatically garbage collected, but you have solutions to terminate them
 if you need to. For this, you need to use the `async` property of your annotated class :
@@ -102,8 +108,10 @@ if you need to. For this, you need to use the `async` property of your annotated
 > match: actors
 > match: actors::Proxy::terminate
 > match: actors::Actor
-> match: actors::ClockAgent::async
+> match: actors::A::async
+> match: actors::ThreadRing::async
 > match: actors::Agent::async
+> match: actors::ClockAgent::async
 > match: actors::Creature::async
 > match: actors::FannkuchRedux::async
 > match: actors::Worker::async
@@ -135,8 +143,11 @@ For now, there isn't any mecanism to recreate and actor after it was terminated.
 Sending messages after terminating it results in unspecified behaviour.
 
 > match: actors::Actor
-> match: actors::Proxy::terminate
 > match: actors::Message
+> match: actors::Proxy::terminate
+> match: actors::Proxy::wait_termination
+> match: actors::Proxy::terminate_now
+> match: actors::Proxy::wait_termination
 
 ## Waiting for all actors to finish processing
 
@@ -153,6 +164,7 @@ before quitting.
 > match: actors::actors
 > match: actors::Actor
 > match: actors::Message
+> match: actors::Proxy::wait_termination
 
 It's materialized by the `active_actors` property added to `Sys` which is a `ReverseBlockingQueue`.
 In short, the `is_empty` method on this list is blocking until the list is effectively empty.

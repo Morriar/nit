@@ -1,18 +1,52 @@
 # Portable game and multimedia framework for Nit
 
+> match: gamnit>depth>
+> match: gamnit>
+> match: gamnit
+> match: gamnit::Server
+> match: gamnit::gamnit::App::create_scene
+
 _gamnit_ is a modular framework to create portable 2D or 3D apps in Nit.
 It is based on the portability framework _app.nit_ and the OpenGL ES 2.0 standard.
 
+> match: gamnit
+> match: gamnit::gamnit
+> match: app
+> match: gamnit>
+> match: gamnit>depth>
+> match: gamnit>flat>
+> match: gamnit>virtual_gamepad>
+
 ## System configuration
+
+> match: gamnit::egl::GamnitDisplay::egl_config
+> match: gamnit::GamnitDisplay::gl_extensions
+> match: gamnit::egl::GamnitDisplay::check_egl_context
+> match: gamnit::shadow::App::supports_shadows
 
 To compile the _gamnit_ apps packaged with the Nit repository on GNU/Linux you need to install the dev version of a few libraries and some tools.
 On Debian 8.2, this command should install everything needed:
+
+> match: gamnit
+> match: gamnit::gamnit
+> match: linux
+> match: gamnit::Shader::compile
+> match: gamnit>
+> match: gamnit::display::Sys::debug_gamnit
+> match: gamnit::Shader
+> match: gamnit::GamnitProgram
 
 ~~~bash
 apt-get install libgles2-mesa-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev inkscape
 ~~~
 
 On Windows 64 bits, using msys2, you can install the required packages with:
+
+> match: gamnit>
+> match: gamnit
+> match: gamnit::more_meshes::Boxed3d::to_mesh
+> match: gamnit::GamnitDisplay::blue_bits
+> match: gamnit::Mesh::indices
 
 ~~~bash
 pacman -S mingw-w64-x86_64-angleproject-git mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_image mingw-w64-x86_64-SDL2_mixer
@@ -21,13 +55,36 @@ pacman -S mingw-w64-x86_64-angleproject-git mingw-w64-x86_64-SDL2 mingw-w64-x86_
 While macOS isn't supported, it can create iOS apps.
 You need to install and setup Xcode, and you may install the GLSL shader validation tool via `brew`:
 
+> match: gamnit::Shader
+> match: ios
+> match: gamnit::GamnitDisplay::setup
+> match: gamnit>
+> match: gamnit
+> match: gamnit>flat>
+> match: gamnit::flat
+> match: gamnit::InactiveVariable
+
 ~~~bash
 brew install glslang
 ~~~
 
 ## Services by submodules
 
+> match: gamnit>
+> match: gamnit
+> match: gamnit::shadow::ShadowContext::destroy
+> match: gamnit::VirtualGamepadSpritesheet::x
+> match: gamnit::VirtualGamepadSpritesheet::y
+
 _gamnit_ is modular, different services of the framework are available through different submodules:
+
+> match: gamnit
+> match: gamnit::gamnit
+> match: gamnit::flat_core::GroupedArray::available
+> match: gamnit>
+> match: gamnit::SpriteSet
+> match: gamnit::common::Sys::handshake_app_name
+> match: gamnit::common::Sys::handshake_app_version
 
 * The main entrypoint `gamnit` provides low-level abstractions over some services of OpenGL ES 2.0, like textures, shaders and programs.
   It defines the basic methods to implement in order to obtain a working game:
@@ -61,4 +118,85 @@ _gamnit_ is modular, different services of the framework are available through d
 * `model_parsers` provides services to read and parse models from the asset folder.
 
 * `network` provides a simple communication framework for multiplayer client/server games.
+
+> match: gamnit::Camera
+> match: gamnit::Sprite
+> match: gamnit::Actor
+> match: gamnit::flat_core::App::ui_sprites
+> match: gamnit::Model
+> match: gamnit::CustomTexture::fill
+> match: gamnit::Server::clients
+> match: gamnit::Server
+> match: gamnit::keys
+> match: gamnit
+> match: gamnit::keys::App::pressed_keys
+> match: gamnit::depth_core::App::actors
+> match: gamnit>model_parsers>
+> match: gamnit::flat_core::App::ui_camera
+> match: gamnit::flat_core::App::world_camera
+> match: gamnit::gamnit::App::frame_core
+> match: gamnit::Camera::position
+> match: gamnit::Light::position
+> match: gamnit::gamnit
+> match: gamnit::more_models::Sys::models
+> match: gamnit::server
+> match: gamnit::client
+> match: gamnit::display
+> match: gamnit::ObjDef::objects
+> match: gamnit::GamnitProgram::use
+> match: gamnit::programs
+> match: gamnit::textures
+> match: gamnit::Shader
+> match: gamnit::Texture
+> match: gamnit::flat_core::App::update
+> match: gamnit::flat_core::App::sprites
+> match: gamnit>flat>
+> match: gamnit::BlinnPhongProgram::camera
+> match: gamnit::cameras::CameraAnchor::camera
+> match: gamnit::LightCastingShadows::camera
+> match: gamnit::flat_core::Point3d::sprites
+> match: gamnit::flat_core::SpriteContext::sprites
+> match: gamnit::TextSprites::sprites
+> match: gamnit::virtual_gamepad::VirtualGamepad::sprites
+> match: gamnit::virtual_gamepad::RoundControl::sprites
+> match: gamnit>network>
+> match: gamnit::limit_fps
+> match: gamnit::Vec3::z
+> match: gamnit::gamnit::App::accept_event
+> match: gamnit::UICamera::top
+> match: gamnit::MtlFileParser::parse
+> match: gamnit::ObjFileParser::parse
+> match: gamnit::AbsoluteSubtexture::top
+> match: gamnit::Material::draw
+> match: gamnit::flat_core::SpriteSet::draw
+> match: gamnit::ShadowDepthProgram::rotation
+> match: gamnit::flat_core::SpriteContext::draw
+> match: gamnit::ParticleSystem::draw
+> match: gamnit::SelectionProgram::rotation
+> match: gamnit::Sprite::rotation
+> match: gamnit>depth>
+> match: gamnit::CheckerTexture::size
+> match: gamnit::ShaderVariable::size
+> match: gamnit::BMFont::size
+> match: gamnit::AbsoluteSubtexture::left
+> match: gamnit::VirtualGamepadSpritesheet::left
+> match: gamnit::UICamera::left
+> match: gamnit::Camera::display
+> match: gamnit::gamnit::App::display
+> match: gamnit>
+> match: gamnit::flat
+> match: gamnit::more_models::Model::new
+> match: gamnit::shadow::LightPointOfViewProgram
+> match: gamnit::Actor::model
+> match: gamnit::depth_core
+> match: gamnit::limit_fps::App::maximum_fps
+> match: gamnit::model_parser_base::StringProcessor::read_number
+> match: gamnit::TextureAsset
+> match: gamnit::TextureAsset::path
+> match: gamnit::network
+> match: gamnit::RoundButton::name
+> match: gamnit::gamnit::App::recreate_gamnit
+> match: gamnit::limit_fps::App::clock
+> match: gamnit::virtual_gamepad::RoundControl::down_names
+> match: gamnit::keys::App::register_key_event
 

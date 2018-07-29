@@ -1,75 +1,92 @@
 # Lightweight framework for Web applications development
 
+> match: nitcorn
+
 ## Features
 
 Dynamic content is served by subclassing `Action` and implementing `answer`.
 This method receives an `HttpRequest` and must return an `HttpResponse`.
 _nitcorn_ provides `FileServer`, a simple `Action` to serve static files.
 
-> name: nitcorn
+> match: nitcorn::Action
+> match: nitcorn::reactor::Action::answer
+> match: nitcorn::HttpRequest
+> match: nitcorn::HttpResponse
+> match: nitcorn::FileServer
+> match: nitcorn
+> match: nitcorn::nitcorn
 
 `HttpRequest` contains the GET and POST arguments as well as session data it one exists.
 The produced `HttpResponse` should contain the HTTP status code, the body,
 session data to preserve or create a session, and optionally list files to append.
 
-> name: nitcorn::Session
-> name: nitcorn::HttpRequest::body
-> name: nitcorn::HttpResponse::body
-> name: nitcorn::Session
-> name: nitcorn::Session
-> name: nitcorn::HttpResponse::files
+> match: nitcorn::Session
+> match: nitcorn::HttpResponse
+> match: nitcorn::HttpRequest
+> match: nitcorn::HttpRequest::body
+> match: nitcorn::HttpResponse::body
+> match: nitcorn::Session
+> match: nitcorn::HttpResponse::files
 
 Each `Action` may be associated to many instances of `Route`.
 These routes can simply identify the root of a service,
 but also define parameters within the URI.
 
-> name: nitcorn::Routes
-> name: nitcorn::Route
-> name: nitcorn::HttpRequest::uri
+> match: nitcorn::Route
+> match: nitcorn::Action
+> match: nitcorn::Routes
+> match: nitcorn::HttpRequest::uri
 
 _nitcorn_ instances are configured dynamically in Nit code with the interfaces and routes created as needed.
 
-> name: nitcorn
-> name: nitcorn::Interfaces
-> name: nitcorn::Interface
-> name: nitcorn::Routes
-> name: nitcorn::Route
+> match: nitcorn::Interfaces
+> match: nitcorn::nitcorn
+> match: nitcorn
+> match: nitcorn::Interface
+> match: nitcorn::Routes
+> match: nitcorn::Route
 
 _nitcorn_ plays well with other Nit services and tools such as `serialization`, `mongodb`, `sqlite` and `nitiwiki`.
 It also benefits from the full power of the Nit language:
 class refinement can be used to customize default services and merge many applications in a single server,
 and the FFI enables calling services in different languages.
 
-> name: nitcorn
+> match: nitcorn
+> match: serialization
+> match: mongodb
+> match: sqlite
+> match: nitiwiki
+> match: ffi
 
 ## Examples
 
-> name: nitcorn>examples>
+> match: nitcorn>examples>
 
 A minimal example follows with a custom `Action` and using `FileServer`.
 
-> name: nitcorn>examples>
+> match: nitcorn::Action
+> match: nitcorn::FileServer
+> match: nitcorn>examples>
 
 More general examples are available at `lib/nitcorn/examples/`.
 For an example of a larger project merging many _nitcorn_ applications into one server,
 take a look at the configuration of `http://xymus.net/` at `../contrib/xymus_net/xymus_net.nit`.
 
-> name: nitcorn>examples>
-> name: nitcorn>examples>
-> name: nitcorn
+> match: nitcorn>examples>
+> match: nitcorn
 
 Larger projects using _nitcorn_ can be found in the `contrib/` folder:
 
-> name: nitcorn
+> match: nitcorn
 
 * _opportunity_ is a meetup planner heavily based on _nitcorn_.
 * _tnitter_ is a micro-blogging platform with a simple Web and RESTful interface.
 * _benitlux_ uses a custom `Action` to subscribe people to a mailing list and define a RESTful interface.
 
-> name: opportunity
-> name: nitcorn
-> name: nitcorn::restful
-> name: nitcorn::restful
+> match: opportunity
+> match: nitcorn::restful
+> match: nitcorn::Action
+> match: nitcorn
 
 ### Simple hello world server
 
@@ -117,13 +134,37 @@ factory.config.virtual_hosts.add vh
 factory.run
 ~~~
 
+> match: nitcorn::nitcorn_hello_world
+> match: nitcorn::VirtualHost
+> match: nitcorn::HttpFactory
+> match: nitcorn::Routes::add
+> match: nitcorn::Routes
+> match: nitcorn::Route
+> match: nitcorn::HttpResponse
+> match: nitcorn::VirtualHost::routes
+> match: nitcorn::ServerConfig
+> match: nitcorn::FileServer
+> match: nitcorn::Action
+> match: core::SimpleCollection::add
+> match: nitcorn::HttpResponse::body=
+> match: core::HashMap
+> match: nitcorn::HttpRequest::get_args
+> match: nitcorn::HttpRequest
+> match: nitcorn::VirtualHosts
+> match: nitcorn::ServerConfig::virtual_hosts
+> match: core::abstract_text::Map::join
+> match: nitcorn::HttpFactory::config
+> match: nitcorn::reactor::Action::answer
+> match: nitcorn::HttpFactory::run
+> match: nitcorn::nitcorn
+
 ## Credits
 
 This nitcorn library is a fork from an independent project originally created in 2013 by
 Jean-Philippe Caissy, Guillaume Auger, Frederic Sevillano, Justin Michaud-Ouellette,
 Stephan Michaud and Maxime Bélanger.
 
-> name: nitcorn
+> match: nitcorn
 
 It has been adapted to a library, and is currently maintained, by Alexis Laferrière.
 
