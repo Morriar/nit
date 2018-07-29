@@ -23,7 +23,7 @@ A call to the `join` method will block the execution until the threaded method i
 
 ## Known limitations:
 
-> struct: misc
+> struct: todo
 
 * Most services from the Nit library are not thread-safe. You must manage
   your own mutex to avoid conflicts on shared data.
