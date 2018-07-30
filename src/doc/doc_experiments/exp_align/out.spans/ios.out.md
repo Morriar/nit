@@ -1,8 +1,5 @@
 # iOS support for _app.nit_
 
-[[doc: ios]]
-[[features: ios]]
-
 ## System configuration
 
 Configure your system for OS X by installing Xcode and brew.
@@ -14,6 +11,8 @@ Optionally, install ios-sim to run compiled apps in the simulator: `brew install
 
 Let's use the `hello_ios` example in the folder `lib/ios/examples/`.
 
+> span: ios::hello_ios
+
 Compile with: `nitc hello_world.nit`
 
 Run in the simulator with: `ios-sim hello_world.app`
@@ -22,8 +21,6 @@ Run in the simulator with: `ios-sim hello_world.app`
 
 See the calculator example at `examples/calculator` and the Tnitter client at `contrib/tnitter/`
 for portable applications working on GNU/Linux, OS X, iOS and Android.
-
-[[example: ios::calculator]]
 
 ## Application icon
 

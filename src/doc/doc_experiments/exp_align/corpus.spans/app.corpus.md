@@ -39,7 +39,7 @@ It relies on the following sequence of events, represented here by their callbac
 > span: app::AppComponent::on_restart
 > span: app::AppComponent::on_stop
 
-![_app.nit_ life-cycle](doc/app-nit-lifecycle.png)
+![_app.nit_ life-cycle](path/resources/ab03b885463901ade4ae1a9adfaefeff.png)
 
 Life-cycle events related to saving and restoring the application state are provided by two special callback methods:
 
@@ -106,9 +106,7 @@ So there is two ways  to customize the behavior on a given event:
 The example at `examples/ui_example.nit` shows off most features of `app::ui` in a minimal program.
 You can also take a look at the calculator (`../../examples/calculator/src/calculator.nit`) which is a concrete usage example.
 
-> span: lib/app/examples/ui_example.nit
 > span: app::ui
-> span: lib/app/../../examples/calculator/src/calculator.nit
 
 ### Platform-specific UI
 
@@ -124,6 +122,7 @@ _app.nit_ offers the submodule `app::data_store` to easily save the application 
 The service is accessible by the method `App::data_store`. The `DataStore` itself defines 2 methods:
 
 > span: app::data_store
+> span: app::data_store::App::data_store
 > span: app::DataStore
 
 * `DataStore::[]=` saves and associates any serializable instances to a `String` key.
@@ -181,7 +180,6 @@ the full example at `examples/http_request_example.nit`.
 > span: app::http_request
 > span: app::AsyncHttpRequest
 > span: app::AsyncHttpRequest
-> span: lib/app/examples/http_request_example.nit
 
 ## Metadata annotations
 
@@ -260,3 +258,4 @@ There is two main ways to achieve this goal:
   ~~~
 
 > span: android
+

@@ -26,11 +26,6 @@ class Person
 end
 ~~~
 
-> code: serialization::Serializable
-> code: serialization::serialization
-> code: core::Object::==
-> code: core::Object::hash
-
 The `Person` class also defines `==` and `hash`, this is optional but we will use it to make an important point.
 By definition of a serializable class, an instance can be serialized to a stream, then deserialized.
 The deserialized instance will not be the same instance, but they should be equal.
@@ -74,11 +69,6 @@ class Partnership
 end
 ~~~
 
-> code: serialization::Serializable
-> code: serialization::serialization
-> code: core::Object::==
-> code: core::Object::hash
-
 ### Scope of the `serialize` annotation
 
 `serialize` can annotate class definitions, modules and attributes:
@@ -109,9 +99,6 @@ end
   end
   ~~~
 
-> code: serialization::Serializable
-> code: serialization::serialization
-
 ## The `noserialize` annotation
 
 The `noserialize` annotation mark an exception in a `serialize` module or class definition.
@@ -137,9 +124,6 @@ The `noserialize` annotation mark an exception in a `serialize` module or class 
   end
   ~~~
 
-> code: serialization::Serializable
-> code: serialization::serialization
-
 ## The `serialize_as` annotation
 
 By default, an attribute is identified in the serialization format by its Nit name.
@@ -161,9 +145,6 @@ class UserCredentials
 	var avatar_path: String = "/somepath/"+name is lazy, serialize_as "ap"
 end
 ~~~
-
-> code: serialization::Serializable
-> code: serialization::serialization
 
 ## Custom serializable classes
 
@@ -268,18 +249,6 @@ end
 
 ~~~
 
-> code: serialization::Deserializer
-> code: serialization::Serializer
-> code: serialization::Serializer::serialize_attribute
-> code: serialization::Deserializer::deserialize_attribute
-> code: serialization::Serializable
-> code: serialization::serialization
-> code: core::file::Text::to_path
-> code: core::Path::read_all
-> code: serialization::Serializable::core_serialize_to
-> code: core::Path
-> code: serialization::Deserializer::deserialize_class
-
 See the documentation of the module `serialization::serialization` for more
 information on the services to redefine.
 
@@ -315,15 +284,6 @@ reader.close
 
 assert couple == deserialize_couple
 ~~~
-
-> code: json
-> code: serialization::JsonSerializer
-> code: serialization::JsonSerializer::serialize
-> code: serialization::JsonDeserializer
-> code: serialization::JsonDeserializer::deserialize
-> code: serialization::serialization
-> code: core::FileReader
-> code: core::FileReader::close
 
 ## Limitations and TODO
 

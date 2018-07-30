@@ -96,6 +96,7 @@ redef class MdBlock
 
 		# TODO scaffold refs
 		# TODO structure refs
+		# TODO average readme, align with package
 
 		var res = new Array[MdRefMEntity]
 		for key in scores.sorted_keys do

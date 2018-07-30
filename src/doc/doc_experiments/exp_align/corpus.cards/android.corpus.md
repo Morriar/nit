@@ -1,5 +1,8 @@
 # Android platform support and APIs
 
+[[doc: android]]
+[[features: android]]
+
 ## Compilation for Android
 
 The compiler generates an APK file as the output when the `android`
@@ -101,6 +104,9 @@ For example, a module importing `app::ui` and `android` will trigger the importa
 Importing `android::landscape` or `android::portrait` locks the generated
 application in the specified orientation. This can be useful for games and
 other multimedia applications.
+
+[[doc: android::landscape]]
+[[doc: android::portrait]]
 
 ### Resources and application icon
 

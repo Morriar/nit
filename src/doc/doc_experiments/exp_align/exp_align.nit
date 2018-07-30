@@ -30,6 +30,10 @@ class ReadmeComparator
 	end
 
 	fun compare_docs(orig, dest: MdDocument) do
+
+		var block_spans = 0
+		var block_count = 0
+
 		var spans_r = 0.0
 		var spans_p = 0.0
 		var spans_count = 0
@@ -54,6 +58,8 @@ class ReadmeComparator
 			if not block isa MdBlock then continue
 			if block isa MdBlockQuote then continue
 
+			block_count += 1
+
 			var oblock = dest.match_block(block)
 			if oblock == null then continue
 			# print block
@@ -63,6 +69,7 @@ class ReadmeComparator
 			# spans
 			var orig_spans = block.span_refs
 			var dest_spans = oblock.span_refs
+			if dest_spans.not_empty then block_spans += 1
 			if orig_spans.not_empty and dest_spans.not_empty then
 				var span_r = recall(orig_spans, dest_spans)
 				var span_p = precision(orig_spans, dest_spans)
@@ -123,11 +130,12 @@ class ReadmeComparator
 			matches_count += 1
 		end
 		printn "{lib or else "NULL"}\t"
-		# printn "{spans_r / spans_count.to_f}\t{spans_p / spans_count.to_f}\t"
+		printn "{block_count}\t{block_spans}\n"
+		# printn "{spans_r / spans_count.to_f}\t{spans_p / spans_count.to_f}\n"
 		# printn "{names_r / names_count.to_f}\t{names_p / names_count.to_f}\n"
 		# printn "{exs_r / exs_count.to_f}\t{exs_p / exs_count.to_f}\t"
 		# printn "{codes_r / codes_count.to_f}\t{codes_p / codes_count.to_f}\n"
-		printn "{matches_r / matches_count.to_f}\t{matches_p / matches_count.to_f}\n"
+		# printn "{matches_r / matches_count.to_f}\t{matches_p / matches_count.to_f}\n"
 	end
 
 	fun print_block(block: MdBlock) do
@@ -185,7 +193,7 @@ redef class MdDocument
 	fun match_block(orig: MdBlock): nullable MdBlock do
 		for block in blocks do
 			if orig isa MdCodeBlock and block isa MdCodeBlock then
-				if orig.literal.to_s == block.literal.to_s then return block
+				if orig.literal == block.literal then return block
 			else
 				if orig.raw_text == block.raw_text then return block
 			end
@@ -243,16 +251,20 @@ end
 class MdSpans
 	super MdVisitor
 
+	var spans = 0
+
 	redef fun visit(node) do
 		if node isa MdCode then
-			print node.literal
+			spans += 1
+			# print node.literal
 		end
 		node.visit_all(self)
 	end
 end
 
-var corpus_path = "src/doc/doc_experiments/exp_align/corpus.matches"
-(corpus_path / "../out").mkdir
+var corpus = "spans"
+var corpus_path = "src/doc/doc_experiments/exp_align/corpus.{corpus}"
+(corpus_path / "../out.{corpus}").mkdir
 var files = corpus_path.files
 default_comparator.sort(files)
 
@@ -265,21 +277,23 @@ for file in files do
 	# if not libs.has(lib) then continue
 	# if lib != "vsm" then continue
 #
-	sys.system "./nitreadme lib/{lib} --keep-going --check-docdown > src/doc/doc_experiments/exp_align/out/{lib}.out.md 2>/dev/null"
+	# sys.system "./nitreadme lib/{lib} --keep-going --check-docdown"
+	# sys.system "./nitreadme lib/{lib} --keep-going --check-docdown > src/doc/doc_experiments/exp_align/out.{corpus}/{lib}.out.md 2>/dev/null"
 
-	# var md = "src/doc/doc_experiments/exp_align/corpus/{lib}.corpus.md".to_path.read_all
+	# var md = "src/doc/doc_experiments/exp_align/corpus.spans/{lib}.corpus.md".to_path.read_all
 	# var doc = (new MdParser).parse(md)
 	# var v = new MdSpans
 	# v.enter_visit(doc)
+	# print "{lib}\t{v.spans}"
 
 	var comparator = new ReadmeComparator
 	comparator.compare_files(
-		"src/doc/doc_experiments/exp_align/corpus.matches/{lib}.corpus.md",
-		"src/doc/doc_experiments/exp_align/out/{lib}.out.md")
+		"src/doc/doc_experiments/exp_align/corpus.{corpus}/{lib}.corpus.md",
+		"src/doc/doc_experiments/exp_align/out.{corpus}/{lib}.out.md")
 
 	# break
 	# sys.system "meld " +
-		# "src/doc/doc_experiments/exp_align/corpus.names/{lib}.corpus.md " +
-		# "src/doc/doc_experiments/exp_align/out/{lib}.out.md"
+		# "src/doc/doc_experiments/exp_align/corpus.{corpus}/{lib}.corpus.md " +
+		# "src/doc/doc_experiments/exp_align/out.{corpus}/{lib}.out.md"
 
 end

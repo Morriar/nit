@@ -89,5 +89,4 @@ You can find example of differents small programs implemented with Nit actors in
 directory. For a really simple example, you can check `examples/simple`.
 
 > span: actors>examples>
-> span: lib/actors/examples/simple
 

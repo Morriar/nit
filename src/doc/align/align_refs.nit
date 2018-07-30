@@ -27,9 +27,15 @@ class MdCodeAlign
 
 	var context: MEntity is noinit
 
+	var spans = new Counter[String]
+
 	fun align_spans(doc: MdDocument, context: MEntity) do
+		self.spans.clear
 		self.context = context
 		enter_visit(doc)
+		# for span, count in spans do
+			# print "{context}\t{span}\t{count}"
+		# end
 	end
 
 	redef fun visit(node) do
@@ -40,6 +46,7 @@ class MdCodeAlign
 		var ref = ref_parser.parse_code(node)
 		if ref == null then return
 
+		spans.inc ref.class_name
 		node.md_ref = ref
 		ref.align_ref(self)
 		ref.sort_refs(self)
@@ -169,35 +176,77 @@ redef class MdRefName
 	end
 
 	redef fun sort_refs(v) do
-		var res = new Array[MdRefMEntity]
-		var has_mpackage = false
-		var has_mgroup = false
-		var has_mmodule = false
+
+		# Locate conflicts
+		var name_conflicts = new HashMap[String, Array[MdRefMEntity]]
 		for ref in model_refs do
-			if ref.mentity isa MPackage then has_mpackage = true
-			if ref.mentity isa MGroup then has_mgroup = true
-			if ref.mentity isa MModule then has_mmodule = true
+			var name = ref.mentity.name
+			if not name_conflicts.has_key(name) then
+				name_conflicts[name] = new Array[MdRefMEntity]
+			end
+			name_conflicts[name].add ref
 		end
-		for ref in model_refs do
-			var mentity = ref.mentity
-			if not v.context.has_mentity(mentity) then continue
-			if has_mpackage and mentity isa MPackage then
-				res.add ref
-			else if not has_mpackage and has_mgroup and mentity isa MGroup then
-				res.add ref
-			else if not has_mpackage and not has_mgroup and has_mmodule and mentity isa MModule then
-				res.add ref
-			else if not has_mpackage and not has_mgroup and not has_mmodule then
-				if mentity isa MClass or mentity isa MProperty then
+
+		# Remove conflicts
+		var res = new Array[MdRefMEntity]
+		for name, refs in name_conflicts do
+			if refs.length == 1 then
+				res.add refs.first
+				continue
+			end
+
+			# Filter by context
+			# var in_context = new Array[MdRefMEntity]
+			# for ref in refs do
+			#	if v.context.has_mentity(ref.mentity) then
+			#		in_context.add ref
+			#	end
+			# end
+			# if in_context.length == 1 then
+			#	res.add_all in_context
+			#	continue
+			# end
+
+			var left = new Array[MdRefMEntity]
+			# if in_context.not_empty then
+				# left.add_all in_context
+			# else
+				left.add_all refs
+			# end
+
+			# Filter by kind
+			var mpackage = null
+			var mgroup = null
+			var mmodule = null
+			# print left
+			for ref in left do
+				var mentity = ref.mentity
+				if mentity isa MPackage then
+					mpackage = mentity
+				else if mentity isa MGroup then
+					mgroup = mentity
+				else if mentity isa MModule then
+					mmodule = mentity
+				end
+			end
+			for ref in left do
+				var mentity = ref.mentity
+				if mentity isa MPackage then
+					res.add ref
+				else if mentity isa MGroup and mpackage == null then
+					res.add ref
+				else if mentity isa MModule and mpackage == null and mgroup == null then
+					res.add ref
+				else if mpackage == null and mgroup == null and mmodule == null then
 					res.add ref
 				end
 			end
+			# for ref in refs do
+				# res.add ref
+			# end
 		end
-		# print res
-		if res.not_empty then
-			model_refs = res
-		end
-		# print mentities
+
+		model_refs = res
 	end
 end
 

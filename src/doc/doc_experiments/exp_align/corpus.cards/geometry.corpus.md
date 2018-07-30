@@ -1,13 +1,20 @@
 # Basic geometry data structures and services
 
+[[doc: geometry]]
+[[features: geometry]]
+
 ## Points and Lines
 
 The very basics of geometry needs, for two and three-dimensional space.
+
+[[doc: geometry::points_and_lines]]
 
 ## Boxes and detection collision
 
 Boxes module introduces Bounding boxes for Points and Lines and services to detect collision or inclusion between boxes.
 It means a simple and fast way to test collision but not really accurate since it uses bounding boxes.
+
+[[doc: geometry::Box]]
 
 ## Quadtrees
 
@@ -26,6 +33,10 @@ This API provides two different types of Quadtree : Static and Dynamic (respecti
 
 * Dynamic: You just need to fill the quadtree with objects, and when the threshold is reached,
   it will automatically divide the current region, depending on the distribution of objects already in the region.
+
+[[doc: geometry::QuadTree]]
+[[doc: geometry::SQuadTree]]
+[[doc: geometry::DQuadTree]]
 
 ## Polygons
 
@@ -47,6 +58,9 @@ This module contains interesting algorithms for `ConvexPolygon`only at the momen
 
 A polygon which is not convex is called concave. Convex polygon are used because most
 geometric problems are simpler and faster on convex objects than on non-convex ones.
+
+[[doc: geometry::Polygon]]
+[[doc: geometry::ConvexPolygon]]
 
 Services provided :
 

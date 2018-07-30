@@ -5,8 +5,6 @@
 Configure your system for OS X by installing Xcode and brew.
 Follow the instructions in `README.md` at the root of the repository.
 
-> span: README.md
-
 Optionally, install ios-sim to run compiled apps in the simulator: `brew install ios-sim`
 
 ## Compile and run a simple application
@@ -14,20 +12,15 @@ Optionally, install ios-sim to run compiled apps in the simulator: `brew install
 Let's use the `hello_ios` example in the folder `lib/ios/examples/`.
 
 > span: ios::hello_ios
-> span: lib/ios/examples/
 
 Compile with: `nitc hello_world.nit`
 
-> span: nitc hello_world.nit
 Run in the simulator with: `ios-sim hello_world.app`
 
 ## Sample portable applications
 
 See the calculator example at `examples/calculator` and the Tnitter client at `contrib/tnitter/`
 for portable applications working on GNU/Linux, OS X, iOS and Android.
-
-> span: examples/calculator
-> span: contrib/tnitter/
 
 ## Application icon
 
@@ -42,6 +35,4 @@ These files can be generated in a number of different ways:
 
 * Write or modify the file `Contents.json` manually.
   It is in Json format and easily readable.
-
-> span: contrib/inkscape_tools/bin/svg_to_icons
 

@@ -28,9 +28,18 @@ A call to the `join` method will block the execution until the threaded method i
 
 > span: pthreads::Thread
 > span: pthreads::Thread::is_done
+> span: pthreads::JoinTask::is_done
 > span: pthreads::Thread
+> span: core::abstract_text::Collection::join
+> span: core::abstract_text::Map::join
+> span: pthreads::pthreads::NativePthread::join
 > span: pthreads::Thread::join
+> span: pthreads::JoinTask::join
+> span: core::abstract_text::Collection::join
+> span: core::abstract_text::Map::join
+> span: pthreads::pthreads::NativePthread::join
 > span: pthreads::Thread::join
+> span: pthreads::JoinTask::join
 
 ## Known limitations:
 

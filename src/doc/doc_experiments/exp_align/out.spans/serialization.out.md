@@ -35,7 +35,6 @@ By definition of a serializable class, an instance can be serialized to a stream
 The deserialized instance will not be the same instance, but they should be equal.
 So, in this case, we can compare both instances with `==` to test their equality.
 
-> span: serialization::Person
 > span: core::Object::==
 > span: core::Object::hash
 > span: core::Object::==
@@ -49,7 +48,6 @@ These common types are defined defined as serializable by this project.
 The attributes could also be typed with user-defined `serialize`
 classes or any other subclass of `Serializable`.
 
-> span: serialization::Person
 > span: serialization::Serializable
 
 ~~~
@@ -186,8 +184,6 @@ The method should only act on known class names, and call super otherwise.
 The following example cannot use the `serialize` annotations
 because some of the arguments to the `User` class need special treatment:
 
-> span: serialization::User
-
 * The `name` attribute is perfectly normal, it can be serialized and deserialized
   directly.
 
@@ -199,11 +195,12 @@ because some of the arguments to the `User` class need special treatment:
   serialize the path to its source on the file system.
   The data is reloaded on deserialization.
 
+> span: meta::Class::name
+
 For this customization, the following code snippet implements
 two serialization services: `User::core_serialize_to` and
 `Deserializer::deserialize_class`.
 
-> span: serialization::User::core_serialize_to
 > span: serialization::Deserializer::deserialize_class
 
 ~~~
@@ -297,8 +294,6 @@ The main implementations of these services are `JsonSerializer` and `JsonDeseria
 from the `json_serialization` module.
 
 > span: json::JsonSerializer
-> span: json::JsonDeserializer
-> span: json::json_serialization
 
 ~~~
 import json

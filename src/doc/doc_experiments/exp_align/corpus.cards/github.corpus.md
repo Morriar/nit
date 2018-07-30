@@ -2,12 +2,18 @@
 
 This module provides a Nit object oriented interface to access the Github api.
 
+[[features: github]]
+
 ## Accessing the API
+
+[[doc: github::api]]
+[[features: github::api]]
 
 ### `GithubAPI` - # Client to Github API
 
-
 To access the API you need an instance of a `GithubAPI` client.
+
+[[doc: github::GithubAPI]]
 
 ~~~
 # Get Github authentification token.
@@ -32,9 +38,9 @@ assert user.login == "Morriar"
 
 ### Authentification
 
-
-
 Token can also be recovered from user config with `get_github_oauth`.
+
+[[doc: github::Curl::get_gtihub_oauth]]
 
 ### `get_github_oauth` - # Gets the Github token from `git` configuration
 
@@ -46,6 +52,7 @@ or `""` if no key exists.
 
 ### `load_user` - # Get the Github user with `login`
 
+[[doc: github::GtihubAPI::load_user]]
 
 Loads the `User` from the API or returns `null` if the user cannot be found.
 
@@ -53,8 +60,10 @@ Loads the `User` from the API or returns `null` if the user cannot be found.
     var user = api.load_user("Morriar")
     print user or else "null"
     assert user.login == "Morriar"
+
 ### `User` - # A Github user
 
+[[doc: github::User]]
 
 Provides access to [Github user data](https://developer.github.com/v3/users/).
 Should be accessed from `GithubAPI::load_user`.
@@ -99,6 +108,7 @@ Should be accessed from `GithubAPI::load_user`.
 
 ### `load_repo` - # Get the Github repo with `full_name`.
 
+[[doc: github::GtihubAPI::load_repo]]
 
 Loads the `Repo` from the API or returns `null` if the repo cannot be found.
 
@@ -107,8 +117,11 @@ Loads the `Repo` from the API or returns `null` if the repo cannot be found.
     assert repo.name == "nit"
     assert repo.owner.login == "nitlang"
     assert repo.default_branch == "master"
+
+
 ### `Repo` - # A Github repository.
 
+[[doc: github::Repo]]
 
 Provides access to [Github repo data](https://developer.github.com/v3/repos/).
 Should be accessed from `GithubAPI::load_repo`.
@@ -151,6 +164,8 @@ Should be accessed from `GithubAPI::load_repo`.
 * `owner=` - # Get the repo owner.
 
 ### Other data
+
+[[features: github::GithubAPI]]
 
 * `api$Branch` - # A Github branch.
 
@@ -204,12 +219,14 @@ Should be accessed from `GithubAPI::load_repo`.
 
 #### Caching
 
-
+[[doc: github::caching]]
+[[features: github::caching]]
 
 #### Custom requests
 
 ### `get` - # Execute a GET request on Github API.
 
+[[doc: github::GithubAPI::get]]
 
 This method returns raw json data.
 See other `load_*` methods to use more expressive types.
@@ -233,6 +250,7 @@ Returns `null` in case of `error`.
 
 ### `user_agent` - # User agent used for HTTP requests.
 
+[[doc: github::GithubAPI::user_agent]]
 
 Default is `nit_github_api`.
 
@@ -242,6 +260,7 @@ See <https://developer.github.com/v3/#user-agent-required>
 
 ### `verbose_lvl` - # Verbosity level.
 
+[[doc: github::GithubAPI::verbose_level]]
 
 * `0`: only errors (default)
 * `1`: verbose
@@ -253,6 +272,7 @@ configure this wrapper to use a custom URL.
 
 ### `api_url` - # Github API base url.
 
+[[doc: github::GithubAPI::api_url]]
 
 Default is `https://api.github.com` and should not be changed.
 
@@ -263,6 +283,7 @@ on a repository.
 
 ### `hooks` - # Github hook event listening with `nitcorn`.
 
+[[doc: github::hooks]]
 
 Usage:
 
@@ -298,7 +319,11 @@ var listener = new LogHookListener(api, "127.0.0.1", 8080)
 
 ## Dealing with events
 
+[[doc: github::events]]
+
 GithubAPI can trigger different events depending on the hook configuration.
+
+[[features: github::events]]
 
 ### `GithubEvent` - # Github event stub.
 

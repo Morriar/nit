@@ -1,7 +1,5 @@
 # _app.nit_, a framework for portable applications
 
-[[doc:: app]]
-
 The framework provides services to manage common needs of modern mobile applications:
 
 * Life-cycle
@@ -14,11 +12,7 @@ The framework provides services to manage common needs of modern mobile applicat
 The features offered by _app.nit_ are common to all platforms, but
 may not be available on all devices.
 
-[[feature:: app]]
-
 ## Application Life-Cycle
-
-[[doc:: app::App]]
 
 The _app.nit_ application life-cycle is compatible with all target platforms.
 It relies on the following sequence of events, represented here by their callback method name:
@@ -37,6 +31,14 @@ It relies on the following sequence of events, represented here by their callbac
 5. `on_restart`: The app goes back to the inactive state.
    You can revert what was done by `on_stop`.
 
+> span: app::AppComponent::on_create
+> span: app::AppComponent::on_resume
+> span: app::AppComponent::on_pause
+> span: app::AppComponent::on_stop
+> span: app::AppComponent::on_restart
+> span: app::AppComponent::on_restart
+> span: app::AppComponent::on_stop
+
 ![_app.nit_ life-cycle](path/resources/ab03b885463901ade4ae1a9adfaefeff.png)
 
 Life-cycle events related to saving and restoring the application state are provided by two special callback methods:
@@ -46,17 +48,30 @@ Life-cycle events related to saving and restoring the application state are prov
 
 * `on_restore_state`: The app is launching, restore its state from a previous `on_save_state`.
 
+> span: app::AppComponent::on_save_state
+> span: app::AppComponent::on_restore_state
+> span: app::data_store
+> span: app::AppComponent::on_restore_state
+> span: app::AppComponent::on_save_state
+
 These events are synchronized to the native platforms applications
 The `App` instance is the first to be notified of these events.
 Other UI elements, from the `ui` submodule, are notified of the same events using a simple depth first visit.
 So all UI elements can react separately to live-cycle events.
 
-## User Interface
+> span: app::App
+> span: android>ui>
+> span: ios>ui>
 
-[[doc:: app::ui]]
+## User Interface
 
 The `app::ui` module defines an abstract API to build a portable graphical application.
 The API is composed of interactive `Control`s, visible `View`s and an active `Window`.
+
+> span: app::ui
+> span: app::Control
+> span: app::View
+> span: app::Window
 
 Here is a subset of the most useful controls and views:
 
@@ -66,22 +81,33 @@ Here is a subset of the most useful controls and views:
 
 * `HorizontalLayout` and `VerticalLayout` organize other controls in order.
 
+> span: app::Button
+> span: app::TextInput
+> span: app::HorizontalLayout
+> span: app::VerticalLayout
+
 Each control is notified of input events by callbacks to `on_event`.
 All controls have observers that are also notified of the events.
 So there is two ways  to customize the behavior on a given event:
+
+> span: app::AppObserver::on_event
 
 * Create a subclass of the wanted `Control`, let's say `Button`, and specialize `on_event`.
 
 * Add an observer to a `Button` instance, and implement `on_event` in the observer.
 
-[[features: app::ui]]
+> span: app::Control
+> span: app::Button
+> span: app::AppObserver::on_event
+> span: app::Button
+> span: app::AppObserver::on_event
 
 ### Usage Example
 
 The example at `examples/ui_example.nit` shows off most features of `app::ui` in a minimal program.
 You can also take a look at the calculator (`../../examples/calculator/src/calculator.nit`) which is a concrete usage example.
 
-[[examples: app::ui]]
+> span: app::ui
 
 ### Platform-specific UI
 
@@ -91,15 +117,14 @@ The suggested approach is to use platform specific modules to customize the appl
 See the calculator example for an adaptation of the UI on Android,
 the interesting module is in this repository at ../../examples/calculator/src/android_calculator.nit
 
-[[examples: app::android]]
-[[examples: app::ios]]
-
 ## Persistent State with data_store
-
-[[examples: app::data_score]]
 
 _app.nit_ offers the submodule `app::data_store` to easily save the application state and user preferences.
 The service is accessible by the method `App::data_store`. The `DataStore` itself defines 2 methods:
+
+> span: app::data_store
+> span: app::data_store::App::data_store
+> span: app::DataStore
 
 * `DataStore::[]=` saves and associates any serializable instances to a `String` key.
   Pass `null` to clear the value associated to a key.
@@ -107,8 +132,10 @@ The service is accessible by the method `App::data_store`. The `DataStore` itsel
 * `DataStore::[]` returns the object associated to a `String` key.
   It returns `null` if nothing is associated to the key.
 
-[[doc: app::DataStore]]
-[[features: app::DataStore]]
+> span: app::DataStore::[]=
+> span: core::String
+> span: app::DataStore::[]
+> span: core::String
 
 ### Usage Example
 
@@ -151,11 +178,9 @@ lets the user implement methods acting only on the UI thread.
 See the documentation of `AsyncHttpRequest` for more information and
 the full example at `examples/http_request_example.nit`.
 
-[[doc: app::http_request]]
-[[features: app::http_request]]
-
-[[doc: app::http_request::ASyncHttpRequest]]
-[[features: app::http_request::ASyncHttpRequest]]
+> span: app::http_request
+> span: app::AsyncHttpRequest
+> span: app::AsyncHttpRequest
 
 ## Metadata annotations
 
@@ -186,6 +211,13 @@ The _app.nit_ framework defines three annotations to customize the application p
   If there is no arguments, the parent folder of the annotated module is used.
   In case of name conflicts in the resource files, the files from the project root have the lowest priority,
   those associated to modules lower in the importation hierarchy have higher priority.
+
+> span: android
+> span: ios
+> span: android
+> span: ios
+> span: android
+> span: ios
 
 ### Usage Example
 
@@ -232,3 +264,6 @@ There is two main ways to achieve this goal:
 
   # ...
   ~~~
+
+> span: android
+

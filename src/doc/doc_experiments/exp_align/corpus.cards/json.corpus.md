@@ -1,8 +1,12 @@
 # read and write JSON formatted text
 
+[[doc: json]]
+
 These services can be useful to communicate with a remote server or client,
 save data locally or even debug and understand the structure of a Nit object.
 There is a single API to write JSON, and three API to read depending on the use case.
+
+[[features: json]]
 
 ## Write JSON
 
@@ -12,6 +16,9 @@ There is two related services to write JSON object, the method
 `serialize_to_json` and the object `JsonSerializer`.
 The method `serialize_to_json` is actually a shortcut to `JsonSerializer`, both
 share the same features.
+
+[[doc: serialization::write]]
+[[features: serialization::write]]
 
 ### Write plain JSON
 
@@ -77,12 +84,6 @@ assert charlie.serialize_to_json(pretty=true, plain=true) == """
 	}
 }"""
 ~~~
-
-> code: core::Map
-> code: core::Map::[]=
-> code: serialization::Serializable
-> code: json::serialization_write::Serializable::serialize_to_json
-> code: json::json
 
 ### Write JSON with metadata
 
@@ -168,13 +169,6 @@ object = deserializer.deserialize("Triangle")
 assert deserializer.errors.is_empty # If false, `object` is invalid
 ~~~
 
-> code: json::JsonDeserializer
-> code: serialization::Serializable
-> code: serialization::Deserializer::errors
-> code: serialization::Deserializer::deserialize
-> code: serialization::Deserializer
-> code: json::json
-
 #### Missing attributes and default values
 
 When reading JSON, some attributes expected by Nit classes may be missing.
@@ -256,10 +250,3 @@ assert deserializer.errors.length == 1
 assert obj isa MyConfig
 assert obj.player_name == "Bob"
 ~~~
-
-> code: json::JsonDeserializer
-> code: serialization::Deserializer::errors
-> code: serialization::Deserializer::deserialize
-> code: serialization::Serializable
-> code: serialization::Deserializer
-> code: json::json

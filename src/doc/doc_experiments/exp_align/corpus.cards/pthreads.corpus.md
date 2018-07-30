@@ -1,15 +1,19 @@
 # POSIX Threads support
 
-> struct: intro
-
 The threads can be manipulated and synchronized using the classes `Thread`,
 `Mutex` and `Barrier`.
+
+[[features: posix::Thread]]
+[[features: posix::Mutex]]
+[[features: posix::Barrier]]
 
 This group also provides two optional modules with thread-safe collections:
 
 * `redef_collections` redefines existing collection to make them thread-safe.
   This incures a small overhead in all usage of the redefined collections.
 * `concurrent_collections` intro new thread-safe collections.
+
+[[features: posix]]
 
 Theses services are implemented using the POSIX threads.
 
@@ -21,9 +25,9 @@ You will get a subclass of `Thread`, even if there wasn't a return value before.
 A call to the `join` method will block the execution until the threaded method is done, or immediatly return if it's already done.
 `join` will return an object typed with the orginial return type, or `null` if there wasn't.
 
-## Known limitations:
+[[features: posix::Thread::join]]
 
-> struct: misc
+## Known limitations:
 
 * Most services from the Nit library are not thread-safe. You must manage
   your own mutex to avoid conflicts on shared data.
@@ -31,9 +35,8 @@ A call to the `join` method will block the execution until the threaded method i
 
 ## For more information:
 
-> struct: see_also
-
 * See: `man pthreads`
 * See: `examples/concurrent_array_and_barrier.nit`
 * See: `examples/threaded_example.nit`
 
+[[examples: posix]]

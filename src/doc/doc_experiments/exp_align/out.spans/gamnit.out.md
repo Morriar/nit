@@ -3,8 +3,6 @@
 _gamnit_ is a modular framework to create portable 2D or 3D apps in Nit.
 It is based on the portability framework _app.nit_ and the OpenGL ES 2.0 standard.
 
-[[doc: gamnit]]
-
 ## System configuration
 
 To compile the _gamnit_ apps packaged with the Nit repository on GNU/Linux you need to install the dev version of a few libraries and some tools.
@@ -28,8 +26,6 @@ brew install glslang
 ~~~
 
 ## Services by submodules
-
-[[features: gamnit]]
 
 _gamnit_ is modular, different services of the framework are available through different submodules:
 
@@ -66,4 +62,38 @@ _gamnit_ is modular, different services of the framework are available through d
 
 * `network` provides a simple communication framework for multiplayer client/server games.
 
-[[uml: gamnit]]
+> span: gamnit
+> span: gamnit::gamnit::App::frame_core
+> span: gamnit::gamnit::App::accept_event
+> span: gamnit>flat>
+> span: gamnit::flat_core::App::update
+> span: gamnit::flat_core::App::sprites
+> span: gamnit::flat_core::App::world_camera
+> span: core::flat::FlatText::position
+> span: gamnit::Camera::position
+> span: gamnit::Light::position
+> span: geometry::IPoint3d::z
+> span: gamnit::Vec3::z
+> span: core::flat::FlatText::position
+> span: gamnit::Camera::position
+> span: gamnit::Light::position
+> span: gamnit::flat_core::App::ui_sprites
+> span: gamnit::flat_core::App::ui_camera
+> span: gamnit>depth>
+> span: gamnit::Actor
+> span: gamnit>flat>
+> span: core::TimeT::update
+> span: realtime::realtime::Timespec::update
+> span: ios::NitGLKView::update
+> span: more_collections::BestDistance::update
+> span: gamnit::flat_core::App::update
+> span: gamnit::flat_core::App::ui_sprites
+> span: gamnit::depth_core::App::actors
+> span: gamnit::Actor
+> span: gamnit::Model
+> span: gamnit::limit_fps
+> span: gamnit::keys
+> span: gamnit::keys::App::pressed_keys
+> span: gamnit>model_parsers>
+> span: gamnit>network>
+
