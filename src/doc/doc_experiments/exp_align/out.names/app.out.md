@@ -1,6 +1,11 @@
 # _app.nit_, a framework for portable applications
 
+> name: app
+> name: app::App
+
 The framework provides services to manage common needs of modern mobile applications:
+
+> name: android>service>
 
 * Life-cycle
 * User interface
@@ -12,10 +17,21 @@ The framework provides services to manage common needs of modern mobile applicat
 The features offered by _app.nit_ are common to all platforms, but
 may not be available on all devices.
 
+> name: app
+> name: app::App
+> name: android::platform
+> name: ios::platform
+
 ## Application Life-Cycle
 
 The _app.nit_ application life-cycle is compatible with all target platforms.
 It relies on the following sequence of events, represented here by their callback method name:
+
+> name: app
+> name: app::App
+> name: android::platform
+> name: ios::platform
+> name: core::Sequence
 
 1. `on_create`: The application is being created.
    You should build the UI at this time and launch services.
@@ -31,7 +47,23 @@ It relies on the following sequence of events, represented here by their callbac
 5. `on_restart`: The app goes back to the inactive state.
    You can revert what was done by `on_stop`.
 
+> name: android>ui>
+> name: ios>ui>
+> name: core::time
+> name: android>service>
+> name: app
+> name: app::App
+> name: app
+> name: app::App
+> name: app
+> name: app::App
+> name: app
+> name: app::App
+
 ![_app.nit_ life-cycle](path/resources/ab03b885463901ade4ae1a9adfaefeff.png)
+
+> name: app
+> name: app::App
 
 Life-cycle events related to saving and restoring the application state are provided by two special callback methods:
 
@@ -40,10 +72,23 @@ Life-cycle events related to saving and restoring the application state are prov
 
 * `on_restore_state`: The app is launching, restore its state from a previous `on_save_state`.
 
+> name: app
+> name: app::App
+> name: app
+> name: app::App
+
 These events are synchronized to the native platforms applications
 The `App` instance is the first to be notified of these events.
 Other UI elements, from the `ui` submodule, are notified of the same events using a simple depth first visit.
 So all UI elements can react separately to live-cycle events.
+
+> name: core::native
+> name: android::platform
+> name: ios::platform
+> name: android>ui>
+> name: ios>ui>
+> name: android>ui>
+> name: ios>ui>
 
 ## User Interface
 
@@ -52,37 +97,114 @@ The API is composed of interactive `Control`s, visible `View`s and an active `Wi
 
 Here is a subset of the most useful controls and views:
 
+> name: app::Control
+> name: app::View
+
 * The classic pushable `Button` with text (usually rectangular).
 
 * `TextInput` is a field for the user to enter text.
 
 * `HorizontalLayout` and `VerticalLayout` organize other controls in order.
 
+> name: core>text>
+> name: core::Text
+> name: core>text>
+> name: core::Text
+> name: app::Control
+
 Each control is notified of input events by callbacks to `on_event`.
 All controls have observers that are also notified of the events.
 So there is two ways  to customize the behavior on a given event:
+
+> name: app::Control
+> name: app::Control
+> name: app::ui::AppComponent::observers
 
 * Create a subclass of the wanted `Control`, let's say `Button`, and specialize `on_event`.
 
 * Add an observer to a `Button` instance, and implement `on_event` in the observer.
 
+> name: app::CompositeControl::add
+> name: app::ui::AppComponent::observers
+> name: app::ui::AppComponent::observers
+
 ### Usage Example
+
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
 
 The example at `examples/ui_example.nit` shows off most features of `app::ui` in a minimal program.
 You can also take a look at the calculator (`../../examples/calculator/src/calculator.nit`) which is a concrete usage example.
 
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+
 ### Platform-specific UI
 
+> name: android::platform
+> name: ios::platform
+> name: android>ui>
+> name: ios>ui>
+
 You can go beyond the portable UI API of _app.nit_ by using the natives services of a platform.
+
+> name: android>ui>
+> name: ios>ui>
+> name: app
+> name: app::App
+> name: core::native
+> name: android>service>
+> name: android::platform
+> name: ios::platform
 
 The suggested approach is to use platform specific modules to customize the application on a precise platform.
 See the calculator example for an adaptation of the UI on Android,
 the interesting module is in this repository at ../../examples/calculator/src/android_calculator.nit
 
+> name: android::platform
+> name: ios::platform
+> name: android::platform
+> name: ios::platform
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: android>ui>
+> name: ios>ui>
+> name: android
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: android>examples>src>
+> name: android>nit_compile>android>app>src>
+
 ## Persistent State with data_store
+
+> name: app::data_store
+> name: linux::data_store
+> name: android::data_store
+> name: ios::data_store
 
 _app.nit_ offers the submodule `app::data_store` to easily save the application state and user preferences.
 The service is accessible by the method `App::data_store`. The `DataStore` itself defines 2 methods:
+
+> name: app
+> name: app::App
+> name: android>service>
 
 * `DataStore::[]=` saves and associates any serializable instances to a `String` key.
   Pass `null` to clear the value associated to a key.
@@ -90,7 +212,17 @@ The service is accessible by the method `App::data_store`. The `DataStore` itsel
 * `DataStore::[]` returns the object associated to a `String` key.
   It returns `null` if nothing is associated to the key.
 
+> name: serialization::Serializable
+> name: app::CompositeControl::clear
+> name: core::Object
+
 ### Usage Example
+
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
 
 ~~~
 import app::data_store
@@ -123,16 +255,6 @@ redef class App
 end
 ~~~
 
-> example: app::ui_example
-> code: app::App
-> code: app::data_store::App::data_store
-> code: app::DataStore
-> code: app::DataStore::[]=
-> code: app::DataStore::[]
-> code: app::AppComponent::on_save_state
-> code: app::data_store
-> code: app::AppComponent::on_restore_state
-
 ## Async HTTP request
 
 The module `app::http_request` provides services to execute asynchronous HTTP request.
@@ -141,9 +263,23 @@ lets the user implement methods acting only on the UI thread.
 See the documentation of `AsyncHttpRequest` for more information and
 the full example at `examples/http_request_example.nit`.
 
+> name: android>service>
+> name: meta::Class
+> name: android>ui>
+> name: ios>ui>
+> name: pthreads::Thread
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+
 ## Metadata annotations
 
 The _app.nit_ framework defines three annotations to customize the application package.
+
+> name: app
+> name: app::App
 
 * `app_name` takes a single argument, the visible name of the application.
   This name is used for launchers and window title.
@@ -171,7 +307,31 @@ The _app.nit_ framework defines three annotations to customize the application p
   In case of name conflicts in the resource files, the files from the project root have the lowest priority,
   those associated to modules lower in the importation hierarchy have higher priority.
 
+> name: app::Window
+> name: json::store
+> name: app::CompositeControl::has
+> name: core>collection>tests>
+> name: android::platform
+> name: ios::platform
+> name: core::file
+> name: android
+> name: core::file
+> name: android>nit_compile>android>app>libs>
+> name: android>nit_compile>android>app>src>main>java>
+> name: core::file
+> name: core::Path
+> name: pthreads::extra
+> name: app::Control::parent
+> name: core::file
+> name: core::file
+
 ### Usage Example
+
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
 
 ~~~
 module my_module is
@@ -181,17 +341,28 @@ module my_module is
 end
 ~~~
 
-> code: app::app
-> code: app::App
-
 ## Compiling and Packaging an Application
 
 The Nit compiler detects the target platform from the importations and generates the appropriate application format and package.
+
+> name: android::platform
+> name: ios::platform
 
 Applications using only the portable services of _app.nit_ require some special care at compilation.
 Such an application, let's say `calculator.nit`, does not depend on a specific platform and use the portable UI.
 The target platform must be specified to the compiler for it to produce the correct application package.
 There is two main ways to achieve this goal:
+
+> name: android>service>
+> name: app
+> name: app::App
+> name: android::platform
+> name: ios::platform
+> name: android>ui>
+> name: ios>ui>
+> name: android::platform
+> name: ios::platform
+> name: android>nit_compile>android>app>src>main>
 
 * The mixin option (`-m module`) imports an additional module before compiling.
   It can be used to load platform specific implementations of the _app.nit_ portable UI.
@@ -220,7 +391,22 @@ There is two main ways to achieve this goal:
   # ...
   ~~~
 
-> example: examples::calculator
-> code: examples::calculator
-> code: android::android
+> name: app::AsyncHttpRequest::before
+> name: app::TextAsset::load
+> name: app::PlayableAudio::load
+> name: android::platform
+> name: ios::platform
+> name: app
+> name: app::App
+> name: android>ui>
+> name: ios>ui>
+> name: android::platform
+> name: ios::platform
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: android
+> name: android
 

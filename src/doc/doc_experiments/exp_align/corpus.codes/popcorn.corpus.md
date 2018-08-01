@@ -94,7 +94,7 @@ end
 ~~~
 
 > code: popcorn::Handler
-> code: popcorn::popcorn
+> code: popcorn
 
 Where:
 
@@ -163,10 +163,10 @@ in a directory named `public`:
 app.use("/", new StaticHandler("public/"))
 ~~~
 
-> code: nitcorn::StaticHandler
+> code: popcorn::popcorn
 > code: popcorn::App
 > code: popcorn::Router::use
-> code: popcorn::popcorn
+> code: popcorn::StaticHandler
 
 Now, you can load the files that are in the `public` directory:
 
@@ -186,10 +186,11 @@ app.use("/", new StaticHandler("public/"))
 app.use("/", new StaticHandler("files/"))
 ~~~
 
-> code: nitcorn::StaticHandler
+> code: popcorn::StaticHandler
 > code: popcorn::App
 > code: popcorn::Router::use
 > code: popcorn::popcorn
+> code: popcorn::StaticHandler
 
 Popcorn looks up the files in the order in which you set the static directories
 with the `use` method.
@@ -202,10 +203,10 @@ static directory, as shown below:
 app.use("/static/", new StaticHandler("public/"))
 ~~~
 
-> code: nitcorn::StaticHandler
 > code: popcorn::App
 > code: popcorn::Router::use
 > code: popcorn::popcorn
+> code: popcorn::StaticHandler
 
 Now, you can load the files that are in the public directory from the `/static`
 path prefix.
@@ -230,9 +231,9 @@ This can be achieved by specifying a default file in the StaticHandler:
 app.use("/static/", new StaticHandler("public/", "default.html"))
 ~~~
 
-> code: nitcorn::StaticHandler
 > code: popcorn::App
 > code: popcorn::Router::use
+> code: popcorn::StaticHandler
 > code: popcorn::popcorn
 
 This way all non-matched queries to the StaticHandler will be answered with the
@@ -335,8 +336,8 @@ app.listen("localhost", 3000)
 > code: template::Template
 > code: nitcorn::HttpRequest::query_string
 > code: nitcorn::HttpRequest::get_args
-> code: nitcorn::HttpRequest::uri
 > code: popcorn::popcorn::App::listen
+> code: nitcorn::HttpRequest::uri
 > code: popcorn::Handler::get
 > code: popcorn::pop_handlers::HttpResponse::send
 > code: popcorn::Router::use
@@ -376,8 +377,8 @@ app.listen("localhost", 3000)
 > code: popcorn::App
 > code: template::Template
 > code: nitcorn::HttpRequest::post_args
-> code: nitcorn::HttpRequest::uri
 > code: popcorn::popcorn::App::listen
+> code: nitcorn::HttpRequest::uri
 > code: popcorn::pop_handlers::HttpResponse::send
 > code: popcorn::Handler::post
 > code: popcorn::Router::use
@@ -470,11 +471,19 @@ This route path will match requests to `/about`.
 app.use("/about", new MyHandler)
 ~~~
 
+> code: popcorn::App
+> code: popcorn::Handler
+> code: popcorn::Router::use
+
 This route path will match requests to `/random.text`.
 
 ~~~
 app.use("/random.text", new MyHandler)
 ~~~
+
+> code: popcorn::App
+> code: popcorn::Handler
+> code: popcorn::Router::use
 
 During the query/response process, routes are matched by order of declaration
 through the `App::use` method.

@@ -1,18 +1,25 @@
 # Portable game and multimedia framework for Nit
 
+> name: android::game
+
 _gamnit_ is a modular framework to create portable 2D or 3D apps in Nit.
 It is based on the portability framework _app.nit_ and the OpenGL ES 2.0 standard.
 
 > name: gamnit
 > name: app
+> name: app::App
 > name: app
+> name: app::App
 
 ## System configuration
 
 To compile the _gamnit_ apps packaged with the Nit repository on GNU/Linux you need to install the dev version of a few libraries and some tools.
 On Debian 8.2, this command should install everything needed:
 
+> name: gamnit::Shader::compile
 > name: gamnit
+> name: app
+> name: app::App
 > name: linux
 
 ~~~bash
@@ -29,6 +36,10 @@ While macOS isn't supported, it can create iOS apps.
 You need to install and setup Xcode, and you may install the GLSL shader validation tool via `brew`:
 
 > name: ios
+> name: app
+> name: app::App
+> name: gamnit::GamnitDisplay::setup
+> name: gamnit::Shader
 
 ~~~bash
 brew install glslang
@@ -36,9 +47,13 @@ brew install glslang
 
 ## Services by submodules
 
+> name: android>service>
+
 _gamnit_ is modular, different services of the framework are available through different submodules:
 
 > name: gamnit
+> name: android>service>
+> name: gamnit::flat_core::GroupedArray::available
 
 * The main entrypoint `gamnit` provides low-level abstractions over some services of OpenGL ES 2.0, like textures, shaders and programs.
   It defines the basic methods to implement in order to obtain a working game:
@@ -73,24 +88,85 @@ _gamnit_ is modular, different services of the framework are available through d
 
 * `network` provides a simple communication framework for multiplayer client/server games.
 
+> name: android>nit_compile>android>app>src>main>
+> name: android>service>
 > name: gamnit::textures
 > name: gamnit::Texture
 > name: gamnit::Shader
 > name: gamnit::programs
+> name: android::game
 > name: gamnit::flat_core::App::update
+> name: mnit::input
+> name: gamnit::GamnitProgram::use
+> name: android::game
 > name: gamnit::Sprite
+> name: gamnit::client
 > name: gamnit::flat_core::App::update
+> name: android::game
+> name: gamnit::CustomTexture::fill
+> name: core::list
+> name: core::List
 > name: gamnit::Sprite
+> name: core::Object
+> name: gamnit::flat_core::SpriteSet::draw
+> name: gamnit::flat_core::SpriteContext::draw
+> name: gamnit::Material::draw
+> name: gamnit::ParticleSystem::draw
+> name: core::list
+> name: core::List
 > name: gamnit::Sprite
+> name: android::game
+> name: geometry::Point
+> name: gamnit::cameras
 > name: gamnit::Camera
+> name: core::Set
+> name: core::list
+> name: core::List
+> name: android>ui>
+> name: ios>ui>
 > name: gamnit::Sprite
+> name: geometry::Point
+> name: gamnit::cameras
 > name: gamnit::Camera
+> name: gamnit::AbsoluteSubtexture::top
+> name: gamnit::UICamera::top
+> name: gamnit::AbsoluteSubtexture::left
+> name: gamnit::VirtualGamepadSpritesheet::left
+> name: gamnit::UICamera::left
 > name: gamnit::display
+> name: gamnit::CheckerTexture::size
+> name: gamnit::ShaderVariable::size
+> name: gamnit::BMFont::size
+> name: android::game
+> name: app>doc>
+> name: gamnit::client
+> name: android::game
+> name: gamnit::CustomTexture::fill
+> name: android>ui>
+> name: ios>ui>
+> name: gamnit::Animation::frames
+> name: core::list
+> name: core::List
+> name: gamnit::Camera::position
+> name: gamnit::Light::position
+> name: gamnit::Sprite::rotation
+> name: gamnit::ShadowDepthProgram::rotation
+> name: gamnit::SelectionProgram::rotation
+> name: android>service>
 > name: gamnit
 > name: gamnit::keys
+> name: android>service>
+> name: msgpack::read
 > name: gamnit::MtlFileParser::parse
 > name: gamnit::ObjFileParser::parse
 > name: gamnit::Model
+> name: gamnit>virtual_gamepad>assets>
+> name: fonts_showcase>assets>
+> name: template>assets>
+> name: sdl2>examples>minimal>assets>
+> name: app::Asset
 > name: gamnit::client
 > name: gamnit::server
 > name: gamnit::Server
+> name: android::game
+

@@ -1,6 +1,7 @@
 # _app.nit_, a framework for portable applications
 
 > name: app
+> name: app::App
 
 The framework provides services to manage common needs of modern mobile applications:
 
@@ -15,6 +16,7 @@ The features offered by _app.nit_ are common to all platforms, but
 may not be available on all devices.
 
 > name: app
+> name: app::App
 
 ## Application Life-Cycle
 
@@ -22,6 +24,7 @@ The _app.nit_ application life-cycle is compatible with all target platforms.
 It relies on the following sequence of events, represented here by their callback method name:
 
 > name: app
+> name: app::App
 
 1. `on_create`: The application is being created.
    You should build the UI at this time and launch services.
@@ -43,7 +46,7 @@ It relies on the following sequence of events, represented here by their callbac
 > name: app::App
 > name: app::App
 
-![_app.nit_ life-cycle](doc/app-nit-lifecycle.png)
+![_app.nit_ life-cycle](path/resources/ab03b885463901ade4ae1a9adfaefeff.png)
 
 > name: app
 > name: app::App
@@ -63,8 +66,8 @@ The `App` instance is the first to be notified of these events.
 Other UI elements, from the `ui` submodule, are notified of the same events using a simple depth first visit.
 So all UI elements can react separately to live-cycle events.
 
-> name: app::ui
-> name: app::ui
+> name: android>ui>
+> name: ios>ui>
 
 ## User Interface
 
@@ -104,7 +107,6 @@ The example at `examples/ui_example.nit` shows off most features of `app::ui` in
 You can also take a look at the calculator (`../../examples/calculator/src/calculator.nit`) which is a concrete usage example.
 
 > name: app>examples>
-> name: app::calculator
 > name: app>examples>
 
 ### Platform-specific UI
@@ -122,7 +124,6 @@ the interesting module is in this repository at ../../examples/calculator/src/an
 
 > name: app>examples>
 > name: app::ui
-> name: examples::calculator
 > name: android
 > name: app>examples>
 
@@ -245,7 +246,9 @@ The target platform must be specified to the compiler for it to produce the corr
 There is two main ways to achieve this goal:
 
 > name: app
-> name: app::ui
+> name: app::App
+> name: android::platform
+> name: android>ui>
 
 * The mixin option (`-m module`) imports an additional module before compiling.
   It can be used to load platform specific implementations of the _app.nit_ portable UI.
@@ -276,9 +279,9 @@ There is two main ways to achieve this goal:
 
 > name: app
 > name: app::App
-> name: app::ui
+> name: android>ui>
+> name: android::platform
 > name: app>examples>
-> name: examples::calculator
 > name: android
 > name: android
-> name: app
+

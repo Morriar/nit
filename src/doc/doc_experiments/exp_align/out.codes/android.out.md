@@ -1,11 +1,6 @@
 # Android platform support and APIs
 
-> name: android
-> name: android::platform
-
 ## Compilation for Android
-
-> name: android
 
 The compiler generates an APK file as the output when the `android`
 module is imported by the compilation target. The path to the generated
@@ -16,15 +11,8 @@ file can be specified using the `-o` and `--dir` options.
 To compile Android apps from a 64 bits GNU/Linux host you can reuse an existing Android Studio
 installation or make a clean install with command line tools only.
 
-> name: android
-> name: app::App
-> name: linux
-> name: android
-
 Note that this guide supports only 64 bits GNU/Linux hosts with support for a Java 8 JDK,
 it may be possible to support other platforms with some tweaks.
-
-> name: linux
 
 1. Install the required SDK packages using one of these two methods:
 
@@ -65,21 +53,10 @@ it may be possible to support other platforms with some tweaks.
    sudo apt install openjdk-8-jdk
    ~~~
 
-> name: android
-> name: android
-> name: android
-> name: android
-
 ## Configure the Android application
-
-> name: android
 
 The _app.nit_ framework and this project offers some services to
 customize the generated Android application.
-
-> name: app
-> name: app::App
-> name: android
 
 ### Annotations
 
@@ -110,35 +87,19 @@ customize the generated Android application.
   only be used by low-level implementations of Nit on Android.
   Its usefulness will be extended in the future to customize user applications.
 
-> name: app
-> name: app::App
-> name: android
-> name: android
-> name: android
-> name: android
-> name: android
+> code: android
+> code: android
 
 ### Android implementation
-
-> name: android
 
 There is two core implementation for Nit apps on Android.
 `android::nit_activity` is used by apps with standard windows and native UI controls.
 `android::game` is used by, well, games and the game frameworks `mnit` and `gamnit`.
 
-> name: app::App
-> name: android
-> name: app::App
-> name: android>ui>
-> name: android::game
-
 Clients don't have to select the core implementation, it is imported by other relevant modules.
 For example, a module importing `app::ui` and `android` will trigger the importation of `android::nit_activity`.
 
-
 ### Lock app orientation
-
-> name: app
 
 Importing `android::landscape` or `android::portrait` locks the generated
 application in the specified orientation. This can be useful for games and
@@ -150,10 +111,6 @@ Resources specific to the Android platform should be placed in an `android/` fol
 The folder should adopt the structure of a normal Android project, e.g., a custom XML resource file can be placed
 at `android/res/values/color.xml` to be compiled with the Android application.
 
-> name: android
-> name: android
-> name: android
-
 The application icon should also be placed in the `android/` folder.
 Place the classic bitmap version at `android/res/mipmap-hdpi/ic_launcher.png` (and others),
 and the adaptive version at `android/res/mipmap-anydpi-v26/ic_launcher.xml`.
@@ -162,17 +119,12 @@ The Nit compiler detects these files and uses them as the application icon.
 Additional `android/` folders may be placed next to more specific Nit modules to change the Android resources
 for application variants. The more specific resources will have priority over the project level `android/` files.
 
-> name: android
-
 ## Compilation modes
 
 There are two compilation modes for the Android platform, debug and release.
 Theses modes are also applied to the generated Android projects.
 The compilation mode is specified as an argument to `nitc`, only
 `--release` can be specified as debug is the default behavior.
-
-> name: android
-> name: android
 
 ### Debug mode
 
@@ -181,7 +133,6 @@ and their password. The APK file can be installed to a local device with
 USB debugging enabled, but it cannot be published on the Play Store.
 
 By default, `nitc` will compile Android applications in debug mode.
-
 
 ### Release mode
 
@@ -214,3 +165,4 @@ APK file, it can then be published on the Play Store.
 
 3. Call `nitc` with the `--release` options. You will be prompted for the
    required passwords as needed by `jarsigner`.
+

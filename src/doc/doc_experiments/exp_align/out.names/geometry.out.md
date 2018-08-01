@@ -1,6 +1,7 @@
 # Basic geometry data structures and services
 
 > name: geometry
+> name: geometry::QuadTree::data
 
 ## Points and Lines
 
@@ -21,53 +22,73 @@ It means a simple and fast way to test collision but not really accurate since i
 
 > name: geometry::boxes
 > name: geometry::Box
+> name: geometry::boxes
+> name: geometry::Box
 > name: geometry::Point
 > name: geometry::Line
+> name: geometry::boxes
+> name: geometry::Box
+> name: core>collection>tests>
+> name: geometry::boxes
 > name: geometry::Box
 
 ## Quadtrees
 
 > name: geometry::quadtree
+> name: geometry::QuadTree
 
 A QuadTree is a tree data structure in which each internal node has exactly four children
 They're most often used to partition two-dimensional space by recursively subdividing
 it into four quadrants or regions.
 
-> name: geometry::quadtree
 > name: geometry::QuadTree
+> name: geometry::quadtree
+> name: geometry::QuadTree::data
 > name: geometry::QuadTree::children
+> name: core::re
 
 * They decompose space into adaptable cells
 * Each cell has a maximum capacity. When maximum is reached, the cell splits.
 
 Quadtrees are using Boxed objects to determine their distribution in the 2D space.
 
+> name: geometry::quadtree
 > name: geometry::QuadTree
 > name: geometry::Boxed
+> name: core::Object
 
 This API provides two different types of Quadtree : Static and Dynamic (respectively `SQuadTree` and `DQuadTree`).
 
 > name: geometry::quadtree
+> name: geometry::QuadTree
 
 * Static: When you create the QuadTree, you need to specify the region that it will cover
 
 * Dynamic: You just need to fill the quadtree with objects, and when the threshold is reached,
   it will automatically divide the current region, depending on the distribution of objects already in the region.
 
-> name: geometry::quadtree
 > name: geometry::QuadTree
 > name: geometry::quadtree
+> name: geometry::quadtree
+> name: geometry::QuadTree
+> name: core::Object
+> name: core::Object
 
 ## Polygons
 
+> name: geometry::polygon
 > name: geometry::Polygon
 
 Some basic polygon services.
 
+> name: geometry::polygon
 > name: geometry::Polygon
 
 This module contains interesting algorithms for `ConvexPolygon`only at the moment. A Convex polygon can be defined as follow :
 
+> name: geometry::Boxed::contains
+> name: geometry::APolygon::contain
+> name: geometry::polygon
 > name: geometry::Polygon
 
 * All its interior angles are less than 180°. this means that all the vertices of the polygon
@@ -85,19 +106,30 @@ This module contains interesting algorithms for `ConvexPolygon`only at the momen
 > name: geometry::angles
 > name: geometry::polygon::APolygon::vertices
 > name: geometry::polygon
+> name: geometry::Polygon
 > name: geometry::Point
 > name: geometry::Point
 > name: geometry::Line
 > name: geometry::Point
+> name: geometry::polygon
+> name: geometry::Polygon
+> name: geometry::polygon
 > name: geometry::Polygon
 > name: geometry::Point
 > name: geometry::Line
+> name: geometry::angles
+> name: geometry::Boxed::contains
+> name: geometry::APolygon::contain
+> name: geometry::polygon::APolygon::vertices
 
 A polygon which is not convex is called concave. Convex polygon are used because most
 geometric problems are simpler and faster on convex objects than on non-convex ones.
 
+> name: geometry::polygon
 > name: geometry::Polygon
+> name: geometry::polygon
 > name: geometry::Polygon
+> name: core::Object
 
 Services provided :
 
@@ -107,7 +139,12 @@ Services provided :
 * Triangulation of polygon
 
 > name: geometry::Point
+> name: geometry::polygon
 > name: geometry::Polygon
+> name: geometry::polygon
 > name: geometry::Polygon
+> name: core::Set
 > name: geometry::Point
+> name: geometry::polygon
 > name: geometry::Polygon
+

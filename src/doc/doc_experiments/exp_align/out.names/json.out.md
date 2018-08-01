@@ -1,6 +1,8 @@
 # read and write JSON formatted text
 
 > name: json
+> name: core>text>
+> name: core::Text
 
 These services can be useful to communicate with a remote server or client,
 save data locally or even debug and understand the structure of a Nit object.
@@ -22,7 +24,10 @@ share the same features.
 
 > name: core::Object
 > name: json
+> name: core::Object
 > name: json
+> name: core::Object
+> name: core::Object
 
 ### Write plain JSON
 
@@ -43,9 +48,15 @@ For your local objects, you can annotate them with `serialize` to automate subcl
 
 > name: core::Object
 > name: core>collection>
+> name: core::Collection
+> name: core::numeric
 > name: core::Numeric
+> name: json::JsonValue::value
+> name: core::Object
 
 #### Example
+
+> name: serialization>examples>
 
 ~~~
 import json
@@ -110,6 +121,9 @@ The metadata allows to avoid repeating an object and its resolves cycles in the 
 
 > name: json
 > name: json
+> name: core::Object
+> name: core::Object
+> name: core::Object
 
 For more information on Nit serialization, see: ../serialization/README.md
 
@@ -131,6 +145,7 @@ There are a total of 3 API to read JSON:
 > name: json
 > name: core::Object
 > name: json
+> name: core::Object
 > name: json
 > name: core::Object
 
@@ -139,11 +154,16 @@ It can use the metadata in the JSON code, to recreate precise Nit objects.
 Otherwise, JSON objects are recreated to simple Nit types: `Map`, `Array`, etc.
 Errors are reported to the attribute `JsonDeserializer::errors`.
 
+> name: meta::Class
 > name: json
 > name: core::Object
 > name: json
 > name: core::Object
 > name: json
+> name: core::Object
+> name: json::error
+> name: core::error
+> name: core::Error
 
 The type to recreate is either declared or inferred:
 
@@ -155,13 +175,23 @@ The type to recreate is either declared or inferred:
    or the type name passed to `deserialize`.
 
 > name: json
+> name: core::Object
+> name: json::JsonKeyError::key
+> name: meta::Class
+> name: json::JsonValue::value
+> name: meta::Class
+> name: json::static
 
 The method `deserialize_json` is a shortcut to `JsonDeserializer` which prints
 errors to the console. It is fit only for small scripts and other quick and dirty usage.
 
-> name: serialization::Deserializer::errors
+> name: json::error
+> name: core::error
+> name: core::Error
 
 #### Example
+
+> name: serialization>examples>
 
 ~~~
 import json
@@ -213,6 +243,8 @@ assert deserializer.errors.is_empty # If false, `object` is invalid
 
 #### Missing attributes and default values
 
+> name: json::JsonValue::value
+
 When reading JSON, some attributes expected by Nit classes may be missing.
 The JSON object may come from an external API using optional attributes or
 from a previous version of your program without the attributes.
@@ -220,6 +252,7 @@ When an attribute is not found, the deserialization engine acts in one of three 
 
 > name: json
 > name: json
+> name: core::Object
 
 1. If the attribute has a default value or if it is annotated by `lazy`,
    the engine leave the attribute to the default value. No error is raised.
@@ -228,9 +261,20 @@ When an attribute is not found, the deserialization engine acts in one of three 
 3. Otherwise, the engine raises an error and does not set the attribute.
    The caller must check for `errors` and must not read from the attribute.
 
+> name: json::JsonValue::value
+> name: json::JsonValue::value
 > name: json::error
+> name: core::error
+> name: core::Error
+> name: json::static
+> name: core::Set
 > name: json::error
+> name: core::error
+> name: core::Error
 > name: json::error
+> name: core::error
+> name: core::Error
+> name: core::Set
 
 ~~~
 import json

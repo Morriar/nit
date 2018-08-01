@@ -230,13 +230,13 @@ redef class Deserializer
 	do
 		if name == "User" then
 			# Deserialize normally
-			var user = deserialize_attribute("name")
+			var user = deserialize_attribute("name").as(String)
 
 			# Decrypt password
-			var pass = deserialize_attribute("pass").rot(-13)
+			var pass = deserialize_attribute("pass").as(String).rot(-13)
 
 			# Deserialize the path and load the avatar from the file system
-			var avatar_path = deserialize_attribute("avatar_path")
+			var avatar_path = deserialize_attribute("avatar_path").as(String)
 			var avatar = new Image(avatar_path)
 
 			return new User(user, pass, avatar)
@@ -244,6 +244,10 @@ redef class Deserializer
 
 		return super
 	end
+end
+
+redef class String
+	fun rot(s: Int): String do return self
 end
 
 # An image loaded in memory as ASCII art
@@ -254,7 +258,7 @@ class Image
 	var path: String
 
 	# ASCII art composing this image
-	var ascii_art: String = path.read_all is lazy
+	var ascii_art: String = path.to_path.read_all is lazy
 end
 
 ~~~
@@ -274,8 +278,8 @@ you must use implementations of `Serializer` and `Deserializer`.
 The main implementations of these services are `JsonSerializer` and `JsonDeserializer`,
 from the `json_serialization` module.
 
-~~~
-import json
+~~~nitish
+mport json
 import user_credentials
 
 # Data to be serialized and deserialized

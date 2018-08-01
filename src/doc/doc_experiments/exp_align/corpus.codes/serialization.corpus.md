@@ -26,6 +26,7 @@ class Person
 end
 ~~~
 
+> example: serialization::custom_serialization
 > code: serialization::Serializable
 > code: serialization::serialization
 > code: core::Object::==
@@ -74,10 +75,11 @@ class Partnership
 end
 ~~~
 
+> example: serialization::custom_serialization
 > code: serialization::Serializable
-> code: serialization::serialization
 > code: core::Object::==
 > code: core::Object::hash
+> code: serialization::serialization
 
 ### Scope of the `serialize` annotation
 
@@ -137,6 +139,7 @@ The `noserialize` annotation mark an exception in a `serialize` module or class 
   end
   ~~~
 
+> example: serialization::custom_serialization
 > code: serialization::Serializable
 > code: serialization::serialization
 
@@ -162,6 +165,7 @@ class UserCredentials
 end
 ~~~
 
+> example: serialization::custom_serialization
 > code: serialization::Serializable
 > code: serialization::serialization
 
@@ -268,6 +272,7 @@ end
 
 ~~~
 
+> example: serialization::custom_serialization
 > code: serialization::Deserializer
 > code: serialization::Serializer
 > code: serialization::Serializer::serialize_attribute
@@ -293,8 +298,8 @@ you must use implementations of `Serializer` and `Deserializer`.
 The main implementations of these services are `JsonSerializer` and `JsonDeserializer`,
 from the `json_serialization` module.
 
-~~~
-import json
+~~~nitish
+mport json
 import user_credentials
 
 # Data to be serialized and deserialized

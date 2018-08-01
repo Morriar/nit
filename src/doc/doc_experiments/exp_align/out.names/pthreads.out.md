@@ -11,16 +11,20 @@ This group also provides two optional modules with thread-safe collections:
 
 > name: pthreads::Thread
 > name: core>collection>
+> name: core::Collection
 
 * `redef_collections` redefines existing collection to make them thread-safe.
   This incures a small overhead in all usage of the redefined collections.
 * `concurrent_collections` intro new thread-safe collections.
 
 > name: core>collection>
+> name: core::Collection
 > name: pthreads::Thread
 > name: core>collection>
+> name: core::Collection
 > name: pthreads::Thread
 > name: core>collection>
+> name: core::Collection
 
 Theses services are implemented using the POSIX threads.
 
@@ -36,6 +40,11 @@ You will get a subclass of `Thread`, even if there wasn't a return value before.
 A call to the `join` method will block the execution until the threaded method is done, or immediatly return if it's already done.
 `join` will return an object typed with the orginial return type, or `null` if there wasn't.
 
+> name: pthreads::AtomicInt::value
+> name: pthreads::StringTask::value
+> name: pthreads::pthreads::NativePthreadKey::get
+> name: pthreads::AtomicInt::value
+> name: pthreads::StringTask::value
 > name: core::Object
 
 ## Known limitations:

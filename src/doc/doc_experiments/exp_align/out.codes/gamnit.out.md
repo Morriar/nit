@@ -3,17 +3,10 @@
 _gamnit_ is a modular framework to create portable 2D or 3D apps in Nit.
 It is based on the portability framework _app.nit_ and the OpenGL ES 2.0 standard.
 
-> name: gamnit
-> name: app
-> name: app
-
 ## System configuration
 
 To compile the _gamnit_ apps packaged with the Nit repository on GNU/Linux you need to install the dev version of a few libraries and some tools.
 On Debian 8.2, this command should install everything needed:
-
-> name: gamnit
-> name: linux
 
 ~~~bash
 apt-get install libgles2-mesa-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev inkscape
@@ -28,8 +21,6 @@ pacman -S mingw-w64-x86_64-angleproject-git mingw-w64-x86_64-SDL2 mingw-w64-x86_
 While macOS isn't supported, it can create iOS apps.
 You need to install and setup Xcode, and you may install the GLSL shader validation tool via `brew`:
 
-> name: ios
-
 ~~~bash
 brew install glslang
 ~~~
@@ -37,8 +28,6 @@ brew install glslang
 ## Services by submodules
 
 _gamnit_ is modular, different services of the framework are available through different submodules:
-
-> name: gamnit
 
 * The main entrypoint `gamnit` provides low-level abstractions over some services of OpenGL ES 2.0, like textures, shaders and programs.
   It defines the basic methods to implement in order to obtain a working game:
@@ -73,24 +62,3 @@ _gamnit_ is modular, different services of the framework are available through d
 
 * `network` provides a simple communication framework for multiplayer client/server games.
 
-> name: gamnit::textures
-> name: gamnit::Texture
-> name: gamnit::Shader
-> name: gamnit::programs
-> name: gamnit::flat_core::App::update
-> name: gamnit::Sprite
-> name: gamnit::flat_core::App::update
-> name: gamnit::Sprite
-> name: gamnit::Sprite
-> name: gamnit::Camera
-> name: gamnit::Sprite
-> name: gamnit::Camera
-> name: gamnit::display
-> name: gamnit
-> name: gamnit::keys
-> name: gamnit::MtlFileParser::parse
-> name: gamnit::ObjFileParser::parse
-> name: gamnit::Model
-> name: gamnit::client
-> name: gamnit::server
-> name: gamnit::Server

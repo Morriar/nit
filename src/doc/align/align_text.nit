@@ -38,99 +38,102 @@ class MdTextAlign
 			return
 		end
 		var text = node.literal
-		var words = new Array[String]
 		for word in text.split(sep_re) do
 			if word.trim.is_empty then continue
-			words.add word
-		end
-		for word in words do
+
 			var ref = new MdRefText(node, word)
 			var refs = align_word(node, word).to_a
-			refs = filter_refs(word, refs)
+			refs = filter_refs(refs)
 			ref.model_refs.add_all refs
 			node.md_refs.add ref
 		end
 	end
 
-	var stopwords = ["from", "new", "to", "code", "all", "set", "output"]
+	var name_index: Map[String, Array[MEntity]] is lazy do
+		var index = new HashMap[String, Array[MEntity]]
+		for mentity in model.collect_mentities do
+			var name = lemmatize(mentity.name)
+			if not index.has_key(name) then
+				index[name] = new Array[MEntity]
+			end
+			index[name].add mentity
+		end
+		return index
+	end
+
+	var stopwords = ["from", "new", "to", "code", "all", "set", "output", "other"]
 
 	fun align_word(node: MdText, word: String): ArraySet[MdRefMEntity] do
 		var res = new ArraySet[MdRefMEntity]
 
 		if word.length <= 1 then return res
-		if stopwords.has(word.to_lower) then return res
+		# if stopwords.has(word.to_lower) then return res
 		if word.to_lower.has("examp") then word = "examples"
 		if word.to_lower.has("test") then word = "tests"
 
-		# Align packages
-		var mpackage = model.mentity_by_full_name(word.to_lower)
-		if mpackage != null then
-			res.add new MdRefMEntity(node, word, 90.0, mpackage)
-		end
-
-		# Align groups
-		var full_name = "{context.full_name}>{word.to_lower}>"
-		var mgroup = model.mentity_by_full_name(full_name)
-		if mgroup != null then
-			res.add new MdRefMEntity(node, word, 90.0, mgroup)
-		end
-
-		# Align modules
-		full_name = "{context.full_name}::{word.to_lower}"
-		var mmodule = model.mentity_by_full_name(full_name)
-		if mmodule != null then
-			res.add new MdRefMEntity(node, word, 90.0, mmodule)
-		end
-
-		# Align classes
-		var name = word.capitalize
-		var mclasses = model.mentities_by_name(name)
-		for mclass in mclasses do
-			var confidence = 90.0 / mclasses.length.to_f
-			res.add new MdRefMEntity(node, word, confidence, mclass)
-		end
-
-		name = name.replace("ies$".to_re, "y")
-		name = name.replace("xes$".to_re, "x")
-		name = name.replace("s$".to_re, "")
-		if name.length > 1 then
-			mclasses = model.mentities_by_name(name)
-			for mclass in mclasses do
-				var confidence = 80.0 / mclasses.length.to_f
-				res.add new MdRefMEntity(node, word, confidence, mclass)
+		# Direct match
+		var mentities = model.mentities_by_name(word)
+		for mentity in mentities do
+			if mentity isa MClassDef then continue
+			if mentity isa MPropDef then continue
+			if mentity isa MProperty then
+				if mentity.name.length <= 2 then continue
+				if stopwords.has(mentity.name) then continue
+				if not context.has_mentity(mentity) then continue
 			end
+			res.add new MdRefMEntity(node, word, 90.0, mentity)
 		end
 
-		# Align mprops
-		name = word.to_lower
-		var mprops = model.mentities_by_name(name)
-		for mprop in mprops do
-			if mprop isa MProperty then
-				var confidence = 90.0 / mprops.length.to_f
-				res.add new MdRefMEntity(node, word, confidence, mprop)
+		# Lemma match
+		var name = lemmatize(word)
+		if name_index.has_key(name) then
+			for mentity in name_index[name] do
+				if mentity isa MClassDef then continue
+				if mentity isa MPropDef then continue
+				if mentity isa MProperty then
+					if mentity.name.length <= 2 then continue
+					if stopwords.has(mentity.name) then continue
+					if not context.has_mentity(mentity) then continue
+				end
+				res.add new MdRefMEntity(node, word, 80.0, mentity)
 			end
 		end
 
 		return res
 	end
 
-	fun filter_refs(word: String, refs: Collection[MdRefMEntity]): Array[MdRefMEntity] do
+	fun lemmatize(name: String): String do
+		name = name.to_lower
+		name = name.replace("[^r]ing$".to_re, "e")
+		name = name.replace("ies$".to_re, "y")
+		name = name.replace("xes$".to_re, "x")
+		name = name.replace("s$".to_re, "")
+		return name
+	end
+
+	fun filter_refs(refs: Collection[MdRefMEntity]): Array[MdRefMEntity] do
 		var res = new Array[MdRefMEntity]
 
 		var has_mpackage = false
+		var has_mgroup = false
 		var has_mmodule = false
 		var has_mclass = false
-		for mentity in refs do
+		var mentities = new HashSet[MEntity]
+		for ref in refs do
+			var mentity = ref.mentity
 			if mentity isa MPackage then has_mpackage = true
+			if mentity isa MGroup then has_mgroup = true
 			if mentity isa MModule then has_mmodule = true
 			if mentity isa MClass then has_mclass = true
 		end
 		for ref in refs do
 			var mentity = ref.mentity
+			if mentities.has(mentity) then continue
 			if has_mpackage and mentity isa MGroup then continue
-			if has_mpackage and mentity isa MModule then continue
-			if (has_mpackage or has_mmodule or has_mclass) and mentity isa MProperty then continue
-			if (mentity isa MProperty or mentity isa MClass) and not context.has_mentity(mentity) then continue
+			if (has_mpackage or has_mgroup) and mentity isa MModule then continue
+			# if (has_mpackage or has_mgroup or has_mmodule) and mentity isa MClass then continue
+			if (has_mpackage or has_mgroup or has_mmodule or has_mclass) and mentity isa MProperty then continue
+			mentities.add mentity
 			res.add ref
 		end
 		return res

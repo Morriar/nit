@@ -1,16 +1,8 @@
 # Vector Space Model
 
-> name: vsm::Vector
-
 Vector Space Model (VSM) is an algebraic model for representing text documents
 (and any objects, in general) as vectors of identifiers, such as, for example,
 index terms.
-
-> name: vsm::Vector
-> name: vsm
-> name: vsm::Vector
-> name: vsm::Document
-> name: vsm::Vector
 
 It is used in information filtering, information retrieval, indexing and
 relevancy rankings.
@@ -21,33 +13,15 @@ The `vsm` package provides the following features:
 * Vector indexing and matching with tf * idf.
 * File indexing and matching to free text queries.
 
-> name: vsm::Vector
-> name: vsm::IndexMatch::similarity
-> name: vsm::Vector
-
 ## Vectors
-
-> name: vsm::Vector
 
 With VSM, documents are represented by a n-dimensions vector.
 Each dimension represent an attribute of the document or object.
 
-> name: vsm
-> name: vsm::Document
-> name: vsm::Vector
-> name: vsm::Document
-
 For text document, the count of each term found in the document if often used to
 build vectors.
 
-> name: vsm::Document
-> name: vsm::Document::terms_doc_count
-> name: vsm::Document
-> name: vsm::Vector
-
 ### Creating a vector
-
-> name: vsm::Vector
 
 ~~~
 import vsm
@@ -60,9 +34,14 @@ assert vector["term2"] == 1.0
 assert vector.norm.is_approx(2.236, 0.001)
 ~~~
 
-### Comparing vectors
+> example: vsm::example_vsm
+> code: vsm::Vector
+> code: core::MapRead::[]
+> code: core::Map::[]=
+> code: vsm::Vector::norm
+> code: vsm::vsm
 
-> name: vsm::Vector
+### Comparing vectors
 
 ~~~
 import vsm
@@ -83,24 +62,18 @@ var s2 = query.cosine_similarity(v2)
 assert s1 > s2
 ~~~
 
-## VSMIndex
+> example: vsm::example_vsm
+> code: vsm::Vector
+> code: core::Map::[]=
+> code: vsm::Vector::cosine_similarity
+> code: vsm::vsm
 
-> name: vsm::VSMIndex
+## VSMIndex
 
 VSMIndex is a Document index based on VSM.
 
-> name: vsm::VSMIndex
-> name: vsm::Document
-> name: vsm
-
 Using VSMIndex you can index documents associated with their vector.
 Documents can then be matched to query vectors.
-
-> name: vsm::VSMIndex
-> name: vsm::Document
-> name: vsm::Vector
-> name: vsm::Document
-> name: vsm::Vector
 
 This represents a minimalistic search engine.
 
@@ -135,14 +108,23 @@ var matches = index.match_vector(query)
 assert matches.first.document == d1
 ~~~
 
+> example: vsm::example_vsm
+> code: vsm::Vector
+> code: core::Map::[]=
+> code: vsm::VSMIndex
+> code: vsm::Document
+> code: core::Collection::first
+> code: vsm::VSMIndex::index_document
+> code: core::HashSet
+> code: vsm::IndexMatch::document
+> code: vsm::IndexMatch
+> code: vsm::VSMIndex::documents
+> code: vsm::VSMIndex::match_vector
+> code: vsm::vsm
+
 ## StringIndex
 
-> name: vsm::StringIndex
-
 The StringIndex provides usefull services to index and match strings.
-
-> name: vsm::StringIndex
-> name: core::String
 
 ~~~
 import vsm
@@ -157,14 +139,21 @@ var matches = index.match_string("this sample")
 assert matches.first.document == d1
 ~~~
 
+> example: vsm::example_vsm
+> code: vsm::StringIndex
+> code: vsm::StringIndex::index_string
+> code: core::Collection::first
+> code: vsm::Document
+> code: core::HashSet
+> code: vsm::IndexMatch::document
+> code: vsm::IndexMatch
+> code: vsm::VSMIndex::documents
+> code: vsm::StringIndex::match_string
+> code: vsm::vsm
+
 ## FileIndex
 
-> name: vsm::FileIndex
-
 The FileIndex is a StringIndex able to index and retrieve files.
-
-> name: vsm::FileIndex
-> name: vsm::StringIndex
 
 ~~~nit
 import vsm
@@ -173,4 +162,9 @@ var index = new FileIndex
 
 index.index_files(["/path/to/doc/1", "/path/to/doc/2"])
 ~~~
+
+> example: vsm::example_vsm
+> code: vsm::FileIndex
+> code: vsm::FileIndex::index_files
+> code: vsm::vsm
 

@@ -125,12 +125,12 @@ end
 
 > example: app::ui_example
 > code: app::App
-> code: app::data_store::App::data_store
+> code: app::app_base::Sys::app
+> code: app::data_store
 > code: app::DataStore
 > code: app::DataStore::[]=
 > code: app::DataStore::[]
 > code: app::AppComponent::on_save_state
-> code: app::data_store
 > code: app::AppComponent::on_restore_state
 
 ## Async HTTP request
@@ -181,7 +181,6 @@ module my_module is
 end
 ~~~
 
-> code: app::app
 > code: app::App
 
 ## Compiling and Packaging an Application
@@ -220,7 +219,5 @@ There is two main ways to achieve this goal:
   # ...
   ~~~
 
-> example: examples::calculator
-> code: examples::calculator
 > code: android::android
 

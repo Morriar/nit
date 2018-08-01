@@ -263,7 +263,7 @@ class MEntityDocument
 	fun build_vector(index: MEntityIndex) do
 		mentity.build_base_vector(terms_count)
 		mentity.build_sign_vector(terms_count)
-		mentity.build_nlp_vector(terms_count, index)
+		# mentity.build_nlp_vector(terms_count, index)
 		mentity.build_code_vector(code_vector, index)
 
 		terms_count.add_all code_vector

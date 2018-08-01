@@ -8,9 +8,13 @@ index terms.
 
 > name: vsm::Vector
 > name: vsm
-> name: vsm::Vector
+> name: core>text>
+> name: core::Text
 > name: vsm::Document
+> name: core::Object
 > name: vsm::Vector
+> name: vsm>examples>
+> name: serialization>examples>
 
 It is used in information filtering, information retrieval, indexing and
 relevancy rankings.
@@ -24,6 +28,9 @@ The `vsm` package provides the following features:
 > name: vsm::Vector
 > name: vsm::IndexMatch::similarity
 > name: vsm::Vector
+> name: core::file
+> name: core>text>
+> name: core::Text
 
 ## Vectors
 
@@ -36,12 +43,14 @@ Each dimension represent an attribute of the document or object.
 > name: vsm::Document
 > name: vsm::Vector
 > name: vsm::Document
+> name: core::Object
 
 For text document, the count of each term found in the document if often used to
 build vectors.
 
+> name: core>text>
+> name: core::Text
 > name: vsm::Document
-> name: vsm::Document::terms_doc_count
 > name: vsm::Document
 > name: vsm::Vector
 
@@ -142,6 +151,7 @@ assert matches.first.document == d1
 The StringIndex provides usefull services to index and match strings.
 
 > name: vsm::StringIndex
+> name: core::Match
 > name: core::String
 
 ~~~
@@ -165,6 +175,7 @@ The FileIndex is a StringIndex able to index and retrieve files.
 
 > name: vsm::FileIndex
 > name: vsm::StringIndex
+> name: core::file
 
 ~~~nit
 import vsm

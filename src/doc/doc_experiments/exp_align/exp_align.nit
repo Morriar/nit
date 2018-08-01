@@ -31,8 +31,10 @@ class ReadmeComparator
 
 	fun compare_docs(orig, dest: MdDocument) do
 
-		var block_spans = 0
 		var block_count = 0
+		var block_spans = 0
+		var block_names = 0
+		var block_codes = 0
 
 		var spans_r = 0.0
 		var spans_p = 0.0
@@ -62,9 +64,6 @@ class ReadmeComparator
 
 			var oblock = dest.match_block(block)
 			if oblock == null then continue
-			# print block
-			# print oblock
-			# print "--------"
 
 			# spans
 			var orig_spans = block.span_refs
@@ -82,7 +81,8 @@ class ReadmeComparator
 			# names
 			var orig_names = block.name_refs
 			var dest_names = oblock.name_refs
-			if orig_names.not_empty and dest_names.not_empty then
+			if dest_names.not_empty then block_names += 1
+			if orig_names.not_empty  then
 				var name_r = recall(orig_names, dest_names)
 				var name_p = precision(orig_names, dest_names)
 				# print "name_r: {name_r}\t{if name_r < 100.0 then "\t" else ""}name_p: {name_p}"
@@ -94,7 +94,7 @@ class ReadmeComparator
 			# examples
 			var orig_exs = block.example_refs
 			var dest_exs = oblock.example_refs
-			if orig_exs.not_empty and dest_exs.not_empty then
+			if orig_exs.not_empty then
 				var ex_r = recall(orig_exs, dest_exs)
 				var ex_p = precision(orig_exs, dest_exs)
 				# print "name_r: {name_r}\t{if name_r < 100.0 then "\t" else ""}name_p: {name_p}"
@@ -103,16 +103,14 @@ class ReadmeComparator
 				exs_count += 1
 			end
 
-			# code reds
+			# code refs
 			var orig_codes = block.code_refs
 			var dest_codes = oblock.code_refs
-			if orig_codes.not_empty and dest_codes.not_empty then
-				# print orig_codes
-				# print dest_codes
+			if dest_codes.not_empty then block_codes += 1
+			if orig_codes.not_empty then
 				var code_r = recall(orig_codes, dest_codes)
 				var code_p = precision(orig_codes, dest_codes)
-				# print code_r
-				# print "name_r: {name_r}\t{if name_r < 100.0 then "\t" else ""}name_p: {name_p}"
+				# print "name_r: {code_r}\t{if code_r < 100.0 then "\t" else ""}code_p: {code_p}"
 				codes_r += code_r
 				codes_p += code_p
 				codes_count += 1
@@ -130,7 +128,7 @@ class ReadmeComparator
 			matches_count += 1
 		end
 		printn "{lib or else "NULL"}\t"
-		printn "{block_count}\t{block_spans}\n"
+		printn "{block_count}\t{block_spans}\t{block_names}\t{block_codes}\n"
 		# printn "{spans_r / spans_count.to_f}\t{spans_p / spans_count.to_f}\n"
 		# printn "{names_r / names_count.to_f}\t{names_p / names_count.to_f}\n"
 		# printn "{exs_r / exs_count.to_f}\t{exs_p / exs_count.to_f}\t"
@@ -144,8 +142,8 @@ class ReadmeComparator
 		block.pretty_print
 	end
 
-	fun precision(relevant, retrieved: Array[String]): Float do
-		if retrieved.is_empty then return 0.0
+	fun precision(relevant, retrieved: ArraySet[String]): Float do
+		if retrieved.is_empty then return 100.0
 		var inter = new Array[String]
 		for doc in relevant do
 			if retrieved.has(doc) then inter.add doc
@@ -153,7 +151,7 @@ class ReadmeComparator
 		return inter.length.to_f / retrieved.length.to_f * 100.0
 	end
 
-	fun recall(relevant, retrieved: Array[String]): Float do
+	fun recall(relevant, retrieved: ArraySet[String]): Float do
 		if relevant.is_empty then return 100.0
 		var inter = new Array[String]
 		for doc in relevant do
@@ -203,11 +201,11 @@ redef class MdDocument
 end
 
 redef class MdBlock
-	var span_refs = new Array[String]
-	var name_refs = new Array[String]
-	var example_refs = new Array[String]
-	var code_refs = new Array[String]
-	var matches = new Array[String]
+	var span_refs = new ArraySet[String]
+	var name_refs = new ArraySet[String]
+	var example_refs = new ArraySet[String]
+	var code_refs = new ArraySet[String]
+	var matches = new ArraySet[String]
 
 	fun parse_entry(lines: Array[String]) do
 		for line in lines do
@@ -262,20 +260,45 @@ class MdSpans
 	end
 end
 
-var corpus = "spans"
+class MdBlockCodes
+	super MdVisitor
+
+	var blocks = 0
+	var kinds = new Counter[String]
+
+	redef fun visit(node) do
+		if node isa MdCodeBlock then
+			blocks += 1
+
+			var info = node.info
+			if info == null or info == "nit" then
+				kinds.inc "nit"
+			else if info == "nitish" then
+				kinds.inc "nitish"
+			else if info == "bash" then
+				kinds.inc "bash"
+			else
+				kinds.inc "other"
+			end
+			# print node.literal
+		end
+		node.visit_all(self)
+	end
+end
+
+var corpus = "names"
 var corpus_path = "src/doc/doc_experiments/exp_align/corpus.{corpus}"
 (corpus_path / "../out.{corpus}").mkdir
 var files = corpus_path.files
 default_comparator.sort(files)
 
-# var libs = ["app", "json", "nitcorn", "nlp", "popcorn", "serialization", "vsm"]
+# var libs = ["android", "app", "github", "json", "nitcorn", "nlp", "popcorn", "serialization", "vsm"]
 
 for file in files do
 	# print ""
 	# print file
 	var lib = file.replace(".corpus.md", "")
 	# if not libs.has(lib) then continue
-	# if lib != "vsm" then continue
 #
 	# sys.system "./nitreadme lib/{lib} --keep-going --check-docdown"
 	# sys.system "./nitreadme lib/{lib} --keep-going --check-docdown > src/doc/doc_experiments/exp_align/out.{corpus}/{lib}.out.md 2>/dev/null"
@@ -285,6 +308,11 @@ for file in files do
 	# var v = new MdSpans
 	# v.enter_visit(doc)
 	# print "{lib}\t{v.spans}"
+	# var v = new MdBlockCodes
+	# v.enter_visit(doc)
+	# for kind, count in v.kinds do
+		# print "{lib}\t{kind}\t{count}"
+	# end
 
 	var comparator = new ReadmeComparator
 	comparator.compare_files(

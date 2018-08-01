@@ -39,13 +39,16 @@ class MdCodeBlockAlign
 
 	fun visit_code(node: MdCodeBlock) do
 		var nit_ast = node.nit_ast
-		if nit_ast == null then
+		if nit_ast == null or nit_ast isa AError then
 			visit_raw_code(node)
 			return
 		end
 
 		var code_vector = mentity_index.vectorize_node(nit_ast, true)
-		if code_vector.is_empty then return
+		if code_vector.is_empty then
+			visit_raw_code(node)
+			return
+		end
 
 		# Find code usages
 		var vector = new Vector
@@ -68,7 +71,9 @@ class MdCodeBlockAlign
 			# vector.inc "+in: {context.full_name}"
 			vector.inc "-kind: MPropDef"
 			vector.inc "-kind: MClassDef"
-			vector.inc "-in: core::Sys"
+			vector.inc "-in: core::kernel"
+			vector.inc "-in: core::collection"
+			vector.inc "-in: core::text"
 			vector.inc "-full_name: core::Object"
 			vector.inc "-full_name: core::Object::!="
 			vector.inc "-full_name: core::Object::=="
@@ -76,12 +81,15 @@ class MdCodeBlockAlign
 			vector.inc "-full_name: core::Float"
 			vector.inc "-full_name: core::Array"
 			vector.inc "-full_name: core::String"
+			vector.inc "-full_name: core::Text"
+			vector.inc "-full_name: core::Text::+"
 			vector.inc "-full_name: core::Collection::is_empty"
 			vector.inc "-full_name: core::Collection::length"
 			vector.inc "-full_name: serialization::Serializer::serialize_attribute"
 			vector.inc "-full_name: serialization::Serializable::from_deserializer"
 			vector.inc "-full_name: serialization::Deserializer::deserialize_class_intern"
-			node.code_refs = matches_to_refs(mentity_index.match_query(vector), node)
+			vector.inc "-full_name: core::file::Sys::print"
+			node.code_refs = filter_refs(matches_to_refs(mentity_index.match_query(vector), node))
 			#.filter_context(context)
 			#.limit(5)
 		end
@@ -105,31 +113,34 @@ class MdCodeBlockAlign
 		var info = node.info
 		if info != null and info != "nitish" and info != "nit" then return
 
-		var vector = new Vector
 		var literal = node.literal
-		if literal != null then
-			for name in literal.search_all(name_re) do
-				if not keywords.has(name.to_s.trim) then vector.inc "tid: {name}"
-			end
+		if literal == null then return
+
+		var vector = new Vector
+		vector.inc "-kind: MPropDef"
+		vector.inc "-kind: MClassDef"
+
+		for name in literal.search_all(name_re) do
+			var id = name.to_s.trim
+			if keywords.has(id) then continue
+			vector.inc "name: {id}"
 		end
 		if vector.not_empty then
-			# vector.inc "+in: {context.full_name}"
-			# vector.inc "-kind: MPropDef"
-			# vector.inc "-kind: MClassDef"
-			node.code_refs = matches_to_refs(mentity_index.match_query(vector), node)
-			#.filter_context(context)
-			#.limit(5)
+			for ref in filter_refs(matches_to_refs(mentity_index.match_query(vector), node)) do
+				if not context.has_mentity(ref.mentity) then continue
+				node.code_refs.add ref
+			end
 		end
 	end
 
-	var name_re: Regex = "[a-zA-Z_][a-zA-Z0-9_=]*".to_re
+	var name_re: Regex = "([a-zA-Z_][a-zA-Z0-9_=]*)".to_re
 
 	var keywords = [
 		"end", "not", "null", "var", "do", "then", "catch", "else", "loop", "is",
 		"import", "module", "package", "class", "enum", "universal", "interface", "extern",
 		"abstract", "intern", "fun", "new", "private", "public", "protected", "intrude", "readable",
 		"writable", "redef", "if", "while", "for", "with", "assert", "and", "or", "in", "is",
-		"isa", "once", "break", "contrinue", "return", "abort", "nullable", "special",
+		"isa", "once", "break", "contrinue", "return", "abort", "nullable", "special", "super",
 		"self", "true", "false"]
 
 	private fun matches_to_refs(matches: MDocMatches, node: MdNode): Array[MdRefCode] do
@@ -139,6 +150,80 @@ class MdCodeBlockAlign
 		end
 		return res
 	end
+
+	private fun filter_refs(refs: Array[MdRefCode]): Array[MdRefCode] do
+		# Locate conflicts
+		var name_conflicts = new HashMap[String, Array[MdRefCode]]
+		for ref in refs do
+			var name = ref.mentity.name
+			if not name_conflicts.has_key(name) then
+				name_conflicts[name] = new Array[MdRefCode]
+			end
+			name_conflicts[name].add ref
+		end
+
+		# Remove conflicts
+		var res = new Array[MdRefCode]
+		for name, nrefs in name_conflicts do
+			if nrefs.length == 1 then
+				res.add nrefs.first
+				continue
+			end
+
+			# Filter by context
+			# var in_context = new Array[MdRefMEntity]
+			# for ref in refs do
+			#	if v.context.has_mentity(ref.mentity) then
+			#		in_context.add ref
+			#	end
+			# end
+			# if in_context.length == 1 then
+			#	res.add_all in_context
+			#	continue
+			# end
+
+			var left = new Array[MdRefCode]
+			# if in_context.not_empty then
+				# left.add_all in_context
+			# else
+				left.add_all refs
+			# end
+
+			# Filter by kind
+			var mpackage = null
+			var mgroup = null
+			var mmodule = null
+			# print left
+			for ref in left do
+				var mentity = ref.mentity
+				if mentity isa MPackage then
+					mpackage = mentity
+				else if mentity isa MGroup then
+					mgroup = mentity
+				else if mentity isa MModule then
+					mmodule = mentity
+				end
+			end
+			for ref in left do
+				var mentity = ref.mentity
+				if mentity isa MPackage then
+					res.add ref
+				else if mentity isa MGroup and mpackage == null then
+					res.add ref
+				else if mentity isa MModule and mpackage == null and mgroup == null then
+					res.add ref
+				else if mpackage == null and mgroup == null and mmodule == null then
+					res.add ref
+				end
+			end
+			# for ref in refs do
+				# res.add ref
+			# end
+		end
+
+		return res
+	end
+
 end
 
 redef class MdCodeBlock

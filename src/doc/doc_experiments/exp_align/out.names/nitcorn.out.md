@@ -6,18 +6,30 @@ Dynamic content is served by subclassing `Action` and implementing `answer`.
 This method receives an `HttpRequest` and must return an `HttpResponse`.
 _nitcorn_ provides `FileServer`, a simple `Action` to serve static files.
 
+> name: json::dynamic
+> name: nitcorn::HttpRequest::method
 > name: nitcorn
+> name: json::static
+> name: core::file
 
 `HttpRequest` contains the GET and POST arguments as well as session data it one exists.
 The produced `HttpResponse` should contain the HTTP status code, the body,
 session data to preserve or create a session, and optionally list files to append.
 
+> name: nitcorn::sessions
 > name: nitcorn::Session
+> name: nitcorn::HttpStatusCodes::codes
 > name: nitcorn::HttpRequest::body
+> name: nitcorn::http_request::HttpRequestParser::body
 > name: nitcorn::HttpResponse::body
+> name: nitcorn::ErrorTemplate::body
+> name: nitcorn::sessions
 > name: nitcorn::Session
+> name: nitcorn::sessions
 > name: nitcorn::Session
-> name: nitcorn::HttpResponse::files
+> name: core::list
+> name: core::List
+> name: core::file
 
 Each `Action` may be associated to many instances of `Route`.
 These routes can simply identify the root of a service,
@@ -25,11 +37,13 @@ but also define parameters within the URI.
 
 > name: nitcorn::Route
 > name: nitcorn::Routes
+> name: nitcorn::FileServer::root
 > name: nitcorn::HttpRequest::uri
 
 _nitcorn_ instances are configured dynamically in Nit code with the interfaces and routes created as needed.
 
 > name: nitcorn
+> name: nitcorn::HttpStatusCodes::codes
 > name: nitcorn::Interface
 > name: nitcorn::Interfaces
 > name: nitcorn::Route
@@ -41,21 +55,43 @@ class refinement can be used to customize default services and merge many applic
 and the FFI enables calling services in different languages.
 
 > name: nitcorn
+> name: meta::Class
 
 ## Examples
 
 > name: nitcorn>examples>
+> name: serialization>examples>
+> name: template>examples>
+> name: curl>examples>
+> name: pthreads>examples>
+> name: privileges>examples>
 
 A minimal example follows with a custom `Action` and using `FileServer`.
 
 > name: nitcorn>examples>
+> name: serialization>examples>
+> name: template>examples>
+> name: curl>examples>
+> name: pthreads>examples>
+> name: privileges>examples>
 
 More general examples are available at `lib/nitcorn/examples/`.
 For an example of a larger project merging many _nitcorn_ applications into one server,
 take a look at the configuration of `http://xymus.net/` at `../contrib/xymus_net/xymus_net.nit`.
 
+> name: nitcorn::MyData::more
 > name: nitcorn>examples>
+> name: serialization>examples>
+> name: template>examples>
+> name: curl>examples>
+> name: pthreads>examples>
+> name: privileges>examples>
 > name: nitcorn>examples>
+> name: serialization>examples>
+> name: template>examples>
+> name: curl>examples>
+> name: pthreads>examples>
+> name: privileges>examples>
 > name: nitcorn
 
 Larger projects using _nitcorn_ can be found in the `contrib/` folder:
@@ -68,7 +104,13 @@ Larger projects using _nitcorn_ can be found in the `contrib/` folder:
 
 > name: nitcorn
 > name: nitcorn::restful
+> name: nitcorn::Interface
+> name: nitcorn::Interfaces
+> name: core::list
+> name: core::List
 > name: nitcorn::restful
+> name: nitcorn::Interface
+> name: nitcorn::Interfaces
 
 ### Simple hello world server
 

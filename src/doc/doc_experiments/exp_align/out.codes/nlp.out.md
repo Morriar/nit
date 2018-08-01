@@ -94,7 +94,9 @@ assert matches.first.document == d1
 
 > code: nlp::NLPIndex
 > code: vsm::StringIndex::index_string
+> code: core::Collection::first
 > code: vsm::Document
+> code: core::HashSet
 > code: vsm::IndexMatch
 > code: vsm::IndexMatch::document
 > code: vsm::VSMIndex::documents

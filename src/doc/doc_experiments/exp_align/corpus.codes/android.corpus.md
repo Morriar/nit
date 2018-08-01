@@ -87,6 +87,8 @@ customize the generated Android application.
   only be used by low-level implementations of Nit on Android.
   Its usefulness will be extended in the future to customize user applications.
 
+> code: android
+
 ### Android implementation
 
 There is two core implementation for Nit apps on Android.
