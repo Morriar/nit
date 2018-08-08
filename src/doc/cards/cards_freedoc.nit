@@ -46,9 +46,10 @@ class ReadmeMEntity
 		# var cmd_exs = new CmdExamples(model, modelbuilder, mentity)
 		# var res_exs = cmd_exs.init_command
 		# if res_exs isa CmdSuccess then
+			for ex in mentity.examples do
 			# for ex in cmd_exs.results.as(not null) do
-				# cards.add new CardExample(mdoc_parser, mentity, ex.mentity)
-			# end
+				cards.add new CardExample(mdoc_parser, mentity, ex.mentity)
+			end
 		# end
 
 		var cmd_uml = new CmdInheritanceGraph(model, mainmodule, filter, mentity)
