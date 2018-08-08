@@ -51,7 +51,7 @@ class Nitweb
 
 	redef var mdoc_post_processors is lazy do
 		var processors = super
-		processors.add new MDocProcessImages(config.tmp_dir, "/")
+		processors.add new MDocProcessImages(toolcontext, config.tmp_dir, "/")
 		return processors
 	end
 

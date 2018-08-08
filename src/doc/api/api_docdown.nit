@@ -21,17 +21,17 @@ import doc_down
 redef class NitwebConfig
 
 	# Command parser for MDoc contents
-	var cmd_parser = new CommandParser(model, mainmodule, modelbuilder, catalog, filter) is lazy
+	var cmd_parser = new CommandParser(model, mainmodule, modelbuilder, catalog) is lazy
 
 	# Markdown parser for MDoc contents
 	var mdoc_parser: MdParser is lazy do
 		var md_parser = new MdParser
 		md_parser.github_mode = true
 		md_parser.wikilinks_mode = true
-		md_parser.post_processors.add new MDocProcessSynopsis
-		md_parser.post_processors.add new MDocProcessCodes
-		md_parser.post_processors.add new MDocProcessMEntityLinks(model, mainmodule)
-		md_parser.post_processors.add new MDocProcessCommands(cmd_parser, toolcontext)
+		md_parser.post_processors.add new MDocProcessSynopsis(toolcontext)
+		md_parser.post_processors.add new MDocProcessCodes(toolcontext)
+		md_parser.post_processors.add new MDocProcessMEntityLinks(toolcontext, model, mainmodule)
+		md_parser.post_processors.add new MDocProcessCommands(toolcontext, cmd_parser)
 		md_parser.post_processors.add new MDocProcessSummary
 		return md_parser
 	end

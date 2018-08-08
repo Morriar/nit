@@ -13,13 +13,14 @@
 # limitations under the License.
 
 # Nitdoc specific Markdown format handling for Nitweb
-module api_docdown
+module api_readme
 
 import api_model
 import model::model_index
 intrude import doc_down
 intrude import markdown::wikilinks
-import doc_suggest
+# import doc_suggest
+import cards_scaffolding
 import doc::commands::commands_docdown
 
 import doc::cards
@@ -27,17 +28,23 @@ import doc::cards
 redef class NitwebConfig
 
 	# TODO
-	var cmd_parser: CommandParser is lazy do return new CommandParser(view, modelbuilder)
+	var cmd_parser = new CommandParser(model, mainmodule, modelbuilder, catalog) is lazy
 
-	# Specific Markdown processor to use within Nitweb
-	var md_processor: MarkdownProcessor is lazy do
-		var proc = new CmdMarkdownProcessor(cmd_parser)
-		proc.decorator = new CmdDecorator(view)
-		return proc
+	# Markdown parser for MDoc contents
+	var mdoc_parser: MdParser is lazy do
+		var md_parser = new MdParser
+		md_parser.github_mode = true
+		md_parser.wikilinks_mode = true
+		md_parser.post_processors.add new MDocProcessSynopsis(toolcontext)
+		md_parser.post_processors.add new MDocProcessCodes(toolcontext)
+		md_parser.post_processors.add new MDocProcessMEntityLinks(toolcontext, model, mainmodule)
+		md_parser.post_processors.add new MDocProcessCommands(toolcontext, cmd_parser)
+		md_parser.post_processors.add new MDocProcessSummary
+		return md_parser
 	end
 
 	# TODO
-	var nlp_index: ModelNLPIndex is noinit, writable
+	# var nlp_index: ModelNLPIndex is noinit, writable
 
 	# TODO
 	var sessions_dir: String is lazy do
@@ -63,23 +70,28 @@ end
 redef class APIRouter
 	redef init do
 		super
-		use("/docdown/", new APIDocdown(config))
-		use("/docdown/docs", new APIDocSession(config))
-		use("/docdown/suggest", new APIDocdownSuggest(config))
+		use("/readme/", new APIReadme(config))
+		use("/readme/docs", new APIReadmeSession(config))
+		use("/readme/suggest", new APIReadmeSuggest(config))
 	end
 end
 
-# Docdown handler accept docdown as POST data and render it as HTML
-class APIDocdown
+# Readme Handler
+class APIReadme
 	super APIHandler
 
+	private var mdoc_parser: MdParser = config.model.mdoc_parser is lazy
+
+	private var mdoc_renderer = new MDocHtmlRenderer
+
 	redef fun post(req, res) do
-		res.html config.model.nitdoc_md_processor.process(req.body)
+		var ast = mdoc_parser.parse(req.body)
+		res.html mdoc_renderer.render(ast)
 	end
 end
 
 # TODO
-class APIDocSession
+class APIReadmeSession
 	super APIHandler
 
 	redef fun get(req, res) do
@@ -88,12 +100,12 @@ class APIDocSession
 end
 
 # TODO
-class APIDocdownSuggest
+class APIReadmeSuggest
 	super APIHandler
 
 	redef fun post(req, res) do
 
-		var view = config.view
+		var model = config.model
 		# var mbuilder = config.modelbuilder
 		# var index = config.nlp_index
 
@@ -104,7 +116,7 @@ class APIDocdownSuggest
 		var target_name = req.string_arg("target")
 		if target_name == "null" then target_name = null
 
-		var tcmd = new CmdEntity(view, mentity_name = target_name)
+		var tcmd = new CmdEntity(model, mentity_name = target_name)
 		var tres = tcmd.init_command
 		var target = null
 		if tres isa CmdSuccess then
@@ -126,10 +138,10 @@ class APIDocdownSuggest
 			suggestions.add_all scaf.scaffold(target)
 		end
 
-		var gen = new ReadmeMEntity(view, config.modelbuilder, config.md_processor)
+		# var gen = new ReadmeMEntity(view, config.modelbuilder, config.md_processor)
 		suggestions = new Array[DocCard]
 		if target != null then
-			suggestions.add_all gen.cards(target)
+			# suggestions.add_all gen.cards(target)
 		end
 
 		# suggestions.clear

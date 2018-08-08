@@ -16,12 +16,15 @@ module cards_scaffolding
 
 import doc::cards::cards_base
 import doc::commands
+import doc::templates::html_commands
 
 class ReadmeScaffolder
 
-	var view: ModelView
+	var model: Model
 
-	var md_processor: MarkdownProcessor
+	var mainmodule: MModule
+
+	var mdoc_parser: MdParser
 
 	fun scaffold(mpackage: MPackage): Array[DocCard] do
 		var cards = new Array[DocCard]
@@ -29,139 +32,141 @@ class ReadmeScaffolder
 		var no_ini = mpackage.ini == null
 
 		if no_ini then
-			cards.add new CardTipIni(md_processor, mpackage)
+			cards.add new CardTipIni(mdoc_parser, mpackage)
 		end
+
+		var filter = new ModelFilter
 
 		# README title
 		var no_desc = no_ini or not mpackage.ini.as(not null).has_key("package.desc")
 		if not no_ini and no_desc then
-			cards.add new CardTipIniDesc(md_processor)
+			cards.add new CardTipIniDesc(mdoc_parser)
 		end
-		cards.add new CardTitle(md_processor, mpackage, no_desc)
+		cards.add new CardTitle(mdoc_parser, mpackage, no_desc)
 
-		# Overview
-		var cmd_features = new CmdFeatures(view, mpackage)
+		# Overmodel
+		var cmd_features = new CmdFeatures(model, filter, mpackage)
 		var res_features = cmd_features.init_command
 		var no_features = not res_features isa CmdSuccess
 
 		if not no_features then
-			cards.add new CardOverview(md_processor, mpackage)
+			cards.add new CardOvermodel(mdoc_parser, mpackage)
 		end
 
 		# Getting started
 
-		var cmd_parents = new CmdParents(view, mpackage)
+		var cmd_parents = new CmdParents(model, mainmodule, filter, mpackage)
 		var res_parents = cmd_parents.init_command
 		var no_parent = not res_parents isa CmdSuccess
 
 		var mains = new Array[MEntity]
-		var cmd_mains = new CmdMains(view, mpackage)
+		var cmd_mains = new CmdMains(model, filter, mpackage)
 		var res_mains = cmd_mains.init_command
 		if res_mains isa CmdSuccess then mains.add_all cmd_mains.results.as(not null)
 
 		var no_git = no_ini or not mpackage.ini.as(not null).has_key("upstream.git")
 		if not no_ini and no_git then
-			cards.add new CardTipIniGit(md_processor)
+			cards.add new CardTipIniGit(mdoc_parser)
 		end
 
 		var man_synopsis = new HashSet[MEntity]
 		var man_opts = new HashSet[MEntity]
 		for main in mains do
-			var cmd_man = new CmdManFile(view, main)
+			var cmd_man = new CmdManFile(model, filter, main)
 			var res_man = cmd_man.init_command
 			var no_man = not res_man isa CmdSuccess
 
 			if no_man then
-				cards.add new CardTipMan(md_processor, main)
+				cards.add new CardTipMan(mdoc_parser, main)
 				continue
 			end
 
-			var cmd_syn = new CmdManSynopsis(view, main)
+			var cmd_syn = new CmdManSynopsis(model, filter, main)
 			var res_syn = cmd_syn.init_command
 			var no_syn = not res_syn isa CmdSuccess
 
 			if no_syn then
-				cards.add new CardTipManSynopsis(md_processor, main)
+				cards.add new CardTipManSynopsis(mdoc_parser, main)
 			else
 				man_synopsis.add main
 			end
 
-			var cmd_opts = new CmdManOptions(view, main)
+			var cmd_opts = new CmdManOptions(model, filter, main)
 			var res_opts = cmd_opts.init_command
 			var no_opts = not res_opts isa CmdSuccess
 
 			if no_opts then
-				cards.add new CardTipManOptions(md_processor, main)
+				cards.add new CardTipManOptions(mdoc_parser, main)
 			else
 				man_opts.add main
 			end
 		end
-		cards.add new CardGettingStarted(md_processor, mpackage,
+		cards.add new CardGettingStarted(mdoc_parser, mpackage,
 			no_parent, no_git, mains, man_synopsis, man_opts)
 
 		# Testing
-		var cmd_tests = new CmdTesting(view, mpackage)
+		var cmd_tests = new CmdTesting(model, filter, mpackage)
 		var res_tests = cmd_tests.init_command
 		var no_tests = not res_tests isa CmdSuccess
 
 		if no_tests then
-			cards.add new CardTipTests(md_processor)
+			cards.add new CardTipTests(mdoc_parser)
 		else
-			cards.add new CardTesting(md_processor, mpackage)
+			cards.add new CardTesting(mdoc_parser, mpackage)
 		end
 
 		# Issues
 		var no_issues = no_ini or not mpackage.ini.as(not null).has_key("upstream.issues")
 		if not no_ini and no_issues then
-			cards.add new CardTipIniIssues(md_processor)
+			cards.add new CardTipIniIssues(mdoc_parser)
 		else
-			cards.add new CardIssues(md_processor, mpackage)
+			cards.add new CardIssues(mdoc_parser, mpackage)
 		end
 
 		# Contributing
 		if not no_ini and no_git then
-			cards.add new CardTipIniContrib(md_processor)
+			cards.add new CardTipIniContrib(mdoc_parser)
 		end
 
-		var cmd_contrib = new CmdContribFile(view, mpackage)
+		var cmd_contrib = new CmdContribFile(model, filter, mpackage)
 		var res_contrib = cmd_contrib.init_command
 		var no_contrib_file = not res_contrib isa CmdSuccess
 
 		if no_contrib_file then
-			cards.add new CardTipContribFile(md_processor)
+			cards.add new CardTipContribFile(mdoc_parser)
 		end
 		if not no_git or not no_contrib_file then
-			cards.add new CardContributing(md_processor, mpackage, no_git, no_contrib_file)
+			cards.add new CardContributing(mdoc_parser, mpackage, no_git, no_contrib_file)
 		end
 
 		# License
 		var no_license = no_ini or not mpackage.ini.as(not null).has_key("package.license")
 		if not no_ini and no_license then
-			cards.add new CardTipIniLicense(md_processor)
+			cards.add new CardTipIniLicense(mdoc_parser)
 		end
 
-		var cmd_license = new CmdLicenseFile(view, mpackage)
+		var cmd_license = new CmdLicenseFile(model, filter, mpackage)
 		var res_license = cmd_license.init_command
 		var no_license_file = not res_license isa CmdSuccess
 
 		if no_license_file then
-			cards.add new CardTipLicenseFile(md_processor)
+			cards.add new CardTipLicenseFile(mdoc_parser)
 		end
 		if not no_license or not no_license_file then
-			cards.add new CardLicense(md_processor, mpackage, no_license, no_license_file)
+			cards.add new CardLicense(mdoc_parser, mpackage, no_license, no_license_file)
 		end
 
 		# Authors
 		var no_author = no_ini or not mpackage.ini.as(not null).has_key("package.maintainer")
 		if not no_ini and no_author then
-			cards.add new CardTipIniAuthor(md_processor)
+			cards.add new CardTipIniAuthor(mdoc_parser)
 		end
 		var no_contrib = no_ini or not mpackage.ini.as(not null).has_key("package.more_contributors")
 		if not no_ini and no_contrib then
-			cards.add new CardTipIniContributors(md_processor)
+			cards.add new CardTipIniContributors(mdoc_parser)
 		end
 		if not no_author or not no_contrib then
-			cards.add new CardAuthors(md_processor, mpackage, no_author, no_contrib)
+			cards.add new CardAuthors(mdoc_parser, mpackage, no_author, no_contrib)
 		end
 
 		return cards
@@ -176,13 +181,16 @@ abstract class CardTip
 
 	redef var icon = "info-sign"
 
-	var md_processor: MarkdownProcessor is noserialize
+	var mdoc_parser: MdParser is noserialize
+
+	var mdoc_renderer = new MDocHtmlRenderer is noserialize
 
 	# Markdown content to insert into the document
 	fun markdown: String is abstract
 
 	redef fun description do
-		return md_processor.process(markdown).write_to_string
+		var ast = mdoc_parser.parse(markdown)
+		return mdoc_renderer.render(ast)
 	end
 
 	redef fun core_serialize_to(v) do
@@ -456,7 +464,9 @@ abstract class CardScaffolding
 
 	redef var icon = "file"
 
-	var md_processor: MarkdownProcessor is noserialize
+	var mdoc_parser: MdParser is noserialize
+
+	var mdoc_renderer = new MDocHtmlRenderer is noserialize
 
 	var mentity: MEntity is noserialize
 
@@ -464,7 +474,8 @@ abstract class CardScaffolding
 	fun markdown: String is abstract
 
 	fun html: Writable do
-		return md_processor.process(markdown)
+		var ast = mdoc_parser.parse(markdown)
+		return mdoc_renderer.render(ast)
 	end
 
 	redef fun core_serialize_to(v) do
@@ -496,11 +507,11 @@ class CardTitle
 	end
 end
 
-class CardOverview
+class CardOvermodel
 	super CardScaffolding
 	serialize
 
-	redef var title = "Project Overview"
+	redef var title = "Project Overmodel"
 	redef var description = "List the most interesting features of your project to explain what it does and why it is useful."
 
 	redef fun options do
@@ -511,7 +522,7 @@ class CardOverview
 
 	redef var markdown is lazy do
 		var tpl = new Template
-		tpl.addn "## Overview\n"
+		tpl.addn "## Overmodel\n"
 		tpl.addn "Main features:"
 		tpl.addn "[[defs: {mentity.full_name}]]\n"
 		return tpl.write_to_string

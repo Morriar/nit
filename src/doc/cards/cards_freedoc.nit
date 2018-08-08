@@ -16,55 +16,57 @@ module cards_freedoc
 
 import doc::cards::cards_base
 import doc::commands
-import doc::templates::templates_html
+import doc::templates::html_commands
 
 class ReadmeMEntity
 
-	var view: ModelView
+	var model: Model
+	var mainmodule: MModule
 	var modelbuilder: ModelBuilder
 
-	var md_processor: MarkdownProcessor
+	var mdoc_parser: MdParser
 
 	fun cards(mentity: MEntity): Array[DocCard] do
 		var cards = new Array[DocCard]
 
+		var filter = new ModelFilter
 
-		var cmd_link = new CmdLink(view, mentity)
+		var cmd_link = new CmdLink(model, filter, mentity)
 		var res_link = cmd_link.init_command
 		if res_link isa CmdSuccess then
-			cards.add new CardLink(md_processor, mentity)
+			cards.add new CardLink(mdoc_parser, mentity)
 		end
 
-		var cmd_doc = new CmdComment(view, mentity)
+		var cmd_doc = new CmdComment(model, filter, mentity)
 		var res_doc = cmd_doc.init_command
 		if res_doc isa CmdSuccess then
-			cards.add new CardDoc(md_processor, mentity)
+			cards.add new CardDoc(mdoc_parser, mentity)
 		end
 
-		var cmd_exs = new CmdExamples(view, modelbuilder, mentity)
+		var cmd_exs = new CmdExamples(model, modelbuilder, mentity)
 		var res_exs = cmd_exs.init_command
 		if res_exs isa CmdSuccess then
 			for ex in cmd_exs.results.as(not null) do
-				cards.add new CardExample(md_processor, mentity, ex.mentity)
+				cards.add new CardExample(mdoc_parser, mentity, ex.mentity)
 			end
 		end
 
-		var cmd_uml = new CmdInheritanceGraph(view, mentity)
+		var cmd_uml = new CmdInheritanceGraph(model, mainmodule, filter, mentity)
 		var res_uml = cmd_uml.init_command
 		if res_uml isa CmdSuccess then
-			cards.add new CardUML(md_processor, mentity)
+			cards.add new CardUML(mdoc_parser, mentity)
 		end
 
-		var cmd_defs = new CmdFeatures(view, mentity)
+		var cmd_defs = new CmdFeatures(model, filter, mentity)
 		var res_defs = cmd_defs.init_command
 		if res_defs isa CmdSuccess then
-			cards.add new CardFeatures(md_processor, mentity)
+			cards.add new CardFeatures(mdoc_parser, mentity)
 		end
 
-		# var cmd_code = new CmdEntityCode(view, modelbuilder, mentity)
+		# var cmd_code = new CmdEntityCode(model, modelbuilder, mentity)
 		# var res_code = cmd_code.init_command
 		# if res_code isa CmdSuccess then
-		#	cards.add new CardCode(md_processor, mentity)
+		#	cards.add new CardCode(mdoc_parser, mentity)
 		# end
 
 		return cards
@@ -75,7 +77,9 @@ abstract class CardMEntity
 	super DocCard
 	serialize
 
-	var md_processor: MarkdownProcessor is noserialize
+	var mdoc_parser: MdParser is noserialize
+
+	var mdoc_renderer = new MDocHtmlRenderer is noserialize
 
 	var mentity: MEntity is noserialize
 
@@ -83,7 +87,8 @@ abstract class CardMEntity
 	fun markdown: String is abstract
 
 	fun html: Writable do
-		return md_processor.process(markdown)
+		var ast = mdoc_parser.parse(markdown)
+		return mdoc_renderer.render(ast)
 	end
 
 	redef fun core_serialize_to(v) do
