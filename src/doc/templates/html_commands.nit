@@ -371,6 +371,7 @@ end
 redef class MdWikilink
 	redef fun render_html(v) do
 		var command = self.command
+		print command or else "NULL"
 		if command == null then return
 		v.add_raw command.to_html.write_to_string
 	end

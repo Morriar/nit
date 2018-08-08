@@ -31,7 +31,7 @@ class ReadmeMEntity
 
 		var filter = new ModelFilter
 
-		var cmd_link = new CmdLink(model, filter, mentity)
+		var cmd_link = new CmdEntity(model, filter, mentity)
 		var res_link = cmd_link.init_command
 		if res_link isa CmdSuccess then
 			cards.add new CardLink(mdoc_parser, mentity)
@@ -43,13 +43,13 @@ class ReadmeMEntity
 			cards.add new CardDoc(mdoc_parser, mentity)
 		end
 
-		var cmd_exs = new CmdExamples(model, modelbuilder, mentity)
-		var res_exs = cmd_exs.init_command
-		if res_exs isa CmdSuccess then
-			for ex in cmd_exs.results.as(not null) do
-				cards.add new CardExample(mdoc_parser, mentity, ex.mentity)
-			end
-		end
+		# var cmd_exs = new CmdExamples(model, modelbuilder, mentity)
+		# var res_exs = cmd_exs.init_command
+		# if res_exs isa CmdSuccess then
+			# for ex in cmd_exs.results.as(not null) do
+				# cards.add new CardExample(mdoc_parser, mentity, ex.mentity)
+			# end
+		# end
 
 		var cmd_uml = new CmdInheritanceGraph(model, mainmodule, filter, mentity)
 		var res_uml = cmd_uml.init_command

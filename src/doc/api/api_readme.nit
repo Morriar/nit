@@ -80,7 +80,7 @@ end
 class APIReadme
 	super APIHandler
 
-	private var mdoc_parser: MdParser = config.model.mdoc_parser is lazy
+	private var mdoc_parser: MdParser = config.mdoc_parser is lazy
 
 	private var mdoc_renderer = new MDocHtmlRenderer
 
@@ -132,17 +132,17 @@ class APIReadmeSuggest
 		# var suggestions = engine.doc_suggestions(doc, loc)
 
 		# TODO tmp
-		var scaf = new ReadmeScaffolder(view, config.md_processor)
+		var scaf = new ReadmeScaffolder(model, config.mainmodule, config.mdoc_parser)
 		var suggestions = new Array[DocCard]
 		if target isa MPackage then
 			suggestions.add_all scaf.scaffold(target)
 		end
 
 		# var gen = new ReadmeMEntity(view, config.modelbuilder, config.md_processor)
-		suggestions = new Array[DocCard]
-		if target != null then
+		# suggestions = new Array[DocCard]
+		# if target != null then
 			# suggestions.add_all gen.cards(target)
-		end
+		# end
 
 		# suggestions.clear
 

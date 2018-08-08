@@ -576,12 +576,14 @@ class MDocProcessCommands
 
 	# Visit each `MdWikilink`
 	redef fun visit(node) do
-		var document = self.document
-		if document == null then return
+		# var document = self.document
+		# if document == null then return
+		# print "la"
 
-		var mdoc = document.mdoc
-		if mdoc == null then return
+		# var mdoc = document.mdoc
+		# if mdoc == null then return
 
+		print "-- {node}"
 		if node isa MdWikilink then
 			var link = node.link
 			var name = node.title
@@ -591,11 +593,11 @@ class MDocProcessCommands
 			var error = parser.error
 
 			if error isa CmdError then
-				warn(location(mdoc.location, node.location), "mdoc-cmd", error.to_s)
+				# warn(location(mdoc.location, node.location), "mdoc-cmd", error.to_s)
 				return
 			end
 			if error isa CmdWarning then
-				warn(location(mdoc.location, node.location), "mdoc-cmd", error.to_s)
+				# warn(location(mdoc.location, node.location), "mdoc-cmd", error.to_s)
 			end
 			node.command = command
 		end

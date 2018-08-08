@@ -50,7 +50,7 @@ class ReadmeScaffolder
 		var no_features = not res_features isa CmdSuccess
 
 		if not no_features then
-			cards.add new CardOvermodel(mdoc_parser, mpackage)
+			cards.add new CardOverview(mdoc_parser, mpackage)
 		end
 
 		# Getting started
@@ -474,7 +474,14 @@ abstract class CardScaffolding
 	fun markdown: String is abstract
 
 	fun html: Writable do
+		print "parse"
+		print markdown
 		var ast = mdoc_parser.parse(markdown)
+		ast.mdoc = mentity.mdoc
+		mdoc_parser.post_process(ast)
+		ast.debug
+		print mdoc_parser.post_processors
+		print "render"
 		return mdoc_renderer.render(ast)
 	end
 
@@ -507,11 +514,11 @@ class CardTitle
 	end
 end
 
-class CardOvermodel
+class CardOverview
 	super CardScaffolding
 	serialize
 
-	redef var title = "Project Overmodel"
+	redef var title = "Project Overview"
 	redef var description = "List the most interesting features of your project to explain what it does and why it is useful."
 
 	redef fun options do
@@ -522,7 +529,7 @@ class CardOvermodel
 
 	redef var markdown is lazy do
 		var tpl = new Template
-		tpl.addn "## Overmodel\n"
+		tpl.addn "## Overview\n"
 		tpl.addn "Main features:"
 		tpl.addn "[[defs: {mentity.full_name}]]\n"
 		return tpl.write_to_string
