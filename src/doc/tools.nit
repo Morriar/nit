@@ -14,7 +14,8 @@
 
 module tools
 
-import doc::down
+import mdoc_phase
+# import doc::down
 # import doc::commands
 
 redef class ToolContext
@@ -105,46 +106,7 @@ class DocTool
 		accept_example = true,
 		accept_broken = false)
 
-	# Tool catalog of mpackages
-	var catalog: Catalog is noinit
-
-    # Parse the mpackages catalog
-	#
-	# Initializes the `catalog`.
-	private fun parse_catalog do
-		var catalog = new Catalog(modelbuilder)
-		var mpackages = model.collect_mpackages(filter)
-		# Compute the poset
-		for p in mpackages do
-			var g = p.root
-			assert g != null
-			modelbuilder.scan_group(g)
-
-			catalog.deps.add_node(p)
-			for gg in p.mgroups do for m in gg.mmodules do
-				for im in m.in_importation.direct_greaters do
-					var ip = im.mpackage
-					if ip == null or ip == p then continue
-					catalog.deps.add_edge(p, ip)
-				end
-			end
-		end
-		# Build the catalog
-		for mpackage in mpackages do
-			catalog.package_page(mpackage)
-			catalog.git_info(mpackage)
-			catalog.mpackage_stats(mpackage)
-		end
-		self.catalog = catalog
-	end
-
 	# Tool MDoc handling
-
-	# Commands parser for MDoc
-	var cmd_parser: CommandParser is noinit
-
-	# Makrdown parser for MDoc
-	var mdoc_parser: MdParser is noinit
 
 	# MDoc post-processors to apply
 	#
@@ -159,30 +121,10 @@ class DocTool
 		return post_processors
 	end
 
-	# Parse MDoc comments
-	#
-	# Intializes `cmd_parser` and `mdoc_parser`.
-	fun parse_mdoc do
-		var cmd_parser = new CommandParser(model, mainmodule, modelbuilder, catalog)
-		self.cmd_parser = cmd_parser
-
-		var mdoc_parser = new MdParser
-		mdoc_parser.github_mode = true
-		mdoc_parser.wikilinks_mode = true
-		for post_processor in mdoc_post_processors do
-			mdoc_parser.post_processors.add post_processor
-		end
-		model.mdoc_parser = mdoc_parser
-
-		self.mdoc_parser = mdoc_parser
-	end
-
 	# Initialize the tool
 	fun start do
 		parse_options
 		parse_code
-		parse_catalog
-		parse_mdoc
 		execute
 	end
 

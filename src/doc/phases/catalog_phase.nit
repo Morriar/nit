@@ -12,14 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module phases_catalog
+# A global phase used to build the Catalog
+#
+# See `ToolContext::catalog`.
+module catalog_phase
 
-import phases_base
+import typing
 import catalog
+import model_collect
 
 redef class ToolContext
+
+	# Phase used to build the catalog
+	#
+	# See `ToolContext::catalog`.
 	var catalog_phase = new CatalogPhase(self, [typing_phase])
 
+	# Nit Catalog of packages
 	var catalog = new Catalog(modelbuilder) is lazy
 
     # Parse the mpackages catalog
@@ -52,10 +61,9 @@ redef class ToolContext
 	end
 end
 
+# Catalog building phase
 class CatalogPhase
-	super DocPhase
+	super Phase
 
-	redef fun process_mainmodule(mainmodule, mmodules) do
-		toolcontext.parse_catalog
-	end
+	redef fun process_mainmodule(mainmodule, mmodules) do toolcontext.parse_catalog
 end

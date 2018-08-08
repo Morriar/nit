@@ -1,6 +1,8 @@
-import doc::down
+# import doc::down
 
-import model_collect
+# import model_collect
+# import index_phase
+import mdoc_phase
 
 var toolcontext = new ToolContext
 toolcontext.process_options(args)
@@ -14,9 +16,11 @@ if mmodules.is_empty then return
 mbuilder.run_phases
 toolcontext.run_global_phases(mmodules)
 
-var mpackages = model.collect_mmodules
+# var mpackages = model.collect_mmodules
+var mpackages = model.index.find_by_name("popcorn")
 for mpackage in mpackages do
-	var mdoc = mpackage.mdoc_or_fallback
+	print mpackage.mentity.mdoc_or_fallback.mdoc_synopsis or else "NULL"
+	# var mdoc = mpackage.mdoc_or_fallback
 	# if mdoc == null then
 		# print "{mpackage}: NULL"
 	# else

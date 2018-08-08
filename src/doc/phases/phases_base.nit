@@ -20,9 +20,4 @@ import parse_examples
 
 abstract class DocPhase
 	super Phase
-
-	fun warn(location: Location, cat: String, message: String) do
-		toolcontext.warning(location, cat, "Warning: {message}")
-		toolcontext.check_errors
-	end
 end

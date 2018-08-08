@@ -21,7 +21,7 @@ redef class ToolContext
 end
 
 class PhaseSummaries
-	super MDocPhase
+	super MdPhase
 
 	redef fun process_mdoc(mdoc) do
 		# TODO Extract exemples

@@ -15,7 +15,7 @@
 module down
 
 import down_synopsis
-import down_resources
-import down_codes
+# import down_resources
+# import down_codes
 
-import down_commands
+# import down_commands

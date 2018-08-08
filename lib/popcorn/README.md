@@ -1,6 +1,6 @@
 # Popcorn
 
-[test1](src2/)
+[[test: test]]
 
 **Why endure plain corn when you can pop it?!**
 
