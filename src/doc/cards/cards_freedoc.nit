@@ -88,6 +88,8 @@ abstract class CardMEntity
 
 	fun html: Writable do
 		var ast = mdoc_parser.parse(markdown)
+		ast.mdoc = mentity.mdoc
+		mdoc_parser.post_process(ast)
 		return mdoc_renderer.render(ast)
 	end
 

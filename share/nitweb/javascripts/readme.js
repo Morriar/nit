@@ -148,7 +148,7 @@
 			})
 
 			//TODO remove
-			vm.target = 'markdown';
+			vm.target = 'markdown2';
 			vm.markdown = '';
 			/*if($location.search().snippet) {
 				vm.markdown = atob($location.search().snippet);

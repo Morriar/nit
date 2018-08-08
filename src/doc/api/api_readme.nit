@@ -138,11 +138,11 @@ class APIReadmeSuggest
 			suggestions.add_all scaf.scaffold(target)
 		end
 
-		# var gen = new ReadmeMEntity(view, config.modelbuilder, config.md_processor)
-		# suggestions = new Array[DocCard]
-		# if target != null then
-			# suggestions.add_all gen.cards(target)
-		# end
+		var gen = new ReadmeMEntity(model, config.mainmodule, config.modelbuilder, config.mdoc_parser)
+		suggestions = new Array[DocCard]
+		if target != null then
+			suggestions.add_all gen.cards(target)
+		end
 
 		# suggestions.clear
 

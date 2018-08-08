@@ -474,14 +474,9 @@ abstract class CardScaffolding
 	fun markdown: String is abstract
 
 	fun html: Writable do
-		print "parse"
-		print markdown
 		var ast = mdoc_parser.parse(markdown)
 		ast.mdoc = mentity.mdoc
 		mdoc_parser.post_process(ast)
-		ast.debug
-		print mdoc_parser.post_processors
-		print "render"
 		return mdoc_renderer.render(ast)
 	end
 

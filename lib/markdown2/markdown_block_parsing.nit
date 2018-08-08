@@ -20,9 +20,20 @@ module markdown_block_parsing
 
 import markdown_inline_parsing
 
-# Markdown parser
+# Build the AST from a Markdown string
 #
-# Used to create the AST representation of a Markdown document.
+# The Markdown string is parsed as a `MdDocument` that can be visited with a
+# `MdVisitor`.
+#
+# Usage:
+# ~~~
+# var parser = new MdParser
+# var document = parser.parse("# Hello World!")
+#
+# assert document.children.first isa MdHeading
+# ~~~
+#
+# See `markdown_rendering` to render a `MdDocument` into other presentation languages.
 class MdParser
 
 	# Inline parser used to parse block content
