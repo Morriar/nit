@@ -21,6 +21,7 @@ import commands_model
 
 import uml
 import dot
+import model_visitor
 
 # An abstract command that returns a dot graph
 abstract class CmdGraph
@@ -94,35 +95,49 @@ class CmdUML
 	super CmdEntity
 	super CmdGraph
 
-	autoinit(model, mainmodule, filter, mentity, mentity_name, format, uml)
+	autoinit(model, mainmodule, filter, mentity, mentity_name, pdepth, cdepth, format, graph)
 
-	# UML model to return
-	var uml: nullable UMLModel = null is optional, writable
+	# Parents depth to display
+	var pdepth: nullable Int = null is optional, writable
+
+	# Children depth to display
+	var cdepth: nullable Int = null is optional, writable
+
+	# UML diagram to return
+	var graph: nullable UMLDiagram = null is optional, writable
 
 	redef fun init_command do
-		if uml != null then return new CmdSuccess
+		if graph != null then return new CmdSuccess
 
+		# Load mentity
 		var res = super
 		if not res isa CmdSuccess then return res
 		var mentity = self.mentity.as(not null)
 
-		if mentity isa MClassDef then mentity = mentity.mclass
-		if mentity isa MClass or mentity isa MModule then
-			uml = new UMLModel(model, mainmodule, filter)
+		# Prepare options
+		var opts = new UMLDiagramOptions
+		opts.center = mentity
+		opts.parents_depth = pdepth
+		opts.children_depth = cdepth
+
+		# Build diagram
+		var uml = new UMLDiagram(model, mainmodule, filter, opts)
+		if mentity isa MPackage or mentity isa MGroup or mentity isa MModule then
+			uml.draw_package_diagram(mentity)
+		else if mentity isa MClass or mentity isa MProperty then
+			uml.draw_class_diagram(mentity)
 		else
 			return new WarningNoUML(mentity)
 		end
+		self.graph = uml
+
 		return res
 	end
 
 	redef fun render do
-		var uml = self.uml
-		if uml == null then return null
-		if mentity isa MClass then
-			dot = uml.generate_class_uml.write_to_string
-		else if mentity isa MModule then
-			dot = uml.generate_package_uml.write_to_string
-		end
+		var graph = self.graph
+		if graph == null then return ""
+		self.dot = graph.to_dot
 		return super
 	end
 end
@@ -176,6 +191,9 @@ end
 #
 # Recursively build parents and children list from a `center`.
 class InheritanceGraph
+	super ModelVisitor
+
+	autoinit center, model, mainmodule, filter
 
 	# MEntity at the center of this graph
 	var center: MEntity
@@ -185,9 +203,6 @@ class InheritanceGraph
 
 	# Mainmodule for class linearization
 	var mainmodule: MModule
-
-	# Filter to apply on model if any
-	var filter: nullable ModelFilter
 
 	# Graph generated
 	var graph: DotGraph is lazy do

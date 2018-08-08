@@ -36,7 +36,7 @@ redef class UMLModel
 					fontsize = 8
 				]\n"""
 		for mclass in model.collect_mclasses(filter) do
-			tpl.add mclass.tpl_class(self)
+			tpl.add mclass.to_uml(self)
 			tpl.add "\n"
 		end
 		tpl.add "\}"
@@ -44,45 +44,45 @@ redef class UMLModel
 	end
 end
 
-redef class MEntity
-	# Generates a dot-compatible `Writable` UML Class diagram from `self`
-	fun tpl_class(model: UMLModel): Writable is abstract
-end
-
 redef class MClass
-
-	redef fun tpl_class(model) do
+	redef fun to_uml(model) do
 		var name = name.escape_to_dot
 		var t = new Template
 		t.add "{name} [\n label = \"\{"
-		if kind == abstract_kind then
-			t.add "abstract\\n{name}"
-		else if kind == interface_kind then
-			t.add "interface\\n{name}"
+		if kind == abstract_kind or kind == interface_kind or
+		   kind == enum_kind or kind == extern_kind then
+			t.add "{kind.to_uml}\\n{name}"
 		else
-			t.add "{name}"
+			t.add name
 		end
+
 		if arity > 0 then
 			t.add "["
-			t.add mparameters.first.name
-			for i in [1 .. mparameters.length[ do
-				t.add ", "
-				t.add mparameters[i].name
+			for i in [0..mparameters.length[ do
+				if i > 0 then t.add ", "
+				t.add mparameters[i].to_uml(model)
 			end
 			t.add "]"
 		end
-		t.add "|"
-		var props = collect_intro_mproperties(model.filter)
-		for i in props do
-			if not i isa MAttribute then continue
-			t.add i.tpl_class(model)
-			t.add "\\l"
+		if model.show_attributes then
+			var mattributes = collect_intro_mattributes(model.filter)
+			if mattributes.not_empty then
+				t.add "|"
+				for i in mattributes do
+					t.add i.to_uml(model)
+					t.add "\\l"
+				end
+			end
 		end
-		t.add "|"
-		for i in props do
-			if not i isa MMethod then continue
-			t.add i.tpl_class(model)
-			t.add "\\l"
+		if model.show_methods then
+			var mmethods = collect_intro_mmethods(model.view)
+			if mmethods.not_empty then
+				t.add "|"
+				for i in mmethods do
+					t.add i.to_uml(model)
+					t.add "\\l"
+				end
+			end
 		end
 		t.add "\}\"\n]\n"
 		var g = in_hierarchy(model.mainmodule).direct_greaters
@@ -97,58 +97,64 @@ redef class MClass
 			t.add "];\n"
 		end
 		return t
-	end
 
+	end
 end
 
-redef class MMethod
-	redef fun tpl_class(model) do
+redef class MProperty
+	redef fun to_uml(model) do return intro.to_uml(model)
+end
+
+redef class MMethodDef
+	redef fun to_uml(model) do
 		var tpl = new Template
-		tpl.add visibility.tpl_class
-		tpl.add " "
+		if model.show_visibility then
+			tpl.add visibility.to_uml
+			tpl.add " "
+		end
 		tpl.add name.escape_to_dot
-		tpl.add intro.msignature.tpl_class(model)
+		var msignature = msignature
+		if msignature != null then
+			tpl.add msignature.to_uml(model)
+		end
 		return tpl
 	end
 end
 
 redef class MSignature
-
-	redef fun tpl_class(model) do
+	redef fun to_uml(model) do
 		var t = new Template
 		t.add "("
-		var params = new Array[MParameter]
-		for i in mparameters do
-			params.add i
-		end
-		if params.length > 0 then
-			t.add params.first.name.escape_to_dot
-			t.add ": "
-			t.add params.first.mtype.tpl_class(model)
-			for i in [1 .. params.length [ do
-				t.add ", "
-				t.add params[i].name.escape_to_dot
+		for i in [0..mparameters.length[ do
+			if i > 0 then t.add ", "
+			t.add mparameters[i].name.escape_to_dot
+			if model.show_types then
 				t.add ": "
-				t.add params[i].mtype.tpl_class(model)
+				t.add mparameters[i].mtype.to_uml(model)
 			end
 		end
 		t.add ")"
-		if return_mtype != null then
+		var return_mtype = self.return_mtype
+		if model.show_types and return_mtype != null then
 			t.add ": "
-			t.add return_mtype.tpl_class(model)
+			t.add return_mtype.to_uml(model)
 		end
 		return t
 	end
 end
 
-redef class MAttribute
-	redef fun tpl_class(model) do
+redef class MAttributeDef
+	redef fun to_uml(model) do
 		var tpl = new Template
-		tpl.add visibility.tpl_class
-		tpl.add " "
+		if model.show_visibility then
+			tpl.add visibility.to_uml
+			tpl.add " "
+		end
 		tpl.add name.escape_to_dot
-		tpl.add ": "
-		tpl.add intro.static_mtype.tpl_class(model)
+		if model.show_types then
+			tpl.add ": "
+			tpl.add static_mtype.as(not null).to_uml(model)
+		end
 		return tpl
 	end
 end
@@ -156,9 +162,9 @@ end
 redef class MVisibility
 	# Returns the visibility as a UML token
 	#
-	#    assert public_visibility.tpl_class == "+"
-	#    assert private_visibility.tpl_class == "-"
-	fun tpl_class: Writable do
+	#    assert public_visibility.to_uml == "+"
+	#    assert private_visibility.to_uml == "-"
+	fun to_uml: Writable do
 		if self == private_visibility then
 			return "-"
 		else if self == protected_visibility then
@@ -172,20 +178,19 @@ redef class MVisibility
 end
 
 redef class MClassType
-	redef fun tpl_class(model) do
+	redef fun to_uml(model) do
 		return name
 	end
 end
 
 redef class MGenericType
-	redef fun tpl_class(model) do
+	redef fun to_uml(model) do
 		var t = new Template
 		t.add name.substring(0, name.index_of('['))
 		t.add "["
-		t.add arguments.first.tpl_class(model)
-		for i in [1 .. arguments.length[ do
-			t.add ", "
-			t.add arguments[i].tpl_class(model)
+		for i in [0..arguments.length[ do
+			if i > 0 then t.add ", "
+			t.add arguments[i].to_uml(model)
 		end
 		t.add "]"
 		return t
@@ -193,22 +198,46 @@ redef class MGenericType
 end
 
 redef class MParameterType
-	redef fun tpl_class(model) do
-		return name
+	redef fun to_uml(model) do
+		var t = new Template
+		t.add name.escape_to_dot
+		if model.show_types then
+			t.add ": "
+			t.add mclass.intro.bound_mtype.arguments[rank].to_uml(model)
+		end
+		return t
 	end
 end
 
 redef class MVirtualType
-	redef fun tpl_class(model) do
+	redef fun to_uml(model) do
 		return name
 	end
 end
 
 redef class MNullableType
-	redef fun tpl_class(model) do
+	redef fun to_uml(model) do
 		var t = new Template
 		t.add "nullable "
-		t.add mtype.tpl_class(model)
+		t.add mtype.to_uml(model)
 		return t
+	end
+end
+
+redef class MClassKind
+
+	# Returns the UML representation of `self`
+	fun to_uml: Writable do
+		if self == abstract_kind then
+			return "&lt;&lt;abstract&gt;&gt;"
+		else if self == interface_kind then
+			return "&lt;&lt;interface&gt;&gt;"
+		else if self == enum_kind then
+			return "&lt;&lt;enum&gt;&gt;"
+		else if self == extern_kind then
+			return "&lt;&lt;extern&gt;&gt;"
+		else
+			return ""
+		end
 	end
 end

@@ -334,9 +334,7 @@ redef class MPackage
 	fun collect_intro_mclasses(filter: nullable ModelFilter): HashSet[MClass] do
 		var res = new HashSet[MClass]
 		for mgroup in mgroups do
-			for mmodule in collect_all_mmodules(filter) do
-				res.add_all mmodule.collect_intro_mclasses(filter)
-			end
+			res.add_all mgroup.collect_intro_mclasses(filter)
 		end
 		return res
 	end
@@ -484,6 +482,15 @@ redef class MGroup
 		var res = new HashSet[MModule]
 		for mmodule in mmodules do
 			if filter == null or filter.accept_mentity(mmodule) then res.add(mmodule)
+		end
+		return res
+	end
+
+	# Collect all classes introduced in `self`
+	fun collect_intro_mclasses(filter: nullable ModelFilter): HashSet[MClass] do
+		var res = new HashSet[MClass]
+		for mmodule in mmodules do
+			res.add_all mmodule.collect_intro_mclasses(filter)
 		end
 		return res
 	end

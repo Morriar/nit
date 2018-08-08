@@ -368,6 +368,18 @@ redef class CmdGraph
 	end
 end
 
+redef class CmdUML
+	redef fun parser_init(mentity_name, options) do
+		if options.has_key("pdepth") and options["pdepth"].is_int then
+			pdepth = options["pdepth"].to_i
+		end
+		if options.has_key("cdepth") and options["cdepth"].is_int then
+			cdepth = options["cdepth"].to_i
+		end
+		return super
+	end
+end
+
 redef class CmdInheritanceGraph
 	redef fun parser_init(mentity_name, options) do
 		var opt_pdepth = options.opt_int("pdepth")

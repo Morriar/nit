@@ -70,6 +70,7 @@ class ModelFilter
 		if not accept_mentity_extern(mentity) then return false
 		if not accept_mentity_example(mentity) then return false
 		if not accept_mentity_attribute(mentity) then return false
+		if not accept_mentity_accessor(mentity) then return false
 		if not accept_mentity_empty_doc(mentity) then return false
 		if not accept_mentity_inherited(mentity) then return false
 		if not accept_mentity_full_name(mentity) then return false
@@ -183,6 +184,20 @@ class ModelFilter
 		if accept_attribute then return true
 		if mentity isa MAttribute then return false
 		if mentity isa MAttributeDef then return false
+		return true
+	end
+
+	# Accept accessors?
+	#
+	# Default is `true`.
+	var accept_accessor = true is optional, writable
+
+	# Accept only entities that are not accessors
+	#
+	# See `is_accessor`.
+	fun accept_mentity_accessor(mentity: MEntity): Bool do
+		if mentity isa MMethod then return not mentity.is_accessor
+		if mentity isa MMethodDef then return not mentity.mproperty.is_accessor
 		return true
 	end
 

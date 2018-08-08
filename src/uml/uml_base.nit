@@ -29,4 +29,31 @@ class UMLModel
 
 	# Filters to apply on model if any
 	var filter: nullable ModelFilter
+
+	# Show class attributes
+	var show_attributes = true
+
+	# Show class methods
+	var show_methods = true
+
+	# Show classes and properties visibility
+	var show_visibility = true
+
+	# Show types for attributes, methods and in signatures
+	var show_types = true
+
+	# Colour for the border of a class when first introduced
+	#
+	# Defaults to a shade of green
+	var intro_colour = "#58B26A"
+
+	# Colour for the border of a class when refined
+	#
+	# Defaults to a shade of red
+	var redef_colour = "#B24758"
+end
+
+redef class MEntity
+	# Generates a dot-compatible `Writable` UML Class diagram from `self`
+	fun to_uml(model: UMLModel): Writable is abstract
 end

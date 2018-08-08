@@ -16,7 +16,13 @@
 # This module is the root of the module hierarchy.
 # It provides a very minimal set of classes and services used as a
 # foundation to define other classes and methods.
-module kernel
+module kernel is
+	new_annotation test
+	new_annotation before
+	new_annotation before_all
+	new_annotation after
+	new_annotation after_all
+end
 
 import end # Mark this module is a top level one. (must be only one)
 

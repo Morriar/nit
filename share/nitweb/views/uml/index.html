@@ -1,0 +1,292 @@
+<div class='container-fluid'>
+	<div class='page-header'>
+		<h2>UML</h2>
+		<p class='text-muted'>Create UML diagrams from Nitweb.</p>
+
+		<div class='input-group'>
+			<span ng-if='vm.edit' class='input-group-btn'>
+				<button class='btn btn-success' ng-click='vm.edit = false'>
+					<span class='glyphicon glyphicon-link' /> View
+				</button>
+			</span>
+			<span ng-if='!vm.edit' class='input-group-btn'>
+				<button class='btn btn-success' ng-click='vm.edit = true'>
+					<span class='glyphicon glyphicon-edit' /> Edit
+				</button>
+			</span>
+			<input class='form-control' type='text' ng-model='vm.shareUrl' />
+		</div>
+
+	</div>
+	<div class='row'>
+		<div class='col-xs-4' ng-if='vm.edit'>
+			<ul class='nav nav-tabs'>
+				<li class='active'>
+					<a data-target='#diagram' data-toggle='tab'>Diagram</a>
+				</li>
+				<li><a data-target='#options' data-toggle='tab'>Options</a></li>
+				<li><a data-target='#colors' data-toggle='tab'>Colors</a></li>
+			</ul>
+			<div class='tab-content'>
+				<div class='tab-pane active' id='diagram'>
+					<br>
+					<div class='form-group'>
+						<label for='center'>Diagram Target</label>
+						<input type='text' class='form-control' id='center'
+							ng-model='vm.options.center'
+							ng-model-options='{ debounce: 200 }'
+							ng-change='vm.render()'>
+					</div>
+
+					<label>Diagram kind</label>
+					<div class='radio'>
+					  <label>
+						<input type='radio' ng-model='vm.options.kind'
+							ng-change='vm.render()' value='package' />
+						Packages
+					  </label>
+					</div>
+					<div class='radio'>
+					  <label>
+						<input type='radio' ng-model='vm.options.kind'
+							ng-change='vm.render()' value='class' />
+						Classes
+					  </label>
+					</div>
+
+					<div class='form-group'>
+						<label for='visibility'>Min. visibility</label>
+						<select class='form-control' id='visibility'
+							ng-model='vm.options.min_visibility' ng-change='vm.render()'>
+							<option>public</option>
+							<option>protected</option>
+							<option>private</option>
+						</select>
+					</div>
+
+					<div class='form-group'>
+						<label for='output_format'>Output format</label>
+						<select class='form-control' id='output_format'
+							ng-model='vm.options.output_format' ng-change='vm.render()'>
+							<option>svg</option>
+							<option>dot</option>
+						</select>
+					</div>
+				</div>
+				<div class='tab-pane' id='options'>
+					<br>
+					<div class='form-group'>
+						<label for='depth-parents'>Max parents depth</label>
+						<input type='number' class='form-control' id='depth-parents'
+							ng-model='vm.options.parents_depth' ng-change='vm.render()'>
+					</div>
+					<div class='form-group'>
+						<label for='depth-children'>Max children depth</label>
+						<input type='number' class='form-control' id='depth-children'
+							ng-model='vm.options.children_depth' ng-change='vm.render()'>
+					</div>
+					<div class='form-group'>
+						<label for='max-parents'>Max parents</label>
+						<input type='number' class='form-control' id='max-parents'
+							ng-model='vm.options.max_parents' ng-change='vm.render()'>
+					</div>
+					<div class='form-group'>
+						<label for='max-children'>Max children</label>
+						<input type='number' class='form-control' id='max-children'
+							ng-model='vm.options.max_children' ng-change='vm.render()'>
+					</div>
+					<label>Clustering</label>
+					<div class='checkbox'>
+						<label>
+							<input type='checkbox' ng-change='vm.render()'
+								ng-model='vm.options.clusterize_classes'/>
+							clusterize classes
+						</label>
+					</div>
+					<div class='checkbox'>
+						<label>
+							<input type='checkbox' ng-change='vm.render()'
+								ng-model='vm.options.clusterize_modules'/>
+							clusterize modules
+						</label>
+					</div>
+					<div class='checkbox'>
+						<label>
+							<input type='checkbox' ng-change='vm.render()'
+								ng-model='vm.options.clusterize_groups'/>
+							clusterize groups
+						</label>
+					</div>
+					<label>Compacting</label>
+					<div class='checkbox'>
+						<label>
+							<input type='checkbox' ng-change='vm.render()'
+								ng-model='vm.options.compact_groups'/>
+							compact groups
+						</label>
+					</div>
+					<div class='checkbox'>
+						<label>
+							<input type='checkbox' ng-change='vm.render()'
+								ng-model='vm.options.compact_modules'/>
+							compact modules
+						</label>
+					</div>
+					<label>Display</label>
+					<div class='checkbox'>
+						<label>
+							<input type='checkbox' ng-change='vm.render()'
+								ng-model='vm.options.show_groups'/>
+							show groups
+						</label>
+					</div>
+					<div class='checkbox'>
+						<label>
+							<input type='checkbox' ng-change='vm.render()'
+								ng-model='vm.options.show_modules'/>
+							show modules
+						</label>
+					</div>
+					<div class='checkbox'>
+						<label>
+							<input type='checkbox' ng-change='vm.render()'
+								ng-model='vm.options.show_classes'/>
+							show classes
+						</label>
+					</div>
+					<div class='checkbox'>
+						<label>
+							<input type='checkbox' ng-change='vm.render()'
+								ng-model='vm.options.show_attributes'/>
+							show attributes
+						</label>
+					</div>
+					<div class='checkbox'>
+						<label>
+							<input type='checkbox' ng-change='vm.render()'
+								ng-model='vm.options.show_methods'/>
+							show methods
+						</label>
+					</div>
+					<div class='checkbox'>
+						<label>
+							<input type='checkbox' ng-change='vm.render()'
+								ng-model='vm.options.show_types'/>
+							show types
+						</label>
+					</div>
+
+					<div class='checkbox'>
+						<label>
+							<input type='checkbox' ng-change='vm.render()'
+								ng-model='vm.options.show_vtypes'/>
+							show virtual types
+						</label>
+					</div>
+					<div class='checkbox'>
+						<label>
+							<input type='checkbox' ng-change='vm.render()'
+								ng-model='vm.options.show_visibility'/>
+							show visibility
+						</label>
+					</div>
+					<label>Misc.</label>
+					<div class='checkbox'>
+						<label>
+							<input type='checkbox' ng-change='vm.render()'
+								ng-model='vm.options.ortho_edges'/>
+							use orthogonal edges
+						</label>
+					</div>
+				</div>
+				<div class='tab-pane' id='colors'>
+					<br>
+					<label>Use colors</label>
+					<div class='checkbox'>
+						<label>
+							<input type='checkbox' ng-change='vm.render()'
+								ng-model='vm.options.no_colors'/>
+							no color
+						</label>
+					</div>
+					<div class='form-group'>
+						<label for='hl-color'>highlight color</label>
+						<input type='text' class='form-control' id='hl-color'
+							ng-change='vm.render()' ng-model='vm.options.color_highlight'
+							ng-disabled='vm.options.no_colors'>
+					</div>
+					<div class='form-group'>
+						<label for='border-color'>border color</label>
+						<input type='text' class='form-control' id='border-color'
+							ng-change='vm.render()' ng-model='vm.options.color_border'
+							ng-disabled='vm.options.no_colors'>
+					</div>
+					<div class='form-group'>
+						<label for='diagram-color'>diagram color</label>
+						<input type='text' class='form-control' id='diagram-color'
+							ng-change='vm.render()' ng-model='vm.options.color_diagram'
+							ng-disabled='vm.options.no_colors'>
+					</div>
+					<div class='form-group'>
+						<label for='packages-color'>packages color</label>
+						<input type='text' class='form-control' id='packages-color'
+							ng-change='vm.render()' ng-model='vm.options.color_packages'
+							ng-disabled='vm.options.no_colors'>
+					</div>
+					<div class='form-group'>
+						<label for='groups-color'>groups color</label>
+						<input type='text' class='form-control' id='groups-color'
+							ng-change='vm.render()' ng-model='vm.options.color_groups'
+							ng-disabled='vm.options.no_colors'>
+					</div>
+					<div class='form-group'>
+						<label for='modules-color'>modules color</label>
+						<input type='text' class='form-control' id='modules-color'
+							ng-change='vm.render()' ng-model='vm.options.color_modules'
+							ng-disabled='vm.options.no_colors'>
+					</div>
+					<div class='form-group'>
+						<label for='classes-color'>classes color</label>
+						<input type='text' class='form-control' id='classes-color'
+							ng-change='vm.render()' ng-model='vm.options.color_classes'
+							ng-disabled='vm.options.no_colors'>
+					</div>
+					<div class='form-group'>
+						<label for='font-color'>font color</label>
+						<input type='text' class='form-control' id='font-color'
+							ng-change='vm.render()' ng-model='vm.options.color_font'
+							ng-disabled='vm.options.no_colors'>
+					</div>
+					<div class='form-group'>
+						<label for='public-color'>public color</label>
+						<input type='text' class='form-control' id='public-color'
+							ng-change='vm.render()' ng-model='vm.options.color_public'
+							ng-disabled='vm.options.no_colors'>
+					</div>
+					<div class='form-group'>
+						<label for='protected-color'>protected color</label>
+						<input type='text' class='form-control' id='protected-color'
+							ng-change='vm.render()' ng-model='vm.options.color_protected'
+							ng-disabled='vm.options.no_colors'>
+					</div>
+					<div class='form-group'>
+						<label for='private-color'>private color</label>
+						<input type='text' class='form-control' id='private-color'
+							ng-change='vm.render()' ng-model='vm.options.color_private'
+							ng-disabled='vm.options.no_colors'>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div ng-class='{"col-xs-8": vm.edit, "col-xs-12": !vm.edit}'>
+			<div class='card' ng-if='vm.output'>
+				<div class='card-body nitdoc'>
+					<div class='graph' ng-bind-html='vm.output'
+						ng-if='vm.options.output_format == "svg"' />
+					<div ng-bind='vm.output'
+						ng-if='vm.options.output_format == "dot"' />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -61,6 +61,7 @@ class Nitweb
 	redef fun execute do
 		var app = new App
 
+		var config = new NitwebConfig(model, mainmodule, toolcontext.modelbuilder, toolcontext, filter, catalog)
 		var config_file = toolcontext.opt_config.value
 		if config_file == null then config.default_config_file = "nitweb.ini"
 		config.parse_options(args)
@@ -71,6 +72,13 @@ class Nitweb
 		var opt_tmp_dir = toolcontext.opt_tmp_dir.value
 		if opt_tmp_dir != null then config.tmp_dir = opt_tmp_dir
 
+	redef fun process_mainmodule(mainmodule, mmodules)
+	do
+		var config = build_config(toolcontext, mainmodule)
+		config.model.index # pre load model index
+		config.model.nitdoc_md_processor = config.md_processor
+
+		var app = new App
 
 		app.use_before("/*", new SessionInit)
 		app.use_before("/*", new RequestClock)
