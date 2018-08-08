@@ -19,18 +19,33 @@ import phases_catalog
 import commands::commands_parser
 
 redef class ToolContext
-	var mdoc_commands_phase = new CommandsPhase(self, [mdoc_phase])
+
+	var cmd_parser_phase = new CmdParserPhase(self, [catalog_phase])
+
+	var commands_phase = new CommandsPhase(self, [mdoc_phase, cmd_parser_phase: MDocPhase])
 
 	# Commands parser for MDoc
 	# var cmd_parser: CommandParser is noinit
-	var cmd_parser = new CommandParser(modelbuilder.model, mainmodule, modelbuilder, catalog)
+	var cmd_parser: CommandParser is noinit
+end
+
+class CmdParserPhase
+	super MDocPhase
+
+	redef fun process_mainmodule(mainmodule, mmodules) do
+		toolcontext.cmd_parser = new CommandParser(
+			toolcontext.modelbuilder.model,
+			mainmodule,
+			toolcontext.modelbuilder,
+			toolcontext.catalog)
+	end
 end
 
 class CommandsPhase
 	super MDocPhase
 
 	redef fun process_mdoc(mdoc) do
-		var v = new CommandsPhaseVisitor(self, mdoc)
+		var v = new CommandsPhaseVisitor(self, mdoc, toolcontext.cmd_parser)
 		v.enter_visit(mdoc.mdoc_document)
 	end
 end
