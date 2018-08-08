@@ -47,7 +47,6 @@ private class ExamplesPhase
 		var mmodule = nmodule.mmodule
 		if mmodule == null then return
 
-		print mmodule.full_name
 		if not mmodule.has_annotation("example") then return
 
 		process_example(mmodule, nmodule)

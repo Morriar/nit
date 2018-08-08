@@ -18,22 +18,21 @@ import down_base
 # TODO extract index phase
 import model_index
 
-redef class ToolContext
-	var refs_phase = new ReferencesPhase(self, [mdoc_phase])
-end
-
 class ReferencesPhase
-	super MDocPhase
+	super MdPhase
 
-	redef fun process_mdoc(mdoc) do
-		# TODO Extract ref
-		# TODO Check ref
-		# TODO warn
+	var mainmodule: MModule
+
+	redef fun process_ast(context, document) do
+		var v = new MDocProcessMEntityLinks(context, toolcontext.modelbuilder.model, mainmodule)
+		v.enter_visit(document)
 	end
 end
 
 class MDocProcessMEntityLinks
-	super MdPostProcessor
+	super MdVisitor
+
+	var context: MEntity
 
 	# Model where the names are matched with the entities
 	var model: Model
@@ -52,30 +51,22 @@ class MDocProcessMEntityLinks
 				node.nit_mentity = mentity
 			end
 		end
-		super
+		node.visit_all(self)
 	end
 
 	private fun try_find_mentity(text: String): nullable MEntity do
 		if text.is_empty then return null
 
-		var document = self.document
-		if document == null then return null
-
-		var mdoc = document.mdoc
-		if mdoc == null then return null
-
-		var mentity = mdoc.original_mentity
-		if mentity == null then return null
+		var context = self.context
 
 		# Check parameters
-		if mentity isa MMethod and link_mparameters(mentity.intro, text) then
+		if context isa MMethod and link_mparameters(context.intro, text) then
 			return null # Do not link parameters
 		end
-		if mentity isa MMethodDef and link_mparameters(mentity, text) then
+		if context isa MMethodDef and link_mparameters(context, text) then
 			return null # Do not link parameters
 		end
 
-		var model = mentity.model
 		var query = text.replace("nullable", "").trim
 
 		if text.has("::") then
@@ -91,7 +82,7 @@ class MDocProcessMEntityLinks
 		if mentities.is_empty then return null
 		var match = mentities.first
 		if mentities.length > 1 then
-			var res = filter_matches(mentity, mentities)
+			var res = filter_matches(context, mentities)
 			if res.is_empty then return null
 			var best_score = 0
 			for match2, score in res do

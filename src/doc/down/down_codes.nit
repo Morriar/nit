@@ -17,16 +17,12 @@ module down_codes
 import down_base
 private import parser_util
 
-redef class ToolContext
-	var codes_phase = new CodesPhase(self, [mdoc_phase])
-end
-
 class CodesPhase
-	super MDocPhase
+	super MdPhase
 
-	redef fun process_mdoc(mdoc) do
-		var v = new CodesPhaseVisitor(self, mdoc)
-		v.enter_visit(mdoc.mdoc_document)
+	redef fun process_ast(context, document) do
+		var v = new CodesPhaseVisitor(self, context)
+		v.enter_visit(document)
 	end
 end
 
@@ -34,7 +30,7 @@ private class CodesPhaseVisitor
 	super MdVisitor
 
 	var phase: CodesPhase
-	var mdoc: MDoc
+	var context: MEntity
 
 	# Visit each `MdCode` and `MdCodeBlock`
 	redef fun visit(node) do
@@ -60,8 +56,7 @@ private class CodesPhaseVisitor
 
 	fun check_error(md: MdNode, node: ANode): Bool do
 		if node isa AError then
-			phase.warn(phase.join_location(mdoc.location, md.location, node.location),
-				"doc-codes", node.message)
+			phase.code_warn(context, md.location, node.location, "doc-codes", node.message)
 			return false
 		end
 		return true

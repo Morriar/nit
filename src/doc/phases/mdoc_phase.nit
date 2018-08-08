@@ -23,6 +23,21 @@ import doc::down
 
 redef class ToolContext
 
+	var opt_doc_output_path =
+		new OptionString("Path where the doc resources are copied", "--doc-tmp-path")
+
+	var opt_doc_resources_path =
+		new OptionString("Prefix path to the tmp directory", "--doc-resources-path")
+
+	var default_output_path: nullable String = null
+
+	var default_resources_path: nullable String = null
+
+	init do
+		option_context.add_option opt_doc_output_path
+		option_context.add_option opt_doc_resources_path
+	end
+
 	var mdoc_phase = new MDocPhase(self, [examples_phase])#, catalog_phase, index_phase])
 
 	var mdoc_parser: MdParser is lazy do
@@ -34,7 +49,11 @@ redef class ToolContext
 
 	var mdoc_phases: Array[MdPhase] is lazy do
 		var res = new Array[MdPhase]
-		# res.add new SynopsisPhase(self)
+		res.add new SynopsisPhase(self)
+		res.add new CheckResourcesPhase(self)
+		res.add new CodesPhase(self)
+		res.add new CommandsPhase(self)
+		res.add new SummariesPhase(self)
 		return res
 	end
 
@@ -52,6 +71,15 @@ class MDocPhase
 
 	redef fun process_mainmodule(mainmodule, mmodules) do
 		var model = toolcontext.modelbuilder.model
+
+		toolcontext.cmd_parser = new CommandParser(
+			model,
+			mainmodule,
+			toolcontext.modelbuilder,
+			toolcontext.catalog)
+
+		toolcontext.mdoc_phases.add new ReferencesPhase(toolcontext, mainmodule)
+
 		var mentities = new Array[MEntity]
 		mentities.add_all model.collect_mgroups
 		mentities.add_all model.collect_mmodules
@@ -86,11 +114,8 @@ class MDocPhase
 					if mentity.mclass.visibility == private_visibility then return
 				end
 			end
-			# print mentity.full_name
-			# print mentity.is_example
-			# print mentity.location
-			# toolcontext.warning(mentity.location, "doc-missing",
-				# "No MDoc for public entity `{mentity}`")
+			toolcontext.warning(mentity.location, "doc-missing",
+				"No MDoc for public entity `{mentity}`")
 			return
 		end
 		mdoc.mdoc_document = toolcontext.parse_markdown(mentity, mdoc.content.join("\n"))

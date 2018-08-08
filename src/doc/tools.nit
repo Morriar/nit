@@ -106,21 +106,6 @@ class DocTool
 		accept_example = true,
 		accept_broken = false)
 
-	# Tool MDoc handling
-
-	# MDoc post-processors to apply
-	#
-	# Clients can redefine this list.
-	var mdoc_post_processors: Array[MdPostProcessor] is lazy, writable do
-		var post_processors = new Array[MdPostProcessor]
-		post_processors.add new MDocProcessSynopsis
-		post_processors.add new MDocProcessCodes
-		post_processors.add new MDocProcessMEntityLinks(model, mainmodule)
-		post_processors.add new MDocProcessCommands(cmd_parser, toolcontext)
-		post_processors.add new MDocProcessSummary
-		return post_processors
-	end
-
 	# Initialize the tool
 	fun start do
 		parse_options

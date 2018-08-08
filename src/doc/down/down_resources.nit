@@ -16,41 +16,22 @@ module down_resources
 
 import down_base
 
-redef class ToolContext
-	var opt_doc_output_path =
-		new OptionString("Path where the doc resources are copied", "--doc-tmp-path")
-
-	var opt_doc_resources_path =
-		new OptionString("Prefix path to the tmp directory", "--doc-resources-path")
-
-	var check_resources_phase = new CheckResourcesPhase(self, [mdoc_phase])
-
-	var default_output_path: nullable String = null
-
-	var default_resources_path: nullable String = null
-
-	init do
-		option_context.add_option opt_doc_output_path
-		option_context.add_option opt_doc_resources_path
-	end
-end
-
 class CheckResourcesPhase
-	super MDocPhase
+	super MdPhase
 
-	redef fun process_mdoc(mdoc) do
-		var v = new CheckResourcesPhaseVisitor(self, mdoc)
-		v.enter_visit(mdoc.mdoc_document)
+	redef fun process_ast(context, document) do
+		var v = new CheckResourcesPhaseVisitor(self, context)
+		v.enter_visit(document)
 	end
 
-	fun process_resource(node: MdLinkOrImage, mdoc: MDoc) do
+	fun process_resource(context: MEntity, node: MdLinkOrImage) do
 		# Keep absolute links as is
 		var link = node.destination
 		if link.has_prefix("http://") or link.has_prefix("https://") then return
 
 		# Try from mentity context
 		do
-			var source = mdoc.location.file
+			var source = context.location.file
 			if source == null then break
 			var path = source.filename
 			var stat = path.file_stat
@@ -72,7 +53,7 @@ class CheckResourcesPhase
 		end
 
 		# Something went bad
-		warn(join_location(mdoc.location, node.location), "doc-resources",
+		md_warn(context, node.location, "doc-resources",
 			"Cannot find local resource `{link}`")
 	end
 
@@ -86,19 +67,19 @@ private class CheckResourcesPhaseVisitor
 	super MdVisitor
 
 	var phase: CheckResourcesPhase
-	var mdoc: MDoc
+	var context: MEntity
 
 	# Visit each `MdImage`
 	redef fun visit(node) do
 		if node isa MdLinkOrImage then
-			phase.process_resource(node, mdoc)
+			phase.process_resource(context, node)
 		end
 		node.visit_all(self)
 	end
 end
 
 class CopyResourcesPhase
-	super MDocPhase
+	super MdPhase
 
 	# Output directory where files are copied
 	var output_directory: String
@@ -106,9 +87,9 @@ class CopyResourcesPhase
 	# Path to the tmp resource directory
 	var resources_path = "." is optional
 
-	redef fun process_mdoc(mdoc) do
-		var v = new CopyResourcesPhaseVisitor(self, mdoc)
-		v.enter_visit(mdoc.mdoc_document)
+	redef fun process_ast(context, document) do
+		var v = new CopyResourcesPhaseVisitor(self, context)
+		v.enter_visit(document)
 	end
 end
 
@@ -116,7 +97,7 @@ private class CopyResourcesPhaseVisitor
 	super MdVisitor
 
 	var phase: CopyResourcesPhase
-	var mdoc: MDoc
+	var context: MEntity
 
 	# Visit each `MdLink` and `MdImage`
 	redef fun visit(node) do

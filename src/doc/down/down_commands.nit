@@ -17,41 +17,19 @@ module down_commands
 import down_base
 import phases::catalog_phase
 import commands::commands_parser
-import markdown2::markdown_wikilinks
 
 redef class ToolContext
-
-	var cmd_parser_phase = new CmdParserPhase(self, [catalog_phase])
-
-	var commands_phase = new CommandsPhase(self, [cmd_parser_phase])
-
 	# Commands parser for MDoc
 	# var cmd_parser: CommandParser is noinit
-	var cmd_parser: CommandParser is noinit
-end
-
-class CmdParserPhase
-	super MDocPhase
-
-	redef fun process_mainmodule(mainmodule, mmodules) do
-		toolcontext.cmd_parser = new CommandParser(
-			toolcontext.modelbuilder.model,
-			mainmodule,
-			toolcontext.modelbuilder,
-			toolcontext.catalog)
-	end
+	var cmd_parser: CommandParser is noinit, writable
 end
 
 class CommandsPhase
-	super MDocPhase
+	super MdPhase
 
-	redef fun process_mainmodule(mainmodule, mmodules) do
-		for mentity in toolcontext.modelbuilder.model.collect_mentities do
-			var mdoc = mentity.mdoc
-			if mdoc == null then continue
-			var v = new CommandsPhaseVisitor(self, mdoc, toolcontext.cmd_parser)
-			v.enter_visit(mdoc.mdoc_document)
-		end
+	redef fun process_ast(context, document) do
+		var v = new CommandsPhaseVisitor(self, context)
+		v.enter_visit(document)
 	end
 end
 
@@ -59,10 +37,7 @@ private class CommandsPhaseVisitor
 	super MdVisitor
 
 	var phase: CommandsPhase
-	var mdoc: MDoc
-
-	# Parser used to process doc commands
-	var parser: CommandParser
+	var context: MEntity
 
 	# Visit each `MdWikilink`
 	redef fun visit(node) do
@@ -71,6 +46,7 @@ private class CommandsPhaseVisitor
 			return
 		end
 
+		var parser = phase.toolcontext.cmd_parser
 		var link = node.link
 		var name = node.title
 		if name != null then link = "{name} | {link}"
@@ -79,13 +55,11 @@ private class CommandsPhaseVisitor
 		var error = parser.error
 
 		if error isa CmdError then
-			phase.warn(phase.join_location(mdoc.location, node.location),
-				"doc-commands", error.to_s)
+			phase.md_warn(context, node.location, "doc-commands", error.to_s)
 			return
 		end
 		if error isa CmdWarning then
-			phase.warn(phase.join_location(mdoc.location, node.location),
-				"doc-commands", error.to_s)
+			phase.md_warn(context, node.location, "doc-commands", error.to_s)
 		end
 		node.command = command
 		node.visit_all(self)

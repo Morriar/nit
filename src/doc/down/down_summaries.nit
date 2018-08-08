@@ -16,17 +16,12 @@ module down_summaries
 
 import down_base
 
-redef class ToolContext
-	var mdoc_summaries_phase = new PhaseSummaries(self, [mdoc_phase])
-end
-
-class PhaseSummaries
+class SummariesPhase
 	super MdPhase
 
-	redef fun process_mdoc(mdoc) do
-		# TODO Extract exemples
-		# TODO Check exemples
-		# TODO warn
+	redef fun process_ast(context, document) do
+		var v = new MDocProcessSummary(document)
+		v.enter_visit(document)
 	end
 end
 
@@ -34,26 +29,20 @@ end
 #
 # This post-processor attaches the summary of a `MDoc` to its `MdDocument`.
 class MDocProcessSummary
-	super MdPostProcessor
+	super MdVisitor
+
+	var document: MdDocument
 
 	# Visit each `MdHeading`
 	redef fun visit(node) do
-		var document = self.document
-		if document == null then return
-
 		if node isa MdHeading then
 			document.headings.add node
 		end
-		super
+		node.visit_all(self)
 	end
 end
 
 redef class MdDocument
-
-	# MDoc linked to this document if any
-	var mdoc: nullable MDoc = null is writable
-
 	# Headings contained in this document if any
 	var headings = new Array[MdHeading]
 end
-
