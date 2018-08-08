@@ -187,7 +187,7 @@ class CardUML
 
 	redef var markdown is lazy do
 		var tpl = new Template
-		tpl.addn "[[graph: {mentity.full_name} | format: svg]]"
+		tpl.addn "[[uml: {mentity.full_name} | format: svg]]"
 		return tpl.write_to_string
 	end
 

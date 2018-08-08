@@ -43,9 +43,6 @@ class NitwebConfig
 	# Modelbuilder used to access sources.
 	var modelbuilder: ModelBuilder
 
-	# Toolcontext used to create the model
-	var toolcontext: ToolContext
-
 	# The JSON API does not filter anything by default.
 	var filter: nullable ModelFilter
 

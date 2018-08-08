@@ -54,6 +54,7 @@ class APIDocdown
 
 	redef fun post(req, res) do
 		var ast = mdoc_parser.parse(req.body)
+		mdoc_parser.post_process(ast)
 		res.html mdoc_renderer.render(ast)
 	end
 end

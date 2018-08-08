@@ -18,7 +18,7 @@
 	angular
 		.module('docdown', ['ngSanitize'])
 
-		.config(function($stateProvider, $locationProvider) {
+		/*.config(function($stateProvider, $locationProvider) {
 			$stateProvider
 				.state('docdown', {
 					url: '/docdown',
@@ -154,13 +154,13 @@
 				vm.markdown = atob($location.search().snippet);
 			}*/
 
-			this.loadDocs();
+			/*this.loadDocs();
 			this.updateSuggestions(vm.target, vm.markdown, 1, 1);
 		})
 
 		/* Directives */
 
-		.directive('docEditor', function () {
+		/*.directive('docEditor', function () {
 			return {
 				scope: {},
 				link: function($scope, $el, $attr) {
@@ -295,5 +295,5 @@
 				replace: true,
 				templateUrl: '/directives/cards/card-config.html'
 			};
-		})
+		})*/
 })();
