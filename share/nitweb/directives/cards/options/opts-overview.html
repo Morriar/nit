@@ -1,0 +1,21 @@
+<div class='container-fluid'>
+	<div class='col-xs-6'>
+		<h4>Options</h4>
+
+		<form>
+{{vm.card.options}}
+			<input type='text' ng-repeat='(option, value) in vm.card.options'
+				ng-bind='vm.card.options[option]' />
+		</form>
+		options
+
+		list options fields
+
+		options helper
+	</div>
+	<div class='col-xs-6'>
+		<h4>Rendering</h4>
+		html card
+		markdown
+	</div>
+</div>

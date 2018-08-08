@@ -59,6 +59,13 @@
 			</a>
 		</li>
 
+		<!-- examples -->
+		<li role='presentation' ui-sref-active='active'>
+			<a ui-sref='.examples'>
+				<span class='glyphicon glyphicon-play'/> Examples
+			</a>
+		</li>
+
 		<!-- linearization -->
 		<li role='presentation' ui-sref-active='active' ng-if='
 				vm.mentity.class_name == "MClass" ||
@@ -85,22 +92,6 @@
 		<li role='presentation' ui-sref-active='active'>
 			<a ui-sref='.grades'>
 				<span class='glyphicon glyphicon-star'/> Grades
-			</a>
-		</li>
-
-		<!-- license -->
-		<li role='presentation' ui-sref-active='active' ng-if='
-				vm.mentity.class_name == "MPackage"'>
-			<a ui-sref='.license'>
-				<span class='glyphicon glyphicon-copyright-mark'/> License
-			</a>
-		</li>
-
-		<!-- contrib -->
-		<li role='presentation' ui-sref-active='active' ng-if='
-				vm.mentity.class_name == "MPackage"'>
-			<a ui-sref='.contrib'>
-				<span class='glyphicon glyphicon-gift'/> Contributing
 			</a>
 		</li>
 	</ul>

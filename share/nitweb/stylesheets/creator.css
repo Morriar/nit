@@ -1,0 +1,87 @@
+/*
+ * Copyright 2017 Alexandre Terrasa <alexandre@moz-code.org>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* creator */
+
+.creator-window {
+	position: absolute;
+	top: 50px;
+	bottom: 10px;
+	width:100%;
+	padding: 0;
+}
+
+.creator-main-panel {
+	position: absolute;
+	top: 0px;
+	bottom: 45px;
+	width:60%;
+	background-color: #fff;
+	padding: 10px;
+	border-right: 1px solid #ddd;
+}
+
+.creator-side-panel {
+	position: absolute;
+	top: 0px;
+	bottom: 45px;
+	right:0;
+	left: 60%;
+	padding: 10px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.creator-footer {
+	border-top: 1px solid #ddd;
+	position: absolute;
+	bottom: 0;
+	right:0;
+	left: 0;
+	padding: 10px 10px 0 10px;
+}
+
+#editor {
+	border: 0;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right:0;
+	left: 0;
+	width: 100%;
+}
+
+.show-more {
+	line-height: 10px;
+}
+
+.CodeMirror {
+	padding-top: 10px;
+	height: 100%;
+}
+
+.suggest-card pre, .suggest-card .well { font-size: 80%; word-break: break-word; }
+.suggest-card pre :first-child, .suggest-card .well :first-child { margin-top: 0; }
+.suggest-card pre :last-child, .suggest-card .well :last-child { margin-bottom: 0; }
+
+.suggest-card pre h1, .suggest-card .well h1 { font-size: 180%; }
+.suggest-card pre h2, .suggest-card .well h2 { font-size: 155%; }
+.suggest-card pre h3, .suggest-card .well h3 { font-size: 140%; }
+.suggest-card pre h4, .suggest-card .well h4 { font-size: 125%; }
+.suggest-card pre h5, .suggest-card .well h5 { font-size: 115%; }
+.suggest-card pre h6, .suggest-card .well h6 { font-size: 105%; }
+
+.tip-card { background-color: #fffdf3; }

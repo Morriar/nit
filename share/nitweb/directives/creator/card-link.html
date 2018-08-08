@@ -1,0 +1,18 @@
+<div>
+	<div class='card-left'>
+		<span class='glyphicon glyphicon-paperclip' />
+	</div>
+	<div class='card-body'>
+		<h5 class='card-heading'>
+			Documenting <entity-link mentity='vm.card.mentity'/>?
+		</h5>
+		<br/>
+		<entity-signature mentity='vm.card.mentity'/>
+		<br/>
+		<span style='font-size: 200%' ng-bind-html='vm.card.synopsis' />
+		<button class='show-more btn btn-muted btn-xs' data-toggle='collapse' data-target='#collapseDoc{{vm.index}}'>...</button>
+		<div class='collapse' id='collapseDoc{{vm.index}}'>
+			<div class='nitdoc' ng-bind-html='vm.card.doc' />
+		</div>
+	</div>
+</div>

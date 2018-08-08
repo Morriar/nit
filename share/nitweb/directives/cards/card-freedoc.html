@@ -1,0 +1,36 @@
+<div class='card suggest-card'>
+
+	<div>
+		<div class='card-left'>
+			<span class='glyphicon glyphicon-{{vm.card.icon}}' />
+		</div>
+		<div class='card-body'>
+			<h4 class='card-heading' ng-bind-html='vm.card.title' />
+			<p>{{vm.card.description}}</p>
+			<div ng-if='vm.mode == "html" && !vm.card.is_graph && !vm.card.is_code'>
+				<div class='well' ng-bind-html='vm.card.html' />
+			</div>
+			<div ng-if='vm.mode == "html" && vm.card.is_graph' class='text-center'>
+				<br/>
+				<div ng-bind-html='vm.card.html' />
+			</div>
+			<div ng-if='vm.mode == "html" && vm.card.is_code'>
+				<div class='code' ng-bind-html='vm.card.html' />
+			</div>
+			<div ng-if='vm.mode == "md"'>
+				<pre ng-bind-html='vm.card.markdown' />
+			</div>
+		</div>
+	</div>
+	<div class='card-footer text-right'>
+		<button class='btn btn-xs btn-link' ng-click='vm.switchCard()'>
+			<span ng-if='vm.mode == "md"'>html</span>
+			<span ng-if='vm.mode == "html"'>md</span>
+		</button>
+		<button class='btn btn-xs btn-link' ng-click='vm.editCard()' ng-if='vm.card.has_options'>
+			<span class='glyphicon glyphicon-cog text-muted' />
+		</button>
+		<button class='btn btn-xs btn-success' ng-click='vm.insertCard()'>Insert</button>
+		<button class='btn btn-xs btn-muted' ng-click='vm.dismissCard()'>Dismiss</button>
+	</div>
+</div>

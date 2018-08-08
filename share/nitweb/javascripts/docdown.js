@@ -24,55 +24,276 @@
 					url: '/docdown',
 					templateUrl: 'views/docdown.html',
 					controller: 'DocdownCtrl',
-					controllerAs: 'docdownCtrl'
+					controllerAs: 'vm'
 				})
 		})
 
 		.factory('DocDown', [ '$http', function($http) {
 			return {
-				postMarkdown: function(md, cb, cbErr) {
+				loadDocs: function(cb, cbErr) {
+					$http.get('/api/docdown/docs')
+						.success(cb)
+						.error(cbErr);
+				},
+				renderHtml: function(md, cb, cbErr) {
 					$http.post('/api/docdown', md)
+						.success(cb)
+						.error(cbErr);
+				},
+				suggest: function(target, md, line, column, cb, cbErr) {
+					$http.post('/api/docdown/suggest?line=' + line + '&column=' + column + '&target=' + target, md)
 						.success(cb)
 						.error(cbErr);
 				}
 			}
 		}])
 
-		.controller('DocdownCtrl', ['$sce', '$scope', '$location', 'DocDown', function($sce, $scope, $location, DocDown) {
+		.controller('DocdownCtrl', function($scope, $sce, $location, DocDown) {
+			var vm = this;
 
-			this.updateSnippet = function() {
-				this.updateLink();
-				this.updateHtml();
+			this.initEditor = function(div) {
+				vm.editor = CodeMirror(div, {
+					lineNumbers: true,
+					matchBrackets: true,
+					viewportMargin: Infinity
+				});
+				vm.editor.on('cursorActivity', function(CodeMirror) {
+					$scope.$emit('doc-change', CodeMirror.doc.getValue(),
+						CodeMirror.doc.getCursor());
+				});
+				var buffer = CodeMirror.Doc(vm.markdown, 'markdown');
+				vm.editor.swapDoc(buffer);
+				vm.editor.focus();
 			}
 
-			this.updateLink = function() {
-				$scope.link = $location.protocol()+ '://' + $location.host() + ':' +
-					$location.port() + $location.path() + '?snippet=' +
-					encodeURIComponent(btoa($scope.markdown));
+			this.loadDocs = function() {
+				DocDown.loadDocs(
+					function(data) { vm.session = data },
+					function(err) { vm.error = err });
 			}
 
-			this.updateHtml = function() {
-				DocDown.postMarkdown($scope.markdown,
+			this.loadDoc = function(doc) {
+				vm.target = doc.target_name;
+				vm.markdown = doc.md;
+				var buffer = CodeMirror.Doc(doc.md, 'markdown');
+				vm.editor.swapDoc(buffer);
+			}
+
+			this.changeTarget = function() {
+				vm.updateSuggestions(vm.target, vm.markdown, 1, 1)
+			}
+
+			this.renderHtml = function() {
+				DocDown.renderHtml(vm.markdown,
 					function(data) {
-						$scope.html = $sce.trustAsHtml(data);
+						vm.html = $sce.trustAsHtml(data);
+						$('#renderModal').modal();
 					}, function(err) {
-						$scope.error = err;
+						vm.error = err;
+					});
+			}
+
+			this.updateSuggestions = function(target, markdown, linePos, lineChar) {
+				DocDown.suggest(target, markdown, linePos, lineChar,
+					function(data) {
+						vm.summary = data.summary;
+						vm.suggestions = data.suggestions;
+						vm.debug = data.debug;
+					}, function(err) {
+						vm.error = err;
 					});
 			};
 
-			this.editMode = function(isEdit) {
-				$scope.edit = isEdit;
-			}
+			this.jumpSection = function(section) {
+				vm.editor.focus();
+				var coords = vm.editor.charCoords(
+					{line: section.line - 1, ch: 0}, "local").top;
+				vm.editor.scrollTo(0, coords);
+			};
 
-			$scope.markdown = 'Type some markdown...';
-			if($location.search().snippet) {
-				$scope.markdown = atob($location.search().snippet);
-			}
-			$scope.edit = false;
-			if($location.search().edit) {
-				$scope.edit = Boolean($location.search().edit);
-			}
+			$scope.$on('init-editor', function(e, div) {
+				vm.initEditor(div);
+			})
 
-			this.updateSnippet();
-		}])
+			$scope.$on('doc-change', function(e, data, pos) {
+				vm.markdown = data;
+				//vm.updateSuggestions(vm.target, data, pos.line + 1, pos.ch + 1);
+			})
+
+			$scope.$on('insert-card', function(e, card) {
+				var cursor = vm.editor.doc.getCursor();
+				vm.editor.doc.replaceRange(card.command_string, cursor);
+			})
+
+			$scope.$on('insert-content', function(e, content) {
+				var cursor = vm.editor.doc.getCursor();
+				vm.editor.doc.replaceRange(content, cursor);
+			})
+
+			$scope.$on('edit-card', function(e, card, index) {
+				vm.config_card = card;
+				vm.config_index = index;
+				$('#editModal').modal();
+			})
+
+			$scope.$on('dismiss-card', function(e, index) {
+				//console.log(card);
+				// TODO Send card dismiss
+				vm.suggestions.splice(index, 1);
+			})
+
+			$scope.$on('update-target', function(e, target) {
+				vm.target = target;
+				vm.changeTarget();
+			})
+
+			//TODO remove
+			vm.target = 'markdown';
+			vm.markdown = '';
+			/*if($location.search().snippet) {
+				vm.markdown = atob($location.search().snippet);
+			}*/
+
+			this.loadDocs();
+			this.updateSuggestions(vm.target, vm.markdown, 1, 1);
+		})
+
+		/* Directives */
+
+		.directive('docEditor', function () {
+			return {
+				scope: {},
+				link: function($scope, $el, $attr) {
+					$scope.$emit('init-editor', angular.element('#editor')[0]);
+				},
+				restrict: 'E',
+				replace: true,
+				template: '<div id="editor" />'
+			};
+		})
+
+		.directive('cardTip', function() {
+			return {
+				restrict: 'E',
+				scope: {},
+				bindToController: {
+					card: '=',
+					index: '='
+				},
+				controller: function($scope, $sce) {
+					var vm = this;
+
+					this.dismissCard = function() {
+						$scope.$emit('dismiss-card', vm.index);
+					}
+				},
+				controllerAs: 'vm',
+				replace: true,
+				templateUrl: '/directives/cards/card-tip.html'
+			};
+		})
+
+		.directive('cardScaffolding', function() {
+			return {
+				restrict: 'E',
+				scope: {},
+				bindToController: {
+					card: '=',
+					index: '='
+				},
+				controller: function($scope, $sce) {
+					var vm = this;
+					vm.mode = 'html';
+
+					this.switchCard = function() {
+						if(vm.mode == 'html') {
+							vm.mode = 'md';
+						} else {
+							vm.mode = 'html';
+						}
+					}
+
+					this.insertCard = function() {
+						$scope.$emit('insert-content', vm.card.markdown);
+						$scope.$emit('dismiss-card', vm.index);
+					}
+
+					this.dismissCard = function() {
+						$scope.$emit('dismiss-card', vm.index);
+					}
+
+					this.editCard = function() {
+						$scope.$emit('edit-card', vm.card, vm.index);
+					}
+				},
+				controllerAs: 'vm',
+				replace: true,
+				templateUrl: '/directives/cards/card-scaffolding.html'
+			};
+		})
+
+		.directive('cardFreedoc', function() {
+			return {
+				restrict: 'E',
+				scope: {},
+				bindToController: {
+					card: '=',
+					index: '='
+				},
+				controller: function($scope, $sce) {
+					var vm = this;
+					vm.mode = 'html';
+					// TODO beurk
+					vm.card.html = vm.card.html.replace('<p>', '');
+					vm.card.html = $sce.trustAsHtml(vm.card.html);
+
+					this.switchCard = function() {
+						if(vm.mode == 'html') {
+							vm.mode = 'md';
+						} else {
+							vm.mode = 'html';
+						}
+					}
+
+					this.insertCard = function() {
+						$scope.$emit('insert-content', vm.card.markdown);
+						$scope.$emit('dismiss-card', vm.index);
+					}
+
+					this.dismissCard = function() {
+						$scope.$emit('dismiss-card', vm.index);
+					}
+
+					this.editCard = function() {
+						$scope.$emit('edit-card', vm.card, vm.index);
+					}
+				},
+				controllerAs: 'vm',
+				replace: true,
+				templateUrl: '/directives/cards/card-freedoc.html'
+			};
+		})
+
+		.directive('configCard', function() {
+			return {
+				restrict: 'E',
+				scope: {},
+				bindToController: {
+					card: '=',
+					index: '=',
+				},
+				controller: function($scope, $sce) {
+					var vm = this;
+
+					this.insertCard = function() {
+						$('#editModal').modal('hide');
+						$scope.$emit('insert-content', vm.card.markdown);
+						$scope.$emit('dismiss-card', vm.index);
+					}
+				},
+				controllerAs: 'vm',
+				replace: true,
+				templateUrl: '/directives/cards/card-config.html'
+			};
+		})
 })();

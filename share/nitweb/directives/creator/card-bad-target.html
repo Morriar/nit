@@ -1,0 +1,18 @@
+<div>
+	<div class='card-left'>
+		<span class='glyphicon glyphicon-paperclip' />
+	</div>
+	<div class='card-body'>
+		<h4 class='card-heading'>
+			Target `{{vm.card.target_name}}` not found.
+		</h4>
+		<br/>
+		Did you mean...
+		<br/>
+		<ul>
+			<li ng-repeat='target in vm.card.suggestions'>
+				<a ng-click='vm.selectTarget(target)'>{{target}}</a>
+			</li>
+		</ul>
+	</div>
+</div>
