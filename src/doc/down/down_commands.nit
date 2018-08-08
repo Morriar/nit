@@ -15,39 +15,37 @@
 module down_commands
 
 import down_base
+import phases_catalog
 import commands::commands_parser
 
 redef class ToolContext
-	var mdoc_commands_phase = new PhaseCommands(self, [mdoc_phase])
+	var mdoc_commands_phase = new CommandsPhase(self, [mdoc_phase])
+
+	# Commands parser for MDoc
+	# var cmd_parser: CommandParser is noinit
+	var cmd_parser = new CommandParser(modelbuilder.model, mainmodule, modelbuilder, catalog)
 end
 
-class PhaseCommands
+class CommandsPhase
 	super MDocPhase
 
 	redef fun process_mdoc(mdoc) do
-		# TODO Extract exemples
-		# TODO Check exemples
-		# TODO warn
+		var v = new CommandsPhaseVisitor(self, mdoc)
+		v.enter_visit(mdoc.mdoc_document)
 	end
 end
 
-class MDocProcessCommands
-	super MdPostProcessor
+private class CommandsPhaseVisitor
+	super MdVisitor
+
+	var phase: CommandsPhase
+	var mdoc: MDoc
 
 	# Parser used to process doc commands
 	var parser: CommandParser
 
-	# ToolContext to display errors
-	var toolcontext: ToolContext
-
 	# Visit each `MdWikilink`
 	redef fun visit(node) do
-		var document = self.document
-		if document == null then return
-
-		var mdoc = document.mdoc
-		if mdoc == null then return
-
 		if node isa MdWikilink then
 			var link = node.link
 			var name = node.title
@@ -57,11 +55,13 @@ class MDocProcessCommands
 			var error = parser.error
 
 			if error isa CmdError then
-				toolcontext.error(mdoc.location, error.to_s)
+				phase.warn(phase.join_location(mdoc.location, node.location),
+					"doc-commands", error.to_s)
 				return
 			end
 			if error isa CmdWarning then
-				toolcontext.warning(mdoc.location, "mdoc", error.to_s)
+				phase.warn(phase.join_location(mdoc.location, node.location),
+					"doc-commands", error.to_s)
 			end
 			node.command = command
 		end

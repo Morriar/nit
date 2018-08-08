@@ -15,19 +15,19 @@
 module down_references
 
 import down_base
+# TODO extract index phase
 import model_index
 
 redef class ToolContext
-	var mdoc_refs_phase = new PhaseReferences(self, [mdoc_phase])
+	var refs_phase = new ReferencesPhase(self, [mdoc_phase])
 end
 
-class PhaseReferences
+class ReferencesPhase
 	super MDocPhase
 
 	redef fun process_mdoc(mdoc) do
-		# TODO phase model index
-		# TODO Extract exemples
-		# TODO Check exemples
+		# TODO Extract ref
+		# TODO Check ref
 		# TODO warn
 	end
 end

@@ -1,7 +1,5 @@
 # This file is part of NIT ( http://www.nitlanguage.org ).
 #
-# Copyright 2016 Alexandre Terrasa <alexandre@moz-code.org>
-#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -14,28 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module example_simple_error_handler is example
+module phases_base
 
-import popcorn
+import frontend
+import model_collect
+import parse_examples
 
-class SimpleErrorHandler
-	super Handler
+abstract class DocPhase
+	super Phase
 
-	redef fun all(req, res) do
-		if res.status_code != 200 then
-			res.send("An error occurred!", res.status_code)
-		end
+	fun warn(location: Location, cat: String, message: String) do
+		toolcontext.warning(location, cat, "Warning: {message}")
+		toolcontext.check_errors
 	end
 end
-
-class SomeHandler
-	super Handler
-
-	redef fun get(req, res) do res.send "Hello World!"
-end
-
-
-var app = new App
-app.use("/", new SomeHandler)
-app.use("/*", new SimpleErrorHandler)
-app.listen("localhost", 3000)

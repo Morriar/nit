@@ -12,35 +12,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module down_codeblocks
+module down_codes
 
 import down_base
 private import parser_util
 
 redef class ToolContext
-	var mdoc_codeblocks_phase = new DocCodeBlocksPhase(self, [mdoc_phase])
+	var codes_phase = new CodesPhase(self, [mdoc_phase])
 end
 
-class DocCodeBlocksPhase
+class CodesPhase
 	super MDocPhase
 
 	redef fun process_mdoc(mdoc) do
-		# TODO Extract exemples
-		# TODO Check exemples
-		# TODO warn
+		var v = new CodesPhaseVisitor(self, mdoc)
+		v.enter_visit(mdoc.mdoc_document)
 	end
 end
 
-class MDocProcessCodes
-	super MdPostProcessor
+private class CodesPhaseVisitor
+	super MdVisitor
 
-	# ToolContext used to parse pieces of code
-	var toolcontext = new ToolContext is lazy
+	var phase: CodesPhase
+	var mdoc: MDoc
 
 	# Visit each `MdCode` and `MdCodeBlock`
 	redef fun visit(node) do
 		if node isa MdCode then
-			node.nit_ast = toolcontext.parse_something(node.literal)
+			node.nit_ast = phase.toolcontext.parse_something(node.literal)
 			return
 		end
 		if node isa MdCodeBlock then
@@ -48,29 +47,33 @@ class MDocProcessCodes
 			if literal != null then
 				if node isa MdFencedCodeBlock then
 					var meta = node.info or else "nit"
-					if meta == "nit" or meta == "nitish" then
-						node.nit_ast = toolcontext.parse_something(literal)
-					end
+					if meta != "nit" and meta != "nitish" then return
 				end
-				if node isa MdIndentedCodeBlock then
-					node.nit_ast = toolcontext.parse_something(literal)
-					return
-				end
+				var ast = phase.toolcontext.parse_something(literal)
+				check_error(node, ast)
+				node.nit_ast = ast
+				return
 			end
 		end
-		super
+		node.visit_all(self)
+	end
+
+	fun check_error(md: MdNode, node: ANode): Bool do
+		if node isa AError then
+			phase.warn(phase.join_location(mdoc.location, md.location, node.location),
+				"doc-codes", node.message)
+			return false
+		end
+		return true
 	end
 end
 
 redef class MdCodeBlock
-
 	# Nit AST of this code block if any
 	var nit_ast: nullable ANode = null is writable
 end
 
 redef class MdCode
-
 	# Nit AST of this code span if any
 	var nit_ast: nullable ANode = null is writable
 end
-

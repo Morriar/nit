@@ -17,26 +17,27 @@ module down_synopsis
 import down_base
 
 redef class ToolContext
-	var mdoc_synopsis_phase = new DocSynopsisPhase(self, [mdoc_phase])
+	var synopsis_phase = new SynopsisPhase(self, [mdoc_phase])
 end
 
-class DocSynopsisPhase
+class SynopsisPhase
 	super MDocPhase
 
 	redef fun process_mdoc(mdoc) do
 		var first = mdoc.mdoc_document.first_child
 		if first == null then return
 		if first isa MdHeading then return
-		# Check rule for README
 		if mdoc.original_mentity isa MGroup then
+			# Check rule for README
 			if not first isa MdHeading or first.level != 1 then
-				warn(join_location(mdoc.location, first.location), "mdoc",
-					"Warning: README synopsis should be a MdHeading 1")
+				warn(join_location(mdoc.location, first.location), "doc-synopsis",
+					"README synopsis should be a MdHeading 1")
 			end
 		else
+			# Check rule for comment
 			if not first isa MdParagraph then
-				warn(join_location(mdoc.location, first.location), "mdoc",
-					"Warning: MDoc synopsis should be a MdParagraph")
+				warn(join_location(mdoc.location, first.location), "doc-synopsis",
+					"MDoc synopsis should be a MdParagraph")
 			end
 		end
 		# Replace node
