@@ -295,8 +295,8 @@ from the `json_serialization` module.
 
 > span: json::JsonSerializer
 
-~~~
-import json
+~~~nitish
+mport json
 import user_credentials
 
 # Data to be serialized and deserialized

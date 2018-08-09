@@ -88,7 +88,6 @@ Where:
 * `MyHandler` is the name of the handler you will add to the app.
 * `METHOD` can be replaced by `get`, `post`, `put` or `delete`.
 
-> span: popcorn::MyHandler
 > span: popcorn::Handler::get
 > span: popcorn::Handler::post
 > span: popcorn::Handler::put
@@ -342,9 +341,9 @@ which requests can be made.
 Route paths can be strings, parameterized strings or glob patterns.
 Query strings such as `?q=foo`are not part of the route path.
 
-Popcorn uses the `Handler::match(uri)` method to match the route paths.
+Popcorn uses the `AppRoute::match(uri)` method to match the route paths.
 
-> span: popcorn::Handler::match
+> span: popcorn::AppRoute::match
 
 Here are some examples of route paths based on strings.
 
@@ -549,8 +548,6 @@ By using the `MyLogger` handler to the route `/*` we ensure that every requests
 (even 404 ones) pass through the middleware handler.
 This handler just prints “Request Logged!” when a request is received.
 
-> span: popcorn::MyLogger
-
 Be default, the order of middleware execution is that are loaded first are also executed first.
 To ensure our middleware `MyLogger` will be executed before all the other, we add it
 with the `use_before` method.
@@ -720,8 +717,6 @@ app.listen("localhost", 3000)
 
 The app will now be able to handle requests to /user and /user/profile, as well
 as call the `Time` middleware handler that is specific to the route.
-
-> span: popcorn::Time
 
 ## Error handling
 

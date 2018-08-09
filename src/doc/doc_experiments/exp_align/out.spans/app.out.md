@@ -62,6 +62,8 @@ So all UI elements can react separately to live-cycle events.
 > span: app::App
 > span: android>ui>
 > span: ios>ui>
+> span: app::ui
+> span: linux::ui
 
 ## User Interface
 

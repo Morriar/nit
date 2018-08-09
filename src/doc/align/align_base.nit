@@ -14,76 +14,36 @@
 
 import doc_down
 
+abstract class MdAligner
+	super MdVisitor
+
+	var model: Model
+
+	var mainmodule: MModule
+
+	var context: MEntity is noinit
+
+	fun align_document(doc: MdDocument, context: MEntity) do
+		self.context = context
+		enter_visit(doc)
+	end
+end
+
+redef class MdNode
+	var md_refs = new Array[MdRef] is writable
+end
+
 # A reference from the Markdown document to something
 abstract class MdRef
 
 	# Source node for this reference
 	var node: MdNode
 
-	# String associated to the `node`
-	var string: String
-
-	var confidence = 0.0 is writable, optional
-
 	redef fun to_s do return "{class_name}\{{node}\}"
-end
-
-# A reference to an option
-class MdRefOption
-	super MdRef
-end
-
-class MdRefPath
-	super MdRef
-
-	var path: nullable Path = null
-
-	redef fun confidence do return if path == null then 0.0 else 100.0
-end
-
-class MdRefCommand
-	super MdRef
-
-	var command: nullable String = null
-	var args = new Array[String]
-
-	redef fun confidence do return if command == null then 0.0 else 100.0
-end
-
-class MdRefAnnot
-	super MdRef
-
-	var annot: nullable String = null
-
-	redef fun confidence do return if annot == null then 0.0 else 100.0
 end
 
 class MdRefMEntity
 	super MdRef
 
 	var mentity:  MEntity
-end
-
-class MdRefName
-	super MdRef
-
-	var model_refs = new Array[MdRefMEntity]
-end
-
-class MdRefQName
-	super MdRefName
-end
-
-class MdRefSignature
-	super MdRefName
-end
-
-class MdRefOther
-	super MdRef
-end
-
-class MdRefText
-	super MdRef
-
-	var model_refs = new Array[MdRefMEntity]
 end

@@ -321,7 +321,7 @@ which requests can be made.
 Route paths can be strings, parameterized strings or glob patterns.
 Query strings such as `?q=foo`are not part of the route path.
 
-Popcorn uses the `Handler::match(uri)` method to match the route paths.
+Popcorn uses the `AppRoute::match(uri)` method to match the route paths.
 
 Here are some examples of route paths based on strings.
 

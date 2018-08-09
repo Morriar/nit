@@ -20,9 +20,10 @@ import mdoc_index
 import name_index
 intrude import model_index
 import align_refs
-import align_text
-import align_block
-import align_code_blocks
+# import align_text
+# import align_block
+# import align_code_blocks
+import align_filter
 
 class MDocAligner
 
@@ -38,11 +39,17 @@ class MDocAligner
 	fun align_mdoc(mdoc: MDoc) do
 		var document = mdoc.mdoc_document
 
-		# span_align.align_spans(document, context)
-		text_align.align_texts(document, context)
+		align_codes.align_document(document, context)
+		# text_align.align_texts(document, context)
 		# code_block_align.align_code_blocks(document, context)
 		# nlp_align.align_nlp(document, context)
 		# block_align.align_blocks(document, context)
+
+		# var filter_context = new MdFilterNameConflicts(context)
+		# filter_context.filter_document(document)
+
+		var filter_kind = new MdFilterKind
+		filter_kind.filter_document(document)
 
 		span_visitor.enter_visit(document)
 
@@ -60,14 +67,14 @@ class MDocAligner
 		# section_visitor.enter_section(root)
 	end
 
-	var span_align = new MdCodeAlign(model, mainmodule) is lazy
-	var text_align = new MdTextAlign(model, mainmodule) is lazy
-	var block_align = new MdBlockAlign(model, mainmodule) is lazy
-	var code_block_align = new MdCodeBlockAlign(mentity_index) is lazy
-	var nlp_align = new MdNLPAlign(mentity_index) is lazy
+	var align_codes = new MdAlignCodes(model, mainmodule) is lazy
+	# var text_align = new MdTextAlign(model, mainmodule) is lazy
+	# var block_align = new MdBlockAlign(model, mainmodule) is lazy
+	# var code_block_align = new MdCodeBlockAlign(mentity_index) is lazy
+	# var nlp_align = new MdNLPAlign(mentity_index) is lazy
 	var span_visitor = new MDocSpanReferencesVisitor is lazy
-	var code_visitor = new MDocCodeReferencesVisitor(mentity_index, context) is lazy
-	var nlp_visitor = new MDocNLPReferencesVisitor(mentity_index, context) is lazy
+	# var code_visitor = new MDocCodeReferencesVisitor(mentity_index, context) is lazy
+	# var nlp_visitor = new MDocNLPReferencesVisitor(mentity_index, context) is lazy
 end
 
 class MDocSpanReferencesVisitor
@@ -80,44 +87,27 @@ class MDocSpanReferencesVisitor
 			for block in node.children do
 				if not block isa MdBlock then continue
 				if block isa MdBlockQuote then continue
-				nlp_refs.clear
-				refs.clear
-				code_refs.clear
-				example_refs.clear
-				block_refs.clear
-				text_refs.clear
-				span_refs.clear
-				name_refs.clear
+				md_refs.clear
 				visit(block)
 				print md_renderer.render(block)
 				var need_space = false
 
 				# Span refs
-				# for ref in span_refs do
-			#		if ref isa MdRefPath and ref.path != null then
-			#			print "> span: {ref.path.as(not null)}"
-			#			need_space = true
-			#		end
-			#		if ref isa MdRefCommand and ref.command != null then
-			#			print "> span: {ref.command.as(not null)} {ref.args.join(" ")}".trim
-			#			need_space = true
-			#		end
-				#	if ref isa MdRefName then
-				#		for n in ref.model_refs do
-				#			print "> span: {n.mentity.full_name}".trim
-				#			need_space = true
-				#		end
-				#	end
-				# end
-				# if need_space then print ""
-
-				for ref in text_refs do
-					for r in ref.model_refs do
-						print "> name: {r.mentity.full_name}"
+				for ref in md_refs do
+					if ref isa MdRefMEntity and ref.node isa MdCode then
+						print "> span: {ref.mentity.full_name}".trim
 						need_space = true
 					end
 				end
 				if need_space then print ""
+
+				# for ref in text_refs do
+					# for r in ref.model_refs do
+						# print "> name: {r.mentity.full_name}"
+						# need_space = true
+					# end
+				# end
+				# if need_space then print ""
 
 				# Code refs
 				# for ref in example_refs do
@@ -151,28 +141,10 @@ class MDocSpanReferencesVisitor
 		end
 	end
 
-	var span_refs = new Array[MdRef]
-	var name_refs = new Array[MEntity]
-	var refs = new Array[MdRef]
-	var text_refs = new Array[MdRefText]
-	var block_refs = new Array[MdRef]
-	var code_refs = new Array[MdRefCode]
-	var nlp_refs = new Array[MdRefNLP]
-	var example_refs = new Array[MdRefCode]
+	var md_refs = new Array[MdRef]
 
 	redef fun visit(node) do
-		# if node isa MdBlock then
-			# block_refs.add_all node.model_refs
-			# nlp_refs.add_all node.nlp_refs
-		if node isa MdCodeBlock then
-			code_refs.add_all node.code_refs
-			example_refs.add_all node.example_refs
-		else if node isa MdCode then
-			var ref = node.md_ref
-			if ref != null then span_refs.add ref
-		else if node isa MdText then
-			text_refs.add_all node.md_refs
-		end
+		md_refs.add_all node.md_refs
 		node.visit_all(self)
 	end
 end

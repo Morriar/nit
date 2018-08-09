@@ -24,4 +24,5 @@ See the `minimal` example within this project at `examples/minimal` for a simple
 of how to use this project.
 
 > span: sdl2>examples>minimal>
+> span: sdl2::minimal
 

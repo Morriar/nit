@@ -583,7 +583,7 @@ class MDocProcessCommands
 		# var mdoc = document.mdoc
 		# if mdoc == null then return
 
-		print "-- {node}"
+		# print "-- {node}"
 		if node isa MdWikilink then
 			var link = node.link
 			var name = node.title

@@ -6,10 +6,15 @@ This module provides a Nit object oriented interface to access the Github api.
 
 ### `GithubAPI` - # Client to Github API
 
+> span: github::GithubAPI
 
 To access the API you need an instance of a `GithubAPI` client.
 
+> span: github::GithubAPI
+
 ~~~
+import github
+
 # Get Github authentification token.
 var token = get_github_oauth
 assert not token.is_empty
@@ -21,6 +26,9 @@ var api = new GithubAPI(token)
 The API client allows you to get Github API entities.
 
 ~~~
+import github
+
+var api = new GithubAPI(get_github_oauth)
 var repo = api.load_repo("nitlang/nit")
 assert repo != null
 assert repo.name == "nit"
@@ -32,14 +40,13 @@ assert user.login == "Morriar"
 
 ### Authentification
 
-
-
 Token can also be recovered from user config with `get_github_oauth`.
 
 > span: github::github_curl::Sys::get_github_oauth
 
 ### `get_github_oauth` - # Gets the Github token from `git` configuration
 
+> span: github::github_curl::Sys::get_github_oauth
 
 Return the value of `git config --get github.oauthtoken`
 or `""` if no key exists.
@@ -48,18 +55,31 @@ or `""` if no key exists.
 
 ### `load_user` - # Get the Github user with `login`
 
+> span: github::GithubAPI::load_user
+> span: github::User::login
 
 Loads the `User` from the API or returns `null` if the user cannot be found.
 
-    var api = new GithubAPI(get_github_oauth)
-    var user = api.load_user("Morriar")
-    print user or else "null"
-    assert user.login == "Morriar"
+> span: github::User
+
+~~~
+import github
+
+var api = new GithubAPI(get_github_oauth)
+var user = api.load_user("Morriar")
+print user or else "null"
+assert user.login == "Morriar"
+~~~
+
 ### `User` - # A Github user
 
+> span: github::User
 
 Provides access to [Github user data](https://developer.github.com/v3/users/).
 Should be accessed from `GithubAPI::load_user`.
+
+> span: github::GithubAPI::load_user
+
 * `api$User$SELF` - # Type of this instance, automatically specialized in every class
 
 * `_avatar_url` - # Avatar image url for this user.
@@ -89,6 +109,7 @@ Should be accessed from `GithubAPI::load_user`.
 * `api$User$from_deserializer` - # Create an instance of this class from the `deserializer`
 
 * `api$User$init`
+
 * `login` - # Github login.
 
 * `login=` - # Github login.
@@ -97,23 +118,71 @@ Should be accessed from `GithubAPI::load_user`.
 
 * `name=` - # User public name if any.
 
+> span: github::api::User::_avatar_url
+> span: github::api::User::_blog
+> span: github::api::User::_email
+> span: github::api::User::_login
+> span: meta::meta::Class::_name
+> span: nitcorn::server_config::Interface::_name
+> span: ini::ini::ConfigNode::_name
+> span: nitcorn::vararg_routes::UriParam::_name
+> span: github::github_curl::GithubError::_name
+> span: mongodb::mongodb::MongoDb::_name
+> span: mongodb::mongodb::MongoCollection::_name
+> span: github::api::User::_name
+> span: github::api::Repo::_name
+> span: github::api::Branch::_name
+> span: github::api::Label::_name
+> span: github::events::DeploymentEvent::_name
+> span: popcorn::pop_routes::UriParam::_name
+> span: github::User::avatar_url
+> span: github::User::blog
+> span: github::User::email
+> span: github::User::login
+> span: meta::Class::name
+> span: nitcorn::Interface::name
+> span: ini::ini::ConfigNode::name
+> span: nitcorn::vararg_routes::UriParam::name
+> span: github::GithubError::name
+> span: mongodb::MongoDb::name
+> span: mongodb::MongoCollection::name
+> span: github::User::name
+> span: github::Repo::name
+> span: github::Branch::name
+> span: github::Label::name
+> span: github::DeploymentEvent::name
+> span: popcorn::pop_routes::UriParam::name
+
 ### Retrieving repo data
 
 ### `load_repo` - # Get the Github repo with `full_name`.
 
+> span: github::GithubAPI::load_repo
+> span: github::Repo::full_name
 
 Loads the `Repo` from the API or returns `null` if the repo cannot be found.
 
-    var api = new GithubAPI(get_github_oauth)
-    var repo = api.load_repo("nitlang/nit")
-    assert repo.name == "nit"
-    assert repo.owner.login == "nitlang"
-    assert repo.default_branch == "master"
+> span: github::Repo
+
+~~~
+import github
+
+var api = new GithubAPI(get_github_oauth)
+var repo = api.load_repo("nitlang/nit")
+assert repo.name == "nit"
+assert repo.owner.login == "nitlang"
+assert repo.default_branch == "master"
+~~~
+
 ### `Repo` - # A Github repository.
 
+> span: github::Repo
 
 Provides access to [Github repo data](https://developer.github.com/v3/repos/).
 Should be accessed from `GithubAPI::load_repo`.
+
+> span: github::GithubAPI::load_repo
+
 * `api$Repo$SELF` - # Type of this instance, automatically specialized in every class
 
 * `_default_branch` - # Repo default branch name.
@@ -121,6 +190,7 @@ Should be accessed from `GithubAPI::load_repo`.
 * `_full_name` - # Repo full name on Github.
 
 * `_mongo_id`
+
 * `_name` - # Repo short name on Github.
 
 * `_owner` - # Get the repo owner.
@@ -142,8 +212,11 @@ Should be accessed from `GithubAPI::load_repo`.
 * `full_name=` - # Repo full name on Github.
 
 * `api$Repo$init`
+
 * `mongo_id`
+
 * `mongo_id=`
+
 * `name` - # Repo short name on Github.
 
 * `name=` - # Repo short name on Github.
@@ -151,6 +224,51 @@ Should be accessed from `GithubAPI::load_repo`.
 * `owner` - # Get the repo owner.
 
 * `owner=` - # Get the repo owner.
+
+> span: github::api::Repo::_default_branch
+> span: github::api::Repo::_full_name
+> span: github::loader::Repo::_mongo_id
+> span: github::loader::Branch::_mongo_id
+> span: github::loader::Commit::_mongo_id
+> span: github::loader::Issue::_mongo_id
+> span: github::loader::IssueComment::_mongo_id
+> span: github::loader::IssueEvent::_mongo_id
+> span: meta::meta::Class::_name
+> span: nitcorn::server_config::Interface::_name
+> span: ini::ini::ConfigNode::_name
+> span: nitcorn::vararg_routes::UriParam::_name
+> span: github::github_curl::GithubError::_name
+> span: mongodb::mongodb::MongoDb::_name
+> span: mongodb::mongodb::MongoCollection::_name
+> span: github::api::User::_name
+> span: github::api::Repo::_name
+> span: github::api::Branch::_name
+> span: github::api::Label::_name
+> span: github::events::DeploymentEvent::_name
+> span: popcorn::pop_routes::UriParam::_name
+> span: github::api::Repo::_owner
+> span: github::Repo::default_branch
+> span: github::Repo::full_name
+> span: github::loader::Repo::mongo_id
+> span: github::loader::Branch::mongo_id
+> span: github::loader::Commit::mongo_id
+> span: github::loader::Issue::mongo_id
+> span: github::loader::IssueComment::mongo_id
+> span: github::loader::IssueEvent::mongo_id
+> span: meta::Class::name
+> span: nitcorn::Interface::name
+> span: ini::ini::ConfigNode::name
+> span: nitcorn::vararg_routes::UriParam::name
+> span: github::GithubError::name
+> span: mongodb::MongoDb::name
+> span: mongodb::MongoCollection::name
+> span: github::User::name
+> span: github::Repo::name
+> span: github::Branch::name
+> span: github::Label::name
+> span: github::DeploymentEvent::name
+> span: popcorn::pop_routes::UriParam::name
+> span: github::Repo::owner
 
 ### Other data
 
@@ -202,39 +320,59 @@ Should be accessed from `GithubAPI::load_repo`.
 
 * `api$User` - # A Github user
 
+> span: github::Issue
+
 ### Advanced uses
 
 #### Caching
-
-
 
 #### Custom requests
 
 ### `get` - # Execute a GET request on Github API.
 
+> span: curl::CURLOption::get
+> span: github::GithubAPI::get
+> span: popcorn::Handler::get
 
 This method returns raw json data.
 See other `load_*` methods to use more expressive types.
 
-    var api = new GithubAPI(get_github_oauth)
-    var obj = api.get("/repos/nitlang/nit")
-    assert obj isa JsonObject
-    assert obj["name"] == "nit"
+~~~
+import github
+
+var api = new GithubAPI(get_github_oauth)
+var obj = api.get("/repos/nitlang/nit")
+assert obj isa JsonObject
+assert obj["name"] == "nit"
+~~~
 
 Returns `null` in case of `error`.
 
-    obj = api.get("/foo/bar/baz")
-    assert obj == null
-    assert api.was_error
-    var err = api.last_error
-    assert err isa GithubError
-    assert err.name == "GithubAPIError"
-    assert err.message == "Not Found"
+> span: core::error
+> span: json::error
+
+~~~
+import github
+
+var api = new GithubAPI(get_github_oauth)
+var obj = api.get("/foo/bar/baz")
+assert obj == null
+assert api.was_error
+var err = api.last_error
+assert err isa GithubError
+assert err.name == "GithubAPIError"
+assert err.message == "Not Found"
+~~~
 
 #### Change the user agent
 
 ### `user_agent` - # User agent used for HTTP requests.
 
+> span: curl::CURLOption::user_agent
+> span: curl::CurlHTTPRequest::user_agent
+> span: github::GithubCurl::user_agent
+> span: github::GithubAPI::user_agent
+> span: github::TestGithubCurl::user_agent
 
 Default is `nit_github_api`.
 
@@ -244,6 +382,7 @@ See <https://developer.github.com/v3/#user-agent-required>
 
 ### `verbose_lvl` - # Verbosity level.
 
+> span: github::GithubAPI::verbose_lvl
 
 * `0`: only errors (default)
 * `1`: verbose
@@ -255,6 +394,7 @@ configure this wrapper to use a custom URL.
 
 ### `api_url` - # Github API base url.
 
+> span: github::GithubAPI::api_url
 
 Default is `https://api.github.com` and should not be changed.
 
@@ -265,6 +405,7 @@ on a repository.
 
 ### `hooks` - # Github hook event listening with `nitcorn`.
 
+> span: github::hooks
 
 Usage:
 
@@ -303,6 +444,8 @@ var listener = new LogHookListener(api, "127.0.0.1", 8080)
 GithubAPI can trigger different events depending on the hook configuration.
 
 ### `GithubEvent` - # Github event stub.
+
+> span: github::GithubEvent
 
 * `events$CommitCommentEvent` - # Triggered when a commit comment is created.
 

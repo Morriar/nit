@@ -14,113 +14,94 @@
 
 module align_refs
 
-import ref_parser
+import align_base
 
-class MdCodeAlign
-	super MdVisitor
-
-	var ref_parser = new MdCodeParser
-
-	var model: Model
-
-	var mainmodule: MModule
-
-	var context: MEntity is noinit
-
-	var spans = new Counter[String]
-
-	fun align_spans(doc: MdDocument, context: MEntity) do
-		self.spans.clear
-		self.context = context
-		enter_visit(doc)
-		# for span, count in spans do
-			# print "{context}\t{span}\t{count}"
-		# end
-	end
+class MdAlignCodes
+	super MdAligner
 
 	redef fun visit(node) do
-		if not node isa MdCode then
-			node.visit_all(self)
-			return
+		if node isa MdCode then
+			align_md_code(node)
 		end
-		var ref = ref_parser.parse_code(node)
-		if ref == null then return
-
-		spans.inc ref.class_name
-		node.md_ref = ref
-		ref.align_ref(self)
-		ref.sort_refs(self)
-
-		# Parse sign/gen
-		# Parse call
+		node.visit_all(self)
 	end
-end
 
-redef class MdCode
-	var md_ref: nullable MdRef = null
-end
+	fun align_md_code(node: MdCode) do
+		var string = node.literal.trim
 
-redef class MdRef
-	fun align_ref(v: MdCodeAlign) do end
-	fun sort_refs(v: MdCodeAlign) do end
-end
-
-redef class MdRefPath
-
-	redef fun align_ref(v) do
-		if string.file_exists then
-			path = string.to_path
-			return
-		end
-		var file = v.context.location.file
-		if file != null then
-			var filename = file.filename
-			var p = null
-			if filename.to_path.is_dir then
-				p = filename / string
-			else if filename.file_exists then
-				p = filename.dirname / string
-			end
-			if p != null and p.file_exists then
-				path = p.to_path
-			end
+		if is_option(string) then
+			align_option_ref(node, string)
+		else if is_command(string) then
+			align_command_ref(node, string)
+		else if is_path(string) or is_file(string) then
+			align_path_ref(node, string)
+		else if is_annot(string) then
+			align_annot_ref(node, string)
+		else if is_name(string) then
+			align_name_ref(node, string)
+		else if is_qname(string) then
+			align_qname_ref(node, string)
+		else if is_signature(string) or is_generic(string) or is_call(string) then
+			align_signature_ref(node, string)
 		end
 	end
-end
 
-redef class MdRefCommand
+	fun align_option_ref(node: MdCode, string: String) do
+		node.md_refs.add new MdRefOption(node, string)
+	end
 
-	redef fun align_ref(v) do
+	fun align_command_ref(node: MdCode, string: String) do
+		var command = string
+		var args = new Array[String]
+
 		var parts = string.split(" ")
 		if not parts.is_empty then
-			self.command = parts.shift
-			self.args.add_all parts
+			command = parts.shift
+			args.add_all parts # FIXME this will never work with complicated commands
+		end
+
+		node.md_refs.add new MdRefCommand(node, command, args)
+	end
+
+	fun align_path_ref(node: MdNode, string: String) do
+		var path: nullable Path = null
+		if string.file_exists then
+			path = string.to_path
+		else
+			var file = context.location.file
+			if file != null then
+				var filename = file.filename
+				var p = null
+				if filename.to_path.is_dir then
+					p = filename / string
+				else if filename.file_exists then
+					p = filename.dirname / string
+				end
+				if p != null and p.file_exists then
+					path = p.to_path
+				end
+			end
+		end
+		node.md_refs.add new MdRefPath(node, path)
+	end
+
+	fun align_annot_ref(node: MdCode, string: String) do
+		node.md_refs.add new MdRefAnnot(node, string)
+	end
+
+	fun align_name_ref(node: MdCode, string: String) do
+		for mentity in model.mentities_by_name(string) do
+			node.md_refs.add new MdRefMEntity(node, mentity)
 		end
 	end
-end
 
-redef class MdRefName
-
-	redef fun align_ref(v) do
-		model_refs.add_all align_name(string, v.model)
-	end
-
-	fun align_name(string: String, model: Model): Array[MdRefMEntity] do
-		var refs = new Array[MdRefMEntity]
-		var mentities = model.mentities_by_name(string)
-		for mentity in mentities do
-			var confidence = 100.0 / mentities.length.to_f
-			refs.add new MdRefMEntity(node, string, confidence, mentity)
-		end
-		return refs
-	end
-
-	fun align_qname(string: String, model: Model, mainmodule: MModule): Array[MdRefMEntity] do
-		var refs = new Array[MdRefMEntity]
-
+	fun align_qname_ref(node: MdCode, string: String) do
 		# Match full_name
 		var mentity = model.mentity_by_full_name(string)
-		if mentity != null then return [new MdRefMEntity(node, string, 100.0, mentity)]
+		if mentity != null then
+			node.md_refs.add new MdRefMEntity(node, mentity)
+			return
+		end
 
 		# Match partial name
 		var pack_name = null
@@ -166,108 +147,113 @@ redef class MdRefName
 		for mprop in mprops do
 			for mclass in mclasses do
 				if mclass.collect_accessible_mproperties(mainmodule).has(mprop) then
-					var confidence = 100.0 / mprops.length.to_f
-					refs.add new MdRefMEntity(node, string, confidence, mprop)
+					node.md_refs.add new MdRefMEntity(node, mprop)
 				end
 			end
 		end
-
-		return refs
 	end
 
-	redef fun sort_refs(v) do
-
-		# Locate conflicts
-		var name_conflicts = new HashMap[String, Array[MdRefMEntity]]
-		for ref in model_refs do
-			var name = ref.mentity.name
-			if not name_conflicts.has_key(name) then
-				name_conflicts[name] = new Array[MdRefMEntity]
-			end
-			name_conflicts[name].add ref
-		end
-
-		# Remove conflicts
-		var res = new Array[MdRefMEntity]
-		for name, refs in name_conflicts do
-			if refs.length == 1 then
-				res.add refs.first
-				continue
-			end
-
-			# Filter by context
-			# var in_context = new Array[MdRefMEntity]
-			# for ref in refs do
-			#	if v.context.has_mentity(ref.mentity) then
-			#		in_context.add ref
-			#	end
-			# end
-			# if in_context.length == 1 then
-			#	res.add_all in_context
-			#	continue
-			# end
-
-			var left = new Array[MdRefMEntity]
-			# if in_context.not_empty then
-				# left.add_all in_context
-			# else
-				left.add_all refs
-			# end
-
-			# Filter by kind
-			var mpackage = null
-			var mgroup = null
-			var mmodule = null
-			# print left
-			for ref in left do
-				var mentity = ref.mentity
-				if mentity isa MPackage then
-					mpackage = mentity
-				else if mentity isa MGroup then
-					mgroup = mentity
-				else if mentity isa MModule then
-					mmodule = mentity
-				end
-			end
-			for ref in left do
-				var mentity = ref.mentity
-				if mentity isa MPackage then
-					res.add ref
-				else if mentity isa MGroup and mpackage == null then
-					res.add ref
-				else if mentity isa MModule and mpackage == null and mgroup == null then
-					res.add ref
-				else if mpackage == null and mgroup == null and mmodule == null then
-					res.add ref
-				end
-			end
-			# for ref in refs do
-				# res.add ref
-			# end
-		end
-
-		model_refs = res
-	end
-end
-
-redef class MdRefQName
-
-	redef fun align_ref(v) do
-		model_refs.add_all align_qname(string, v.model, v.mainmodule)
-	end
-end
-
-redef class MdRefSignature
-
-	redef fun align_ref(v) do
-		var string = self.string
+	fun align_signature_ref(node: MdCode, string: String) do
 		string = string.replace("\\(.*\\)".to_re, "")
 		string = string.replace("\\[.*\\]".to_re, "")
 		string = string.replace(".*\\.".to_re, "")
 		if string.has("::") then
-			model_refs.add_all align_qname(string, v.model, v.mainmodule)
+			align_qname_ref(node, string)
 		else
-			model_refs.add_all align_name(string, v.model)
+			align_name_ref(node, string)
 		end
 	end
+
+	# Parsing utils
+
+	var option_re: Regex = "^--?[a-zA-Z0-9]+".to_re
+
+	fun is_option(string: String): Bool do
+		return string.has(option_re)
+	end
+
+	fun is_path(string: String): Bool do
+		return string != "/" and string.has("/")
+	end
+
+	var file_re: Regex = "\\.(nit|html|md|json)$".to_re
+
+	fun is_file(string: String): Bool do
+		return string.has(file_re)
+	end
+
+	var command_re: Regex = "^(nit.*)".to_re
+
+	fun is_command(string: String): Bool do
+		return string.has(command_re)
+	end
+
+	var name_pt = "(([a-zA-Z_][a-zA-Z0-9_]*)|(\\[\\]=?)|(==))"
+	var name_re: Regex = "^{name_pt}$".to_re
+
+	fun is_name(string: String): Bool do
+		return string.has(name_re)
+	end
+
+	var qname_pt = "{name_pt}(::{name_pt})*"
+	var qname_re: Regex = "^{qname_pt}$".to_re
+
+	fun is_qname(string: String): Bool do
+		return string.has(qname_re)
+	end
+
+	var arg_pt = "([a-zA-Z0-9_]+)"
+	var args_pt = "({arg_pt}(, ?{arg_pt})*)"
+	var sign_pt = "(\\({args_pt}?\\))"
+	var sign_re: Regex = sign_pt.to_re
+
+	fun is_signature(string: String): Bool do
+		return string.has(sign_re)
+	end
+
+	var gen_pt = "(\\[{args_pt}?\\])"
+	var gen_re: Regex = gen_pt.to_re
+
+	fun is_generic(string: String): Bool do
+		return string.has(gen_re)
+	end
+
+	var call_pt = "^({name_pt}\\.{name_pt}(\\.{name_pt})*)$"
+	var call_re: Regex = call_pt.to_re
+
+	fun is_call(string: String): Bool do
+		return string.has(call_re)
+	end
+
+	var annot_re: Regex = "^((is )?(actor|example|lazy|(no)?serialize|test|threaded))$".to_re
+
+	fun is_annot(string: String): Bool do
+		return string.has(annot_re)
+	end
+end
+
+class MdRefPath
+	super MdRef
+
+	var path: nullable Path
+end
+
+# A reference to an option
+class MdRefOption
+	super MdRef
+
+	var option: String
+end
+
+class MdRefCommand
+	super MdRef
+
+	var command: String
+	var args: Array[String]
+end
+
+class MdRefAnnot
+	super MdRef
+
+	var annot: String
 end

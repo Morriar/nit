@@ -66,6 +66,7 @@ _gamnit_ is modular, different services of the framework are available through d
 > span: gamnit::gamnit::App::frame_core
 > span: gamnit::gamnit::App::accept_event
 > span: gamnit>flat>
+> span: core::flat
 > span: gamnit::flat_core::App::update
 > span: gamnit::flat_core::App::sprites
 > span: gamnit::flat_core::App::world_camera
@@ -82,6 +83,7 @@ _gamnit_ is modular, different services of the framework are available through d
 > span: gamnit>depth>
 > span: gamnit::Actor
 > span: gamnit>flat>
+> span: core::flat
 > span: core::TimeT::update
 > span: realtime::realtime::Timespec::update
 > span: ios::NitGLKView::update

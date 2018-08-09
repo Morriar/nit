@@ -128,8 +128,8 @@ class ReadmeComparator
 			matches_count += 1
 		end
 		printn "{lib or else "NULL"}\t"
-		printn "{block_count}\t{block_spans}\t{block_names}\t{block_codes}\n"
-		# printn "{spans_r / spans_count.to_f}\t{spans_p / spans_count.to_f}\n"
+		# printn "{block_count}\t{block_spans}\t{block_names}\t{block_codes}\n"
+		printn "{spans_r / spans_count.to_f}\t{spans_p / spans_count.to_f}\n"
 		# printn "{names_r / names_count.to_f}\t{names_p / names_count.to_f}\n"
 		# printn "{exs_r / exs_count.to_f}\t{exs_p / exs_count.to_f}\t"
 		# printn "{codes_r / codes_count.to_f}\t{codes_p / codes_count.to_f}\n"
@@ -286,7 +286,7 @@ class MdBlockCodes
 	end
 end
 
-var corpus = "names"
+var corpus = "spans"
 var corpus_path = "src/doc/doc_experiments/exp_align/corpus.{corpus}"
 (corpus_path / "../out.{corpus}").mkdir
 var files = corpus_path.files
@@ -301,7 +301,7 @@ for file in files do
 	# if not libs.has(lib) then continue
 #
 	# sys.system "./nitreadme lib/{lib} --keep-going --check-docdown"
-	# sys.system "./nitreadme lib/{lib} --keep-going --check-docdown > src/doc/doc_experiments/exp_align/out.{corpus}/{lib}.out.md 2>/dev/null"
+	sys.system "./nitreadme lib/{lib} --keep-going --check-docdown > src/doc/doc_experiments/exp_align/out.{corpus}/{lib}.out.md 2>/dev/null"
 
 	# var md = "src/doc/doc_experiments/exp_align/corpus.spans/{lib}.corpus.md".to_path.read_all
 	# var doc = (new MdParser).parse(md)
