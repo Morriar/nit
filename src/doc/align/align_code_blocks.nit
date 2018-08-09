@@ -17,17 +17,10 @@ module align_code_blocks
 import align_base
 import mentities_index
 
-class MdCodeBlockAlign
-	super MdVisitor
+class MdAlignBlockCodes
+	super MdAligner
 
 	var mentity_index: MEntityIndex
-
-	var context: MEntity is noinit
-
-	fun align_code_blocks(doc: MdDocument, context: MEntity) do
-		self.context = context
-		enter_visit(doc)
-	end
 
 	redef fun visit(node) do
 		if node isa MdCodeBlock then
@@ -71,42 +64,36 @@ class MdCodeBlockAlign
 			# vector.inc "+in: {context.full_name}"
 			vector.inc "-kind: MPropDef"
 			vector.inc "-kind: MClassDef"
+			vector.inc "-is_fictive: true"
 			vector.inc "-in: core::kernel"
-			vector.inc "-in: core::collection"
-			vector.inc "-in: core::text"
-			vector.inc "-full_name: core::Object"
-			vector.inc "-full_name: core::Object::!="
-			vector.inc "-full_name: core::Object::=="
-			vector.inc "-full_name: core::Int"
-			vector.inc "-full_name: core::Float"
-			vector.inc "-full_name: core::Array"
-			vector.inc "-full_name: core::String"
-			vector.inc "-full_name: core::Text"
-			vector.inc "-full_name: core::Text::+"
-			vector.inc "-full_name: core::Collection::is_empty"
-			vector.inc "-full_name: core::Collection::length"
+			vector.inc "-in: core>collection>"
+			vector.inc "-in: core>text>"
+			# vector.inc "-full_name: serialization::Serializable"
+			vector.inc "-full_name: serialization::Serializable::core_serialize_to"
+			# vector.inc "-full_name: serialization::Serializer"
 			vector.inc "-full_name: serialization::Serializer::serialize_attribute"
 			vector.inc "-full_name: serialization::Serializable::from_deserializer"
+			# vector.inc "-full_name: serialization::Deserializer"
+			vector.inc "-full_name: serialization::Deserializer::deserialize_attribute"
+			vector.inc "-full_name: serialization::Deserializer::deserialize_class"
 			vector.inc "-full_name: serialization::Deserializer::deserialize_class_intern"
 			vector.inc "-full_name: core::file::Sys::print"
-			node.code_refs = filter_refs(matches_to_refs(mentity_index.match_query(vector), node))
-			#.filter_context(context)
-			#.limit(5)
+			node.md_refs.add_all matches_to_refs(mentity_index.match_query(vector), node)
 		end
 
 		# Examples
-		var example_query = new Vector
-		example_query.add_all code_vector
-		example_query.inc "+in: {context.full_name}"
-		example_query.inc "+is_example: true"
-		example_query.inc "+kind: MModule"
-		var example_all_matches = mentity_index.match_query(example_query)
-		var example_matches = new MDocMatches
-		for match in example_all_matches do
-			match.similarity = code_vector.cosine_similarity(match.document.code_vector)
-			if match.similarity > 0.0 then example_matches.add match
-		end
-		node.example_refs = matches_to_refs(example_matches.sort.limit(1), node)
+		# var example_query = new Vector
+		# example_query.add_all code_vector
+		# example_query.inc "+in: {context.full_name}"
+		# example_query.inc "+is_example: true"
+		# example_query.inc "+kind: MModule"
+		# var example_all_matches = mentity_index.match_query(example_query)
+		# var example_matches = new MDocMatches
+		# for match in example_all_matches do
+			# match.similarity = code_vector.cosine_similarity(match.document.code_vector)
+			# if match.similarity > 0.0 then example_matches.add match
+		# end
+		# node.example_refs = matches_to_refs(example_matches.sort.limit(1), node)
 	end
 
 	fun visit_raw_code(node: MdCodeBlock) do
@@ -126,9 +113,9 @@ class MdCodeBlockAlign
 			vector.inc "name: {id}"
 		end
 		if vector.not_empty then
-			for ref in filter_refs(matches_to_refs(mentity_index.match_query(vector), node)) do
+			for ref in matches_to_refs(mentity_index.match_query(vector), node) do
 				if not context.has_mentity(ref.mentity) then continue
-				node.code_refs.add ref
+				node.md_refs.add ref
 			end
 		end
 	end
@@ -146,91 +133,18 @@ class MdCodeBlockAlign
 	private fun matches_to_refs(matches: MDocMatches, node: MdNode): Array[MdRefCode] do
 		var res = new Array[MdRefCode]
 		for match in matches do
-			res.add new MdRefCode(node, node.raw_text, match.similarity, match.document.mentity)
+			res.add new MdRefCode(node, match.document.mentity)
 		end
 		return res
 	end
-
-	private fun filter_refs(refs: Array[MdRefCode]): Array[MdRefCode] do
-		# Locate conflicts
-		var name_conflicts = new HashMap[String, Array[MdRefCode]]
-		for ref in refs do
-			var name = ref.mentity.name
-			if not name_conflicts.has_key(name) then
-				name_conflicts[name] = new Array[MdRefCode]
-			end
-			name_conflicts[name].add ref
-		end
-
-		# Remove conflicts
-		var res = new Array[MdRefCode]
-		for name, nrefs in name_conflicts do
-			if nrefs.length == 1 then
-				res.add nrefs.first
-				continue
-			end
-
-			# Filter by context
-			# var in_context = new Array[MdRefMEntity]
-			# for ref in refs do
-			#	if v.context.has_mentity(ref.mentity) then
-			#		in_context.add ref
-			#	end
-			# end
-			# if in_context.length == 1 then
-			#	res.add_all in_context
-			#	continue
-			# end
-
-			var left = new Array[MdRefCode]
-			# if in_context.not_empty then
-				# left.add_all in_context
-			# else
-				left.add_all refs
-			# end
-
-			# Filter by kind
-			var mpackage = null
-			var mgroup = null
-			var mmodule = null
-			# print left
-			for ref in left do
-				var mentity = ref.mentity
-				if mentity isa MPackage then
-					mpackage = mentity
-				else if mentity isa MGroup then
-					mgroup = mentity
-				else if mentity isa MModule then
-					mmodule = mentity
-				end
-			end
-			for ref in left do
-				var mentity = ref.mentity
-				if mentity isa MPackage then
-					res.add ref
-				else if mentity isa MGroup and mpackage == null then
-					res.add ref
-				else if mentity isa MModule and mpackage == null and mgroup == null then
-					res.add ref
-				else if mpackage == null and mgroup == null and mmodule == null then
-					res.add ref
-				end
-			end
-			# for ref in refs do
-				# res.add ref
-			# end
-		end
-
-		return res
-	end
-
 end
 
-redef class MdCodeBlock
-	var code_refs = new Array[MdRefCode]
-	var example_refs = new Array[MdRefCode]
-end
+# redef class MdCodeBlock
+	# var example_refs = new Array[MdRefCode]
+# end
 
 class MdRefCode
 	super MdRefMEntity
+
+	# var token: String
 end

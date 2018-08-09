@@ -28,7 +28,6 @@ This wrapper needs the Stanford CoreNLP jars that run on Java 1.8+.
 See http://nlp.stanford.edu/software/corenlp.shtml.
 
 > name: nlp
-> name: nlp::stanford
 
 ## NLPProcessor
 

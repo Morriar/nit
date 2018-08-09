@@ -11,6 +11,7 @@ _nitcorn_ provides `FileServer`, a simple `Action` to serve static files.
 > name: nitcorn
 > name: json::static
 > name: core::file
+> name: nitcorn::HttpResponse::files
 
 `HttpRequest` contains the GET and POST arguments as well as session data it one exists.
 The produced `HttpResponse` should contain the HTTP status code, the body,
@@ -18,18 +19,25 @@ session data to preserve or create a session, and optionally list files to appen
 
 > name: nitcorn::sessions
 > name: nitcorn::Session
+> name: nitcorn::sessions::HttpResponse::session
+> name: nitcorn::sessions::HttpRequest::session
 > name: nitcorn::HttpStatusCodes::codes
 > name: nitcorn::HttpRequest::body
 > name: nitcorn::http_request::HttpRequestParser::body
 > name: nitcorn::HttpResponse::body
 > name: nitcorn::ErrorTemplate::body
 > name: nitcorn::sessions
-> name: nitcorn::Session
 > name: nitcorn::sessions
-> name: nitcorn::Session
 > name: core::list
-> name: core::List
 > name: core::file
+> name: nitcorn::Session
+> name: nitcorn::Session
+> name: core::List
+> name: nitcorn::sessions::HttpResponse::session
+> name: nitcorn::sessions::HttpRequest::session
+> name: nitcorn::sessions::HttpResponse::session
+> name: nitcorn::sessions::HttpRequest::session
+> name: nitcorn::HttpResponse::files
 
 Each `Action` may be associated to many instances of `Route`.
 These routes can simply identify the root of a service,
@@ -37,17 +45,22 @@ but also define parameters within the URI.
 
 > name: nitcorn::Route
 > name: nitcorn::Routes
+> name: nitcorn::VirtualHost::routes
+> name: nitcorn::Routes::routes
 > name: nitcorn::FileServer::root
 > name: nitcorn::HttpRequest::uri
 
 _nitcorn_ instances are configured dynamically in Nit code with the interfaces and routes created as needed.
 
 > name: nitcorn
-> name: nitcorn::HttpStatusCodes::codes
 > name: nitcorn::Interface
 > name: nitcorn::Interfaces
 > name: nitcorn::Route
 > name: nitcorn::Routes
+> name: nitcorn::HttpStatusCodes::codes
+> name: nitcorn::VirtualHost::interfaces
+> name: nitcorn::VirtualHost::routes
+> name: nitcorn::Routes::routes
 
 _nitcorn_ plays well with other Nit services and tools such as `serialization`, `mongodb`, `sqlite` and `nitiwiki`.
 It also benefits from the full power of the Nit language:
@@ -60,38 +73,18 @@ and the FFI enables calling services in different languages.
 ## Examples
 
 > name: nitcorn>examples>
-> name: serialization>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: privileges>examples>
 
 A minimal example follows with a custom `Action` and using `FileServer`.
 
 > name: nitcorn>examples>
-> name: serialization>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: privileges>examples>
 
 More general examples are available at `lib/nitcorn/examples/`.
 For an example of a larger project merging many _nitcorn_ applications into one server,
 take a look at the configuration of `http://xymus.net/` at `../contrib/xymus_net/xymus_net.nit`.
 
+> name: nitcorn>examples>
 > name: nitcorn::MyData::more
 > name: nitcorn>examples>
-> name: serialization>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: privileges>examples>
-> name: nitcorn>examples>
-> name: serialization>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: privileges>examples>
 > name: nitcorn
 
 Larger projects using _nitcorn_ can be found in the `contrib/` folder:
@@ -106,11 +99,13 @@ Larger projects using _nitcorn_ can be found in the `contrib/` folder:
 > name: nitcorn::restful
 > name: nitcorn::Interface
 > name: nitcorn::Interfaces
+> name: nitcorn::VirtualHost::interfaces
 > name: core::list
-> name: core::List
 > name: nitcorn::restful
+> name: core::List
 > name: nitcorn::Interface
 > name: nitcorn::Interfaces
+> name: nitcorn::VirtualHost::interfaces
 
 ### Simple hello world server
 

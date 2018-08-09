@@ -19,10 +19,9 @@ assert not token.is_empty
 var api = new GithubAPI(token)
 ~~~
 
-> code: core::Text::is_empty
 > code: github::github
-> code: github::github_curl::Sys::get_github_oauth
 > code: github::GithubAPI
+> code: github::github_curl::Sys::get_github_oauth
 
 The API client allows you to get Github API entities.
 
@@ -39,12 +38,12 @@ assert user != null
 assert user.login == "Morriar"
 ~~~
 
+> code: github::github
 > code: github::GithubAPI
-> code: github::Repo::name
-> code: github::User::login
 > code: github::Repo
 > code: github::User
-> code: github::github
+> code: github::Repo::name
+> code: github::User::login
 > code: github::GithubAPI::load_user
 > code: github::GithubAPI::load_repo
 > code: github::github_curl::Sys::get_github_oauth
@@ -73,9 +72,9 @@ print user or else "null"
 assert user.login == "Morriar"
 ~~~
 
+> code: github::github
 > code: github::GithubAPI
 > code: github::User::login
-> code: github::github
 > code: github::GithubAPI::load_user
 > code: github::github_curl::Sys::get_github_oauth
 
@@ -138,13 +137,13 @@ assert repo.owner.login == "nitlang"
 assert repo.default_branch == "master"
 ~~~
 
+> code: github::github
 > code: github::GithubAPI
+> code: github::User
 > code: github::Repo::name
 > code: github::User::login
 > code: github::Repo::owner
 > code: github::Repo::default_branch
-> code: github::User
-> code: github::github
 > code: github::GithubAPI::load_repo
 > code: github::github_curl::Sys::get_github_oauth
 
@@ -265,11 +264,10 @@ assert obj isa JsonObject
 assert obj["name"] == "nit"
 ~~~
 
+> code: github::github
 > code: github::GithubAPI
 > code: json::JsonObject
 > code: github::GithubAPI::get
-> code: github::github
-> code: core::MapRead::[]
 > code: github::github_curl::Sys::get_github_oauth
 
 Returns `null` in case of `error`.
@@ -287,13 +285,13 @@ assert err.name == "GithubAPIError"
 assert err.message == "Not Found"
 ~~~
 
+> code: github::github
 > code: github::GithubAPI
 > code: github::GithubError
 > code: github::GithubError::name
 > code: github::GithubAPI::was_error
 > code: github::GithubAPI::last_error
 > code: github::GithubAPI::get
-> code: github::github
 > code: github::github_curl::Sys::get_github_oauth
 > code: core::Error::message
 
@@ -360,16 +358,16 @@ var listener = new LogHookListener(api, "127.0.0.1", 8080)
 # listener.listen # uncomment to start listening
 ~~~
 
+> code: github::hooks
 > code: github::GithubEvent
 > code: github::CommitCommentEvent
 > code: github::CommitComment
+> code: github::HookListener
+> code: github::GithubAPI
 > code: github::CommitComment::commit_id
 > code: github::CommitCommentEvent::comment
-> code: github::HookListener
 > code: github::HookListener::apply_event
 > code: github::github_curl::Sys::get_github_oauth
-> code: github::GithubAPI
-> code: github::hooks
 
 ## Dealing with events
 

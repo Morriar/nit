@@ -78,14 +78,11 @@ assert charlie.serialize_to_json(pretty=true, plain=true) == """
 }"""
 ~~~
 
-> code: serialization::Serializer
-> code: core::Map
-> code: core::Map::[]=
-> code: serialization::Serializable
-> code: json::serialization_write::Serializable::serialize_to_json
-> code: serialization::Deserializer
 > code: json::json
-> code: serialization::Serializable::core_serialize_to
+> code: serialization::Serializer
+> code: serialization::Serializable
+> code: serialization::Deserializer
+> code: json::serialization_write::Serializable::serialize_to_json
 
 ### Write JSON with metadata
 
@@ -171,15 +168,13 @@ object = deserializer.deserialize("Triangle")
 assert deserializer.errors.is_empty # If false, `object` is invalid
 ~~~
 
+> code: json::json
 > code: json::JsonDeserializer
 > code: serialization::Serializer
 > code: serialization::Serializable
+> code: serialization::Deserializer
 > code: serialization::Deserializer::errors
 > code: serialization::Deserializer::deserialize
-> code: core::abstract_text::Object::to_s
-> code: serialization::Serializable::core_serialize_to
-> code: serialization::Deserializer
-> code: json::json
 
 #### Missing attributes and default values
 
@@ -263,12 +258,11 @@ assert obj isa MyConfig
 assert obj.player_name == "Bob"
 ~~~
 
+> code: json::json
 > code: json::JsonDeserializer
 > code: serialization::Serializer
-> code: serialization::Deserializer::errors
-> code: serialization::Deserializer::deserialize
 > code: serialization::Serializable
 > code: serialization::Deserializer
-> code: json::json
-> code: serialization::Serializable::core_serialize_to
+> code: serialization::Deserializer::errors
+> code: serialization::Deserializer::deserialize
 

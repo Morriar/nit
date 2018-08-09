@@ -43,8 +43,8 @@ So, in this case, we can compare both instances with `==` to test their equality
 > name: meta::Class
 > name: serialization::Serializable
 > name: meta::Class
-> name: core::stream
 > name: core::Stream
+> name: serialization::inspect::InspectSerializer::stream
 > name: core>collection>tests>
 
 Some conditions applies to the classes that can be annotated as `serialize`.
@@ -52,14 +52,15 @@ All attributes of the class must be serializable, runtime errors will be
 raised when trying to serialize non-serializable attributes.
 
 > name: serialization::A
-> name: serialization::AttributeTypeError::attribute
-> name: meta::Class
-> name: serialization::Serializable
 > name: core::error
 > name: json::error
-> name: core::Error
-> name: serialization::Serializer::serialize
+> name: meta::Class
 > name: serialization::Serializable
+> name: core::Error
+> name: serialization::AttributeTypeError::attribute
+> name: serialization::Deserializer::errors
+> name: serialization::Serializable
+> name: serialization::Serializer::serialize
 > name: serialization::AttributeTypeError::attribute
 
 In the class `Person`, all attributes are typed with classes the standards library.
@@ -140,8 +141,8 @@ end
 > name: serialization::AttributeTypeError::attribute
 > name: meta::Class
 > name: meta::Class
-> name: serialization::AttributeTypeError::attribute
 > name: serialization::Serializable
+> name: serialization::AttributeTypeError::attribute
 > name: serialization::AttributeTypeError::attribute
 > name: meta::Class
 > name: meta::Class
@@ -178,14 +179,14 @@ The `noserialize` annotation mark an exception in a `serialize` module or class 
 > name: serialization::A
 > name: meta::Class
 > name: serialization::Serializable
-> name: serialization::AttributeTypeError::attribute
 > name: meta::Class
+> name: serialization::AttributeTypeError::attribute
 > name: serialization::Serializer::serialize
 > name: serialization::AttributeTypeError::attribute
 > name: meta::Class
 > name: serialization::AttributeTypeError::attribute
-> name: serialization::AttributeTypeError::attribute
 > name: core::Set
+> name: serialization::AttributeTypeError::attribute
 > name: core::Object
 
 ## The `serialize_as` annotation
@@ -193,12 +194,12 @@ The `noserialize` annotation mark an exception in a `serialize` module or class 
 By default, an attribute is identified in the serialization format by its Nit name.
 The `serialize_as` attribute changes this behavior and sets the name of an attribute in the serialization format.
 
-> name: serialization::AttributeTypeError::attribute
 > name: serialization
 > name: serialization::AttributeTypeError::attribute
+> name: serialization
 > name: core::Set
 > name: serialization::AttributeTypeError::attribute
-> name: serialization
+> name: serialization::AttributeTypeError::attribute
 
 This annotation can be useful to change the name of an attribute to what is expected by a remote service.
 Or to use identifiers in the serialization format that are reserved keywords in Nit (like `class` and `type`).
@@ -268,12 +269,12 @@ because some of the arguments to the `User` class need special treatment:
 
 > name: serialization::AttributeTypeError::attribute
 > name: serialization::AttributeTypeError::attribute
+> name: serialization::A
 > name: serialization::AttributeTypeError::attribute
 > name: serialization::A
-> name: serialization::A
-> name: serialization::Serializer::serialize
-> name: core::Path
 > name: core::file
+> name: core::Path
+> name: serialization::Serializer::serialize
 
 For this customization, the following code snippet implements
 two serialization services: `User::core_serialize_to` and
@@ -417,12 +418,12 @@ The serialization has some limitations:
 > name: json
 > name: core::file
 > name: core::Object
-> name: serialization::Serializer::serialize
-> name: core::Object
 > name: core::file
+> name: core::Object
+> name: serialization::Serializer::serialize
+> name: core::time
 > name: serialization::Serializer
 > name: serialization::Deserializer
-> name: core::time
 > name: serialization
 > name: meta::Class
 > name: serialization
@@ -438,8 +439,8 @@ So the compiler won't support serializing instances of `Array[MySerializable]`.
 > name: serialization>examples>
 > name: meta::Class
 > name: serialization::Serializable
-> name: core::Array
 > name: core::array
+> name: core::Array
 
 The tool `nitserial` solves this problem at the level of user modules.
 It does so by parsing a Nit module, group or project to find all known

@@ -129,11 +129,11 @@ class ReadmeComparator
 		end
 		printn "{lib or else "NULL"}\t"
 		# printn "{block_count}\t{block_spans}\t{block_names}\t{block_codes}\n"
-		printn "{spans_r / spans_count.to_f}\t{spans_p / spans_count.to_f}\n"
+		# printn "{spans_r / spans_count.to_f}\t{spans_p / spans_count.to_f}\n"
 		# printn "{names_r / names_count.to_f}\t{names_p / names_count.to_f}\n"
 		# printn "{exs_r / exs_count.to_f}\t{exs_p / exs_count.to_f}\t"
 		# printn "{codes_r / codes_count.to_f}\t{codes_p / codes_count.to_f}\n"
-		# printn "{matches_r / matches_count.to_f}\t{matches_p / matches_count.to_f}\n"
+		printn "{matches_r / matches_count.to_f}\t{matches_p / matches_count.to_f}\n"
 	end
 
 	fun print_block(block: MdBlock) do
@@ -286,20 +286,22 @@ class MdBlockCodes
 	end
 end
 
-var corpus = "spans"
+var corpus = "nlp"
 var corpus_path = "src/doc/doc_experiments/exp_align/corpus.{corpus}"
 (corpus_path / "../out.{corpus}").mkdir
 var files = corpus_path.files
 default_comparator.sort(files)
 
 # var libs = ["android", "app", "github", "json", "nitcorn", "nlp", "popcorn", "serialization", "vsm"]
+# var libs = ["json", "serialization", "vsm"]
 
 for file in files do
 	# print ""
 	# print file
 	var lib = file.replace(".corpus.md", "")
 	# if not libs.has(lib) then continue
-#
+	if not lib == "vsm" then continue
+
 	# sys.system "./nitreadme lib/{lib} --keep-going --check-docdown"
 	sys.system "./nitreadme lib/{lib} --keep-going --check-docdown > src/doc/doc_experiments/exp_align/out.{corpus}/{lib}.out.md 2>/dev/null"
 

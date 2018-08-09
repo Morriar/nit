@@ -26,12 +26,10 @@ class Person
 end
 ~~~
 
-> example: serialization::custom_serialization
+> code: serialization::serialization
 > code: serialization::Serializer
 > code: serialization::Serializable
 > code: serialization::Deserializer
-> code: serialization::serialization
-> code: serialization::Serializable::core_serialize_to
 
 The `Person` class also defines `==` and `hash`, this is optional but we will use it to make an important point.
 By definition of a serializable class, an instance can be serialized to a stream, then deserialized.
@@ -76,12 +74,10 @@ class Partnership
 end
 ~~~
 
-> example: serialization::custom_serialization
+> code: serialization::serialization
 > code: serialization::Serializer
 > code: serialization::Serializable
-> code: serialization::Serializable::core_serialize_to
 > code: serialization::Deserializer
-> code: serialization::serialization
 
 ### Scope of the `serialize` annotation
 
@@ -113,14 +109,11 @@ end
   end
   ~~~
 
-> example: serialization::custom_serialization
-> example: serialization::custom_serialization
+> code: serialization::serialization
 > code: serialization::serialization
 > code: serialization::Serializable
 > code: serialization::Serializer
 > code: serialization::Deserializer
-> code: serialization::serialization
-> code: serialization::Serializable::core_serialize_to
 
 ## The `noserialize` annotation
 
@@ -147,12 +140,10 @@ The `noserialize` annotation mark an exception in a `serialize` module or class 
   end
   ~~~
 
-> example: serialization::custom_serialization
+> code: serialization::serialization
 > code: serialization::Serializable
 > code: serialization::Serializer
 > code: serialization::Deserializer
-> code: serialization::serialization
-> code: serialization::Serializable::core_serialize_to
 
 ## The `serialize_as` annotation
 
@@ -176,12 +167,10 @@ class UserCredentials
 end
 ~~~
 
-> example: serialization::custom_serialization
+> code: serialization::serialization
 > code: serialization::Serializer
 > code: serialization::Serializable
 > code: serialization::Deserializer
-> code: serialization::serialization
-> code: serialization::Serializable::core_serialize_to
 
 ## Custom serializable classes
 
@@ -286,17 +275,13 @@ end
 
 ~~~
 
-> example: serialization::custom_serialization
+> code: serialization::serialization
 > code: serialization::Deserializer
 > code: serialization::Serializer
-> code: serialization::Deserializer::deserialize_attribute
 > code: serialization::Serializable
-> code: serialization::serialization
+> code: core::Path
 > code: core::file::Text::to_path
 > code: core::Path::read_all
-> code: serialization::Serializable::core_serialize_to
-> code: core::Path
-> code: serialization::Deserializer::deserialize_class
 
 See the documentation of the module `serialization::serialization` for more
 information on the services to redefine.

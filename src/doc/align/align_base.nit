@@ -21,10 +21,9 @@ abstract class MdAligner
 
 	var mainmodule: MModule
 
-	var context: MEntity is noinit
+	var context: MEntity
 
-	fun align_document(doc: MdDocument, context: MEntity) do
-		self.context = context
+	fun align_document(doc: MdDocument) do
 		enter_visit(doc)
 	end
 end

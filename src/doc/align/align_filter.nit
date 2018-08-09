@@ -91,14 +91,14 @@ class MdFilterNameConflicts
 
 			# Resolve name conflicts
 			var subrefs = new Array[MdRefMEntity]
-			for ref in refs do
+			for ref in mrefs do
 				if not context.has_mentity(ref.mentity) then continue
 				subrefs.add ref
 			end
 			if subrefs.not_empty then
 				keep.add_all subrefs
 			else
-				keep.add_all refs
+				keep.add_all mrefs
 			end
 		end
 

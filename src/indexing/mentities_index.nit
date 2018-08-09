@@ -263,7 +263,7 @@ class MEntityDocument
 	fun build_vector(index: MEntityIndex) do
 		mentity.build_base_vector(terms_count)
 		mentity.build_sign_vector(terms_count)
-		# mentity.build_nlp_vector(terms_count, index)
+		mentity.build_nlp_vector(terms_count, index)
 		mentity.build_code_vector(code_vector, index)
 
 		terms_count.add_all code_vector
@@ -352,6 +352,7 @@ redef class MEntity
 		vector.inc "kind: {class_name}"
 		vector.inc "visibility: {visibility.to_s}"
 		vector.inc "is_example: {is_example}"
+		vector.inc "is_fictive: {is_fictive}"
 
 		var mdoc = mdoc_or_fallback
 		if mdoc == null then return
@@ -369,12 +370,22 @@ redef class MEntity
 	end
 
 	private fun build_nlp_vector(vector: Vector, index: MEntityIndex) do
+		# Index name
+		var name_vector = new Vector
+		parse_name(name_vector, null, name)
+		var nlp_vector = index.vectorize_string(name_vector.keys.join(" "))
+		for k, v in nlp_vector do
+			# print name
+			# print k or else "null"
+			# print "--"
+			vector["nlp_name: {k or else "null"}"] += v
+		end
+
+		# Index comment
 		var mdoc = mdoc_or_fallback
 		if mdoc == null then return
-		var text_renderer = new RawTextVisitor
-		var ast = mdoc.mdoc_document
-		var text = text_renderer.render(ast).to_lower
-		var nlp_vector = index.vectorize_string(text)
+		var text = mdoc.mdoc_document.raw_text
+		nlp_vector = index.vectorize_string(text)
 		for k, v in nlp_vector do
 			vector["nlp: {k or else "null"}"] += v
 		end
@@ -388,8 +399,14 @@ redef class MEntity
 		parse_name(vector, prefix, mtype.name)
 	end
 
-	private fun parse_name(vector: Vector, prefix, name: String) do
-		vector.inc "{prefix}: {name}"
+	private fun parse_name(vector: Vector, prefix: nullable String, name: String) do
+		if prefix != null then
+			vector.inc "{prefix}: {name}"
+			vector.inc "{prefix}: {name.to_lower}"
+		else
+			vector.inc name
+			vector.inc name.to_lower
+		end
 		var names = new Array[String]
 		var buffer = new Buffer
 		for c in name.chars do
@@ -412,9 +429,12 @@ redef class MEntity
 		for sname in names do
 			if sname.is_empty then continue
 			if sname == name then continue
-			vector["{prefix}: {sname}"] += 1.0
+			if prefix != null then
+				vector["{prefix}: {sname}"] += 1.0
+			else
+				vector[sname] += 1.0
+			end
 		end
-		# TODO nlp names
 	end
 
 	fun build_code_vector(vector: Vector, index: MEntityIndex) do

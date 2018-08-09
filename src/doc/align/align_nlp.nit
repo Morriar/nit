@@ -17,17 +17,10 @@ module align_nlp
 import align_base
 import mentities_index
 
-class MdNLPAlign
-	super MdVisitor
+class MdAlignNLP
+	super MdAligner
 
 	var mentity_index: MEntityIndex
-
-	var context: MEntity is noinit
-
-	fun align_nlp(doc: MdDocument, context: MEntity) do
-		self.context = context
-		enter_visit(doc)
-	end
 
 	redef fun visit(node) do
 		if node isa MdHeading then
@@ -45,7 +38,7 @@ class MdNLPAlign
 		if text.is_empty then return
 
 		var vector = new Vector
-		vector.inc "+in: {context.full_name}"
+		# vector.inc "+in: {context.full_name}"
 		vector.inc "-kind: MPropDef"
 		vector.inc "-kind: MClassDef"
 		vector.inc "-kind: MAttribute"
@@ -67,9 +60,10 @@ class MdNLPAlign
 		# print nlp_vector
 		for lemma, freq in nlp_vector do
 			# vector[lemma] = freq
-			# vector["name: {lemma or else "null"}"] += freq
+			vector["name: {lemma or else "null"}"] += freq
+			vector["nlp_name: {(lemma or else "null").to_s.to_lower}"] += freq
 			# vector["name: {(lemma or else "null").as(String).capitalize}"] += freq
-			vector["comment: {lemma or else "null"}"] += freq
+			# vector["comment: {lemma or else "null"}"] += freq
 			# vector["comment: {(lemma or else "null").as(String).capitalize}"] += freq
 			vector["nlp: {lemma or else "null"}"] += freq
 			# vector["sign: {lemma or else "null"}"] += freq
@@ -77,38 +71,21 @@ class MdNLPAlign
 			# vector["tid: {lemma or else "null"}"] += freq
 			# vector["tid: {(lemma or else "null").as(String).capitalize}"] += freq
 		end
-		node.nlp_refs = matches_to_refs(mentity_index.match_query(vector).above_threshold.limit(5), node)
-		#.limit(5)
+		# print vector
+		node.md_refs = matches_to_refs(mentity_index.match_query(vector).above_threshold, node)
 	end
 
 	private fun matches_to_refs(matches: MDocMatches, node: MdNode): Array[MdRefNLP] do
 		var res = new Array[MdRefNLP]
 		for match in matches do
-			res.add new MdRefNLP(node, node.raw_text, match.similarity, match.document.mentity)
+			res.add new MdRefNLP(node, match.document.mentity, match.similarity)
 		end
 		return res
 	end
-end
-
-redef class MdBlock
-	var nlp_refs: Array[MdRefNLP] is lazy do
-		var res = new Array[MdRefNLP]
-		for child in children do
-			if not child isa MdBlock then continue
-			res.add_all child.nlp_refs
-		end
-		return res
-	end
-end
-
-redef class MdHeading
-	redef var nlp_refs = new Array[MdRefNLP]
-end
-
-redef class MdParagraph
-	redef var nlp_refs = new Array[MdRefNLP]
 end
 
 class MdRefNLP
 	super MdRefMEntity
+
+	var score: Float
 end

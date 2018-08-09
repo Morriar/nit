@@ -81,28 +81,25 @@ factory.config.virtual_hosts.add vh
 factory.run
 ~~~
 
-> example: nitcorn::nitcorn_hello_world
+> code: nitcorn::nitcorn
 > code: nitcorn::VirtualHost
 > code: nitcorn::HttpFactory
 > code: nitcorn::Route
 > code: nitcorn::HttpResponse
-> code: nitcorn::nitcorn
 > code: nitcorn::Routes
-> code: nitcorn::VirtualHost::routes
 > code: nitcorn::Action
 > code: nitcorn::ServerConfig
 > code: nitcorn::FileServer
-> code: core::HashMap
-> code: nitcorn::HttpResponse::body=
 > code: nitcorn::HttpRequest
 > code: nitcorn::VirtualHosts
+> code: nitcorn::Routes::add
+> code: nitcorn::VirtualHost::routes
+> code: nitcorn::HttpResponse::body=
 > code: nitcorn::HttpRequest::get_args
 > code: nitcorn::HttpFactory::config
 > code: nitcorn::ServerConfig::virtual_hosts
-> code: core::abstract_text::Map::join
 > code: nitcorn::HttpFactory::run
 > code: nitcorn::reactor::Action::answer
-> code: nitcorn::nitcorn
 
 ## Credits
 

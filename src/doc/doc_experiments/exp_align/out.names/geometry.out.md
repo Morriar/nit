@@ -7,6 +7,7 @@
 
 > name: geometry::Point
 > name: geometry::Line
+> name: geometry::APolygon::points
 
 The very basics of geometry needs, for two and three-dimensional space.
 
@@ -21,13 +22,14 @@ Boxes module introduces Bounding boxes for Points and Lines and services to dete
 It means a simple and fast way to test collision but not really accurate since it uses bounding boxes.
 
 > name: geometry::boxes
-> name: geometry::Box
 > name: geometry::boxes
+> name: geometry::boxes
+> name: geometry::Box
+> name: geometry::Box
 > name: geometry::Box
 > name: geometry::Point
 > name: geometry::Line
-> name: geometry::boxes
-> name: geometry::Box
+> name: geometry::APolygon::points
 > name: core>collection>tests>
 > name: geometry::boxes
 > name: geometry::Box
@@ -41,8 +43,8 @@ A QuadTree is a tree data structure in which each internal node has exactly four
 They're most often used to partition two-dimensional space by recursively subdividing
 it into four quadrants or regions.
 
-> name: geometry::QuadTree
 > name: geometry::quadtree
+> name: geometry::QuadTree
 > name: geometry::QuadTree::data
 > name: geometry::QuadTree::children
 > name: core::re
@@ -67,8 +69,8 @@ This API provides two different types of Quadtree : Static and Dynamic (respecti
 * Dynamic: You just need to fill the quadtree with objects, and when the threshold is reached,
   it will automatically divide the current region, depending on the distribution of objects already in the region.
 
-> name: geometry::QuadTree
 > name: geometry::quadtree
+> name: geometry::QuadTree
 > name: geometry::quadtree
 > name: geometry::QuadTree
 > name: core::Object
@@ -104,19 +106,23 @@ This module contains interesting algorithms for `ConvexPolygon`only at the momen
 * The angle at each vertex contains all other vertices in its edges and interior.
 
 > name: geometry::angles
+> name: geometry::polygon
+> name: geometry::Polygon
 > name: geometry::polygon::APolygon::vertices
+> name: geometry::Point
+> name: geometry::APolygon::points
 > name: geometry::polygon
-> name: geometry::Polygon
 > name: geometry::Point
 > name: geometry::Point
 > name: geometry::Line
-> name: geometry::Point
-> name: geometry::polygon
 > name: geometry::Polygon
+> name: geometry::APolygon::points
+> name: geometry::APolygon::points
 > name: geometry::polygon
 > name: geometry::Polygon
 > name: geometry::Point
 > name: geometry::Line
+> name: geometry::APolygon::points
 > name: geometry::angles
 > name: geometry::Boxed::contains
 > name: geometry::APolygon::contain
@@ -126,8 +132,8 @@ A polygon which is not convex is called concave. Convex polygon are used because
 geometric problems are simpler and faster on convex objects than on non-convex ones.
 
 > name: geometry::polygon
-> name: geometry::Polygon
 > name: geometry::polygon
+> name: geometry::Polygon
 > name: geometry::Polygon
 > name: core::Object
 
@@ -138,13 +144,15 @@ Services provided :
 * Convex hull of a set of points
 * Triangulation of polygon
 
-> name: geometry::Point
 > name: geometry::polygon
+> name: geometry::Point
 > name: geometry::Polygon
+> name: geometry::APolygon::points
 > name: geometry::polygon
 > name: geometry::Polygon
 > name: core::Set
 > name: geometry::Point
+> name: geometry::APolygon::points
 > name: geometry::polygon
 > name: geometry::Polygon
 

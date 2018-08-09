@@ -1,15 +1,19 @@
 # Nit wrapper for Github API
 
 > name: github
-> name: github::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 
 This module provides a Nit object oriented interface to access the Github api.
 
+> name: github
 > name: core::Object
 > name: nitcorn::Interface
 > name: nitcorn::Interfaces
-> name: github
-> name: github::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 
 ## Accessing the API
 
@@ -17,9 +21,11 @@ This module provides a Nit object oriented interface to access the Github api.
 
 ### `GithubAPI` - # Client to Github API
 
-> name: github::LoaderConfig::client
 > name: github
-> name: github::api
+> name: github::LoaderConfig::client
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 
 To access the API you need an instance of a `GithubAPI` client.
 
@@ -39,11 +45,15 @@ var api = new GithubAPI(token)
 
 The API client allows you to get Github API entities.
 
-> name: github::api
+> name: github
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 > name: github::LoaderConfig::client
 > name: github::GithubAPI::get
-> name: github
-> name: github::api
 
 ~~~
 import github
@@ -64,14 +74,21 @@ Token can also be recovered from user config with `get_github_oauth`.
 
 > name: nitcorn::token
 > name: github::User
-> name: config
 > name: config::Config
+> name: github::GithubWallet::tokens
+> name: github::LoaderConfig::tokens
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
+> name: github::Loader::config
 
 ### `get_github_oauth` - # Gets the Github token from `git` configuration
 
-> name: github::GithubAPI::get
 > name: github
 > name: nitcorn::token
+> name: github::GithubAPI::get
+> name: github::GithubWallet::tokens
+> name: github::LoaderConfig::tokens
 
 Return the value of `git config --get github.oauthtoken`
 or `""` if no key exists.
@@ -79,17 +96,26 @@ or `""` if no key exists.
 ### Retrieving user data
 
 > name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 
 ### `load_user` - # Get the Github user with `login`
 
-> name: github::GithubAPI::get
 > name: github
 > name: github::User
+> name: github::GithubAPI::get
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 
 Loads the `User` from the API or returns `null` if the user cannot be found.
 
 > name: github::api
 > name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 
 ~~~
 import github
@@ -104,12 +130,18 @@ assert user.login == "Morriar"
 
 > name: github
 > name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 
 Provides access to [Github user data](https://developer.github.com/v3/users/).
 Should be accessed from `GithubAPI::load_user`.
 
 > name: github
 > name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 
 * `api$User$SELF` - # Type of this instance, automatically specialized in every class
 
@@ -152,16 +184,28 @@ Should be accessed from `GithubAPI::load_user`.
 > name: meta::Class
 > name: popcorn>examples>static_files>public>images>
 > name: github::User
-> name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 > name: popcorn>examples>static_files>public>
+> name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 > name: github::User::blog
-> name: github::User
 > name: popcorn>examples>static_files>public>
+> name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 > name: github::User::email
 > name: github
 > name: github::User::login
-> name: github::User
 > name: popcorn>examples>static_files>public>
+> name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 > name: github::GithubError::name
 > name: github::User::name
 > name: github::Repo::name
@@ -170,36 +214,60 @@ Should be accessed from `GithubAPI::load_user`.
 > name: github::DeploymentEvent::name
 > name: popcorn>examples>static_files>public>images>
 > name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 > name: popcorn>examples>static_files>public>images>
 > name: github::User
-> name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 > name: popcorn>examples>static_files>public>
+> name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 > name: github::User::blog
-> name: github::User
 > name: popcorn>examples>static_files>public>
+> name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 > name: github::User::blog
 > name: serialization
-> name: github::User
 > name: popcorn>examples>static_files>public>
+> name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 > name: github::User::email
-> name: github::User
 > name: popcorn>examples>static_files>public>
+> name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 > name: github::User::email
 > name: meta::Class
 > name: github
 > name: github::User::login
 > name: github
 > name: github::User::login
-> name: github::User
 > name: popcorn>examples>static_files>public>
+> name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 > name: github::GithubError::name
 > name: github::User::name
 > name: github::Repo::name
 > name: github::Branch::name
 > name: github::Label::name
 > name: github::DeploymentEvent::name
-> name: github::User
 > name: popcorn>examples>static_files>public>
+> name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 > name: github::GithubError::name
 > name: github::User::name
 > name: github::Repo::name
@@ -210,17 +278,32 @@ Should be accessed from `GithubAPI::load_user`.
 ### Retrieving repo data
 
 > name: github::Repo
+> name: github::PullRef::repo
+> name: github::GithubEvent::repo
+> name: github::LoaderJob::repo
+> name: github::RepoEntity::repo
+> name: github::Loader::repos
 
 ### `load_repo` - # Get the Github repo with `full_name`.
 
-> name: github::GithubAPI::get
 > name: github
 > name: github::Repo
+> name: github::GithubAPI::get
+> name: github::PullRef::repo
+> name: github::GithubEvent::repo
+> name: github::LoaderJob::repo
+> name: github::RepoEntity::repo
+> name: github::Loader::repos
 
 Loads the `Repo` from the API or returns `null` if the repo cannot be found.
 
 > name: github::api
 > name: github::Repo
+> name: github::PullRef::repo
+> name: github::GithubEvent::repo
+> name: github::LoaderJob::repo
+> name: github::RepoEntity::repo
+> name: github::Loader::repos
 
 ~~~
 import github
@@ -242,6 +325,11 @@ Should be accessed from `GithubAPI::load_repo`.
 
 > name: github
 > name: github::Repo
+> name: github::PullRef::repo
+> name: github::GithubEvent::repo
+> name: github::LoaderJob::repo
+> name: github::RepoEntity::repo
+> name: github::Loader::repos
 
 * `api$Repo$SELF` - # Type of this instance, automatically specialized in every class
 
@@ -288,13 +376,11 @@ Should be accessed from `GithubAPI::load_repo`.
 > name: meta::Class
 > name: github::Repo
 > name: github::Branch
-> name: github::GithubError::name
-> name: github::User::name
-> name: github::Repo::name
-> name: github::Branch::name
-> name: github::Label::name
-> name: github::DeploymentEvent::name
-> name: github::Repo
+> name: github::PullRef::repo
+> name: github::GithubEvent::repo
+> name: github::LoaderJob::repo
+> name: github::RepoEntity::repo
+> name: github::Loader::repos
 > name: github::GithubError::name
 > name: github::User::name
 > name: github::Repo::name
@@ -303,6 +389,11 @@ Should be accessed from `GithubAPI::load_repo`.
 > name: github::DeploymentEvent::name
 > name: github
 > name: github::Repo
+> name: github::PullRef::repo
+> name: github::GithubEvent::repo
+> name: github::LoaderJob::repo
+> name: github::RepoEntity::repo
+> name: github::Loader::repos
 > name: github::GithubError::name
 > name: github::User::name
 > name: github::Repo::name
@@ -310,13 +401,35 @@ Should be accessed from `GithubAPI::load_repo`.
 > name: github::Label::name
 > name: github::DeploymentEvent::name
 > name: github
+> name: github::Repo
+> name: github::PullRef::repo
+> name: github::GithubEvent::repo
+> name: github::LoaderJob::repo
+> name: github::RepoEntity::repo
+> name: github::Loader::repos
+> name: github::GithubError::name
+> name: github::User::name
+> name: github::Repo::name
+> name: github::Branch::name
+> name: github::Label::name
+> name: github::DeploymentEvent::name
+> name: github::Repo
 > name: github::GithubAPI::get
-> name: github::Repo
+> name: github::PullRef::repo
+> name: github::GithubEvent::repo
+> name: github::LoaderJob::repo
+> name: github::RepoEntity::repo
+> name: github::Loader::repos
 > name: github::Repo::owner
 > name: serialization
 > name: serialization
 > name: github::Repo
 > name: github::Branch
+> name: github::PullRef::repo
+> name: github::GithubEvent::repo
+> name: github::LoaderJob::repo
+> name: github::RepoEntity::repo
+> name: github::Loader::repos
 > name: github::GithubError::name
 > name: github::User::name
 > name: github::Repo::name
@@ -325,6 +438,11 @@ Should be accessed from `GithubAPI::load_repo`.
 > name: github::DeploymentEvent::name
 > name: github::Repo
 > name: github::Branch
+> name: github::PullRef::repo
+> name: github::GithubEvent::repo
+> name: github::LoaderJob::repo
+> name: github::RepoEntity::repo
+> name: github::Loader::repos
 > name: github::GithubError::name
 > name: github::User::name
 > name: github::Repo::name
@@ -333,7 +451,13 @@ Should be accessed from `GithubAPI::load_repo`.
 > name: github::DeploymentEvent::name
 > name: meta::Class
 > name: meta::Class
+> name: github
 > name: github::Repo
+> name: github::PullRef::repo
+> name: github::GithubEvent::repo
+> name: github::LoaderJob::repo
+> name: github::RepoEntity::repo
+> name: github::Loader::repos
 > name: github::GithubError::name
 > name: github::User::name
 > name: github::Repo::name
@@ -342,6 +466,11 @@ Should be accessed from `GithubAPI::load_repo`.
 > name: github::DeploymentEvent::name
 > name: github
 > name: github::Repo
+> name: github::PullRef::repo
+> name: github::GithubEvent::repo
+> name: github::LoaderJob::repo
+> name: github::RepoEntity::repo
+> name: github::Loader::repos
 > name: github::GithubError::name
 > name: github::User::name
 > name: github::Repo::name
@@ -350,6 +479,11 @@ Should be accessed from `GithubAPI::load_repo`.
 > name: github::DeploymentEvent::name
 > name: github
 > name: github::Repo
+> name: github::PullRef::repo
+> name: github::GithubEvent::repo
+> name: github::LoaderJob::repo
+> name: github::RepoEntity::repo
+> name: github::Loader::repos
 > name: github::GithubError::name
 > name: github::User::name
 > name: github::Repo::name
@@ -358,18 +492,32 @@ Should be accessed from `GithubAPI::load_repo`.
 > name: github::DeploymentEvent::name
 > name: github
 > name: github::Repo
+> name: github::PullRef::repo
+> name: github::GithubEvent::repo
+> name: github::LoaderJob::repo
+> name: github::RepoEntity::repo
+> name: github::Loader::repos
 > name: github::GithubError::name
 > name: github::User::name
 > name: github::Repo::name
 > name: github::Branch::name
 > name: github::Label::name
 > name: github::DeploymentEvent::name
-> name: github
+> name: github::Repo
 > name: github::GithubAPI::get
-> name: github::Repo
+> name: github::PullRef::repo
+> name: github::GithubEvent::repo
+> name: github::LoaderJob::repo
+> name: github::RepoEntity::repo
+> name: github::Loader::repos
 > name: github::Repo::owner
-> name: github::GithubAPI::get
 > name: github::Repo
+> name: github::GithubAPI::get
+> name: github::PullRef::repo
+> name: github::GithubEvent::repo
+> name: github::LoaderJob::repo
+> name: github::RepoEntity::repo
+> name: github::Loader::repos
 > name: github::Repo::owner
 
 ### Other data
@@ -426,36 +574,80 @@ Should be accessed from `GithubAPI::load_repo`.
 > name: github::Branch
 > name: github
 > name: github::Comment
+> name: github::CommitCommentEvent::comment
+> name: github::IssueCommentEvent::comment
+> name: github::PullRequestReviewCommentEvent::comment
+> name: github::Issue::comments
 > name: github
 > name: github::Commit
+> name: github::Branch::commit
+> name: github::Commit::commit
+> name: github::PullRequest::commits
+> name: github::PushEvent::commits
+> name: github::Loader::commits
 > name: github::Comment
 > name: github::Commit
+> name: github::CommitCommentEvent::comment
+> name: github::IssueCommentEvent::comment
+> name: github::PullRequestReviewCommentEvent::comment
+> name: github::Issue::comments
+> name: github::Branch::commit
+> name: github::Commit::commit
+> name: github::PullRequest::commits
+> name: github::PushEvent::commits
+> name: github::Loader::commits
 > name: github::Commit
+> name: github::Branch::commit
+> name: github::Commit::commit
+> name: github::PullRequest::commits
+> name: github::PushEvent::commits
+> name: github::Loader::commits
 > name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
+> name: github
 > name: github::LoaderConfig::client
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 > name: github
-> name: github::api
 > name: json::JsonDeserializer
-> name: github
 > name: core::Object
 > name: github
-> name: github::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 > name: github
-> name: popcorn>examples>static_files>files>
+> name: core::file
+> name: github::Commit::files
 > name: github
 > name: github::Issue
+> name: github::IssueCommentEvent::issue
+> name: github::IssuesEvent::issue
+> name: github::Loader::issues
+> name: github
 > name: github::Comment
-> name: github
 > name: github::Issue
+> name: github::Issue::comments
+> name: github::CommitCommentEvent::comment
+> name: github::IssueCommentEvent::comment
+> name: github::PullRequestReviewCommentEvent::comment
+> name: github::IssueCommentEvent::issue
+> name: github::IssuesEvent::issue
+> name: github::Loader::issues
 > name: github::PullRequestEvent::pull
 > name: github::PullRequestReviewCommentEvent::pull
 > name: github::Loader::pulls
-> name: github::events
 > name: github
+> name: github::IssueEvent::event
 > name: github
 > name: github::Label
+> name: github::Issue::labels
 > name: github
 > name: github::Milestone
+> name: github::Issue::milestone
+> name: github::IssueEvent::milestone
 > name: github::PullRequestEvent::pull
 > name: github::PullRequestReviewCommentEvent::pull
 > name: github::Loader::pulls
@@ -465,24 +657,33 @@ Should be accessed from `GithubAPI::load_repo`.
 > name: github::PullRequestEvent::pull
 > name: github::PullRequestReviewCommentEvent::pull
 > name: github::Loader::pulls
-> name: github::IssueEvent::rename
 > name: nitcorn::Action
+> name: nitcorn::Action
+> name: github::IssueEvent::rename
+> name: github::GithubEvent::action
+> name: github::GithubEvent::action
 > name: github::GithubError::name
 > name: github::User::name
 > name: github::Repo::name
 > name: github::Branch::name
 > name: github::Label::name
 > name: github::DeploymentEvent::name
-> name: nitcorn::Action
 > name: github
 > name: popcorn::Repository
-> name: github::Comment
 > name: github
+> name: github::Comment
+> name: github::Issue::comments
+> name: github::CommitCommentEvent::comment
+> name: github::IssueCommentEvent::comment
+> name: github::PullRequestReviewCommentEvent::comment
 > name: github::PullRequestEvent::pull
 > name: github::PullRequestReviewCommentEvent::pull
 > name: github::Loader::pulls
 > name: github
 > name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 
 ### Advanced uses
 
@@ -494,14 +695,16 @@ Should be accessed from `GithubAPI::load_repo`.
 
 ### `get` - # Execute a GET request on Github API.
 
-> name: github::GithubAPI::get
 > name: github
-> name: github::api
+> name: github::GithubAPI::get
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 
 This method returns raw json data.
 See other `load_*` methods to use more expressive types.
 
-> name: json
+> name: github::GithubError::json
 
 ~~~
 import github
@@ -530,10 +733,16 @@ assert err.message == "Not Found"
 #### Change the user agent
 
 > name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 
 ### `user_agent` - # User agent used for HTTP requests.
 
 > name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 
 Default is `nit_github_api`.
 
@@ -541,6 +750,9 @@ See <https://developer.github.com/v3/#user-agent-required>
 
 > name: github
 > name: github::User
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 
 #### Debugging
 
@@ -551,9 +763,8 @@ See <https://developer.github.com/v3/#user-agent-required>
 * `0`: only errors (default)
 * `1`: verbose
 
-> name: core::error
-> name: json::error
 > name: core::Error
+> name: github::Loader::error
 > name: github::GithubWallet::verbose
 
 #### Using with GitLab
@@ -561,14 +772,20 @@ See <https://developer.github.com/v3/#user-agent-required>
 If URL scheme of GitLab API follows the one of Github API, it may be possible to
 configure this wrapper to use a custom URL.
 
-> name: github::api
 > name: github
-> name: github::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 
 ### `api_url` - # Github API base url.
 
 > name: github
-> name: github::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 > name: github::PullRequest::base
 
 Default is `https://api.github.com` and should not be changed.
@@ -580,17 +797,18 @@ Default is `https://api.github.com` and should not be changed.
 Using this API you can create Github hooks able to respond to actions performed
 on a repository.
 
-> name: github::api
 > name: github
-> name: github::hooks
 > name: nitcorn::Action
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
+> name: github::GithubEvent::action
 > name: popcorn::Repository
 
 ### `hooks` - # Github hook event listening with `nitcorn`.
 
 > name: github
-> name: github::hooks
-> name: github::events
+> name: github::IssueEvent::event
 
 Usage:
 
@@ -627,17 +845,19 @@ var listener = new LogHookListener(api, "127.0.0.1", 8080)
 ## Dealing with events
 
 > name: github::events
+> name: github::IssueEvent::event
 
 GithubAPI can trigger different events depending on the hook configuration.
 
-> name: github::GithubAPI
 > name: github::events
 > name: github::hooks
+> name: github::GithubAPI
+> name: github::IssueEvent::event
 
 ### `GithubEvent` - # Github event stub.
 
 > name: github
-> name: github::events
+> name: github::IssueEvent::event
 
 * `events$CommitCommentEvent` - # Triggered when a commit comment is created.
 
@@ -673,31 +893,67 @@ GithubAPI can trigger different events depending on the hook configuration.
 
 > name: github::Commit
 > name: github::Comment
+> name: github::Branch::commit
+> name: github::Commit::commit
+> name: github::PullRequest::commits
+> name: github::PushEvent::commits
+> name: github::Loader::commits
+> name: github::CommitCommentEvent::comment
+> name: github::IssueCommentEvent::comment
+> name: github::PullRequestReviewCommentEvent::comment
+> name: github::Issue::comments
 > name: popcorn::Repository
 > name: github::Branch
 > name: github::Branch
 > name: github::User
 > name: popcorn::Repository
-> name: json::JsonDeserializer
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 > name: github
+> name: json::JsonDeserializer
 > name: core::Object
 > name: github
-> name: github::events
+> name: github::IssueEvent::event
 > name: github::Issue
 > name: github::Comment
+> name: github::IssueCommentEvent::issue
+> name: github::IssuesEvent::issue
+> name: github::Loader::issues
+> name: github::CommitCommentEvent::comment
+> name: github::IssueCommentEvent::comment
+> name: github::PullRequestReviewCommentEvent::comment
+> name: github::Issue::comments
 > name: github::events
 > name: github::Issue
+> name: github::IssueEvent::event
+> name: github::IssueCommentEvent::issue
+> name: github::IssuesEvent::issue
+> name: github::Loader::issues
 > name: github::User
 > name: popcorn::Repository
+> name: github::Issue::user
+> name: github::PullRef::user
+> name: github::Comment::user
 > name: github::events
+> name: github::IssueEvent::event
 > name: github::PullRequestEvent::pull
 > name: github::PullRequestReviewCommentEvent::pull
 > name: github::Loader::pulls
 > name: github::Comment
+> name: github::CommitCommentEvent::comment
+> name: github::IssueCommentEvent::comment
+> name: github::PullRequestReviewCommentEvent::comment
+> name: github::Issue::comments
 > name: github::PullRequestEvent::pull
 > name: github::PullRequestReviewCommentEvent::pull
 > name: github::Loader::pulls
 > name: popcorn::Repository
 > name: github::Branch
 > name: github::Commit
+> name: github::Branch::commit
+> name: github::Commit::commit
+> name: github::PullRequest::commits
+> name: github::PushEvent::commits
+> name: github::Loader::commits
 

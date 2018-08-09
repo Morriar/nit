@@ -29,16 +29,16 @@ for sentence in doc.sentences do
 end
 ~~~
 
+> code: nlp::nlp
 > code: nlp::NLPToken
 > code: nlp::NLPJavaProcessor
+> code: nlp::NLPSentence
+> code: nlp::NLPDocument
 > code: nlp::NLPToken::pos
 > code: nlp::NLPToken::lemma
-> code: nlp::NLPSentence
 > code: nlp::NLPProcessor::process
 > code: nlp::NLPSentence::tokens
 > code: nlp::NLPDocument::sentences
-> code: nlp::NLPDocument
-> code: nlp::nlp
 
 ### NLPServer
 
@@ -54,9 +54,9 @@ var srv = new NLPServer(cp, 9000)
 srv.start
 ~~~
 
+> code: nlp::nlp
 > code: nlp::NLPServer
 > code: pthreads::Thread::start
-> code: nlp::nlp
 
 ### NLPClient
 
@@ -69,9 +69,9 @@ var cli = new NLPClient("http://localhost:9000")
 var doc = cli.process("String to analyze")
 ~~~
 
+> code: nlp::nlp
 > code: nlp::NLPClient
 > code: nlp::NLPProcessor::process
-> code: nlp::nlp
 
 ## NLPIndex
 
@@ -92,17 +92,15 @@ var matches = index.match_string("this sample")
 assert matches.first.document == d1
 ~~~
 
+> code: nlp::nlp
 > code: nlp::NLPIndex
-> code: vsm::StringIndex::index_string
-> code: core::Collection::first
 > code: vsm::Document
-> code: core::HashSet
 > code: vsm::IndexMatch
+> code: nlp::NLPJavaProcessor
+> code: vsm::StringIndex::index_string
 > code: vsm::IndexMatch::document
 > code: vsm::VSMIndex::documents
-> code: nlp::NLPJavaProcessor
 > code: vsm::StringIndex::match_string
-> code: nlp::nlp
 
 ## TODO
 

@@ -88,7 +88,6 @@ customize the generated Android application.
   Its usefulness will be extended in the future to customize user applications.
 
 > code: android
-> code: android
 
 ### Android implementation
 

@@ -47,10 +47,9 @@ It relies on the following sequence of events, represented here by their callbac
 5. `on_restart`: The app goes back to the inactive state.
    You can revert what was done by `on_stop`.
 
-> name: android>ui>
-> name: ios>ui>
-> name: core::time
 > name: android>service>
+> name: app::ui
+> name: core::time
 > name: app
 > name: app::App
 > name: app
@@ -85,10 +84,8 @@ So all UI elements can react separately to live-cycle events.
 > name: core::native
 > name: android::platform
 > name: ios::platform
-> name: android>ui>
-> name: ios>ui>
-> name: android>ui>
-> name: ios>ui>
+> name: app::ui
+> name: app::ui
 
 ## User Interface
 
@@ -99,6 +96,7 @@ Here is a subset of the most useful controls and views:
 
 > name: app::Control
 > name: app::View
+> name: app::ViewEvent::VIEW
 
 * The classic pushable `Button` with text (usually rectangular).
 
@@ -106,10 +104,10 @@ Here is a subset of the most useful controls and views:
 
 * `HorizontalLayout` and `VerticalLayout` organize other controls in order.
 
-> name: core>text>
 > name: core::Text
-> name: core>text>
+> name: app::TextView::text
 > name: core::Text
+> name: app::TextView::text
 > name: app::Control
 
 Each control is notified of input events by callbacks to `on_event`.
@@ -131,40 +129,26 @@ So there is two ways  to customize the behavior on a given event:
 ### Usage Example
 
 > name: app>examples>
-> name: android>examples>
-> name: ios>examples>
-> name: serialization>examples>
-> name: pthreads>examples>
 
 The example at `examples/ui_example.nit` shows off most features of `app::ui` in a minimal program.
 You can also take a look at the calculator (`../../examples/calculator/src/calculator.nit`) which is a concrete usage example.
 
 > name: app>examples>
-> name: android>examples>
-> name: ios>examples>
-> name: serialization>examples>
-> name: pthreads>examples>
 > name: app>examples>
-> name: android>examples>
-> name: ios>examples>
-> name: serialization>examples>
-> name: pthreads>examples>
 
 ### Platform-specific UI
 
 > name: android::platform
 > name: ios::platform
-> name: android>ui>
-> name: ios>ui>
+> name: app::ui
 
 You can go beyond the portable UI API of _app.nit_ by using the natives services of a platform.
 
-> name: android>ui>
-> name: ios>ui>
+> name: app::ui
 > name: app
 > name: app::App
-> name: core::native
 > name: android>service>
+> name: core::native
 > name: android::platform
 > name: ios::platform
 
@@ -176,28 +160,16 @@ the interesting module is in this repository at ../../examples/calculator/src/an
 > name: ios::platform
 > name: android::platform
 > name: ios::platform
-> name: app>examples>
-> name: android>examples>
-> name: ios>examples>
-> name: serialization>examples>
-> name: pthreads>examples>
-> name: android>ui>
-> name: ios>ui>
 > name: android
 > name: app>examples>
-> name: android>examples>
-> name: ios>examples>
-> name: serialization>examples>
-> name: pthreads>examples>
+> name: app::ui
+> name: app>examples>
 > name: android>examples>src>
 > name: android>nit_compile>android>app>src>
 
 ## Persistent State with data_store
 
 > name: app::data_store
-> name: linux::data_store
-> name: android::data_store
-> name: ios::data_store
 
 _app.nit_ offers the submodule `app::data_store` to easily save the application state and user preferences.
 The service is accessible by the method `App::data_store`. The `DataStore` itself defines 2 methods:
@@ -219,10 +191,6 @@ The service is accessible by the method `App::data_store`. The `DataStore` itsel
 ### Usage Example
 
 > name: app>examples>
-> name: android>examples>
-> name: ios>examples>
-> name: serialization>examples>
-> name: pthreads>examples>
 
 ~~~
 import app::data_store
@@ -265,14 +233,9 @@ the full example at `examples/http_request_example.nit`.
 
 > name: android>service>
 > name: meta::Class
-> name: android>ui>
-> name: ios>ui>
+> name: app::ui
 > name: pthreads::Thread
 > name: app>examples>
-> name: android>examples>
-> name: ios>examples>
-> name: serialization>examples>
-> name: pthreads>examples>
 
 ## Metadata annotations
 
@@ -308,6 +271,7 @@ The _app.nit_ framework defines three annotations to customize the application p
   those associated to modules lower in the importation hierarchy have higher priority.
 
 > name: app::Window
+> name: app::ui::App::window
 > name: json::store
 > name: app::CompositeControl::has
 > name: core>collection>tests>
@@ -315,12 +279,14 @@ The _app.nit_ framework defines three annotations to customize the application p
 > name: ios::platform
 > name: core::file
 > name: android
-> name: core::file
 > name: android>nit_compile>android>app>libs>
 > name: android>nit_compile>android>app>src>main>java>
 > name: core::file
-> name: core::Path
+> name: core::file
 > name: pthreads::extra
+> name: core::Path
+> name: app::Asset::path
+> name: app::PlayableAudio::path
 > name: app::Control::parent
 > name: core::file
 > name: core::file
@@ -328,10 +294,6 @@ The _app.nit_ framework defines three annotations to customize the application p
 ### Usage Example
 
 > name: app>examples>
-> name: android>examples>
-> name: ios>examples>
-> name: serialization>examples>
-> name: pthreads>examples>
 
 ~~~
 module my_module is
@@ -358,8 +320,7 @@ There is two main ways to achieve this goal:
 > name: app::App
 > name: android::platform
 > name: ios::platform
-> name: android>ui>
-> name: ios>ui>
+> name: app::ui
 > name: android::platform
 > name: ios::platform
 > name: android>nit_compile>android>app>src>main>
@@ -392,21 +353,16 @@ There is two main ways to achieve this goal:
   ~~~
 
 > name: app::AsyncHttpRequest::before
+> name: android::platform
+> name: ios::platform
 > name: app::TextAsset::load
 > name: app::PlayableAudio::load
-> name: android::platform
-> name: ios::platform
 > name: app
 > name: app::App
-> name: android>ui>
-> name: ios>ui>
+> name: app::ui
 > name: android::platform
 > name: ios::platform
-> name: app>examples>
-> name: android>examples>
-> name: ios>examples>
-> name: serialization>examples>
-> name: pthreads>examples>
 > name: android
+> name: app>examples>
 > name: android
 

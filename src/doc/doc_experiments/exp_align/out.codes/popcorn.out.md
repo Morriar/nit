@@ -27,15 +27,14 @@ app.use("/", new HelloHandler)
 app.listen("localhost", 3000)
 ~~~
 
-> example: popcorn::example_hello
+> code: popcorn::popcorn
 > code: nitcorn::HttpResponse
 > code: popcorn::App
+> code: popcorn::Handler
 > code: popcorn::popcorn::App::listen
 > code: popcorn::Handler::get
 > code: popcorn::pop_handlers::HttpResponse::html
 > code: popcorn::Router::use
-> code: popcorn::Handler
-> code: popcorn::popcorn
 
 The Popcorn app listens on port 3000 for connections.
 The app responds with "Hello World!" for requests to the root URL (`/`) or **route**.
@@ -93,8 +92,8 @@ class MyHandler
 end
 ~~~
 
-> code: popcorn::Handler
 > code: popcorn
+> code: popcorn::Handler
 
 Where:
 
@@ -114,13 +113,12 @@ class MyHandler
 end
 ~~~
 
-> example: popcorn::example_router
+> code: popcorn::popcorn
 > code: nitcorn::HttpResponse
+> code: popcorn::Handler
 > code: popcorn::pop_handlers::HttpResponse::send
 > code: popcorn::Handler::get
 > code: popcorn::Handler::post
-> code: popcorn::Handler
-> code: popcorn::popcorn
 
 To make your handler responds to a specific route, you have to add it to the app.
 
@@ -131,9 +129,9 @@ var app = new App
 app.use("/", new MyHandler)
 ~~~
 
+> code: popcorn::App
 > code: popcorn::AppThread::app
 > code: popcorn::Router::use
-> code: popcorn::App
 
 Respond to a request to the `/user` route:
 
@@ -142,9 +140,7 @@ app.use("/user", new MyHandler)
 ~~~
 
 > code: popcorn::AppThread::app
-> code: popcorn::AppThread::app
 > code: popcorn::pop_auth::Session::user
-> code: popcorn::Router::use
 > code: popcorn::Router::use
 
 For more details about routing, see the routing section.
@@ -163,9 +159,9 @@ in a directory named `public`:
 app.use("/", new StaticHandler("public/"))
 ~~~
 
+> code: popcorn::StaticHandler
 > code: popcorn::AppThread::app
 > code: popcorn::Router::use
-> code: popcorn::StaticHandler
 
 Now, you can load the files that are in the `public` directory:
 
@@ -185,10 +181,10 @@ app.use("/", new StaticHandler("public/"))
 app.use("/", new StaticHandler("files/"))
 ~~~
 
-> code: popcorn::AppThread::app
-> code: popcorn::Router::use
 > code: popcorn>examples>static_files>files>
 > code: popcorn::StaticHandler
+> code: popcorn::AppThread::app
+> code: popcorn::Router::use
 
 Popcorn looks up the files in the order in which you set the static directories
 with the `use` method.
@@ -201,9 +197,9 @@ static directory, as shown below:
 app.use("/static/", new StaticHandler("public/"))
 ~~~
 
+> code: popcorn::StaticHandler
 > code: popcorn::AppThread::app
 > code: popcorn::Router::use
-> code: popcorn::StaticHandler
 
 Now, you can load the files that are in the public directory from the `/static`
 path prefix.
@@ -228,10 +224,10 @@ This can be achieved by specifying a default file in the StaticHandler:
 app.use("/static/", new StaticHandler("public/", "default.html"))
 ~~~
 
+> code: popcorn::StaticHandler
 > code: popcorn::AppThread::app
 > code: popcorn::pop_handlers::HttpResponse::html
 > code: popcorn::Router::use
-> code: popcorn::StaticHandler
 
 This way all non-matched queries to the StaticHandler will be answered with the
 `default.html` file.
@@ -257,14 +253,13 @@ var app = new App
 app.use("/", new HelloHandler)
 ~~~
 
-> example: popcorn::example_router
+> code: popcorn::popcorn
 > code: nitcorn::HttpResponse
+> code: popcorn::App
+> code: popcorn::Handler
 > code: popcorn::Handler::get
 > code: popcorn::pop_handlers::HttpResponse::send
 > code: popcorn::Router::use
-> code: popcorn::App
-> code: popcorn::Handler
-> code: popcorn::popcorn
 
 ### Route methods
 
@@ -288,15 +283,14 @@ var app = new App
 app.use("/", new GetPostHandler)
 ~~~
 
-> example: popcorn::example_router
+> code: popcorn::popcorn
 > code: nitcorn::HttpResponse
+> code: popcorn::App
+> code: popcorn::Handler
 > code: popcorn::pop_handlers::HttpResponse::send
 > code: popcorn::Handler::get
 > code: popcorn::Handler::post
 > code: popcorn::Router::use
-> code: popcorn::App
-> code: popcorn::Handler
-> code: popcorn::popcorn
 
 Popcorn supports the following routing methods that correspond to HTTP methods:
 get, post, put, and delete.
@@ -326,12 +320,14 @@ app.use("/", new QueryStringHandler)
 app.listen("localhost", 3000)
 ~~~
 
-> example: popcorn::example_query_string
+> code: popcorn::popcorn
+> code: template::template
 > code: nitcorn::HttpRequest
-> code: template::Template::addn
 > code: nitcorn::HttpResponse
 > code: popcorn::App
 > code: template::Template
+> code: popcorn::Handler
+> code: template::Template::addn
 > code: nitcorn::HttpRequest::query_string
 > code: nitcorn::HttpRequest::get_args
 > code: popcorn::popcorn::App::listen
@@ -339,9 +335,6 @@ app.listen("localhost", 3000)
 > code: popcorn::Handler::get
 > code: popcorn::pop_handlers::HttpResponse::send
 > code: popcorn::Router::use
-> code: popcorn::Handler
-> code: popcorn::popcorn
-> code: template::template
 
 Post parameters can also be accessed through the `req` parameter:
 
@@ -368,22 +361,21 @@ app.use("/", new PostHandler)
 app.listen("localhost", 3000)
 ~~~
 
-> example: popcorn::example_post_handler
+> code: popcorn::popcorn
+> code: template::template
 > code: nitcorn::HttpRequest
-> code: template::Template::addn
 > code: nitcorn::HttpResponse
-> code: nitcorn::HttpRequest::body
 > code: popcorn::App
 > code: template::Template
+> code: popcorn::Handler
+> code: template::Template::addn
+> code: nitcorn::HttpRequest::body
 > code: nitcorn::HttpRequest::post_args
 > code: popcorn::popcorn::App::listen
 > code: nitcorn::HttpRequest::uri
 > code: popcorn::pop_handlers::HttpResponse::send
 > code: popcorn::Handler::post
 > code: popcorn::Router::use
-> code: popcorn::Handler
-> code: popcorn::popcorn
-> code: template::template
 
 There is a special routing method, `all(res, req)`, which is not derived from any
 HTTP method. This method is used to respond at a path for all request methods.
@@ -401,12 +393,11 @@ class AllHandler
 end
 ~~~
 
-> example: popcorn::example_simple_logger
+> code: popcorn::popcorn
 > code: nitcorn::HttpResponse
+> code: popcorn::Handler
 > code: popcorn::pop_handlers::HttpResponse::send
 > code: popcorn::Handler::all
-> code: popcorn::Handler
-> code: popcorn::popcorn
 
 Using the `all` method you can also implement other HTTP request methods.
 
@@ -424,12 +415,11 @@ class MergeHandler
 end
 ~~~
 
-> example: popcorn::example_advanced_logger
-> code: nitcorn::HttpRequest::method
-> code: nitcorn::HttpRequest
-> code: popcorn::Handler::all
-> code: popcorn::Handler
 > code: popcorn::popcorn
+> code: nitcorn::HttpRequest
+> code: popcorn::Handler
+> code: nitcorn::HttpRequest::method
+> code: popcorn::Handler::all
 
 ### Route paths
 
@@ -438,7 +428,7 @@ which requests can be made.
 Route paths can be strings, parameterized strings or glob patterns.
 Query strings such as `?q=foo`are not part of the route path.
 
-Popcorn uses the `Handler::match(uri)` method to match the route paths.
+Popcorn uses the `AppRoute::match(uri)` method to match the route paths.
 
 Here are some examples of route paths based on strings.
 
@@ -457,14 +447,13 @@ var app = new App
 app.use("/", new MyHandler)
 ~~~
 
-> example: popcorn::example_router
+> code: popcorn::popcorn
 > code: nitcorn::HttpResponse
+> code: popcorn::App
+> code: popcorn::Handler
 > code: popcorn::Handler::get
 > code: popcorn::pop_handlers::HttpResponse::send
 > code: popcorn::Router::use
-> code: popcorn::App
-> code: popcorn::Handler
-> code: popcorn::popcorn
 
 This route path will match requests to `/about`.
 
@@ -523,17 +512,16 @@ app.use("/:user", new UserHome)
 app.listen("localhost", 3000)
 ~~~
 
-> example: popcorn::example_param_route
+> code: popcorn::popcorn
 > code: nitcorn::HttpResponse
-> code: popcorn::pop_handlers::HttpResponse::send
 > code: popcorn::App
-> code: nitcorn::vararg_routes::HttpRequest::param
 > code: nitcorn::HttpRequest
+> code: popcorn::Handler
+> code: popcorn::pop_handlers::HttpResponse::send
+> code: nitcorn::vararg_routes::HttpRequest::param
 > code: popcorn::popcorn::App::listen
 > code: popcorn::Handler::get
 > code: popcorn::Router::use
-> code: popcorn::Handler
-> code: popcorn::popcorn
 
 The `UserHome` handler listen to every path matching `/:user`. This can be `/Morriar`,
 `/10`, ... but not `/Morriar/profile` since route follow the strict matching rule.
@@ -570,17 +558,16 @@ app.use("/user/:user/item/:item/*", new UserItem)
 app.listen("localhost", 3000)
 ~~~
 
-> example: popcorn::example_glob_route
+> code: popcorn::popcorn
 > code: nitcorn::HttpResponse
-> code: nitcorn::vararg_routes::HttpRequest::param
 > code: nitcorn::HttpRequest
-> code: popcorn::pop_handlers::HttpResponse::send
 > code: popcorn::App
+> code: popcorn::Handler
+> code: nitcorn::vararg_routes::HttpRequest::param
+> code: popcorn::pop_handlers::HttpResponse::send
 > code: popcorn::popcorn::App::listen
 > code: popcorn::Handler::get
 > code: popcorn::Router::use
-> code: popcorn::Handler
-> code: popcorn::popcorn
 
 ## Response methods
 
@@ -654,17 +641,16 @@ app.use("/", new HelloHandler)
 app.listen("localhost", 3000)
 ~~~
 
-> example: popcorn::example_simple_logger
+> code: popcorn::popcorn
 > code: popcorn::App
 > code: nitcorn::HttpResponse
+> code: popcorn::Handler
 > code: popcorn::popcorn::App::listen
 > code: popcorn::Handler::get
 > code: popcorn::pop_handlers::HttpResponse::send
 > code: popcorn::Router::use
 > code: popcorn::Router::use_before
-> code: popcorn::Handler
 > code: popcorn::Handler::all
-> code: popcorn::popcorn
 
 By using the `MyLogger` handler to the route `/*` we ensure that every requests
 (even 404 ones) pass through the middleware handler.
@@ -722,25 +708,24 @@ app.use_after("/*", new LogHandler)
 app.listen("localhost", 3000)
 ~~~
 
-> example: popcorn::example_advanced_logger
+> code: popcorn::popcorn
+> code: realtime::realtime
 > code: nitcorn::HttpRequest
 > code: nitcorn::HttpResponse
-> code: nitcorn::HttpRequest::method
 > code: realtime::Clock
+> code: popcorn::App
+> code: popcorn::Handler
+> code: nitcorn::HttpRequest::method
 > code: nitcorn::HttpRequest::uri
 > code: popcorn::pop_logging::HttpResponse::color_status
-> code: popcorn::App
 > code: realtime::Clock::total
 > code: popcorn::popcorn::App::listen
-> code: popcorn::Handler
 > code: popcorn::Handler::all
 > code: popcorn::Handler::get
 > code: popcorn::pop_handlers::HttpResponse::send
 > code: popcorn::Router::use
 > code: popcorn::Router::use_after
 > code: popcorn::Router::use_before
-> code: popcorn::popcorn
-> code: realtime::realtime
 
 First, we attach a new attribute `timer` to every `HttpRequest`.
 Doing so we can access our data from all handlers that import our module, directly
@@ -824,17 +809,16 @@ app.use("/user", user_router)
 app.listen("localhost", 3000)
 ~~~
 
-> example: popcorn::example_router
-> code: popcorn::Router::use
+> code: popcorn::popcorn
 > code: nitcorn::HttpResponse
-> code: popcorn::Handler::get
-> code: popcorn::pop_handlers::HttpResponse::send
 > code: popcorn::Router
 > code: popcorn::App
 > code: popcorn::Handler
+> code: popcorn::Router::use
+> code: popcorn::Handler::get
+> code: popcorn::pop_handlers::HttpResponse::send
 > code: popcorn::popcorn::App::listen
 > code: popcorn::Handler::all
-> code: popcorn::popcorn
 
 The app will now be able to handle requests to /user and /user/profile, as well
 as call the `Time` middleware handler that is specific to the route.
@@ -870,17 +854,16 @@ app.use("/*", new SimpleErrorHandler)
 app.listen("localhost", 3000)
 ~~~
 
-> example: popcorn::example_simple_logger
+> code: popcorn::popcorn
 > code: nitcorn::HttpResponse
+> code: popcorn::App
+> code: popcorn::Handler
 > code: nitcorn::HttpResponse::status_code
 > code: popcorn::Router::use
-> code: popcorn::App
 > code: popcorn::popcorn::App::listen
 > code: popcorn::Handler::get
 > code: popcorn::pop_handlers::HttpResponse::send
-> code: popcorn::Handler
 > code: popcorn::Handler::all
-> code: popcorn::popcorn
 
 In this example, every non-200 response is caught by the `SimpleErrorHandler`
 that print an error in stdout.
@@ -928,20 +911,19 @@ app.use("/*", new HtmlErrorHandler)
 app.listen("localhost", 3000)
 ~~~
 
-> example: popcorn::example_html_error_handler
+> code: popcorn::popcorn
+> code: template::template
 > code: nitcorn::HttpResponse
-> code: nitcorn::HttpResponse::status_code
 > code: popcorn::App
+> code: popcorn::Handler
+> code: template::Template
+> code: nitcorn::HttpResponse::status_code
 > code: popcorn::popcorn::App::listen
 > code: popcorn::pop_handlers::HttpResponse::send
 > code: popcorn::Router::use
 > code: template::Template::rendering
 > code: template::Template::add
 > code: popcorn::Handler::all
-> code: popcorn::Handler
-> code: template::Template
-> code: popcorn::popcorn
-> code: template::template
 
 ## Sessions
 
@@ -979,22 +961,21 @@ app.use("/", new AppLogin)
 app.listen("localhost", 3000)
 ~~~
 
-> example: popcorn::example_session
+> code: popcorn::popcorn
 > code: nitcorn::Session
 > code: nitcorn::HttpResponse
-> code: nitcorn::sessions::HttpRequest::session
 > code: nitcorn::HttpRequest
 > code: popcorn::App
+> code: popcorn::SessionInit
+> code: popcorn::Handler
+> code: nitcorn::sessions::HttpRequest::session
 > code: popcorn::popcorn::App::listen
 > code: popcorn::Handler::get
 > code: popcorn::pop_handlers::HttpResponse::html
 > code: popcorn::Handler::post
-> code: popcorn::SessionInit
 > code: popcorn::Router::use
 > code: popcorn::Router::use_before
 > code: popcorn::pop_handlers::HttpResponse::redirect
-> code: popcorn::Handler
-> code: popcorn::popcorn
 
 Notice the use of the `SessionInit` on the `/*` route. You must use the
 `SessionInit` first to initialize the request session.
@@ -1076,34 +1057,30 @@ app.use("/new", new UserForm(db))
 app.listen("localhost", 3000)
 ~~~
 
-> example: popcorn::example_mongodb
+> code: popcorn::popcorn
+> code: template::template
+> code: mongodb::mongodb
 > code: json::JsonObject
 > code: nitcorn::HttpResponse
-> code: core::MapRead::[]
-> code: template::Template::add
 > code: nitcorn::HttpRequest
-> code: core::HashMap
-> code: mongodb::MongoDb::collection
-> code: nitcorn::HttpRequest::post_args
 > code: mongodb::MongoClient
 > code: template::Template
+> code: mongodb::MongoCollection
+> code: mongodb::MongoDb
+> code: popcorn::App
+> code: popcorn::Handler
+> code: template::Template::add
+> code: mongodb::MongoDb::collection
+> code: nitcorn::HttpRequest::post_args
 > code: popcorn::Handler::get
 > code: popcorn::pop_handlers::HttpResponse::html
 > code: popcorn::Router::use
-> code: mongodb::MongoCollection
-> code: mongodb::MongoDb
-> code: core::Map::[]=
-> code: popcorn::App
 > code: popcorn::popcorn::App::listen
 > code: popcorn::Handler::post
 > code: popcorn::pop_handlers::HttpResponse::redirect
 > code: mongodb::MongoCollection::insert
 > code: mongodb::MongoClient::database
-> code: popcorn::Handler
 > code: mongodb::MongoCollection::find_all
-> code: popcorn::popcorn
-> code: template::template
-> code: mongodb::mongodb
 
 ## Angular.JS integration
 
@@ -1120,12 +1097,11 @@ app.use("/*", new StaticHandler("my-ng-app/", "index.html"))
 app.listen("localhost", 3000)
 ~~~
 
-> example: popcorn::example_static_default
+> code: popcorn::popcorn
 > code: popcorn::App
+> code: popcorn::StaticHandler
 > code: popcorn::popcorn::App::listen
 > code: popcorn::Router::use
-> code: popcorn::popcorn
-> code: popcorn::StaticHandler
 
 Because the StaticHandler will not find the angular routes as static files,
 you must specify the path to the default angular controller.

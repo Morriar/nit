@@ -20,9 +20,10 @@ import mdoc_index
 import name_index
 intrude import model_index
 import align_refs
-# import align_text
+import align_text
+import align_code_blocks
+import align_nlp
 # import align_block
-# import align_code_blocks
 import align_filter
 
 class MDocAligner
@@ -39,17 +40,49 @@ class MDocAligner
 	fun align_mdoc(mdoc: MDoc) do
 		var document = mdoc.mdoc_document
 
-		align_codes.align_document(document, context)
-		# text_align.align_texts(document, context)
-		# code_block_align.align_code_blocks(document, context)
-		# nlp_align.align_nlp(document, context)
-		# block_align.align_blocks(document, context)
+		# Align spans
+		# var align_codes = new MdAlignCodes(model, mainmodule)
+		# align_codes.align_document(document, context)
+        #
+		# var filter_context = new MdFilterNameConflicts(context)
+		# filter_context.filter_document(document)
+        #
+		# var filter_kind = new MdFilterKind
+		# filter_kind.filter_document(document)
+
+		# Align texts
+		# var align_texts = new MdAlignTexts(model, mainmodule)
+		# align_texts.align_texts(document, context)
 
 		# var filter_context = new MdFilterNameConflicts(context)
 		# filter_context.filter_document(document)
 
-		var filter_kind = new MdFilterKind
-		filter_kind.filter_document(document)
+		# # var filter_context = new MdFilterContext(context)
+		# # filter_context.filter_document(document)
+
+		# var filter_kind = new MdFilterKind
+		# filter_kind.filter_document(document)
+
+		# Align code bloks
+		# var align_blockcodes = new MdAlignBlockCodes(model, mainmodule, context, mentity_index)
+		# align_blockcodes.align_document(document)
+
+		# var filter_context = new MdFilterContext(context)
+		# filter_context.filter_document(document)
+
+		# var filter_context = new MdFilterNameConflicts(context)
+		# filter_context.filter_document(document)
+
+		# var filter_kind = new MdFilterKind
+		# filter_kind.filter_document(document)
+
+		var align_nlp = new MdAlignNLP(model, mainmodule, context, mentity_index)
+		align_nlp.align_document(document)
+
+		var filter_context = new MdFilterContext(context)
+		filter_context.filter_document(document)
+
+		# block_align.align_blocks(document, context)
 
 		span_visitor.enter_visit(document)
 
@@ -67,11 +100,7 @@ class MDocAligner
 		# section_visitor.enter_section(root)
 	end
 
-	var align_codes = new MdAlignCodes(model, mainmodule) is lazy
-	# var text_align = new MdTextAlign(model, mainmodule) is lazy
 	# var block_align = new MdBlockAlign(model, mainmodule) is lazy
-	# var code_block_align = new MdCodeBlockAlign(mentity_index) is lazy
-	# var nlp_align = new MdNLPAlign(mentity_index) is lazy
 	var span_visitor = new MDocSpanReferencesVisitor is lazy
 	# var code_visitor = new MDocCodeReferencesVisitor(mentity_index, context) is lazy
 	# var nlp_visitor = new MDocNLPReferencesVisitor(mentity_index, context) is lazy
@@ -101,33 +130,40 @@ class MDocSpanReferencesVisitor
 				end
 				if need_space then print ""
 
-				# for ref in text_refs do
-					# for r in ref.model_refs do
-						# print "> name: {r.mentity.full_name}"
-						# need_space = true
-					# end
-				# end
-				# if need_space then print ""
+				# Name refs
+				for ref in md_refs do
+					if ref isa MdRefText then
+						print "> name: {ref.mentity.full_name}".trim
+						need_space = true
+					end
+				end
+				if need_space then print ""
 
 				# Code refs
-				# for ref in example_refs do
-					# print "> example: {ref.mentity.full_name}"
-					# need_space = true
-				# end
-				# for ref in code_refs do
-					# print "> code: {ref.mentity.full_name}"
-					# need_space = true
-				# end
-				# if need_space then print ""
+				for ref in md_refs do
+					if ref isa MdRefCode then
+						print "> code: {ref.mentity.full_name}"
+						need_space = true
+					end
+				end
+				if need_space then print ""
+
+				# TODO examples
+				# print "> example: {ref.mentity.full_name}"
+				# need_space = true
 
 				# NLP refs
-				# var need_space = false
-				# for ref in nlp_refs do
-					# print "> name: {ref.mentity.full_name}"
-					# need_space = true
-				# end
-				# if need_space then print ""
+				for ref in md_refs do
+					if ref isa MdRefNLP then
+						# print "> match: {ref.mentity.full_name} (conf: {ref.score})"
+						print "> match: {ref.mentity.full_name}"
+						need_space = true
+					end
+				end
+				if need_space then print ""
 
+				# TODO themes
+				# TODO blocks
 				# var need_space = false
 				# for ref in block_refs do
 					# if ref isa MdRefMEntity then

@@ -1,8 +1,8 @@
 # read and write JSON formatted text
 
 > name: json
-> name: core>text>
 > name: core::Text
+> name: json::serialization_read::JsonDeserializer::text
 
 These services can be useful to communicate with a remote server or client,
 save data locally or even debug and understand the structure of a Nit object.
@@ -22,8 +22,8 @@ There is two related services to write JSON object, the method
 The method `serialize_to_json` is actually a shortcut to `JsonSerializer`, both
 share the same features.
 
-> name: core::Object
 > name: json
+> name: core::Object
 > name: core::Object
 > name: json
 > name: core::Object
@@ -48,8 +48,8 @@ For your local objects, you can annotate them with `serialize` to automate subcl
 
 > name: core::Object
 > name: core>collection>
-> name: core::Collection
 > name: core::numeric
+> name: core::Collection
 > name: core::Numeric
 > name: json::JsonValue::value
 > name: core::Object
@@ -162,7 +162,6 @@ Errors are reported to the attribute `JsonDeserializer::errors`.
 > name: json
 > name: core::Object
 > name: json::error
-> name: core::error
 > name: core::Error
 
 The type to recreate is either declared or inferred:
@@ -176,8 +175,8 @@ The type to recreate is either declared or inferred:
 
 > name: json
 > name: core::Object
-> name: json::JsonKeyError::key
 > name: meta::Class
+> name: json::JsonKeyError::key
 > name: json::JsonValue::value
 > name: meta::Class
 > name: json::static
@@ -186,7 +185,6 @@ The method `deserialize_json` is a shortcut to `JsonDeserializer` which prints
 errors to the console. It is fit only for small scripts and other quick and dirty usage.
 
 > name: json::error
-> name: core::error
 > name: core::Error
 
 #### Example
@@ -262,17 +260,14 @@ When an attribute is not found, the deserialization engine acts in one of three 
    The caller must check for `errors` and must not read from the attribute.
 
 > name: json::JsonValue::value
-> name: json::JsonValue::value
 > name: json::error
-> name: core::error
 > name: core::Error
+> name: json::JsonValue::value
 > name: json::static
 > name: core::Set
 > name: json::error
-> name: core::error
 > name: core::Error
 > name: json::error
-> name: core::error
 > name: core::Error
 > name: core::Set
 

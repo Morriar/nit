@@ -123,11 +123,10 @@ redef class App
 end
 ~~~
 
-> example: app::ui_example
-> code: app::App
-> code: app::app_base::Sys::app
 > code: app::data_store
+> code: app::App
 > code: app::DataStore
+> code: app::app_base::Sys::app
 > code: app::DataStore::[]=
 > code: app::DataStore::[]
 > code: app::AppComponent::on_save_state
