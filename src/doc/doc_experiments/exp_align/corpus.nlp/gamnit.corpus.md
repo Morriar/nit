@@ -41,7 +41,6 @@ brew install glslang
 _gamnit_ is modular, different services of the framework are available through different submodules:
 
 > match: gamnit
-> match: gamnit::gamnit
 
 * The main entrypoint `gamnit` provides low-level abstractions over some services of OpenGL ES 2.0, like textures, shaders and programs.
   It defines the basic methods to implement in order to obtain a working game:
@@ -76,57 +75,56 @@ _gamnit_ is modular, different services of the framework are available through d
 
 * `network` provides a simple communication framework for multiplayer client/server games.
 
-> match: gamnit::Camera
-> match: gamnit::Sprite
-> match: gamnit::Actor
-> match: gamnit::Model
-> match: gamnit::Server
-> match: gamnit::keys
 > match: gamnit
-> match: gamnit::flat_core::App::world_camera
-> match: gamnit>model_parsers>
-> match: gamnit::keys::App::pressed_keys
-> match: gamnit::depth_core::App::actors
-> match: gamnit::flat_core::App::ui_camera
-> match: gamnit::gamnit::App::frame_core
-> match: gamnit::Light::position
-> match: gamnit::Camera::position
-> match: gamnit::ObjDef::objects
-> match: gamnit::GamnitProgram::use
-> match: gamnit::textures
-> match: gamnit::gamnit
-> match: gamnit::programs
-> match: gamnit::more_models::Sys::models
-> match: gamnit::display
-> match: gamnit::client
-> match: gamnit::server
-> match: gamnit::Texture
-> match: gamnit::Shader
-> match: gamnit::flat_core::App::sprites
-> match: gamnit::flat_core::App::update
-> match: gamnit>flat>
-> match: gamnit::virtual_gamepad::VirtualGamepad::sprites
-> match: gamnit::TextSprites::sprites
-> match: gamnit::LightCastingShadows::camera
-> match: gamnit::virtual_gamepad::RoundControl::sprites
-> match: gamnit::cameras::CameraAnchor::camera
-> match: gamnit::BlinnPhongProgram::camera
-> match: gamnit::flat_core::SpriteContext::sprites
-> match: gamnit::flat_core::Point3d::sprites
-> match: gamnit>network>
-> match: gamnit::limit_fps
-> match: gamnit::Vec3::z
-> match: gamnit::gamnit::App::accept_event
 > match: gamnit::AbsoluteSubtexture::top
-> match: gamnit::MtlFileParser::parse
-> match: gamnit::ObjFileParser::parse
-> match: gamnit::UICamera::top
+> match: gamnit::Actor
+> match: gamnit::BlinnPhongProgram::camera
+> match: gamnit::Camera
+> match: gamnit::Camera::position
+> match: gamnit::GamnitProgram::use
+> match: gamnit::Light::position
+> match: gamnit::LightCastingShadows::camera
 > match: gamnit::Material::draw
-> match: gamnit::Sprite::rotation
-> match: gamnit::ShadowDepthProgram::rotation
-> match: gamnit::SelectionProgram::rotation
+> match: gamnit::Model
+> match: gamnit::MtlFileParser::parse
 > match: gamnit::ParticleSystem::draw
+> match: gamnit::ObjDef::objects
+> match: gamnit::ObjFileParser::parse
+> match: gamnit::SelectionProgram::rotation
+> match: gamnit::Server
+> match: gamnit::Shader
+> match: gamnit::ShadowDepthProgram::rotation
+> match: gamnit::Sprite
+> match: gamnit::Sprite::rotation
+> match: gamnit::TextSprites::sprites
+> match: gamnit::Texture
+> match: gamnit::UICamera::top
+> match: gamnit::Vec3::z
+> match: gamnit::cameras::CameraAnchor::camera
+> match: gamnit::client
+> match: gamnit::gamnit
+> match: gamnit::gamnit::App::accept_event
+> match: gamnit::gamnit::App::frame_core
+> match: gamnit::depth_core::App::actors
+> match: gamnit::display
+> match: gamnit::flat_core::App::sprites
+> match: gamnit::flat_core::App::ui_camera
+> match: gamnit::flat_core::App::update
+> match: gamnit::flat_core::App::world_camera
+> match: gamnit::flat_core::Point3d::sprites
 > match: gamnit::flat_core::SpriteContext::draw
+> match: gamnit::flat_core::SpriteContext::sprites
 > match: gamnit::flat_core::SpriteSet::draw
+> match: gamnit::keys
+> match: gamnit::keys::App::pressed_keys
+> match: gamnit::limit_fps
+> match: gamnit::more_models::Sys::models
+> match: gamnit::programs
+> match: gamnit::server
+> match: gamnit::textures
+> match: gamnit::virtual_gamepad::RoundControl::sprites
+> match: gamnit::virtual_gamepad::VirtualGamepad::sprites
 > match: gamnit>depth>
-
+> match: gamnit>flat>
+> match: gamnit>model_parsers>
+> match: gamnit>network>

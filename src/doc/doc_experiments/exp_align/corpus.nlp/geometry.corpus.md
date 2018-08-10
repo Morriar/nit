@@ -20,38 +20,42 @@ The very basics of geometry needs, for two and three-dimensional space.
 Boxes module introduces Bounding boxes for Points and Lines and services to detect collision or inclusion between boxes.
 It means a simple and fast way to test collision but not really accurate since it uses bounding boxes.
 
-> match: geometry::boxes
 > match: geometry::Box
-> match: geometry::Point
+> match: geometry::Boxed
+> match: geometry::Boxed3d
 > match: geometry::Line
+> match: geometry::Point
+> match: geometry::Point3d
+> match: geometry::boxes
+> match: geometry::points_and_lines
 
 ## Quadtrees
 
-> matches: geometry::quadtree
+> match: geometry::quadtree
 
 A QuadTree is a tree data structure in which each internal node has exactly four children
 They're most often used to partition two-dimensional space by recursively subdividing
 it into four quadrants or regions.
 
 > match: geometry::QuadTree
-> match: geometry::quadtree
 > match: geometry::QuadTree::children
 > match: geometry::QuadTree::data
+> match: geometry::quadtree
 
 * They decompose space into adaptable cells
 * Each cell has a maximum capacity. When maximum is reached, the cell splits.
 
 Quadtrees are using Boxed objects to determine their distribution in the 2D space.
 
-> match: geometry::quadtree
-> match: geometry::QuadTree
 > match: geometry::Boxed
+> match: geometry::QuadTree
+> match: geometry::quadtree
 
 This API provides two different types of Quadtree : Static and Dynamic (respectively `SQuadTree` and `DQuadTree`).
 
+> match: geometry::DQuadTree
 > match: geometry::QuadTree
 > match: geometry::SQuadTree
-> match: geometry::DQuadTree
 > match: geometry::quadtree
 
 * Static: When you create the QuadTree, you need to specify the region that it will cover
@@ -59,12 +63,13 @@ This API provides two different types of Quadtree : Static and Dynamic (respecti
 * Dynamic: You just need to fill the quadtree with objects, and when the threshold is reached,
   it will automatically divide the current region, depending on the distribution of objects already in the region.
 
-> match: geometry::quadtree
 > match: geometry::QuadTree
+> match: geometry::quadtree
 
 ## Polygons
 
 > match: geometry::Polygon
+> match: geometry::polygon
 
 Some basic polygon services.
 
@@ -73,8 +78,10 @@ Some basic polygon services.
 
 This module contains interesting algorithms for `ConvexPolygon`only at the moment. A Convex polygon can be defined as follow :
 
-> match: geometry::Polygon
+> match: geometry::APolygon::is_convex
+> match: geometry::Boxed::contains
 > match: geometry::ConvexPolygon
+> match: geometry::Polygon
 > match: geometry::polygon
 
 * All its interior angles are less than 180°. this means that all the vertices of the polygon
@@ -99,9 +106,10 @@ This module contains interesting algorithms for `ConvexPolygon`only at the momen
 A polygon which is not convex is called concave. Convex polygon are used because most
 geometric problems are simpler and faster on convex objects than on non-convex ones.
 
+> match: geometry::APolygon::is_convex
+> match: geometry::ConvexPolygon
 > match: geometry::Polygon
 > match: geometry::polygon
-> name: geometry::geometry
 
 Services provided :
 
@@ -110,8 +118,11 @@ Services provided :
 * Convex hull of a set of points
 * Triangulation of polygon
 
+> match: geometry::APolygon::is_convex
+> match: geometry::APolygon::points
+> match: geometry::Point
+> match: geometry::Point3d
 > match: geometry::Polygon
 > match: geometry::polygon
-> match: geometry::Point
-> match: geometry::APolygon::points
+> match: geometry::polygon::Sys::convex_hull
 

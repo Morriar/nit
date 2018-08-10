@@ -22,5 +22,3 @@ See the `examples` subdirectory for examples:
 * `examples/queens.nit`
 * `examples/puzzle.nit`
 
-> match: ai::examples::queens
-> match: ai::examples::puzzle

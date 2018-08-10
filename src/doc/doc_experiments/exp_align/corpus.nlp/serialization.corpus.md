@@ -12,8 +12,10 @@ the `Serializable` interface and the implementations of `Serializer` and `Deseri
 A class annotated with `serialize` identifies it as a subclass of Serializable and
 triggers the generation of customized serialization and deserialization services.
 
-> match: serialization::Serializable
 > match: serialization
+> match: serialization::Deserializer
+> match: serialization::Serializable
+> match: serialization::Serializer
 
 ~~~
 import serialization
@@ -33,20 +35,16 @@ class Person
 end
 ~~~
 
-> match: serialization::custom_serialization
-> match: serialization::Serializer
-> match: serialization::Serializable
-> match: serialization::serialization
-> match: serialization::Deserializer
-> match: core::Object::hash
-> match: serialization::Serializable::core_serialize_to
-
 The `Person` class also defines `==` and `hash`, this is optional but we will use it to make an important point.
 By definition of a serializable class, an instance can be serialized to a stream, then deserialized.
 The deserialized instance will not be the same instance, but they should be equal.
 So, in this case, we can compare both instances with `==` to test their equality.
 
+> match: core::Object::==
+> match: core::Object::hash
+> match: serialization::Deserializer::deserialize
 > match: serialization::Serializable
+> match: serialization::Serializer::serialize
 
 Some conditions applies to the classes that can be annotated as `serialize`.
 All attributes of the class must be serializable, runtime errors will be
@@ -54,7 +52,6 @@ raised when trying to serialize non-serializable attributes.
 
 > match: serialization::Serializable
 > match: serialization::Serializer::serialize
-> match: serialization::Serializable
 
 In the class `Person`, all attributes are typed with classes the standards library.
 These common types are defined defined as serializable by this project.
@@ -92,19 +89,15 @@ class Partnership
 end
 ~~~
 
-> match: serialization::custom_serialization
-> match: serialization::Serializer
-> match: serialization::Serializable
-> match: core::Object::hash
-> match: core::Numeric::+
-> match: core::Numeric::*
-> match: serialization::serialization
-> match: serialization::Serializable::core_serialize_to
-> match: serialization::Deserializer
-
 ### Scope of the `serialize` annotation
 
+> match: serialization::Serializable
+> match: serialization::Serializer
+> match: serialization::Serializer::serialize
+
 `serialize` can annotate class definitions, modules and attributes:
+
+> match: serialization::Serializer::serialize
 
 * The annotation on a class applies only to the class definition,
   only attributes declared locally will be serialized.
@@ -189,14 +182,6 @@ class UserCredentials
 end
 ~~~
 
-> match: serialization::custom_serialization
-> match: serialization::Serializer
-> match: core::Text::+
-> match: serialization::Serializable
-> match: serialization::serialization
-> match: serialization::Deserializer
-> match: serialization::Serializable::core_serialize_to
-
 ## Custom serializable classes
 
 > match: serialization::Serializable
@@ -210,10 +195,10 @@ For more control, create a subclass to `Serializable` and redefine `core_seriali
 This method should use `Serializer::serialize_attribute` to serialize its components.
 `serialize_attribute` works as a dictionary and organize attributes with a key.
 
-> match: serialization::Serializer::serialize_attribute
-> match: serialization::Serializable::core_serialize_to
 > match: serialization::Serializable
+> match: serialization::Serializable::core_serialize_to
 > match: serialization::Serializer::serialize
+> match: serialization::Serializer::serialize_attribute
 
 You will also need to redefine `Deserializer::deserialize_class` to support this specific class.
 The method should only act on known class names, and call super otherwise.
@@ -246,9 +231,9 @@ For this customization, the following code snippet implements
 two serialization services: `User::core_serialize_to` and
 `Deserializer::deserialize_class`.
 
+> match: serialization
 > match: serialization::Deserializer::deserialize_class
 > match: serialization::serialization
-> match: serialization
 
 ~~~
 module user_credentials
@@ -321,20 +306,6 @@ end
 
 ~~~
 
-> match: serialization::custom_serialization
-> match: serialization::Deserializer
-> match: serialization::Serializer
-> match: serialization::Deserializer::deserialize_attribute
-> match: core::Text
-> match: core::Numeric::unary -
-> match: serialization::Serializable
-> match: serialization::serialization
-> match: core::file::Text::to_path
-> match: core::Path::read_all
-> match: serialization::Serializable::core_serialize_to
-> match: serialization::Deserializer::deserialize_class
-> match: core::Path
-
 See the documentation of the module `serialization::serialization` for more
 information on the services to redefine.
 
@@ -359,8 +330,8 @@ from the `json_serialization` module.
 > match: json::JsonSerializer
 > match: json::JsonDeserializer
 
-~~~
-import json
+~~~nitish
+mport json
 import user_credentials
 
 # Data to be serialized and deserialized
@@ -381,8 +352,6 @@ reader.close
 
 assert couple == deserialize_couple
 ~~~
-
-> match: json::json
 
 ## Limitations and TODO
 

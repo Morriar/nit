@@ -9,16 +9,19 @@ quantities, and mark up the structure of sentences in terms of phrases and word
 dependencies, indicate which noun phrases refer to the same entities, indicate
 sentiment, etc.
 
+> match: nlp::NLPClient::language
+> match: nlp::NLPDocument::sentences
+> match: nlp::NLPToken::word
 > match: nlp::stanford
 
 This wrapper needs the Stanford CoreNLP jars that run on Java 1.8+.
 
+> match: nlp::NLPJavaProcessor::java_cp
+> match: nlp::NLPServer::java_cp
+> match: nlp::nlp_server::Config::opt_java_cp
 > match: nlp::stanford
 
 See http://nlp.stanford.edu/software/corenlp.shtml.
-
-> match: nlp
-> match: nlp::stanford
 
 ## NLPProcessor
 
@@ -26,8 +29,15 @@ See http://nlp.stanford.edu/software/corenlp.shtml.
 
 ### Java client
 
-~~~nitish
-var proc = new NLPProcessor("path/to/StanfordCoreNLP/jars")
+> match: nlp::NLPJavaProcessor
+> match: nlp::NLPJavaProcessor::java_cp
+> match: nlp::NLPServer::java_cp
+> match: nlp::nlp_server::Config::opt_java_cp
+
+~~~nit
+import nlp
+
+var proc = new NLPJavaProcessor("path/to/StanfordCoreNLP/jars")
 
 var doc = proc.process("String to analyze")
 
@@ -37,17 +47,6 @@ for sentence in doc.sentences do
 	end
 end
 ~~~
-
-> match: nlp::NLPToken
-> match: nlp::NLPJavaProcessor
-> match: nlp::NLPToken::pos
-> match: nlp::NLPToken::lemma
-> match: nlp::NLPSentence
-> match: nlp::NLPProcessor::process
-> match: nlp::NLPDocument::sentences
-> match: nlp::NLPSentence::tokens
-> match: nlp::NLPDocument
-> match: nlp::nlp
 
 ### NLPServer
 
@@ -67,10 +66,6 @@ var srv = new NLPServer(cp, 9000)
 srv.start
 ~~~
 
-> match: nlp::NLPServer
-> match: pthreads::Thread::start
-> match: nlp::nlp
-
 ### NLPClient
 
 > match: nlp::NLPClient
@@ -87,10 +82,6 @@ import nlp
 var cli = new NLPClient("http://localhost:9000")
 var doc = cli.process("String to analyze")
 ~~~
-
-> match: nlp::NLPClient
-> match: nlp::NLPProcessor::process
-> match: nlp::nlp
 
 ## NLPIndex
 
@@ -115,16 +106,6 @@ assert index.documents.length == 2
 var matches = index.match_string("this sample")
 assert matches.first.document == d1
 ~~~
-
-> match: nlp::NLPIndex
-> match: vsm::StringIndex::index_string
-> match: vsm::Document
-> match: vsm::IndexMatch
-> match: vsm::VSMIndex::documents
-> match: vsm::IndexMatch::document
-> match: nlp::NLPJavaProcessor
-> match: vsm::StringIndex::match_string
-> match: nlp::nlp
 
 ## TODO
 

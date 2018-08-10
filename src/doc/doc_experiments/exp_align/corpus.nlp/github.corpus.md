@@ -1,21 +1,29 @@
 # Nit wrapper for Github API
 
 > match: github
+> match: github::GithubAPI
 
 This module provides a Nit object oriented interface to access the Github api.
 
 > match: github
+> match: github::GithubAPI
 > match: github::github
 > match: github::api
 
 ## Accessing the API
 
+> match: github::GithubAPI
 > match: github::api
 
 ### `GithubAPI` - # Client to Github API
 
+> match: github
+> match: github::GithubAPI
+> match: github::api
 
 To access the API you need an instance of a `GithubAPI` client.
+
+> match: github::GithubAPI
 
 ~~~
 # Get Github authentification token.
@@ -28,7 +36,14 @@ var api = new GithubAPI(token)
 
 The API client allows you to get Github API entities.
 
+> match: github
+> match: github::GithubAPI::get
+> match: github::github
+
 ~~~
+import github
+
+var api = new GithubAPI(get_github_oauth)
 var repo = api.load_repo("nitlang/nit")
 assert repo != null
 assert repo.name == "nit"
@@ -38,8 +53,6 @@ assert user != null
 assert user.login == "Morriar"
 ~~~
 
-> match: github::GithubAPI
-
 ### Authentification
 
 > match: github::GithubCurl::auth
@@ -48,11 +61,18 @@ assert user.login == "Morriar"
 Token can also be recovered from user config with `get_github_oauth`.
 
 > match: github::User
+> match: github::GithubWallet::check_token
+> match: github::GithubWallet::current_token
+> match: github::GithubWallet::from_tokens
+> match: github::GithubWallet::get_next_token
+> match: github::GithubWallet::tokens
 > match: github::github_curl::Sys::get_github_oauth
 > match: config
 
 ### `get_github_oauth` - # Gets the Github token from `git` configuration
 
+> match: github
+> match: github::github_curl::Sys::get_github_oauth
 
 Return the value of `git config --get github.oauthtoken`
 or `""` if no key exists.
@@ -68,15 +88,30 @@ or `""` if no key exists.
 
 Loads the `User` from the API or returns `null` if the user cannot be found.
 
-    var api = new GithubAPI(get_github_oauth)
-    var user = api.load_user("Morriar")
-    print user or else "null"
-    assert user.login == "Morriar"
+> match: github::GithubAPI::load_user
+> match: github::User
+
+~~~
+import github
+
+var api = new GithubAPI(get_github_oauth)
+var user = api.load_user("Morriar")
+print user or else "null"
+assert user.login == "Morriar"
+~~~
+
 ### `User` - # A Github user
 
+> match: github
+> match: github::User
 
 Provides access to [Github user data](https://developer.github.com/v3/users/).
 Should be accessed from `GithubAPI::load_user`.
+
+> match: github
+> match: github::GithubAPI::load_user
+> match: github::User
+
 * `api$User$SELF` - # Type of this instance, automatically specialized in every class
 
 * `_avatar_url` - # Avatar image url for this user.
@@ -106,6 +141,7 @@ Should be accessed from `GithubAPI::load_user`.
 * `api$User$from_deserializer` - # Create an instance of this class from the `deserializer`
 
 * `api$User$init`
+
 * `login` - # Github login.
 
 * `login=` - # Github login.
@@ -114,8 +150,13 @@ Should be accessed from `GithubAPI::load_user`.
 
 * `name=` - # User public name if any.
 
-> match: github::User
 > match: github::GithubAPI::load_user
+> match: github::User
+> match: github::User::avatar_url
+> match: github::User::blog
+> match: github::User::email
+> match: github::User::login
+> match: github::User::name
 
 ### Retrieving repo data
 
@@ -126,16 +167,39 @@ Should be accessed from `GithubAPI::load_user`.
 
 Loads the `Repo` from the API or returns `null` if the repo cannot be found.
 
-    var api = new GithubAPI(get_github_oauth)
-    var repo = api.load_repo("nitlang/nit")
-    assert repo.name == "nit"
-    assert repo.owner.login == "nitlang"
-    assert repo.default_branch == "master"
+> match: github::GithubAPI
+> match: github::GithubAPI::load_repo
+> match: github::Repo
+
+~~~
+import github
+
+var api = new GithubAPI(get_github_oauth)
+var repo = api.load_repo("nitlang/nit")
+assert repo.name == "nit"
+assert repo.owner.login == "nitlang"
+assert repo.default_branch == "master"
+~~~
+
 ### `Repo` - # A Github repository.
 
+> match: github
+> match: github::Repo
+> match: github::GithubAPI::load_repo
 
 Provides access to [Github repo data](https://developer.github.com/v3/repos/).
 Should be accessed from `GithubAPI::load_repo`.
+
+> match: github::GithubAPI::load_repo
+> match: github::GithubAPI::load_repo_branches
+> match: github::GithubAPI::load_repo_contrib_stats
+> match: github::GithubAPI::load_repo_issues
+> match: github::GithubAPI::load_repo_labels
+> match: github::GithubAPI::load_repo_last_issue
+> match: github::GithubAPI::load_repo_milestones
+> match: github::GithubAPI::load_repo_pulls
+> match: github::Repo
+
 * `api$Repo$SELF` - # Type of this instance, automatically specialized in every class
 
 * `_default_branch` - # Repo default branch name.
@@ -143,6 +207,7 @@ Should be accessed from `GithubAPI::load_repo`.
 * `_full_name` - # Repo full name on Github.
 
 * `_mongo_id`
+
 * `_name` - # Repo short name on Github.
 
 * `_owner` - # Get the repo owner.
@@ -164,8 +229,11 @@ Should be accessed from `GithubAPI::load_repo`.
 * `full_name=` - # Repo full name on Github.
 
 * `api$Repo$init`
+
 * `mongo_id`
+
 * `mongo_id=`
+
 * `name` - # Repo short name on Github.
 
 * `name=` - # Repo short name on Github.
@@ -174,8 +242,12 @@ Should be accessed from `GithubAPI::load_repo`.
 
 * `owner=` - # Get the repo owner.
 
-> match: github::Repo
 > match: github::GithubAPI::load_repo
+> match: github::Repo
+> match: github::Repo::default_branch
+> match: github::Repo::full_name
+> match: github::Repo::name
+> match: github::Repo::owner
 
 ### Other data
 
@@ -228,14 +300,60 @@ Should be accessed from `GithubAPI::load_repo`.
 * `api$User` - # A Github user
 
 > match: github
-> match: github::github
-> match: github::api
+> match: github::Branch
+> match: github::Comment
+> match: github::Commit
+> match: github::CommitComment
+> match: github::CommitRepo
+> match: github::CreateEvent
+> match: github::DeleteEvent
+> match: github::GitCommit
+> match: github::GitUser
+> match: github::GithubAPI::load_branch
+> match: github::GithubAPI::load_branch_commits
+> match: github::GithubAPI::load_commit
+> match: github::GithubAPI::load_commit_comment
+> match: github::GithubAPI::load_from_github
+> match: github::GithubAPI::load_issue
+> match: github::GithubAPI::load_issue_comment
+> match: github::GithubAPI::load_issue_comments
+> match: github::GithubAPI::load_issue_event
+> match: github::GithubAPI::load_issue_events
+> match: github::GithubAPI::load_label
+> match: github::GithubAPI::load_milestone
+> match: github::GithubAPI::load_pull
+> match: github::GithubAPI::load_repo_branches
+> match: github::GithubAPI::load_repo_contrib_stats
+> match: github::GithubAPI::load_repo_issues
+> match: github::GithubAPI::load_repo_labels
+> match: github::GithubAPI::load_repo_last_issue
+> match: github::GithubAPI::load_repo_milestones
+> match: github::GithubAPI::load_repo_pulls
+> match: github::GithubAPI::load_review_comment
+> match: github::GithubAPI::load_user
+> match: github::GithubAPI::search_repo_issues
+> match: github::GithubEntity
+> match: github::GithubFile
+> match: github::Issue
+> match: github::IssueComment
+> match: github::IssueCommentEvent
+> match: github::IssueCommentRepo
+> match: github::IssueEvent
+> match: github::IssuesEvent
+> match: github::Label
+> match: github::Milestone
+> match: github::PullRef
+> match: github::PullRequest
+> match: github::PullRequestReviewCommentEvent
+> match: github::RenameAction
+> match: github::Repo
+> match: github::RepoRepo
+> match: github::ReviewComment
+> match: github::User
 
 ### Advanced uses
 
 #### Caching
-
-
 
 > match: github::cache
 > match: github::cache::GithubAPI::cache
@@ -244,51 +362,62 @@ Should be accessed from `GithubAPI::load_repo`.
 
 ### `get` - # Execute a GET request on Github API.
 
+> match: github::GithubAPI::get
+> match: github::GithubCurl::get_and_check
+> match: github::GithubCurl::get_and_parse
 
 This method returns raw json data.
 See other `load_*` methods to use more expressive types.
 
-    var api = new GithubAPI(get_github_oauth)
-    var obj = api.get("/repos/nitlang/nit")
-    assert obj isa JsonObject
-    assert obj["name"] == "nit"
+~~~
+import github
+
+var api = new GithubAPI(get_github_oauth)
+var obj = api.get("/repos/nitlang/nit")
+assert obj isa JsonObject
+assert obj["name"] == "nit"
+~~~
 
 Returns `null` in case of `error`.
 
-    obj = api.get("/foo/bar/baz")
-    assert obj == null
-    assert api.was_error
-    var err = api.last_error
-    assert err isa GithubError
-    assert err.name == "GithubAPIError"
-    assert err.message == "Not Found"
+> match: github::GithubAPI::last_error
+> match: github::GithubAPI::was_error
 
-> match: github::GithubAPI
-> match: github::github
-> match: github
-> match: github::GithubAPI::get
+~~~
+import github
+
+var api = new GithubAPI(get_github_oauth)
+var obj = api.get("/foo/bar/baz")
+assert obj == null
+assert api.was_error
+var err = api.last_error
+assert err isa GithubError
+assert err.name == "GithubAPIError"
+assert err.message == "Not Found"
+~~~
 
 #### Change the user agent
 
-[[doc: github::GithubAPI::user_agent]]
+> match: github::GithubAPI::user_agent
+> match: github::GithubCurl::user_agent
 
 ### `user_agent` - # User agent used for HTTP requests.
 
+> match: github::GithubAPI::user_agent
+> match: github::GithubCurl::user_agent
 
 Default is `nit_github_api`.
 
 See <https://developer.github.com/v3/#user-agent-required>
 
-> match: github::GithubAPI
-> match: github::github
-> match: github
-> match: github::GithubCurl::user_agent
 > match: github::GithubAPI::user_agent
+> match: github::GithubCurl::user_agent
 
 #### Debugging
 
 ### `verbose_lvl` - # Verbosity level.
 
+> match: github::GithubAPI::verbose_lvl
 
 * `0`: only errors (default)
 * `1`: verbose
@@ -300,16 +429,17 @@ See <https://developer.github.com/v3/#user-agent-required>
 If URL scheme of GitLab API follows the one of Github API, it may be possible to
 configure this wrapper to use a custom URL.
 
+> match: github
+> match: github::GithubAPI
 > match: github::GithubAPI::api_url
 > match: github::api
-> match: github
-> match: github::github
-> match: github::HookListener::api
-> match: github::ContributorStats::api
-> match: github::GithubWallet::api
 
 ### `api_url` - # Github API base url.
 
+> match: github
+> match: github::GithubAPI
+> match: github::GithubAPI::api_url
+> match: github::api
 
 Default is `https://api.github.com` and should not be changed.
 
@@ -322,8 +452,8 @@ Default is `https://api.github.com` and should not be changed.
 Using this API you can create Github hooks able to respond to actions performed
 on a repository.
 
-> match: github::api
 > match: github
+> match: github::api
 > match: github::github
 > match: github::hooks
 
@@ -362,8 +492,6 @@ var listener = new LogHookListener(api, "127.0.0.1", 8080)
 # listener.listen # uncomment to start listening
 ~~~
 
-> match: github::hooks
-
 ## Dealing with events
 
 > match: github::events
@@ -371,7 +499,9 @@ var listener = new LogHookListener(api, "127.0.0.1", 8080)
 GithubAPI can trigger different events depending on the hook configuration.
 
 > match: github::GithubAPI
+> match: github::GithubEvent
 > match: github::events
+> match: github::hooks
 
 ### `GithubEvent` - # Github event stub.
 
@@ -410,6 +540,18 @@ GithubAPI can trigger different events depending on the hook configuration.
 * `events$StatusEvent` - # Triggered when the status of a Git commit changes.
 
 > match: github
-> match: github::github
+> match: github::CommitCommentEvent
+> match: github::CreateEvent
+> match: github::DeleteEvent
+> match: github::DeploymentEvent
+> match: github::DeploymentStatusEvent
+> match: github::ForkEvent
+> match: github::GithubEvent
+> match: github::IssueEvent
+> match: github::MemberEvent
+> match: github::PullRequestEvent
+> match: github::PushEvent
+> match: github::StatusEvent
 > match: github::events
+> match: github::github
 

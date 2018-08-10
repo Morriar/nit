@@ -20,12 +20,9 @@ installation or make a clean install with command line tools only.
 
 > match: android
 > match: android::android
-> match: linux
 
 Note that this guide supports only 64 bits GNU/Linux hosts with support for a Java 8 JDK,
 it may be possible to support other platforms with some tweaks.
-
-> match: linux
 
 1. Install the required SDK packages using one of these two methods:
 
@@ -72,14 +69,13 @@ it may be possible to support other platforms with some tweaks.
 ## Configure the Android application
 
 > match: android
-> match: android::android
 
 The _app.nit_ framework and this project offers some services to
 customize the generated Android application.
 
-> match: app
 > match: android
 > match: android::android
+> match: app
 
 ### Annotations
 
@@ -126,29 +122,29 @@ There is two core implementation for Nit apps on Android.
 `android::nit_activity` is used by apps with standard windows and native UI controls.
 `android::game` is used by, well, games and the game frameworks `mnit` and `gamnit`.
 
+> match: android
+> match: android::android
 > match: android::game
 > match: android::nit_activity
-> match: android::android
-> match: android
-> match: core
-> match: android>ui>
 > match: android::ui
-> match: mnit
-> match: mnit>
+> match: android>ui>
+> match: core
 > match: gamnit::gamnit
 > match: gamnit
 > match: gamnit>
+> match: mnit
+> match: mnit>
 
 Clients don't have to select the core implementation, it is imported by other relevant modules.
 For example, a module importing `app::ui` and `android` will trigger the importation of `android::nit_activity`.
 
-> match: app::ui
-> match: android::nit_activity
 > match: android
+> match: android::nit_activity
+> match: app::ui
 
 ### Lock app orientation
 
-> match: app
+> match: app::App
 
 Importing `android::landscape` or `android::portrait` locks the generated
 application in the specified orientation. This can be useful for games and
@@ -156,6 +152,7 @@ other multimedia applications.
 
 > match: android::landscape
 > match: android::portrait
+> match: app::App
 
 ### Resources and application icon
 
@@ -180,10 +177,10 @@ The Nit compiler detects these files and uses them as the application icon.
 Additional `android/` folders may be placed next to more specific Nit modules to change the Android resources
 for application variants. The more specific resources will have priority over the project level `android/` files.
 
+> match: android
+> match: android::android
 > match: android::assets_and_resources
 > match: android::assets_and_resources::NativeContext::resources
-> match: android::android
-> match: android
 
 ## Compilation modes
 
@@ -193,7 +190,6 @@ The compilation mode is specified as an argument to `nitc`, only
 `--release` can be specified as debug is the default behavior.
 
 > match: android
-> match: android::android
 > match: android::platform
 
 ### Debug mode
@@ -205,7 +201,6 @@ USB debugging enabled, but it cannot be published on the Play Store.
 By default, `nitc` will compile Android applications in debug mode.
 
 > match: android
-> match: android::android
 
 ### Release mode
 

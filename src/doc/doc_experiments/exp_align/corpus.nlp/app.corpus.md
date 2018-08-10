@@ -11,6 +11,8 @@ The framework provides services to manage common needs of modern mobile applicat
 * Package metadata
 * Compilation and packaging
 
+> match: app::http_request
+
 The features offered by _app.nit_ are common to all platforms, but
 may not be available on all devices.
 
@@ -21,6 +23,7 @@ may not be available on all devices.
 The _app.nit_ application life-cycle is compatible with all target platforms.
 It relies on the following sequence of events, represented here by their callback method name:
 
+> match: app::AppEvent
 > match: app::App
 > match: app
 
@@ -38,33 +41,36 @@ It relies on the following sequence of events, represented here by their callbac
 5. `on_restart`: The app goes back to the inactive state.
    You can revert what was done by `on_stop`.
 
-> match: app::App
 > match: app
 > match: app::app
-> match: app::AppComponent::on_restart
-> match: app::AppComponent::on_stop
-> match: app::AppComponent::on_pause
-> match: app::AppComponent::on_resume
+> match: app::App
 > match: app::AppComponent::on_create
+> match: app::AppComponent::on_pause
+> match: app::AppComponent::on_restart
+> match: app::AppComponent::on_resume
+> match: app::AppComponent::on_stop
 > match: app::ui
 
-![_app.nit_ life-cycle](doc/app-nit-lifecycle.png)
+![_app.nit_ life-cycle](path/resources/ab03b885463901ade4ae1a9adfaefeff.png)
 
 > match: app::App
 > match: app
 
 Life-cycle events related to saving and restoring the application state are provided by two special callback methods:
 
+> match: app::AppComponent::on_restore_state
+> match: app::AppComponent::on_save_state
+> match: app::AppEvent
+
 * `on_save_state`: The app may be destroyed soon, save its state for a future `on_restore_state`.
   There is more on how it can be done in the `app::data_store` section.
 
 * `on_restore_state`: The app is launching, restore its state from a previous `on_save_state`.
 
-> match: app::App
-> match: app::AppComponent::on_save_state
-> match: app::AppComponent::on_restore_state
 > match: app
-> match: app::app
+> match: app::App
+> match: app::AppComponent::on_restore_state
+> match: app::AppComponent::on_save_state
 > match: app::data_store
 
 These events are synchronized to the native platforms applications
@@ -72,13 +78,20 @@ The `App` instance is the first to be notified of these events.
 Other UI elements, from the `ui` submodule, are notified of the same events using a simple depth first visit.
 So all UI elements can react separately to live-cycle events.
 
-> match: app::ui
+> match: app
 > match: app::App
+> match: app::AppEvent
+> match: app::AppObserver
+> match: app::AppObserver::on_event
+> match: app::ui
+> match: app::ui::AppComponent::notify_observers
 > match: linux::ui
 > match: android::ui
 > match: ios::ui
 
 ## User Interface
+
+> match: app::ui
 
 The `app::ui` module defines an abstract API to build a portable graphical application.
 The API is composed of interactive `Control`s, visible `View`s and an active `Window`.
@@ -100,38 +113,42 @@ Here is a subset of the most useful controls and views:
 * `HorizontalLayout` and `VerticalLayout` organize other controls in order.
 
 > match: app::Button
-> match: app::TextInput
-> match: app::HorizontalLayout
-> match: app::VerticalLayout
 > match: app::Control
+> match: app::HorizontalLayout
+> match: app::TextInput
+> match: app::VerticalLayout
 
 Each control is notified of input events by callbacks to `on_event`.
 All controls have observers that are also notified of the events.
 So there is two ways  to customize the behavior on a given event:
 
-> match: app::Control
+> match: app::AppEvent
 > match: app::AppObserver::on_event
+> match: app::Control
+> match: app::ui::AppComponent::notify_observers
 > match: app::ui::AppComponent::observers
 
 * Create a subclass of the wanted `Control`, let's say `Button`, and specialize `on_event`.
 
 * Add an observer to a `Button` instance, and implement `on_event` in the observer.
 
-> match: app::Button
 > match: app::AppObserver::on_event
-> match: app::Control
+> match: app::Button
 > match: app::CompositeControl::add
+> match: app::Control
 
 ### Usage Example
 
+> match: app::ui_example
 > match: app>examples>
 
 The example at `examples/ui_example.nit` shows off most features of `app::ui` in a minimal program.
 You can also take a look at the calculator (`../../examples/calculator/src/calculator.nit`) which is a concrete usage example.
 
 > match: app::calculator
-> match: app>examples>
 > match: app::ui
+> match: app::ui_example
+> match: app>examples>
 
 ### Platform-specific UI
 
@@ -147,10 +164,9 @@ The suggested approach is to use platform specific modules to customize the appl
 See the calculator example for an adaptation of the UI on Android,
 the interesting module is in this repository at ../../examples/calculator/src/android_calculator.nit
 
-> match: app>examples>
-> match: app::ui
-> match: examples::calculator
 > match: android
+> match: app::ui
+> match: app::ui_example
 > match: app>examples>
 
 ## Persistent State with data_store
@@ -161,12 +177,12 @@ the interesting module is in this repository at ../../examples/calculator/src/an
 _app.nit_ offers the submodule `app::data_store` to easily save the application state and user preferences.
 The service is accessible by the method `App::data_store`. The `DataStore` itself defines 2 methods:
 
+> match: app
 > match: app::App
-> match: app::data_store
-> match: app::data_store::App::data_store
 > match: app::DataStore
 > match: app::app
-> match: app
+> match: app::data_store
+> match: app::data_store::App::data_store
 
 * `DataStore::[]=` saves and associates any serializable instances to a `String` key.
   Pass `null` to clear the value associated to a key.
@@ -174,9 +190,10 @@ The service is accessible by the method `App::data_store`. The `DataStore` itsel
 * `DataStore::[]` returns the object associated to a `String` key.
   It returns `null` if nothing is associated to the key.
 
-> match: core::String
+> match: app::DataStore
 > match: app::DataStore::[]=
 > match: app::DataStore::[]
+> match: core::String
 
 ### Usage Example
 
@@ -213,17 +230,9 @@ redef class App
 end
 ~~~
 
-> match: app::App
-> match: app::data_store::App::data_store
-> match: app::ui_example
-> match: app::DataStore
-> match: app::DataStore::[]=
-> match: app::DataStore::[]
-> match: app::data_store
-> match: app::AppComponent::on_save_state
-> match: app::AppComponent::on_restore_state
-
 ## Async HTTP request
+
+> match: app::http_request
 
 The module `app::http_request` provides services to execute asynchronous HTTP request.
 The class `AsyncHttpRequest` hides the complex parallel logic and

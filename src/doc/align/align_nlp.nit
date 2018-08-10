@@ -59,20 +59,25 @@ class MdAlignNLP
 		var nlp_vector = mentity_index.vectorize_string(text)
 		# print nlp_vector
 		for lemma, freq in nlp_vector do
+			if lemma == null then continue
+			if lemma.to_s.length <= 1 then continue
+
 			# vector[lemma] = freq
-			vector["name: {lemma or else "null"}"] += freq
-			vector["nlp_name: {(lemma or else "null").to_s.to_lower}"] += freq
+			vector["name: {lemma}"] += freq
+			vector["nlp_name: {lemma.to_s}"] += freq
+			vector["nlp_name: {lemma.to_s.to_lower}"] += freq
 			# vector["name: {(lemma or else "null").as(String).capitalize}"] += freq
 			# vector["comment: {lemma or else "null"}"] += freq
 			# vector["comment: {(lemma or else "null").as(String).capitalize}"] += freq
-			vector["nlp: {lemma or else "null"}"] += freq
+			vector["nlp: {lemma}"] += freq
 			# vector["sign: {lemma or else "null"}"] += freq
 			# vector["sign: {(lemma or else "null").as(String).capitalize}"] += freq
 			# vector["tid: {lemma or else "null"}"] += freq
 			# vector["tid: {(lemma or else "null").as(String).capitalize}"] += freq
 		end
 		# print vector
-		node.md_refs = matches_to_refs(mentity_index.match_query(vector).above_threshold, node)
+		node.md_refs = matches_to_refs(mentity_index.match_query(vector), node)
+		# .above_threshold
 	end
 
 	private fun matches_to_refs(matches: MDocMatches, node: MdNode): Array[MdRefNLP] do

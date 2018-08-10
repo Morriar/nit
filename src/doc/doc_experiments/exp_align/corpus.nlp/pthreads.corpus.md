@@ -1,18 +1,21 @@
 # POSIX Threads support
 
+> match: posix
 > match: pthreads
 > match: pthreads::Thread
 
 The threads can be manipulated and synchronized using the classes `Thread`,
 `Mutex` and `Barrier`.
 
-> match: pthreads::Thread
-> match: pthreads::Mutex
 > match: pthreads::Barrier
+> match: pthreads::Mutex
+> match: pthreads::Thread
 
 This group also provides two optional modules with thread-safe collections:
 
 > match: pthreads::Thread
+> match: pthreads::concurrent_collections
+> match: pthreads::redef_collections
 > match: core>collections>
 
 * `redef_collections` redefines existing collection to make them thread-safe.
@@ -21,8 +24,8 @@ This group also provides two optional modules with thread-safe collections:
 
 > match: core>collections>
 > match: pthreads::Thread
-> match: pthreads::redef_collections
 > match: pthreads::concurrent_collections
+> match: pthreads::redef_collections
 
 Theses services are implemented using the POSIX threads.
 

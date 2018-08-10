@@ -244,7 +244,18 @@ class MEntityIndex
 	# List of lemmas that must not be indexed
 	var stoplist = [
 		"=", "==", "&lt;", "&gt;", "*", "/", "\\", "=]", "%", "_", "!=", ">=",
-		"<=", "<=>", "+", "-", ">>", "<<"]
+		"<=", "<=>", "+", "-", ">>", "<<",
+		"be", "use", "it", "can", "you"]
+
+	# TODO
+	var keywords = [
+		"end", "not", "null", "var", "do", "then", "catch", "else", "loop", "is",
+		"import", "module", "package", "class", "enum", "universal", "interface", "extern",
+		"abstract", "intern", "fun", "new", "private", "public", "protected", "intrude", "readable",
+		"writable", "redef", "if", "while", "for", "with", "assert", "and", "or", "in", "is",
+		"isa", "once", "break", "contrinue", "return", "abort", "nullable", "special", "super",
+		"self", "true", "false"]
+
 end
 
 class MEntityDocument
@@ -306,7 +317,7 @@ class MDocMatches
 	fun above_threshold: MDocMatches do
 		var res = new MDocMatches
 		for match in self do
-			if match.similarity > threshold then res.add match
+			if match.similarity >= threshold then res.add match
 		end
 		return res
 	end
@@ -375,10 +386,13 @@ redef class MEntity
 		parse_name(name_vector, null, name)
 		var nlp_vector = index.vectorize_string(name_vector.keys.join(" "))
 		for k, v in nlp_vector do
+			if k == null then continue
+			if index.keywords.has(k) then continue
+			if k.to_s.length <= 1 then continue
 			# print name
 			# print k or else "null"
 			# print "--"
-			vector["nlp_name: {k or else "null"}"] += v
+			vector["nlp_name: {k}"] += v
 		end
 
 		# Index comment
@@ -387,7 +401,11 @@ redef class MEntity
 		var text = mdoc.mdoc_document.raw_text
 		nlp_vector = index.vectorize_string(text)
 		for k, v in nlp_vector do
-			vector["nlp: {k or else "null"}"] += v
+			if k == null then continue
+			if index.keywords.has(k) then continue
+			if k.to_s.length <= 1 then continue
+			# print k
+			vector["nlp: {k}"] += v
 		end
 	end
 

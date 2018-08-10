@@ -300,7 +300,6 @@ for file in files do
 	# print file
 	var lib = file.replace(".corpus.md", "")
 	# if not libs.has(lib) then continue
-	if not lib == "vsm" then continue
 
 	# sys.system "./nitreadme lib/{lib} --keep-going --check-docdown"
 	sys.system "./nitreadme lib/{lib} --keep-going --check-docdown > src/doc/doc_experiments/exp_align/out.{corpus}/{lib}.out.md 2>/dev/null"

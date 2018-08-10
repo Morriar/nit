@@ -1,119 +1,827 @@
 # Vector Space Model
 
-> match: vsm::Vector (conf: 0.141)
-> match: vsm> (conf: 0.139)
-> match: vsm (conf: 0.139)
+> match: vsm
+> match: vsm::FileIndex::parse_file
+> match: vsm::StringIndex::parse_string
+> match: vsm::VSMIndex::match_vector
+> match: vsm::Vector
+> match: vsm::vsm
+> match: vsm::vsm::TermComparator::vector
+> match: vsm>
 
 Vector Space Model (VSM) is an algebraic model for representing text documents
 (and any objects, in general) as vectors of identifiers, such as, for example,
 index terms.
 
-> match: vsm> (conf: 0.251)
-> match: vsm (conf: 0.251)
-> match: vsm::Vector (conf: 0.198)
-> match: vsm::VSMIndex::match_vector (conf: 0.113)
-> match: vsm::VSMIndex (conf: 0.113)
-> match: vsm::vsm::TermComparator::vector (conf: 0.113)
-> match: vsm::Document::tfidf (conf: 0.083)
-> match: vsm::Document::terms_count (conf: 0.073)
-> match: vsm::VSMIndex::inverse_doc_frequency (conf: 0.072)
-> match: vsm::Document::terms_frequency (conf: 0.07)
-> match: vsm::VSMIndex::terms_doc_count (conf: 0.069)
-> match: vsm::IndexMatch::document (conf: 0.068)
-> match: vsm::VSMIndex::index_document (conf: 0.067)
-> match: vsm::VSMIndex::documents (conf: 0.065)
-> match: vsm::VSMIndex::inversed_index (conf: 0.062)
-> match: vsm::StringIndex::parse_string (conf: 0.061)
-> match: vsm::vsm (conf: 0.06)
-> match: vsm::Vector::inc (conf: 0.058)
-> match: vsm::vsm::TermComparator (conf: 0.044)
-> match: vsm::VSMIndex::DOC (conf: 0.042)
-> match: vsm::VSMIndex::update_index (conf: 0.042)
-> match: vsm>examples> (conf: 0.04)
+> match: core
+> match: core::AbstractArray
+> match: core::AbstractArrayRead
+> match: core::Array
+> match: core::Array::with_items
+> match: core::Buffer::[]=
+> match: core::Buffer::append
+> match: core::Buffer::append_substring
+> match: core::Buffer::from_text
+> match: core::Buffer::times
+> match: core::BytePattern::first_index_in
+> match: core::BytePattern::first_index_in_from
+> match: core::BytePattern::last_index_in
+> match: core::BytePattern::last_index_in_from
+> match: core::BytePattern::search_all_in
+> match: core::Bytes::append_ns_from
+> match: core::Bytes::append_text
+> match: core::CString
+> match: core::CString::[]
+> match: core::CString::[]=
+> match: core::CString::byte_to_char_index_cached
+> match: core::CString::char_at
+> match: core::CString::char_to_byte_index
+> match: core::CString::char_to_byte_index_cached
+> match: core::CString::fast_cstring
+> match: core::CachedAlphaComparator
+> match: core::Cloneable::clone
+> match: core::Collection
+> match: core::Collection::has_all
+> match: core::Collection::has_any
+> match: core::Collection::has_exactly
+> match: core::Comparable
+> match: core::Comparator::bubble_sort
+> match: core::Comparator::heap_sort
+> match: core::Comparator::insertion_sort
+> match: core::Comparator::merge_sort
+> match: core::Comparator::quick_sort
+> match: core::Couple
+> match: core::CoupleMap
+> match: core::DefaultComparator
+> match: core::DefaultReverseComparator
+> match: core::Finalizable
+> match: core::Finalizable::finalize
+> match: core::FinalizableOnce
+> match: core::FlatText
+> match: core::IndexedIterator
+> match: core::IndexedIterator::index
+> match: core::ListIterator::item=
+> match: core::Match
+> match: core::Match::text_after
+> match: core::Match::text_before
+> match: core::NativeArray::[]
+> match: core::NativeArray::[]=
+> match: core::Object
+> match: core::Object::==
+> match: core::Object::SELF
+> match: core::Object::hash
+> match: core::Object::is_same_instance
+> match: core::Object::object_id
+> match: core::Object::output
+> match: core::Object::output_class_name
+> match: core::Object::sys
+> match: core::Path
+> match: core::Path::last_error
+> match: core::Pattern::search_in
+> match: core::Pattern::search_index_in
+> match: core::Pointer::address_is_null
+> match: core::Range
+> match: core::Range::step
+> match: core::Reader::append_line_to
+> match: core::Regex
+> match: core::Regex::not_bol
+> match: core::Regex::not_eol
+> match: core::Sequence
+> match: core::Sequence::[]=
+> match: core::Sequence::insert
+> match: core::Sequence::insert_all
+> match: core::Sequence::modulo=
+> match: core::Sequence::remove_at
+> match: core::SequenceRead
+> match: core::SequenceRead::[]
+> match: core::SequenceRead::get_or_default
+> match: core::SequenceRead::get_or_null
+> match: core::SequenceRead::index_of
+> match: core::SequenceRead::index_of_from
+> match: core::SequenceRead::last_index_of
+> match: core::SequenceRead::last_index_of_from
+> match: core::SequenceRead::modulo
+> match: core::SequenceRead::modulo_index
+> match: core::Stream::codec
+> match: core::String
+> match: core::Text
+> match: core::Text::[]
+> match: core::Text::bytes
+> match: core::Text::chars
+> match: core::Text::empty
+> match: core::Text::escape_to_sh
+> match: core::Text::first
+> match: core::Text::format
+> match: core::Text::has_substring
+> match: core::Text::index_of
+> match: core::Text::index_of_from
+> match: core::Text::is_empty
+> match: core::Text::justify
+> match: core::Text::last_index_of
+> match: core::Text::last_index_of_from
+> match: core::Text::substring
+> match: core::Text::substring_from
+> match: core::Text::to_camel_case
+> match: core::Text::to_cmangle
+> match: core::Writable
+> match: core::Writable::write_to_bytes
+> match: core::Writable::write_to_string
+> match: core::abstract_text
+> match: core::abstract_text::BufferByteView
+> match: core::abstract_text::BufferCharView
+> match: core::abstract_text::Char::escape_to_utf16
+> match: core::abstract_text::Object::class_name
+> match: core::abstract_text::Object::native_class_name
+> match: core::array::ArrayMap::index
+> match: core::array::ArrayMap::last_index
+> match: core::array::ArrayMap::remove_at_index
+> match: core::bytes::CString::to_bytes
+> match: core::bytes::CString::to_bytes_with_copy
+> match: core::bytes::Int::to_bytes
+> match: core::circular_array::CircularArray::native
+> match: core::circular_array::CircularArray::offset
+> match: core::file::Sys::print
+> match: core::file::Sys::print_error
+> match: core::file::Sys::printn
+> match: core::file::Text::chdir
+> match: core::file::Text::files
+> match: core::file::Text::mkdir
+> match: core::file::Text::rmdir
+> match: core::fixed_ints_text
+> match: core::flat
+> match: core::flat::FlatText::char_to_byte_index
+> match: core::flat::FlatText::fetch_char_at
+> match: core::hash_collection::HashCollection
+> match: core::hash_collection::HashCollection::index_at
+> match: core::hash_collection::HashCollection::node_at_idx
+> match: core::hash_collection::HashCollection::store
+> match: core::native
+> match: core::queue::Sequence::as_fifo
+> match: core::queue::Sequence::as_lifo
+> match: core::queue::SimpleCollection::as_random
+> match: core::range
+> match: core::re
+> match: core::re::NativeMatchArray::[]
+> match: core::ropes
+> match: core::ropes::Concat
+> match: core::ropes::RopeByteReverseIterator
+> match: core::ropes::RopeBytes
+> match: core::ropes::RopeCharReverseIterator
+> match: core::ropes::RopeChars
+> match: core::sorter::Comparator::sub_sort
+> match: core::sorter::Sys::default_comparator
+> match: core::sorter::Sys::default_reverse_comparator
+> match: core::string_search::Text::search_last
+> match: core::string_search::Text::search_last_up_to
+> match: core::test_abstract_text
+> match: core::text
+> match: core>
+> match: core>text>
+> match: ini::ConfigTree
+> match: ini::ConfigTree::load
+> match: meta
+> match: meta::meta
+> match: meta::meta::Object::get_class
+> match: meta>
+> match: opts::OptionEnum
+> match: opts::OptionEnum::init
+> match: opts::OptionText
+> match: opts::OptionText::init
+> match: poset::POSetElement
+> match: poset::POSetElement::element
+> match: serialization
+> match: serialization::AttributeError::receiver
+> match: serialization::AttributeTypeError::attribute
+> match: serialization::Deserializer::deserialize
+> match: serialization::Deserializer::deserialize_attribute
+> match: serialization::Deserializer::deserialize_class
+> match: serialization::Deserializer::deserialize_class_intern
+> match: serialization::Deserializer::keep_going
+> match: serialization::Deserializer::notify_of_creation
+> match: serialization::Serializer::current_object
+> match: serialization::Serializer::serialize
+> match: serialization::Serializer::serialize_attribute
+> match: serialization::Serializer::serialize_reference
+> match: serialization::Serializer::warn
+> match: serialization::serialization_core
+> match: serialization>
+> match: serialization>examples>
+> match: vsm
+> match: vsm::Document
+> match: vsm::Document::terms_count
+> match: vsm::Document::terms_frequency
+> match: vsm::Document::tfidf
+> match: vsm::FileIndex::blacklist_exts
+> match: vsm::FileIndex::index_dir
+> match: vsm::FileIndex::index_file
+> match: vsm::FileIndex::index_files
+> match: vsm::FileIndex::parse_file
+> match: vsm::FileIndex::whitelist_exts
+> match: vsm::IndexMatch
+> match: vsm::IndexMatch::document
+> match: vsm::StringIndex::index_string
+> match: vsm::StringIndex::match_string
+> match: vsm::StringIndex::parse_string
+> match: vsm::VSMIndex
+> match: vsm::VSMIndex::DOC
+> match: vsm::VSMIndex::documents
+> match: vsm::VSMIndex::index_document
+> match: vsm::VSMIndex::inverse_doc_frequency
+> match: vsm::VSMIndex::inversed_index
+> match: vsm::VSMIndex::match_vector
+> match: vsm::VSMIndex::terms_doc_count
+> match: vsm::VSMIndex::update_index
+> match: vsm::Vector
+> match: vsm::Vector::cosine_similarity
+> match: vsm::Vector::inc
+> match: vsm::Vector::norm
+> match: vsm::bm25::VSMIndex::average_document_length
+> match: vsm::bm25::VSMIndex::bm25_term
+> match: vsm::example_vsm
+> match: vsm::vsm
+> match: vsm::vsm::TermComparator
+> match: vsm::vsm::TermComparator::vector
+> match: vsm>
+> match: vsm>examples>
 
 It is used in information filtering, information retrieval, indexing and
 relevancy rankings.
 
-> match: vsm> (conf: 0.102)
-> match: vsm (conf: 0.102)
-> match: vsm::VSMIndex::inverse_doc_frequency (conf: 0.044)
-> match: vsm::vsm (conf: 0.038)
-> match: vsm::StringIndex (conf: 0.037)
-> match: vsm::FileIndex (conf: 0.034)
-> match: vsm::VSMIndex::update_index (conf: 0.032)
+> match: core::CString::byte_to_char_index_cached
+> match: core::CString::char_to_byte_index_cached
+> match: core::Error::message
+> match: core::FileStat
+> match: core::Path
+> match: core::Path::copy
+> match: core::Path::delete
+> match: core::Path::each_line
+> match: core::Path::exists
+> match: core::Path::files
+> match: core::Path::link_stat
+> match: core::Path::read_all
+> match: core::Path::read_all_bytes
+> match: core::Path::read_lines
+> match: core::Path::stat
+> match: core::re::NativeRegex::regexec
+> match: counter::Counter
+> match: counter::Counter::entropy
+> match: counter::Counter::print_summary
+> match: meta
+> match: meta::meta
+> match: meta>
+> match: poset::poset::MapRead::filter_keys
+> match: serialization
+> match: serialization::serialization_core
+> match: serialization>
+> match: vsm
+> match: vsm::FileIndex
+> match: vsm::StringIndex
+> match: vsm::VSMIndex::inverse_doc_frequency
+> match: vsm::VSMIndex::update_index
+> match: vsm::vsm
+> match: vsm>
 
 The `vsm` package provides the following features:
 
-> match: vsm> (conf: 0.114)
-> match: vsm (conf: 0.114)
+> match: config
+> match: config::config
+> match: config>
+> match: core::Buffer::capitalize
+> match: core::Collection
+> match: core::FlatText::fast_cstring
+> match: core::MapRead::provide_default_value
+> match: core::Object::object_id
+> match: core::Path
+> match: core::Path::/
+> match: core::Path::link_stat
+> match: core::Path::stat
+> match: core::Reader::read_nonwhitespace
+> match: core::Reader::read_word
+> match: core::Regex::extended
+> match: core::Regex::not_eol
+> match: core::Sequence::insert
+> match: core::Sequence::insert_all
+> match: core::Sequence::remove_at
+> match: core::Sys
+> match: core::Sys::main
+> match: core::Sys::run
+> match: core::Task
+> match: core::Text::capitalized
+> match: core::Text::escape_to_c
+> match: core::Text::format
+> match: core::Text::to_cmangle
+> match: core::Text::to_snake_case
+> match: core::Writable
+> match: core::file::Text::join_path
+> match: core::fixed_ints
+> match: core::kernel
+> match: core::math::Sys::inf
+> match: core::queue::SimpleCollection::as_random
+> match: core::re::NativeRegex::regexec
+> match: core::ropes
+> match: core::sorter
+> match: meta
+> match: meta::meta
+> match: meta>
+> match: poset::POSet::sub
+> match: serialization
+> match: serialization::serialization_core
+> match: serialization>
+> match: vsm
+> match: vsm::VSMIndex::inverse_doc_frequency
+> match: vsm::example_vsm
+> match: vsm::vsm
+> match: vsm>
 
 * Vector comparison with cosine similarity.
 * Vector indexing and matching with tf * idf.
 * File indexing and matching to free text queries.
 
-> match: vsm::IndexMatch::similarity (conf: 0.211)
-> match: vsm::Vector (conf: 0.122)
-> match: vsm> (conf: 0.145)
-> match: vsm (conf: 0.145)
-> match: vsm::Vector (conf: 0.109)
-> match: vsm> (conf: 0.124)
-> match: vsm (conf: 0.124)
-> match: vsm::FileIndex (conf: 0.072)
+> match: config
+> match: config::Config::tool_description
+> match: config::IniConfig
+> match: config::IniConfig::config_file
+> match: config::IniConfig::default_config_file
+> match: config::IniConfig::opt_config
+> match: config::config
+> match: config>
+> match: core
+> match: core::Buffer::append
+> match: core::Buffer::from_text
+> match: core::Bytes::append_text
+> match: core::CString
+> match: core::CString::fast_cstring
+> match: core::Collection::has_exactly
+> match: core::Error::message
+> match: core::FileReader
+> match: core::FileReader::from_fd
+> match: core::FileReader::open
+> match: core::FileReader::reopen
+> match: core::FileStat
+> match: core::FileStat::is_file
+> match: core::FileStat::mode
+> match: core::FileStat::size
+> match: core::FileStream
+> match: core::FileStream::fd
+> match: core::FileStream::file_stat
+> match: core::FileStream::path
+> match: core::FileWriter
+> match: core::FileWriter::from_fd
+> match: core::FileWriter::open
+> match: core::Finalizable::finalize
+> match: core::FlatText
+> match: core::FlatText::fast_cstring
+> match: core::Iterator::finish
+> match: core::MapIterator::finish
+> match: core::Match
+> match: core::Match::string
+> match: core::Match::text_after
+> match: core::Match::text_before
+> match: core::Object::is_same_instance
+> match: core::Path
+> match: core::Path::copy
+> match: core::Path::delete
+> match: core::Path::dir
+> match: core::Path::each_line
+> match: core::Path::exists
+> match: core::Path::filename
+> match: core::Path::files
+> match: core::Path::link_stat
+> match: core::Path::open_ro
+> match: core::Path::open_wo
+> match: core::Path::read_all
+> match: core::Path::read_all_bytes
+> match: core::Path::read_lines
+> match: core::Path::rmdir
+> match: core::Path::simplified
+> match: core::Path::stat
+> match: core::Pattern::split_in
+> match: core::Pointer::free
+> match: core::ProcessReader::stream_in
+> match: core::ProcessWriter::stream_out
+> match: core::Reader::append_line_to
+> match: core::Reader::read_all
+> match: core::Reader::read_all_bytes
+> match: core::Reader::read_line
+> match: core::Reader::read_nonwhitespace
+> match: core::Reader::read_word
+> match: core::Regex
+> match: core::Regex::ignore_case
+> match: core::Regex::newline
+> match: core::Regex::not_bol
+> match: core::Regex::not_eol
+> match: core::Stream::codec
+> match: core::Stream::finish
+> match: core::Stream::last_error
+> match: core::Text
+> match: core::Text::bytes
+> match: core::Text::chars
+> match: core::Text::empty
+> match: core::Text::escape_to_sh
+> match: core::Text::first
+> match: core::Text::is_empty
+> match: core::abstract_text
+> match: core::array::AbstractArrayRead::free_iterator
+> match: core::file
+> match: core::file::CString::file_chdir
+> match: core::file::CString::file_delete
+> match: core::file::CString::file_exists
+> match: core::file::CString::file_lstat
+> match: core::file::CString::file_mkdir
+> match: core::file::CString::file_realpath
+> match: core::file::CString::file_stat
+> match: core::file::FileStat::stat
+> match: core::file::FileStream::file
+> match: core::file::Int::fd_to_stream
+> match: core::file::Int::isatty
+> match: core::file::NativeFile
+> match: core::file::NativeFile::file_stat
+> match: core::file::NativeFileStat::is_reg
+> match: core::file::NativeFileStat::mode
+> match: core::file::Sys::read_only
+> match: core::file::Sys::wipe_write
+> match: core::file::Text::file_copy_to
+> match: core::file::Text::file_delete
+> match: core::file::Text::file_exists
+> match: core::file::Text::file_extension
+> match: core::file::Text::file_lstat
+> match: core::file::Text::file_stat
+> match: core::file::Text::files
+> match: core::file::Text::relpath
+> match: core::file::Text::simplify_path
+> match: core::file::Text::to_path
+> match: core::file::Writable::write_to_file
+> match: core::fixed_ints_text
+> match: core::flat
+> match: core::math::Float::acos
+> match: core::math::Float::cos
+> match: core::math::Float::tan
+> match: core::native
+> match: core::re
+> match: core::re::Match::[]
+> match: core::re::Match::subs
+> match: core::re::NativeRegex::regexec
+> match: core::re::NativeRegex::regexec_match_only
+> match: core::re::NativeRegex::regfree
+> match: core::re::Regex::native_match
+> match: core::re::Regex::native_match_is_init
+> match: core::string_search
+> match: core::string_search::Text::search_last
+> match: core::string_search::Text::search_last_up_to
+> match: core::test_abstract_text
+> match: core::text
+> match: core>
+> match: core>text>
+> match: ini
+> match: ini::ConfigTree::ini_file
+> match: ini::ConfigTree::load
+> match: ini::ConfigTree::save
+> match: ini::ini
+> match: ini>
+> match: opts::OptionText
+> match: opts::OptionText::init
+> match: serialization
+> match: serialization::Deserializer::deserialize_attribute_missing
+> match: serialization>
+> match: vsm
+> match: vsm::Document::terms_frequency
+> match: vsm::Document::tfidf
+> match: vsm::FileIndex
+> match: vsm::FileIndex::accept_file
+> match: vsm::FileIndex::blacklist_exts
+> match: vsm::FileIndex::index_dir
+> match: vsm::FileIndex::index_file
+> match: vsm::FileIndex::index_files
+> match: vsm::FileIndex::parse_file
+> match: vsm::FileIndex::whitelist_exts
+> match: vsm::IndexMatch
+> match: vsm::IndexMatch::document
+> match: vsm::IndexMatch::similarity
+> match: vsm::IndexMatchSorter
+> match: vsm::StringIndex
+> match: vsm::StringIndex::match_string
+> match: vsm::StringIndex::parse_string
+> match: vsm::VSMIndex
+> match: vsm::VSMIndex::match_vector
+> match: vsm::VSMIndex::sorter
+> match: vsm::VSMIndex::update_index
+> match: vsm::Vector
+> match: vsm::Vector::cosine_similarity
+> match: vsm::example_vsm
+> match: vsm::vsm
+> match: vsm::vsm::TermComparator::vector
+> match: vsm>
 
 ## Vectors
 
-> match: vsm::vsm::TermComparator::vector (conf: 0.346)
-> match: vsm::Vector (conf: 0.303)
+> match: vsm
+> match: vsm::StringIndex::parse_string
+> match: vsm::VSMIndex
+> match: vsm::VSMIndex::match_vector
+> match: vsm::Vector
+> match: vsm::Vector::cosine_similarity
+> match: vsm::Vector::inc
+> match: vsm::Vector::norm
+> match: vsm::vsm
+> match: vsm::vsm::TermComparator::vector
+> match: vsm>
 
 With VSM, documents are represented by a n-dimensions vector.
 Each dimension represent an attribute of the document or object.
 
-> match: vsm> (conf: 0.224)
-> match: vsm (conf: 0.224)
-> match: vsm::Vector (conf: 0.221)
-> match: vsm::IndexMatch::document (conf: 0.153)
-> match: vsm::VSMIndex (conf: 0.138)
-> match: vsm::VSMIndex::match_vector (conf: 0.117)
-> match: vsm::VSMIndex::documents (conf: 0.112)
-> match: vsm::VSMIndex::index_document (conf: 0.108)
-> match: vsm::VSMIndex::inverse_doc_frequency (conf: 0.092)
-> match: vsm::Document::tfidf (conf: 0.09)
-> match: vsm::vsm::TermComparator::vector (conf: 0.089)
-> match: vsm::Document::terms_count (conf: 0.077)
-> match: vsm::Document::terms_frequency (conf: 0.074)
-> match: vsm::Document (conf: 0.07)
-> match: vsm::bm25::VSMIndex::average_document_length (conf: 0.06)
-> match: vsm::Vector::sorted_dimensions (conf: 0.059)
+> match: config
+> match: config::config
+> match: config>
+> match: core::AbstractArray
+> match: core::AbstractArrayRead
+> match: core::Array
+> match: core::Array::with_items
+> match: core::CachedAlphaComparator
+> match: core::Cloneable::clone
+> match: core::Collection
+> match: core::Comparable
+> match: core::Couple
+> match: core::CoupleMap
+> match: core::DefaultComparator
+> match: core::DefaultReverseComparator
+> match: core::Finalizable
+> match: core::Finalizable::finalize
+> match: core::FinalizableOnce
+> match: core::Object
+> match: core::Object::==
+> match: core::Object::SELF
+> match: core::Object::hash
+> match: core::Object::is_same_instance
+> match: core::Object::object_id
+> match: core::Object::sys
+> match: core::Path
+> match: core::Path::last_error
+> match: core::Pointer::address_is_null
+> match: core::Range
+> match: core::String
+> match: core::Text::bytes
+> match: core::Text::chars
+> match: core::Text::format
+> match: core::Writable
+> match: core::Writable::write_to_bytes
+> match: core::Writable::write_to_string
+> match: core::abstract_text::BufferByteView
+> match: core::abstract_text::BufferCharView
+> match: core::abstract_text::Char::escape_to_utf16
+> match: core::abstract_text::Object::class_name
+> match: core::abstract_text::Object::native_class_name
+> match: core::bytes::CString::to_bytes
+> match: core::bytes::CString::to_bytes_with_copy
+> match: core::bytes::Int::to_bytes
+> match: core::file::Sys::print
+> match: core::file::Sys::print_error
+> match: core::file::Sys::printn
+> match: core::file::Text::chdir
+> match: core::file::Text::files
+> match: core::file::Text::mkdir
+> match: core::file::Text::rmdir
+> match: core::range
+> match: core::ropes::Concat
+> match: core::ropes::RopeByteReverseIterator
+> match: core::ropes::RopeBytes
+> match: core::ropes::RopeCharReverseIterator
+> match: core::ropes::RopeChars
+> match: meta
+> match: meta::meta
+> match: meta::meta::Object::get_class
+> match: meta>
+> match: poset::POSetElement
+> match: poset::POSetElement::element
+> match: serialization
+> match: serialization::AttributeError
+> match: serialization::AttributeError::attribute_name
+> match: serialization::AttributeError::receiver
+> match: serialization::AttributeMissingError
+> match: serialization::AttributeTypeError
+> match: serialization::AttributeTypeError::attribute
+> match: serialization::AttributeTypeError::expected_type
+> match: serialization::Deserializer::deserialize
+> match: serialization::Deserializer::deserialize_attribute
+> match: serialization::Deserializer::deserialize_attribute_missing
+> match: serialization::Deserializer::deserialize_class
+> match: serialization::Deserializer::deserialize_class_intern
+> match: serialization::Deserializer::keep_going
+> match: serialization::Deserializer::notify_of_creation
+> match: serialization::Serializable::core_serialize_to
+> match: serialization::Serializer::current_object
+> match: serialization::Serializer::serialize
+> match: serialization::Serializer::serialize_attribute
+> match: serialization::Serializer::serialize_reference
+> match: serialization::Serializer::warn
+> match: serialization::serialization_core
+> match: serialization>
+> match: vsm
+> match: vsm::Document
+> match: vsm::Document::terms_count
+> match: vsm::Document::terms_frequency
+> match: vsm::Document::tfidf
+> match: vsm::FileIndex::index_file
+> match: vsm::IndexMatch::document
+> match: vsm::StringIndex::match_string
+> match: vsm::StringIndex::parse_string
+> match: vsm::VSMIndex
+> match: vsm::VSMIndex::DOC
+> match: vsm::VSMIndex::documents
+> match: vsm::VSMIndex::index_document
+> match: vsm::VSMIndex::inverse_doc_frequency
+> match: vsm::VSMIndex::inversed_index
+> match: vsm::VSMIndex::match_vector
+> match: vsm::VSMIndex::terms_doc_count
+> match: vsm::VSMIndex::update_index
+> match: vsm::Vector
+> match: vsm::Vector::cosine_similarity
+> match: vsm::Vector::inc
+> match: vsm::Vector::norm
+> match: vsm::Vector::sorted_dimensions
+> match: vsm::bm25::VSMIndex::average_document_length
+> match: vsm::example_vsm
+> match: vsm::vsm
+> match: vsm::vsm::TermComparator::vector
+> match: vsm>
 
 For text document, the count of each term found in the document if often used to
 build vectors.
 
-> match: vsm::Document::terms_count (conf: 0.215)
-> match: vsm> (conf: 0.191)
-> match: vsm (conf: 0.191)
-> match: vsm::IndexMatch::document (conf: 0.172)
-> match: vsm::Vector (conf: 0.162)
-> match: vsm::Document::terms_frequency (conf: 0.161)
-> match: vsm::VSMIndex::terms_doc_count (conf: 0.154)
-> match: vsm::Document::tfidf (conf: 0.15)
-> match: vsm::VSMIndex (conf: 0.129)
-> match: vsm::VSMIndex::match_vector (conf: 0.126)
-> match: vsm::VSMIndex::documents (conf: 0.125)
-> match: vsm::VSMIndex::inverse_doc_frequency (conf: 0.122)
-> match: vsm::VSMIndex::index_document (conf: 0.119)
-> match: vsm::vsm::TermComparator::vector (conf: 0.1)
-> match: vsm::Document (conf: 0.078)
-> match: vsm::bm25::VSMIndex::average_document_length (conf: 0.067)
-> match: vsm::VSMIndex::inversed_index (conf: 0.066)
+> match: config
+> match: config::config
+> match: config>
+> match: core
+> match: core::AbstractArrayRead::sub
+> match: core::Array::*
+> match: core::Array::+
+> match: core::Array::filled_with
+> match: core::Buffer::append
+> match: core::Buffer::from_text
+> match: core::Byte::%
+> match: core::BytePattern::first_index_in
+> match: core::BytePattern::first_index_in_from
+> match: core::BytePattern::last_index_in
+> match: core::BytePattern::last_index_in_from
+> match: core::Bytes::append_text
+> match: core::Bytes::slice
+> match: core::CString
+> match: core::CString::find_beginning_of_char_at
+> match: core::Collection
+> match: core::Collection::count
+> match: core::Collection::has_exactly
+> match: core::DisjointSet
+> match: core::Error::message
+> match: core::FlatText
+> match: core::Float::is_approx
+> match: core::HashMap::from
+> match: core::HashSet::from
+> match: core::Int::%
+> match: core::Int::digit_count
+> match: core::Int::digit_count_base_10
+> match: core::List::from
+> match: core::Match
+> match: core::Match::text_after
+> match: core::Match::text_before
+> match: core::Path
+> match: core::Reader::append_line_to
+> match: core::Regex
+> match: core::Regex::not_bol
+> match: core::Regex::not_eol
+> match: core::Stream::codec
+> match: core::Text
+> match: core::Text::bytes
+> match: core::Text::chars
+> match: core::Text::empty
+> match: core::Text::escape_to_sh
+> match: core::Text::first
+> match: core::Text::index_of
+> match: core::Text::index_of_from
+> match: core::Text::is_empty
+> match: core::Text::last_index_of
+> match: core::Text::last_index_of_from
+> match: core::Text::substring
+> match: core::Writable
+> match: core::abstract_text
+> match: core::abstract_text::CString::to_s_unsafe
+> match: core::array::Collection::to_a
+> match: core::array::Iterator::to_a
+> match: core::file::Text::files
+> match: core::fixed_ints_text
+> match: core::flat
+> match: core::native
+> match: core::re
+> match: core::ropes
+> match: core::sorter::Comparator::build_heap
+> match: core::string_search::Text::search_last
+> match: core::string_search::Text::search_last_up_to
+> match: core::test_abstract_text
+> match: core::text
+> match: core::union_find
+> match: core::union_find::DisjointSet::find
+> match: core>
+> match: core>text>
+> match: counter::Counter
+> match: counter::Counter::inc
+> match: counter::Counter::inc_all
+> match: counter::Counter::print_elements
+> match: counter::Counter::sum
+> match: opts::OptionContext::context_errors
+> match: opts::OptionCount
+> match: opts::OptionText
+> match: opts::OptionText::init
+> match: opts::opts::OptionContext::build
+> match: poset::poset::POSetElement::count
+> match: serialization
+> match: serialization::Deserializer::notify_of_creation
+> match: serialization::Serializable::from_deserializer
+> match: serialization>
+> match: vsm
+> match: vsm::Document
+> match: vsm::Document::terms_count
+> match: vsm::Document::terms_frequency
+> match: vsm::Document::tfidf
+> match: vsm::FileIndex::index_file
+> match: vsm::FileIndex::index_files
+> match: vsm::IndexMatch::document
+> match: vsm::StringIndex::match_string
+> match: vsm::StringIndex::parse_string
+> match: vsm::VSMIndex
+> match: vsm::VSMIndex::DOC
+> match: vsm::VSMIndex::documents
+> match: vsm::VSMIndex::index_document
+> match: vsm::VSMIndex::inverse_doc_frequency
+> match: vsm::VSMIndex::inversed_index
+> match: vsm::VSMIndex::match_vector
+> match: vsm::VSMIndex::terms_doc_count
+> match: vsm::VSMIndex::update_index
+> match: vsm::Vector
+> match: vsm::Vector::cosine_similarity
+> match: vsm::Vector::inc
+> match: vsm::Vector::norm
+> match: vsm::bm25::VSMIndex::average_document_length
+> match: vsm::bm25::VSMIndex::bm25_term
+> match: vsm::example_vsm
+> match: vsm::vsm
+> match: vsm::vsm::TermComparator
+> match: vsm::vsm::TermComparator::vector
+> match: vsm>
 
 ### Creating a vector
 
-> match: vsm::vsm::TermComparator::vector (conf: 0.244)
-> match: vsm::Vector (conf: 0.215)
-> match: vsm::VSMIndex::match_vector (conf: 0.154)
-> match: vsm> (conf: 0.145)
-> match: vsm (conf: 0.145)
-> match: vsm::VSMIndex (conf: 0.116)
+> match: core::Array::+
+> match: core::Array::filled_with
+> match: core::Array::from
+> match: core::Array::with_capacity
+> match: core::Array::with_items
+> match: core::Array::with_native
+> match: core::ArraySet::with_capacity
+> match: core::CString::new
+> match: core::FileReader::from_fd
+> match: core::FileStat
+> match: core::FileWriter::from_fd
+> match: core::FlatBuffer::from
+> match: core::FlatBuffer::with_capacity
+> match: core::NativeArray::new
+> match: core::Object::SELF
+> match: core::Path
+> match: core::Range::init
+> match: core::Range::without_last
+> match: core::String
+> match: core::Text::substring
+> match: core::Text::substring_from
+> match: core::Tm::gmtime
+> match: core::Tm::gmtime_from_timet
+> match: core::Tm::localtime
+> match: core::Tm::localtime_from_timet
+> match: core::bytes::CString::to_bytes
+> match: core::bytes::CString::to_bytes_with_copy
+> match: core::file
+> match: core::file::Int::fd_to_stream
+> match: core::file::Sys::wipe_write
+> match: core::file::Text::mkdir
+> match: core::file::Writable::write_to_file
+> match: core::ropes::Sys::maxlen
+> match: counter::counter::Collection::to_counter
+> match: meta::meta::Object::class_factory
+> match: opts::Option::init
+> match: poset::POSet::add_edge
+> match: serialization
+> match: serialization::Serializable::from_deserializer
+> match: serialization::serialization_core
+> match: serialization>
+> match: vsm
+> match: vsm::FileIndex::index_file
+> match: vsm::StringIndex::index_string
+> match: vsm::StringIndex::parse_string
+> match: vsm::VSMIndex
+> match: vsm::VSMIndex::match_vector
+> match: vsm::Vector
+> match: vsm::Vector::cosine_similarity
+> match: vsm::Vector::inc
+> match: vsm::Vector::norm
+> match: vsm::vsm
+> match: vsm::vsm::TermComparator::vector
+> match: vsm>
 
 ~~~
 import vsm
@@ -128,8 +836,35 @@ assert vector.norm.is_approx(2.236, 0.001)
 
 ### Comparing vectors
 
-> match: vsm::vsm::TermComparator::vector (conf: 0.244)
-> match: vsm::Vector (conf: 0.215)
+> match: core::CachedAlphaComparator
+> match: core::Comparable::OTHER
+> match: core::Comparator::COMPARED
+> match: core::Comparator::compare
+> match: core::Comparator::sort
+> match: core::DefaultComparator
+> match: core::DefaultReverseComparator
+> match: core::Float::is_approx
+> match: core::MapComparator
+> match: core::MapComparator::comparator
+> match: core::MapComparator::map
+> match: core::abstract_text::Sys::alpha_comparator
+> match: core::sorter
+> match: core::sorter::MapRead::to_map_comparator
+> match: core::sorter::Sys::default_comparator
+> match: serialization
+> match: serialization>
+> match: vsm
+> match: vsm::StringIndex::parse_string
+> match: vsm::VSMIndex
+> match: vsm::VSMIndex::match_vector
+> match: vsm::Vector
+> match: vsm::Vector::cosine_similarity
+> match: vsm::Vector::inc
+> match: vsm::Vector::norm
+> match: vsm::vsm
+> match: vsm::vsm::TermComparator
+> match: vsm::vsm::TermComparator::vector
+> match: vsm>
 
 ~~~
 import vsm
@@ -152,52 +887,293 @@ assert s1 > s2
 
 ## VSMIndex
 
-> match: vsm::VSMIndex (conf: 0.306)
+> match: vsm
+> match: vsm::Document
+> match: vsm::FileIndex
+> match: vsm::StringIndex
+> match: vsm::VSMIndex
+> match: vsm>
 
 VSMIndex is a Document index based on VSM.
 
-> match: vsm::VSMIndex (conf: 0.267)
-> match: vsm::Document (conf: 0.251)
-> match: vsm> (conf: 0.126)
-> match: vsm (conf: 0.126)
-> match: vsm::IndexMatch::document (conf: 0.098)
-> match: vsm::VSMIndex::documents (conf: 0.077)
-> match: vsm::StringIndex::index_string (conf: 0.071)
-> match: vsm::VSMIndex::index_document (conf: 0.065)
-> match: vsm::StringIndex (conf: 0.051)
-> match: vsm::Document::title (conf: 0.049)
-> match: vsm::Document::uri (conf: 0.049)
-> match: vsm::VSMIndex::update_index (conf: 0.049)
+> match: config::IniConfig
+> match: core::Buffer::[]=
+> match: core::Buffer::append_substring
+> match: core::Buffer::with_cap
+> match: core::BytePattern::first_index_in
+> match: core::BytePattern::first_index_in_from
+> match: core::BytePattern::last_index_in
+> match: core::BytePattern::last_index_in_from
+> match: core::BytePattern::search_all_in
+> match: core::Bytes::append_ns_from
+> match: core::CString::[]
+> match: core::CString::[]=
+> match: core::CString::byte_to_char_index_cached
+> match: core::CString::char_at
+> match: core::CString::char_to_byte_index
+> match: core::CString::char_to_byte_index_cached
+> match: core::CString::fast_cstring
+> match: core::Comparator::bubble_sort
+> match: core::Comparator::heap_sort
+> match: core::Comparator::insertion_sort
+> match: core::Comparator::merge_sort
+> match: core::Comparator::quick_sort
+> match: core::IndexedIterator
+> match: core::IndexedIterator::index
+> match: core::Int::digit_count
+> match: core::Int::digit_count_base_10
+> match: core::ListIterator::item=
+> match: core::Match::string
+> match: core::NativeArray::[]
+> match: core::NativeArray::[]=
+> match: core::Object::hash
+> match: core::Object::object_id
+> match: core::Pattern::search_in
+> match: core::Pattern::search_index_in
+> match: core::Sequence
+> match: core::Sequence::[]=
+> match: core::Sequence::insert
+> match: core::Sequence::insert_all
+> match: core::Sequence::modulo=
+> match: core::Sequence::remove_at
+> match: core::SequenceRead
+> match: core::SequenceRead::[]
+> match: core::SequenceRead::get_or_default
+> match: core::SequenceRead::get_or_null
+> match: core::SequenceRead::index_of
+> match: core::SequenceRead::index_of_from
+> match: core::SequenceRead::last_index_of
+> match: core::SequenceRead::last_index_of_from
+> match: core::SequenceRead::modulo
+> match: core::SequenceRead::modulo_index
+> match: core::Text::[]
+> match: core::Text::a_to
+> match: core::Text::has_substring
+> match: core::Text::index_of
+> match: core::Text::index_of_from
+> match: core::Text::last_index_of
+> match: core::Text::last_index_of_from
+> match: core::Text::substring
+> match: core::Text::substring_from
+> match: core::abstract_text::Int::fill_buffer
+> match: core::abstract_text::Int::to_base
+> match: core::array::ArrayMap::index
+> match: core::array::ArrayMap::last_index
+> match: core::array::ArrayMap::remove_at_index
+> match: core::circular_array::CircularArray::native
+> match: core::circular_array::CircularArray::offset
+> match: core::codec_base
+> match: core::flat::FlatText::char_to_byte_index
+> match: core::flat::FlatText::fetch_char_at
+> match: core::hash_collection::HashCollection
+> match: core::hash_collection::HashCollection::index_at
+> match: core::hash_collection::HashCollection::node_at_idx
+> match: core::hash_collection::HashCollection::store
+> match: core::math::Float::log_base
+> match: core::re
+> match: core::re::NativeMatchArray::[]
+> match: core::sorter::Comparator::sub_sort
+> match: counter::Counter::pack
+> match: opts::OptionEnum
+> match: opts::OptionEnum::init
+> match: serialization
+> match: serialization>
+> match: vsm
+> match: vsm::Document
+> match: vsm::Document::title
+> match: vsm::Document::uri
+> match: vsm::FileIndex
+> match: vsm::FileIndex::blacklist_exts
+> match: vsm::FileIndex::index_dir
+> match: vsm::FileIndex::index_file
+> match: vsm::FileIndex::index_files
+> match: vsm::FileIndex::whitelist_exts
+> match: vsm::IndexMatch
+> match: vsm::IndexMatch::document
+> match: vsm::StringIndex
+> match: vsm::StringIndex::index_string
+> match: vsm::StringIndex::match_string
+> match: vsm::VSMIndex
+> match: vsm::VSMIndex::DOC
+> match: vsm::VSMIndex::documents
+> match: vsm::VSMIndex::index_document
+> match: vsm::VSMIndex::inversed_index
+> match: vsm::VSMIndex::match_vector
+> match: vsm::VSMIndex::terms_doc_count
+> match: vsm::VSMIndex::update_index
+> match: vsm::bm25::VSMIndex::average_document_length
+> match: vsm::example_vsm
+> match: vsm::vsm
+> match: vsm>
 
 Using VSMIndex you can index documents associated with their vector.
 Documents can then be matched to query vectors.
 
-> match: vsm::VSMIndex (conf: 0.327)
-> match: vsm> (conf: 0.234)
-> match: vsm (conf: 0.234)
-> match: vsm::VSMIndex::match_vector (conf: 0.194)
-> match: vsm::Vector (conf: 0.179)
-> match: vsm::IndexMatch::document (conf: 0.151)
-> match: vsm::vsm::TermComparator::vector (conf: 0.151)
-> match: vsm::VSMIndex::index_document (conf: 0.112)
-> match: vsm::VSMIndex::documents (conf: 0.109)
-> match: vsm::Document (conf: 0.093)
-> match: vsm::Document::terms_frequency (conf: 0.085)
-> match: vsm::VSMIndex::inverse_doc_frequency (conf: 0.078)
-> match: vsm::VSMIndex::DOC (conf: 0.078)
-> match: vsm::Document::tfidf (conf: 0.076)
-> match: vsm::StringIndex::match_string (conf: 0.075)
-> match: vsm::Document::terms_count (conf: 0.073)
-> match: vsm::Vector::cosine_similarity (conf: 0.069)
-> match: vsm::VSMIndex::inversed_index (conf: 0.058)
-> match: vsm::VSMIndex::update_index (conf: 0.055)
-> match: vsm::VSMIndex::terms_doc_count (conf: 0.053)
-> match: vsm::bm25::VSMIndex::average_document_length (conf: 0.051)
+> match: core::Buffer::[]=
+> match: core::Buffer::append_substring
+> match: core::BytePattern::first_index_in
+> match: core::BytePattern::first_index_in_from
+> match: core::BytePattern::last_index_in
+> match: core::BytePattern::last_index_in_from
+> match: core::BytePattern::search_all_in
+> match: core::Bytes::append_ns_from
+> match: core::CString::[]
+> match: core::CString::[]=
+> match: core::CString::byte_to_char_index_cached
+> match: core::CString::char_at
+> match: core::CString::char_to_byte_index
+> match: core::CString::char_to_byte_index_cached
+> match: core::CString::fast_cstring
+> match: core::Comparator::bubble_sort
+> match: core::Comparator::heap_sort
+> match: core::Comparator::insertion_sort
+> match: core::Comparator::merge_sort
+> match: core::Comparator::quick_sort
+> match: core::IndexedIterator
+> match: core::IndexedIterator::index
+> match: core::ListIterator::item=
+> match: core::Map::[]=
+> match: core::MapComparator::map
+> match: core::MapRead::get_or_null
+> match: core::MapRead::has_key
+> match: core::Match
+> match: core::Match::string
+> match: core::Match::text_after
+> match: core::Match::text_before
+> match: core::NativeArray::[]
+> match: core::NativeArray::[]=
+> match: core::Object::==
+> match: core::Object::hash
+> match: core::Pattern::search_in
+> match: core::Pattern::search_index_in
+> match: core::Pattern::split_in
+> match: core::Regex::ignore_case
+> match: core::Regex::newline
+> match: core::Sequence
+> match: core::Sequence::[]=
+> match: core::Sequence::insert
+> match: core::Sequence::insert_all
+> match: core::Sequence::modulo=
+> match: core::Sequence::remove_at
+> match: core::SequenceRead
+> match: core::SequenceRead::[]
+> match: core::SequenceRead::get_or_default
+> match: core::SequenceRead::get_or_null
+> match: core::SequenceRead::index_of
+> match: core::SequenceRead::index_of_from
+> match: core::SequenceRead::last_index_of
+> match: core::SequenceRead::last_index_of_from
+> match: core::SequenceRead::modulo
+> match: core::SequenceRead::modulo_index
+> match: core::Text::[]
+> match: core::Text::has_substring
+> match: core::Text::index_of
+> match: core::Text::index_of_from
+> match: core::Text::last_index_of
+> match: core::Text::last_index_of_from
+> match: core::Text::substring
+> match: core::Text::substring_from
+> match: core::Writable
+> match: core::array::ArrayMap::index
+> match: core::array::ArrayMap::last_index
+> match: core::array::ArrayMap::remove_at_index
+> match: core::circular_array::CircularArray::native
+> match: core::circular_array::CircularArray::offset
+> match: core::flat::FlatText::char_to_byte_index
+> match: core::flat::FlatText::fetch_char_at
+> match: core::hash_collection::HashCollection
+> match: core::hash_collection::HashCollection::index_at
+> match: core::hash_collection::HashCollection::node_at
+> match: core::hash_collection::HashCollection::node_at_idx
+> match: core::hash_collection::HashCollection::store
+> match: core::re::Match::[]
+> match: core::re::Match::subs
+> match: core::re::NativeMatchArray::[]
+> match: core::re::NativeRegex::regexec
+> match: core::re::NativeRegex::regexec_match_only
+> match: core::re::Regex::native_match
+> match: core::re::Regex::native_match_is_init
+> match: core::sorter::Comparator::sub_sort
+> match: core::string_search
+> match: opts::OptionEnum
+> match: opts::OptionEnum::init
+> match: serialization::Deserializer::deserialize_attribute_missing
+> match: vsm
+> match: vsm::Document
+> match: vsm::Document::terms_count
+> match: vsm::Document::terms_frequency
+> match: vsm::Document::tfidf
+> match: vsm::FileIndex
+> match: vsm::FileIndex::blacklist_exts
+> match: vsm::FileIndex::index_dir
+> match: vsm::FileIndex::index_file
+> match: vsm::FileIndex::index_files
+> match: vsm::FileIndex::whitelist_exts
+> match: vsm::IndexMatch
+> match: vsm::IndexMatch::document
+> match: vsm::IndexMatchSorter
+> match: vsm::StringIndex
+> match: vsm::StringIndex::index_string
+> match: vsm::StringIndex::match_string
+> match: vsm::StringIndex::parse_string
+> match: vsm::VSMIndex
+> match: vsm::VSMIndex::DOC
+> match: vsm::VSMIndex::documents
+> match: vsm::VSMIndex::index_document
+> match: vsm::VSMIndex::inverse_doc_frequency
+> match: vsm::VSMIndex::inversed_index
+> match: vsm::VSMIndex::match_vector
+> match: vsm::VSMIndex::sorter
+> match: vsm::VSMIndex::terms_doc_count
+> match: vsm::VSMIndex::update_index
+> match: vsm::Vector
+> match: vsm::Vector::cosine_similarity
+> match: vsm::Vector::inc
+> match: vsm::Vector::norm
+> match: vsm::bm25::VSMIndex::average_document_length
+> match: vsm::example_vsm
+> match: vsm::vsm
+> match: vsm::vsm::TermComparator::vector
+> match: vsm>
 
 This represents a minimalistic search engine.
 
-> match: vsm> (conf: 0.086)
-> match: vsm (conf: 0.086)
+> match: core::BytePattern
+> match: core::BytePattern::search_all_in
+> match: core::CoupleMap
+> match: core::Object::object_id
+> match: core::Path
+> match: core::Pattern::search_all_in
+> match: core::Pattern::search_in
+> match: core::Pattern::search_index_in
+> match: core::Regex::optimize_has
+> match: core::Text::format
+> match: core::abstract_text::CString::to_s_full
+> match: core::abstract_text::CString::to_s_unsafe
+> match: core::abstract_text::Char::escape_to_utf16
+> match: core::environ::String::program_is_in_path
+> match: core::file::Text::files
+> match: core::list::List::search_node_after
+> match: core::re::NativeRegex::regcomp
+> match: core::ropes::Concat
+> match: core::string_search
+> match: core::string_search::BM_Pattern::motif
+> match: core::string_search::Text::search
+> match: core::string_search::Text::search_all
+> match: core::string_search::Text::search_from
+> match: core::string_search::Text::search_last
+> match: core::string_search::Text::search_last_up_to
+> match: meta::meta::Object::get_class
+> match: poset::poset::MapRead::lookup_all_values
+> match: serialization::Deserializer::deserialize
+> match: serialization::Deserializer::deserialize_attribute
+> match: serialization::Deserializer::keep_going
+> match: serialization::Deserializer::notify_of_creation
+> match: serialization::engine_tools
+> match: vsm
+> match: vsm::Vector
+> match: vsm::vsm
+> match: vsm>
 
 ~~~
 import vsm
@@ -232,16 +1208,215 @@ assert matches.first.document == d1
 
 ## StringIndex
 
-> match: vsm::StringIndex (conf: 0.319)
+> match: vsm
+> match: vsm::StringIndex
+> match: vsm>
 
 The StringIndex provides usefull services to index and match strings.
 
-> match: vsm::StringIndex (conf: 0.146)
-> match: vsm> (conf: 0.13)
-> match: vsm (conf: 0.13)
-> match: vsm::StringIndex::match_string (conf: 0.093)
-> match: vsm::StringIndex::index_string (conf: 0.069)
-> match: vsm::StringIndex::parse_string (conf: 0.068)
+> match: config
+> match: config::config
+> match: config>
+> match: core::BM_Pattern
+> match: core::Buffer::[]=
+> match: core::Buffer::append_substring
+> match: core::BytePattern::first_index_in
+> match: core::BytePattern::first_index_in_from
+> match: core::BytePattern::last_index_in
+> match: core::BytePattern::last_index_in_from
+> match: core::BytePattern::search_all_in
+> match: core::Bytes::append_ns_from
+> match: core::Bytes::from_percent_encoding
+> match: core::CString
+> match: core::CString::[]
+> match: core::CString::[]=
+> match: core::CString::byte_to_char_index_cached
+> match: core::CString::char_at
+> match: core::CString::char_to_byte_index
+> match: core::CString::char_to_byte_index_cached
+> match: core::CString::fast_cstring
+> match: core::CachedAlphaComparator
+> match: core::Codec::add_string_to
+> match: core::Codec::decode_string
+> match: core::Codec::encode_string
+> match: core::Collection
+> match: core::Comparator::bubble_sort
+> match: core::Comparator::heap_sort
+> match: core::Comparator::insertion_sort
+> match: core::Comparator::merge_sort
+> match: core::Comparator::quick_sort
+> match: core::FlatBuffer
+> match: core::FlatBuffer::from
+> match: core::FlatBuffer::with_capacity
+> match: core::FlatString
+> match: core::FlatText::fast_cstring
+> match: core::ISODate::from_string
+> match: core::IndexedIterator
+> match: core::IndexedIterator::index
+> match: core::ListIterator::item=
+> match: core::MapRead::provide_default_value
+> match: core::Match
+> match: core::Match::from
+> match: core::Match::string
+> match: core::Match::text_after
+> match: core::Match::text_before
+> match: core::NativeArray::[]
+> match: core::NativeArray::[]=
+> match: core::Object
+> match: core::Object::object_id
+> match: core::Path
+> match: core::Path::read_all
+> match: core::Pattern
+> match: core::Pattern::search_in
+> match: core::Pattern::search_index_in
+> match: core::Pattern::split_in
+> match: core::Reader::append_line_to
+> match: core::Reader::read_line
+> match: core::Reader::read_word
+> match: core::Regex::ignore_case
+> match: core::Regex::newline
+> match: core::Regex::not_bol
+> match: core::Regex::not_eol
+> match: core::Regex::string
+> match: core::Sequence
+> match: core::Sequence::[]=
+> match: core::Sequence::insert
+> match: core::Sequence::insert_all
+> match: core::Sequence::modulo=
+> match: core::Sequence::remove_at
+> match: core::SequenceRead
+> match: core::SequenceRead::[]
+> match: core::SequenceRead::get_or_default
+> match: core::SequenceRead::get_or_null
+> match: core::SequenceRead::index_of
+> match: core::SequenceRead::index_of_from
+> match: core::SequenceRead::last_index_of
+> match: core::SequenceRead::last_index_of_from
+> match: core::SequenceRead::modulo
+> match: core::SequenceRead::modulo_index
+> match: core::Set::new_set
+> match: core::String
+> match: core::StringWriter
+> match: core::Task
+> match: core::Text::[]
+> match: core::Text::empty
+> match: core::Text::escape_to_c
+> match: core::Text::escape_to_dot
+> match: core::Text::from_percent_encoding
+> match: core::Text::has_prefix
+> match: core::Text::has_substring
+> match: core::Text::has_suffix
+> match: core::Text::index_of
+> match: core::Text::index_of_from
+> match: core::Text::is_bin
+> match: core::Text::is_dec
+> match: core::Text::is_hex
+> match: core::Text::is_numeric
+> match: core::Text::is_oct
+> match: core::Text::is_whitespace
+> match: core::Text::last_index_of
+> match: core::Text::last_index_of_from
+> match: core::Text::levenshtein_distance
+> match: core::Text::pack_l
+> match: core::Text::pack_r
+> match: core::Text::substring
+> match: core::Text::substring_from
+> match: core::Text::to_cmangle
+> match: core::Text::to_snake_case
+> match: core::Text::unescape_nit
+> match: core::Writable
+> match: core::Writable::write_to_string
+> match: core::Writer::write
+> match: core::abstract_collection
+> match: core::abstract_text::CString::to_s_full
+> match: core::abstract_text::CString::to_s_unsafe
+> match: core::abstract_text::Float::to_precision_size
+> match: core::abstract_text::Int::strerror
+> match: core::array::ArrayMap::index
+> match: core::array::ArrayMap::last_index
+> match: core::array::ArrayMap::remove_at_index
+> match: core::bytes::Int::add_digest_at
+> match: core::circular_array::CircularArray::native
+> match: core::circular_array::CircularArray::offset
+> match: core::codec_base
+> match: core::file::Text::relpath
+> match: core::file::Text::simplify_path
+> match: core::file::Text::to_path
+> match: core::fixed_ints
+> match: core::fixed_ints_text
+> match: core::flat::CString::to_s_with_length
+> match: core::flat::FlatString::full
+> match: core::flat::FlatString::with_infos
+> match: core::flat::FlatText::char_to_byte_index
+> match: core::flat::FlatText::fetch_char_at
+> match: core::flat::FlatText::position
+> match: core::flat::UnicodeFlatString
+> match: core::hash_collection::HashCollection
+> match: core::hash_collection::HashCollection::index_at
+> match: core::hash_collection::HashCollection::node_at_idx
+> match: core::hash_collection::HashCollection::store
+> match: core::kernel
+> match: core::numeric
+> match: core::queue::SimpleCollection::as_random
+> match: core::range::Int::times
+> match: core::re
+> match: core::re::Match::[]
+> match: core::re::Match::subs
+> match: core::re::NativeMatchArray::[]
+> match: core::re::NativeMatchArray::rm_eo
+> match: core::re::NativeMatchArray::rm_so
+> match: core::re::NativeRegex::regerror
+> match: core::re::NativeRegex::regexec
+> match: core::re::NativeRegex::regexec_match_only
+> match: core::re::Regex::native_match
+> match: core::re::Regex::native_match_is_init
+> match: core::re::Regex::string_cache
+> match: core::ropes
+> match: core::sorter
+> match: core::sorter::Comparator::sub_sort
+> match: core::string_search
+> match: core::string_search::Text::replace
+> match: core::string_search::Text::replace_first
+> match: meta
+> match: meta::meta
+> match: meta>
+> match: opts::OptionEnum
+> match: opts::OptionEnum::init
+> match: poset::POSet::sub
+> match: serialization
+> match: serialization::Deserializer
+> match: serialization::Deserializer::deserialize_class_intern
+> match: serialization::Serializer
+> match: serialization::Serializer::serialize
+> match: serialization::serialization_core
+> match: serialization>
+> match: vsm
+> match: vsm::Document::terms_frequency
+> match: vsm::FileIndex::blacklist_exts
+> match: vsm::FileIndex::index_dir
+> match: vsm::FileIndex::index_file
+> match: vsm::FileIndex::index_files
+> match: vsm::FileIndex::whitelist_exts
+> match: vsm::IndexMatch
+> match: vsm::IndexMatch::document
+> match: vsm::IndexMatchSorter
+> match: vsm::StringIndex
+> match: vsm::StringIndex::index_string
+> match: vsm::StringIndex::match_string
+> match: vsm::StringIndex::parse_string
+> match: vsm::VSMIndex
+> match: vsm::VSMIndex::DOC
+> match: vsm::VSMIndex::documents
+> match: vsm::VSMIndex::index_document
+> match: vsm::VSMIndex::inverse_doc_frequency
+> match: vsm::VSMIndex::inversed_index
+> match: vsm::VSMIndex::match_vector
+> match: vsm::VSMIndex::sorter
+> match: vsm::VSMIndex::terms_doc_count
+> match: vsm::VSMIndex::update_index
+> match: vsm::example_vsm
+> match: vsm::vsm
+> match: vsm>
 
 ~~~
 import vsm
@@ -258,18 +1433,195 @@ assert matches.first.document == d1
 
 ## FileIndex
 
-> match: vsm::FileIndex (conf: 0.441)
+> match: vsm
+> match: vsm::FileIndex
+> match: vsm::example_vsm
+> match: vsm>
 
 The FileIndex is a StringIndex able to index and retrieve files.
 
-> match: vsm::FileIndex (conf: 0.189)
-> match: vsm> (conf: 0.132)
-> match: vsm (conf: 0.132)
-> match: vsm::StringIndex (conf: 0.121)
-> match: vsm::FileIndex::whitelist_exts (conf: 0.073)
-> match: vsm::FileIndex::index_file (conf: 0.065)
-> match: vsm::FileIndex::blacklist_exts (conf: 0.064)
-> match: vsm::FileIndex::index_files (conf: 0.06)
+> match: config
+> match: config::Config::tool_description
+> match: config::IniConfig
+> match: config::IniConfig::config_file
+> match: config::IniConfig::default_config_file
+> match: config::IniConfig::opt_config
+> match: config::config
+> match: config>
+> match: core::Buffer::[]=
+> match: core::Buffer::append_substring
+> match: core::BytePattern::first_index_in
+> match: core::BytePattern::first_index_in_from
+> match: core::BytePattern::last_index_in
+> match: core::BytePattern::last_index_in_from
+> match: core::BytePattern::search_all_in
+> match: core::Bytes::append_ns_from
+> match: core::CString::[]
+> match: core::CString::[]=
+> match: core::CString::byte_to_char_index_cached
+> match: core::CString::char_at
+> match: core::CString::char_to_byte_index
+> match: core::CString::char_to_byte_index_cached
+> match: core::CString::fast_cstring
+> match: core::Collection
+> match: core::Comparator::bubble_sort
+> match: core::Comparator::heap_sort
+> match: core::Comparator::insertion_sort
+> match: core::Comparator::merge_sort
+> match: core::Comparator::quick_sort
+> match: core::Error::message
+> match: core::FileReader
+> match: core::FileReader::from_fd
+> match: core::FileReader::open
+> match: core::FileReader::reopen
+> match: core::FileStat
+> match: core::FileStat::is_file
+> match: core::FileStat::mode
+> match: core::FileStat::size
+> match: core::FileStream
+> match: core::FileStream::fd
+> match: core::FileStream::file_stat
+> match: core::FileStream::path
+> match: core::FileWriter
+> match: core::FileWriter::from_fd
+> match: core::FileWriter::open
+> match: core::IndexedIterator
+> match: core::IndexedIterator::index
+> match: core::ListIterator::item=
+> match: core::Map::[]=
+> match: core::NativeArray::[]
+> match: core::NativeArray::[]=
+> match: core::Path
+> match: core::Path::copy
+> match: core::Path::delete
+> match: core::Path::dir
+> match: core::Path::each_line
+> match: core::Path::exists
+> match: core::Path::filename
+> match: core::Path::files
+> match: core::Path::link_stat
+> match: core::Path::open_ro
+> match: core::Path::open_wo
+> match: core::Path::read_all
+> match: core::Path::read_all_bytes
+> match: core::Path::read_lines
+> match: core::Path::rmdir
+> match: core::Path::simplified
+> match: core::Path::stat
+> match: core::Pattern::search_in
+> match: core::Pattern::search_index_in
+> match: core::ProcessReader::stream_in
+> match: core::ProcessWriter::stream_out
+> match: core::Queue
+> match: core::Reader::read_all
+> match: core::Reader::read_all_bytes
+> match: core::Reader::read_line
+> match: core::Reader::read_nonwhitespace
+> match: core::Reader::read_word
+> match: core::Sequence
+> match: core::Sequence::[]=
+> match: core::Sequence::insert
+> match: core::Sequence::insert_all
+> match: core::Sequence::modulo=
+> match: core::Sequence::remove_at
+> match: core::SequenceRead
+> match: core::SequenceRead::[]
+> match: core::SequenceRead::get_or_default
+> match: core::SequenceRead::get_or_null
+> match: core::SequenceRead::index_of
+> match: core::SequenceRead::index_of_from
+> match: core::SequenceRead::last_index_of
+> match: core::SequenceRead::last_index_of_from
+> match: core::SequenceRead::modulo
+> match: core::SequenceRead::modulo_index
+> match: core::Stream::last_error
+> match: core::Text::[]
+> match: core::Text::has_substring
+> match: core::Text::index_of
+> match: core::Text::index_of_from
+> match: core::Text::last_index_of
+> match: core::Text::last_index_of_from
+> match: core::Text::substring
+> match: core::Text::substring_from
+> match: core::array::ArrayMap::index
+> match: core::array::ArrayMap::last_index
+> match: core::array::ArrayMap::remove_at_index
+> match: core::circular_array::CircularArray::native
+> match: core::circular_array::CircularArray::offset
+> match: core::file
+> match: core::file::CString::file_chdir
+> match: core::file::CString::file_delete
+> match: core::file::CString::file_exists
+> match: core::file::CString::file_lstat
+> match: core::file::CString::file_mkdir
+> match: core::file::CString::file_realpath
+> match: core::file::CString::file_stat
+> match: core::file::FileStat::stat
+> match: core::file::FileStream::file
+> match: core::file::Int::fd_to_stream
+> match: core::file::Int::isatty
+> match: core::file::NativeFile
+> match: core::file::NativeFile::file_stat
+> match: core::file::NativeFileStat::is_reg
+> match: core::file::NativeFileStat::mode
+> match: core::file::Sys::read_only
+> match: core::file::Sys::wipe_write
+> match: core::file::Text::file_copy_to
+> match: core::file::Text::file_delete
+> match: core::file::Text::file_exists
+> match: core::file::Text::file_extension
+> match: core::file::Text::file_lstat
+> match: core::file::Text::file_stat
+> match: core::file::Text::files
+> match: core::file::Text::relpath
+> match: core::file::Text::simplify_path
+> match: core::file::Text::to_path
+> match: core::file::Writable::write_to_file
+> match: core::flat::FlatString::full
+> match: core::flat::FlatString::with_infos
+> match: core::flat::FlatText::char_to_byte_index
+> match: core::flat::FlatText::fetch_char_at
+> match: core::hash_collection::HashCollection
+> match: core::hash_collection::HashCollection::index_at
+> match: core::hash_collection::HashCollection::node_at_idx
+> match: core::hash_collection::HashCollection::store
+> match: core::re::NativeMatchArray::[]
+> match: core::sorter::Comparator::sub_sort
+> match: ini
+> match: ini::ConfigTree::ini_file
+> match: ini::ConfigTree::load
+> match: ini::ConfigTree::save
+> match: ini::ini
+> match: ini>
+> match: meta::GetName
+> match: opts::OptionEnum
+> match: opts::OptionEnum::init
+> match: serialization
+> match: serialization>
+> match: vsm
+> match: vsm::FileIndex
+> match: vsm::FileIndex::accept_file
+> match: vsm::FileIndex::blacklist_exts
+> match: vsm::FileIndex::index_dir
+> match: vsm::FileIndex::index_file
+> match: vsm::FileIndex::index_files
+> match: vsm::FileIndex::parse_file
+> match: vsm::FileIndex::whitelist_exts
+> match: vsm::IndexMatch
+> match: vsm::StringIndex
+> match: vsm::StringIndex::index_string
+> match: vsm::StringIndex::match_string
+> match: vsm::VSMIndex
+> match: vsm::VSMIndex::DOC
+> match: vsm::VSMIndex::documents
+> match: vsm::VSMIndex::index_document
+> match: vsm::VSMIndex::inversed_index
+> match: vsm::VSMIndex::match_vector
+> match: vsm::VSMIndex::terms_doc_count
+> match: vsm::VSMIndex::update_index
+> match: vsm::example_vsm
+> match: vsm::vsm
+> match: vsm>
 
 ~~~nit
 import vsm

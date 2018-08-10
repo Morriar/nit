@@ -79,8 +79,8 @@ class MDocAligner
 		var align_nlp = new MdAlignNLP(model, mainmodule, context, mentity_index)
 		align_nlp.align_document(document)
 
-		var filter_context = new MdFilterContext(context)
-		filter_context.filter_document(document)
+		# var filter_context = new MdFilterContext(context)
+		# filter_context.filter_document(document)
 
 		# block_align.align_blocks(document, context)
 
@@ -153,12 +153,20 @@ class MDocSpanReferencesVisitor
 				# need_space = true
 
 				# NLP refs
+				var names = new Array[String]
 				for ref in md_refs do
 					if ref isa MdRefNLP then
+						if names.has(ref.mentity.full_name) then continue
+						names.add ref.mentity.full_name
+						# names.add "{ref.mentity.full_name} (s: {ref.score})"
 						# print "> match: {ref.mentity.full_name} (conf: {ref.score})"
-						print "> match: {ref.mentity.full_name}"
 						need_space = true
 					end
+				end
+				default_comparator.sort(names)
+				for name in names do
+					print "> match: {name}"
+					need_space = true
 				end
 				if need_space then print ""
 

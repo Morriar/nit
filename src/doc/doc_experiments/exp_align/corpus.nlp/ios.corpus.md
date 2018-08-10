@@ -13,6 +13,7 @@ Follow the instructions in `README.md` at the root of the repository.
 Optionally, install ios-sim to run compiled apps in the simulator: `brew install ios-sim`
 
 > match: ios
+> match: ios::app
 
 ## Compile and run a simple application
 
@@ -23,21 +24,24 @@ Let's use the `hello_ios` example in the folder `lib/ios/examples/`.
 
 Compile with: `nitc hello_world.nit`
 
+> match: ios::hello_ios::AppDelegate::hello_world
+
 Run in the simulator with: `ios-sim hello_world.app`
 
 ## Sample portable applications
 
+> match: ios::app::App
+
 See the calculator example at `examples/calculator` and the Tnitter client at `contrib/tnitter/`
 for portable applications working on GNU/Linux, OS X, iOS and Android.
 
-> match: ios>examples>
-> match: examples::Calculator
-> match: tnitter
-> match: linux
 > match: ios
-> match: android
+> match: ios>examples>
 
 ## Application icon
+
+> match: ios::app
+> match: ios::app::App
 
 To associate icons to your application, create the directory `ios/AppIcon.appiconset` and fill it with standard icons and `Contents.json`.
 These files can be generated in a number of different ways:
@@ -48,6 +52,4 @@ These files can be generated in a number of different ways:
 
 * Write or modify the file `Contents.json` manually.
   It is in Json format and easily readable.
-
-> match: json
 
