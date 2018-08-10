@@ -1,24 +1,25 @@
 # Android platform support and APIs
 
-> theme: <MdThemeTitle:#d1199c0>
-
+> theme: title
 
 ## Compilation for Android
+
+> theme: features
 
 The compiler generates an APK file as the output when the `android`
 module is imported by the compilation target. The path to the generated
 file can be specified using the `-o` and `--dir` options.
 
-> theme: <MdThemeAPI:#d119180>
-
+> theme: api
 
 ## Host system configuration
+
+> theme: features
 
 To compile Android apps from a 64 bits GNU/Linux host you can reuse an existing Android Studio
 installation or make a clean install with command line tools only.
 
-> theme: <MdThemeInstall:#d1b5720>
-
+> theme: install
 
 Note that this guide supports only 64 bits GNU/Linux hosts with support for a Java 8 JDK,
 it may be possible to support other platforms with some tweaks.
@@ -62,27 +63,30 @@ it may be possible to support other platforms with some tweaks.
    sudo apt install openjdk-8-jdk
    ~~~
 
-> theme: <MdThemeAPI:#d3919c0>
-> theme: <MdThemeAPI:#d34b500>
-> theme: <MdThemeInstall:#d2142c0>
-> theme: <MdThemeAPI:#d214280>
-> theme: <MdThemeInstall:#d2c0340>
-> theme: <MdThemeInstall:#d34b600>
-> theme: <MdThemeInstall:#d34b540>
-> theme: <MdThemeAPI:#d351040>
-> theme: <MdThemeAPI:#d34b4c0>
-> theme: <MdThemeInstall:#d351140>
-> theme: <MdThemeInstall:#d351080>
-> theme: <MdThemeInstall:#d391b20>
-> theme: <MdThemeInstall:#d391a60>
-
+> theme: api
+> theme: api
+> theme: install
+> theme: api
+> theme: install
+> theme: install
+> theme: install
+> theme: api
+> theme: api
+> theme: install
+> theme: install
+> theme: install
+> theme: install
 
 ## Configure the Android application
+
+> theme: features
 
 The _app.nit_ framework and this project offers some services to
 customize the generated Android application.
 
 ### Annotations
+
+> theme: features
 
 * All _app.nit_ annotations are applied to Android projects:
   `app_name`, `app_namespace` and `app_version`.
@@ -111,96 +115,98 @@ customize the generated Android application.
   only be used by low-level implementations of Nit on Android.
   Its usefulness will be extended in the future to customize user applications.
 
-> theme: <MdThemeAPI:#cd30260>
-> theme: <MdThemeFeatures:#cd30240>
-> theme: <MdThemeAPI:#d3bfb20>
-> theme: <MdThemeAPI:#d3a1180>
-> theme: <MdThemeAPI:#d3b8a40>
-> theme: <MdThemeRefs:#d3bfb60>
-> theme: <MdThemeAPI:#d3c8880>
-> theme: <MdThemeAPI:#d3bfae0>
-> theme: <MdThemeUsage:#d3c8900>
-> theme: <MdThemeExamples:#d3c88c0>
-> theme: <MdThemeAPI:#d3f8820>
-> theme: <MdThemeAPI:#d3c8840>
-> theme: <MdThemeRefs:#d3f8980>
-> theme: <MdThemeAPI:#cd302a0>
-> theme: <MdThemeAPI:#d3f8780>
-
+> theme: api
+> theme: features
+> theme: api
+> theme: api
+> theme: api
+> theme: refs
+> theme: api
+> theme: api
+> theme: usage
+> theme: examples
+> theme: api
+> theme: api
+> theme: refs
+> theme: api
+> theme: api
 
 ### Android implementation
+
+> theme: features
 
 There is two core implementation for Nit apps on Android.
 `android::nit_activity` is used by apps with standard windows and native UI controls.
 `android::game` is used by, well, games and the game frameworks `mnit` and `gamnit`.
 
-> theme: <MdThemeAPI:#cd6cac0>
-
+> theme: api
 
 Clients don't have to select the core implementation, it is imported by other relevant modules.
 For example, a module importing `app::ui` and `android` will trigger the importation of `android::nit_activity`.
 
-> theme: <MdThemeAPI:#cdb3f20>
-> theme: <MdThemeExamples:#cdce1c0>
-
+> theme: api
+> theme: examples
 
 ### Lock app orientation
+
+> theme: features
 
 Importing `android::landscape` or `android::portrait` locks the generated
 application in the specified orientation. This can be useful for games and
 other multimedia applications.
 
-> theme: <MdThemeAPI:#cdd9be0>
-
+> theme: api
 
 ### Resources and application icon
+
+> theme: features
 
 Resources specific to the Android platform should be placed in an `android/` folder at the root of the project.
 The folder should adopt the structure of a normal Android project, e.g., a custom XML resource file can be placed
 at `android/res/values/color.xml` to be compiled with the Android application.
 
-> theme: <MdThemeAPI:#ce347e0>
-
+> theme: api
 
 The application icon should also be placed in the `android/` folder.
 Place the classic bitmap version at `android/res/mipmap-hdpi/ic_launcher.png` (and others),
 and the adaptive version at `android/res/mipmap-anydpi-v26/ic_launcher.xml`.
 The Nit compiler detects these files and uses them as the application icon.
 
-> theme: <MdThemeAPI:#cf19160>
-
+> theme: api
 
 Additional `android/` folders may be placed next to more specific Nit modules to change the Android resources
 for application variants. The more specific resources will have priority over the project level `android/` files.
 
-> theme: <MdThemeAPI:#c850720>
-
+> theme: api
 
 ## Compilation modes
+
+> theme: features
 
 There are two compilation modes for the Android platform, debug and release.
 Theses modes are also applied to the generated Android projects.
 The compilation mode is specified as an argument to `nitc`, only
 `--release` can be specified as debug is the default behavior.
 
-> theme: <MdThemeAPI:#c8712a0>
-
+> theme: api
 
 ### Debug mode
+
+> theme: features
 
 Debug mode enables compiling to an APK file without handling signing keys
 and their password. The APK file can be installed to a local device with
 USB debugging enabled, but it cannot be published on the Play Store.
 
-> theme: <MdThemeInstall:#c8ad440>
-
+> theme: install
 
 By default, `nitc` will compile Android applications in debug mode.
 
-> theme: <MdThemeAPI:#c8ad400>
-
+> theme: api
 
 ### Release mode
+
+> theme: features
 
 Building in release mode will use your private key to sign the
 APK file, it can then be published on the Play Store.
@@ -232,14 +238,13 @@ APK file, it can then be published on the Play Store.
 3. Call `nitc` with the `--release` options. You will be prompted for the
    required passwords as needed by `jarsigner`.
 
-> theme: <MdThemeAPI:#ca0a020>
-> theme: <MdThemeAPI:#c94dd20>
-> theme: <MdThemeAPI:#c9077a0>
-> theme: <MdThemeInstall:#c94dd80>
-> theme: <MdThemeAPI:#ca01800>
-> theme: <MdThemeAPI:#c94daa0>
-> theme: <MdThemeInstall:#ca01840>
-> theme: <MdThemeAPI:#ca0a060>
-> theme: <MdThemeAPI:#ca017c0>
-
+> theme: api
+> theme: api
+> theme: api
+> theme: install
+> theme: api
+> theme: api
+> theme: install
+> theme: api
+> theme: api
 

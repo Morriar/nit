@@ -1,25 +1,23 @@
 # Nit wrapper for Github API
 
-> name: github
+> theme: title
 
 This module provides a Nit object oriented interface to access the Github api.
 
-> name: github
-> name: core::Object
-> name: nitcorn::Interface
-> name: nitcorn::Interfaces
+> theme: intro
 
 ## Accessing the API
 
-> name: github::api
+> theme: features
 
 ### `GithubAPI` - # Client to Github API
 
-> name: github
+> theme: api
+> theme: features
 
 To access the API you need an instance of a `GithubAPI` client.
 
-> name: github::api
+> theme: api
 
 ~~~
 import github
@@ -32,9 +30,9 @@ assert not token.is_empty
 var api = new GithubAPI(token)
 ~~~
 
-The API client allows you to get Github API entities.
+> theme: examples
 
-> name: github
+The API client allows you to get Github API entities.
 
 ~~~
 import github
@@ -49,36 +47,38 @@ assert user != null
 assert user.login == "Morriar"
 ~~~
 
+> theme: examples
+
 ### Authentification
+
+> theme: features
 
 Token can also be recovered from user config with `get_github_oauth`.
 
-> name: config
-> name: nitcorn::token
-> name: github::User
-> name: config::Config
+> theme: api
 
 ### `get_github_oauth` - # Gets the Github token from `git` configuration
 
-> name: github
-> name: nitcorn::token
+> theme: api
+> theme: features
 
 Return the value of `git config --get github.oauthtoken`
 or `""` if no key exists.
 
+> theme: api
+
 ### Retrieving user data
 
-> name: github::User
+> theme: features
 
 ### `load_user` - # Get the Github user with `login`
 
-> name: github
-> name: github::User
+> theme: api
+> theme: features
 
 Loads the `User` from the API or returns `null` if the user cannot be found.
 
-> name: github::api
-> name: github::User
+> theme: api
 
 ~~~
 import github
@@ -89,16 +89,18 @@ print user or else "null"
 assert user.login == "Morriar"
 ~~~
 
+> theme: examples
+
 ### `User` - # A Github user
 
-> name: github
-> name: github::User
+> theme: api
+> theme: features
 
 Provides access to [Github user data](https://developer.github.com/v3/users/).
 Should be accessed from `GithubAPI::load_user`.
 
-> name: github
-> name: github::User
+> theme: api
+> theme: intro
 
 * `api$User$SELF` - # Type of this instance, automatically specialized in every class
 
@@ -138,50 +140,59 @@ Should be accessed from `GithubAPI::load_user`.
 
 * `name=` - # User public name if any.
 
-> name: meta::Class
-> name: popcorn>examples>static_files>public>images>
-> name: github::User
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: github
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: popcorn>examples>static_files>public>images>
-> name: github::User
-> name: popcorn>examples>static_files>public>images>
-> name: github::User
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: serialization
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: meta::Class
-> name: github
-> name: github
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: popcorn>examples>static_files>public>
-> name: github::User
+> theme: api
+> theme: features
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
 
 ### Retrieving repo data
 
-> name: github::Repo
+> theme: features
 
 ### `load_repo` - # Get the Github repo with `full_name`.
 
-> name: github
-> name: github::Repo
+> theme: api
+> theme: features
 
 Loads the `Repo` from the API or returns `null` if the repo cannot be found.
 
-> name: github::api
-> name: github::Repo
+> theme: api
 
 ~~~
 import github
@@ -193,16 +204,18 @@ assert repo.owner.login == "nitlang"
 assert repo.default_branch == "master"
 ~~~
 
+> theme: examples
+
 ### `Repo` - # A Github repository.
 
-> name: github
-> name: popcorn::Repository
+> theme: api
+> theme: features
 
 Provides access to [Github repo data](https://developer.github.com/v3/repos/).
 Should be accessed from `GithubAPI::load_repo`.
 
-> name: github
-> name: github::Repo
+> theme: api
+> theme: intro
 
 * `api$Repo$SELF` - # Type of this instance, automatically specialized in every class
 
@@ -246,34 +259,54 @@ Should be accessed from `GithubAPI::load_repo`.
 
 * `owner=` - # Get the repo owner.
 
-> name: meta::Class
-> name: github::Repo
-> name: github::Branch
-> name: github
-> name: github::Repo
-> name: github
-> name: github::Repo
-> name: github::Repo
-> name: serialization
-> name: serialization
-> name: github::Repo
-> name: github::Branch
-> name: github::Repo
-> name: github::Branch
-> name: meta::Class
-> name: meta::Class
-> name: github
-> name: github::Repo
-> name: github
-> name: github::Repo
-> name: github
-> name: github::Repo
-> name: github
-> name: github::Repo
-> name: github::Repo
-> name: github::Repo
+> theme: api
+> theme: features
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
 
 ### Other data
+
+> theme: features
 
 * `api$Branch` - # A Github branch.
 
@@ -323,60 +356,82 @@ Should be accessed from `GithubAPI::load_repo`.
 
 * `api$User` - # A Github user
 
-> name: github
-> name: github::Branch
-> name: github
-> name: github::Comment
-> name: github
-> name: github::Commit
-> name: github::Comment
-> name: github::Commit
-> name: github::Commit
-> name: github::User
-> name: github
-> name: github
-> name: json::JsonDeserializer
-> name: core::Object
-> name: github
-> name: github
-> name: popcorn>examples>static_files>files>
-> name: core::file
-> name: github
-> name: github::Issue
-> name: github
-> name: github::Comment
-> name: github::Issue
-> name: github
-> name: github
-> name: github::Label
-> name: github
-> name: github::Milestone
-> name: github
-> name: nitcorn::Action
-> name: nitcorn::Action
-> name: github
-> name: popcorn::Repository
-> name: github
-> name: github::Comment
-> name: github
-> name: github::User
+> theme: api
+> theme: features
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: authors
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: authors
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: refs
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
 
 ### Advanced uses
 
+> theme: features
+
 #### Caching
 
-> name: serialization::caching
+> theme: features
 
 #### Custom requests
 
+> theme: features
+
 ### `get` - # Execute a GET request on Github API.
 
-> name: github
+> theme: api
+> theme: features
 
 This method returns raw json data.
 See other `load_*` methods to use more expressive types.
 
-> name: json
+> theme: api
+> theme: refs
 
 ~~~
 import github
@@ -387,7 +442,11 @@ assert obj isa JsonObject
 assert obj["name"] == "nit"
 ~~~
 
+> theme: examples
+
 Returns `null` in case of `error`.
+
+> theme: api
 
 ~~~
 import github
@@ -402,61 +461,75 @@ assert err.name == "GithubAPIError"
 assert err.message == "Not Found"
 ~~~
 
+> theme: examples
+
 #### Change the user agent
 
-> name: github::User
+> theme: features
 
 ### `user_agent` - # User agent used for HTTP requests.
 
-> name: github::User
+> theme: api
+> theme: features
 
 Default is `nit_github_api`.
 
+> theme: api
+
 See <https://developer.github.com/v3/#user-agent-required>
 
-> name: github
-> name: github::User
+> theme: refs
 
 #### Debugging
 
+> theme: features
+
 ### `verbose_lvl` - # Verbosity level.
+
+> theme: api
+> theme: features
 
 * `0`: only errors (default)
 * `1`: verbose
 
-> name: core::error
-> name: json::error
-> name: core::Error
+> theme: api
+> theme: features
+> theme: api
+> theme: api
+> theme: api
+> theme: api
 
 #### Using with GitLab
+
+> theme: features
 
 If URL scheme of GitLab API follows the one of Github API, it may be possible to
 configure this wrapper to use a custom URL.
 
-> name: github
-
 ### `api_url` - # Github API base url.
 
-> name: github
+> theme: api
+> theme: features
 
 Default is `https://api.github.com` and should not be changed.
 
+> theme: api
+
 ## Creating hooks
 
-> name: github::hooks
+> theme: features
 
 Using this API you can create Github hooks able to respond to actions performed
 on a repository.
 
-> name: github
-> name: nitcorn::Action
-> name: popcorn::Repository
-
 ### `hooks` - # Github hook event listening with `nitcorn`.
 
-> name: github
+> theme: api
+> theme: features
 
 Usage:
+
+> theme: usage
 
 ~~~
 import github::hooks
@@ -488,19 +561,18 @@ var listener = new LogHookListener(api, "127.0.0.1", 8080)
 # listener.listen # uncomment to start listening
 ~~~
 
+> theme: examples
+
 ## Dealing with events
 
-> name: github::events
+> theme: features
 
 GithubAPI can trigger different events depending on the hook configuration.
 
-> name: github::events
-> name: github::hooks
-> name: github::GithubAPI
-
 ### `GithubEvent` - # Github event stub.
 
-> name: github
+> theme: api
+> theme: features
 
 * `events$CommitCommentEvent` - # Triggered when a commit comment is created.
 
@@ -534,26 +606,38 @@ GithubAPI can trigger different events depending on the hook configuration.
 
 * `events$StatusEvent` - # Triggered when the status of a Git commit changes.
 
-> name: github::Commit
-> name: github::Comment
-> name: popcorn::Repository
-> name: github::Branch
-> name: github::Branch
-> name: github::User
-> name: popcorn::Repository
-> name: github
-> name: json::JsonDeserializer
-> name: core::Object
-> name: github
-> name: github::Issue
-> name: github::Comment
-> name: github::events
-> name: github::Issue
-> name: github::User
-> name: popcorn::Repository
-> name: github::events
-> name: github::Comment
-> name: popcorn::Repository
-> name: github::Branch
-> name: github::Commit
+> theme: api
+> theme: features
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
 

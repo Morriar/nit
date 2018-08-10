@@ -1,71 +1,70 @@
 # Nit Actor Model
 
-> theme: <MdThemeTitle:#11c5b060>
-
+> theme: title
 
 This group introduces the `actors` module which contains the abstraction of a Nit Actor Model,
 based on Celluloid (https://github.com/celluloid/celluloid).
 
-> theme: <MdThemeAPI:#11c5b020>
-> theme: <MdThemeIntro:#11c5fc60>
-
+> theme: api
+> theme: intro
 
 ## What is an actor ?
+
+> theme: api
+> theme: features
 
 An actor is an entity which receives messages and does some kind of computation based on it.
 An actor has a mailbox in which it receives its messages, and process them one at a time.
 
+> theme: api
+
 ## `actor` annotation
 
-> theme: <MdThemeAPI:#11c61f40>
-
+> theme: api
+> theme: features
 
 The `actors` module introduces the annotation `actor` which is to be used on classes.
 This annotation transform a normal Nit class into an actor.
 
-> theme: <MdThemeAPI:#11c61b40>
-> theme: <MdThemeIntro:#11c62920>
-
+> theme: api
+> theme: intro
 
 In practice, it adds a new property `async` to the annotated class.
 When using `async` on your annotated class, this means that you want your calls to be asynchronous,
 executed by the actor.
 
-> theme: <MdThemeAPI:#11c628e0>
-
+> theme: api
 
 For instance, if you call `a.async.foo` and `foo` doesn't have a return value, it will send
 a message to the mailbox of the actor attached to `a` which will process it asynchronously.
 
-> theme: <MdThemeAPI:#11c64120>
-
+> theme: api
 
 On the other hand, if you call `a.async.bar` and `bar` returns an`Int`, it will still send
 a message to the actor, but you'll get a `Future[Int]` to be able to retrieve the value.
 When using `join` on the future, the calling thread will wait until the value of the future is set.
 
-> theme: <MdThemeAPI:#11c66a80>
-
+> theme: api
 
 ## Managing actors
+
+> theme: api
+> theme: features
 
 When you annotate a class with `actor` and create an instance of it with `new`, the actor is not
 automatically created (which means you can completely skip the use of the actors if you
 don't need them for a specific program).
 
-> theme: <MdThemeAPI:#11c684a0>
-
+> theme: api
 
 The `async` added property is actually created lazily when you use it.
 
-> theme: <MdThemeAPI:#11c6a880>
-
+> theme: api
 
 Actors are not automatically garbage collected, but you have solutions to terminate them
 if you need to. For this, you need to use the `async` property of your annotated class :
 
-> theme: <MdThemeAPI:#11c6bf60>
-
+> theme: api
 
 * `async.terminate` sends a shutdown message to the actor telling him to stop, so he'll finish
   processing every other messages in his mailbox before terminating properly. Every other messages sent
@@ -78,22 +77,16 @@ if you need to. For this, you need to use the `async` property of your annotated
   or in which state he'll leave the memory, you can with this call. it's synchronous but not really
   blocking, since it's direcly canceling the native pthread associated to the actor.
 
-> theme: <MdThemeAPI:#11c74c80>
-> theme: <MdThemeFeatures:#11c74c60>
-> theme: <MdThemeAPI:#11c6f740>
-> theme: <MdThemeAPI:#11c6c900>
-> theme: <MdThemeAPI:#11c71ba0>
-> theme: <MdThemeAPI:#11c6f700>
-> theme: <MdThemeAPI:#11c72fa0>
-> theme: <MdThemeAPI:#11c71b60>
-> theme: <MdThemeAPI:#11c74cc0>
-> theme: <MdThemeAPI:#11c72f60>
-
+> theme: api
+> theme: features
 
 For now, there isn't any mecanism to recreate and actor after it was terminated.
 Sending messages after terminating it results in unspecified behaviour.
 
 ## Waiting for all actors to finish processing
+
+> theme: api
+> theme: features
 
 Let's imagine you create a whole bunch of actors and make them do things asynchronously from the main thread.
 You don't want your program to exit right after giving work to your actors.
@@ -105,24 +98,20 @@ In short, the `is_empty` method on this list is blocking until the list is effec
 When every actors finished working, and we're sure they won't even send another message to another
 actor, `active_actors` is empty.
 
-> theme: <MdThemeAPI:#11c78d00>
-
+> theme: api
 
 You can use this property as a mean of synchronisation in some specific cases (for example if you're
 using actors for fork/join parallelism instead of concurrency).
 
-> theme: <MdThemeExamples:#11c7b060>
-
+> theme: features
 
 ## Examples
 
-> theme: <MdThemeExamples:#11c7cec0>
-
+> theme: examples
 
 You can find example of differents small programs implemented with Nit actors in the `examples`
 directory. For a really simple example, you can check `examples/simple`.
 
-> theme: <MdThemeAPI:#11c7ce80>
-> theme: <MdThemeExamples:#11c7e9a0>
-
+> theme: api
+> theme: examples
 

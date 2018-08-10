@@ -46,3 +46,40 @@ class MdRefMEntity
 
 	var mentity:  MEntity
 end
+
+abstract class MdFilter
+	super MdVisitor
+
+	fun filter_document(doc: MdDocument) do
+		enter_visit(doc)
+	end
+
+	fun filter_node(node: MdNode) do end
+
+	redef fun visit(node) do
+		filter_node(node)
+		node.visit_all(self)
+	end
+end
+
+abstract class MdFilterMEntities
+	super MdFilter
+
+	redef fun filter_node(node) do
+		var keep = new Array[MdRef]
+		var mentities_refs = new Array[MdRefMEntity]
+
+		for ref in node.md_refs do
+			if ref isa MdRefMEntity then
+				mentities_refs.add ref
+			else
+				keep.add ref
+			end
+		end
+		keep.add_all filter_mentities_refs(mentities_refs)
+		node.md_refs = keep
+	end
+
+	fun filter_mentities_refs(refs: Array[MdRefMEntity]): Array[MdRefMEntity] is abstract
+end
+

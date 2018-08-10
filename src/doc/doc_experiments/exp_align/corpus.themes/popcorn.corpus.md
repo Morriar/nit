@@ -1,31 +1,27 @@
 # Popcorn
 
-> name: popcorn
+> theme: title
 
 **Why endure plain corn when you can pop it?!**
 
 Popcorn is a minimal yet powerful nit web application framework that provides cool
 features for lazy developpers.
 
-> name: popcorn
+> theme: intro
 
 Popcorn is built over nitcorn to provide a clean and user friendly interface
 without all the boiler plate code.
 
-> name: popcorn
-> name: nitcorn
-> name: github::User
-> name: nitcorn::Interface
-> name: nitcorn::Interfaces
+> theme: intro
 
 ## What does it taste like?
+
+> struct: usage
 
 Set up is quick and easy as 10 lines of code.
 Create a file `app.nit` and add the following code:
 
-> name: core::Set
-> name: popcorn>examples>static_files>files>
-> name: core::file
+> theme: api
 
 ~~~
 import popcorn
@@ -41,37 +37,36 @@ app.use("/", new HelloHandler)
 app.listen("localhost", 3000)
 ~~~
 
+> theme: examples
+
 The Popcorn app listens on port 3000 for connections.
 The app responds with "Hello World!" for requests to the root URL (`/`) or **route**.
 For every other path, it will respond with a **404 Not Found**.
 
-> name: popcorn
-> name: popcorn::App
-> name: libevent::Connection
-> name: popcorn::App
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: core::Path
+> theme: api
 
 The `req` (request) and `res` (response) parameters are the same that nitcorn provides
 so you can do anything else you would do in your route without Popcorn involved.
 
-> name: nitcorn
-> name: popcorn
-> name: nitcorn::Route
-> name: nitcorn::Routes
+> theme: api
+> theme: intro
 
 Run the app with the following command:
-
-> name: popcorn::App
 
 ~~~bash
 $ nitc app.nit && ./app
 ~~~
 
+> theme: usage
+
 Then, load [http://localhost:3000](http://localhost:3000) in a browser to see the output.
 
+> theme: usage
+
+
 Here the output using the `curl` command:
+
+> theme: usage
 
 ~~~bash
 $ curl localhost:3000
@@ -90,38 +85,22 @@ $ curl localhost:3000/wrong_uri
 </html>
 ~~~
 
-This is why we love popcorn!
+> theme: usage
 
-> name: popcorn
+This is why we love popcorn!
 
 ## Basic routing
 
-> name: popcorn>examples>routing>
+> theme: api
+> theme: features
 
 **Routing** refers to determining how an application responds to a client request
 to a particular endpoint, which is a URI (or path) and a specific HTTP request
 method GET, POST, PUT or DELETE (other methods are not suported yet).
 
-> name: popcorn>examples>routing>
-> name: core::Path
-
 Each route can have one or more handler methods, which are executed when the route is matched.
 
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: popcorn::Handler
-> name: nitcorn::Route
-> name: nitcorn::Routes
-
 Route handlers definition takes the following form:
-
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: popcorn::Handler
 
 ~~~nitish
 import popcorn
@@ -133,24 +112,20 @@ class MyHandler
 end
 ~~~
 
+> theme: examples
+
 Where:
 
 * `MyHandler` is the name of the handler you will add to the app.
 * `METHOD` can be replaced by `get`, `post`, `put` or `delete`.
 
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
-> name: popcorn::App
+> theme: api
+> theme: features
 
 The following example responds to GET and POST requests:
 
-> name: popcorn>examples>
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
+> theme: examples
+> theme: api
 
 ~~~
 import popcorn
@@ -163,94 +138,64 @@ class MyHandler
 end
 ~~~
 
+> theme: examples
+
 To make your handler responds to a specific route, you have to add it to the app.
 
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: popcorn::App
+> theme: api
 
 Respond to POST request on the root route (`/`), the application's home page:
 
-> name: nitcorn::Route
-> name: nitcorn::Routes
+> theme: api
 
 ~~~
 var app = new App
 app.use("/", new MyHandler)
 ~~~
 
+> theme: examples
+
 Respond to a request to the `/user` route:
 
-> name: nitcorn::Route
-> name: nitcorn::Routes
+> theme: api
 
 ~~~
 app.use("/user", new MyHandler)
 ~~~
 
+> theme: examples
+
 For more details about routing, see the routing section.
 
-> name: popcorn>examples>routing>
-> name: popcorn>examples>routing>
+> theme: refs
 
 ## Serving static files with Popcorn
 
-> name: popcorn
-> name: json::static
-> name: core::file
+> theme: api
+> theme: features
 
 To serve static files such as images, CSS files, and JavaScript files, use the
 Popcorn built-in handler `StaticHandler`.
 
-> name: popcorn>examples>static_files>files>
-> name: popcorn>examples>static_files>public>images>
-> name: popcorn>examples>static_files>public>css>
-> name: popcorn>examples>static_files>files>
-> name: popcorn>examples>angular>www>javascripts>
-> name: popcorn>examples>watchdog>www>javascripts>
-> name: popcorn>examples>static_files>files>
-> name: json::static
-> name: core::file
-> name: core::file
-> name: core::file
-> name: popcorn
-> name: popcorn::Handler
+> theme: api
 
 Pass the name of the directory that contains the static assets to the StaticHandler
 init method to start serving the files directly.
 For example, use the following code to serve images, CSS files, and JavaScript files
 in a directory named `public`:
 
-> name: json::static
-> name: popcorn::StaticHandler
-> name: popcorn>examples>static_files>files>
-> name: core::file
-> name: popcorn>examples>
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: popcorn>examples>static_files>public>images>
-> name: popcorn>examples>static_files>public>css>
-> name: popcorn>examples>static_files>files>
-> name: popcorn>examples>angular>www>javascripts>
-> name: popcorn>examples>watchdog>www>javascripts>
-> name: popcorn>examples>static_files>files>
-> name: core::file
-> name: core::file
+> theme: api
+> theme: examples
 
 ~~~
 app.use("/", new StaticHandler("public/"))
 ~~~
 
+> theme: examples
+
 Now, you can load the files that are in the `public` directory:
 
-> name: popcorn>examples>static_files>files>
-> name: core::file
+> theme: examples
 
 ~~~raw
 http://localhost:3000/images/trollface.jpg
@@ -263,50 +208,39 @@ Popcorn looks up the files relative to the static directory, so the name of the
 static directory is not part of the URL.
 To use multiple static assets directories, add the `StaticHandler` multiple times:
 
-> name: popcorn
-> name: core::file
-> name: json::static
-> name: json::static
-> name: json::static
-> name: core::time
+> theme: examples
 
 ~~~
 app.use("/", new StaticHandler("public/"))
 app.use("/", new StaticHandler("files/"))
 ~~~
 
+> theme: examples
+
 Popcorn looks up the files in the order in which you set the static directories
 with the `use` method.
 
-> name: popcorn
-> name: core::file
-> name: json::static
-> name: core::Set
+> theme: api
+> theme: example
 
 To create a virtual path prefix (where the path does not actually exist in the file system)
 for files that are served by the `StaticHandler`, specify a mount path for the
 static directory, as shown below:
 
-> name: popcorn>examples>static_files>files>
-> name: core::file
-> name: core::Path
-> name: core::Path
-> name: popcorn>examples>static_files>files>
-> name: core::file
-> name: core::Path
-> name: json::static
+> theme: api
+> theme: example
 
 ~~~
 app.use("/static/", new StaticHandler("public/"))
 ~~~
 
+> theme: examples
+
 Now, you can load the files that are in the public directory from the `/static`
 path prefix.
 
-> name: popcorn>examples>static_files>files>
-> name: popcorn>examples>static_files>public>
-> name: core::file
-> name: core::Path
+> theme: api
+> theme: example
 
 ~~~raw
 http://localhost:3000/static/images/trollface.jpg
@@ -320,61 +254,42 @@ directory from where you launch your app.
 If you run the app from another directory, it’s safer to use the absolute path of
 the directory that you want to serve.
 
-> name: core::Path
-> name: popcorn::App
-> name: popcorn::App
-> name: core::Path
+> theme: api
+> theme: examples
 
 In some cases, you can want to redirect request to static files to a default file
 instead of returning a 404 error.
 This can be achieved by specifying a default file in the StaticHandler:
 
-> name: popcorn>examples>static_files>files>
-> name: popcorn>examples>static_files>files>
-> name: json::static
-> name: core::file
-> name: core::file
-> name: json::error
-> name: core::error
-> name: core::Error
-> name: popcorn>examples>static_files>files>
-> name: core::file
-> name: popcorn::StaticHandler
+> theme: api
+> theme: examples
 
 ~~~
 app.use("/static/", new StaticHandler("public/", "default.html"))
 ~~~
 
+> theme: examples
+
 This way all non-matched queries to the StaticHandler will be answered with the
 `default.html` file.
 
-> name: mongodb::queries
-> name: popcorn::StaticHandler
-> name: popcorn>examples>static_files>files>
-> name: core::file
+> theme: api
+> theme: examples
 
 ## Advanced Routing
 
-> name: popcorn>examples>routing>
+> theme: api
+> theme: features
 
 **Routing** refers to the definition of application end points (URIs) and how
 they respond to client requests. For an introduction to routing, see the Basic routing
 section.
 
-> name: popcorn>examples>routing>
-> name: popcorn>examples>routing>
-> name: popcorn>examples>routing>
+> theme: api
 
 The following code is an example of a very basic route.
 
-> name: popcorn>examples>
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: nitcorn::Route
-> name: nitcorn::Routes
+> theme: examples
 
 ~~~
 import popcorn
@@ -389,33 +304,22 @@ var app = new App
 app.use("/", new HelloHandler)
 ~~~
 
+> theme: examples
+
 ### Route methods
 
-> name: nitcorn::Route
-> name: nitcorn::Routes
+> theme: api
+> theme: features
 
 A **route method** is derived from one of the HTTP methods, and is attached to an
 instance of the Handler class.
 
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
-> name: meta::Class
+> theme: api
 
 The following code is an example of routes that are defined for the GET and the POST
 methods to the root of the app.
 
-> name: popcorn>examples>
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: popcorn::App
+> theme: examples
 
 ~~~
 import popcorn
@@ -431,15 +335,15 @@ var app = new App
 app.use("/", new GetPostHandler)
 ~~~
 
+> theme: examples
+
 Popcorn supports the following routing methods that correspond to HTTP methods:
 get, post, put, and delete.
 
-> name: popcorn
-
 The request query string is accessed through the `req` parameter:
 
-> name: mongodb::queries
-> name: core::String
+> theme: api
+> theme: examples
 
 ~~~
 import popcorn
@@ -464,7 +368,12 @@ app.use("/", new QueryStringHandler)
 app.listen("localhost", 3000)
 ~~~
 
+> theme: examples
+
 Post parameters can also be accessed through the `req` parameter:
+
+> theme: api
+> theme: examples
 
 ~~~
 import popcorn
@@ -489,25 +398,18 @@ app.use("/", new PostHandler)
 app.listen("localhost", 3000)
 ~~~
 
+> theme: examples
+
 There is a special routing method, `all(res, req)`, which is not derived from any
 HTTP method. This method is used to respond at a path for all request methods.
 
-> name: popcorn>examples>routing>
-> name: core::Path
+> theme: api
+> theme: examples
 
 In the following example, the handler will be executed for requests to "/user"
 whether you are using GET, POST, PUT, DELETE, or any other HTTP request method.
 
-> name: popcorn>examples>
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
-> name: github::User
+> theme: examples
 
 ~~~
 import popcorn
@@ -519,7 +421,12 @@ class AllHandler
 end
 ~~~
 
+> theme: examples
+
 Using the `all` method you can also implement other HTTP request methods.
+
+> theme: api
+> theme: examples
 
 ~~~
 import popcorn
@@ -535,64 +442,31 @@ class MergeHandler
 end
 ~~~
 
+> theme: examples
+
 ### Route paths
 
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: core::Path
+> theme: api
+> theme: features
 
 **Route paths**, in combination with a request handlers, define the endpoints at
 which requests can be made.
 Route paths can be strings, parameterized strings or glob patterns.
 Query strings such as `?q=foo`are not part of the route path.
 
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: core::Path
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: core::Path
-> name: core::String
-> name: core::String
-> name: core::Pattern
-> name: mongodb::queries
-> name: core::String
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: core::Path
+> theme: api
 
 Popcorn uses the `AppRoute::match(uri)` method to match the route paths.
 
-> name: popcorn
-> name: core::Match
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: core::Path
+> theme: api
 
 Here are some examples of route paths based on strings.
 
-> name: popcorn>examples>
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: core::Path
-> name: core::String
+> theme: examples
 
 This route path will match requests to the root route, `/`.
 
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: core::Path
-> name: core::Match
-> name: nitcorn::Route
-> name: nitcorn::Routes
+> theme: examples
 
 ~~~
 import popcorn
@@ -607,83 +481,60 @@ var app = new App
 app.use("/", new MyHandler)
 ~~~
 
+> theme: examples
+
 This route path will match requests to `/about`.
 
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: core::Path
-> name: core::Match
+> theme: examples
 
 ~~~
 app.use("/about", new MyHandler)
 ~~~
 
+> theme: examples
+
 This route path will match requests to `/random.text`.
 
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: core::Path
-> name: core::Match
+> theme: examples
 
 ~~~
 app.use("/random.text", new MyHandler)
 ~~~
 
+> theme: examples
+
 During the query/response process, routes are matched by order of declaration
 through the `App::use` method.
 
-> name: mongodb::queries
-> name: core::Process
-> name: nitcorn::Route
-> name: nitcorn::Routes
+> theme: api
+> theme: examples
 
 The app declared in this example will try to match the routes in this order:
 
-> name: popcorn>examples>
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: popcorn::App
-> name: core::Match
-> name: nitcorn::Route
-> name: nitcorn::Routes
+> theme: examples
 
 1. `/`
 2. `/about`
 3. `/random.text`
 
+> theme: api
+
 ### Route parameters
 
-> name: nitcorn::Route
-> name: nitcorn::Routes
+> theme: api
+> theme: features
 
 **Route parameters** are variable parts of a route path. They can be used to path
 arguments within the URI.
 Parameters in a route are prefixed with a colon `:` like in `:userId`, `:year`.
 
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: core::Path
-> name: core::Path
-> name: nitcorn::Route
-> name: nitcorn::Routes
+> theme: api
 
 The following example declares a handler `UserHome` that responds with the `user`
 name.
 
-> name: popcorn>examples>
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
+> theme: api
+> theme: examples
 
 ~~~
 import popcorn
@@ -706,46 +557,31 @@ app.use("/:user", new UserHome)
 app.listen("localhost", 3000)
 ~~~
 
+> theme: examples
+
 The `UserHome` handler listen to every path matching `/:user`. This can be `/Morriar`,
 `/10`, ... but not `/Morriar/profile` since route follow the strict matching rule.
 
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
-> name: core::Path
-> name: nitcorn::Route
-> name: nitcorn::Routes
+> theme: api
+> theme: examples
 
 ### Glob routes
 
-> name: nitcorn::Route
-> name: nitcorn::Routes
+> theme: api
+> theme: features
 
 **Glob routes** are routes that match only on a prefix, thus accepting a wider range
 of URI.
 Glob routes end with the symbol `*`.
 
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: core::range
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: core::Match
-> name: core::Range
-> name: nitcorn::Route
-> name: nitcorn::Routes
+> theme: api
 
 Here we define a `UserItem` handler that will respond to any URI matching the prefix
 `/user/:user/item/:item`.
 Note that glob route are compatible with route parameters.
 
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: nitcorn::Route
-> name: nitcorn::Routes
+> theme: api
+> theme: examples
 
 ~~~
 import popcorn
@@ -769,22 +605,19 @@ app.use("/user/:user/item/:item/*", new UserItem)
 app.listen("localhost", 3000)
 ~~~
 
+> theme: examples
+
 ## Response methods
+
+> theme: api
+> theme: features
 
 The methods on the response object (`res`), can is used to manipulate the
 request-response cycle.
 If none of these methods are called from a route handler, the client request will
 receive a `404 Not found` error.
 
-> name: core::Object
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: popcorn::Handler
-> name: json::error
-> name: core::error
-> name: core::Error
+> theme: api
 
 * `res.html()` Send a HTML response.
 * `res.json()` Send a JSON response.
@@ -792,14 +625,17 @@ receive a `404 Not found` error.
 * `res.send()` Send a response of various types.
 * `res.error()` Set the response status code and send its message as the response body.
 
-> name: json
-> name: core::Set
+> theme: api
+> theme: features
 
 ## Response cycle
 
+> theme: api
+> theme: features
+
 When the popcorn `App` receives a request, the response cycle is the following:
 
-> name: popcorn
+> theme: api
 
 1. `pre-middlewares` lookup matching middlewares registered with `use_before(pre_middleware)`:
    1. execute matching middleware by registration order
@@ -814,88 +650,43 @@ When the popcorn `App` receives a request, the response cycle is the following:
    2. if a middleware send a response then let the `post-middlewares` loop continue
       with the next middleware
 
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>middlewares>
+> theme: api
 
 ## Middlewares
 
-> name: popcorn>examples>middlewares>
+> theme: api
+> theme: features
 
 ### Overview
+
+> theme: api
+> theme: features
 
 **Middleware** handlers are handlers that typically do not send `HttpResponse` responses.
 Middleware handlers can perform the following tasks:
 
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
-> name: popcorn::Handler
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
-> name: core::Task
+> theme: api
 
 * Execute any code.
 * Make changes to the request and the response objects.
 * End its action and pass to the next handler in the stack.
 
-> name: core::Object
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: nitcorn::Action
-> name: popcorn::Handler
+> theme: features
 
 If a middleware handler makes a call to `res.send()`, it provoques the end the
 request-response cycle and the response is sent to the client.
 
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
+> theme: api
 
 ### Ultra simple logger example
 
-> name: popcorn>examples>
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
+> theme: examples
 
 Here is an example of a simple “Hello World” Popcorn application.
 We add a middleware handler to the application called MyLogger that prints a simple
 log message in the app stdout.
 
-> name: popcorn
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
-> name: nitcorn::log
-> name: popcorn::App
-> name: core::Stdout
+> theme: examples
 
 ~~~
 import popcorn
@@ -919,59 +710,36 @@ app.use("/", new HelloHandler)
 app.listen("localhost", 3000)
 ~~~
 
+> theme: examples
+
 By using the `MyLogger` handler to the route `/*` we ensure that every requests
 (even 404 ones) pass through the middleware handler.
 This handler just prints “Request Logged!” when a request is received.
 
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
+> theme: api
+> theme: examples
 
 Be default, the order of middleware execution is that are loaded first are also executed first.
 To ensure our middleware `MyLogger` will be executed before all the other, we add it
 with the `use_before` method.
 
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>middlewares>
+> theme: api
+> theme: examples
 
 ### Ultra cool, more advanced logger example
 
-> name: popcorn>examples>
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
+> theme: examples
 
 Next, we’ll create a middleware handler called “LogHandler” that prints the requested
 uri, the response status and the time it took to Popcorn to process the request.
 
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
-> name: popcorn
-> name: core::time
-> name: core::Process
+> theme: api
+> theme: examples
 
 This example gives a simplified version of the `RequestClock` and `ConsoleLog` middlewares.
 
-> name: popcorn>examples>
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: popcorn>examples>middlewares>
+> theme: api
+> theme: examples
 
 ~~~
 import popcorn
@@ -1014,31 +782,32 @@ app.use_after("/*", new LogHandler)
 app.listen("localhost", 3000)
 ~~~
 
+> theme: examples
+
 First, we attach a new attribute `timer` to every `HttpRequest`.
 Doing so we can access our data from all handlers that import our module, directly
 from the `req` parameter.
 
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
+> theme: api
+> theme: examples
 
 We use the new middleware called `RequestTimeHandler` to initialize the request timer.
 Because of the `use_before` method, the `RequestTimeHandler` middleware will be executed
 before all the others.
 
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>middlewares>
+> theme: api
+> theme: examples
 
 We then let the `HelloHandler` produce the response.
+
+> theme: api
 
 Finally, our `LogHandler` will display a bunch of data and use the request `timer`
 to display the time it took to process the request.
 Because of the `use_after` method, the `LogHandler` middleware will be executed after
 all the others.
 
-> name: core::time
-> name: core::Process
-> name: popcorn>examples>middlewares>
+> theme: api
 
 The app now uses the `RequestTimeHandler` middleware for every requests received
 by the Popcorn app.
@@ -1046,30 +815,21 @@ The page is processed the `HelloHandler` to display the index page.
 And, before every response is sent, the `LogHandler` is activated to display the
 log line.
 
-> name: popcorn::App
-> name: popcorn>examples>middlewares>
-> name: popcorn
-> name: popcorn::App
-> name: nitcorn::log
+> theme: api
 
 Because you have access to the request object, the response object, and all the
 Popcorn API, the possibilities with middleware functions are endless.
 
-> name: core::Object
-> name: core::Object
-> name: popcorn
-> name: github::api
-
 ### Built-in middlewares
 
-> name: popcorn>examples>middlewares>
+> theme: api
+> theme: features
 
 Starting with version 0.1, Popcorn provide a set of built-in middleware that can
 be used to develop your app faster.
 
-> name: popcorn
-> name: core::Set
-> name: popcorn::App
+> theme: api
+> theme: features
 
 * `RequestClock`: initializes requests clock.
 * `ConsoleLog`: displays resquest and response status in console (can be used with `RequestClock`).
@@ -1077,53 +837,25 @@ be used to develop your app faster.
 * `StaticHandler`: serves static files (see the `Serving static files with Popcorn` section).
 * `Router`: a mountable mini-app (see the `Mountable routers` section).
 
-> name: realtime::Clock
-> name: console
-> name: popcorn>examples>sessions>
-> name: nitcorn::sessions
-> name: nitcorn::Session
-> name: popcorn>examples>static_files>files>
-> name: json::static
-> name: core::file
-> name: popcorn::App
+> theme: api
+> theme: features
+> theme: refs
 
 ## Mountable routers
 
-> name: popcorn::Router
+> theme: api
+> theme: features
 
 Use the `Router` class to create modular, mountable route handlers.
 A Router instance is a complete middleware and routing system; for this reason,
 it is often referred to as a “mini-app”.
 
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: meta::Class
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: popcorn::Handler
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>routing>
-> name: popcorn::Router
+> theme: api
 
 The following example creates a router as a module, loads a middleware handler in it,
 defines some routes, and mounts the router module on a path in the main app.
 
-> name: popcorn>examples>
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Router
-> name: popcorn::Handler
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: popcorn::Router
-> name: core::Path
-> name: popcorn::App
+> theme: examples
 
 ~~~
 import popcorn
@@ -1163,45 +895,27 @@ app.use("/user", user_router)
 app.listen("localhost", 3000)
 ~~~
 
+> theme: examples
+
 The app will now be able to handle requests to /user and /user/profile, as well
 as call the `Time` middleware handler that is specific to the route.
 
-> name: popcorn::App
-> name: github::User
-> name: github::User
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
-> name: nitcorn::Route
-> name: nitcorn::Routes
+> theme: api
+> theme: examples
 
 ## Error handling
 
-> name: json::error
-> name: core::error
-> name: core::Error
+> theme: api
+> theme: features
 
 **Error handling** is based on middleware handlers.
 
-> name: json::error
-> name: core::error
-> name: core::Error
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
+> theme: api
+> theme: features
 
 Define error-handling middlewares in the same way as other middleware handlers:
 
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: json::error
-> name: core::error
-> name: core::Error
-> name: popcorn::Handler
+> theme: examples
 
 ~~~
 import popcorn
@@ -1228,48 +942,23 @@ app.use("/*", new SimpleErrorHandler)
 app.listen("localhost", 3000)
 ~~~
 
+> theme: examples
+
 In this example, every non-200 response is caught by the `SimpleErrorHandler`
 that print an error in stdout.
 
-> name: popcorn>examples>
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: json::error
-> name: core::error
-> name: core::Error
-> name: core::Stdout
+> theme: api
+> theme: examples
 
 By defining multiple middleware error handlers, you can take multiple action depending
 on the kind of error or the kind of interface you provide (HTML, XML, JSON...).
 
-> name: popcorn>examples>middlewares>
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: json::error
-> name: core::error
-> name: core::Error
-> name: popcorn::Handler
-> name: nitcorn::Action
-> name: json
-> name: core::error
-> name: core::Error
-> name: nitcorn::Interface
-> name: nitcorn::Interfaces
+> theme: api
+> theme: examples
 
 Here an example of the 404 custom error page in HTML:
 
-> name: popcorn>examples>
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: json::error
-> name: core::error
-> name: core::Error
+> theme: examples
 
 ~~~
 import popcorn
@@ -1309,30 +998,20 @@ app.use("/*", new HtmlErrorHandler)
 app.listen("localhost", 3000)
 ~~~
 
+> theme: examples
+
 ## Sessions
 
-> name: popcorn>examples>sessions>
-> name: nitcorn::sessions
-> name: nitcorn::Session
+> struct: nitcorn::Session
 
 **Sessions** can be used thanks to the built-in `SessionInit` middleware.
 
-> name: popcorn>examples>sessions>
-> name: nitcorn::sessions
-> name: nitcorn::Session
-> name: popcorn>examples>middlewares>
+> theme: api
 
 Here a simple example of login button that define a value in the `req` session.
 
-> name: popcorn>examples>
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: popcorn>examples>sessions>
-> name: nitcorn::sessions
-> name: nitcorn::Session
+> theme: api
+> theme: examples
 
 ~~~
 import popcorn
@@ -1364,71 +1043,42 @@ app.use("/", new AppLogin)
 app.listen("localhost", 3000)
 ~~~
 
+> theme: examples
+
 Notice the use of the `SessionInit` on the `/*` route. You must use the
 `SessionInit` first to initialize the request session.
 Without that, your request session will be set to `null`.
 If you don't use sessions in your app, you do not need to include that middleware.
 
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: popcorn>examples>sessions>
-> name: nitcorn::sessions
-> name: nitcorn::Session
-> name: popcorn>examples>sessions>
-> name: nitcorn::sessions
-> name: nitcorn::Session
-> name: core::Set
-> name: popcorn>examples>sessions>
-> name: popcorn>examples>middlewares>
-> name: nitcorn::sessions
-> name: nitcorn::Session
-> name: popcorn::App
+> theme: api
+> theme: examples
 
 ## Database integration
 
+> theme: api
+> theme: features
+
 ### Mongo DB
+
+> theme: api
+> theme: features
 
 If you want to persist your data, Popcorn works well with MongoDB.
 
-> name: popcorn
-> name: mongodb
-> name: mongodb::MongoDb
-
 In this example, we will show how to store and list user with a Mongo database.
 
-> name: popcorn>examples>
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: json::store
-> name: core::list
-> name: core::List
-> name: github::User
+> theme: examples
 
 First let's define a handler that access the database to list all the user.
 The mongo database reference is passed to the UserList handler through the `db` attribute.
 
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: core::list
-> name: popcorn::Handler
-> name: core::List
-> name: github::User
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::UserList
-> name: popcorn::Handler
+> theme: api
 
 Then we define a handler that displays the user creation form on GET requests.
 POST requests are used to save the user data.
 
-> name: popcorn>examples>handlers>
-> name: popcorn>examples>watchdog>src>handlers>
-> name: popcorn::Handler
-> name: github::User
-> name: github::User
+> theme: api
+> theme: examples
 
 ~~~
 import popcorn
@@ -1491,22 +1141,23 @@ app.use("/new", new UserForm(db))
 app.listen("localhost", 3000)
 ~~~
 
+> theme: examples
+
 ## Angular.JS integration
 
-> name: popcorn>examples>angular>
-> name: popcorn>examples>static_files>public>js>
+> theme: api
+> theme: features
 
 Loving [AngularJS](https://angularjs.org/)? Popcorn is made for Angular and for you!
 
-> name: popcorn
+> theme: api
+> theme: features
 
 Using the StaticHandler with a glob route, you can easily redirect all HTTP requests
 to your angular controller:
 
-> name: popcorn::StaticHandler
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: popcorn>examples>angular>
+> theme: api
+> theme: examples
 
 ~~~
 import popcorn
@@ -1516,37 +1167,17 @@ app.use("/*", new StaticHandler("my-ng-app/", "index.html"))
 app.listen("localhost", 3000)
 ~~~
 
+> theme: examples
+
 Because the StaticHandler will not find the angular routes as static files,
 you must specify the path to the default angular controller.
 In this example, the StaticHandler will redirect any unknown requests to the `index.html`
 angular controller.
 
-> name: popcorn>examples>angular>
-> name: popcorn>examples>static_files>files>
-> name: json::static
-> name: core::file
-> name: popcorn::StaticHandler
-> name: nitcorn::Route
-> name: nitcorn::Routes
-> name: popcorn>examples>angular>
-> name: core::Path
-> name: popcorn>examples>
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: popcorn::StaticHandler
-> name: popcorn>examples>angular>
+> theme: api
+> theme: examples
 
 See the examples for a more detailed use case working with a JSON API.
 
-> name: json
-> name: popcorn>examples>
-> name: serialization>examples>
-> name: nitcorn>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: github::api
+> theme: examples
 

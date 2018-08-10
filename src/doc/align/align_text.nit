@@ -21,6 +21,12 @@ class MdAlignTexts
 
 	var sep_re: Regex = "[\n\t ,.?!~`@#$%^&*()+=/\\|\"':;><-]".to_re
 
+	redef fun align_document(document) do
+		super
+		var filter = new MdPreferPackages
+		filter.filter_document(document)
+	end
+
 	redef fun visit(node) do
 		if not node isa MdText then
 			node.visit_all(self)
@@ -106,4 +112,63 @@ class MdRefText
 	super MdRefMEntity
 
 	var string: String
+end
+
+# Resolve conflicts between modules, packages and groups
+class MdPreferPackages
+	super MdFilterMEntities
+
+	redef fun filter_mentities_refs(refs) do
+		var keep = new Array[MdRefMEntity]
+		var keep_mentities = new HashSet[MEntity]
+
+		# Keep all packages
+		for ref in refs do
+			var mentity = ref.mentity
+			if not mentity isa MPackage then continue
+			keep.add ref
+			keep_mentities.add mentity
+		end
+
+		# Keep groups only if not the root of a already kept package
+		for ref in refs do
+			var mentity = ref.mentity
+			if not mentity isa MGroup then continue
+			if keep_mentities.has(mentity.mpackage) then continue
+			keep.add ref
+			keep_mentities.add mentity
+		end
+
+		# Keep mmodules only if not already in a kept package or group
+		for ref in refs do
+			var mentity = ref.mentity
+			if not mentity isa MModule then continue
+			var mgroup = mentity.mgroup
+			if mgroup != null then
+				if keep_mentities.has(mgroup) then continue
+				if keep_mentities.has(mgroup.mpackage) then continue
+			end
+			keep.add ref
+			keep_mentities.add mentity
+		end
+
+		# Keep all classes
+		var keep_classes = new HashMap[String, MEntity]
+		for ref in refs do
+			var mentity = ref.mentity
+			if not mentity isa MClass then continue
+			keep.add ref
+			keep_mentities.add mentity
+		end
+
+		# Keep all properties
+		# for ref in refs do
+			# var mentity = ref.mentity
+			# if not mentity isa MProperty then continue
+			# keep.add ref
+			# keep_mentities.add mentity
+		# end
+
+		return keep
+	end
 end

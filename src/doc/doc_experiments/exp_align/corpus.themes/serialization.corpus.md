@@ -1,21 +1,22 @@
 # Abstract serialization services
 
-> name: serialization
+> theme: title
 
 The serialization services are based on the `serialize` and the `noserialize` annotations,
 the `Serializable` interface and the implementations of `Serializer` and `Deserializer`.
 
-> name: serialization
+> theme: api
+> theme: intro
 
 ## The `serialize` annotation
+
+> theme: api
+> theme: features
 
 A class annotated with `serialize` identifies it as a subclass of Serializable and
 triggers the generation of customized serialization and deserialization services.
 
-> name: meta::Class
-> name: serialization::A
-> name: serialization::Serializable
-> name: serialization
+> theme: api
 
 ~~~
 import serialization
@@ -35,38 +36,27 @@ class Person
 end
 ~~~
 
+> theme: examples
+
 The `Person` class also defines `==` and `hash`, this is optional but we will use it to make an important point.
 By definition of a serializable class, an instance can be serialized to a stream, then deserialized.
 The deserialized instance will not be the same instance, but they should be equal.
 So, in this case, we can compare both instances with `==` to test their equality.
 
-> name: meta::Class
-> name: core::stream
-> name: serialization::Serializable
-> name: meta::Class
-> name: core::Stream
-> name: core>collection>tests>
+> theme: api
 
 Some conditions applies to the classes that can be annotated as `serialize`.
 All attributes of the class must be serializable, runtime errors will be
 raised when trying to serialize non-serializable attributes.
 
-> name: serialization::A
-> name: core::error
-> name: json::error
-> name: meta::Class
-> name: serialization::Serializable
-> name: core::Error
-> name: serialization::Serializable
+> theme: api
 
 In the class `Person`, all attributes are typed with classes the standards library.
 These common types are defined defined as serializable by this project.
 The attributes could also be typed with user-defined `serialize`
 classes or any other subclass of `Serializable`.
 
-> name: meta::Class
-> name: serialization::A
-> name: serialization::Serializable
+> theme: api
 
 ~~~
 import serialization
@@ -97,11 +87,14 @@ class Partnership
 end
 ~~~
 
+> theme: examples
+
 ### Scope of the `serialize` annotation
 
-`serialize` can annotate class definitions, modules and attributes:
+> theme: api
+> theme: features
 
-> name: meta::Class
+`serialize` can annotate class definitions, modules and attributes:
 
 * The annotation on a class applies only to the class definition,
   only attributes declared locally will be serialized.
@@ -129,19 +122,18 @@ end
   end
   ~~~
 
-> name: meta::Class
-> name: meta::Class
-> name: meta::Class
-> name: meta::Class
-> name: serialization::Serializable
-> name: meta::Class
-> name: meta::Class
+> theme: api
+> theme: features
+> theme: examples
 
 ## The `noserialize` annotation
 
+> theme: api
+> theme: features
+
 The `noserialize` annotation mark an exception in a `serialize` module or class definition.
 
-> name: meta::Class
+> theme: api
 
 * By default a module is `noserialize`. There is no need to declare it as such.
 
@@ -164,27 +156,24 @@ The `noserialize` annotation mark an exception in a `serialize` module or class 
   end
   ~~~
 
-> name: serialization::A
-> name: meta::Class
-> name: serialization::Serializable
-> name: meta::Class
-> name: meta::Class
-> name: core::Set
-> name: core::Object
+> theme: api
+> theme: features
+> theme: examples
 
 ## The `serialize_as` annotation
+
+> theme: api
+> theme: features
 
 By default, an attribute is identified in the serialization format by its Nit name.
 The `serialize_as` attribute changes this behavior and sets the name of an attribute in the serialization format.
 
-> name: serialization
-> name: serialization
-> name: core::Set
+> theme: api
 
 This annotation can be useful to change the name of an attribute to what is expected by a remote service.
 Or to use identifiers in the serialization format that are reserved keywords in Nit (like `class` and `type`).
 
-> name: serialization
+> theme: api
 
 ~~~
 import serialization
@@ -200,38 +189,38 @@ class UserCredentials
 end
 ~~~
 
+> theme: examples
+
 ## Custom serializable classes
 
-> name: serialization::Serializable
+> theme: api
+> theme: features
 
 The annotation `serialize` should be enough for most cases,
 but in some cases you need more control over the serialization process.
 
-> name: serialization
-> name: core::Process
+> theme: api
 
 For more control, create a subclass to `Serializable` and redefine `core_serialize_to`.
 This method should use `Serializer::serialize_attribute` to serialize its components.
 `serialize_attribute` works as a dictionary and organize attributes with a key.
 
-> name: serialization::A
+> theme: api
 
 You will also need to redefine `Deserializer::deserialize_class` to support this specific class.
 The method should only act on known class names, and call super otherwise.
 
-> name: meta::Class
-> name: meta::Class
+> theme: api
 
 ### Example: the User class
 
-> name: serialization>examples>
-> name: meta::Class
+> theme: examples
 
 The following example cannot use the `serialize` annotations
 because some of the arguments to the `User` class need special treatment:
 
-> name: serialization>examples>
-> name: meta::Class
+> theme: api
+> theme: examples
 
 * The `name` attribute is perfectly normal, it can be serialized and deserialized
   directly.
@@ -244,16 +233,15 @@ because some of the arguments to the `User` class need special treatment:
   serialize the path to its source on the file system.
   The data is reloaded on deserialization.
 
-> name: serialization::A
-> name: serialization::A
-> name: core::file
-> name: core::Path
+> theme: api
+> theme: features
 
 For this customization, the following code snippet implements
 two serialization services: `User::core_serialize_to` and
 `Deserializer::deserialize_class`.
 
-> name: serialization
+> theme: api
+> theme: examples
 
 ~~~
 module user_credentials
@@ -326,22 +314,30 @@ end
 
 ~~~
 
+> theme: examples
+
 See the documentation of the module `serialization::serialization` for more
 information on the services to redefine.
 
+> theme: api
+> theme: refs
+
 ## Serialization services
 
-> name: serialization
+> theme: api
+> theme: features
 
 The `serialize` annotation and the `Serializable` class are used on
 classes specific to the business domain.
 To write (and read) instances of these classes to a persistent format
 you must use implementations of `Serializer` and `Deserializer`.
 
-> name: meta::Class
+> theme: api
 
 The main implementations of these services are `JsonSerializer` and `JsonDeserializer`,
 from the `json_serialization` module.
+
+> theme: api
 
 ~~~nitish
 mport json
@@ -366,11 +362,13 @@ reader.close
 assert couple == deserialize_couple
 ~~~
 
+> theme: examples
+
 ## Limitations and TODO
 
-The serialization has some limitations:
+> theme: todo
 
-> name: serialization
+The serialization has some limitations:
 
 * A limitation of the JSON parser prevents deserializing from files
   with more than one object.
@@ -388,38 +386,31 @@ The serialization has some limitations:
   deal with generic types. A solution is to use `nitserial`,
   the next section explores this subject.
 
-> name: json
-> name: core::file
-> name: core::Object
-> name: core::file
-> name: core::Object
-> name: core::time
-> name: serialization::Serializer
-> name: serialization::Deserializer
-> name: serialization
-> name: meta::Class
-> name: serialization
+> theme: api
+> theme: features
 
 ## Dealing with generic types
+
+> theme: features
 
 One limitation of the serialization support in the compiler is with generic types.
 For example, the `Array` class is generic and serializable.
 However, the runtime types of Array instances are parameterized and are unknown to the compiler.
 So the compiler won't support serializing instances of `Array[MySerializable]`.
 
-> name: serialization
-> name: serialization>examples>
-> name: meta::Class
-> name: serialization::Serializable
-> name: core::array
-> name: core::Array
+> theme: api
+> theme: examples
 
 The tool `nitserial` solves this problem at the level of user modules.
 It does so by parsing a Nit module, group or project to find all known
 parameterized types of generic classes.
 It will then generating a Nit module to handle deserialization of these types.
 
+> theme: api
+
 Usage steps to serialize parameterized types:
+
+> theme: usage
 
 * Write your program, let's call it `my_prog.nit`,
   it must use some parameterized serializable types.
@@ -431,8 +422,9 @@ Usage steps to serialize parameterized types:
 * Compile your program by mixing in the generated module with:
   `nitc my_prog.nit -m my_prog_serial.nit`
 
-> name: serialization::Serializable
-> name: core::file
+> theme: api
+> theme: features
+> theme: usage
 
 This was a simple example, in practical cases you may need
 to use more than one generated file.
@@ -442,9 +434,5 @@ In this case, two files will be generated by nitserial,
 one for the server and one for the client.
 Both the files should be compiled with both the client and the server.
 
-> name: serialization>examples>
-> name: core::file
-> name: serialization>examples>
-> name: core::file
-> name: core::file
+> theme: examples
 

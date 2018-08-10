@@ -1,19 +1,17 @@
 # read and write JSON formatted text
 
-> name: json
-> name: core>text>
-> name: core::Text
+> theme: title
 
 These services can be useful to communicate with a remote server or client,
 save data locally or even debug and understand the structure of a Nit object.
 There is a single API to write JSON, and three API to read depending on the use case.
 
-> name: core::Object
-> name: json
+> theme: intro
 
 ## Write JSON
 
-> name: json
+> theme: api
+> theme: features
 
 Writing Nit objects to JSON format can be useful to communicate with a remote service,
 save data locally or even debug and understand the structure of an object.
@@ -22,40 +20,30 @@ There is two related services to write JSON object, the method
 The method `serialize_to_json` is actually a shortcut to `JsonSerializer`, both
 share the same features.
 
-> name: json
-> name: core::Object
-> name: core::Object
-> name: json
-> name: core::Object
-> name: core::Object
+> theme: api
+> theme: features
 
 ### Write plain JSON
 
-> name: json
+> theme: api
+> theme: features
 
 Passing the argument `plain=true` to `serialize_to_json` generates plain and clean JSON.
 This format is non-Nit program, it cannot be fully deserialized back to Nit objects.
 The argument `pretty=true` generates JSON for humans, with more spaces and line breaks.
 
-> name: json
-> name: core::Object
-> name: json
+> theme: api
 
 The Nit objects to write must subclass `Serializable` and implement its services.
 Most classes from the `core` library are already supported, including collections, numeric values, etc.
 For your local objects, you can annotate them with `serialize` to automate subclassing
 `Serializable` and the implementation of its services.
 
-> name: core::Object
-> name: core>collection>
-> name: core::numeric
-> name: core::Collection
-> name: core::Numeric
-> name: core::Object
+> theme: api
 
 #### Example
 
-> name: serialization>examples>
+> theme: examples
 
 ~~~
 import json
@@ -109,60 +97,44 @@ assert charlie.serialize_to_json(pretty=true, plain=true) == """
 }"""
 ~~~
 
+> theme: examples
+
 ### Write JSON with metadata
 
-> name: json
+> theme: api
+> theme: features
 
 By default, `serialize_to_json` and `JsonSerializer` include metadate in the generated JSON.
 This metadata is used by `JsonDeserializer` when reading the JSON code to recreate
 the Nit object with the exact original type.
 The metadata allows to avoid repeating an object and its resolves cycles in the serialized objects.
 
-> name: json
-> name: json
-> name: core::Object
-> name: core::Object
-> name: core::Object
+> theme: api
 
 For more information on Nit serialization, see: ../serialization/README.md
 
-> name: serialization
-> name: serialization
+> theme: refs
 
 ## Read JSON
 
-> name: json
+> theme: api
+> theme: features
 
 There are a total of 3 API to read JSON:
-
-> name: json
 
 * `JsonDeserializer` reads JSON to recreate complex Nit objects (discussed here),
 * the module `json::dynamic` provides an easy API to explore JSON objects,
 * the module `json::static` offers a low-level service to parse JSON and create basic Nit objects.
 
-> name: json
-> name: core::Object
-> name: json
-> name: core::Object
-> name: json
-> name: core::Object
+> theme: api
+> theme: features
 
 The class `JsonDeserializer` reads JSON code to recreate objects.
 It can use the metadata in the JSON code, to recreate precise Nit objects.
 Otherwise, JSON objects are recreated to simple Nit types: `Map`, `Array`, etc.
 Errors are reported to the attribute `JsonDeserializer::errors`.
 
-> name: meta::Class
-> name: json
-> name: core::Object
-> name: json
-> name: core::Object
-> name: json
-> name: core::Object
-> name: json::error
-> name: core::error
-> name: core::Error
+> theme: api
 
 The type to recreate is either declared or inferred:
 
@@ -173,22 +145,17 @@ The type to recreate is either declared or inferred:
 3. If all else fails, `JsonDeserializer` uses the static type of the attribute,
    or the type name passed to `deserialize`.
 
-> name: json
-> name: core::Object
-> name: meta::Class
-> name: meta::Class
-> name: json::static
+> theme: api
+> theme: features
 
 The method `deserialize_json` is a shortcut to `JsonDeserializer` which prints
 errors to the console. It is fit only for small scripts and other quick and dirty usage.
 
-> name: json::error
-> name: core::error
-> name: core::Error
+> theme: api
 
 #### Example
 
-> name: serialization>examples>
+> theme: examples
 
 ~~~
 import json
@@ -238,16 +205,17 @@ object = deserializer.deserialize("Triangle")
 assert deserializer.errors.is_empty # If false, `object` is invalid
 ~~~
 
+> theme: examples
+
 #### Missing attributes and default values
+
+> theme: api
+> theme: features
 
 When reading JSON, some attributes expected by Nit classes may be missing.
 The JSON object may come from an external API using optional attributes or
 from a previous version of your program without the attributes.
 When an attribute is not found, the deserialization engine acts in one of three ways:
-
-> name: json
-> name: json
-> name: core::Object
 
 1. If the attribute has a default value or if it is annotated by `lazy`,
    the engine leave the attribute to the default value. No error is raised.
@@ -256,18 +224,8 @@ When an attribute is not found, the deserialization engine acts in one of three 
 3. Otherwise, the engine raises an error and does not set the attribute.
    The caller must check for `errors` and must not read from the attribute.
 
-> name: json::error
-> name: core::error
-> name: core::Error
-> name: json::static
-> name: core::Set
-> name: json::error
-> name: core::error
-> name: core::Error
-> name: json::error
-> name: core::error
-> name: core::Error
-> name: core::Set
+> theme: api
+> theme: features
 
 ~~~
 import json
@@ -336,4 +294,6 @@ assert deserializer.errors.length == 1
 assert obj isa MyConfig
 assert obj.player_name == "Bob"
 ~~~
+
+> theme: examples
 

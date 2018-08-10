@@ -1,6 +1,6 @@
 # Nit wrapper for Stanford CoreNLP
 
-> name: nlp::stanford
+> theme: title
 
 Stanford CoreNLP provides a set of natural language analysis tools which can take
 raw text input and give the base forms of words, their parts of speech, whether
@@ -9,27 +9,21 @@ quantities, and mark up the structure of sentences in terms of phrases and word
 dependencies, indicate which noun phrases refer to the same entities, indicate
 sentiment, etc.
 
-> name: nlp::stanford
-> name: core::Set
-> name: core>text>
-> name: core::Text
-> name: core::time
-> name: core::numeric
-> name: core::Numeric
+> theme: intro
 
 This wrapper needs the Stanford CoreNLP jars that run on Java 1.8+.
 
-> name: nlp::stanford
-
 See http://nlp.stanford.edu/software/corenlp.shtml.
 
-> name: nlp
+> theme: refs
 
 ## NLPProcessor
 
-> name: nlp::NLPProcessor
+> theme: features
 
 ### Java client
+
+> theme: features
 
 ~~~nit
 import nlp
@@ -45,15 +39,20 @@ for sentence in doc.sentences do
 end
 ~~~
 
+> theme: examples
+
 ### NLPServer
 
-> name: nlp::NLPServer
+> theme: features
 
 The NLPServer provides a wrapper around the StanfordCoreNLPServer.
 
-> name: nlp::NLPServer
+> theme: intro
 
 See `https://stanfordnlp.github.io/CoreNLP/corenlp-server.html`.
+
+> theme: api
+> theme: refs
 
 ~~~nit
 import nlp
@@ -63,15 +62,13 @@ var srv = new NLPServer(cp, 9000)
 srv.start
 ~~~
 
+> theme: examples
+
 ### NLPClient
 
-> name: nlp::NLPClient
+> theme: features
 
 The NLPClient is used as a NLPProcessor with a NLPServer backend.
-
-> name: nlp::NLPClient
-> name: nlp::NLPProcessor
-> name: nlp::NLPServer
 
 ~~~nit
 import nlp
@@ -80,17 +77,14 @@ var cli = new NLPClient("http://localhost:9000")
 var doc = cli.process("String to analyze")
 ~~~
 
+> theme: examples
+
 ## NLPIndex
 
-> name: nlp::NLPIndex
+> theme: features
 
 NLPIndex extends the StringIndex to use a NLPProcessor to tokenize, lemmatize and
 tag the terms of a document.
-
-> name: nlp::NLPIndex
-> name: vsm::StringIndex
-> name: nlp::NLPProcessor
-> name: vsm::Document
 
 ~~~nit
 import nlp
@@ -106,12 +100,17 @@ var matches = index.match_string("this sample")
 assert matches.first.document == d1
 ~~~
 
+> theme: examples
+
 ## TODO
+
+> theme: todo
 
 * Use JWrapper
 * Use options to choose CoreNLP analyzers
 * Analyze sentences dependencies
 * Analyze sentiment
 
-> name: opts::Option
+> theme: features
+> theme: install
 

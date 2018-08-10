@@ -213,7 +213,7 @@ redef class MdBlock
 			if line.has_prefix("name: ") then name_refs.add line.replace("name: ", "")
 			if line.has_prefix("code: ") then code_refs.add line.replace("code: ", "")
 			if line.has_prefix("example: ") then example_refs.add line.replace("example: ", "")
-			if line.has_prefix("match: ") then matches.add line.replace("matches: ", "")
+			if line.has_prefix("theme: ") then matches.add line.replace("theme: ", "")
 		end
 	end
 
@@ -286,7 +286,7 @@ class MdBlockCodes
 	end
 end
 
-var corpus = "nlp"
+var corpus = "themes"
 var corpus_path = "src/doc/doc_experiments/exp_align/corpus.{corpus}"
 (corpus_path / "../out.{corpus}").mkdir
 var files = corpus_path.files
