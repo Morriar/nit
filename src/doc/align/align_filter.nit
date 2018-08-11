@@ -21,7 +21,7 @@ class MdFilterContext
 
 	var context: MEntity
 
-	redef fun filter_mentities_refs(refs) do
+	redef fun filter_mentities_refs(node, refs) do
 		var keep = new Array[MdRefMEntity]
 		for ref in refs do
 			if context.has_mentity(ref.mentity) then keep.add ref
@@ -35,7 +35,7 @@ class MdFilterNameConflicts
 
 	var context: MEntity
 
-	redef fun filter_mentities_refs(refs) do
+	redef fun filter_mentities_refs(node, refs) do
 		var keep = new Array[MdRefMEntity]
 		var names = new HashMap[String, Array[MdRefMEntity]]
 
@@ -74,7 +74,7 @@ end
 class MdFilterKind
 	super MdFilterMEntities
 
-	redef fun filter_mentities_refs(refs) do
+	redef fun filter_mentities_refs(node, refs) do
 		var keep = new Array[MdRefMEntity]
 		var keep_mentities = new HashSet[MEntity]
 

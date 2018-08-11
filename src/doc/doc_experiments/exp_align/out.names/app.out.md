@@ -1,12 +1,8 @@
 # _app.nit_, a framework for portable applications
 
-> theme: <MdThemeTitle:#117264e0>
-
+> name: app
 
 The framework provides services to manage common needs of modern mobile applications:
-
-> theme: <MdThemeIntro:#117272a0>
-
 
 * Life-cycle
 * User interface
@@ -15,19 +11,25 @@ The framework provides services to manage common needs of modern mobile applicat
 * Package metadata
 * Compilation and packaging
 
-> theme: <MdThemeFeatures:#11731c60>
-
-
 The features offered by _app.nit_ are common to all platforms, but
 may not be available on all devices.
 
-> theme: <MdThemeFeatures:#117347a0>
-
+> name: app
 
 ## Application Life-Cycle
 
 The _app.nit_ application life-cycle is compatible with all target platforms.
 It relies on the following sequence of events, represented here by their callback method name:
+
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::app
+> name: ios::app
+> name: android::platform
+> name: ios::platform
+> name: app::App
+> name: core::Sequence
 
 1. `on_create`: The application is being created.
    You should build the UI at this time and launch services.
@@ -43,56 +45,254 @@ It relies on the following sequence of events, represented here by their callbac
 5. `on_restart`: The app goes back to the inactive state.
    You can revert what was done by `on_stop`.
 
-> theme: <MdThemeAPI:#11751740>
-> theme: <MdThemeAPI:#11744e20>
-> theme: <MdThemeAPI:#1173c660>
-> theme: <MdThemeAPI:#11744200>
-> theme: <MdThemeAPI:#11744de0>
-> theme: <MdThemeAPI:#11748180>
-> theme: <MdThemeAPI:#11744180>
-> theme: <MdThemeAPI:#1174fe00>
-> theme: <MdThemeAPI:#11748140>
-> theme: <MdThemeAPI:#117517c0>
-> theme: <MdThemeAPI:#1174fd80>
-
+> name: app
+> name: app
+> name: app
+> name: app
+> name: android>ui>
+> name: ios>ui>
+> name: android>service>
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: core::time
+> name: android::service
+> name: app::app
+> name: ios::app
+> name: app::app
+> name: ios::app
+> name: app::app
+> name: ios::app
+> name: app::app
+> name: ios::app
+> name: app::App
+> name: app::App
+> name: app::App
+> name: app::App
+> name: app
+> name: app
+> name: app
+> name: app
+> name: android>ui>
+> name: ios>ui>
+> name: android>service>
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: core::time
+> name: android::service
+> name: app::app
+> name: ios::app
+> name: app::app
+> name: ios::app
+> name: app::app
+> name: ios::app
+> name: app::app
+> name: ios::app
+> name: app::App
+> name: app::App
+> name: app::App
+> name: app::App
+> name: android>ui>
+> name: ios>ui>
+> name: android>service>
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: core::time
+> name: android::service
+> name: android>ui>
+> name: ios>ui>
+> name: android>service>
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: core::time
+> name: android::service
+> name: android>ui>
+> name: ios>ui>
+> name: android>service>
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: core::time
+> name: android::service
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::app
+> name: ios::app
+> name: app::App
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::app
+> name: ios::app
+> name: app::App
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::app
+> name: ios::app
+> name: app::App
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::app
+> name: ios::app
+> name: app::App
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::app
+> name: ios::app
+> name: app::App
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::app
+> name: ios::app
+> name: app::App
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::app
+> name: ios::app
+> name: app::App
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::app
+> name: ios::app
+> name: app::App
 
 ![_app.nit_ life-cycle](path/resources/ab03b885463901ade4ae1a9adfaefeff.png)
 
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::app
+> name: ios::app
+> name: app::App
+
 Life-cycle events related to saving and restoring the application state are provided by two special callback methods:
-
-> theme: <MdThemeIntro:#11756600>
-
 
 * `on_save_state`: The app may be destroyed soon, save its state for a future `on_restore_state`.
   There is more on how it can be done in the `app::data_store` section.
 
 * `on_restore_state`: The app is launching, restore its state from a previous `on_save_state`.
 
-> theme: <MdThemeAPI:#11762e00>
-> theme: <MdThemeFeatures:#11762de0>
-> theme: <MdThemeAPI:#1175b540>
-> theme: <MdThemeAPI:#117565c0>
-> theme: <MdThemeAPI:#11762e40>
-> theme: <MdThemeAPI:#1175b4c0>
-
+> name: app
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::app
+> name: ios::app
+> name: app::app
+> name: ios::app
+> name: app::App
+> name: app::App
+> name: app
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::app
+> name: ios::app
+> name: app::app
+> name: ios::app
+> name: app::App
+> name: app::App
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::app
+> name: ios::app
+> name: app::App
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::app
+> name: ios::app
+> name: app::App
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::app
+> name: ios::app
+> name: app::App
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::app
+> name: ios::app
+> name: app::App
 
 These events are synchronized to the native platforms applications
 The `App` instance is the first to be notified of these events.
 Other UI elements, from the `ui` submodule, are notified of the same events using a simple depth first visit.
 So all UI elements can react separately to live-cycle events.
 
-> theme: <MdThemeAPI:#11762da0>
-
+> name: core::native
+> name: android::platform
+> name: ios::platform
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: android>ui>
+> name: ios>ui>
+> name: android>ui>
+> name: ios>ui>
+> name: core::native
+> name: android::platform
+> name: ios::platform
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
 
 ## User Interface
 
 The `app::ui` module defines an abstract API to build a portable graphical application.
 The API is composed of interactive `Control`s, visible `View`s and an active `Window`.
 
-> theme: <MdThemeAPI:#1176e8a0>
-
-
 Here is a subset of the most useful controls and views:
+
+> name: app::Control
+> name: app::View
 
 * The classic pushable `Button` with text (usually rectangular).
 
@@ -100,66 +300,234 @@ Here is a subset of the most useful controls and views:
 
 * `HorizontalLayout` and `VerticalLayout` organize other controls in order.
 
-> theme: <MdThemeAPI:#1177c320>
-> theme: <MdThemeFeatures:#1177c2e0>
-> theme: <MdThemeAPI:#11778dc0>
-> theme: <MdThemeAPI:#11776b60>
-> theme: <MdThemeAPI:#117781c0>
-> theme: <MdThemeAPI:#11778d80>
-> theme: <MdThemeAPI:#1177c360>
-> theme: <MdThemeAPI:#11778180>
-
+> name: core>text>
+> name: core>text>
+> name: core::text
+> name: core::text
+> name: core::Text
+> name: core::Text
+> name: app::Control
+> name: core>text>
+> name: core>text>
+> name: core::text
+> name: core::text
+> name: core::Text
+> name: core::Text
+> name: app::Control
+> name: core>text>
+> name: core::text
+> name: core::Text
+> name: core::Text
+> name: core>text>
+> name: core::text
+> name: core::Text
+> name: core>text>
+> name: core::text
+> name: core::Text
+> name: core>text>
+> name: core::text
+> name: core::Text
+> name: app::Control
+> name: app::Control
 
 Each control is notified of input events by callbacks to `on_event`.
 All controls have observers that are also notified of the events.
 So there is two ways  to customize the behavior on a given event:
 
-> theme: <MdThemeAPI:#1177c260>
-
+> name: app::Control
+> name: app::Control
 
 * Create a subclass of the wanted `Control`, let's say `Button`, and specialize `on_event`.
 
 * Add an observer to a `Button` instance, and implement `on_event` in the observer.
 
-> theme: <MdThemeAPI:#1178a4a0>
-> theme: <MdThemeFeatures:#1178a460>
-> theme: <MdThemeAPI:#11788560>
-> theme: <MdThemeAPI:#11786800>
-> theme: <MdThemeAPI:#1178a520>
-> theme: <MdThemeAPI:#11788520>
-
+> name: app::CompositeControl::add
+> name: app::ui::AppComponent::observers
+> name: app::ui::AppComponent::observers
+> name: app::CompositeControl::add
+> name: app::ui::AppComponent::observers
+> name: app::ui::AppComponent::observers
+> name: app::CompositeControl::add
+> name: app::ui::AppComponent::observers
+> name: app::ui::AppComponent::observers
 
 ### Usage Example
 
-> theme: <MdThemeUsage:#1178dfe0>
-
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
 
 The example at `examples/ui_example.nit` shows off most features of `app::ui` in a minimal program.
 You can also take a look at the calculator (`../../examples/calculator/src/calculator.nit`) which is a concrete usage example.
 
-> theme: <MdThemeAPI:#1178dc40>
-> theme: <MdThemeUsage:#11797c80>
-
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
 
 ### Platform-specific UI
 
+> name: android>ui>
+> name: ios>ui>
+> name: android::platform
+> name: ios::platform
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: android>ui>
+> name: ios>ui>
+> name: android::platform
+> name: ios::platform
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+
 You can go beyond the portable UI API of _app.nit_ by using the natives services of a platform.
+
+> name: app
+> name: android>ui>
+> name: ios>ui>
+> name: app>
+> name: android>nit_compile>android>app>
+> name: android>service>
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: app::app
+> name: ios::app
+> name: core::native
+> name: android::service
+> name: android::platform
+> name: ios::platform
+> name: app::App
+> name: app
+> name: android>ui>
+> name: ios>ui>
+> name: app>
+> name: android>nit_compile>android>app>
+> name: android>service>
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: app::app
+> name: ios::app
+> name: core::native
+> name: android::service
+> name: android::platform
+> name: ios::platform
+> name: app::App
 
 The suggested approach is to use platform specific modules to customize the application on a precise platform.
 See the calculator example for an adaptation of the UI on Android,
 the interesting module is in this repository at ../../examples/calculator/src/android_calculator.nit
 
-> theme: <MdThemeExamples:#117a5520>
-
+> name: android::platform
+> name: ios::platform
+> name: android::platform
+> name: ios::platform
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: android::android
+> name: android
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: android>ui>
+> name: ios>ui>
+> name: android>
+> name: android>nit_compile>android>
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: android>examples>src>
+> name: android>nit_compile>android>app>src>
+> name: android::platform
+> name: ios::platform
+> name: android::platform
+> name: ios::platform
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: android::android
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: android>examples>src>
 
 ## Persistent State with data_store
+
+> name: app::data_store
+> name: linux::data_store
+> name: android::data_store
+> name: ios::data_store
+> name: app::data_store
+> name: linux::data_store
+> name: android::data_store
+> name: ios::data_store
 
 _app.nit_ offers the submodule `app::data_store` to easily save the application state and user preferences.
 The service is accessible by the method `App::data_store`. The `DataStore` itself defines 2 methods:
 
-> theme: <MdThemeAPI:#117a5080>
-> theme: <MdThemeRefs:#117b0840>
-
+> name: app::app
+> name: ios::app
+> name: android::service
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: android>service>
+> name: app::app
+> name: ios::app
+> name: android::service
+> name: app::App
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: android>service>
+> name: app::app
+> name: ios::app
+> name: android::service
+> name: app::App
 
 * `DataStore::[]=` saves and associates any serializable instances to a `String` key.
   Pass `null` to clear the value associated to a key.
@@ -167,18 +535,32 @@ The service is accessible by the method `App::data_store`. The `DataStore` itsel
 * `DataStore::[]` returns the object associated to a `String` key.
   It returns `null` if nothing is associated to the key.
 
-> theme: <MdThemeAPI:#117b81a0>
-> theme: <MdThemeFeatures:#117b8180>
-> theme: <MdThemeAPI:#117b4ac0>
-> theme: <MdThemeAPI:#117b0800>
-> theme: <MdThemeAPI:#117b81e0>
-> theme: <MdThemeAPI:#117b4a80>
-
+> name: serialization::Serializable
+> name: core::Object
+> name: serialization::Serializable
+> name: core::Object
+> name: serialization::Serializable
+> name: serialization::Serializable
+> name: core::Object
+> name: core::Object
 
 ### Usage Example
 
-> theme: <MdThemeUsage:#117baf40>
-
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
 
 ~~~
 import app::data_store
@@ -211,9 +593,6 @@ redef class App
 end
 ~~~
 
-> theme: <MdThemeExamples:#117baf00>
-
-
 ## Async HTTP request
 
 The module `app::http_request` provides services to execute asynchronous HTTP request.
@@ -222,13 +601,45 @@ lets the user implement methods acting only on the UI thread.
 See the documentation of `AsyncHttpRequest` for more information and
 the full example at `examples/http_request_example.nit`.
 
-> theme: <MdThemeAPI:#117ba800>
-> theme: <MdThemeIntro:#117c3080>
-
+> name: android::service
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: meta::Class
+> name: pthreads::Thread
+> name: android>service>
+> name: android>ui>
+> name: ios>ui>
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: android::service
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: meta::Class
+> name: pthreads::Thread
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
 
 ## Metadata annotations
 
 The _app.nit_ framework defines three annotations to customize the application package.
+
+> name: app
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: app::app
+> name: ios::app
+> name: app::App
 
 * `app_name` takes a single argument, the visible name of the application.
   This name is used for launchers and window title.
@@ -256,24 +667,107 @@ The _app.nit_ framework defines three annotations to customize the application p
   In case of name conflicts in the resource files, the files from the project root have the lowest priority,
   those associated to modules lower in the importation hierarchy have higher priority.
 
-> theme: <MdThemeAPI:#1100c140>
-> theme: <MdThemeFeatures:#1100c120>
-> theme: <MdThemeAPI:#117d2520>
-> theme: <MdThemeAPI:#117c9500>
-> theme: <MdThemeAPI:#117dd5e0>
-> theme: <MdThemeAPI:#117d24a0>
-> theme: <MdThemeAPI:#117e86c0>
-> theme: <MdThemeAPI:#117dd5a0>
-> theme: <MdThemeTests:#117e8700>
-> theme: <MdThemeAPI:#1100c180>
-> theme: <MdThemeAPI:#117e8680>
-> theme: <MdThemeAPI:#117f8820>
-
+> name: android
+> name: core>collection>tests>
+> name: android>
+> name: android>nit_compile>android>
+> name: android>nit_compile>android>app>libs>
+> name: android>nit_compile>android>app>src>main>java>
+> name: json::store
+> name: android::platform
+> name: ios::platform
+> name: core::file
+> name: android::android
+> name: core::file
+> name: core::file
+> name: pthreads::extra
+> name: core::file
+> name: core::file
+> name: app::Window
+> name: core::Path
+> name: android
+> name: core>collection>tests>
+> name: android>
+> name: android>nit_compile>android>
+> name: android>nit_compile>android>app>libs>
+> name: android>nit_compile>android>app>src>main>java>
+> name: json::store
+> name: android::platform
+> name: ios::platform
+> name: core::file
+> name: android::android
+> name: core::file
+> name: core::file
+> name: pthreads::extra
+> name: core::file
+> name: core::file
+> name: app::Window
+> name: core::Path
+> name: app::Window
+> name: app::Window
+> name: json::store
+> name: json::store
+> name: json::store
+> name: core>collection>tests>
+> name: core>collection>tests>
+> name: core>collection>tests>
+> name: android
+> name: android>
+> name: android>nit_compile>android>
+> name: android>nit_compile>android>app>libs>
+> name: android>nit_compile>android>app>src>main>java>
+> name: android::platform
+> name: ios::platform
+> name: core::file
+> name: android::android
+> name: core::file
+> name: core::file
+> name: pthreads::extra
+> name: core::file
+> name: core::file
+> name: core::Path
+> name: android::platform
+> name: ios::platform
+> name: core::file
+> name: android::android
+> name: core::file
+> name: core::file
+> name: android
+> name: android>
+> name: android>nit_compile>android>
+> name: android>nit_compile>android>app>libs>
+> name: android>nit_compile>android>app>src>main>java>
+> name: android::platform
+> name: ios::platform
+> name: core::file
+> name: android::android
+> name: core::file
+> name: core::file
+> name: pthreads::extra
+> name: core::file
+> name: core::file
+> name: pthreads::extra
+> name: core::file
+> name: core::file
+> name: core::Path
 
 ### Usage Example
 
-> theme: <MdThemeUsage:#11010ee0>
-
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
 
 ~~~
 module my_module is
@@ -283,20 +777,38 @@ module my_module is
 end
 ~~~
 
-> theme: <MdThemeExamples:#11010ea0>
-
-
 ## Compiling and Packaging an Application
 
 The Nit compiler detects the target platform from the importations and generates the appropriate application format and package.
+
+> name: android::platform
+> name: ios::platform
 
 Applications using only the portable services of _app.nit_ require some special care at compilation.
 Such an application, let's say `calculator.nit`, does not depend on a specific platform and use the portable UI.
 The target platform must be specified to the compiler for it to produce the correct application package.
 There is two main ways to achieve this goal:
 
-> theme: <MdThemeAPI:#1101b080>
-
+> name: app
+> name: app
+> name: android>service>
+> name: app>
+> name: android>nit_compile>android>app>
+> name: android>ui>
+> name: ios>ui>
+> name: android>nit_compile>android>app>src>main>
+> name: android::service
+> name: app::app
+> name: ios::app
+> name: android::platform
+> name: ios::platform
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: android::platform
+> name: ios::platform
+> name: app::App
 
 * The mixin option (`-m module`) imports an additional module before compiling.
   It can be used to load platform specific implementations of the _app.nit_ portable UI.
@@ -325,14 +837,142 @@ There is two main ways to achieve this goal:
   # ...
   ~~~
 
-> theme: <MdThemeAPI:#1103a920>
-> theme: <MdThemeFeatures:#1103a900>
-> theme: <MdThemeAPI:#11031180>
-> theme: <MdThemeAPI:#1102a640>
-> theme: <MdThemeInstall:#110311c0>
-> theme: <MdThemeAPI:#1103a960>
-> theme: <MdThemeAPI:#11031140>
-> theme: <MdThemeExamples:#1103a9e0>
-> theme: <MdThemeExamples:#1103a9a0>
-
+> name: app
+> name: android
+> name: android
+> name: app>
+> name: android>nit_compile>android>app>
+> name: android>ui>
+> name: ios>ui>
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: android>
+> name: android>nit_compile>android>
+> name: android>
+> name: android>nit_compile>android>
+> name: android::platform
+> name: ios::platform
+> name: app::app
+> name: ios::app
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: android::platform
+> name: ios::platform
+> name: android::android
+> name: android::android
+> name: app::App
+> name: app
+> name: android
+> name: android
+> name: app>
+> name: android>nit_compile>android>app>
+> name: android>ui>
+> name: ios>ui>
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: android>
+> name: android>nit_compile>android>
+> name: android>
+> name: android>nit_compile>android>
+> name: android::platform
+> name: ios::platform
+> name: app::app
+> name: ios::app
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: android::platform
+> name: ios::platform
+> name: android::android
+> name: android::android
+> name: app::App
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: android>ui>
+> name: ios>ui>
+> name: android::platform
+> name: ios::platform
+> name: app::app
+> name: ios::app
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: app::App
+> name: android::platform
+> name: ios::platform
+> name: app::app
+> name: ios::app
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: app
+> name: app>
+> name: android>nit_compile>android>app>
+> name: android>ui>
+> name: ios>ui>
+> name: android::platform
+> name: ios::platform
+> name: app::app
+> name: ios::app
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: app::App
+> name: android
+> name: android
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: android>
+> name: android>nit_compile>android>
+> name: android>
+> name: android>nit_compile>android>
+> name: android::platform
+> name: ios::platform
+> name: android::android
+> name: android::android
+> name: android::platform
+> name: ios::platform
+> name: android::android
+> name: android::android
+> name: android
+> name: android
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: android>
+> name: android>nit_compile>android>
+> name: android>
+> name: android>nit_compile>android>
+> name: android::platform
+> name: ios::platform
+> name: android::android
+> name: android::android
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
+> name: app>examples>
+> name: android>examples>
+> name: ios>examples>
+> name: serialization>examples>
+> name: pthreads>examples>
 

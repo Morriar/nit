@@ -1,5 +1,6 @@
 # iOS support for _app.nit_
 
+> theme: api
 > theme: title
 
 ## System configuration
@@ -10,16 +11,16 @@ Configure your system for OS X by installing Xcode and brew.
 Follow the instructions in `README.md` at the root of the repository.
 
 > theme: api
-> theme: install
+> theme: usage
 
 Optionally, install ios-sim to run compiled apps in the simulator: `brew install ios-sim`
 
 > theme: api
-> theme: install
+> theme: usage
 
 ## Compile and run a simple application
 
-> theme: features
+> theme: usage
 
 Let's use the `hello_ios` example in the folder `lib/ios/examples/`.
 
@@ -29,10 +30,9 @@ Let's use the `hello_ios` example in the folder `lib/ios/examples/`.
 Compile with: `nitc hello_world.nit`
 
 > theme: api
+> theme: usage
 
 Run in the simulator with: `ios-sim hello_world.app`
-
-> theme: api
 
 ## Sample portable applications
 

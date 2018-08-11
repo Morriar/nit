@@ -1,13 +1,16 @@
 # Nit wrapper for Github API
 
+> theme: api
 > theme: title
 
 This module provides a Nit object oriented interface to access the Github api.
 
+> theme: api
 > theme: intro
 
 ## Accessing the API
 
+> theme: api
 > theme: features
 
 ### `GithubAPI` - # Client to Github API
@@ -18,6 +21,7 @@ This module provides a Nit object oriented interface to access the Github api.
 To access the API you need an instance of a `GithubAPI` client.
 
 > theme: api
+> theme: examples
 
 ~~~
 import github
@@ -33,6 +37,10 @@ var api = new GithubAPI(token)
 > theme: examples
 
 The API client allows you to get Github API entities.
+
+> theme: examples
+> theme: api
+> theme: examples
 
 ~~~
 import github
@@ -65,10 +73,9 @@ Token can also be recovered from user config with `get_github_oauth`.
 Return the value of `git config --get github.oauthtoken`
 or `""` if no key exists.
 
-> theme: api
-
 ### Retrieving user data
 
+> theme: api
 > theme: features
 
 ### `load_user` - # Get the Github user with `login`
@@ -79,6 +86,7 @@ or `""` if no key exists.
 Loads the `User` from the API or returns `null` if the user cannot be found.
 
 > theme: api
+> theme: examples
 
 ~~~
 import github
@@ -100,7 +108,6 @@ Provides access to [Github user data](https://developer.github.com/v3/users/).
 Should be accessed from `GithubAPI::load_user`.
 
 > theme: api
-> theme: intro
 
 * `api$User$SELF` - # Type of this instance, automatically specialized in every class
 
@@ -178,11 +185,10 @@ Should be accessed from `GithubAPI::load_user`.
 > theme: api
 > theme: api
 > theme: api
-> theme: api
-> theme: api
 
 ### Retrieving repo data
 
+> theme: api
 > theme: features
 
 ### `load_repo` - # Get the Github repo with `full_name`.
@@ -193,6 +199,7 @@ Should be accessed from `GithubAPI::load_user`.
 Loads the `Repo` from the API or returns `null` if the repo cannot be found.
 
 > theme: api
+> theme: examples
 
 ~~~
 import github
@@ -215,7 +222,6 @@ Provides access to [Github repo data](https://developer.github.com/v3/repos/).
 Should be accessed from `GithubAPI::load_repo`.
 
 > theme: api
-> theme: intro
 
 * `api$Repo$SELF` - # Type of this instance, automatically specialized in every class
 
@@ -261,14 +267,6 @@ Should be accessed from `GithubAPI::load_repo`.
 
 > theme: api
 > theme: features
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
 > theme: api
 > theme: api
 > theme: api
@@ -366,6 +364,7 @@ Should be accessed from `GithubAPI::load_repo`.
 > theme: api
 > theme: api
 > theme: api
+> theme: features
 > theme: api
 > theme: api
 > theme: authors
@@ -375,25 +374,17 @@ Should be accessed from `GithubAPI::load_repo`.
 > theme: api
 > theme: api
 > theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
+> theme: api
 > theme: authors
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
 > theme: api
 > theme: api
 > theme: api
@@ -416,6 +407,7 @@ Should be accessed from `GithubAPI::load_repo`.
 
 #### Caching
 
+> theme: api
 > theme: features
 
 #### Custom requests
@@ -432,6 +424,7 @@ See other `load_*` methods to use more expressive types.
 
 > theme: api
 > theme: refs
+> theme: examples
 
 ~~~
 import github
@@ -446,7 +439,9 @@ assert obj["name"] == "nit"
 
 Returns `null` in case of `error`.
 
+> theme: examples
 > theme: api
+> theme: examples
 
 ~~~
 import github
@@ -465,6 +460,7 @@ assert err.message == "Not Found"
 
 #### Change the user agent
 
+> theme: api
 > theme: features
 
 ### `user_agent` - # User agent used for HTTP requests.
@@ -478,15 +474,15 @@ Default is `nit_github_api`.
 
 See <https://developer.github.com/v3/#user-agent-required>
 
+> theme: api
 > theme: refs
 
 #### Debugging
 
-> theme: features
+> theme: todo
 
 ### `verbose_lvl` - # Verbosity level.
 
-> theme: api
 > theme: features
 
 * `0`: only errors (default)
@@ -496,8 +492,6 @@ See <https://developer.github.com/v3/#user-agent-required>
 > theme: features
 > theme: api
 > theme: api
-> theme: api
-> theme: api
 
 #### Using with GitLab
 
@@ -505,6 +499,8 @@ See <https://developer.github.com/v3/#user-agent-required>
 
 If URL scheme of GitLab API follows the one of Github API, it may be possible to
 configure this wrapper to use a custom URL.
+
+> theme: api
 
 ### `api_url` - # Github API base url.
 
@@ -517,10 +513,13 @@ Default is `https://api.github.com` and should not be changed.
 
 ## Creating hooks
 
+> theme: api
 > theme: features
 
 Using this API you can create Github hooks able to respond to actions performed
 on a repository.
+
+> theme: api
 
 ### `hooks` - # Github hook event listening with `nitcorn`.
 
@@ -530,6 +529,7 @@ on a repository.
 Usage:
 
 > theme: usage
+> theme: examples
 
 ~~~
 import github::hooks
@@ -565,9 +565,12 @@ var listener = new LogHookListener(api, "127.0.0.1", 8080)
 
 ## Dealing with events
 
+> theme: api
 > theme: features
 
 GithubAPI can trigger different events depending on the hook configuration.
+
+> theme: api
 
 ### `GithubEvent` - # Github event stub.
 
@@ -614,12 +617,7 @@ GithubAPI can trigger different events depending on the hook configuration.
 > theme: api
 > theme: api
 > theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
-> theme: api
+> theme: features
 > theme: api
 > theme: api
 > theme: api

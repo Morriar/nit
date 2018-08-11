@@ -13,6 +13,7 @@ To compile the _gamnit_ apps packaged with the Nit repository on GNU/Linux you n
 On Debian 8.2, this command should install everything needed:
 
 > name: gamnit
+> name: app
 > name: linux
 
 ~~~bash

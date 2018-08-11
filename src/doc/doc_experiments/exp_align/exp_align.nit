@@ -32,9 +32,15 @@ class ReadmeComparator
 	fun compare_docs(orig, dest: MdDocument) do
 
 		var block_count = 0
+		var block_ok = 0
+		var block_ko = 0
+		var block_pt = 0
+
+
 		var block_spans = 0
-		var block_names = 0
-		var block_codes = 0
+		var block_spans_ok = 0
+		var block_spans_ko = 0
+		var block_spans_pt = 0
 
 		var spans_r = 0.0
 		var spans_p = 0.0
@@ -76,12 +82,19 @@ class ReadmeComparator
 				spans_r += span_r
 				spans_p += span_p
 				spans_count += 1
+				if span_r == 100.0 then
+					block_spans_ok += 1
+				else if span_r > 0.0 then
+					block_spans_pt += 1
+				else
+					block_spans_ko += 1
+				end
 			end
 
 			# names
 			var orig_names = block.name_refs
 			var dest_names = oblock.name_refs
-			if dest_names.not_empty then block_names += 1
+			# if dest_names.not_empty then block_names += 1
 			if orig_names.not_empty  then
 				var name_r = recall(orig_names, dest_names)
 				var name_p = precision(orig_names, dest_names)
@@ -106,7 +119,7 @@ class ReadmeComparator
 			# code refs
 			var orig_codes = block.code_refs
 			var dest_codes = oblock.code_refs
-			if dest_codes.not_empty then block_codes += 1
+			# if dest_codes.not_empty then block_codes += 1
 			if orig_codes.not_empty then
 				var code_r = recall(orig_codes, dest_codes)
 				var code_p = precision(orig_codes, dest_codes)
@@ -126,14 +139,24 @@ class ReadmeComparator
 			matches_r += match_r
 			matches_p += match_p
 			matches_count += 1
+
+			if orig_matches.not_empty and match_r == 100.0 then
+				block_ok += 1
+			else if orig_matches.not_empty and match_r > 0.0 then
+				block_pt += 1
+			else if orig_matches.not_empty then
+				block_ko += 1
+			end
+
 		end
 		printn "{lib or else "NULL"}\t"
-		# printn "{block_count}\t{block_spans}\t{block_names}\t{block_codes}\n"
+		# printn "{block_count}\t{block_spans_ok}\t{block_spans_pt}\t{block_spans_ko}\n"
+		printn "{block_count}\t{block_ok}\t{block_pt}\t{block_ko}\n"
 		# printn "{spans_r / spans_count.to_f}\t{spans_p / spans_count.to_f}\n"
 		# printn "{names_r / names_count.to_f}\t{names_p / names_count.to_f}\n"
 		# printn "{exs_r / exs_count.to_f}\t{exs_p / exs_count.to_f}\t"
 		# printn "{codes_r / codes_count.to_f}\t{codes_p / codes_count.to_f}\n"
-		printn "{matches_r / matches_count.to_f}\t{matches_p / matches_count.to_f}\n"
+		# printn "{matches_r / matches_count.to_f}\t{matches_p / matches_count.to_f}\n"
 	end
 
 	fun print_block(block: MdBlock) do
@@ -213,7 +236,7 @@ redef class MdBlock
 			if line.has_prefix("name: ") then name_refs.add line.replace("name: ", "")
 			if line.has_prefix("code: ") then code_refs.add line.replace("code: ", "")
 			if line.has_prefix("example: ") then example_refs.add line.replace("example: ", "")
-			if line.has_prefix("theme: ") then matches.add line.replace("theme: ", "")
+			if line.has_prefix("match: ") then matches.add line.replace("match: ", "")
 		end
 	end
 
@@ -286,7 +309,7 @@ class MdBlockCodes
 	end
 end
 
-var corpus = "themes"
+var corpus = "composed"
 var corpus_path = "src/doc/doc_experiments/exp_align/corpus.{corpus}"
 (corpus_path / "../out.{corpus}").mkdir
 var files = corpus_path.files
@@ -300,6 +323,7 @@ for file in files do
 	# print file
 	var lib = file.replace(".corpus.md", "")
 	# if not libs.has(lib) then continue
+	# if lib != "pthreads" then continue
 
 	# sys.system "./nitreadme lib/{lib} --keep-going --check-docdown"
 	sys.system "./nitreadme lib/{lib} --keep-going --check-docdown > src/doc/doc_experiments/exp_align/out.{corpus}/{lib}.out.md 2>/dev/null"

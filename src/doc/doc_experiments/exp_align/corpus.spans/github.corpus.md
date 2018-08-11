@@ -10,6 +10,8 @@ This module provides a Nit object oriented interface to access the Github api.
 To access the API you need an instance of a `GithubAPI` client.
 
 ~~~
+import github
+
 # Get Github authentification token.
 var token = get_github_oauth
 assert not token.is_empty
@@ -21,6 +23,9 @@ var api = new GithubAPI(token)
 The API client allows you to get Github API entities.
 
 ~~~
+import github
+
+var api = new GithubAPI(get_github_oauth)
 var repo = api.load_repo("nitlang/nit")
 assert repo != null
 assert repo.name == "nit"
@@ -51,10 +56,15 @@ or `""` if no key exists.
 
 Loads the `User` from the API or returns `null` if the user cannot be found.
 
-    var api = new GithubAPI(get_github_oauth)
-    var user = api.load_user("Morriar")
-    print user or else "null"
-    assert user.login == "Morriar"
+~~~
+import github
+
+var api = new GithubAPI(get_github_oauth)
+var user = api.load_user("Morriar")
+print user or else "null"
+assert user.login == "Morriar"
+~~~
+
 ### `User` - # A Github user
 
 
@@ -104,11 +114,16 @@ Should be accessed from `GithubAPI::load_user`.
 
 Loads the `Repo` from the API or returns `null` if the repo cannot be found.
 
-    var api = new GithubAPI(get_github_oauth)
-    var repo = api.load_repo("nitlang/nit")
-    assert repo.name == "nit"
-    assert repo.owner.login == "nitlang"
-    assert repo.default_branch == "master"
+~~~
+import github
+
+var api = new GithubAPI(get_github_oauth)
+var repo = api.load_repo("nitlang/nit")
+assert repo.name == "nit"
+assert repo.owner.login == "nitlang"
+assert repo.default_branch == "master"
+~~~
+
 ### `Repo` - # A Github repository.
 
 
@@ -216,20 +231,29 @@ Should be accessed from `GithubAPI::load_repo`.
 This method returns raw json data.
 See other `load_*` methods to use more expressive types.
 
-    var api = new GithubAPI(get_github_oauth)
-    var obj = api.get("/repos/nitlang/nit")
-    assert obj isa JsonObject
-    assert obj["name"] == "nit"
+~~~
+import github
+
+var api = new GithubAPI(get_github_oauth)
+var obj = api.get("/repos/nitlang/nit")
+assert obj isa JsonObject
+assert obj["name"] == "nit"
+~~~
 
 Returns `null` in case of `error`.
 
-    obj = api.get("/foo/bar/baz")
-    assert obj == null
-    assert api.was_error
-    var err = api.last_error
-    assert err isa GithubError
-    assert err.name == "GithubAPIError"
-    assert err.message == "Not Found"
+~~~
+import github
+
+var api = new GithubAPI(get_github_oauth)
+var obj = api.get("/foo/bar/baz")
+assert obj == null
+assert api.was_error
+var err = api.last_error
+assert err isa GithubError
+assert err.name == "GithubAPIError"
+assert err.message == "Not Found"
+~~~
 
 #### Change the user agent
 

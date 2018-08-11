@@ -1,9 +1,11 @@
 # Nit wrapper for Github API
 
+> theme: api
 > theme: title
 
 This module provides a Nit object oriented interface to access the Github api.
 
+> theme: api
 > theme: intro
 
 ## Accessing the API
@@ -19,6 +21,7 @@ This module provides a Nit object oriented interface to access the Github api.
 To access the API you need an instance of a `GithubAPI` client.
 
 > theme: api
+> theme: examples
 
 ~~~
 import github
@@ -35,6 +38,7 @@ var api = new GithubAPI(token)
 
 The API client allows you to get Github API entities.
 
+> theme: examples
 > theme: api
 
 ~~~
@@ -54,7 +58,6 @@ assert user.login == "Morriar"
 
 ### Authentification
 
-> theme: api
 > theme: features
 
 Token can also be recovered from user config with `get_github_oauth`.
@@ -84,6 +87,7 @@ or `""` if no key exists.
 Loads the `User` from the API or returns `null` if the user cannot be found.
 
 > theme: api
+> theme: examples
 
 ~~~
 import github
@@ -161,6 +165,7 @@ Should be accessed from `GithubAPI::load_user`.
 Loads the `Repo` from the API or returns `null` if the repo cannot be found.
 
 > theme: api
+> theme: examples
 
 ~~~
 import github
@@ -311,6 +316,7 @@ See other `load_*` methods to use more expressive types.
 > theme: api
 > theme: features
 > theme: refs
+> theme: examples
 
 ~~~
 import github
@@ -325,6 +331,7 @@ assert obj["name"] == "nit"
 
 Returns `null` in case of `error`.
 
+> theme: examples
 > theme: api
 
 ~~~
@@ -368,6 +375,7 @@ See <https://developer.github.com/v3/#user-agent-required>
 ### `verbose_lvl` - # Verbosity level.
 
 > theme: api
+> theme: features
 
 * `0`: only errors (default)
 * `1`: verbose
@@ -381,6 +389,8 @@ See <https://developer.github.com/v3/#user-agent-required>
 
 If URL scheme of GitLab API follows the one of Github API, it may be possible to
 configure this wrapper to use a custom URL.
+
+> theme: api
 
 ### `api_url` - # Github API base url.
 
@@ -399,6 +409,8 @@ Default is `https://api.github.com` and should not be changed.
 Using this API you can create Github hooks able to respond to actions performed
 on a repository.
 
+> theme: api
+
 ### `hooks` - # Github hook event listening with `nitcorn`.
 
 > theme: api
@@ -407,6 +419,7 @@ on a repository.
 Usage:
 
 > theme: usage
+> theme: examples
 
 ~~~
 import github::hooks

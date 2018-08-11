@@ -1,9 +1,11 @@
 # Android platform support and APIs
 
+> theme: api
 > theme: title
 
 ## Compilation for Android
 
+> theme: api
 > theme: features
 
 The compiler generates an APK file as the output when the `android`
@@ -11,6 +13,7 @@ module is imported by the compilation target. The path to the generated
 file can be specified using the `-o` and `--dir` options.
 
 > theme: api
+> theme: usage
 
 ## Host system configuration
 
@@ -19,10 +22,14 @@ file can be specified using the `-o` and `--dir` options.
 To compile Android apps from a 64 bits GNU/Linux host you can reuse an existing Android Studio
 installation or make a clean install with command line tools only.
 
-> theme: install
+> theme: api
+> theme: authors
+> theme: usage
 
 Note that this guide supports only 64 bits GNU/Linux hosts with support for a Java 8 JDK,
 it may be possible to support other platforms with some tweaks.
+
+> theme: api
 
 1. Install the required SDK packages using one of these two methods:
 
@@ -64,25 +71,35 @@ it may be possible to support other platforms with some tweaks.
    ~~~
 
 > theme: api
+> theme: features
 > theme: api
-> theme: install
+> theme: usage
 > theme: api
-> theme: install
-> theme: install
-> theme: install
+> theme: authors
+> theme: usage
+> theme: api
+> theme: authors
+> theme: usage
+> theme: usage
 > theme: api
 > theme: api
-> theme: install
-> theme: install
-> theme: install
-> theme: install
+> theme: usage
+> theme: usage
+> theme: api
+> theme: api
+> theme: usage
+> theme: usage
 
 ## Configure the Android application
 
+> theme: api
 > theme: features
 
 The _app.nit_ framework and this project offers some services to
 customize the generated Android application.
+
+> theme: api
+> theme: features
 
 ### Annotations
 
@@ -123,8 +140,11 @@ customize the generated Android application.
 > theme: refs
 > theme: api
 > theme: api
-> theme: usage
+> theme: api
 > theme: examples
+> theme: examples
+> theme: examples
+> theme: api
 > theme: api
 > theme: api
 > theme: refs
@@ -133,6 +153,7 @@ customize the generated Android application.
 
 ### Android implementation
 
+> theme: api
 > theme: features
 
 There is two core implementation for Nit apps on Android.
@@ -149,6 +170,7 @@ For example, a module importing `app::ui` and `android` will trigger the importa
 
 ### Lock app orientation
 
+> theme: api
 > theme: features
 
 Importing `android::landscape` or `android::portrait` locks the generated
@@ -166,6 +188,7 @@ The folder should adopt the structure of a normal Android project, e.g., a custo
 at `android/res/values/color.xml` to be compiled with the Android application.
 
 > theme: api
+> theme: usage
 
 The application icon should also be placed in the `android/` folder.
 Place the classic bitmap version at `android/res/mipmap-hdpi/ic_launcher.png` (and others),
@@ -173,6 +196,7 @@ and the adaptive version at `android/res/mipmap-anydpi-v26/ic_launcher.xml`.
 The Nit compiler detects these files and uses them as the application icon.
 
 > theme: api
+> theme: usage
 
 Additional `android/` folders may be placed next to more specific Nit modules to change the Android resources
 for application variants. The more specific resources will have priority over the project level `android/` files.
@@ -189,20 +213,24 @@ The compilation mode is specified as an argument to `nitc`, only
 `--release` can be specified as debug is the default behavior.
 
 > theme: api
+> theme: usage
 
 ### Debug mode
 
-> theme: features
+> theme: todo
 
 Debug mode enables compiling to an APK file without handling signing keys
 and their password. The APK file can be installed to a local device with
 USB debugging enabled, but it cannot be published on the Play Store.
 
-> theme: install
+> theme: api
+> theme: authors
+> theme: usage
 
 By default, `nitc` will compile Android applications in debug mode.
 
 > theme: api
+> theme: usage
 
 ### Release mode
 
@@ -210,6 +238,9 @@ By default, `nitc` will compile Android applications in debug mode.
 
 Building in release mode will use your private key to sign the
 APK file, it can then be published on the Play Store.
+
+> theme: api
+> theme: authors
 
 1. Have a keystore with a valid key to sign your APK file.
 
@@ -239,12 +270,16 @@ APK file, it can then be published on the Play Store.
    required passwords as needed by `jarsigner`.
 
 > theme: api
+> theme: features
 > theme: api
 > theme: api
-> theme: install
+> theme: api
+> theme: usage
 > theme: api
 > theme: api
-> theme: install
+> theme: usage
+> theme: usage
 > theme: api
 > theme: api
+> theme: usage
 

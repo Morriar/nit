@@ -26,8 +26,10 @@ See http://nlp.stanford.edu/software/corenlp.shtml.
 
 ### Java client
 
-~~~nitish
-var proc = new NLPProcessor("path/to/StanfordCoreNLP/jars")
+~~~nit
+import nlp
+
+var proc = new NLPJavaProcessor("path/to/StanfordCoreNLP/jars")
 
 var doc = proc.process("String to analyze")
 
@@ -48,7 +50,9 @@ The NLPServer provides a wrapper around the StanfordCoreNLPServer.
 
 See `https://stanfordnlp.github.io/CoreNLP/corenlp-server.html`.
 
-~~~nitish
+~~~nit
+import nlp
+
 var cp = "/path/to/StanfordCoreNLP/jars"
 var srv = new NLPServer(cp, 9000)
 srv.start
@@ -64,7 +68,9 @@ The NLPClient is used as a NLPProcessor with a NLPServer backend.
 > name: nlp::NLPProcessor
 > name: nlp::NLPServer
 
-~~~nitish
+~~~nit
+import nlp
+
 var cli = new NLPClient("http://localhost:9000")
 var doc = cli.process("String to analyze")
 ~~~
@@ -81,14 +87,17 @@ tag the terms of a document.
 > name: nlp::NLPProcessor
 > name: vsm::Document
 
-~~~nitish
+~~~nit
+import nlp
+
+var proc = new NLPJavaProcessor("path/to/StanfordCoreNLP/jars")
 var index = new NLPIndex(proc)
 
 var d1 = index.index_string("Doc 1", "/uri/1", "this is a sample")
 var d2 = index.index_string("Doc 2", "/uri/2", "this and this is another example")
 assert index.documents.length == 2
 
-matches = index.match_string("this sample")
+var matches = index.match_string("this sample")
 assert matches.first.document == d1
 ~~~
 

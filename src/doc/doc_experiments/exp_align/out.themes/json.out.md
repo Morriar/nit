@@ -1,13 +1,19 @@
 # read and write JSON formatted text
 
+> theme: api
 > theme: title
 
 These services can be useful to communicate with a remote server or client,
 save data locally or even debug and understand the structure of a Nit object.
 There is a single API to write JSON, and three API to read depending on the use case.
 
+> theme: api
+> theme: intro
+> theme: features
+
 ## Write JSON
 
+> theme: api
 > theme: features
 
 Writing Nit objects to JSON format can be useful to communicate with a remote service,
@@ -22,6 +28,7 @@ share the same features.
 
 ### Write plain JSON
 
+> theme: api
 > theme: features
 
 Passing the argument `plain=true` to `serialize_to_json` generates plain and clean JSON.
@@ -36,9 +43,12 @@ For your local objects, you can annotate them with `serialize` to automate subcl
 `Serializable` and the implementation of its services.
 
 > theme: api
+> theme: features
 
 #### Example
 
+> theme: api
+> theme: examples
 > theme: examples
 
 ~~~
@@ -97,6 +107,7 @@ assert charlie.serialize_to_json(pretty=true, plain=true) == """
 
 ### Write JSON with metadata
 
+> theme: api
 > theme: features
 
 By default, `serialize_to_json` and `JsonSerializer` include metadate in the generated JSON.
@@ -108,13 +119,17 @@ The metadata allows to avoid repeating an object and its resolves cycles in the 
 
 For more information on Nit serialization, see: ../serialization/README.md
 
+> theme: api
 > theme: refs
 
 ## Read JSON
 
+> theme: api
 > theme: features
 
 There are a total of 3 API to read JSON:
+
+> theme: api
 
 * `JsonDeserializer` reads JSON to recreate complex Nit objects (discussed here),
 * the module `json::dynamic` provides an easy API to explore JSON objects,
@@ -126,9 +141,9 @@ There are a total of 3 API to read JSON:
 > theme: api
 > theme: api
 > theme: api
-> theme: intro
 > theme: api
 > theme: api
+> theme: features
 
 The class `JsonDeserializer` reads JSON code to recreate objects.
 It can use the metadata in the JSON code, to recreate precise Nit objects.
@@ -147,6 +162,7 @@ The type to recreate is either declared or inferred:
    or the type name passed to `deserialize`.
 
 > theme: api
+> theme: features
 > theme: api
 > theme: api
 > theme: api
@@ -162,6 +178,8 @@ errors to the console. It is fit only for small scripts and other quick and dirt
 
 #### Example
 
+> theme: api
+> theme: examples
 > theme: examples
 
 ~~~
@@ -223,6 +241,8 @@ The JSON object may come from an external API using optional attributes or
 from a previous version of your program without the attributes.
 When an attribute is not found, the deserialization engine acts in one of three ways:
 
+> theme: api
+
 1. If the attribute has a default value or if it is annotated by `lazy`,
    the engine leave the attribute to the default value. No error is raised.
 2. If the static type of the attribute is nullable, the engine sets
@@ -231,6 +251,8 @@ When an attribute is not found, the deserialization engine acts in one of three 
    The caller must check for `errors` and must not read from the attribute.
 
 > theme: api
+> theme: features
+> theme: examples
 > theme: api
 > theme: api
 > theme: api

@@ -56,6 +56,22 @@ classes or any other subclass of `Serializable`.
 > name: serialization::Serializable
 
 ~~~
+import serialization
+
+# Simple serializable class identifying a human
+class Person
+	serialize
+
+	# First and last name
+	var name: String
+
+	# Year of birth (`null` if unknown)
+	var birth: nullable Int
+
+	redef fun ==(o) do return o isa SELF and name == o.name and birth == o.birth
+	redef fun hash do return name.hash
+end
+
 # This `serialize` class is composed of two `serialize` attributes
 class Partnership
 	serialize
@@ -81,6 +97,7 @@ end
 
   ~~~
   module shared_between_clients is serialize
+  import serialization
   ~~~
 
 * Attribute annotated with `serialize` states that it is to be serialized, when the rest of the class does not.
@@ -88,6 +105,8 @@ end
   Only the attributes with the `serialize` annotation will be serialized.
 
   ~~~
+  import serialization
+
   # Only serialize the `name`
   class UserCredentials
       var name: String is serialize
@@ -111,6 +130,8 @@ The `noserialize` annotation mark an exception in a `serialize` module or class 
   Usually, it will also be annotated with `lazy` to get its value by another mean after the object has been deserialized.
 
   ~~~
+  import serialization
+
   # Once again, only serialize the `name`
   class UserCredentials
       serialize
@@ -137,6 +158,8 @@ Or to use identifiers in the serialization format that are reserved keywords in 
 > name: serialization
 
 ~~~
+import serialization
+
 class UserCredentials
 	serialize
 
@@ -196,6 +219,8 @@ two serialization services: `User::core_serialize_to` and
 
 ~~~
 module user_credentials
+
+import serialization
 
 # User credentials for a website
 class User

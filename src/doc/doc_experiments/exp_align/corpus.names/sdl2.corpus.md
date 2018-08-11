@@ -12,9 +12,11 @@ mainly `SDLSurface::load` to load images from PNG, JPG or TIF files.
 > name: sdl2::events
 > name: sdl2::syswm
 > name: sdl2::image::SDLSurface::load
+> name: sdl2::image
 > name: sdl2::SDLImgInitFlags::png
 > name: sdl2::SDLImgInitFlags::jpg
 > name: sdl2::SDLImgInitFlags::tif
+> name: core::file
 
 You can also import `sdl2::all` to get `sdl2` and all its sister libraries, which is only
 `sdl2::image` at this point.

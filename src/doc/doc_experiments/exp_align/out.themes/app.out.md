@@ -1,10 +1,13 @@
 # _app.nit_, a framework for portable applications
 
+> theme: api
 > theme: title
 
 The framework provides services to manage common needs of modern mobile applications:
 
+> theme: api
 > theme: intro
+> theme: features
 
 * Life-cycle
 * User interface
@@ -14,10 +17,18 @@ The framework provides services to manage common needs of modern mobile applicat
 * Compilation and packaging
 
 > theme: features
+> theme: intro
+> theme: intro
+> theme: intro
+> theme: intro
+> theme: intro
+> theme: intro
 
 The features offered by _app.nit_ are common to all platforms, but
 may not be available on all devices.
 
+> theme: api
+> theme: intro
 > theme: features
 
 ## Application Life-Cycle
@@ -26,6 +37,8 @@ may not be available on all devices.
 
 The _app.nit_ application life-cycle is compatible with all target platforms.
 It relies on the following sequence of events, represented here by their callback method name:
+
+> theme: api
 
 1. `on_create`: The application is being created.
    You should build the UI at this time and launch services.
@@ -42,8 +55,10 @@ It relies on the following sequence of events, represented here by their callbac
    You can revert what was done by `on_stop`.
 
 > theme: api
+> theme: features
 > theme: api
 > theme: api
+> theme: features
 > theme: api
 > theme: api
 > theme: api
@@ -55,9 +70,9 @@ It relies on the following sequence of events, represented here by their callbac
 
 ![_app.nit_ life-cycle](path/resources/ab03b885463901ade4ae1a9adfaefeff.png)
 
-Life-cycle events related to saving and restoring the application state are provided by two special callback methods:
+> theme: api
 
-> theme: intro
+Life-cycle events related to saving and restoring the application state are provided by two special callback methods:
 
 * `on_save_state`: The app may be destroyed soon, save its state for a future `on_restore_state`.
   There is more on how it can be done in the `app::data_store` section.
@@ -88,6 +103,8 @@ The API is composed of interactive `Control`s, visible `View`s and an active `Wi
 > theme: api
 
 Here is a subset of the most useful controls and views:
+
+> theme: api
 
 * The classic pushable `Button` with text (usually rectangular).
 
@@ -123,35 +140,43 @@ So there is two ways  to customize the behavior on a given event:
 
 ### Usage Example
 
-> theme: usage
+> theme: api
+> theme: examples
 
 The example at `examples/ui_example.nit` shows off most features of `app::ui` in a minimal program.
 You can also take a look at the calculator (`../../examples/calculator/src/calculator.nit`) which is a concrete usage example.
 
 > theme: api
-> theme: usage
+> theme: examples
 
 ### Platform-specific UI
 
+> theme: api
 > theme: features
 
 You can go beyond the portable UI API of _app.nit_ by using the natives services of a platform.
+
+> theme: api
+> theme: features
 
 The suggested approach is to use platform specific modules to customize the application on a precise platform.
 See the calculator example for an adaptation of the UI on Android,
 the interesting module is in this repository at ../../examples/calculator/src/android_calculator.nit
 
+> theme: api
 > theme: examples
 
 ## Persistent State with data_store
 
+> theme: api
 > theme: features
 
 _app.nit_ offers the submodule `app::data_store` to easily save the application state and user preferences.
 The service is accessible by the method `App::data_store`. The `DataStore` itself defines 2 methods:
 
 > theme: api
-> theme: refs
+> theme: authors
+> theme: features
 
 * `DataStore::[]=` saves and associates any serializable instances to a `String` key.
   Pass `null` to clear the value associated to a key.
@@ -168,7 +193,9 @@ The service is accessible by the method `App::data_store`. The `DataStore` itsel
 
 ### Usage Example
 
-> theme: usage
+> theme: api
+> theme: examples
+> theme: examples
 
 ~~~
 import app::data_store
@@ -214,13 +241,15 @@ See the documentation of `AsyncHttpRequest` for more information and
 the full example at `examples/http_request_example.nit`.
 
 > theme: api
-> theme: intro
+> theme: examples
 
 ## Metadata annotations
 
 > theme: features
 
 The _app.nit_ framework defines three annotations to customize the application package.
+
+> theme: api
 
 * `app_name` takes a single argument, the visible name of the application.
   This name is used for launchers and window title.
@@ -254,16 +283,20 @@ The _app.nit_ framework defines three annotations to customize the application p
 > theme: api
 > theme: api
 > theme: api
+> theme: usage
 > theme: api
 > theme: api
 > theme: tests
 > theme: api
 > theme: api
+> theme: usage
 > theme: api
 
 ### Usage Example
 
-> theme: usage
+> theme: api
+> theme: examples
+> theme: examples
 
 ~~~
 module my_module is
@@ -281,12 +314,16 @@ end
 
 The Nit compiler detects the target platform from the importations and generates the appropriate application format and package.
 
+> theme: api
+> theme: usage
+
 Applications using only the portable services of _app.nit_ require some special care at compilation.
 Such an application, let's say `calculator.nit`, does not depend on a specific platform and use the portable UI.
 The target platform must be specified to the compiler for it to produce the correct application package.
 There is two main ways to achieve this goal:
 
 > theme: api
+> theme: usage
 
 * The mixin option (`-m module`) imports an additional module before compiling.
   It can be used to load platform specific implementations of the _app.nit_ portable UI.
@@ -319,9 +356,10 @@ There is two main ways to achieve this goal:
 > theme: features
 > theme: api
 > theme: api
-> theme: install
+> theme: usage
 > theme: api
 > theme: api
+> theme: examples
 > theme: examples
 > theme: examples
 

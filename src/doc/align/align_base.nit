@@ -30,6 +30,24 @@ end
 
 redef class MdNode
 	var md_refs = new Array[MdRef] is writable
+
+	var all_md_refs: Array[MdRef] is lazy do
+		var v = new MdRefVisitor
+		v.enter_visit(self)
+		return v.md_refs
+	end
+
+	var all_model_refs: Array[MdRefMEntity] is lazy do
+		var res = new Array[MdRefMEntity]
+		var v = new MdRefMEntityVisitor
+		v.enter_visit(self)
+		res.add_all v.md_refs
+		# var v = new MdRefVisitor
+		# v.enter_visit(self)
+		# res.add_all v.md_refs
+		return res
+	end
+
 end
 
 # A reference from the Markdown document to something
@@ -45,6 +63,8 @@ class MdRefMEntity
 	super MdRef
 
 	var mentity:  MEntity
+
+	redef fun to_s do return "{class_name}\{{mentity.full_name}\}"
 end
 
 abstract class MdFilter
@@ -76,10 +96,33 @@ abstract class MdFilterMEntities
 				keep.add ref
 			end
 		end
-		keep.add_all filter_mentities_refs(mentities_refs)
+		keep.add_all filter_mentities_refs(node, mentities_refs)
 		node.md_refs = keep
 	end
 
-	fun filter_mentities_refs(refs: Array[MdRefMEntity]): Array[MdRefMEntity] is abstract
+	fun filter_mentities_refs(node: MdNode, refs: Array[MdRefMEntity]): Array[MdRefMEntity] is abstract
 end
 
+class MdRefVisitor
+	super MdVisitor
+
+	var md_refs = new Array[MdRef]
+
+	redef fun visit(node) do
+		md_refs.add_all node.md_refs
+		node.visit_all(self)
+	end
+end
+
+class MdRefMEntityVisitor
+	super MdVisitor
+
+	var md_refs = new Array[MdRefMEntity]
+
+	redef fun visit(node) do
+		for ref in node.md_refs do
+			if ref isa MdRefMEntity then md_refs.add ref
+		end
+		node.visit_all(self)
+	end
+end

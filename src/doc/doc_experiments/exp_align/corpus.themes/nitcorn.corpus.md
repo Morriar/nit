@@ -11,7 +11,7 @@ This method receives an `HttpRequest` and must return an `HttpResponse`.
 _nitcorn_ provides `FileServer`, a simple `Action` to serve static files.
 
 > theme: api
-> theme: intro
+> theme: usage
 
 `HttpRequest` contains the GET and POST arguments as well as session data it one exists.
 The produced `HttpResponse` should contain the HTTP status code, the body,
@@ -27,15 +27,20 @@ but also define parameters within the URI.
 
 _nitcorn_ instances are configured dynamically in Nit code with the interfaces and routes created as needed.
 
+> theme: api
+> theme: usage
+
 _nitcorn_ plays well with other Nit services and tools such as `serialization`, `mongodb`, `sqlite` and `nitiwiki`.
 It also benefits from the full power of the Nit language:
 class refinement can be used to customize default services and merge many applications in a single server,
 and the FFI enables calling services in different languages.
 
 > theme: api
+> theme: usage
 
 ## Examples
 
+> theme: api
 > theme: examples
 
 A minimal example follows with a custom `Action` and using `FileServer`.
@@ -53,6 +58,7 @@ take a look at the configuration of `http://xymus.net/` at `../contrib/xymus_net
 Larger projects using _nitcorn_ can be found in the `contrib/` folder:
 
 > theme: api
+> theme: usage
 
 * _opportunity_ is a meetup planner heavily based on _nitcorn_.
 * _tnitter_ is a micro-blogging platform with a simple Web and RESTful interface.
@@ -124,3 +130,4 @@ Stephan Michaud and Maxime Bélanger.
 It has been adapted to a library, and is currently maintained, by Alexis Laferrière.
 
 > theme: authors
+

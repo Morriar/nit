@@ -1,5 +1,6 @@
 # Abstract serialization services
 
+> theme: api
 > theme: title
 
 The serialization services are based on the `serialize` and the `noserialize` annotations,
@@ -7,6 +8,7 @@ the `Serializable` interface and the implementations of `Serializer` and `Deseri
 
 > theme: api
 > theme: intro
+> theme: features
 
 ## The `serialize` annotation
 
@@ -17,6 +19,8 @@ A class annotated with `serialize` identifies it as a subclass of Serializable a
 triggers the generation of customized serialization and deserialization services.
 
 > theme: api
+> theme: features
+> theme: examples
 
 ~~~
 import serialization
@@ -43,6 +47,7 @@ By definition of a serializable class, an instance can be serialized to a stream
 The deserialized instance will not be the same instance, but they should be equal.
 So, in this case, we can compare both instances with `==` to test their equality.
 
+> theme: examples
 > theme: api
 
 Some conditions applies to the classes that can be annotated as `serialize`.
@@ -57,6 +62,7 @@ The attributes could also be typed with user-defined `serialize`
 classes or any other subclass of `Serializable`.
 
 > theme: api
+> theme: examples
 
 ~~~
 import serialization
@@ -96,6 +102,9 @@ end
 
 `serialize` can annotate class definitions, modules and attributes:
 
+> theme: api
+> theme: usage
+
 * The annotation on a class applies only to the class definition,
   only attributes declared locally will be serialized.
   However, each definition of a class (a refinement or specialization) can be annotated with `serialize`.
@@ -134,6 +143,7 @@ end
 The `noserialize` annotation mark an exception in a `serialize` module or class definition.
 
 > theme: api
+> theme: usage
 
 * By default a module is `noserialize`. There is no need to declare it as such.
 
@@ -174,6 +184,8 @@ This annotation can be useful to change the name of an attribute to what is expe
 Or to use identifiers in the serialization format that are reserved keywords in Nit (like `class` and `type`).
 
 > theme: api
+> theme: features
+> theme: examples
 
 ~~~
 import serialization
@@ -241,6 +253,7 @@ two serialization services: `User::core_serialize_to` and
 `Deserializer::deserialize_class`.
 
 > theme: api
+> theme: features
 > theme: examples
 
 ~~~
@@ -321,6 +334,7 @@ information on the services to redefine.
 
 > theme: api
 > theme: refs
+> theme: features
 
 ## Serialization services
 
@@ -338,6 +352,7 @@ The main implementations of these services are `JsonSerializer` and `JsonDeseria
 from the `json_serialization` module.
 
 > theme: api
+> theme: features
 
 ~~~nitish
 mport json
@@ -370,6 +385,9 @@ assert couple == deserialize_couple
 
 The serialization has some limitations:
 
+> theme: api
+> theme: todo
+
 * A limitation of the JSON parser prevents deserializing from files
   with more than one object.
   This could be improved in the future, but for now you should
@@ -388,6 +406,7 @@ The serialization has some limitations:
 
 > theme: api
 > theme: features
+> theme: todo
 
 ## Dealing with generic types
 
@@ -407,6 +426,7 @@ parameterized types of generic classes.
 It will then generating a Nit module to handle deserialization of these types.
 
 > theme: api
+> theme: usage
 
 Usage steps to serialize parameterized types:
 

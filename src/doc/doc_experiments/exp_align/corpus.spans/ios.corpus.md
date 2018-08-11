@@ -29,10 +29,9 @@ These files can be generated in a number of different ways:
 
 * Using the tool `svg_to_icons` packaged with the Nit repository at `contrib/inkscape_tools/bin/svg_to_icons`.
 
-> span: svg_to_icons
-
 * Using Xcode to assign images to each slot, create the folder and the file `Contents.json`.
 
 * Write or modify the file `Contents.json` manually.
   It is in Json format and easily readable.
 
+> span: svg_to_icons

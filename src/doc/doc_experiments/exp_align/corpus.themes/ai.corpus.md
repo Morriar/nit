@@ -9,6 +9,7 @@ It offers simple generic classes to extends.
 
 Contents:
 
+> theme: intro
 > theme: features
 
 * see `backtrack`
@@ -16,11 +17,13 @@ Contents:
 
 > theme: api
 > theme: features
+> theme: intro
 > theme: refs
 
 See the `examples` subdirectory for examples:
 
 > theme: api
+> theme: intro
 > theme: examples
 
 * `examples/queens.nit`
@@ -28,5 +31,6 @@ See the `examples` subdirectory for examples:
 
 > theme: api
 > theme: features
+> theme: intro
 > theme: examples
 

@@ -6,13 +6,19 @@
 
 > name: geometry::Point
 > name: geometry::Line
+> name: geometry::Point
+> name: geometry::Line
 
 The very basics of geometry needs, for two and three-dimensional space.
 
 > name: geometry
+> name: geometry>
+> name: geometry::geometry
 
 ## Boxes and detection collision
 
+> name: geometry::boxes
+> name: geometry::Box
 > name: geometry::boxes
 > name: geometry::Box
 
@@ -22,17 +28,34 @@ It means a simple and fast way to test collision but not really accurate since i
 > name: geometry::boxes
 > name: geometry::boxes
 > name: geometry::boxes
+> name: geometry::boxes
+> name: core>collection>tests>
+> name: geometry::boxes
+> name: geometry::boxes
+> name: geometry::boxes
+> name: geometry::boxes
 > name: geometry::Box
 > name: geometry::Box
 > name: geometry::Point
 > name: geometry::Line
 > name: geometry::Box
+> name: geometry::Box
 > name: core>collection>tests>
 > name: geometry::boxes
+> name: geometry::boxes
+> name: geometry::boxes
+> name: geometry::boxes
+> name: geometry::Box
+> name: geometry::Box
+> name: geometry::Point
+> name: geometry::Line
+> name: geometry::Box
 > name: geometry::Box
 
 ## Quadtrees
 
+> name: geometry::quadtree
+> name: geometry::QuadTree
 > name: geometry::quadtree
 > name: geometry::QuadTree
 
@@ -41,8 +64,8 @@ They're most often used to partition two-dimensional space by recursively subdiv
 it into four quadrants or regions.
 
 > name: geometry::quadtree
-> name: geometry::QuadTree
 > name: core::re
+> name: geometry::QuadTree
 
 * They decompose space into adaptable cells
 * Each cell has a maximum capacity. When maximum is reached, the cell splits.
@@ -65,7 +88,25 @@ This API provides two different types of Quadtree : Static and Dynamic (respecti
   it will automatically divide the current region, depending on the distribution of objects already in the region.
 
 > name: geometry::quadtree
+> name: geometry::quadtree
 > name: geometry::QuadTree
+> name: geometry::QuadTree
+> name: core::Object
+> name: core::Object
+> name: geometry::quadtree
+> name: geometry::quadtree
+> name: geometry::QuadTree
+> name: geometry::QuadTree
+> name: core::Object
+> name: core::Object
+> name: geometry::quadtree
+> name: geometry::QuadTree
+> name: geometry::quadtree
+> name: geometry::QuadTree
+> name: geometry::quadtree
+> name: geometry::QuadTree
+> name: core::Object
+> name: core::Object
 > name: geometry::quadtree
 > name: geometry::QuadTree
 > name: core::Object
@@ -75,14 +116,19 @@ This API provides two different types of Quadtree : Static and Dynamic (respecti
 
 > name: geometry::polygon
 > name: geometry::Polygon
+> name: geometry::polygon
+> name: geometry::Polygon
 
 Some basic polygon services.
 
 > name: geometry::polygon
 > name: geometry::Polygon
+> name: geometry::polygon
+> name: geometry::Polygon
 
 This module contains interesting algorithms for `ConvexPolygon`only at the moment. A Convex polygon can be defined as follow :
 
+> name: geometry::polygon
 > name: geometry::polygon
 > name: geometry::Polygon
 
@@ -100,6 +146,38 @@ This module contains interesting algorithms for `ConvexPolygon`only at the momen
 
 > name: geometry::angles
 > name: geometry::polygon
+> name: geometry::polygon
+> name: geometry::polygon
+> name: geometry::angles
+> name: geometry::Polygon
+> name: geometry::Point
+> name: geometry::Point
+> name: geometry::Line
+> name: geometry::Point
+> name: geometry::Polygon
+> name: geometry::Polygon
+> name: geometry::Point
+> name: geometry::Line
+> name: geometry::angles
+> name: geometry::polygon
+> name: geometry::polygon
+> name: geometry::polygon
+> name: geometry::angles
+> name: geometry::Polygon
+> name: geometry::Point
+> name: geometry::Point
+> name: geometry::Line
+> name: geometry::Point
+> name: geometry::Polygon
+> name: geometry::Polygon
+> name: geometry::Point
+> name: geometry::Line
+> name: geometry::angles
+> name: geometry::polygon
+> name: geometry::Polygon
+> name: geometry::Point
+> name: geometry::angles
+> name: geometry::polygon
 > name: geometry::Polygon
 > name: geometry::Point
 > name: geometry::polygon
@@ -108,9 +186,19 @@ This module contains interesting algorithms for `ConvexPolygon`only at the momen
 > name: geometry::Point
 > name: geometry::Polygon
 > name: geometry::polygon
+> name: geometry::Point
+> name: geometry::Line
+> name: geometry::Point
+> name: geometry::Polygon
+> name: geometry::polygon
+> name: geometry::Polygon
+> name: geometry::polygon
 > name: geometry::Polygon
 > name: geometry::Point
 > name: geometry::Line
+> name: geometry::Point
+> name: geometry::Line
+> name: geometry::angles
 > name: geometry::angles
 
 A polygon which is not convex is called concave. Convex polygon are used because most
@@ -130,12 +218,39 @@ Services provided :
 * Triangulation of polygon
 
 > name: geometry::polygon
+> name: geometry::polygon
+> name: geometry::polygon
 > name: geometry::Point
+> name: geometry::Polygon
+> name: geometry::Polygon
+> name: core::Set
+> name: geometry::Point
+> name: geometry::Polygon
+> name: geometry::polygon
+> name: geometry::polygon
+> name: geometry::polygon
+> name: geometry::Point
+> name: geometry::Polygon
+> name: geometry::Polygon
+> name: core::Set
+> name: geometry::Point
+> name: geometry::Polygon
+> name: geometry::polygon
+> name: geometry::Point
+> name: geometry::Polygon
+> name: geometry::polygon
+> name: geometry::Point
+> name: geometry::Polygon
+> name: geometry::polygon
 > name: geometry::Polygon
 > name: geometry::polygon
 > name: geometry::Polygon
 > name: core::Set
 > name: geometry::Point
+> name: core::Set
+> name: geometry::Point
+> name: geometry::polygon
+> name: geometry::Polygon
 > name: geometry::polygon
 > name: geometry::Polygon
 

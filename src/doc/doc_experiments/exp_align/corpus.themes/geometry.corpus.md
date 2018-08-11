@@ -1,18 +1,21 @@
 # Basic geometry data structures and services
 
+> theme: api
 > theme: title
 
 ## Points and Lines
 
-> theme: features
 > theme: api
+> theme: features
 
 The very basics of geometry needs, for two and three-dimensional space.
 
+> theme: api
+
 ## Boxes and detection collision
 
-> theme: features
 > theme: api
+> theme: features
 
 Boxes module introduces Bounding boxes for Points and Lines and services to detect collision or inclusion between boxes.
 It means a simple and fast way to test collision but not really accurate since it uses bounding boxes.
@@ -27,6 +30,8 @@ It means a simple and fast way to test collision but not really accurate since i
 A QuadTree is a tree data structure in which each internal node has exactly four children
 They're most often used to partition two-dimensional space by recursively subdividing
 it into four quadrants or regions.
+
+> theme: api
 
 * They decompose space into adaptable cells
 * Each cell has a maximum capacity. When maximum is reached, the cell splits.

@@ -1,5 +1,6 @@
 # Nit Actor Model
 
+> theme: api
 > theme: title
 
 This group introduces the `actors` module which contains the abstraction of a Nit Actor Model,
@@ -27,7 +28,6 @@ The `actors` module introduces the annotation `actor` which is to be used on cla
 This annotation transform a normal Nit class into an actor.
 
 > theme: api
-> theme: intro
 
 In practice, it adds a new property `async` to the annotated class.
 When using `async` on your annotated class, this means that you want your calls to be asynchronous,
@@ -59,8 +59,6 @@ don't need them for a specific program).
 
 The `async` added property is actually created lazily when you use it.
 
-> theme: api
-
 Actors are not automatically garbage collected, but you have solutions to terminate them
 if you need to. For this, you need to use the `async` property of your annotated class :
 
@@ -83,6 +81,8 @@ if you need to. For this, you need to use the `async` property of your annotated
 For now, there isn't any mecanism to recreate and actor after it was terminated.
 Sending messages after terminating it results in unspecified behaviour.
 
+> theme: api
+
 ## Waiting for all actors to finish processing
 
 > theme: api
@@ -92,6 +92,8 @@ Let's imagine you create a whole bunch of actors and make them do things asynchr
 You don't want your program to exit right after giving work to your actors.
 To prevent that, we added a mecanism that waits before all your actors finished all their messages
 before quitting.
+
+> theme: api
 
 It's materialized by the `active_actors` property added to `Sys` which is a `ReverseBlockingQueue`.
 In short, the `is_empty` method on this list is blocking until the list is effectively empty.
@@ -103,10 +105,12 @@ actor, `active_actors` is empty.
 You can use this property as a mean of synchronisation in some specific cases (for example if you're
 using actors for fork/join parallelism instead of concurrency).
 
+> theme: api
 > theme: features
 
 ## Examples
 
+> theme: api
 > theme: examples
 
 You can find example of differents small programs implemented with Nit actors in the `examples`

@@ -1,7 +1,6 @@
 # Nit wrapper for Github API
 
 > name: github
-> name: github::api
 
 This module provides a Nit object oriented interface to access the Github api.
 
@@ -83,6 +82,47 @@ assert user.login == "Morriar"
 ~~~
 
 ### `User` - # A Github user
+
+Provides access to [Github user data](https://developer.github.com/v3/users/).
+Should be accessed from `GithubAPI::load_user`.
+
+* `api$User$SELF` - # Type of this instance, automatically specialized in every class
+
+* `_avatar_url` - # Avatar image url for this user.
+
+* `_blog` - # User public blog if any.
+
+* `_email` - # User public email if any.
+
+* `_login` - # Github login.
+
+* `_name` - # User public name if any.
+
+* `avatar_url` - # Avatar image url for this user.
+
+* `avatar_url=` - # Avatar image url for this user.
+
+* `blog` - # User public blog if any.
+
+* `blog=` - # User public blog if any.
+
+* `api$User$core_serialize_to` - # Actual serialization of `self` to `serializer`
+
+* `email` - # User public email if any.
+
+* `email=` - # User public email if any.
+
+* `api$User$from_deserializer` - # Create an instance of this class from the `deserializer`
+
+* `api$User$init`
+
+* `login` - # Github login.
+
+* `login=` - # Github login.
+
+* `name` - # User public name if any.
+
+* `name=` - # User public name if any.
 
 ### Retrieving repo data
 

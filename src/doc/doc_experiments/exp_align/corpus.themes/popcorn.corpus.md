@@ -1,27 +1,34 @@
 # Popcorn
 
+> theme: api
 > theme: title
 
 **Why endure plain corn when you can pop it?!**
 
+> theme: intro
+
 Popcorn is a minimal yet powerful nit web application framework that provides cool
 features for lazy developpers.
 
+> theme: api
 > theme: intro
+> theme: features
 
 Popcorn is built over nitcorn to provide a clean and user friendly interface
 without all the boiler plate code.
 
+> theme: api
 > theme: intro
 
 ## What does it taste like?
 
-> struct: usage
+> theme: features
 
 Set up is quick and easy as 10 lines of code.
 Create a file `app.nit` and add the following code:
 
 > theme: api
+> theme: examples
 
 ~~~
 import popcorn
@@ -43,15 +50,18 @@ The Popcorn app listens on port 3000 for connections.
 The app responds with "Hello World!" for requests to the root URL (`/`) or **route**.
 For every other path, it will respond with a **404 Not Found**.
 
+> theme: examples
 > theme: api
 
 The `req` (request) and `res` (response) parameters are the same that nitcorn provides
 so you can do anything else you would do in your route without Popcorn involved.
 
 > theme: api
-> theme: intro
+> theme: usage
 
 Run the app with the following command:
+
+> theme: usage
 
 ~~~bash
 $ nitc app.nit && ./app
@@ -89,6 +99,8 @@ $ curl localhost:3000/wrong_uri
 
 This is why we love popcorn!
 
+> theme: api
+
 ## Basic routing
 
 > theme: api
@@ -98,9 +110,15 @@ This is why we love popcorn!
 to a particular endpoint, which is a URI (or path) and a specific HTTP request
 method GET, POST, PUT or DELETE (other methods are not suported yet).
 
+> theme: api
+
 Each route can have one or more handler methods, which are executed when the route is matched.
 
+> theme: api
+
 Route handlers definition takes the following form:
+
+> theme: api
 
 ~~~nitish
 import popcorn
@@ -124,8 +142,8 @@ Where:
 
 The following example responds to GET and POST requests:
 
-> theme: examples
 > theme: api
+> theme: examples
 
 ~~~
 import popcorn
@@ -142,11 +160,13 @@ end
 
 To make your handler responds to a specific route, you have to add it to the app.
 
+> theme: examples
 > theme: api
 
 Respond to POST request on the root route (`/`), the application's home page:
 
 > theme: api
+> theme: examples
 
 ~~~
 var app = new App
@@ -157,6 +177,7 @@ app.use("/", new MyHandler)
 
 Respond to a request to the `/user` route:
 
+> theme: examples
 > theme: api
 
 ~~~
@@ -186,6 +207,7 @@ in a directory named `public`:
 
 > theme: api
 > theme: examples
+> theme: examples
 
 ~~~
 app.use("/", new StaticHandler("public/"))
@@ -208,6 +230,7 @@ Popcorn looks up the files relative to the static directory, so the name of the
 static directory is not part of the URL.
 To use multiple static assets directories, add the `StaticHandler` multiple times:
 
+> theme: api
 > theme: examples
 
 ~~~
@@ -220,15 +243,15 @@ app.use("/", new StaticHandler("files/"))
 Popcorn looks up the files in the order in which you set the static directories
 with the `use` method.
 
+> theme: examples
 > theme: api
-> theme: example
 
 To create a virtual path prefix (where the path does not actually exist in the file system)
 for files that are served by the `StaticHandler`, specify a mount path for the
 static directory, as shown below:
 
 > theme: api
-> theme: example
+> theme: examples
 
 ~~~
 app.use("/static/", new StaticHandler("public/"))
@@ -239,8 +262,8 @@ app.use("/static/", new StaticHandler("public/"))
 Now, you can load the files that are in the public directory from the `/static`
 path prefix.
 
+> theme: examples
 > theme: api
-> theme: example
 
 ~~~raw
 http://localhost:3000/static/images/trollface.jpg
@@ -273,8 +296,8 @@ app.use("/static/", new StaticHandler("public/", "default.html"))
 This way all non-matched queries to the StaticHandler will be answered with the
 `default.html` file.
 
-> theme: api
 > theme: examples
+> theme: api
 
 ## Advanced Routing
 
@@ -289,6 +312,7 @@ section.
 
 The following code is an example of a very basic route.
 
+> theme: api
 > theme: examples
 
 ~~~
@@ -319,6 +343,7 @@ instance of the Handler class.
 The following code is an example of routes that are defined for the GET and the POST
 methods to the root of the app.
 
+> theme: api
 > theme: examples
 
 ~~~
@@ -339,6 +364,8 @@ app.use("/", new GetPostHandler)
 
 Popcorn supports the following routing methods that correspond to HTTP methods:
 get, post, put, and delete.
+
+> theme: api
 
 The request query string is accessed through the `req` parameter:
 
@@ -403,12 +430,13 @@ app.listen("localhost", 3000)
 There is a special routing method, `all(res, req)`, which is not derived from any
 HTTP method. This method is used to respond at a path for all request methods.
 
-> theme: api
 > theme: examples
+> theme: api
 
 In the following example, the handler will be executed for requests to "/user"
 whether you are using GET, POST, PUT, DELETE, or any other HTTP request method.
 
+> theme: api
 > theme: examples
 
 ~~~
@@ -462,10 +490,12 @@ Popcorn uses the `AppRoute::match(uri)` method to match the route paths.
 
 Here are some examples of route paths based on strings.
 
+> theme: api
 > theme: examples
 
 This route path will match requests to the root route, `/`.
 
+> theme: api
 > theme: examples
 
 ~~~
@@ -485,6 +515,7 @@ app.use("/", new MyHandler)
 
 This route path will match requests to `/about`.
 
+> theme: api
 > theme: examples
 
 ~~~
@@ -495,6 +526,7 @@ app.use("/about", new MyHandler)
 
 This route path will match requests to `/random.text`.
 
+> theme: api
 > theme: examples
 
 ~~~
@@ -630,7 +662,6 @@ receive a `404 Not found` error.
 
 ## Response cycle
 
-> theme: api
 > theme: features
 
 When the popcorn `App` receives a request, the response cycle is the following:
@@ -659,7 +690,6 @@ When the popcorn `App` receives a request, the response cycle is the following:
 
 ### Overview
 
-> theme: api
 > theme: features
 
 **Middleware** handlers are handlers that typically do not send `HttpResponse` responses.
@@ -680,12 +710,14 @@ request-response cycle and the response is sent to the client.
 
 ### Ultra simple logger example
 
+> theme: api
 > theme: examples
 
 Here is an example of a simple “Hello World” Popcorn application.
 We add a middleware handler to the application called MyLogger that prints a simple
 log message in the app stdout.
 
+> theme: api
 > theme: examples
 
 ~~~
@@ -820,6 +852,8 @@ log line.
 Because you have access to the request object, the response object, and all the
 Popcorn API, the possibilities with middleware functions are endless.
 
+> theme: api
+
 ### Built-in middlewares
 
 > theme: api
@@ -855,6 +889,7 @@ it is often referred to as a “mini-app”.
 The following example creates a router as a module, loads a middleware handler in it,
 defines some routes, and mounts the router module on a path in the main app.
 
+> theme: api
 > theme: examples
 
 ~~~
@@ -1002,7 +1037,8 @@ app.listen("localhost", 3000)
 
 ## Sessions
 
-> struct: nitcorn::Session
+> theme: api
+> theme: features
 
 **Sessions** can be used thanks to the built-in `SessionInit` middleware.
 

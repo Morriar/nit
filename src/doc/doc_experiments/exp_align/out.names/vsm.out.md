@@ -1,20 +1,10 @@
 # Vector Space Model
 
-> name: vsm::Vector
-
 Vector Space Model (VSM) is an algebraic model for representing text documents
 (and any objects, in general) as vectors of identifiers, such as, for example,
 index terms.
 
 > name: vsm
-> name: core>text>
-> name: vsm::Vector
-> name: core::Text
-> name: vsm::Document
-> name: vsm>examples>
-> name: serialization>examples>
-> name: core::Object
-> name: vsm::Vector
 
 It is used in information filtering, information retrieval, indexing and
 relevancy rankings.
@@ -25,20 +15,36 @@ The `vsm` package provides the following features:
 * Vector indexing and matching with tf * idf.
 * File indexing and matching to free text queries.
 
+> name: core>text>
+> name: core::file
+> name: core::text
+> name: vsm::Vector
+> name: vsm::Vector
+> name: core::Text
+> name: core>text>
+> name: core::file
+> name: core::text
+> name: vsm::Vector
+> name: vsm::Vector
+> name: core::Text
 > name: vsm::Vector
 > name: vsm::Vector
 > name: core>text>
 > name: core::file
+> name: core::text
 > name: core::Text
 
 ## Vectors
 
+> name: vsm::Vector
 > name: vsm::Vector
 
 With VSM, documents are represented by a n-dimensions vector.
 Each dimension represent an attribute of the document or object.
 
 > name: vsm
+> name: vsm>
+> name: vsm::vsm
 > name: vsm::Document
 > name: vsm::Vector
 > name: vsm::Document
@@ -48,6 +54,7 @@ For text document, the count of each term found in the document if often used to
 build vectors.
 
 > name: core>text>
+> name: core::text
 > name: core::Text
 > name: vsm::Document
 > name: vsm::Document
@@ -55,6 +62,7 @@ build vectors.
 
 ### Creating a vector
 
+> name: vsm::Vector
 > name: vsm::Vector
 
 ~~~
@@ -70,6 +78,7 @@ assert vector.norm.is_approx(2.236, 0.001)
 
 ### Comparing vectors
 
+> name: vsm::Vector
 > name: vsm::Vector
 
 ~~~
@@ -94,10 +103,13 @@ assert s1 > s2
 ## VSMIndex
 
 > name: vsm::VSMIndex
+> name: vsm::VSMIndex
 
 VSMIndex is a Document index based on VSM.
 
 > name: vsm
+> name: vsm>
+> name: vsm::vsm
 > name: vsm::VSMIndex
 > name: vsm::Document
 
@@ -146,9 +158,13 @@ assert matches.first.document == d1
 ## StringIndex
 
 > name: vsm::StringIndex
+> name: vsm::StringIndex
 
 The StringIndex provides usefull services to index and match strings.
 
+> name: vsm::StringIndex
+> name: core::Match
+> name: core::String
 > name: vsm::StringIndex
 > name: core::Match
 > name: core::String
@@ -168,6 +184,7 @@ assert matches.first.document == d1
 
 ## FileIndex
 
+> name: vsm::FileIndex
 > name: vsm::FileIndex
 
 The FileIndex is a StringIndex able to index and retrieve files.

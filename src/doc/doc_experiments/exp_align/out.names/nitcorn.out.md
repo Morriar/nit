@@ -6,8 +6,10 @@ Dynamic content is served by subclassing `Action` and implementing `answer`.
 This method receives an `HttpRequest` and must return an `HttpResponse`.
 _nitcorn_ provides `FileServer`, a simple `Action` to serve static files.
 
-> name: json::dynamic
 > name: nitcorn
+> name: nitcorn>
+> name: json::dynamic
+> name: nitcorn::nitcorn
 > name: json::static
 > name: core::file
 
@@ -16,11 +18,11 @@ The produced `HttpResponse` should contain the HTTP status code, the body,
 session data to preserve or create a session, and optionally list files to append.
 
 > name: nitcorn::sessions
-> name: nitcorn::Session
 > name: nitcorn::sessions
 > name: nitcorn::sessions
 > name: core::list
 > name: core::file
+> name: nitcorn::Session
 > name: nitcorn::Session
 > name: nitcorn::Session
 > name: core::List
@@ -31,10 +33,14 @@ but also define parameters within the URI.
 
 > name: nitcorn::Route
 > name: nitcorn::Routes
+> name: nitcorn::Route
+> name: nitcorn::Routes
 
 _nitcorn_ instances are configured dynamically in Nit code with the interfaces and routes created as needed.
 
 > name: nitcorn
+> name: nitcorn>
+> name: nitcorn::nitcorn
 > name: nitcorn::Interface
 > name: nitcorn::Interfaces
 > name: nitcorn::Route
@@ -45,11 +51,20 @@ It also benefits from the full power of the Nit language:
 class refinement can be used to customize default services and merge many applications in a single server,
 and the FFI enables calling services in different languages.
 
+> name: meta::Class
 > name: nitcorn
+> name: nitcorn>
+> name: nitcorn::nitcorn
 > name: meta::Class
 
 ## Examples
 
+> name: nitcorn>examples>
+> name: serialization>examples>
+> name: template>examples>
+> name: curl>examples>
+> name: pthreads>examples>
+> name: privileges>examples>
 > name: nitcorn>examples>
 > name: serialization>examples>
 > name: template>examples>
@@ -65,35 +80,92 @@ A minimal example follows with a custom `Action` and using `FileServer`.
 > name: curl>examples>
 > name: pthreads>examples>
 > name: privileges>examples>
+> name: nitcorn>examples>
+> name: serialization>examples>
+> name: template>examples>
+> name: curl>examples>
+> name: pthreads>examples>
+> name: privileges>examples>
 
 More general examples are available at `lib/nitcorn/examples/`.
 For an example of a larger project merging many _nitcorn_ applications into one server,
 take a look at the configuration of `http://xymus.net/` at `../contrib/xymus_net/xymus_net.nit`.
 
-> name: nitcorn>examples>
-> name: serialization>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: privileges>examples>
-> name: nitcorn>examples>
-> name: serialization>examples>
-> name: template>examples>
-> name: curl>examples>
-> name: pthreads>examples>
-> name: privileges>examples>
 > name: nitcorn
+> name: nitcorn>examples>
+> name: serialization>examples>
+> name: template>examples>
+> name: curl>examples>
+> name: pthreads>examples>
+> name: privileges>examples>
+> name: nitcorn>examples>
+> name: serialization>examples>
+> name: template>examples>
+> name: curl>examples>
+> name: pthreads>examples>
+> name: privileges>examples>
+> name: nitcorn>
+> name: nitcorn::nitcorn
+> name: nitcorn>examples>
+> name: serialization>examples>
+> name: template>examples>
+> name: curl>examples>
+> name: pthreads>examples>
+> name: privileges>examples>
+> name: nitcorn>examples>
+> name: serialization>examples>
+> name: template>examples>
+> name: curl>examples>
+> name: pthreads>examples>
+> name: privileges>examples>
 
 Larger projects using _nitcorn_ can be found in the `contrib/` folder:
 
 > name: nitcorn
+> name: nitcorn>
+> name: nitcorn::nitcorn
 
 * _opportunity_ is a meetup planner heavily based on _nitcorn_.
 * _tnitter_ is a micro-blogging platform with a simple Web and RESTful interface.
 * _benitlux_ uses a custom `Action` to subscribe people to a mailing list and define a RESTful interface.
 
 > name: nitcorn
+> name: nitcorn>
+> name: nitcorn::nitcorn
 > name: nitcorn::restful
+> name: core::list
+> name: nitcorn::restful
+> name: nitcorn::Interface
+> name: nitcorn::Interfaces
+> name: core::List
+> name: nitcorn::Interface
+> name: nitcorn::Interfaces
+> name: nitcorn
+> name: nitcorn>
+> name: nitcorn::nitcorn
+> name: nitcorn::restful
+> name: core::list
+> name: nitcorn::restful
+> name: nitcorn::Interface
+> name: nitcorn::Interfaces
+> name: core::List
+> name: nitcorn::Interface
+> name: nitcorn::Interfaces
+> name: nitcorn
+> name: nitcorn>
+> name: nitcorn::nitcorn
+> name: nitcorn
+> name: nitcorn>
+> name: nitcorn::nitcorn
+> name: nitcorn::restful
+> name: nitcorn::Interface
+> name: nitcorn::Interfaces
+> name: nitcorn::restful
+> name: nitcorn::Interface
+> name: nitcorn::Interfaces
+> name: core::list
+> name: nitcorn::restful
+> name: core::List
 > name: nitcorn::Interface
 > name: nitcorn::Interfaces
 > name: core::list
@@ -153,8 +225,6 @@ factory.run
 This nitcorn library is a fork from an independent project originally created in 2013 by
 Jean-Philippe Caissy, Guillaume Auger, Frederic Sevillano, Justin Michaud-Ouellette,
 Stephan Michaud and Maxime Bélanger.
-
-> name: nitcorn
 
 It has been adapted to a library, and is currently maintained, by Alexis Laferrière.
 

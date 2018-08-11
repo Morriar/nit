@@ -432,7 +432,7 @@ Query strings such as `?q=foo`are not part of the route path.
 
 > name: popcorn::Handler
 
-Popcorn uses the `Handler::match(uri)` method to match the route paths.
+Popcorn uses the `AppRoute::match(uri)` method to match the route paths.
 
 > name: popcorn
 

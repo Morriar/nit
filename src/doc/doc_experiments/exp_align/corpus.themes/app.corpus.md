@@ -1,10 +1,12 @@
 # _app.nit_, a framework for portable applications
 
+> theme: api
 > theme: title
 
 The framework provides services to manage common needs of modern mobile applications:
 
 > theme: intro
+> theme: features
 
 * Life-cycle
 * User interface
@@ -14,19 +16,23 @@ The framework provides services to manage common needs of modern mobile applicat
 * Compilation and packaging
 
 > theme: features
+> theme: intro
 
 The features offered by _app.nit_ are common to all platforms, but
 may not be available on all devices.
 
+> theme: api
+> theme: intro
 > theme: features
 
 ## Application Life-Cycle
 
 > theme: features
-> theme: api
 
 The _app.nit_ application life-cycle is compatible with all target platforms.
 It relies on the following sequence of events, represented here by their callback method name:
+
+> theme: api
 
 1. `on_create`: The application is being created.
    You should build the UI at this time and launch services.
@@ -46,6 +52,8 @@ It relies on the following sequence of events, represented here by their callbac
 > theme: features
 
 ![_app.nit_ life-cycle](path/resources/ab03b885463901ade4ae1a9adfaefeff.png)
+
+> theme: api
 
 Life-cycle events related to saving and restoring the application state are provided by two special callback methods:
 
@@ -117,9 +125,14 @@ You can also take a look at the calculator (`../../examples/calculator/src/calcu
 
 You can go beyond the portable UI API of _app.nit_ by using the natives services of a platform.
 
+> theme: api
+
 The suggested approach is to use platform specific modules to customize the application on a precise platform.
 See the calculator example for an adaptation of the UI on Android,
 the interesting module is in this repository at ../../examples/calculator/src/android_calculator.nit
+
+> theme: api
+> theme: examples
 
 ## Persistent State with data_store
 
@@ -128,6 +141,9 @@ the interesting module is in this repository at ../../examples/calculator/src/an
 
 _app.nit_ offers the submodule `app::data_store` to easily save the application state and user preferences.
 The service is accessible by the method `App::data_store`. The `DataStore` itself defines 2 methods:
+
+> theme: api
+> theme: features
 
 * `DataStore::[]=` saves and associates any serializable instances to a `String` key.
   Pass `null` to clear the value associated to a key.
@@ -140,6 +156,7 @@ The service is accessible by the method `App::data_store`. The `DataStore` itsel
 
 ### Usage Example
 
+> theme: api
 > theme: examples
 
 ~~~
@@ -177,7 +194,6 @@ end
 
 ## Async HTTP request
 
-> theme: api
 > theme: features
 
 The module `app::http_request` provides services to execute asynchronous HTTP request.
@@ -190,10 +206,11 @@ the full example at `examples/http_request_example.nit`.
 
 ## Metadata annotations
 
-> theme: api
 > theme: features
 
 The _app.nit_ framework defines three annotations to customize the application package.
+
+> theme: api
 
 * `app_name` takes a single argument, the visible name of the application.
   This name is used for launchers and window title.
@@ -227,7 +244,8 @@ The _app.nit_ framework defines three annotations to customize the application p
 
 ### Usage Example
 
-> theme: example
+> theme: api
+> theme: examples
 
 ~~~
 module my_module is
@@ -237,6 +255,8 @@ module my_module is
 end
 ~~~
 
+> theme: examples
+
 ## Compiling and Packaging an Application
 
 > theme: usage
@@ -244,13 +264,15 @@ end
 
 The Nit compiler detects the target platform from the importations and generates the appropriate application format and package.
 
+> theme: usage
+
 Applications using only the portable services of _app.nit_ require some special care at compilation.
 Such an application, let's say `calculator.nit`, does not depend on a specific platform and use the portable UI.
 The target platform must be specified to the compiler for it to produce the correct application package.
 There is two main ways to achieve this goal:
 
-> theme: example
 > theme: api
+> theme: usage
 
 * The mixin option (`-m module`) imports an additional module before compiling.
   It can be used to load platform specific implementations of the _app.nit_ portable UI.

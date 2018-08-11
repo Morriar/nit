@@ -16,6 +16,18 @@ triggers the generation of customized serialization and deserialization services
 > name: serialization::A
 > name: serialization::Serializable
 > name: serialization
+> name: serialization>
+> name: serialization::serialization
+> name: meta::Class
+> name: serialization::A
+> name: serialization::Serializable
+> name: serialization
+> name: serialization>
+> name: serialization::serialization
+> name: meta::Class
+> name: serialization::A
+> name: serialization::Serializable
+> name: serialization::A
 
 ~~~
 import serialization
@@ -41,19 +53,28 @@ The deserialized instance will not be the same instance, but they should be equa
 So, in this case, we can compare both instances with `==` to test their equality.
 
 > name: meta::Class
-> name: core::stream
 > name: serialization::Serializable
 > name: meta::Class
 > name: core::Stream
 > name: core>collection>tests>
+> name: core::stream
+> name: meta::Class
+> name: serialization::Serializable
+> name: meta::Class
+> name: core::Stream
 
 Some conditions applies to the classes that can be annotated as `serialize`.
 All attributes of the class must be serializable, runtime errors will be
 raised when trying to serialize non-serializable attributes.
 
 > name: serialization::A
+> name: meta::Class
+> name: serialization::Serializable
+> name: core::Error
+> name: serialization::Serializable
 > name: core::error
 > name: json::error
+> name: serialization::A
 > name: meta::Class
 > name: serialization::Serializable
 > name: core::Error
@@ -67,6 +88,10 @@ classes or any other subclass of `Serializable`.
 > name: meta::Class
 > name: serialization::A
 > name: serialization::Serializable
+> name: meta::Class
+> name: serialization::A
+> name: serialization::Serializable
+> name: serialization::A
 
 ~~~
 import serialization
@@ -102,6 +127,7 @@ end
 `serialize` can annotate class definitions, modules and attributes:
 
 > name: meta::Class
+> name: meta::Class
 
 * The annotation on a class applies only to the class definition,
   only attributes declared locally will be serialized.
@@ -136,11 +162,40 @@ end
 > name: serialization::Serializable
 > name: meta::Class
 > name: meta::Class
+> name: meta::Class
+> name: meta::Class
+> name: meta::Class
+> name: meta::Class
+> name: serialization::Serializable
+> name: meta::Class
+> name: meta::Class
+> name: meta::Class
+> name: meta::Class
+> name: meta::Class
+> name: meta::Class
+> name: meta::Class
+> name: meta::Class
+> name: meta::Class
+> name: meta::Class
+> name: meta::Class
+> name: meta::Class
+> name: serialization::Serializable
+> name: meta::Class
+> name: serialization::Serializable
+> name: meta::Class
+> name: serialization::Serializable
+> name: meta::Class
+> name: meta::Class
+> name: meta::Class
+> name: meta::Class
+> name: meta::Class
+> name: meta::Class
 
 ## The `noserialize` annotation
 
 The `noserialize` annotation mark an exception in a `serialize` module or class definition.
 
+> name: meta::Class
 > name: meta::Class
 
 * By default a module is `noserialize`. There is no need to declare it as such.
@@ -171,6 +226,33 @@ The `noserialize` annotation mark an exception in a `serialize` module or class 
 > name: meta::Class
 > name: core::Set
 > name: core::Object
+> name: serialization::A
+> name: meta::Class
+> name: serialization::Serializable
+> name: meta::Class
+> name: meta::Class
+> name: core::Set
+> name: core::Object
+> name: serialization::A
+> name: serialization::A
+> name: meta::Class
+> name: serialization::Serializable
+> name: meta::Class
+> name: serialization::Serializable
+> name: meta::Class
+> name: serialization::Serializable
+> name: meta::Class
+> name: meta::Class
+> name: core::Set
+> name: core::Object
+> name: meta::Class
+> name: meta::Class
+> name: core::Set
+> name: core::Object
+> name: meta::Class
+> name: meta::Class
+> name: core::Set
+> name: core::Object
 
 ## The `serialize_as` annotation
 
@@ -179,12 +261,21 @@ The `serialize_as` attribute changes this behavior and sets the name of an attri
 
 > name: serialization
 > name: serialization
+> name: serialization>
+> name: serialization>
+> name: serialization::serialization
+> name: serialization::serialization
 > name: core::Set
 
 This annotation can be useful to change the name of an attribute to what is expected by a remote service.
 Or to use identifiers in the serialization format that are reserved keywords in Nit (like `class` and `type`).
 
 > name: serialization
+> name: serialization>
+> name: serialization::serialization
+> name: serialization
+> name: serialization>
+> name: serialization::serialization
 
 ~~~
 import serialization
@@ -203,11 +294,14 @@ end
 ## Custom serializable classes
 
 > name: serialization::Serializable
+> name: serialization::Serializable
 
 The annotation `serialize` should be enough for most cases,
 but in some cases you need more control over the serialization process.
 
 > name: serialization
+> name: serialization>
+> name: serialization::serialization
 > name: core::Process
 
 For more control, create a subclass to `Serializable` and redefine `core_serialize_to`.
@@ -215,10 +309,13 @@ This method should use `Serializer::serialize_attribute` to serialize its compon
 `serialize_attribute` works as a dictionary and organize attributes with a key.
 
 > name: serialization::A
+> name: serialization::A
 
 You will also need to redefine `Deserializer::deserialize_class` to support this specific class.
 The method should only act on known class names, and call super otherwise.
 
+> name: meta::Class
+> name: meta::Class
 > name: meta::Class
 > name: meta::Class
 
@@ -226,12 +323,15 @@ The method should only act on known class names, and call super otherwise.
 
 > name: serialization>examples>
 > name: meta::Class
+> name: serialization>examples>
 
 The following example cannot use the `serialize` annotations
 because some of the arguments to the `User` class need special treatment:
 
+> name: meta::Class
 > name: serialization>examples>
 > name: meta::Class
+> name: serialization>examples>
 
 * The `name` attribute is perfectly normal, it can be serialized and deserialized
   directly.
@@ -244,9 +344,25 @@ because some of the arguments to the `User` class need special treatment:
   serialize the path to its source on the file system.
   The data is reloaded on deserialization.
 
-> name: serialization::A
-> name: serialization::A
 > name: core::file
+> name: serialization::A
+> name: serialization::A
+> name: core::Path
+> name: core::file
+> name: serialization::A
+> name: serialization::A
+> name: core::Path
+> name: serialization::AttributeTypeError::attribute
+> name: serialization::AttributeTypeError::attribute
+> name: serialization::AttributeTypeError::attribute
+> name: serialization::AttributeTypeError::attribute
+> name: core::file
+> name: serialization::A
+> name: serialization::A
+> name: core::Path
+> name: core::file
+> name: serialization::A
+> name: serialization::A
 > name: core::Path
 
 For this customization, the following code snippet implements
@@ -254,6 +370,11 @@ two serialization services: `User::core_serialize_to` and
 `Deserializer::deserialize_class`.
 
 > name: serialization
+> name: serialization>
+> name: serialization::serialization
+> name: serialization
+> name: serialization>
+> name: serialization::serialization
 
 ~~~
 module user_credentials
@@ -332,12 +453,18 @@ information on the services to redefine.
 ## Serialization services
 
 > name: serialization
+> name: serialization>
+> name: serialization::serialization
+> name: serialization
+> name: serialization>
+> name: serialization::serialization
 
 The `serialize` annotation and the `Serializable` class are used on
 classes specific to the business domain.
 To write (and read) instances of these classes to a persistent format
 you must use implementations of `Serializer` and `Deserializer`.
 
+> name: meta::Class
 > name: meta::Class
 
 The main implementations of these services are `JsonSerializer` and `JsonDeserializer`,
@@ -371,6 +498,8 @@ assert couple == deserialize_couple
 The serialization has some limitations:
 
 > name: serialization
+> name: serialization>
+> name: serialization::serialization
 
 * A limitation of the JSON parser prevents deserializing from files
   with more than one object.
@@ -389,16 +518,74 @@ The serialization has some limitations:
   the next section explores this subject.
 
 > name: json
+> name: serialization
+> name: serialization
+> name: json>
+> name: serialization>
+> name: serialization>
+> name: json::json
 > name: core::file
-> name: core::Object
 > name: core::file
-> name: core::Object
 > name: core::time
+> name: serialization::serialization
+> name: serialization::serialization
+> name: core::Object
+> name: core::Object
+> name: serialization::Serializer
+> name: serialization::Deserializer
+> name: meta::Class
+> name: json
+> name: serialization
+> name: serialization
+> name: json>
+> name: serialization>
+> name: serialization>
+> name: json::json
+> name: core::file
+> name: core::file
+> name: core::time
+> name: serialization::serialization
+> name: serialization::serialization
+> name: core::Object
+> name: core::Object
+> name: serialization::Serializer
+> name: serialization::Deserializer
+> name: meta::Class
+> name: json
+> name: json>
+> name: json::json
+> name: core::file
+> name: core::file
+> name: core::time
+> name: core::Object
+> name: core::Object
+> name: serialization::Serializer
+> name: serialization::Deserializer
+> name: json
+> name: json>
+> name: json::json
+> name: core::file
+> name: core::file
+> name: core::time
+> name: core::Object
+> name: core::Object
 > name: serialization::Serializer
 > name: serialization::Deserializer
 > name: serialization
+> name: serialization>
+> name: serialization::serialization
+> name: meta::Class
 > name: meta::Class
 > name: serialization
+> name: serialization>
+> name: serialization::serialization
+> name: meta::Class
+> name: serialization
+> name: serialization>
+> name: serialization::serialization
+> name: serialization
+> name: serialization>
+> name: serialization::serialization
 
 ## Dealing with generic types
 
@@ -407,12 +594,18 @@ For example, the `Array` class is generic and serializable.
 However, the runtime types of Array instances are parameterized and are unknown to the compiler.
 So the compiler won't support serializing instances of `Array[MySerializable]`.
 
-> name: serialization
-> name: serialization>examples>
 > name: meta::Class
 > name: serialization::Serializable
-> name: core::array
 > name: core::Array
+> name: serialization
+> name: serialization>
+> name: serialization>examples>
+> name: serialization::serialization
+> name: core::array
+> name: meta::Class
+> name: serialization::Serializable
+> name: core::Array
+> name: serialization>examples>
 
 The tool `nitserial` solves this problem at the level of user modules.
 It does so by parsing a Nit module, group or project to find all known
@@ -420,6 +613,8 @@ parameterized types of generic classes.
 It will then generating a Nit module to handle deserialization of these types.
 
 Usage steps to serialize parameterized types:
+
+> name: serialization::Serializer::serialize
 
 * Write your program, let's call it `my_prog.nit`,
   it must use some parameterized serializable types.
@@ -431,7 +626,13 @@ Usage steps to serialize parameterized types:
 * Compile your program by mixing in the generated module with:
   `nitc my_prog.nit -m my_prog_serial.nit`
 
+> name: core::file
 > name: serialization::Serializable
+> name: core::file
+> name: serialization::Serializable
+> name: serialization::Serializable
+> name: serialization::Serializable
+> name: core::file
 > name: core::file
 
 This was a simple example, in practical cases you may need
@@ -443,8 +644,10 @@ one for the server and one for the client.
 Both the files should be compiled with both the client and the server.
 
 > name: serialization>examples>
-> name: core::file
 > name: serialization>examples>
 > name: core::file
 > name: core::file
+> name: core::file
+> name: serialization>examples>
+> name: serialization>examples>
 

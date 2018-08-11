@@ -1,5 +1,6 @@
 # Nit wrapper for Stanford CoreNLP
 
+> theme: api
 > theme: title
 
 Stanford CoreNLP provides a set of natural language analysis tools which can take
@@ -9,16 +10,25 @@ quantities, and mark up the structure of sentences in terms of phrases and word
 dependencies, indicate which noun phrases refer to the same entities, indicate
 sentiment, etc.
 
+> theme: api
 > theme: intro
+> theme: usage
 
 This wrapper needs the Stanford CoreNLP jars that run on Java 1.8+.
 
+> theme: api
+> theme: intro
+> theme: authors
+
 See http://nlp.stanford.edu/software/corenlp.shtml.
 
+> theme: api
+> theme: intro
 > theme: refs
 
 ## NLPProcessor
 
+> theme: api
 > theme: features
 
 ### Java client
@@ -43,11 +53,12 @@ end
 
 ### NLPServer
 
+> theme: api
 > theme: features
 
 The NLPServer provides a wrapper around the StanfordCoreNLPServer.
 
-> theme: intro
+> theme: api
 
 See `https://stanfordnlp.github.io/CoreNLP/corenlp-server.html`.
 
@@ -66,9 +77,12 @@ srv.start
 
 ### NLPClient
 
+> theme: api
 > theme: features
 
 The NLPClient is used as a NLPProcessor with a NLPServer backend.
+
+> theme: api
 
 ~~~nit
 import nlp
@@ -81,10 +95,13 @@ var doc = cli.process("String to analyze")
 
 ## NLPIndex
 
+> theme: api
 > theme: features
 
 NLPIndex extends the StringIndex to use a NLPProcessor to tokenize, lemmatize and
 tag the terms of a document.
+
+> theme: api
 
 ~~~nit
 import nlp
@@ -111,6 +128,9 @@ assert matches.first.document == d1
 * Analyze sentences dependencies
 * Analyze sentiment
 
+> theme: api
 > theme: features
-> theme: install
+> theme: api
+> theme: api
+> theme: usage
 

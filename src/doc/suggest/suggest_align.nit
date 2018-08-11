@@ -49,18 +49,13 @@ class MDocAligner
 		# var p = new MdPrintStructure
 		# p.visit_document(document)
 
-		# Align themes
-		var align_themes = new MdAlignThemes(model, mainmodule, context)
-		align_themes.align_document(document)
-
-
 		# Align spans
-		# var align_codes = new MdAlignCodes(model, mainmodule)
-		# align_codes.align_document(document, context)
-        #
+		# var align_codes = new MdAlignCodes(model, mainmodule, context)
+		# align_codes.align_document(document)
+
 		# var filter_context = new MdFilterNameConflicts(context)
 		# filter_context.filter_document(document)
-        #
+
 		# var filter_kind = new MdFilterKind
 		# filter_kind.filter_document(document)
 
@@ -90,13 +85,20 @@ class MDocAligner
 		# var filter_kind = new MdFilterKind
 		# filter_kind.filter_document(document)
 
-		# var align_nlp = new MdAlignNLP(model, mainmodule, context, mentity_index)
-		# align_nlp.align_document(document)
+		var align_nlp = new MdAlignNLP(model, mainmodule, context, mentity_index)
+		align_nlp.align_document(document)
 
 		# var filter_context = new MdFilterContext(context)
 		# filter_context.filter_document(document)
 
 		# block_align.align_blocks(document, context)
+
+		# Align themes
+		# var align_themes = new MdAlignThemes(model, mainmodule, context)
+		# align_themes.align_document(document)
+
+		# var filter_local_theme = new MdFilterLocalTheme
+		# filter_local_theme.filter_document(document)
 
 		span_visitor.enter_visit(document)
 
@@ -130,70 +132,72 @@ class MDocSpanReferencesVisitor
 			for block in node.children do
 				if not block isa MdBlock then continue
 				if block isa MdBlockQuote then continue
-				md_themes.clear
-				md_refs.clear
-				visit(block)
+
+				var md_refs = block.all_md_refs
+				# md_themes.clear
+				# visit(block)
 				print md_renderer.render(block)
 
 				# Themes
 				var need_space = false
-				for theme in md_themes do
-					print "> theme: {theme.to_s}"
-					need_space = true
-				end
-				if need_space then print ""
+				# for theme in md_themes do
+					# print "> theme: {theme.to_s}"
+					# need_space = true
+				# end
+				# if need_space then print ""
 
 				# Span refs
 				need_space = false
 				for ref in md_refs do
 					if ref isa MdRefMEntity and ref.node isa MdCode then
-						print "> span: {ref.mentity.full_name}".trim
+						print "> match: {ref.mentity.full_name}".trim
 						need_space = true
 					end
 				end
-				if need_space then print ""
+				# if need_space then print ""
 
 				# Name refs
-				need_space = false
+				# need_space = false
 				for ref in md_refs do
 					if ref isa MdRefText then
-						print "> name: {ref.mentity.full_name}".trim
+						print "> match: {ref.mentity.full_name}".trim
 						need_space = true
 					end
 				end
-				if need_space then print ""
+				# if need_space then print ""
 
 				# Code refs
-				need_space = false
+				# need_space = false
 				for ref in md_refs do
 					if ref isa MdRefCode then
-						print "> code: {ref.mentity.full_name}"
+						print "> match: {ref.mentity.full_name}"
 						need_space = true
 					end
 				end
-				if need_space then print ""
+				# if need_space then print ""
 
 				# TODO examples
 				# print "> example: {ref.mentity.full_name}"
 				# need_space = true
 
 				# NLP refs
-				need_space = false
-				var names = new Array[String]
+				# need_space = false
+				# var names = new Array[String]
 				for ref in md_refs do
 					if ref isa MdRefNLP then
-						if names.has(ref.mentity.full_name) then continue
-						names.add ref.mentity.full_name
+						# if names.has(ref.mentity.full_name) then continue
+						# names.add ref.mentity.full_name
 						# names.add "{ref.mentity.full_name} (s: {ref.score})"
 						# print "> match: {ref.mentity.full_name} (conf: {ref.score})"
+						print "> match: {ref.mentity.full_name}"
 						need_space = true
 					end
 				end
-				default_comparator.sort(names)
-				for name in names do
-					print "> match: {name}"
-					need_space = true
-				end
+				# default_comparator.sort(names)
+				# for name in names do
+					# print "> match: {name}"
+					# need_space = true
+				# end
 				if need_space then print ""
 
 				# TODO themes
@@ -212,10 +216,8 @@ class MDocSpanReferencesVisitor
 	end
 
 	var md_themes = new Array[MdTheme]
-	var md_refs = new Array[MdRef]
 
 	redef fun visit(node) do
-		md_refs.add_all node.md_refs
 
 		if node isa MdBlock then
 			md_themes.add_all node.md_themes

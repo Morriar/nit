@@ -1,7 +1,6 @@
 # _app.nit_, a framework for portable applications
 
 > name: app
-> name: app::App
 
 The framework provides services to manage common needs of modern mobile applications:
 
@@ -16,7 +15,6 @@ The features offered by _app.nit_ are common to all platforms, but
 may not be available on all devices.
 
 > name: app
-> name: app::App
 
 ## Application Life-Cycle
 
@@ -66,8 +64,16 @@ The `App` instance is the first to be notified of these events.
 Other UI elements, from the `ui` submodule, are notified of the same events using a simple depth first visit.
 So all UI elements can react separately to live-cycle events.
 
-> name: android>ui>
-> name: ios>ui>
+> name: android::platform
+> name: ios::platform
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
+> name: app::ui
+> name: linux::ui
+> name: android::ui
+> name: ios::ui
 
 ## User Interface
 
@@ -78,6 +84,7 @@ Here is a subset of the most useful controls and views:
 
 > name: app::Control
 > name: app::View
+> name: app::ViewEvent::VIEW
 
 * The classic pushable `Button` with text (usually rectangular).
 
@@ -98,6 +105,8 @@ So there is two ways  to customize the behavior on a given event:
 * Create a subclass of the wanted `Control`, let's say `Button`, and specialize `on_event`.
 
 * Add an observer to a `Button` instance, and implement `on_event` in the observer.
+
+> name: app::ui::AppComponent::observers
 
 ### Usage Example
 

@@ -26,6 +26,8 @@ To access the API you need an instance of a `GithubAPI` client.
 > match: github::GithubAPI
 
 ~~~
+import github
+
 # Get Github authentification token.
 var token = get_github_oauth
 assert not token.is_empty

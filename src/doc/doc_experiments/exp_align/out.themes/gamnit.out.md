@@ -1,9 +1,13 @@
 # Portable game and multimedia framework for Nit
 
+> theme: api
 > theme: title
 
 _gamnit_ is a modular framework to create portable 2D or 3D apps in Nit.
 It is based on the portability framework _app.nit_ and the OpenGL ES 2.0 standard.
+
+> theme: api
+> theme: intro
 
 ## System configuration
 
@@ -12,41 +16,46 @@ It is based on the portability framework _app.nit_ and the OpenGL ES 2.0 standar
 To compile the _gamnit_ apps packaged with the Nit repository on GNU/Linux you need to install the dev version of a few libraries and some tools.
 On Debian 8.2, this command should install everything needed:
 
-> theme: install
+> theme: api
+> theme: usage
 
 ~~~bash
 apt-get install libgles2-mesa-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev inkscape
 ~~~
 
-> theme: install
+> theme: usage
 
 On Windows 64 bits, using msys2, you can install the required packages with:
 
-> theme: install
+> theme: usage
 
 ~~~bash
 pacman -S mingw-w64-x86_64-angleproject-git mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_image mingw-w64-x86_64-SDL2_mixer
 ~~~
 
-> theme: install
+> theme: usage
 
 While macOS isn't supported, it can create iOS apps.
 You need to install and setup Xcode, and you may install the GLSL shader validation tool via `brew`:
 
 > theme: api
-> theme: install
+> theme: usage
 
 ~~~bash
 brew install glslang
 ~~~
 
-> theme: install
+> theme: usage
 
 ## Services by submodules
 
+> theme: api
 > theme: features
 
 _gamnit_ is modular, different services of the framework are available through different submodules:
+
+> theme: api
+> theme: features
 
 * The main entrypoint `gamnit` provides low-level abstractions over some services of OpenGL ES 2.0, like textures, shaders and programs.
   It defines the basic methods to implement in order to obtain a working game:
@@ -85,27 +94,26 @@ _gamnit_ is modular, different services of the framework are available through d
 > theme: features
 > theme: api
 > theme: api
-> theme: intro
+> theme: features
 > theme: api
 > theme: api
-> theme: intro
+> theme: api
+> theme: usage
+> theme: api
+> theme: refs
+> theme: api
 > theme: api
 > theme: api
 > theme: refs
 > theme: api
 > theme: api
 > theme: api
-> theme: refs
+> theme: features
 > theme: api
 > theme: api
 > theme: api
 > theme: api
-> theme: api
-> theme: intro
-> theme: api
-> theme: api
-> theme: intro
+> theme: features
 > theme: api
 > theme: api
-> theme: intro
 

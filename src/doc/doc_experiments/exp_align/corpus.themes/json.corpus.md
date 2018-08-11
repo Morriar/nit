@@ -1,12 +1,15 @@
 # read and write JSON formatted text
 
+> theme: api
 > theme: title
 
 These services can be useful to communicate with a remote server or client,
 save data locally or even debug and understand the structure of a Nit object.
 There is a single API to write JSON, and three API to read depending on the use case.
 
+> theme: api
 > theme: intro
+> theme: features
 
 ## Write JSON
 
@@ -40,9 +43,11 @@ For your local objects, you can annotate them with `serialize` to automate subcl
 `Serializable` and the implementation of its services.
 
 > theme: api
+> theme: features
 
 #### Example
 
+> theme: api
 > theme: examples
 
 ~~~
@@ -113,6 +118,7 @@ The metadata allows to avoid repeating an object and its resolves cycles in the 
 
 For more information on Nit serialization, see: ../serialization/README.md
 
+> theme: api
 > theme: refs
 
 ## Read JSON
@@ -121,6 +127,8 @@ For more information on Nit serialization, see: ../serialization/README.md
 > theme: features
 
 There are a total of 3 API to read JSON:
+
+> theme: api
 
 * `JsonDeserializer` reads JSON to recreate complex Nit objects (discussed here),
 * the module `json::dynamic` provides an easy API to explore JSON objects,
@@ -155,6 +163,7 @@ errors to the console. It is fit only for small scripts and other quick and dirt
 
 #### Example
 
+> theme: api
 > theme: examples
 
 ~~~
@@ -217,6 +226,8 @@ The JSON object may come from an external API using optional attributes or
 from a previous version of your program without the attributes.
 When an attribute is not found, the deserialization engine acts in one of three ways:
 
+> theme: api
+
 1. If the attribute has a default value or if it is annotated by `lazy`,
    the engine leave the attribute to the default value. No error is raised.
 2. If the static type of the attribute is nullable, the engine sets
@@ -226,6 +237,7 @@ When an attribute is not found, the deserialization engine acts in one of three 
 
 > theme: api
 > theme: features
+> theme: examples
 
 ~~~
 import json

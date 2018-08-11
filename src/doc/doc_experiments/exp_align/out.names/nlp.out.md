@@ -1,7 +1,5 @@
 # Nit wrapper for Stanford CoreNLP
 
-> name: nlp::stanford
-
 Stanford CoreNLP provides a set of natural language analysis tools which can take
 raw text input and give the base forms of words, their parts of speech, whether
 they are names of companies, people, etc., normalize dates, times, and numeric
@@ -9,17 +7,7 @@ quantities, and mark up the structure of sentences in terms of phrases and word
 dependencies, indicate which noun phrases refer to the same entities, indicate
 sentiment, etc.
 
-> name: nlp::stanford
-> name: core::Set
-> name: core>text>
-> name: core::Text
-> name: core::time
-> name: core::numeric
-> name: core::Numeric
-
 This wrapper needs the Stanford CoreNLP jars that run on Java 1.8+.
-
-> name: nlp::stanford
 
 See http://nlp.stanford.edu/software/corenlp.shtml.
 
@@ -27,6 +15,7 @@ See http://nlp.stanford.edu/software/corenlp.shtml.
 
 ## NLPProcessor
 
+> name: nlp::NLPProcessor
 > name: nlp::NLPProcessor
 
 ### Java client
@@ -48,6 +37,7 @@ end
 ### NLPServer
 
 > name: nlp::NLPServer
+> name: nlp::NLPServer
 
 The NLPServer provides a wrapper around the StanfordCoreNLPServer.
 
@@ -66,6 +56,7 @@ srv.start
 ### NLPClient
 
 > name: nlp::NLPClient
+> name: nlp::NLPClient
 
 The NLPClient is used as a NLPProcessor with a NLPServer backend.
 
@@ -82,6 +73,7 @@ var doc = cli.process("String to analyze")
 
 ## NLPIndex
 
+> name: nlp::NLPIndex
 > name: nlp::NLPIndex
 
 NLPIndex extends the StringIndex to use a NLPProcessor to tokenize, lemmatize and
@@ -114,4 +106,9 @@ assert matches.first.document == d1
 * Analyze sentiment
 
 > name: opts::Option
+> name: opts::Option
+> name: opts::Option
+> name: opts::Option
+> name: nlp::NLPDocument::sentences
+> name: nlp::NLPDocument::sentences
 

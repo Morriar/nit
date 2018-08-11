@@ -14,7 +14,7 @@
 
 module align_text
 
-import align_base
+import align_refs
 
 class MdAlignTexts
 	super MdAligner
@@ -23,8 +23,8 @@ class MdAlignTexts
 
 	redef fun align_document(document) do
 		super
-		var filter = new MdPreferPackages
-		filter.filter_document(document)
+		# var filter = new MdPreferPackages
+		# filter.filter_document(document)
 	end
 
 	redef fun visit(node) do
@@ -118,7 +118,7 @@ end
 class MdPreferPackages
 	super MdFilterMEntities
 
-	redef fun filter_mentities_refs(refs) do
+	redef fun filter_mentities_refs(node, refs) do
 		var keep = new Array[MdRefMEntity]
 		var keep_mentities = new HashSet[MEntity]
 
@@ -171,4 +171,83 @@ class MdPreferPackages
 
 		return keep
 	end
+end
+
+class MdFilterLocalBlock
+	super MdFilterMEntities
+
+	redef fun filter_mentities_refs(node, md_refs) do
+		if not node isa MdBlock then return md_refs
+
+		var refs = node.all_model_refs
+
+		var span_refs = new HashSet[MEntity]
+		var text_refs = new HashSet[MdRefText]
+
+		for ref in refs do
+			if ref isa MdRefText then
+				text_refs.add ref
+			else
+				span_refs.add ref.mentity
+			end
+		end
+
+		if span_refs.not_empty and text_refs.not_empty then
+			print span_refs
+			print text_refs
+		end
+
+		return refs
+	end
+
+
+	#	for theme in node.md_themes do
+	#		# print theme
+	#		if theme isa MdThemePackage then
+	#			res.add_all filter_packages.collect(refs)
+	#		end
+	#		if theme isa MdThemeGroup then
+	#			res.add_all filter_groups.collect(refs)
+	#		end
+	#		if theme isa MdThemeModule then
+	#			res.add_all filter_modules.collect(refs)
+	#		end
+	#		if theme isa MdThemeClass then
+	#			res.add_all filter_classes.collect(refs)
+	#		end
+	#	end
+    #
+	#	for theme in node.md_themes do
+	#		if theme isa MdThemeIntro or theme isa MdThemeTitle then
+	#			res.add_all filter_packages.collect(refs)
+	#			return res
+	#		end
+	#	end
+    #
+	#	for theme in node.md_themes do
+	#		if theme isa MdThemeExamples then
+	#			res.add_all filter_examples.collect(refs)
+	#		else if theme isa MdThemeTests then
+	#			res.add_all filter_tests.collect(refs)
+	#		else if theme isa MdThemeAuthors or theme isa MdThemeLicense then
+	#			return new Array[MdRefMEntity]
+	#		else if theme isa MdThemeFeatures or theme isa MdThemeAPI then
+	#			res.add_all filter_packages.collect(refs)
+	#			res.add_all filter_groups.collect(refs)
+	#			res.add_all filter_modules.collect(refs)
+	#			res.add_all filter_classes.collect(refs)
+	#		end
+	#	end
+    #
+	#	if res.is_empty then return refs
+    #
+	#	return res
+	# end
+
+	# var filter_packages = new MdCollectKindG[MPackage]
+	# var filter_groups = new MdCollectKindG[MGroup]
+	# var filter_modules = new MdCollectKindG[MModule]
+	# var filter_classes = new MdCollectKindG[MClass]
+	# var filter_tests = new MdCollectTests
+	# var filter_examples = new MdCollectExamples
 end

@@ -5,7 +5,7 @@
 This group introduces the `actors` module which contains the abstraction of a Nit Actor Model,
 based on Celluloid (https://github.com/celluloid/celluloid).
 
-> name: actors
+> name: actors>
 > name: actors::actors
 
 ## What is an actor ?
@@ -26,6 +26,7 @@ An actor has a mailbox in which it receives its messages, and process them one a
 The `actors` module introduces the annotation `actor` which is to be used on classes.
 This annotation transform a normal Nit class into an actor.
 
+> name: actors::actors
 > name: actors::Actor
 
 In practice, it adds a new property `async` to the annotated class.

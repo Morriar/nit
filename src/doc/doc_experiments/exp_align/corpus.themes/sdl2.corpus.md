@@ -8,16 +8,18 @@ library: video, events, syswm, etc. The alternative entry point `sdl2::image` of
 mainly `SDLSurface::load` to load images from PNG, JPG or TIF files.
 
 > theme: api
-> theme: features
 > theme: intro
+> theme: features
 
 You can also import `sdl2::all` to get `sdl2` and all its sister libraries, which is only
 `sdl2::image` at this point.
 
 > theme: api
+> theme: intro
 
 ## Examples
 
+> theme: api
 > theme: examples
 
 See the `minimal` example within this project at `examples/minimal` for a simple example

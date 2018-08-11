@@ -11,7 +11,7 @@ This method receives an `HttpRequest` and must return an `HttpResponse`.
 _nitcorn_ provides `FileServer`, a simple `Action` to serve static files.
 
 > theme: api
-> theme: intro
+> theme: usage
 
 `HttpRequest` contains the GET and POST arguments as well as session data it one exists.
 The produced `HttpResponse` should contain the HTTP status code, the body,
@@ -24,8 +24,12 @@ These routes can simply identify the root of a service,
 but also define parameters within the URI.
 
 > theme: api
+> theme: features
 
 _nitcorn_ instances are configured dynamically in Nit code with the interfaces and routes created as needed.
+
+> theme: api
+> theme: usage
 
 _nitcorn_ plays well with other Nit services and tools such as `serialization`, `mongodb`, `sqlite` and `nitiwiki`.
 It also benefits from the full power of the Nit language:
@@ -33,9 +37,11 @@ class refinement can be used to customize default services and merge many applic
 and the FFI enables calling services in different languages.
 
 > theme: api
+> theme: usage
 
 ## Examples
 
+> theme: api
 > theme: examples
 
 A minimal example follows with a custom `Action` and using `FileServer`.
@@ -53,6 +59,7 @@ take a look at the configuration of `http://xymus.net/` at `../contrib/xymus_net
 Larger projects using _nitcorn_ can be found in the `contrib/` folder:
 
 > theme: api
+> theme: usage
 
 * _opportunity_ is a meetup planner heavily based on _nitcorn_.
 * _tnitter_ is a micro-blogging platform with a simple Web and RESTful interface.
@@ -62,10 +69,18 @@ Larger projects using _nitcorn_ can be found in the `contrib/` folder:
 > theme: features
 > theme: api
 > theme: api
+> theme: usage
+> theme: api
+> theme: api
+> theme: usage
+> theme: api
+> theme: api
+> theme: usage
 
 ### Simple hello world server
 
 > theme: features
+> theme: examples
 
 ~~~
 import nitcorn
@@ -121,5 +136,11 @@ This nitcorn library is a fork from an independent project originally created in
 Jean-Philippe Caissy, Guillaume Auger, Frederic Sevillano, Justin Michaud-Ouellette,
 Stephan Michaud and Maxime Bélanger.
 
+> theme: api
+> theme: authors
+> theme: usage
+
 It has been adapted to a library, and is currently maintained, by Alexis Laferrière.
+
+> theme: authors
 

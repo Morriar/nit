@@ -1,5 +1,6 @@
 # Nit wrapper for Stanford CoreNLP
 
+> theme: api
 > theme: title
 
 Stanford CoreNLP provides a set of natural language analysis tools which can take
@@ -9,6 +10,7 @@ quantities, and mark up the structure of sentences in terms of phrases and word
 dependencies, indicate which noun phrases refer to the same entities, indicate
 sentiment, etc.
 
+> theme: api
 > theme: intro
 
 This wrapper needs the Stanford CoreNLP jars that run on Java 1.8+.
@@ -17,6 +19,7 @@ This wrapper needs the Stanford CoreNLP jars that run on Java 1.8+.
 
 See http://nlp.stanford.edu/software/corenlp.shtml.
 
+> theme: intro
 > theme: refs
 
 ## NLPProcessor
@@ -26,7 +29,6 @@ See http://nlp.stanford.edu/software/corenlp.shtml.
 
 ### Java client
 
-> theme: api
 > theme: features
 
 ~~~nit
@@ -121,5 +123,8 @@ assert matches.first.document == d1
 * Analyze sentences dependencies
 * Analyze sentiment
 
+> theme: api
 > theme: todo
+> theme: features
+> theme: api
 

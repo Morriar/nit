@@ -1,5 +1,6 @@
 # Services conforming to POSIX
 
+> theme: api
 > theme: title
 
 The core module `posix` includes POSIX services available on all POSIX compliant systems.
@@ -8,4 +9,5 @@ import `posix::ext`.
 
 > theme: api
 > theme: intro
+> theme: features
 
