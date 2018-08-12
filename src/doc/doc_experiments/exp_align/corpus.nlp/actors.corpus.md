@@ -164,11 +164,14 @@ using actors for fork/join parallelism instead of concurrency).
 You can find example of differents small programs implemented with Nit actors in the `examples`
 directory. For a really simple example, you can check `examples/simple`.
 
-> match: actors
 > match: actors::actors_simple
 > match: actors::actors_simple_simulation
 > match: actors::simple
 > match: actors::simple_simulation
+> match: actors
 > match: actors>examples>
 > match: actors>examples>simple>
+> match: actors>examples>fannkuchredux>
+> match: actors>examples>mandelbrot>
+> match: actors>examples>agent_simulation>
 

@@ -99,6 +99,7 @@ class MEntityIndex
 				if term.has_prefix("+") then
 					term = term.substring(1, term.length)
 					must_have_keys.add term
+					continue
 				else if term.has_prefix("-") then
 					term = term.substring(1, term.length)
 					not_have_keys.add term
@@ -274,7 +275,7 @@ class MEntityDocument
 	fun build_vector(index: MEntityIndex) do
 		mentity.build_base_vector(terms_count)
 		mentity.build_sign_vector(terms_count)
-		# mentity.build_nlp_vector(terms_count, index)
+		mentity.build_nlp_vector(terms_count, index)
 		mentity.build_code_vector(code_vector, index)
 
 		terms_count.add_all code_vector

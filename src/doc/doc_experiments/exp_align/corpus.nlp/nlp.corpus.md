@@ -1,5 +1,6 @@
 # Nit wrapper for Stanford CoreNLP
 
+> match: nlp
 > match: nlp::stanford
 
 Stanford CoreNLP provides a set of natural language analysis tools which can take
@@ -9,6 +10,7 @@ quantities, and mark up the structure of sentences in terms of phrases and word
 dependencies, indicate which noun phrases refer to the same entities, indicate
 sentiment, etc.
 
+> match: nlp
 > match: nlp::NLPClient::language
 > match: nlp::NLPDocument::sentences
 > match: nlp::NLPToken::word
@@ -16,6 +18,7 @@ sentiment, etc.
 
 This wrapper needs the Stanford CoreNLP jars that run on Java 1.8+.
 
+> match: nlp
 > match: nlp::NLPJavaProcessor::java_cp
 > match: nlp::NLPServer::java_cp
 > match: nlp::nlp_server::Config::opt_java_cp

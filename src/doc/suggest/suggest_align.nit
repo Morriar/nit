@@ -91,14 +91,31 @@ class MDocAligner
 		# filter = new MdFilterIntro
 		# filter.filter_document(document)
 
-		filter = new MdFilterSmartContext(context)
+		# GOO
+
+		# filter = new MdFilterSmartContext(context)
+		# filter.filter_document(document)
+
+		# filter = new MdFilterPackage
+		# filter.filter_document(document)
+
+		# filter = new MdFilterNameConflictsContext(context)
+		# filter.filter_document(document)
+
+		# / GOOD
+
+		var align_nlp = new MdAlignNLP(model, mainmodule, context, mentity_index)
+		align_nlp.align_document(document)
+
+		filter = new MdFilterAll
+		filter.filter_document(document)
+
+		filter = new MdFilterContext(context)
 		filter.filter_document(document)
 
 		filter = new MdFilterPackage
 		filter.filter_document(document)
 
-		filter = new MdFilterNameConflictsContext(context)
-		filter.filter_document(document)
 
 		# filter = new MdFilterNameConflictsDistance
 		# TODO and not intro
@@ -125,9 +142,6 @@ class MDocAligner
 
 		# var filter_kind = new MdFilterKind
 		# filter_kind.filter_document(document)
-
-		# var align_nlp = new MdAlignNLP(model, mainmodule, context, mentity_index)
-		# align_nlp.align_document(document)
 
 		# var filter_context = new MdFilterContext(context)
 		# filter_context.filter_document(document)
@@ -205,7 +219,7 @@ class MDocSpanReferencesVisitor
 				# need_space = false
 				for ref in md_refs do
 					if ref isa MdRefText then
-						print "> name: {ref.mentity.full_name}".trim
+						# print "> name: {ref.mentity.full_name}".trim
 						need_space = true
 					end
 				end
@@ -234,7 +248,7 @@ class MDocSpanReferencesVisitor
 						# names.add ref.mentity.full_name
 						# names.add "{ref.mentity.full_name} (s: {ref.score})"
 						# print "> match: {ref.mentity.full_name} (conf: {ref.score})"
-						# print "> match: {ref.mentity.full_name}"
+						print "> match: {ref.mentity.full_name}"
 						need_space = true
 					end
 				end

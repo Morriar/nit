@@ -153,10 +153,10 @@ class ReadmeComparator
 		# printn "{block_count}\t{block_spans_ok}\t{block_spans_pt}\t{block_spans_ko}\n"
 		# printn "{block_count}\t{block_ok}\t{block_pt}\t{block_ko}\n"
 		# printn "{spans_r / spans_count.to_f}\t{spans_p / spans_count.to_f}\n"
-		printn "{names_r / names_count.to_f}\t{names_p / names_count.to_f}\n"
+		# printn "{names_r / names_count.to_f}\t{names_p / names_count.to_f}\n"
 		# printn "{exs_r / exs_count.to_f}\t{exs_p / exs_count.to_f}\t"
 		# printn "{codes_r / codes_count.to_f}\t{codes_p / codes_count.to_f}\n"
-		# printn "{matches_r / matches_count.to_f}\t{matches_p / matches_count.to_f}\n"
+		printn "{matches_r / matches_count.to_f}\t{matches_p / matches_count.to_f}\n"
 	end
 
 	fun print_block(block: MdBlock) do
@@ -309,7 +309,7 @@ class MdBlockCodes
 	end
 end
 
-var corpus = "names"
+var corpus = "nlp"
 var corpus_path = "src/doc/doc_experiments/exp_align/corpus.{corpus}"
 (corpus_path / "../out.{corpus}").mkdir
 var files = corpus_path.files

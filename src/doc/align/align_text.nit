@@ -127,8 +127,8 @@ class MdFilterPackageName
 			end
 			var mentity = ref.mentity
 			if mentity isa MPackage then
-				var ldist = ref.string.to_lower.levenshtein_distance(mentity.name.to_lower)
-				if ldist > 0 then continue
+				var dist = ref.string.to_lower.levenshtein_distance(mentity.name.to_lower)
+				if dist > 0 then continue
 			end
 			keep.add ref
 		end

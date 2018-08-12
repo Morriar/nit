@@ -20,12 +20,11 @@ import align_themes
 class MdFilterAll
 	super MdFilterMEntities
 
-	var context: MEntity
-
 	redef fun filter_mentities_refs(node, refs) do
 		var keep = new Array[MdRefMEntity]
 		for ref in refs do
-			if not ref.mentity isa MPackage and not ref.mentity isa MGroup and not ref.mentity isa MModule and not ref.mentity isa MClass then continue
+			# if not ref.mentity isa MPackage and not ref.mentity isa MGroup and not ref.mentity isa MModule then continue # and not ref.mentity isa MClass then continue
+			# if not ref.mentity isa MClass then continue
 			keep.add ref
 		end
 		return keep

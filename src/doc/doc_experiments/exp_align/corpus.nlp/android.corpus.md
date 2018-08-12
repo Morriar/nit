@@ -204,8 +204,12 @@ By default, `nitc` will compile Android applications in debug mode.
 
 ### Release mode
 
+> match: android
+
 Building in release mode will use your private key to sign the
 APK file, it can then be published on the Play Store.
+
+> match: android
 
 1. Have a keystore with a valid key to sign your APK file.
 
@@ -233,3 +237,6 @@ APK file, it can then be published on the Play Store.
 
 3. Call `nitc` with the `--release` options. You will be prompted for the
    required passwords as needed by `jarsigner`.
+
+> match: android
+

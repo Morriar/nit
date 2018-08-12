@@ -15,6 +15,7 @@
 module align_nlp
 
 import align_base
+import align_structure
 import mentities_index
 
 class MdAlignNLP
@@ -37,8 +38,31 @@ class MdAlignNLP
 		var text = node.raw_text
 		if text.is_empty then return
 
+		# var prevs = node.prev_blocks
+		# var prev = null
+		# if prevs.not_empty then prev = prevs.first
+		# if prev != null then
+		#	text = "{prev.raw_text}\n\n{text}\n\n{text}"
+		# end
+        #
+		# var nexts = node.next_blocks
+		# var next = null
+		# if nexts.not_empty then next = nexts.first
+		# if next != null then
+		#	text = "{text}\n\n{text}\n\n{next.raw_text}"
+		# end
+        #
+		# var section = node.md_section
+		# if section != null then
+		#	var title = section.title
+		#	if title != null then
+		#		var ttext = title .raw_text
+		#		text = "{ttext}\n\n{text}"
+		#	end
+		# end
+
 		var vector = new Vector
-		# vector.inc "+in: {context.full_name}"
+		vector.inc "+in: {context.full_name}"
 		vector.inc "-kind: MPropDef"
 		vector.inc "-kind: MClassDef"
 		vector.inc "-kind: MAttribute"
@@ -63,9 +87,9 @@ class MdAlignNLP
 			if lemma.to_s.length <= 1 then continue
 
 			# vector[lemma] = freq
-			vector["name: {lemma}"] += freq
-			vector["nlp_name: {lemma.to_s}"] += freq
-			vector["nlp_name: {lemma.to_s.to_lower}"] += freq
+			vector["!name: {lemma}"] += freq
+			vector["!nlp_name: {lemma.to_s}"] += freq
+			vector["!nlp_name: {lemma.to_s.to_lower}"] += freq
 			# vector["name: {(lemma or else "null").as(String).capitalize}"] += freq
 			# vector["comment: {lemma or else "null"}"] += freq
 			# vector["comment: {(lemma or else "null").as(String).capitalize}"] += freq
@@ -76,7 +100,7 @@ class MdAlignNLP
 			# vector["tid: {(lemma or else "null").as(String).capitalize}"] += freq
 		end
 		# print vector
-		node.md_refs = matches_to_refs(mentity_index.match_query(vector), node)
+		node.md_refs = matches_to_refs(mentity_index.match_query(vector).above_threshold, node)
 		# .above_threshold
 	end
 
