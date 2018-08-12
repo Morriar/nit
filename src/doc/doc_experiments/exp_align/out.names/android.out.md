@@ -1,27 +1,15 @@
 # Android platform support and APIs
 
 > name: android
+> name: android::platform
 
 ## Compilation for Android
 
 > name: android
-> name: android>
-> name: android>nit_compile>android>
-> name: android::android
-> name: android
-> name: android>
-> name: android>nit_compile>android>
-> name: android::android
 
 The compiler generates an APK file as the output when the `android`
 module is imported by the compilation target. The path to the generated
 file can be specified using the `-o` and `--dir` options.
-
-> name: core::file
-> name: core::file
-> name: core::file
-> name: core::file
-> name: core::Path
 
 ## Host system configuration
 
@@ -29,35 +17,16 @@ To compile Android apps from a 64 bits GNU/Linux host you can reuse an existing 
 installation or make a clean install with command line tools only.
 
 > name: android
+> name: android
 > name: app
 > name: linux
-> name: android
-> name: android>
-> name: android>nit_compile>android>
-> name: android>nit_compile>android>app>
-> name: app>
-> name: linux>
-> name: android>
-> name: android>nit_compile>android>
-> name: android::android
-> name: app::app
-> name: ios::app
-> name: linux::linux
-> name: android::android
-> name: app::App
 
 Note that this guide supports only 64 bits GNU/Linux hosts with support for a Java 8 JDK,
 it may be possible to support other platforms with some tweaks.
 
 > name: linux
 > name: java
-> name: linux>
-> name: android>nit_compile>android>app>src>main>java>
-> name: java>
-> name: linux::linux
-> name: java::java
 > name: android::platform
-> name: ios::platform
 
 1. Install the required SDK packages using one of these two methods:
 
@@ -99,134 +68,30 @@ it may be possible to support other platforms with some tweaks.
    ~~~
 
 > name: android
+> name: android::assets_and_resources::NativeAssetManager::open
+> name: android::assets_and_resources::AssetManager::open
+> name: android::Category::tab
 > name: android
+> name: android::Action::run
+> name: android::shared_preferences_api10::SharedPreferences::setup
 > name: android
+> name: android::Category::test
 > name: android
-> name: java
-> name: android>
-> name: android>nit_compile>android>
-> name: android>
-> name: android>nit_compile>android>
-> name: android>
-> name: android>nit_compile>android>
-> name: core>collection>tests>
-> name: android>
-> name: android>nit_compile>android>
-> name: android>nit_compile>android>app>src>main>java>
-> name: java>
-> name: android::android
-> name: android::android
-> name: android::android
-> name: android::android
-> name: java::java
 > name: core::Set
-> name: android
-> name: android
-> name: android
-> name: android
+> name: android::shared_preferences_api10::SharedPreferences::setup
 > name: java
-> name: android>
-> name: android>nit_compile>android>
-> name: android>
-> name: android>nit_compile>android>
-> name: android>
-> name: android>nit_compile>android>
-> name: core>collection>tests>
-> name: android>
-> name: android>nit_compile>android>
-> name: android>nit_compile>android>app>src>main>java>
-> name: java>
-> name: android::android
-> name: android::android
-> name: android::android
-> name: android::android
-> name: java::java
-> name: core::Set
-> name: android
-> name: android
-> name: android
-> name: android
-> name: android>
-> name: android>nit_compile>android>
-> name: android>
-> name: android>nit_compile>android>
-> name: android>
-> name: android>nit_compile>android>
-> name: core>collection>tests>
-> name: android>
-> name: android>nit_compile>android>
-> name: android::android
-> name: android::android
-> name: android::android
-> name: android::android
-> name: android
-> name: android
-> name: android>
-> name: android>nit_compile>android>
-> name: android>
-> name: android>nit_compile>android>
-> name: android::android
-> name: android::android
-> name: android
-> name: android
-> name: android>
-> name: android>nit_compile>android>
-> name: core>collection>tests>
-> name: android>
-> name: android>nit_compile>android>
-> name: android::android
-> name: android::android
-> name: core::Set
-> name: core::Set
-> name: java
-> name: android>nit_compile>android>app>src>main>java>
-> name: java>
-> name: java::java
-> name: java
-> name: android>nit_compile>android>app>src>main>java>
-> name: java>
-> name: java::java
 
 ## Configure the Android application
 
 > name: android
-> name: android>
-> name: android>nit_compile>android>
-> name: android::android
-> name: android
-> name: android>
-> name: android>nit_compile>android>
-> name: android::android
 
 The _app.nit_ framework and this project offers some services to
 customize the generated Android application.
 
 > name: app
-> name: android
-> name: android>nit_compile>android>app>
-> name: app>
 > name: android>service>
-> name: android>
-> name: android>nit_compile>android>
-> name: app::app
-> name: ios::app
-> name: android::service
-> name: android::android
-> name: app::App
 > name: android::Service
-> name: app
 > name: android
-> name: android>nit_compile>android>app>
-> name: app>
-> name: android>service>
-> name: android>
-> name: android>nit_compile>android>
-> name: app::app
-> name: ios::app
-> name: android::service
-> name: android::android
-> name: app::App
-> name: android::Service
 
 ### Annotations
 
@@ -260,193 +125,19 @@ customize the generated Android application.
 > name: app
 > name: android
 > name: android
+> name: android>examples>
+> name: android::Extra
+> name: android::ASensorEvent::version
+> name: android::ResourcesManager::integer
 > name: android
 > name: android
 > name: java
+> name: android::NativeScanResult::level
 > name: android
-> name: android>nit_compile>android>app>
-> name: app>
-> name: android>
-> name: android>nit_compile>android>
-> name: android>
-> name: android>nit_compile>android>
-> name: android>examples>
-> name: app>examples>
-> name: ios>examples>
-> name: serialization>examples>
-> name: pthreads>examples>
-> name: gamnit>examples>
-> name: glesv2>examples>
-> name: android>
-> name: android>nit_compile>android>
-> name: android>
-> name: android>nit_compile>android>
-> name: android>nit_compile>android>app>src>main>java>
-> name: java>
-> name: android>
-> name: android>nit_compile>android>
-> name: app::app
-> name: ios::app
-> name: android::android
-> name: android::android
-> name: core::file
-> name: pthreads::extra
-> name: android::android
-> name: android::android
-> name: java::java
-> name: android::android
-> name: app::App
-> name: android::Extra
-> name: meta::Class
-> name: app
-> name: android
-> name: android
-> name: android
-> name: android
-> name: java
-> name: android
-> name: android>nit_compile>android>app>
-> name: app>
-> name: android>
-> name: android>nit_compile>android>
-> name: android>
-> name: android>nit_compile>android>
-> name: android>examples>
-> name: app>examples>
-> name: ios>examples>
-> name: serialization>examples>
-> name: pthreads>examples>
-> name: gamnit>examples>
-> name: glesv2>examples>
-> name: android>
-> name: android>nit_compile>android>
-> name: android>
-> name: android>nit_compile>android>
-> name: android>nit_compile>android>app>src>main>java>
-> name: java>
-> name: android>
-> name: android>nit_compile>android>
-> name: app::app
-> name: ios::app
-> name: android::android
-> name: android::android
-> name: core::file
-> name: pthreads::extra
-> name: android::android
-> name: android::android
-> name: java::java
-> name: android::android
-> name: app::App
-> name: android::Extra
-> name: meta::Class
-> name: app
-> name: android
-> name: android>nit_compile>android>app>
-> name: app>
-> name: android>
-> name: android>nit_compile>android>
-> name: app::app
-> name: ios::app
-> name: android::android
-> name: app::App
-> name: app
-> name: android
-> name: android>nit_compile>android>app>
-> name: app>
-> name: android>
-> name: android>nit_compile>android>
-> name: app::app
-> name: ios::app
-> name: android::android
-> name: app::App
-> name: android
-> name: android>
-> name: android>nit_compile>android>
-> name: android>examples>
-> name: app>examples>
-> name: ios>examples>
-> name: serialization>examples>
-> name: pthreads>examples>
-> name: gamnit>examples>
-> name: glesv2>examples>
-> name: android::android
-> name: core::file
-> name: pthreads::extra
-> name: android::Extra
-> name: android
-> name: android>
-> name: android>nit_compile>android>
-> name: android::android
-> name: core::file
-> name: android>examples>
-> name: app>examples>
-> name: ios>examples>
-> name: serialization>examples>
-> name: pthreads>examples>
-> name: gamnit>examples>
-> name: glesv2>examples>
-> name: pthreads::extra
-> name: android::Extra
-> name: android>examples>
-> name: app>examples>
-> name: ios>examples>
-> name: serialization>examples>
-> name: pthreads>examples>
-> name: gamnit>examples>
-> name: glesv2>examples>
-> name: android>examples>
-> name: app>examples>
-> name: ios>examples>
-> name: serialization>examples>
-> name: pthreads>examples>
-> name: gamnit>examples>
-> name: glesv2>examples>
-> name: android
-> name: android
-> name: android>
-> name: android>nit_compile>android>
-> name: android>
-> name: android>nit_compile>android>
-> name: android::android
-> name: android::android
-> name: android
-> name: android>
-> name: android>nit_compile>android>
-> name: android::android
-> name: android
-> name: android>
-> name: android>nit_compile>android>
-> name: android::android
-> name: java
-> name: android
-> name: android>nit_compile>android>app>src>main>java>
-> name: java>
-> name: android>
-> name: android>nit_compile>android>
-> name: java::java
-> name: android::android
-> name: meta::Class
-> name: meta::Class
-> name: java
-> name: android
-> name: android>nit_compile>android>app>src>main>java>
-> name: java>
-> name: android>
-> name: android>nit_compile>android>
-> name: java::java
-> name: android::android
-> name: meta::Class
 
 ### Android implementation
 
 > name: android
-> name: android>
-> name: android>nit_compile>android>
-> name: android::android
-> name: android
-> name: android>
-> name: android>nit_compile>android>
-> name: android::android
 
 There is two core implementation for Nit apps on Android.
 `android::nit_activity` is used by apps with standard windows and native UI controls.
@@ -456,71 +147,26 @@ There is two core implementation for Nit apps on Android.
 > name: app
 > name: android
 > name: app
-> name: core>
-> name: android>nit_compile>android>app>
-> name: app>
-> name: android>
-> name: android>nit_compile>android>
-> name: android>nit_compile>android>app>
-> name: app>
+> name: android::NativeAppGlue::window
+> name: android::assets_and_resources::ResourcesManager::native
+> name: android::input_events::AndroidMotionEvent::native
+> name: android::Activity::native
+> name: android::Service::native
+> name: android::ui::Control::native
+> name: android::ui::Control::NATIVE
 > name: android>ui>
-> name: ios>ui>
-> name: core::core
-> name: app::app
-> name: ios::app
-> name: android::android
-> name: app::app
-> name: ios::app
-> name: core::native
-> name: android::ui
-> name: app::ui
-> name: linux::ui
-> name: ios::ui
 > name: android::game
 > name: android::game
-> name: app::App
-> name: app::App
-> name: app::Window
-> name: app::Control
 
 Clients don't have to select the core implementation, it is imported by other relevant modules.
 For example, a module importing `app::ui` and `android` will trigger the importation of `android::nit_activity`.
 
-> name: gamnit::client
-> name: core::core
 > name: core
-> name: core>
 > name: android>examples>
-> name: app>examples>
-> name: ios>examples>
-> name: serialization>examples>
-> name: pthreads>examples>
-> name: gamnit>examples>
-> name: glesv2>examples>
-> name: gamnit::client
-> name: core::core
-> name: android>examples>
-> name: app>examples>
-> name: ios>examples>
-> name: serialization>examples>
-> name: pthreads>examples>
-> name: gamnit>examples>
-> name: glesv2>examples>
 
 ### Lock app orientation
 
 > name: app
-> name: android>nit_compile>android>app>
-> name: app>
-> name: app::app
-> name: ios::app
-> name: app::App
-> name: app
-> name: android>nit_compile>android>app>
-> name: app>
-> name: app::app
-> name: ios::app
-> name: app::App
 
 Importing `android::landscape` or `android::portrait` locks the generated
 application in the specified orientation. This can be useful for games and
@@ -536,39 +182,31 @@ Resources specific to the Android platform should be placed in an `android/` fol
 The folder should adopt the structure of a normal Android project, e.g., a custom XML resource file can be placed
 at `android/res/values/color.xml` to be compiled with the Android application.
 
+> name: android::assets_and_resources::NativeContext::resources
 > name: android
-> name: android
-> name: android
-> name: android>
-> name: android>nit_compile>android>
-> name: android>
-> name: android>nit_compile>android>
-> name: android>
-> name: android>nit_compile>android>
-> name: android::android
 > name: android::platform
-> name: ios::platform
-> name: android::android
-> name: core::file
-> name: android::android
+> name: android
+> name: android::assets_and_resources::NativeContext::resources
+> name: android
 
 The application icon should also be placed in the `android/` folder.
 Place the classic bitmap version at `android/res/mipmap-hdpi/ic_launcher.png` (and others),
 and the adaptive version at `android/res/mipmap-anydpi-v26/ic_launcher.xml`.
 The Nit compiler detects these files and uses them as the application icon.
 
-> name: core::file
+> name: android::assets_and_resources::AssetManager::bitmap
+> name: android::ASensorEvent::version
+> name: android::ASensorEvent::version
 
 Additional `android/` folders may be placed next to more specific Nit modules to change the Android resources
 for application variants. The more specific resources will have priority over the project level `android/` files.
 
-> name: android::android
-> name: core::file
 > name: android
-> name: android>
-> name: android>nit_compile>android>
 > name: android::android
-> name: core::file
+> name: android::assets_and_resources::NativeContext::resources
+> name: android::assets_and_resources::NativeContext::resources
+> name: android::audio::SoundPool::priority
+> name: android::NativeScanResult::level
 
 ## Compilation modes
 
@@ -579,16 +217,15 @@ Theses modes are also applied to the generated Android projects.
 The compilation mode is specified as an argument to `nitc`, only
 `--release` can be specified as debug is the default behavior.
 
+> name: android::audio::NativeAudioManager::mode
 > name: android
-> name: android
-> name: android>
-> name: android>nit_compile>android>
-> name: android>
-> name: android>nit_compile>android>
-> name: android::android
 > name: android::platform
-> name: ios::platform
-> name: android::android
+> name: android::audio::NativeMediaPlayer::release
+> name: android::audio::NativeSoundPool::release
+> name: android::audio::NativeAudioManager::mode
+> name: android
+> name: android::audio::NativeAudioManager::mode
+> name: android::Category::default
 
 ### Debug mode
 
@@ -598,17 +235,18 @@ Debug mode enables compiling to an APK file without handling signing keys
 and their password. The APK file can be installed to a local device with
 USB debugging enabled, but it cannot be published on the Play Store.
 
-> name: core::file
-> name: gamnit::keys
-> name: core::file
-> name: json::store
+> name: android::audio::NativeAudioManager::mode
+> name: android::Bundle::keys
+> name: android::NativeView::enabled
+> name: android::AndroidSensor::enabled
+> name: android::audio::NativeSoundPool::play
+> name: android::SoundPool::play
 
 By default, `nitc` will compile Android applications in debug mode.
 
+> name: android::Category::default
 > name: android
-> name: android>
-> name: android>nit_compile>android>
-> name: android::android
+> name: android::audio::NativeAudioManager::mode
 
 ### Release mode
 
@@ -619,9 +257,12 @@ By default, `nitc` will compile Android applications in debug mode.
 Building in release mode will use your private key to sign the
 APK file, it can then be published on the Play Store.
 
-> name: gamnit::keys
-> name: core::file
-> name: json::store
+> name: android::audio::NativeMediaPlayer::release
+> name: android::audio::NativeSoundPool::release
+> name: android::audio::NativeAudioManager::mode
+> name: android::Bundle::keys
+> name: android::audio::NativeSoundPool::play
+> name: android::SoundPool::play
 
 1. Have a keystore with a valid key to sign your APK file.
 
@@ -650,39 +291,14 @@ APK file, it can then be published on the Play Store.
 3. Call `nitc` with the `--release` options. You will be prompted for the
    required passwords as needed by `jarsigner`.
 
+> name: android::Bundle::keys
+> name: android::NativeNotificationBuilder::create
+> name: android::audio::NativeMediaPlayer::create
+> name: android::Category::default
+> name: android::ASensorEvent::version
 > name: java
-> name: android>nit_compile>android>app>src>main>java>
-> name: java>
-> name: gamnit::keys
-> name: core::file
-> name: java::java
-> name: core::Set
-> name: core::Set
-> name: java
-> name: android>nit_compile>android>app>src>main>java>
-> name: java>
-> name: gamnit::keys
-> name: core::file
-> name: java::java
-> name: core::Set
-> name: core::Set
-> name: java
-> name: android>nit_compile>android>app>src>main>java>
-> name: java>
-> name: gamnit::keys
-> name: core::file
-> name: java::java
-> name: gamnit::keys
-> name: core::file
-> name: java
-> name: android>nit_compile>android>app>src>main>java>
-> name: java>
-> name: java::java
-> name: core::Set
-> name: core::Set
-> name: core::Set
+> name: android::Extra::replacing
 > name: core::Set
 > name: android::Extra::replacing
-> name: android::Action::call
 > name: android::Action::call
 

@@ -30,6 +30,7 @@ While macOS isn't supported, it can create iOS apps.
 You need to install and setup Xcode, and you may install the GLSL shader validation tool via `brew`:
 
 > name: ios
+> name: app
 
 ~~~bash
 brew install glslang

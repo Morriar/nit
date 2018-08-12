@@ -41,10 +41,16 @@ class MDocAligner
 
 	fun align_mdoc(mdoc: MDoc) do
 		var document = mdoc.mdoc_document
+		var filter: MdFilter
 
 		# Align structure
 		var align_struct = new MdAlignStructure(model, mainmodule, context)
 		align_struct.align_document(document)
+
+		# Align themes
+		var align_themes = new MdAlignThemes(model, mainmodule, context)
+		align_themes.align_document(document)
+
 
 		# var p = new MdPrintStructure
 		# p.visit_document(document)
@@ -60,8 +66,43 @@ class MDocAligner
 		# filter_kind.filter_document(document)
 
 		# Align texts
-		# var align_texts = new MdAlignTexts(model, mainmodule, context)
-		# align_texts.align_document(document)
+		var align_texts = new MdAlignTexts(model, mainmodule, context)
+		align_texts.align_document(document)
+
+		# filter = new MdFilterNameDistance
+		# filter.filter_document(document)
+
+		# filter = new MdFilterSmartContext(context)
+		# filter.filter_document(document)
+
+		# filter = new MdFilterSmartContext(context)
+		# filter.filter_document(document)
+
+
+		# filter = new MdFilterMProps
+		# filter.filter_document(document)
+
+		# bad: filter = new MdFilterThemeKind
+		# filter.filter_document(document)
+
+		# filter = new MdFilterTitle
+		# filter.filter_document(document)
+
+		# filter = new MdFilterIntro
+		# filter.filter_document(document)
+
+		filter = new MdFilterSmartContext(context)
+		filter.filter_document(document)
+
+		filter = new MdFilterPackage
+		filter.filter_document(document)
+
+		filter = new MdFilterNameConflictsContext(context)
+		filter.filter_document(document)
+
+		# filter = new MdFilterNameConflictsDistance
+		# TODO and not intro
+		# filter.filter_document(document)
 
 		# var filter_context = new MdFilterNameConflicts(context)
 		# filter_context.filter_document(document)
@@ -85,20 +126,24 @@ class MDocAligner
 		# var filter_kind = new MdFilterKind
 		# filter_kind.filter_document(document)
 
-		var align_nlp = new MdAlignNLP(model, mainmodule, context, mentity_index)
-		align_nlp.align_document(document)
+		# var align_nlp = new MdAlignNLP(model, mainmodule, context, mentity_index)
+		# align_nlp.align_document(document)
 
 		# var filter_context = new MdFilterContext(context)
 		# filter_context.filter_document(document)
 
 		# block_align.align_blocks(document, context)
 
-		# Align themes
-		# var align_themes = new MdAlignThemes(model, mainmodule, context)
-		# align_themes.align_document(document)
 
 		# var filter_local_theme = new MdFilterLocalTheme
 		# filter_local_theme.filter_document(document)
+
+		# Intro package = si ancestor / descendand context
+		# Intro group =  si mpackage avant ou si ancestor / descandant
+		# Intro mmodule = si mgroup andant ou si ancestor / descandant
+		# Intro mclass = si mpackage/mgroup avant ou si context redef mclass ou import mmodule importé
+
+
 
 		span_visitor.enter_visit(document)
 
@@ -150,7 +195,7 @@ class MDocSpanReferencesVisitor
 				need_space = false
 				for ref in md_refs do
 					if ref isa MdRefMEntity and ref.node isa MdCode then
-						print "> match: {ref.mentity.full_name}".trim
+						# print "> match: {ref.mentity.full_name}".trim
 						need_space = true
 					end
 				end
@@ -160,7 +205,7 @@ class MDocSpanReferencesVisitor
 				# need_space = false
 				for ref in md_refs do
 					if ref isa MdRefText then
-						print "> match: {ref.mentity.full_name}".trim
+						print "> name: {ref.mentity.full_name}".trim
 						need_space = true
 					end
 				end
@@ -170,7 +215,7 @@ class MDocSpanReferencesVisitor
 				# need_space = false
 				for ref in md_refs do
 					if ref isa MdRefCode then
-						print "> match: {ref.mentity.full_name}"
+						# print "> match: {ref.mentity.full_name}"
 						need_space = true
 					end
 				end
@@ -189,7 +234,7 @@ class MDocSpanReferencesVisitor
 						# names.add ref.mentity.full_name
 						# names.add "{ref.mentity.full_name} (s: {ref.score})"
 						# print "> match: {ref.mentity.full_name} (conf: {ref.score})"
-						print "> match: {ref.mentity.full_name}"
+						# print "> match: {ref.mentity.full_name}"
 						need_space = true
 					end
 				end

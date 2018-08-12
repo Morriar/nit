@@ -48,6 +48,15 @@ redef class MdNode
 		return res
 	end
 
+	var md_block: MdBlock is lazy do
+		var block = self
+		loop
+			if block isa MdBlock then return block
+			var parent = block.parent
+			assert parent != null
+			block = parent
+		end
+	end
 end
 
 # A reference from the Markdown document to something

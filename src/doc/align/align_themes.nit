@@ -242,6 +242,12 @@ end
 
 redef class MdBlock
 	var md_themes = new Array[MdTheme]
+
+	var md_themes_names: Array[String] is lazy do
+		var res = new Array[String]
+		for theme in md_themes do res.add theme.to_s
+		return res
+	end
 end
 
 abstract class MdTheme
@@ -360,6 +366,94 @@ private class MdRefsVisitor
 		node.visit_all(self)
 	end
 end
+
+class MdFilterThemeKind
+	super MdFilterMEntities
+
+	redef fun filter_mentities_refs(node, md_refs) do
+		var themes = node.md_block.md_themes_names
+
+		var keep = new Array[MdRefMEntity]
+		for ref in md_refs do
+			var mentity = ref.mentity
+			if mentity isa MPackage then
+				if not themes.has("package") then
+					if themes.has("group") then continue
+					if themes.has("module") then continue
+					if themes.has("class") then continue
+				end
+			else if mentity isa MGroup then
+				if not themes.has("group") then
+					if themes.has("package") then continue
+					if themes.has("module") then continue
+					if themes.has("class") then continue
+				end
+			else if mentity isa MModule then
+				if not themes.has("module") then
+					if themes.has("package") then continue
+					if themes.has("group") then continue
+					if themes.has("class") then continue
+				end
+			else if mentity isa MModule then
+				if not themes.has("class") then
+					if themes.has("package") then continue
+					if themes.has("group") then continue
+					if themes.has("module") then continue
+				end
+			else
+				if themes.has("package") then continue
+				if themes.has("group") then continue
+				if themes.has("module") then continue
+				if themes.has("class") then continue
+			end
+			keep.add ref
+		end
+
+		return keep
+	end
+end
+
+# Only keep packages
+class MdFilterTitle
+	super MdFilterMEntities
+
+	redef fun filter_mentities_refs(node, md_refs) do
+		if not node.md_block.md_themes_names.has("title") then return md_refs
+
+		# TODO context
+		var keep = new Array[MdRefMEntity]
+		for ref in md_refs do
+			var mentity = ref.mentity
+			if not mentity isa MPackage then continue
+			keep.add ref
+		end
+
+		if keep.is_empty then return md_refs
+		return keep
+	end
+end
+
+class MdFilterIntro
+	super MdFilterMEntities
+
+	# TODO context
+	redef fun filter_mentities_refs(node, md_refs) do
+		if not node.md_block.md_themes_names.has("intro") then return md_refs
+
+		var keep = new Array[MdRefMEntity]
+		for ref in md_refs do
+			var mentity = ref.mentity
+			if mentity isa MPackage or mentity isa MGroup or
+			   mentity isa MModule or mentity isa MClass then
+				keep.add ref
+			end
+		end
+
+		if keep.is_empty then return md_refs
+		return keep
+	end
+end
+
 
 class MdFilterLocalTheme
 	super MdFilterMEntities

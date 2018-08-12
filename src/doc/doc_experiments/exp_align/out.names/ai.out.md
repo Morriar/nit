@@ -10,6 +10,8 @@ Contents:
 
 See the `examples` subdirectory for examples:
 
+> name: ai>examples>
+
 * `examples/queens.nit`
 * `examples/puzzle.nit`
 

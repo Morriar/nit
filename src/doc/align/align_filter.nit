@@ -15,6 +15,22 @@
 module align_filter
 
 import align_base
+import align_themes
+
+class MdFilterAll
+	super MdFilterMEntities
+
+	var context: MEntity
+
+	redef fun filter_mentities_refs(node, refs) do
+		var keep = new Array[MdRefMEntity]
+		for ref in refs do
+			if not ref.mentity isa MPackage and not ref.mentity isa MGroup and not ref.mentity isa MModule and not ref.mentity isa MClass then continue
+			keep.add ref
+		end
+		return keep
+	end
+end
 
 class MdFilterContext
 	super MdFilterMEntities
@@ -30,7 +46,57 @@ class MdFilterContext
 	end
 end
 
-class MdFilterNameConflicts
+class MdFilterSmartContext
+	super MdFilterMEntities
+
+	var context: MEntity
+
+	redef fun filter_mentities_refs(node, refs) do
+		var keep = new Array[MdRefMEntity]
+		for ref in refs do
+			var mentity = ref.mentity
+			# if mentity.name.length <= 2 then continue
+			if mentity isa MPackage then
+				keep.add ref
+			else if mentity isa MGroup then
+				if not context.has_mentity(ref.mentity) then continue
+				keep.add ref
+			else if mentity isa MModule then
+				if not context.has_mentity(ref.mentity) then continue
+				keep.add ref
+			else if mentity isa MClass then
+				if ref isa MdRefText and not ref.string.chars.first.is_upper then
+					var string = ref.string
+					if mentity.name.length <= 1 then continue
+					var dist = string.levenshtein_distance(mentity.name)
+					if dist > 0 and not context.has_mentity(ref.mentity) then continue
+				end
+				keep.add ref
+			else
+				if not context.has_mentity(ref.mentity) then continue
+				keep.add ref
+			end
+		end
+		return keep
+	end
+end
+
+
+class MdFilterMProps
+	super MdFilterMEntities
+
+	redef fun filter_mentities_refs(node, refs) do
+		var keep = new Array[MdRefMEntity]
+		for ref in refs do
+			if ref.mentity isa MProperty then continue
+			keep.add ref
+		end
+		return keep
+	end
+end
+
+
+class MdFilterNameConflictsContext
 	super MdFilterMEntities
 
 	var context: MEntity
@@ -65,6 +131,9 @@ class MdFilterNameConflicts
 				keep.add_all mrefs
 			end
 		end
+
+		# print node
+		# print keep
 
 		return keep
 	end
@@ -127,6 +196,80 @@ class MdFilterKind
 			keep.add ref
 			keep_mentities.add mentity
 		end label mprop
+
+		return keep
+	end
+end
+
+# Resolve conflicts between a MModule, a MGroup and a MPackage
+#
+# Select the package with the same name.
+class MdFilterPackage
+	super MdFilterMEntities
+
+	redef fun filter_mentities_refs(node, refs) do
+		var keep = new Array[MdRefMEntity]
+
+		# Collect mapackages, mgroups and mmodules
+		var mentities = new HashSet[MEntity]
+		var mclasses = new HashSet[MClass]
+		for ref in refs do
+			var mentity = ref.mentity
+			if mentity isa MPackage or mentity isa MGroup or mentity isa MModule or mentity isa MClass then
+				mentities.add mentity
+				if mentity isa MClass then mclasses.add mentity
+			end
+		end
+
+		for ref in refs do
+			var mentity = ref.mentity
+			var themes = node.md_block.md_themes_names
+			if mentity isa MPackage then
+				# if not themes.has("package") then
+				#	if themes.has("group") then continue
+				#	if themes.has("module") then continue
+				#	if themes.has("class") then continue
+				# end
+				keep.add ref
+			else if mentity isa MGroup then
+				# if not themes.has("group") then
+				#	if themes.has("package") then continue
+				#	if themes.has("module") then continue
+				#	if themes.has("class") then continue
+				# end
+				# Keep groups only if the package is not here
+				if not themes.has("group") then
+					if mentities.has(mentity.mpackage) and mentity.mpackage.root == mentity then continue
+				end
+				keep.add ref
+			else if mentity isa MModule then
+				# Keep modules only if the group and package are not here
+				var mgroup = mentity.mgroup
+				if not themes.has("module") then
+					if mgroup != null and mgroup.name == mentity.name then
+						if mentities.has(mgroup) then continue
+						if mentities.has(mgroup.mpackage) then continue
+					end
+				end
+				keep.add ref
+			else if mentity isa MProperty then
+				if mclasses.not_empty then continue
+				# if not themes.has("group") then
+				#	if themes.has("package") then continue
+				#	if themes.has("module") then continue
+				#	if themes.has("class") then continue
+				# end
+				# Keep groups only if the package is not here
+				# if not themes.has("group") then
+					# if mentities.has(mentity.mpackage) and mentity.mpackage.root == mentity then continue
+				# end
+				keep.add ref
+
+			else
+				# Keep the rest
+				keep.add ref
+			end
+		end
 
 		return keep
 	end

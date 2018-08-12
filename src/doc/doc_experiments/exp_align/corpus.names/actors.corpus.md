@@ -5,6 +5,7 @@
 This group introduces the `actors` module which contains the abstraction of a Nit Actor Model,
 based on Celluloid (https://github.com/celluloid/celluloid).
 
+> name: actors
 > name: actors>
 > name: actors::actors
 
@@ -26,6 +27,7 @@ An actor has a mailbox in which it receives its messages, and process them one a
 The `actors` module introduces the annotation `actor` which is to be used on classes.
 This annotation transform a normal Nit class into an actor.
 
+> name: actors
 > name: actors::actors
 > name: actors::Actor
 
@@ -56,6 +58,7 @@ When using `join` on the future, the calling thread will wait until the value of
 
 ## Managing actors
 
+> name: actors
 > name: actors::Actor
 
 When you annotate a class with `actor` and create an instance of it with `new`, the actor is not
@@ -120,6 +123,7 @@ before quitting.
 > name: actors::Actor
 > name: pthreads::Thread
 > name: actors::Actor
+> name: actors::Message
 
 It's materialized by the `active_actors` property added to `Sys` which is a `ReverseBlockingQueue`.
 In short, the `is_empty` method on this list is blocking until the list is effectively empty.
@@ -133,6 +137,7 @@ actor, `active_actors` is empty.
 You can use this property as a mean of synchronisation in some specific cases (for example if you're
 using actors for fork/join parallelism instead of concurrency).
 
+> name: actors
 > name: actors::Actor
 
 ## Examples

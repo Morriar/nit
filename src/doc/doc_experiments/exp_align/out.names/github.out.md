@@ -1,32 +1,43 @@
 # Nit wrapper for Github API
 
 > name: github
+> name: github::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 
 This module provides a Nit object oriented interface to access the Github api.
 
+> name: github
 > name: github::github
 > name: github::api
-> name: github
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 
 ## Accessing the API
 
 > name: github::api
-> name: github::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 
 ### `GithubAPI` - # Client to Github API
 
+> name: github::LoaderConfig::client
 > name: github
-> name: github>
-> name: github::github
 > name: github::api
-> name: github
-> name: github>
-> name: github::github
-> name: github::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 
 To access the API you need an instance of a `GithubAPI` client.
 
 > name: github::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
+> name: github::LoaderConfig::client
 
 ~~~
 import github
@@ -41,11 +52,17 @@ var api = new GithubAPI(token)
 
 The API client allows you to get Github API entities.
 
+> name: github::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
+> name: github::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
+> name: github::LoaderConfig::client
+> name: github::GithubAPI::get
 > name: github
-> name: github>
-> name: github::api
-> name: github::github
-> name: github::api
 
 ~~~
 import github
@@ -64,23 +81,15 @@ assert user.login == "Morriar"
 
 Token can also be recovered from user config with `get_github_oauth`.
 
-> name: config
-> name: config>
-> name: nitcorn::token
-> name: config::config
 > name: github::User
-> name: config::Config
+> name: config
 
 ### `get_github_oauth` - # Gets the Github token from `git` configuration
 
+> name: github::GithubAPI::get
 > name: github
-> name: github>
-> name: github::github
-> name: nitcorn::token
-> name: github
-> name: github>
-> name: github::github
-> name: nitcorn::token
+> name: github::GithubWallet::tokens
+> name: github::LoaderConfig::tokens
 
 Return the value of `git config --get github.oauthtoken`
 or `""` if no key exists.
@@ -88,22 +97,18 @@ or `""` if no key exists.
 ### Retrieving user data
 
 > name: github::User
-> name: github::User
 
 ### `load_user` - # Get the Github user with `login`
 
 > name: github
-> name: github>
-> name: github::github
-> name: github::User
-> name: github
-> name: github>
-> name: github::github
 > name: github::User
 
 Loads the `User` from the API or returns `null` if the user cannot be found.
 
 > name: github::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 > name: github::User
 
 ~~~
@@ -118,20 +123,12 @@ assert user.login == "Morriar"
 ### `User` - # A Github user
 
 > name: github
-> name: github>
-> name: github::github
-> name: github::User
-> name: github
-> name: github>
-> name: github::github
 > name: github::User
 
 Provides access to [Github user data](https://developer.github.com/v3/users/).
 Should be accessed from `GithubAPI::load_user`.
 
 > name: github
-> name: github>
-> name: github::github
 > name: github::User
 
 * `api$User$SELF` - # Type of this instance, automatically specialized in every class
@@ -172,180 +169,41 @@ Should be accessed from `GithubAPI::load_user`.
 
 * `name=` - # User public name if any.
 
-> name: github
-> name: serialization
-> name: github
-> name: github
-> name: popcorn>examples>static_files>public>images>
-> name: popcorn>examples>static_files>public>
-> name: popcorn>examples>static_files>public>
-> name: github>
-> name: popcorn>examples>static_files>public>
-> name: popcorn>examples>static_files>public>images>
-> name: popcorn>examples>static_files>public>images>
-> name: popcorn>examples>static_files>public>
-> name: popcorn>examples>static_files>public>
-> name: serialization>
-> name: popcorn>examples>static_files>public>
-> name: popcorn>examples>static_files>public>
-> name: github>
-> name: github>
-> name: popcorn>examples>static_files>public>
-> name: popcorn>examples>static_files>public>
-> name: github::github
-> name: serialization::serialization
-> name: github::github
-> name: github::github
-> name: meta::Class
 > name: github::User
-> name: github::User
-> name: github::User
-> name: github::User
-> name: github::User
-> name: github::User
-> name: github::User
-> name: github::User
-> name: github::User
-> name: github::User
-> name: meta::Class
 > name: github::User
 > name: github::User
 > name: github
-> name: serialization
-> name: github
-> name: github
-> name: popcorn>examples>static_files>public>images>
-> name: popcorn>examples>static_files>public>
-> name: popcorn>examples>static_files>public>
-> name: github>
-> name: popcorn>examples>static_files>public>
-> name: popcorn>examples>static_files>public>images>
-> name: popcorn>examples>static_files>public>images>
-> name: popcorn>examples>static_files>public>
-> name: popcorn>examples>static_files>public>
-> name: serialization>
-> name: popcorn>examples>static_files>public>
-> name: popcorn>examples>static_files>public>
-> name: github>
-> name: github>
-> name: popcorn>examples>static_files>public>
-> name: popcorn>examples>static_files>public>
-> name: github::github
-> name: serialization::serialization
-> name: github::github
-> name: github::github
-> name: meta::Class
+> name: github::User::login
 > name: github::User
 > name: github::User
 > name: github::User
 > name: github::User
-> name: github::User
-> name: github::User
-> name: github::User
-> name: github::User
-> name: github::User
-> name: github::User
-> name: meta::Class
-> name: github::User
-> name: github::User
-> name: meta::Class
-> name: meta::Class
-> name: meta::Class
-> name: popcorn>examples>static_files>public>images>
-> name: github::User
-> name: popcorn>examples>static_files>public>images>
-> name: github::User
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: github
-> name: github>
-> name: github::github
-> name: github
-> name: github>
-> name: github::github
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: popcorn>examples>static_files>public>images>
-> name: github::User
-> name: popcorn>examples>static_files>public>images>
-> name: github::User
-> name: popcorn>examples>static_files>public>images>
-> name: github::User
-> name: popcorn>examples>static_files>public>images>
-> name: github::User
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: popcorn>examples>static_files>public>
 > name: github::User
 > name: serialization
-> name: serialization>
-> name: serialization::serialization
-> name: serialization
-> name: serialization>
-> name: serialization::serialization
-> name: popcorn>examples>static_files>public>
 > name: github::User
-> name: popcorn>examples>static_files>public>
 > name: github::User
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: meta::Class
-> name: meta::Class
-> name: meta::Class
 > name: github
-> name: github>
-> name: github::github
+> name: github::User::login
 > name: github
-> name: github>
-> name: github::github
-> name: github
-> name: github>
-> name: github::github
-> name: github
-> name: github>
-> name: github::github
-> name: popcorn>examples>static_files>public>
+> name: github::User::login
 > name: github::User
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: popcorn>examples>static_files>public>
-> name: github::User
-> name: popcorn>examples>static_files>public>
 > name: github::User
 
 ### Retrieving repo data
 
 > name: github::Repo
-> name: github::Repo
 
 ### `load_repo` - # Get the Github repo with `full_name`.
 
 > name: github
-> name: github>
-> name: github::github
-> name: github::Repo
-> name: github
-> name: github>
-> name: github::github
 > name: github::Repo
 
 Loads the `Repo` from the API or returns `null` if the repo cannot be found.
 
 > name: github::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 > name: github::Repo
 
 ~~~
@@ -361,20 +219,11 @@ assert repo.default_branch == "master"
 ### `Repo` - # A Github repository.
 
 > name: github
-> name: github>
-> name: github::github
-> name: popcorn::Repository
-> name: github
-> name: github>
-> name: github::github
-> name: popcorn::Repository
 
 Provides access to [Github repo data](https://developer.github.com/v3/repos/).
 Should be accessed from `GithubAPI::load_repo`.
 
 > name: github
-> name: github>
-> name: github::github
 > name: github::Repo
 
 * `api$Repo$SELF` - # Type of this instance, automatically specialized in every class
@@ -419,175 +268,27 @@ Should be accessed from `GithubAPI::load_repo`.
 
 * `owner=` - # Get the repo owner.
 
+> name: github::Repo
+> name: github::Branch
+> name: github::Repo
 > name: github
+> name: github::Repo
 > name: github
+> name: github::Repo
 > name: serialization
 > name: serialization
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github>
-> name: github>
-> name: serialization>
-> name: serialization>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github::github
-> name: github::github
-> name: serialization::serialization
-> name: serialization::serialization
-> name: github::github
-> name: github::github
-> name: github::github
-> name: github::github
-> name: meta::Class
-> name: github::Repo
-> name: github::Branch
-> name: github::Repo
-> name: github::Repo
-> name: github::Repo
-> name: github::Repo
-> name: github::Branch
-> name: github::Repo
-> name: github::Branch
-> name: meta::Class
-> name: meta::Class
-> name: github::Repo
-> name: github::Repo
-> name: github::Repo
-> name: github::Repo
-> name: github::Repo
-> name: github::Repo
-> name: github
-> name: github
-> name: serialization
-> name: serialization
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github>
-> name: github>
-> name: serialization>
-> name: serialization>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github::github
-> name: github::github
-> name: serialization::serialization
-> name: serialization::serialization
-> name: github::github
-> name: github::github
-> name: github::github
-> name: github::github
-> name: meta::Class
-> name: github::Repo
-> name: github::Branch
-> name: github::Repo
-> name: github::Repo
-> name: github::Repo
-> name: github::Repo
-> name: github::Branch
-> name: github::Repo
-> name: github::Branch
-> name: meta::Class
-> name: meta::Class
-> name: github::Repo
-> name: github::Repo
-> name: github::Repo
-> name: github::Repo
-> name: github::Repo
-> name: github::Repo
-> name: meta::Class
-> name: meta::Class
-> name: meta::Class
-> name: github::Repo
-> name: github::Branch
-> name: github::Repo
-> name: github::Branch
-> name: github
-> name: github>
-> name: github::github
-> name: github::Repo
-> name: github
-> name: github>
-> name: github::github
-> name: github::Repo
-> name: github
-> name: github>
-> name: github::github
-> name: github::Repo
-> name: github
-> name: github>
-> name: github::github
-> name: github::Repo
-> name: github::Repo
-> name: github::Repo
-> name: serialization
-> name: serialization>
-> name: serialization::serialization
-> name: serialization
-> name: serialization>
-> name: serialization::serialization
-> name: serialization
-> name: serialization>
-> name: serialization::serialization
-> name: serialization
-> name: serialization>
-> name: serialization::serialization
 > name: github::Repo
 > name: github::Branch
 > name: github::Repo
 > name: github::Branch
 > name: github::Repo
-> name: github::Branch
-> name: github::Repo
-> name: github::Branch
-> name: meta::Class
-> name: meta::Class
-> name: meta::Class
-> name: meta::Class
-> name: meta::Class
-> name: meta::Class
 > name: github
-> name: github>
-> name: github::github
 > name: github::Repo
 > name: github
-> name: github>
-> name: github::github
 > name: github::Repo
 > name: github
-> name: github>
-> name: github::github
 > name: github::Repo
 > name: github
-> name: github>
-> name: github::github
-> name: github::Repo
-> name: github
-> name: github>
-> name: github::github
-> name: github::Repo
-> name: github
-> name: github>
-> name: github::github
-> name: github::Repo
-> name: github
-> name: github>
-> name: github::github
-> name: github::Repo
-> name: github
-> name: github>
-> name: github::github
-> name: github::Repo
-> name: github::Repo
-> name: github::Repo
 > name: github::Repo
 > name: github::Repo
 
@@ -642,330 +343,85 @@ Should be accessed from `GithubAPI::load_repo`.
 * `api$User` - # A Github user
 
 > name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: popcorn>examples>static_files>files>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github::github
-> name: github::github
-> name: github::github
-> name: github::github
-> name: github::api
-> name: github::github
-> name: github::github
-> name: github::api
-> name: github::github
-> name: core::file
-> name: github::github
-> name: github::github
-> name: github::events
-> name: github::github
-> name: github::github
-> name: github::github
-> name: github::github
-> name: github::github
-> name: github::github
-> name: github::github
-> name: github::Branch
-> name: github::Comment
-> name: github::Commit
-> name: github::Comment
-> name: github::Commit
-> name: github::Commit
-> name: github::User
-> name: json::JsonDeserializer
-> name: core::Object
-> name: github::Issue
-> name: github::Comment
-> name: github::Issue
-> name: github::Label
-> name: github::Milestone
-> name: nitcorn::Action
-> name: nitcorn::Action
-> name: popcorn::Repository
-> name: github::Comment
-> name: github::User
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: popcorn>examples>static_files>files>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github>
-> name: github::github
-> name: github::github
-> name: github::github
-> name: github::github
-> name: github::api
-> name: github::github
-> name: github::github
-> name: github::api
-> name: github::github
-> name: core::file
-> name: github::github
-> name: github::github
-> name: github::events
-> name: github::github
-> name: github::github
-> name: github::github
-> name: github::github
-> name: github::github
-> name: github::github
-> name: github::github
-> name: github::Branch
-> name: github::Comment
-> name: github::Commit
-> name: github::Comment
-> name: github::Commit
-> name: github::Commit
-> name: github::User
-> name: json::JsonDeserializer
-> name: core::Object
-> name: github::Issue
-> name: github::Comment
-> name: github::Issue
-> name: github::Label
-> name: github::Milestone
-> name: nitcorn::Action
-> name: nitcorn::Action
-> name: popcorn::Repository
-> name: github::Comment
-> name: github::User
-> name: github
-> name: github>
-> name: github::github
 > name: github::Branch
 > name: github
-> name: github>
-> name: github::github
-> name: github::Branch
-> name: github
-> name: github>
-> name: github::github
 > name: github::Comment
 > name: github
-> name: github>
-> name: github::github
-> name: github::Comment
-> name: github
-> name: github>
-> name: github::github
-> name: github::Commit
-> name: github
-> name: github>
-> name: github::github
 > name: github::Commit
 > name: github::Comment
-> name: github::Commit
-> name: github::Comment
-> name: github::Commit
 > name: github::Commit
 > name: github::Commit
 > name: github::User
-> name: github::User
+> name: github::LoaderConfig::client
 > name: github
-> name: github>
-> name: github::github
 > name: github::api
-> name: github
-> name: github>
-> name: github::github
-> name: github::api
-> name: github
-> name: github>
-> name: github::github
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 > name: json::JsonDeserializer
-> name: core::Object
 > name: github
-> name: github>
-> name: github::github
-> name: json::JsonDeserializer
-> name: core::Object
 > name: github
-> name: github>
-> name: github::github
 > name: github::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 > name: github
-> name: github>
-> name: github::github
-> name: github::api
+> name: github::Commit::files
 > name: github
-> name: github>
-> name: popcorn>examples>static_files>files>
-> name: github::github
-> name: core::file
-> name: github
-> name: github>
-> name: popcorn>examples>static_files>files>
-> name: github::github
-> name: core::file
-> name: github
-> name: github>
-> name: github::github
 > name: github::Issue
-> name: github
-> name: github>
-> name: github::github
-> name: github::Issue
-> name: github
-> name: github>
-> name: github::github
 > name: github::Comment
+> name: github
 > name: github::Issue
-> name: github
-> name: github>
-> name: github::github
-> name: github::Comment
-> name: github::Issue
-> name: github
-> name: github>
+> name: github::IssueEvent::event
 > name: github::events
-> name: github::github
 > name: github
-> name: github>
-> name: github::events
-> name: github::github
 > name: github
-> name: github>
-> name: github::github
 > name: github::Label
 > name: github
-> name: github>
-> name: github::github
-> name: github::Label
-> name: github
-> name: github>
-> name: github::github
-> name: github::Milestone
-> name: github
-> name: github>
-> name: github::github
 > name: github::Milestone
 > name: github::PullRequestEvent::pull
 > name: github::PullRequestReviewCommentEvent::pull
 > name: github::Loader::pulls
 > name: github::PullRequest::head
 > name: github::PullRequest::base
+> name: github
 > name: github::PullRequestEvent::pull
 > name: github::PullRequestReviewCommentEvent::pull
 > name: github::Loader::pulls
-> name: github::PullRequest::head
-> name: github::PullRequest::base
+> name: github::IssueEvent::rename
+> name: github::GithubEvent::action
+> name: github::GithubEvent::action
+> name: github::GithubError::name
+> name: github::User::name
+> name: github::Repo::name
+> name: github::Branch::name
+> name: github::Label::name
+> name: github::DeploymentEvent::name
 > name: github
-> name: github>
-> name: github::github
-> name: github
-> name: github>
-> name: github::github
-> name: nitcorn::Action
-> name: nitcorn::Action
-> name: nitcorn::Action
-> name: nitcorn::Action
-> name: github
-> name: github>
-> name: github::github
-> name: popcorn::Repository
-> name: github
-> name: github>
-> name: github::github
-> name: popcorn::Repository
-> name: github
-> name: github>
-> name: github::github
 > name: github::Comment
 > name: github
-> name: github>
-> name: github::github
-> name: github::Comment
 > name: github
-> name: github>
-> name: github::github
-> name: github::User
-> name: github
-> name: github>
-> name: github::github
 > name: github::User
 
 ### Advanced uses
 
 #### Caching
 
-> name: serialization::caching
-> name: serialization::caching
-
 #### Custom requests
 
 ### `get` - # Execute a GET request on Github API.
 
+> name: github::GithubAPI::get
 > name: github
-> name: github>
-> name: github::github
 > name: github::api
-> name: github
-> name: github>
-> name: github::github
-> name: github::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 
 This method returns raw json data.
 See other `load_*` methods to use more expressive types.
 
-> name: json
-> name: json>
-> name: json::json
+> name: github::GithubError::json
 
 ~~~
 import github
@@ -994,11 +450,9 @@ assert err.message == "Not Found"
 #### Change the user agent
 
 > name: github::User
-> name: github::User
 
 ### `user_agent` - # User agent used for HTTP requests.
 
-> name: github::User
 > name: github::User
 
 Default is `nit_github_api`.
@@ -1006,8 +460,6 @@ Default is `nit_github_api`.
 See <https://developer.github.com/v3/#user-agent-required>
 
 > name: github
-> name: github>
-> name: github::github
 > name: github::User
 
 #### Debugging
@@ -1019,19 +471,7 @@ See <https://developer.github.com/v3/#user-agent-required>
 * `0`: only errors (default)
 * `1`: verbose
 
-> name: core::error
-> name: json::error
-> name: core::Error
-> name: core::error
-> name: json::error
-> name: core::Error
-> name: core::error
-> name: json::error
-> name: core::Error
-> name: core::error
-> name: json::error
-> name: core::Error
-> name: github::GithubWallet::verbose
+> name: github::Loader::error
 > name: github::GithubWallet::verbose
 
 #### Using with GitLab
@@ -1039,52 +479,47 @@ See <https://developer.github.com/v3/#user-agent-required>
 If URL scheme of GitLab API follows the one of Github API, it may be possible to
 configure this wrapper to use a custom URL.
 
+> name: github::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
+> name: github::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
 > name: github
-> name: github>
-> name: github::api
-> name: github::github
-> name: github::api
 
 ### `api_url` - # Github API base url.
 
 > name: github
-> name: github>
-> name: github::github
 > name: github::api
-> name: github
-> name: github>
-> name: github::github
-> name: github::api
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
+> name: github::PullRequest::base
 
 Default is `https://api.github.com` and should not be changed.
 
 ## Creating hooks
 
 > name: github::hooks
-> name: github::hooks
 
 Using this API you can create Github hooks able to respond to actions performed
 on a repository.
 
-> name: github
-> name: github>
 > name: github::api
-> name: github::github
+> name: github::ContributorStats::api
+> name: github::GithubWallet::api
+> name: github::HookListener::api
+> name: github
 > name: github::hooks
-> name: nitcorn::Action
-> name: popcorn::Repository
+> name: github::GithubEvent::action
 
 ### `hooks` - # Github hook event listening with `nitcorn`.
 
 > name: github
-> name: github>
-> name: github::github
 > name: github::hooks
-> name: github::events
-> name: github
-> name: github>
-> name: github::github
-> name: github::hooks
+> name: github::IssueEvent::event
 > name: github::events
 
 Usage:
@@ -1122,23 +557,18 @@ var listener = new LogHookListener(api, "127.0.0.1", 8080)
 ## Dealing with events
 
 > name: github::events
-> name: github::events
+> name: github::IssueEvent::event
 
 GithubAPI can trigger different events depending on the hook configuration.
 
+> name: github::GithubAPI
 > name: github::events
 > name: github::hooks
-> name: github::GithubAPI
 
 ### `GithubEvent` - # Github event stub.
 
 > name: github
-> name: github>
-> name: github::github
-> name: github::events
-> name: github
-> name: github>
-> name: github::github
+> name: github::IssueEvent::event
 > name: github::events
 
 * `events$CommitCommentEvent` - # Triggered when a commit comment is created.
@@ -1173,112 +603,27 @@ GithubAPI can trigger different events depending on the hook configuration.
 
 * `events$StatusEvent` - # Triggered when the status of a Git commit changes.
 
-> name: github
-> name: github
-> name: github>
-> name: github>
-> name: github::github
-> name: github::github
-> name: github::events
-> name: github::events
-> name: github::events
 > name: github::Commit
 > name: github::Comment
-> name: popcorn::Repository
 > name: github::Branch
 > name: github::Branch
 > name: github::User
-> name: popcorn::Repository
 > name: json::JsonDeserializer
-> name: core::Object
-> name: github::Issue
-> name: github::Comment
-> name: github::Issue
-> name: github::User
-> name: popcorn::Repository
-> name: github::Comment
-> name: popcorn::Repository
-> name: github::Branch
-> name: github::Commit
 > name: github
 > name: github
-> name: github>
-> name: github>
-> name: github::github
-> name: github::github
+> name: github::IssueEvent::event
 > name: github::events
-> name: github::events
-> name: github::events
-> name: github::Commit
-> name: github::Comment
-> name: popcorn::Repository
-> name: github::Branch
-> name: github::Branch
-> name: github::User
-> name: popcorn::Repository
-> name: json::JsonDeserializer
-> name: core::Object
-> name: github::Issue
-> name: github::Comment
-> name: github::Issue
-> name: github::User
-> name: popcorn::Repository
-> name: github::Comment
-> name: popcorn::Repository
-> name: github::Branch
-> name: github::Commit
-> name: github::Commit
-> name: github::Comment
-> name: github::Commit
-> name: github::Comment
-> name: popcorn::Repository
-> name: github::Branch
-> name: popcorn::Repository
-> name: github::Branch
-> name: github::Branch
-> name: github::Branch
-> name: github::User
-> name: popcorn::Repository
-> name: github::User
-> name: popcorn::Repository
-> name: github
-> name: github>
-> name: github::github
-> name: json::JsonDeserializer
-> name: core::Object
-> name: github
-> name: github>
-> name: github::github
-> name: json::JsonDeserializer
-> name: core::Object
-> name: github
-> name: github>
-> name: github::github
-> name: github::events
-> name: github
-> name: github>
-> name: github::github
-> name: github::events
-> name: github::Issue
-> name: github::Comment
 > name: github::Issue
 > name: github::Comment
 > name: github::events
 > name: github::Issue
-> name: github::events
-> name: github::Issue
 > name: github::User
-> name: popcorn::Repository
-> name: github::User
-> name: popcorn::Repository
+> name: github::IssueEvent::event
 > name: github::events
-> name: github::events
+> name: github::PullRequestEvent::pull
+> name: github::PullRequestReviewCommentEvent::pull
+> name: github::Loader::pulls
 > name: github::Comment
-> name: github::Comment
-> name: popcorn::Repository
 > name: github::Branch
-> name: popcorn::Repository
-> name: github::Branch
-> name: github::Commit
 > name: github::Commit
 

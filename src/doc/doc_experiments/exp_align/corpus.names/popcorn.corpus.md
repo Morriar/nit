@@ -102,6 +102,7 @@ method GET, POST, PUT or DELETE (other methods are not suported yet).
 
 Each route can have one or more handler methods, which are executed when the route is matched.
 
+> name: popcorn>examples>handlers>
 > name: nitcorn::Route
 > name: nitcorn::Routes
 > name: popcorn::Handler
@@ -112,6 +113,7 @@ Route handlers definition takes the following form:
 
 > name: nitcorn::Route
 > name: nitcorn::Routes
+> name: popcorn>examples>handlers>
 > name: popcorn::Handler
 
 ~~~nitish
@@ -129,6 +131,7 @@ Where:
 * `MyHandler` is the name of the handler you will add to the app.
 * `METHOD` can be replaced by `get`, `post`, `put` or `delete`.
 
+> name: popcorn>examples>handlers>
 > name: popcorn::Handler
 > name: popcorn::App
 
@@ -151,6 +154,7 @@ end
 
 To make your handler responds to a specific route, you have to add it to the app.
 
+> name: popcorn>examples>handlers>
 > name: popcorn::Handler
 > name: popcorn::App
 
@@ -186,6 +190,7 @@ Popcorn built-in handler `StaticHandler`.
 > name: popcorn>examples>static_files>files>
 > name: popcorn::Router::use
 > name: popcorn
+> name: popcorn>examples>handlers>
 > name: popcorn::Handler
 
 Pass the name of the directory that contains the static assets to the StaticHandler

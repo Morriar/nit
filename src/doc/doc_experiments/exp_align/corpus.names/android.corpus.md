@@ -182,6 +182,8 @@ USB debugging enabled, but it cannot be published on the Play Store.
 
 By default, `nitc` will compile Android applications in debug mode.
 
+> name: android
+> name: app::App
 
 ### Release mode
 

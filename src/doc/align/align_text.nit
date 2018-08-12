@@ -114,6 +114,107 @@ class MdRefText
 	var string: String
 end
 
+class MdFilterPackageName
+	super MdFilterMEntities
+
+	redef fun filter_mentities_refs(node, refs) do
+		var keep = new Array[MdRefMEntity]
+
+		for ref in refs do
+			if not ref isa MdRefText then
+				keep.add ref
+				continue
+			end
+			var mentity = ref.mentity
+			if mentity isa MPackage then
+				var ldist = ref.string.to_lower.levenshtein_distance(mentity.name.to_lower)
+				if ldist > 0 then continue
+			end
+			keep.add ref
+		end
+
+		return keep
+	end
+end
+
+
+class MdFilterNameDistance
+	super MdFilterMEntities
+
+	redef fun filter_mentities_refs(node, refs) do
+		var keep = new Array[MdRefMEntity]
+
+		for ref in refs do
+			if not ref isa MdRefText then
+				keep.add ref
+				continue
+			end
+			var mentity = ref.mentity
+			if mentity isa MPackage then
+				var ldist = ref.string.to_lower.levenshtein_distance(mentity.name.to_lower)
+				if ldist > 0 then continue
+			end
+			keep.add ref
+		end
+
+		return keep
+	end
+end
+
+
+class MdFilterNameConflictsDistance
+	super MdFilterMEntities
+
+	redef fun filter_mentities_refs(node, refs) do
+		var keep = new Array[MdRefMEntity]
+
+		var name_conflicts = new HashMap[String, Array[MdRefText]]
+		for ref in refs do
+			if not ref isa MdRefText then
+				keep.add ref
+				continue
+			end
+			if not name_conflicts.has_key(ref.string) then
+				name_conflicts[ref.string] = new Array[MdRefText]
+			end
+			name_conflicts[ref.string].add ref
+		end
+
+		for name, conflicts in name_conflicts do
+			if conflicts.length == 1 then
+				keep.add conflicts.first
+				continue
+			end
+
+			# Name as a conflict
+			var other = new Array[MdRefText]
+			var mclasses = new Array[MdRefText]
+			var mprops = new Array[MdRefText]
+			for ref in conflicts do
+				var mentity = ref.mentity
+				var ldist = name.to_lower.levenshtein_distance(mentity.name.to_lower)
+				if ldist > 1 then continue
+				var dist = name.levenshtein_distance(mentity.name)
+				if dist == 0 or mentity isa MClass then
+					if mentity isa MProperty then
+						mprops.add ref
+					else if mentity isa MClass then
+						mclasses.add ref
+					else
+						other.add ref
+					end
+				end
+			end
+
+			keep.add_all other
+			keep.add_all mclasses
+			if other.is_empty and mclasses.is_empty then keep.add_all mprops
+		end
+
+		return keep
+	end
+end
+
 # Resolve conflicts between modules, packages and groups
 class MdPreferPackages
 	super MdFilterMEntities
@@ -153,7 +254,7 @@ class MdPreferPackages
 		end
 
 		# Keep all classes
-		var keep_classes = new HashMap[String, MEntity]
+		# var keep_classes = new HashMap[String, MEntity]
 		for ref in refs do
 			var mentity = ref.mentity
 			if not mentity isa MClass then continue

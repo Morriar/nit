@@ -13,6 +13,7 @@ This module provides a Nit object oriented interface to access the Github api.
 
 ### `GithubAPI` - # Client to Github API
 
+> name: github
 > name: github::GithubAPI
 
 To access the API you need an instance of a `GithubAPI` client.
@@ -33,6 +34,7 @@ var api = new GithubAPI(token)
 
 The API client allows you to get Github API entities.
 
+> name: github
 > name: github::api
 > name: github::GithubAPI
 
@@ -55,6 +57,8 @@ Token can also be recovered from user config with `get_github_oauth`.
 
 ### `get_github_oauth` - # Gets the Github token from `git` configuration
 
+> name: github
+
 Return the value of `git config --get github.oauthtoken`
 or `""` if no key exists.
 
@@ -64,6 +68,7 @@ or `""` if no key exists.
 
 ### `load_user` - # Get the Github user with `login`
 
+> name: github
 > name: github::User
 > name: github::User
 
@@ -83,8 +88,11 @@ assert user.login == "Morriar"
 
 ### `User` - # A Github user
 
+> name: github
 Provides access to [Github user data](https://developer.github.com/v3/users/).
 Should be accessed from `GithubAPI::load_user`.
+
+> name: github
 
 * `api$User$SELF` - # Type of this instance, automatically specialized in every class
 
@@ -126,7 +134,9 @@ Should be accessed from `GithubAPI::load_user`.
 
 ### Retrieving repo data
 
+> name: serialization
 > name: github::Repo
+> name: github
 
 ### `load_repo` - # Get the Github repo with `full_name`.
 
@@ -204,6 +214,9 @@ Should be accessed from `GithubAPI::load_repo`.
 
 * `owner=` - # Get the repo owner.
 
+> name: github
+> name: serialization
+
 ### Other data
 
 * `api$Branch` - # A Github branch.
@@ -272,8 +285,9 @@ Should be accessed from `GithubAPI::load_repo`.
 
 ### `get` - # Execute a GET request on Github API.
 
+> name: github
 > name: github::GithubAPI::get
-> name: github::github
+> name: github::GithubAPI
 > name: github::api
 
 This method returns raw json data.
@@ -315,6 +329,8 @@ Default is `nit_github_api`.
 
 See <https://developer.github.com/v3/#user-agent-required>
 
+> name: github
+
 #### Debugging
 
 ### `verbose_lvl` - # Verbosity level.
@@ -329,12 +345,14 @@ See <https://developer.github.com/v3/#user-agent-required>
 If URL scheme of GitLab API follows the one of Github API, it may be possible to
 configure this wrapper to use a custom URL.
 
+> name: github
 > name: github::api
 > name: github::github
 > name: github::api
 
 ### `api_url` - # Github API base url.
 
+> name: github
 > name: github::GithubAPI::api_url
 > name: github::api
 
