@@ -1,6 +1,7 @@
 # Vector Space Model
 
-> name: vsm::Vector
+> name: vsm
+> name: vsm
 
 Vector Space Model (VSM) is an algebraic model for representing text documents
 (and any objects, in general) as vectors of identifiers, such as, for example,

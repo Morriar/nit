@@ -117,10 +117,18 @@ class CmdUML
 		# Prepare options
 		var opts = new UMLDiagramOptions
 		opts.center = mentity
-		opts.parents_depth = pdepth
+		opts.parents_depth = 0 # pdepth
 		opts.children_depth = cdepth
+		opts.clusterize_groups = false
+		opts.clusterize_modules = false
+		opts.clusterize_classes = false
+		# opts.show_packages = false
+		# opts.show_groups = false
+		# opts.show_modules = false
+		opts.show_attributes = false
 
 		# Build diagram
+		var filter = new ModelFilter(min_visibility = protected_visibility)
 		var uml = new UMLDiagram(model, mainmodule, filter, opts)
 		if mentity isa MPackage or mentity isa MGroup or mentity isa MModule then
 			uml.draw_package_diagram(mentity)

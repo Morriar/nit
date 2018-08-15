@@ -1,6 +1,9 @@
 # Abstract serialization services
 
 > name: serialization
+> name: serialization
+> name: serialization
+> name: serialization
 
 The serialization services are based on the `serialize` and the `noserialize` annotations,
 the `Serializable` interface and the implementations of `Serializer` and `Deserializer`.
@@ -52,9 +55,7 @@ These common types are defined defined as serializable by this project.
 The attributes could also be typed with user-defined `serialize`
 classes or any other subclass of `Serializable`.
 
-> name: serialization::AttributeTypeError::attribute
 > name: serialization::Serializable
-> name: serialization::AttributeTypeError::attribute
 
 ~~~
 import serialization
@@ -89,8 +90,6 @@ end
 
 `serialize` can annotate class definitions, modules and attributes:
 
-> name: serialization::AttributeTypeError::attribute
-
 * The annotation on a class applies only to the class definition,
   only attributes declared locally will be serialized.
   However, each definition of a class (a refinement or specialization) can be annotated with `serialize`.
@@ -117,11 +116,7 @@ end
   end
   ~~~
 
-> name: serialization::AttributeTypeError::attribute
 > name: serialization::Serializable
-> name: serialization::AttributeTypeError::attribute
-> name: serialization::AttributeTypeError::attribute
-> name: serialization::AttributeTypeError::attribute
 
 ## The `noserialize` annotation
 
@@ -149,27 +144,18 @@ The `noserialize` annotation mark an exception in a `serialize` module or class 
   ~~~
 
 > name: serialization::Serializable
-> name: serialization::AttributeTypeError::attribute
-> name: serialization::Serializer::serialize
-> name: serialization::AttributeTypeError::attribute
-> name: serialization::AttributeTypeError::attribute
-> name: serialization::AttributeTypeError::attribute
 
 ## The `serialize_as` annotation
 
 By default, an attribute is identified in the serialization format by its Nit name.
 The `serialize_as` attribute changes this behavior and sets the name of an attribute in the serialization format.
 
-> name: serialization::AttributeTypeError::attribute
 > name: serialization
-> name: serialization::AttributeTypeError::attribute
-> name: serialization::AttributeTypeError::attribute
 > name: serialization
 
 This annotation can be useful to change the name of an attribute to what is expected by a remote service.
 Or to use identifiers in the serialization format that are reserved keywords in Nit (like `class` and `type`).
 
-> name: serialization::AttributeTypeError::attribute
 > name: serialization
 
 ~~~
@@ -199,9 +185,6 @@ For more control, create a subclass to `Serializable` and redefine `core_seriali
 This method should use `Serializer::serialize_attribute` to serialize its components.
 `serialize_attribute` works as a dictionary and organize attributes with a key.
 
-> name: serialization::Serializer::serialize
-> name: serialization::AttributeTypeError::attribute
-
 You will also need to redefine `Deserializer::deserialize_class` to support this specific class.
 The method should only act on known class names, and call super otherwise.
 
@@ -224,11 +207,6 @@ because some of the arguments to the `User` class need special treatment:
   It could be serialized as such but it is cleaner to only
   serialize the path to its source on the file system.
   The data is reloaded on deserialization.
-
-> name: serialization::AttributeTypeError::attribute
-> name: serialization::AttributeTypeError::attribute
-> name: serialization::AttributeTypeError::attribute
-> name: serialization::Serializer::serialize
 
 For this customization, the following code snippet implements
 two serialization services: `User::core_serialize_to` and
@@ -368,7 +346,6 @@ The serialization has some limitations:
   the next section explores this subject.
 
 > name: json
-> name: serialization::Serializer::serialize
 > name: serialization::Serializer
 > name: serialization::Deserializer
 > name: serialization
@@ -392,8 +369,6 @@ parameterized types of generic classes.
 It will then generating a Nit module to handle deserialization of these types.
 
 Usage steps to serialize parameterized types:
-
-> name: serialization::Serializer::serialize
 
 * Write your program, let's call it `my_prog.nit`,
   it must use some parameterized serializable types.

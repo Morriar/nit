@@ -85,8 +85,8 @@ When using `join` on the future, the calling thread will wait until the value of
 ## Managing actors
 
 
-> match: actors::Actor
 > match: actors
+> match: actors::Actor
 
 When you annotate a class with `actor` and create an instance of it with `new`, the actor is not
 automatically created (which means you can completely skip the use of the actors if you
@@ -165,8 +165,8 @@ before quitting.
 
 > match: actors::Actor
 > match: pthreads::Thread
-> match: actors::Actor::working
 > match: actors::Message
+> match: actors::Actor::working
 > match: actors::Proxy::wait_termination
 > match: actors::ShutDownMessage
 
@@ -188,6 +188,7 @@ You can use this property as a mean of synchronisation in some specific cases (f
 using actors for fork/join parallelism instead of concurrency).
 
 
+> match: actors
 > match: actors::Actor
 
 ## Examples
@@ -207,4 +208,7 @@ directory. For a really simple example, you can check `examples/simple`.
 > match: actors::actors_simple_simulation
 > match: actors::simple
 > match: actors::simple_simulation
+> match: actors>examples>fannkuchredux>
+> match: actors>examples>mandelbrot>
+> match: actors>examples>agent_simulation>
 

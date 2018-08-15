@@ -21,9 +21,9 @@ This module provides a Nit object oriented interface to access the Github api.
 ### `GithubAPI` - # Client to Github API
 
 
-> match: github::GithubAPI
 > match: github
 > match: github::api
+> match: github::GithubAPI
 
 To access the API you need an instance of a `GithubAPI` client.
 
@@ -50,9 +50,9 @@ var api = new GithubAPI(token)
 The API client allows you to get Github API entities.
 
 
+> match: github
 > match: github::api
 > match: github::GithubAPI
-> match: github
 > match: github::GithubAPI::get
 > match: github::github
 
@@ -118,6 +118,7 @@ or `""` if no key exists.
 ### `load_user` - # Get the Github user with `login`
 
 
+> match: github
 > match: github::User
 
 Loads the `User` from the API or returns `null` if the user cannot be found.
@@ -154,8 +155,8 @@ Should be accessed from `GithubAPI::load_user`.
 
 
 > match: github
-> match: github::GithubAPI::load_user
 > match: github::User
+> match: github::GithubAPI::load_user
 
 * `api$User$SELF` - # Type of this instance, automatically specialized in every class
 
@@ -196,13 +197,15 @@ Should be accessed from `GithubAPI::load_user`.
 * `name=` - # User public name if any.
 
 
-> match: github::GithubAPI::load_user
 > match: github::User
-> match: github::User::avatar_url
+> match: github
 > match: github::User::blog
-> match: github::User::email
 > match: github::User::login
 > match: github::User::name
+> match: github::User::avatar_url
+> match: github::User::email
+> match: serialization
+> match: github::GithubAPI::load_user
 
 ### Retrieving repo data
 
@@ -309,8 +312,15 @@ Should be accessed from `GithubAPI::load_repo`.
 * `owner=` - # Get the repo owner.
 
 
-> match: github::GithubAPI::load_repo
 > match: github::Repo
+> match: github::default_branch
+> match: github::full_name
+> match: github::mongo_id
+> match: github::name
+> match: github::owner
+> match: github
+> match: serialization
+> match: github::GithubAPI::load_repo
 > match: github::Repo::default_branch
 > match: github::Repo::full_name
 > match: github::Repo::name
@@ -369,6 +379,7 @@ Should be accessed from `GithubAPI::load_repo`.
 
 > match: github
 > match: github::github
+> match: github::Repo
 > match: github::Branch
 > match: github::Comment
 > match: github::Commit
@@ -417,7 +428,6 @@ Should be accessed from `GithubAPI::load_repo`.
 > match: github::PullRequest
 > match: github::PullRequestReviewCommentEvent
 > match: github::RenameAction
-> match: github::Repo
 > match: github::RepoRepo
 > match: github::ReviewComment
 
@@ -434,8 +444,9 @@ Should be accessed from `GithubAPI::load_repo`.
 ### `get` - # Execute a GET request on Github API.
 
 
+> match: github
 > match: github::GithubAPI::get
-> match: github::github
+> match: github::GithubAPI
 > match: github::api
 > match: github::GithubCurl::get_and_check
 > match: github::GithubCurl::get_and_parse
@@ -509,6 +520,7 @@ Default is `nit_github_api`.
 See <https://developer.github.com/v3/#user-agent-required>
 
 
+> match: github
 > match: github::GithubAPI::user_agent
 > match: github::GithubCurl::user_agent
 
@@ -531,18 +543,18 @@ If URL scheme of GitLab API follows the one of Github API, it may be possible to
 configure this wrapper to use a custom URL.
 
 
+> match: github
 > match: github::api
 > match: github::github
-> match: github
 > match: github::GithubAPI
 > match: github::GithubAPI::api_url
 
 ### `api_url` - # Github API base url.
 
 
+> match: github
 > match: github::GithubAPI::api_url
 > match: github::api
-> match: github
 > match: github::GithubAPI
 
 Default is `https://api.github.com` and should not be changed.
@@ -624,8 +636,8 @@ GithubAPI can trigger different events depending on the hook configuration.
 
 > match: github::GithubAPI
 > match: github::events
-> match: github::GithubEvent
 > match: github::hooks
+> match: github::GithubEvent
 
 ### `GithubEvent` - # Github event stub.
 

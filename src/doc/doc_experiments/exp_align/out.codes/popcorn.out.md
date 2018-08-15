@@ -1,3 +1,30 @@
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, tid: HelloHandler:2.0, super: popcorn$Handler:1.0, super: popcorn::Handler:1.0, tid: Handler:1.0, redef: popcorn$Handler$get:1.0, redef: popcorn::Handler::get:1.0, tid: get:1.0, tid: req:1.0, tid: res:2.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$html(1):1.0, call: popcorn::pop_handlers::HttpResponse::html(1):1.0, call: nitcorn::HttpResponse:1.0, tid: html:1.0, tid: app:3.0, new: popcorn::App:1.0, tid: App:1.0, call: popcorn$Router$use(2):1.0, call: popcorn::Router::use(2):1.0, call: popcorn::App:2.0, tid: use:1.0, new: ::HelloHandler:1.0, call: popcorn::popcorn$App$listen(2):1.0, call: popcorn::popcorn::App::listen(2):1.0, tid: listen:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, tid: MyHandler:1.0, super: popcorn$Handler:1.0, super: popcorn::Handler:1.0, tid: Handler:1.0, redef: popcorn$Handler$get:1.0, redef: popcorn::Handler::get:1.0, tid: get:1.0, tid: req:2.0, tid: res:4.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$send(1):2.0, call: popcorn::pop_handlers::HttpResponse::send(1):2.0, call: nitcorn::HttpResponse:2.0, tid: send:2.0, redef: popcorn$Handler$post:1.0, redef: popcorn::Handler::post:1.0, tid: post:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[tid: app:2.0, tid: App:1.0, tid: use:1.0, tid: MyHandler:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[tid: app:1.0, tid: use:1.0, tid: MyHandler:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[tid: app:1.0, tid: use:1.0, tid: StaticHandler:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[tid: app:2.0, tid: use:2.0, tid: StaticHandler:2.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[tid: app:1.0, tid: use:1.0, tid: StaticHandler:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[tid: app:1.0, tid: use:1.0, tid: StaticHandler:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, tid: HelloHandler:2.0, super: popcorn$Handler:1.0, super: popcorn::Handler:1.0, tid: Handler:1.0, redef: popcorn$Handler$get:1.0, redef: popcorn::Handler::get:1.0, tid: get:1.0, tid: req:1.0, tid: res:2.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$send(1):1.0, call: popcorn::pop_handlers::HttpResponse::send(1):1.0, call: nitcorn::HttpResponse:1.0, tid: send:1.0, tid: app:2.0, new: popcorn::App:1.0, tid: App:1.0, call: popcorn$Router$use(2):1.0, call: popcorn::Router::use(2):1.0, call: popcorn::App:1.0, tid: use:1.0, new: ::HelloHandler:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, tid: GetPostHandler:2.0, super: popcorn$Handler:1.0, super: popcorn::Handler:1.0, tid: Handler:1.0, redef: popcorn$Handler$get:1.0, redef: popcorn::Handler::get:1.0, tid: get:1.0, tid: req:2.0, tid: res:4.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$send(1):2.0, call: popcorn::pop_handlers::HttpResponse::send(1):2.0, call: nitcorn::HttpResponse:2.0, tid: send:2.0, redef: popcorn$Handler$post:1.0, redef: popcorn::Handler::post:1.0, tid: post:1.0, tid: app:2.0, new: popcorn::App:1.0, tid: App:1.0, call: popcorn$Router$use(2):1.0, call: popcorn::Router::use(2):1.0, call: popcorn::App:1.0, tid: use:1.0, new: ::GetPostHandler:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, import: template::template:1.0, tid: template:1.0, tid: QueryStringHandler:2.0, super: popcorn$Handler:1.0, super: popcorn::Handler:1.0, tid: Handler:1.0, redef: popcorn$Handler$get:1.0, redef: popcorn::Handler::get:1.0, tid: get:1.0, tid: req:4.0, tid: res:2.0, tid: tpl:5.0, new: template::Template:1.0, tid: Template:1.0, call: template$Template$addn(1):3.0, call: template::Template::addn(1):3.0, call: template::Template:3.0, tid: addn:3.0, call: nitcorn$HttpRequest$uri(0):1.0, call: nitcorn::HttpRequest::uri(0):1.0, call: nitcorn::HttpRequest:3.0, tid: uri:1.0, call: nitcorn$HttpRequest$query_string(0):1.0, call: nitcorn::HttpRequest::query_string(0):1.0, tid: query_string:1.0, tid: name:2.0, tid: arg:2.0, call: nitcorn$HttpRequest$get_args(0):1.0, call: nitcorn::HttpRequest::get_args(0):1.0, tid: get_args:1.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$send(1):1.0, call: popcorn::pop_handlers::HttpResponse::send(1):1.0, call: nitcorn::HttpResponse:1.0, tid: send:1.0, tid: app:3.0, new: popcorn::App:1.0, tid: App:1.0, call: popcorn$Router$use(2):1.0, call: popcorn::Router::use(2):1.0, call: popcorn::App:2.0, tid: use:1.0, new: ::QueryStringHandler:1.0, call: popcorn::popcorn$App$listen(2):1.0, call: popcorn::popcorn::App::listen(2):1.0, tid: listen:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, import: template::template:1.0, tid: template:1.0, tid: PostHandler:2.0, super: popcorn$Handler:1.0, super: popcorn::Handler:1.0, tid: Handler:1.0, redef: popcorn$Handler$post:1.0, redef: popcorn::Handler::post:1.0, tid: post:1.0, tid: req:4.0, tid: res:2.0, tid: tpl:5.0, new: template::Template:1.0, tid: Template:1.0, call: template$Template$addn(1):3.0, call: template::Template::addn(1):3.0, call: template::Template:3.0, tid: addn:3.0, call: nitcorn$HttpRequest$uri(0):1.0, call: nitcorn::HttpRequest::uri(0):1.0, call: nitcorn::HttpRequest:3.0, tid: uri:1.0, call: nitcorn$HttpRequest$body(0):1.0, call: nitcorn::HttpRequest::body(0):1.0, tid: body:1.0, tid: name:2.0, tid: arg:2.0, call: nitcorn$HttpRequest$post_args(0):1.0, call: nitcorn::HttpRequest::post_args(0):1.0, tid: post_args:1.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$send(1):1.0, call: popcorn::pop_handlers::HttpResponse::send(1):1.0, call: nitcorn::HttpResponse:1.0, tid: send:1.0, tid: app:3.0, new: popcorn::App:1.0, tid: App:1.0, call: popcorn$Router$use(2):1.0, call: popcorn::Router::use(2):1.0, call: popcorn::App:2.0, tid: use:1.0, new: ::PostHandler:1.0, call: popcorn::popcorn$App$listen(2):1.0, call: popcorn::popcorn::App::listen(2):1.0, tid: listen:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, tid: AllHandler:1.0, super: popcorn$Handler:1.0, super: popcorn::Handler:1.0, tid: Handler:1.0, redef: popcorn$Handler$all:1.0, redef: popcorn::Handler::all:1.0, tid: all:1.0, tid: req:1.0, tid: res:2.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$send(1):1.0, call: popcorn::pop_handlers::HttpResponse::send(1):1.0, call: nitcorn::HttpResponse:1.0, tid: send:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, tid: MergeHandler:1.0, super: popcorn$Handler:1.0, super: popcorn::Handler:1.0, tid: Handler:1.0, redef: popcorn$Handler$all:1.0, redef: popcorn::Handler::all:1.0, tid: all:1.0, tid: req:2.0, tid: res:1.0, call: core$Text$Object::==(1):1.0, call: core::Object::==(1):1.0, call: core::String:1.0, call: nitcorn$HttpRequest$method(0):1.0, call: nitcorn::HttpRequest::method(0):1.0, call: nitcorn::HttpRequest:1.0, tid: method:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, tid: MyHandler:2.0, super: popcorn$Handler:1.0, super: popcorn::Handler:1.0, tid: Handler:1.0, redef: popcorn$Handler$get:1.0, redef: popcorn::Handler::get:1.0, tid: get:1.0, tid: req:1.0, tid: res:2.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$send(1):1.0, call: popcorn::pop_handlers::HttpResponse::send(1):1.0, call: nitcorn::HttpResponse:1.0, tid: send:1.0, tid: app:2.0, new: popcorn::App:1.0, tid: App:1.0, call: popcorn$Router$use(2):1.0, call: popcorn::Router::use(2):1.0, call: popcorn::App:1.0, tid: use:1.0, new: ::MyHandler:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[tid: app:1.0, tid: use:1.0, tid: MyHandler:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[tid: app:1.0, tid: use:1.0, tid: MyHandler:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, tid: UserHome:2.0, super: popcorn$Handler:1.0, super: popcorn::Handler:1.0, tid: Handler:1.0, redef: popcorn$Handler$get:1.0, redef: popcorn::Handler::get:1.0, tid: get:1.0, tid: req:2.0, tid: res:3.0, tid: user:3.0, call: nitcorn::vararg_routes$HttpRequest$param(1):1.0, call: nitcorn::vararg_routes::HttpRequest::param(1):1.0, call: nitcorn::HttpRequest:1.0, tid: param:1.0, call: core$Object$!=(1):1.0, call: core::Object::!=(1):1.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$send(1):1.0, call: popcorn::pop_handlers::HttpResponse::send(1):1.0, call: nitcorn::HttpResponse:2.0, tid: send:2.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$send(2):1.0, call: popcorn::pop_handlers::HttpResponse::send(2):1.0, tid: app:3.0, new: popcorn::App:1.0, tid: App:1.0, call: popcorn$Router$use(2):1.0, call: popcorn::Router::use(2):1.0, call: popcorn::App:2.0, tid: use:1.0, new: ::UserHome:1.0, call: popcorn::popcorn$App$listen(2):1.0, call: popcorn::popcorn::App::listen(2):1.0, tid: listen:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, tid: UserItem:2.0, super: popcorn$Handler:1.0, super: popcorn::Handler:1.0, tid: Handler:1.0, redef: popcorn$Handler$get:1.0, redef: popcorn::Handler::get:1.0, tid: get:1.0, tid: req:3.0, tid: res:3.0, tid: user:3.0, call: nitcorn::vararg_routes$HttpRequest$param(1):2.0, call: nitcorn::vararg_routes::HttpRequest::param(1):2.0, call: nitcorn::HttpRequest:2.0, tid: param:2.0, tid: item:3.0, call: core$Text$Object::==(1):2.0, call: core::Object::==(1):2.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$send(2):1.0, call: popcorn::pop_handlers::HttpResponse::send(2):1.0, call: nitcorn::HttpResponse:2.0, tid: send:2.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$send(1):1.0, call: popcorn::pop_handlers::HttpResponse::send(1):1.0, tid: app:3.0, new: popcorn::App:1.0, tid: App:1.0, call: popcorn$Router$use(2):1.0, call: popcorn::Router::use(2):1.0, call: popcorn::App:2.0, tid: use:1.0, new: ::UserItem:1.0, call: popcorn::popcorn$App$listen(2):1.0, call: popcorn::popcorn::App::listen(2):1.0, tid: listen:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, tid: MyLogger:2.0, super: popcorn$Handler:2.0, super: popcorn::Handler:2.0, tid: Handler:2.0, redef: popcorn$Handler$all:1.0, redef: popcorn::Handler::all:1.0, tid: all:1.0, tid: req:2.0, tid: res:3.0, call: pthreads::pthreads$core::Sys$print(1):1.0, call: core::file::Sys::print(1):1.0, call: core::Sys:1.0, tid: print:1.0, tid: HelloHandler:2.0, redef: popcorn$Handler$get:1.0, redef: popcorn::Handler::get:1.0, tid: get:1.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$send(1):1.0, call: popcorn::pop_handlers::HttpResponse::send(1):1.0, call: nitcorn::HttpResponse:1.0, tid: send:1.0, tid: app:4.0, new: popcorn::App:1.0, tid: App:1.0, call: popcorn$Router$use_before(2):1.0, call: popcorn::Router::use_before(2):1.0, call: popcorn::App:3.0, tid: use_before:1.0, new: ::MyLogger:1.0, call: popcorn$Router$use(2):1.0, call: popcorn::Router::use(2):1.0, tid: use:1.0, new: ::HelloHandler:1.0, call: popcorn::popcorn$App$listen(2):1.0, call: popcorn::popcorn::App::listen(2):1.0, tid: listen:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, import: realtime::realtime:1.0, tid: realtime:1.0, redef: $nitcorn::HttpRequest:1.0, redef: nitcorn::HttpRequest:1.0, tid: HttpRequest:1.0, tid: timer:6.0, tid: Clock:2.0, tid: RequestTimeHandler:2.0, super: popcorn$Handler:3.0, super: popcorn::Handler:3.0, tid: Handler:3.0, redef: popcorn$Handler$all:2.0, redef: popcorn::Handler::all:2.0, tid: all:2.0, tid: req:9.0, tid: res:6.0, call: $nitcorn::HttpRequest$timer=(1):1.0, call: ::HttpRequest::timer=(1):1.0, call: nitcorn::HttpRequest:6.0, new: realtime::Clock:1.0, tid: LogHandler:2.0, call: $nitcorn::HttpRequest$timer(0):1.0, call: ::HttpRequest::timer(0):1.0, call: core$Object$!=(1):1.0, call: core::Object::!=(1):1.0, call: pthreads::pthreads$core::Sys$print(1):2.0, call: core::file::Sys::print(1):2.0, call: core::Sys:2.0, tid: print:2.0, call: nitcorn$HttpRequest$method(0):2.0, call: nitcorn::HttpRequest::method(0):2.0, tid: method:2.0, call: nitcorn$HttpRequest$uri(0):2.0, call: nitcorn::HttpRequest::uri(0):2.0, tid: uri:2.0, call: popcorn::pop_logging$nitcorn::HttpResponse$color_status(0):2.0, call: popcorn::pop_logging::HttpResponse::color_status(0):2.0, call: nitcorn::HttpResponse:3.0, tid: color_status:2.0, call: realtime$Clock$total(0):1.0, call: realtime::Clock::total(0):1.0, call: realtime::Clock:1.0, tid: total:1.0, tid: HelloHandler:2.0, redef: popcorn$Handler$get:1.0, redef: popcorn::Handler::get:1.0, tid: get:1.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$send(1):1.0, call: popcorn::pop_handlers::HttpResponse::send(1):1.0, tid: send:1.0, tid: app:5.0, new: popcorn::App:1.0, tid: App:1.0, call: popcorn$Router$use_before(2):1.0, call: popcorn::Router::use_before(2):1.0, call: popcorn::App:4.0, tid: use_before:1.0, new: ::RequestTimeHandler:1.0, call: popcorn$Router$use(2):1.0, call: popcorn::Router::use(2):1.0, tid: use:1.0, new: ::HelloHandler:1.0, call: popcorn$Router$use_after(2):1.0, call: popcorn::Router::use_after(2):1.0, tid: use_after:1.0, new: ::LogHandler:1.0, call: popcorn::popcorn$App$listen(2):1.0, call: popcorn::popcorn::App::listen(2):1.0, tid: listen:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, tid: AppHome:2.0, super: popcorn$Handler:4.0, super: popcorn::Handler:4.0, tid: Handler:4.0, redef: popcorn$Handler$get:3.0, redef: popcorn::Handler::get:3.0, tid: get:3.0, tid: req:4.0, tid: res:7.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$send(1):3.0, call: popcorn::pop_handlers::HttpResponse::send(1):3.0, call: nitcorn::HttpResponse:3.0, tid: send:3.0, tid: UserLogger:2.0, redef: popcorn$Handler$all:1.0, redef: popcorn::Handler::all:1.0, tid: all:1.0, call: pthreads::pthreads$core::Sys$print(1):1.0, call: core::file::Sys::print(1):1.0, call: core::Sys:1.0, tid: print:1.0, tid: UserHome:2.0, tid: UserProfile:2.0, tid: user_router:5.0, new: popcorn::Router:1.0, tid: Router:1.0, call: popcorn$Router$use(2):5.0, call: popcorn::Router::use(2):5.0, call: popcorn::Router:3.0, tid: use:5.0, new: ::UserLogger:1.0, new: ::UserHome:1.0, new: ::UserProfile:1.0, tid: app:4.0, new: popcorn::App:1.0, tid: App:1.0, call: popcorn::App:3.0, new: ::AppHome:1.0, call: popcorn::popcorn$App$listen(2):1.0, call: popcorn::popcorn::App::listen(2):1.0, tid: listen:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, tid: SimpleErrorHandler:2.0, super: popcorn$Handler:2.0, super: popcorn::Handler:2.0, tid: Handler:2.0, redef: popcorn$Handler$all:1.0, redef: popcorn::Handler::all:1.0, tid: all:1.0, tid: req:2.0, tid: res:5.0, call: core$Int$Object::!=(1):1.0, call: core::Object::!=(1):1.0, call: core::Int:1.0, call: nitcorn$HttpResponse$status_code(0):2.0, call: nitcorn::HttpResponse::status_code(0):2.0, call: nitcorn::HttpResponse:3.0, tid: status_code:2.0, call: pthreads::pthreads$core::Sys$print(1):1.0, call: core::file::Sys::print(1):1.0, call: core::Sys:1.0, tid: print:1.0, tid: HelloHandler:2.0, redef: popcorn$Handler$get:1.0, redef: popcorn::Handler::get:1.0, tid: get:1.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$send(1):1.0, call: popcorn::pop_handlers::HttpResponse::send(1):1.0, tid: send:1.0, tid: app:4.0, new: popcorn::App:1.0, tid: App:1.0, call: popcorn$Router$use(2):2.0, call: popcorn::Router::use(2):2.0, call: popcorn::App:3.0, tid: use:2.0, new: ::HelloHandler:1.0, new: ::SimpleErrorHandler:1.0, call: popcorn::popcorn$App$listen(2):1.0, call: popcorn::popcorn::App::listen(2):1.0, tid: listen:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, import: template::template:1.0, tid: template:1.0, tid: HtmlErrorTemplate:2.0, super: template$Template:1.0, super: template::Template:1.0, tid: Template:1.0, tid: status:3.0, tid: Int:1.0, tid: message:3.0, tid: String:1.0, redef: template$Template$rendering:1.0, redef: template::Template::rendering:1.0, tid: rendering:1.0, call: template$Template$add(1):1.0, call: template::Template::add(1):1.0, call: ::HtmlErrorTemplate:5.0, tid: add:1.0, call: $HtmlErrorTemplate$message(0):2.0, call: ::HtmlErrorTemplate::message(0):2.0, call: $HtmlErrorTemplate$status(0):2.0, call: ::HtmlErrorTemplate::status(0):2.0, tid: HtmlErrorHandler:2.0, super: popcorn$Handler:1.0, super: popcorn::Handler:1.0, tid: Handler:1.0, redef: popcorn$Handler$all:1.0, redef: popcorn::Handler::all:1.0, tid: all:1.0, tid: req:1.0, tid: res:4.0, call: core$Int$Object::!=(1):1.0, call: core::Object::!=(1):1.0, call: core::Int:1.0, call: nitcorn$HttpResponse$status_code(0):2.0, call: nitcorn::HttpResponse::status_code(0):2.0, call: nitcorn::HttpResponse:3.0, tid: status_code:2.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$send(1):1.0, call: popcorn::pop_handlers::HttpResponse::send(1):1.0, tid: send:1.0, new: ::HtmlErrorTemplate:1.0, tid: app:3.0, new: popcorn::App:1.0, tid: App:1.0, call: popcorn$Router$use(2):1.0, call: popcorn::Router::use(2):1.0, call: popcorn::App:2.0, tid: use:1.0, new: ::HtmlErrorHandler:1.0, call: popcorn::popcorn$App$listen(2):1.0, call: popcorn::popcorn::App::listen(2):1.0, tid: listen:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, redef: $nitcorn::Session:1.0, redef: nitcorn::Session:1.0, tid: Session:1.0, tid: is_logged:3.0, tid: AppLogin:2.0, super: popcorn$Handler:1.0, super: popcorn::Handler:1.0, tid: Handler:1.0, redef: popcorn$Handler$get:1.0, redef: popcorn::Handler::get:1.0, tid: get:1.0, tid: req:4.0, tid: res:4.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$html(1):1.0, call: popcorn::pop_handlers::HttpResponse::html(1):1.0, call: nitcorn::HttpResponse:2.0, tid: html:1.0, call: $nitcorn::Session$is_logged(0):1.0, call: ::Session::is_logged(0):1.0, call: nitcorn::Session:2.0, call: nitcorn::sessions$HttpRequest$session(0):2.0, call: nitcorn::sessions::HttpRequest::session(0):2.0, call: nitcorn::HttpRequest:2.0, tid: session:2.0, redef: popcorn$Handler$post:1.0, redef: popcorn::Handler::post:1.0, tid: post:1.0, call: $nitcorn::Session$is_logged=(1):1.0, call: ::Session::is_logged=(1):1.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$redirect(1):1.0, call: popcorn::pop_handlers::HttpResponse::redirect(1):1.0, tid: redirect:1.0, tid: app:4.0, new: popcorn::App:1.0, tid: App:1.0, call: popcorn$Router$use_before(2):1.0, call: popcorn::Router::use_before(2):1.0, call: popcorn::App:3.0, tid: use_before:1.0, new: popcorn::SessionInit:1.0, tid: SessionInit:1.0, call: popcorn$Router$use(2):1.0, call: popcorn::Router::use(2):1.0, tid: use:1.0, new: ::AppLogin:1.0, call: popcorn::popcorn$App$listen(2):1.0, call: popcorn::popcorn::App::listen(2):1.0, tid: listen:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, import: mongodb::mongodb:1.0, tid: mongodb:1.0, import: template::template:1.0, tid: template:1.0, tid: UserList:2.0, super: popcorn$Handler:2.0, super: popcorn::Handler:2.0, tid: Handler:2.0, tid: db:7.0, tid: MongoDb:2.0, redef: popcorn$Handler$get:2.0, redef: popcorn::Handler::get:2.0, tid: get:2.0, tid: req:5.0, tid: res:6.0, tid: users:2.0, call: mongodb$MongoCollection$find_all(1):1.0, call: mongodb::MongoCollection::find_all(1):1.0, call: mongodb::MongoCollection:2.0, call: mongodb$MongoDb$collection(1):2.0, call: mongodb::MongoDb::collection(1):2.0, call: mongodb::MongoDb:2.0, call: $UserList$db(0):1.0, call: ::UserList::db(0):1.0, call: ::UserList:1.0, tid: collection:2.0, tid: find_all:1.0, new: json::JsonObject:2.0, tid: JsonObject:2.0, tid: tpl:9.0, new: template::Template:2.0, tid: Template:2.0, call: template$Template$add(1):5.0, call: template::Template::add(1):5.0, call: template::Template:5.0, tid: add:5.0, tid: user:3.0, call: core$HashMap$MapRead::[](1):4.0, call: core::MapRead::[](1):4.0, call: json::JsonObject:4.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$html(1):2.0, call: popcorn::pop_handlers::HttpResponse::html(1):2.0, call: nitcorn::HttpResponse:3.0, tid: html:2.0, tid: UserForm:2.0, redef: popcorn$Handler$post:1.0, redef: popcorn::Handler::post:1.0, tid: post:1.0, tid: json:4.0, call: core$HashMap$Map::[]=(2):2.0, call: core::Map::[]=(2):2.0, call: core::HashMap:2.0, call: nitcorn$HttpRequest$post_args(0):2.0, call: nitcorn::HttpRequest::post_args(0):2.0, call: nitcorn::HttpRequest:2.0, tid: post_args:2.0, call: mongodb$MongoCollection$insert(1):1.0, call: mongodb::MongoCollection::insert(1):1.0, call: $UserForm$db(0):1.0, call: ::UserForm::db(0):1.0, call: ::UserForm:1.0, tid: insert:1.0, call: popcorn::pop_handlers$nitcorn::HttpResponse$redirect(1):1.0, call: popcorn::pop_handlers::HttpResponse::redirect(1):1.0, tid: redirect:1.0, tid: mongo:2.0, new: mongodb::MongoClient:1.0, tid: MongoClient:1.0, call: mongodb$MongoClient$database(1):1.0, call: mongodb::MongoClient::database(1):1.0, call: mongodb::MongoClient:1.0, tid: database:1.0, tid: app:4.0, new: popcorn::App:1.0, tid: App:1.0, call: popcorn$Router$use(2):2.0, call: popcorn::Router::use(2):2.0, call: popcorn::App:3.0, tid: use:2.0, new: ::UserList:1.0, new: ::UserForm:1.0, call: popcorn::popcorn$App$listen(2):1.0, call: popcorn::popcorn::App::listen(2):1.0, tid: listen:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
+[import: popcorn::popcorn:1.0, tid: popcorn:1.0, tid: app:3.0, new: popcorn::App:1.0, tid: App:1.0, call: popcorn$Router$use(2):1.0, call: popcorn::Router::use(2):1.0, call: popcorn::App:2.0, tid: use:1.0, new: popcorn::StaticHandler:1.0, tid: StaticHandler:1.0, call: popcorn::popcorn$App$listen(2):1.0, call: popcorn::popcorn::App::listen(2):1.0, tid: listen:1.0, +in: popcorn:1.0, +is_example: true:1.0, +kind: MModule:1.0]
 # Popcorn
 
 **Why endure plain corn when you can pop it?!**
@@ -27,14 +54,7 @@ app.use("/", new HelloHandler)
 app.listen("localhost", 3000)
 ~~~
 
-> code: popcorn::popcorn
-> code: nitcorn::HttpResponse
-> code: popcorn::App
-> code: popcorn::Handler
-> code: popcorn::popcorn::App::listen
-> code: popcorn::Handler::get
-> code: popcorn::pop_handlers::HttpResponse::html
-> code: popcorn::Router::use
+> example: popcorn::example_hello
 
 The Popcorn app listens on port 3000 for connections.
 The app responds with "Hello World!" for requests to the root URL (`/`) or **route**.
@@ -92,9 +112,6 @@ class MyHandler
 end
 ~~~
 
-> code: popcorn
-> code: popcorn::Handler
-
 Where:
 
 * `MyHandler` is the name of the handler you will add to the app.
@@ -113,12 +130,7 @@ class MyHandler
 end
 ~~~
 
-> code: popcorn::popcorn
-> code: nitcorn::HttpResponse
-> code: popcorn::Handler
-> code: popcorn::pop_handlers::HttpResponse::send
-> code: popcorn::Handler::get
-> code: popcorn::Handler::post
+> example: popcorn::example_router
 
 To make your handler responds to a specific route, you have to add it to the app.
 
@@ -129,9 +141,7 @@ var app = new App
 app.use("/", new MyHandler)
 ~~~
 
-> code: popcorn::App
-> code: popcorn::AppThread::app
-> code: popcorn::Router::use
+> example: popcorn::example_static_default
 
 Respond to a request to the `/user` route:
 
@@ -139,9 +149,7 @@ Respond to a request to the `/user` route:
 app.use("/user", new MyHandler)
 ~~~
 
-> code: popcorn::AppThread::app
-> code: popcorn::pop_auth::Session::user
-> code: popcorn::Router::use
+> example: popcorn::example_static_multiple
 
 For more details about routing, see the routing section.
 
@@ -159,9 +167,7 @@ in a directory named `public`:
 app.use("/", new StaticHandler("public/"))
 ~~~
 
-> code: popcorn::StaticHandler
-> code: popcorn::AppThread::app
-> code: popcorn::Router::use
+> example: popcorn::example_static_multiple
 
 Now, you can load the files that are in the `public` directory:
 
@@ -181,10 +187,7 @@ app.use("/", new StaticHandler("public/"))
 app.use("/", new StaticHandler("files/"))
 ~~~
 
-> code: popcorn>examples>static_files>files>
-> code: popcorn::StaticHandler
-> code: popcorn::AppThread::app
-> code: popcorn::Router::use
+> example: popcorn::example_static_multiple
 
 Popcorn looks up the files in the order in which you set the static directories
 with the `use` method.
@@ -197,9 +200,7 @@ static directory, as shown below:
 app.use("/static/", new StaticHandler("public/"))
 ~~~
 
-> code: popcorn::StaticHandler
-> code: popcorn::AppThread::app
-> code: popcorn::Router::use
+> example: popcorn::example_static_multiple
 
 Now, you can load the files that are in the public directory from the `/static`
 path prefix.
@@ -224,10 +225,7 @@ This can be achieved by specifying a default file in the StaticHandler:
 app.use("/static/", new StaticHandler("public/", "default.html"))
 ~~~
 
-> code: popcorn::StaticHandler
-> code: popcorn::AppThread::app
-> code: popcorn::pop_handlers::HttpResponse::html
-> code: popcorn::Router::use
+> example: popcorn::example_static_multiple
 
 This way all non-matched queries to the StaticHandler will be answered with the
 `default.html` file.
@@ -253,13 +251,7 @@ var app = new App
 app.use("/", new HelloHandler)
 ~~~
 
-> code: popcorn::popcorn
-> code: nitcorn::HttpResponse
-> code: popcorn::App
-> code: popcorn::Handler
-> code: popcorn::Handler::get
-> code: popcorn::pop_handlers::HttpResponse::send
-> code: popcorn::Router::use
+> example: popcorn::example_hello
 
 ### Route methods
 
@@ -283,14 +275,7 @@ var app = new App
 app.use("/", new GetPostHandler)
 ~~~
 
-> code: popcorn::popcorn
-> code: nitcorn::HttpResponse
-> code: popcorn::App
-> code: popcorn::Handler
-> code: popcorn::pop_handlers::HttpResponse::send
-> code: popcorn::Handler::get
-> code: popcorn::Handler::post
-> code: popcorn::Router::use
+> example: popcorn::example_simple_error_handler
 
 Popcorn supports the following routing methods that correspond to HTTP methods:
 get, post, put, and delete.
@@ -320,21 +305,7 @@ app.use("/", new QueryStringHandler)
 app.listen("localhost", 3000)
 ~~~
 
-> code: popcorn::popcorn
-> code: template::template
-> code: nitcorn::HttpRequest
-> code: nitcorn::HttpResponse
-> code: popcorn::App
-> code: template::Template
-> code: popcorn::Handler
-> code: template::Template::addn
-> code: nitcorn::HttpRequest::query_string
-> code: nitcorn::HttpRequest::get_args
-> code: popcorn::popcorn::App::listen
-> code: nitcorn::HttpRequest::uri
-> code: popcorn::Handler::get
-> code: popcorn::pop_handlers::HttpResponse::send
-> code: popcorn::Router::use
+> example: popcorn::example_query_string
 
 Post parameters can also be accessed through the `req` parameter:
 
@@ -361,21 +332,7 @@ app.use("/", new PostHandler)
 app.listen("localhost", 3000)
 ~~~
 
-> code: popcorn::popcorn
-> code: template::template
-> code: nitcorn::HttpRequest
-> code: nitcorn::HttpResponse
-> code: popcorn::App
-> code: template::Template
-> code: popcorn::Handler
-> code: template::Template::addn
-> code: nitcorn::HttpRequest::body
-> code: nitcorn::HttpRequest::post_args
-> code: popcorn::popcorn::App::listen
-> code: nitcorn::HttpRequest::uri
-> code: popcorn::pop_handlers::HttpResponse::send
-> code: popcorn::Handler::post
-> code: popcorn::Router::use
+> example: popcorn::example_post_handler
 
 There is a special routing method, `all(res, req)`, which is not derived from any
 HTTP method. This method is used to respond at a path for all request methods.
@@ -393,11 +350,7 @@ class AllHandler
 end
 ~~~
 
-> code: popcorn::popcorn
-> code: nitcorn::HttpResponse
-> code: popcorn::Handler
-> code: popcorn::pop_handlers::HttpResponse::send
-> code: popcorn::Handler::all
+> example: popcorn::example_simple_error_handler
 
 Using the `all` method you can also implement other HTTP request methods.
 
@@ -415,11 +368,7 @@ class MergeHandler
 end
 ~~~
 
-> code: popcorn::popcorn
-> code: nitcorn::HttpRequest
-> code: popcorn::Handler
-> code: nitcorn::HttpRequest::method
-> code: popcorn::Handler::all
+> example: popcorn::example_advanced_logger
 
 ### Route paths
 
@@ -447,13 +396,7 @@ var app = new App
 app.use("/", new MyHandler)
 ~~~
 
-> code: popcorn::popcorn
-> code: nitcorn::HttpResponse
-> code: popcorn::App
-> code: popcorn::Handler
-> code: popcorn::Handler::get
-> code: popcorn::pop_handlers::HttpResponse::send
-> code: popcorn::Router::use
+> example: popcorn::example_router
 
 This route path will match requests to `/about`.
 
@@ -461,8 +404,7 @@ This route path will match requests to `/about`.
 app.use("/about", new MyHandler)
 ~~~
 
-> code: popcorn::AppThread::app
-> code: popcorn::Router::use
+> example: popcorn::example_static_multiple
 
 This route path will match requests to `/random.text`.
 
@@ -470,8 +412,7 @@ This route path will match requests to `/random.text`.
 app.use("/random.text", new MyHandler)
 ~~~
 
-> code: popcorn::AppThread::app
-> code: popcorn::Router::use
+> example: popcorn::example_static_multiple
 
 During the query/response process, routes are matched by order of declaration
 through the `App::use` method.
@@ -512,16 +453,7 @@ app.use("/:user", new UserHome)
 app.listen("localhost", 3000)
 ~~~
 
-> code: popcorn::popcorn
-> code: nitcorn::HttpResponse
-> code: popcorn::App
-> code: nitcorn::HttpRequest
-> code: popcorn::Handler
-> code: popcorn::pop_handlers::HttpResponse::send
-> code: nitcorn::vararg_routes::HttpRequest::param
-> code: popcorn::popcorn::App::listen
-> code: popcorn::Handler::get
-> code: popcorn::Router::use
+> example: popcorn::example_param_route
 
 The `UserHome` handler listen to every path matching `/:user`. This can be `/Morriar`,
 `/10`, ... but not `/Morriar/profile` since route follow the strict matching rule.
@@ -558,16 +490,7 @@ app.use("/user/:user/item/:item/*", new UserItem)
 app.listen("localhost", 3000)
 ~~~
 
-> code: popcorn::popcorn
-> code: nitcorn::HttpResponse
-> code: nitcorn::HttpRequest
-> code: popcorn::App
-> code: popcorn::Handler
-> code: nitcorn::vararg_routes::HttpRequest::param
-> code: popcorn::pop_handlers::HttpResponse::send
-> code: popcorn::popcorn::App::listen
-> code: popcorn::Handler::get
-> code: popcorn::Router::use
+> example: popcorn::example_glob_route
 
 ## Response methods
 
@@ -641,16 +564,7 @@ app.use("/", new HelloHandler)
 app.listen("localhost", 3000)
 ~~~
 
-> code: popcorn::popcorn
-> code: popcorn::App
-> code: nitcorn::HttpResponse
-> code: popcorn::Handler
-> code: popcorn::popcorn::App::listen
-> code: popcorn::Handler::get
-> code: popcorn::pop_handlers::HttpResponse::send
-> code: popcorn::Router::use
-> code: popcorn::Router::use_before
-> code: popcorn::Handler::all
+> example: popcorn::example_simple_logger
 
 By using the `MyLogger` handler to the route `/*` we ensure that every requests
 (even 404 ones) pass through the middleware handler.
@@ -708,24 +622,7 @@ app.use_after("/*", new LogHandler)
 app.listen("localhost", 3000)
 ~~~
 
-> code: popcorn::popcorn
-> code: realtime::realtime
-> code: nitcorn::HttpRequest
-> code: nitcorn::HttpResponse
-> code: realtime::Clock
-> code: popcorn::App
-> code: popcorn::Handler
-> code: nitcorn::HttpRequest::method
-> code: nitcorn::HttpRequest::uri
-> code: popcorn::pop_logging::HttpResponse::color_status
-> code: realtime::Clock::total
-> code: popcorn::popcorn::App::listen
-> code: popcorn::Handler::all
-> code: popcorn::Handler::get
-> code: popcorn::pop_handlers::HttpResponse::send
-> code: popcorn::Router::use
-> code: popcorn::Router::use_after
-> code: popcorn::Router::use_before
+> example: popcorn::example_advanced_logger
 
 First, we attach a new attribute `timer` to every `HttpRequest`.
 Doing so we can access our data from all handlers that import our module, directly
@@ -809,16 +706,7 @@ app.use("/user", user_router)
 app.listen("localhost", 3000)
 ~~~
 
-> code: popcorn::popcorn
-> code: nitcorn::HttpResponse
-> code: popcorn::Router
-> code: popcorn::App
-> code: popcorn::Handler
-> code: popcorn::Router::use
-> code: popcorn::Handler::get
-> code: popcorn::pop_handlers::HttpResponse::send
-> code: popcorn::popcorn::App::listen
-> code: popcorn::Handler::all
+> example: popcorn::example_router
 
 The app will now be able to handle requests to /user and /user/profile, as well
 as call the `Time` middleware handler that is specific to the route.
@@ -854,16 +742,7 @@ app.use("/*", new SimpleErrorHandler)
 app.listen("localhost", 3000)
 ~~~
 
-> code: popcorn::popcorn
-> code: nitcorn::HttpResponse
-> code: popcorn::App
-> code: popcorn::Handler
-> code: nitcorn::HttpResponse::status_code
-> code: popcorn::Router::use
-> code: popcorn::popcorn::App::listen
-> code: popcorn::Handler::get
-> code: popcorn::pop_handlers::HttpResponse::send
-> code: popcorn::Handler::all
+> example: popcorn::example_simple_error_handler
 
 In this example, every non-200 response is caught by the `SimpleErrorHandler`
 that print an error in stdout.
@@ -911,19 +790,7 @@ app.use("/*", new HtmlErrorHandler)
 app.listen("localhost", 3000)
 ~~~
 
-> code: popcorn::popcorn
-> code: template::template
-> code: nitcorn::HttpResponse
-> code: popcorn::App
-> code: popcorn::Handler
-> code: template::Template
-> code: nitcorn::HttpResponse::status_code
-> code: popcorn::popcorn::App::listen
-> code: popcorn::pop_handlers::HttpResponse::send
-> code: popcorn::Router::use
-> code: template::Template::rendering
-> code: template::Template::add
-> code: popcorn::Handler::all
+> example: popcorn::example_html_error_handler
 
 ## Sessions
 
@@ -961,21 +828,7 @@ app.use("/", new AppLogin)
 app.listen("localhost", 3000)
 ~~~
 
-> code: popcorn::popcorn
-> code: nitcorn::Session
-> code: nitcorn::HttpResponse
-> code: nitcorn::HttpRequest
-> code: popcorn::App
-> code: popcorn::SessionInit
-> code: popcorn::Handler
-> code: nitcorn::sessions::HttpRequest::session
-> code: popcorn::popcorn::App::listen
-> code: popcorn::Handler::get
-> code: popcorn::pop_handlers::HttpResponse::html
-> code: popcorn::Handler::post
-> code: popcorn::Router::use
-> code: popcorn::Router::use_before
-> code: popcorn::pop_handlers::HttpResponse::redirect
+> example: popcorn::example_session
 
 Notice the use of the `SessionInit` on the `/*` route. You must use the
 `SessionInit` first to initialize the request session.
@@ -1057,30 +910,7 @@ app.use("/new", new UserForm(db))
 app.listen("localhost", 3000)
 ~~~
 
-> code: popcorn::popcorn
-> code: template::template
-> code: mongodb::mongodb
-> code: json::JsonObject
-> code: nitcorn::HttpResponse
-> code: nitcorn::HttpRequest
-> code: mongodb::MongoClient
-> code: template::Template
-> code: mongodb::MongoCollection
-> code: mongodb::MongoDb
-> code: popcorn::App
-> code: popcorn::Handler
-> code: template::Template::add
-> code: mongodb::MongoDb::collection
-> code: nitcorn::HttpRequest::post_args
-> code: popcorn::Handler::get
-> code: popcorn::pop_handlers::HttpResponse::html
-> code: popcorn::Router::use
-> code: popcorn::popcorn::App::listen
-> code: popcorn::Handler::post
-> code: popcorn::pop_handlers::HttpResponse::redirect
-> code: mongodb::MongoCollection::insert
-> code: mongodb::MongoClient::database
-> code: mongodb::MongoCollection::find_all
+> example: popcorn::example_mongodb
 
 ## Angular.JS integration
 
@@ -1097,11 +927,7 @@ app.use("/*", new StaticHandler("my-ng-app/", "index.html"))
 app.listen("localhost", 3000)
 ~~~
 
-> code: popcorn::popcorn
-> code: popcorn::App
-> code: popcorn::StaticHandler
-> code: popcorn::popcorn::App::listen
-> code: popcorn::Router::use
+> example: popcorn::example_static_default
 
 Because the StaticHandler will not find the angular routes as static files,
 you must specify the path to the default angular controller.

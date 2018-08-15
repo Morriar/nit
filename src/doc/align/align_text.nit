@@ -352,3 +352,21 @@ class MdFilterLocalBlock
 	# var filter_tests = new MdCollectTests
 	# var filter_examples = new MdCollectExamples
 end
+
+# TODO propagate refs
+	# TODO spans refs
+	# TODO up down
+	# TODO down up
+
+# Filter context
+
+	# mprops
+		# localcontext and supercontext has class
+	# mclass
+		# localcontext and supercontext has module/group/package
+	# module
+		# localcontext and super context has group/package
+	# group
+		# localcontext and super context has package
+	# package
+		# always

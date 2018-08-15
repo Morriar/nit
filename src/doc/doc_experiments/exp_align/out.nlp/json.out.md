@@ -1,7 +1,17 @@
 # read and write JSON formatted text
 
-> match: json::serialization_read::JsonDeserializer::text
-> match: json::json
+> match: json::JsonSequenceRead
+> match: json::JsonDeserializer
+> match: json::JsonSerializer
+> match: json
+> match: json::JSONStringParser
+> match: json::JsonValue
+> match: json::JsonParseError
+> match: json::JsonObject
+> match: json::serialization_read
+> match: json::serialization_write
+> match: json::dynamic
+> match: json::static
 
 These services can be useful to communicate with a remote server or client,
 save data locally or even debug and understand the structure of a Nit object.
@@ -9,12 +19,32 @@ There is a single API to write JSON, and three API to read depending on the use 
 
 > match: json
 > match: json::JsonSerializer
+> match: json::JsonSequenceRead
+> match: json::JsonDeserializer
+> match: json::JsonValue
+> match: json::error
+> match: json::JsonStore
+> match: json::JSONStringParser
+> match: json::store
+> match: json::JsonObject
+> match: json::serialization_read
+> match: json::JsonMapRead
+> match: json::serialization_write
+> match: json::dynamic
+> match: json::static
 
 ## Write JSON
 
-> match: json::json
 > match: json::JsonDeserializer
 > match: json::JsonSerializer
+> match: json
+> match: json::JSONStringParser
+> match: json::JsonObject
+> match: json::JsonValue
+> match: json::serialization_write
+> match: json::dynamic
+> match: json::serialization_read
+> match: json::static
 
 Writing Nit objects to JSON format can be useful to communicate with a remote service,
 save data locally or even debug and understand the structure of an object.
@@ -24,42 +54,77 @@ The method `serialize_to_json` is actually a shortcut to `JsonSerializer`, both
 share the same features.
 
 > match: json::JsonSerializer
+> match: json
+> match: json::JsonDeserializer
+> match: json::JsonValue
+> match: json::store
+> match: json::JsonMapRead
+> match: json::JSONStringParser
+> match: json::JsonObject
+> match: json::JsonStore
+> match: json::JsonParseError
+> match: json::serialization_write
+> match: json::dynamic
+> match: json::static
+> match: json::serialization_read
 
 ### Write plain JSON
 
-> match: json::json
 > match: json::JsonDeserializer
+> match: json::JsonSerializer
+> match: json
+> match: json::JsonValue
+> match: json::JsonArray
+> match: json::store
+> match: json::JsonSequenceRead
+> match: json::JsonParseError
+> match: json::JsonMapRead
+> match: json::JsonStore
+> match: json::error
+> match: json::JSONStringParser
+> match: json::serialization_write
 
 Passing the argument `plain=true` to `serialize_to_json` generates plain and clean JSON.
 This format is non-Nit program, it cannot be fully deserialized back to Nit objects.
 The argument `pretty=true` generates JSON for humans, with more spaces and line breaks.
 
-> match: json::json
-> match: json::serialization_write::Serializable::to_pretty_json
-> match: json::serialization_write::Serializable::serialize_to_json
-> match: json::static::Text::json_to_nit_string
-> match: json::JsonSerializer::pretty_json
-> match: json::JSONStringParser::parse_json_object
+> match: json
+> match: json::JsonSerializer
+> match: json::JsonDeserializer
+> match: json::JsonValue
+> match: json::JsonParseError
+> match: json::JSONStringParser
+> match: json::JsonMapRead
+> match: json::store
+> match: json::JsonArray
+> match: json::JsonObject
+> match: json::JsonSequenceRead
+> match: json::JsonStore
+> match: json::error
+> match: json::static
+> match: json::serialization_write
+> match: json::dynamic
+> match: json::serialization_read
 
 The Nit objects to write must subclass `Serializable` and implement its services.
 Most classes from the `core` library are already supported, including collections, numeric values, etc.
 For your local objects, you can annotate them with `serialize` to automate subclassing
 `Serializable` and the implementation of its services.
 
-> match: json::JsonValue::value
-> match: json::JsonValue::is_numeric
-> match: json::static::Text::json_to_nit_string
-> match: json::JsonValue::to_numeric
-> match: json::JsonStore::has_collection
-> match: json::JSONStringParser::parse_json_object
-> match: json::serialization_read::JsonDeserializer::convert_object
-> match: json::JsonStore::store_object
-> match: json::JsonStore::list_collection
-> match: json::JsonStore::load_object
+> match: json
+> match: json::JsonValue
+> match: json::JsonSerializer
+> match: json::JsonMapRead
+> match: json::store
+> match: json::serialization_write
+> match: json::dynamic
+> match: json::static
 
 #### Example
 
-> match: json::static::Text::parse_json
+> match: json::JsonValue
+> match: json
+> match: json::store
 
 ~~~
 import json
@@ -115,8 +180,19 @@ assert charlie.serialize_to_json(pretty=true, plain=true) == """
 
 ### Write JSON with metadata
 
-> match: json::json
 > match: json::JsonDeserializer
+> match: json::JsonSerializer
+> match: json
+> match: json::JsonValue
+> match: json::JsonArray
+> match: json::store
+> match: json::JsonSequenceRead
+> match: json::JsonParseError
+> match: json::JsonMapRead
+> match: json::JsonStore
+> match: json::error
+> match: json::JSONStringParser
+> match: json::serialization_write
 
 By default, `serialize_to_json` and `JsonSerializer` include metadate in the generated JSON.
 This metadata is used by `JsonDeserializer` when reading the JSON code to recreate
@@ -125,36 +201,112 @@ The metadata allows to avoid repeating an object and its resolves cycles in the 
 
 > match: json::JsonDeserializer
 > match: json::JsonSerializer
-> match: json::json
+> match: json
+> match: json::JsonSequenceRead
+> match: json::JsonValue
+> match: json::JsonMapRead
+> match: json::JSONStringParser
+> match: json::store
+> match: json::JsonArray
+> match: json::JsonObject
+> match: json::JsonParseError
+> match: json::JsonStore
+> match: json::serialization_read
+> match: json::error
+> match: json::static
+> match: json::serialization_write
+> match: json::dynamic
 
 For more information on Nit serialization, see: ../serialization/README.md
 
-> match: json::static::Text::json_to_nit_string
+> match: json
+> match: json::JsonSerializer
+> match: json::serialization_read
+> match: json::serialization_write
+> match: json::JsonValue
+> match: json::static
 
 ## Read JSON
 
 > match: json::JsonMapRead
-> match: json::json
+> match: json::JsonSequenceRead
+> match: json::JsonDeserializer
+> match: json::JsonSerializer
+> match: json
+> match: json::JSONStringParser
+> match: json::JsonObject
+> match: json::JsonValue
+> match: json::serialization_read
+> match: json::dynamic
+> match: json::static
+> match: json::serialization_write
 
 There are a total of 3 API to read JSON:
 
 > match: json::JsonSequenceRead
-> match: json::json
 > match: json::JsonDeserializer
+> match: json::JsonSerializer
+> match: json
+> match: json::JSONStringParser
+> match: json::JsonValue
+> match: json::JsonObject
+> match: json::error
+> match: json::serialization_read
+> match: json::dynamic
+> match: json::static
+> match: json::serialization_write
 
 * `JsonDeserializer` reads JSON to recreate complex Nit objects (discussed here),
 * the module `json::dynamic` provides an easy API to explore JSON objects,
 * the module `json::static` offers a low-level service to parse JSON and create basic Nit objects.
 
 > match: json::JsonDeserializer
+> match: json::JsonSerializer
+> match: json::JsonSequenceRead
+> match: json
+> match: json::JSONStringParser
+> match: json::JsonValue
+> match: json::JsonObject
+> match: json::serialization_read
+> match: json::JsonMapRead
+> match: json::store
+> match: json::dynamic
+> match: json::static
+> match: json::serialization_write
 > match: json::json
 > match: json::JsonDeserializer
-> match: json::JSONStringParser::parse_json_object
+> match: json::JsonSerializer
+> match: json
+> match: json::JsonValue
+> match: json::dynamic
+> match: json::error
+> match: json::store
+> match: json::JsonMapRead
+> match: json::JsonArray
+> match: json::JsonSequenceRead
+> match: json::JsonParseError
+> match: json::JsonStore
+> match: json::JSONStringParser
+> match: json::static
+> match: json::serialization_write
 > match: json::json
-> match: json::static::Text::json_to_nit_string
-> match: json::JSONStringParser::parse_json_string
-> match: json::JSONStringParser::parse_json_array
-> match: json::JSONStringParser::parse_json_number
+> match: json::JsonSerializer
+> match: json::JsonDeserializer
+> match: json
+> match: json::JsonValue
+> match: json::JSONStringParser
+> match: json::JsonMapRead
+> match: json::store
+> match: json::static
+> match: json::JsonArray
+> match: json::JsonObject
+> match: json::JsonSequenceRead
+> match: json::JsonParseError
+> match: json::JsonStore
+> match: json::error
+> match: json::dynamic
+> match: json::serialization_write
+> match: json::serialization_read
 
 The class `JsonDeserializer` reads JSON code to recreate objects.
 It can use the metadata in the JSON code, to recreate precise Nit objects.
@@ -164,10 +316,28 @@ Errors are reported to the attribute `JsonDeserializer::errors`.
 > match: json::JsonDeserializer
 > match: json
 > match: json::error
+> match: json::JsonSerializer
+> match: json::JsonArray
+> match: json::JsonSequenceRead
+> match: json::JsonValue
+> match: json::JSONStringParser
+> match: json::JsonMapRead
+> match: json::JsonParseError
+> match: json::store
+> match: json::JsonObject
+> match: json::JsonKeyError
+> match: json::serialization_read
+> match: json::JsonStore
+> match: json::static
+> match: json::dynamic
+> match: json::serialization_write
 
 The type to recreate is either declared or inferred:
 
-> match: json::dynamic::JsonValue::json_type
+> match: json
+> match: json::JsonValue
+> match: json::store
+> match: json::static
 
 1. The JSON object defines a `__class` key with the name of the Nit class as value.
    This attribute is generated by the `JsonSerializer` with other metadata,
@@ -178,17 +348,45 @@ The type to recreate is either declared or inferred:
 
 > match: json::JsonSerializer
 > match: json::JsonDeserializer
+> match: json
+> match: json::JsonValue
+> match: json::JSONStringParser
+> match: json::JsonObject
+> match: json::JsonKeyError
+> match: json::store
+> match: json::JsonMapRead
+> match: json::dynamic
+> match: json::static
+> match: json::serialization_write
+> match: json::serialization_read
 > match: json::JsonDeserializer
+> match: json
+> match: json::JsonSerializer
+> match: json::static
+> match: json::serialization_write
+> match: json::JsonDeserializer
+> match: json
+> match: json::static
+> match: json::JsonValue
+> match: json::store
 
 The method `deserialize_json` is a shortcut to `JsonDeserializer` which prints
 errors to the console. It is fit only for small scripts and other quick and dirty usage.
 
 > match: json::JsonDeserializer
 > match: json::error
+> match: json
+> match: json::JsonValue
+> match: json::JsonKeyError
+> match: json::JsonParseError
+> match: json::serialization_read
+> match: json::store
 
 #### Example
 
-> match: json::static::Text::parse_json
+> match: json::JsonValue
+> match: json
+> match: json::store
 
 ~~~
 import json
@@ -240,22 +438,29 @@ assert deserializer.errors.is_empty # If false, `object` is invalid
 
 #### Missing attributes and default values
 
-> match: json::JsonValue::value
-> match: json::JsonDeserializer::attributes_path
-> match: json::serialization_write::JsonSerializer::first_attribute
-> match: json::JsonKeyError::json_value
-> match: json::dynamic::Text::to_json_value
+> match: json
+> match: json::JsonValue
+> match: json::dynamic
 
 When reading JSON, some attributes expected by Nit classes may be missing.
 The JSON object may come from an external API using optional attributes or
 from a previous version of your program without the attributes.
 When an attribute is not found, the deserialization engine acts in one of three ways:
 
-> match: json::static::Text::json_to_nit_string
-> match: json::JSONStringParser::parse_json_object
-> match: json::serialization_write::JsonSerializer::first_attribute
-> match: json::JsonDeserializer::attributes_path
 > match: json
+> match: json::JsonSerializer
+> match: json::JsonSequenceRead
+> match: json::JsonDeserializer
+> match: json::JsonValue
+> match: json::JSONStringParser
+> match: json::JsonObject
+> match: json::error
+> match: json::serialization_read
+> match: json::JsonMapRead
+> match: json::dynamic
+> match: json::store
+> match: json::static
+> match: json::serialization_write
 
 1. If the attribute has a default value or if it is annotated by `lazy`,
    the engine leave the attribute to the default value. No error is raised.
@@ -264,21 +469,30 @@ When an attribute is not found, the deserialization engine acts in one of three 
 3. Otherwise, the engine raises an error and does not set the attribute.
    The caller must check for `errors` and must not read from the attribute.
 
-> match: json::JsonValue::value
 > match: json::error
-> match: json::JsonValue::is_error
-> match: json::serialization_write::JsonSerializer::first_attribute
-> match: json::JsonDeserializer::attributes_path
-> match: json::JsonKeyError::json_value
-> match: json::JsonValue::to_error
+> match: json
+> match: json::JsonValue
+> match: json::JsonKeyError
+> match: json::JsonParseError
+> match: json::dynamic
 > match: json::error
-> match: json::JsonValue::is_error
-> match: json::JsonDeserializer::attributes_path
-> match: json::serialization_write::JsonSerializer::first_attribute
-> match: json::dynamic::JsonValue::json_type
-> match: json::JsonValue::to_error
+> match: json
+> match: json::static
+> match: json::JsonValue
+> match: json::JsonKeyError
+> match: json::JsonParseError
+> match: json::store
 > match: json::error
 > match: json::JsonSequenceRead
+> match: json
+> match: json::JsonKeyError
+> match: json::JsonParseError
+> match: json::JsonValue
+> match: json::serialization_read
+> match: json::JSONStringParser
+> match: json::store
+> match: json::dynamic
+> match: json::static
 
 ~~~
 import json

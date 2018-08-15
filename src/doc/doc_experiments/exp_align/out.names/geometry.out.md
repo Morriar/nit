@@ -1,7 +1,9 @@
 # Basic geometry data structures and services
 
 > name: geometry
-> name: geometry::QuadTree::data
+> name: geometry
+> name: geometry
+> name: geometry
 
 ## Points and Lines
 
@@ -21,13 +23,13 @@ Boxes module introduces Bounding boxes for Points and Lines and services to dete
 It means a simple and fast way to test collision but not really accurate since it uses bounding boxes.
 
 > name: geometry::boxes
-> name: geometry::boxes
-> name: geometry::boxes
 > name: geometry::Box
-> name: geometry::Box
+> name: geometry::boxes
 > name: geometry::Box
 > name: geometry::Point
 > name: geometry::Line
+> name: geometry::boxes
+> name: geometry::Box
 > name: geometry::boxes
 > name: geometry::Box
 
@@ -79,8 +81,6 @@ Some basic polygon services.
 
 This module contains interesting algorithms for `ConvexPolygon`only at the moment. A Convex polygon can be defined as follow :
 
-> name: geometry::Boxed::contains
-> name: geometry::APolygon::contain
 > name: geometry::polygon
 > name: geometry::Polygon
 
@@ -101,8 +101,8 @@ This module contains interesting algorithms for `ConvexPolygon`only at the momen
 > name: geometry::Polygon
 > name: geometry::Point
 > name: geometry::Point
-> name: geometry::Point
 > name: geometry::Line
+> name: geometry::Point
 > name: geometry::polygon
 > name: geometry::Polygon
 > name: geometry::polygon
@@ -110,16 +110,13 @@ This module contains interesting algorithms for `ConvexPolygon`only at the momen
 > name: geometry::Point
 > name: geometry::Line
 > name: geometry::angles
-> name: geometry::Boxed::contains
-> name: geometry::APolygon::contain
-> name: geometry::polygon::APolygon::vertices
 
 A polygon which is not convex is called concave. Convex polygon are used because most
 geometric problems are simpler and faster on convex objects than on non-convex ones.
 
 > name: geometry::polygon
-> name: geometry::polygon
 > name: geometry::Polygon
+> name: geometry::polygon
 > name: geometry::Polygon
 
 Services provided :

@@ -126,6 +126,7 @@ There is two core implementation for Nit apps on Android.
 `android::nit_activity` is used by apps with standard windows and native UI controls.
 `android::game` is used by, well, games and the game frameworks `mnit` and `gamnit`.
 
+> name: app
 > name: app::App
 > name: android
 > name: app::App

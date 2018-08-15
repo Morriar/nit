@@ -11,6 +11,7 @@ Follow the instructions in `README.md` at the root of the repository.
 Optionally, install ios-sim to run compiled apps in the simulator: `brew install ios-sim`
 
 > name: ios
+> name: app
 
 ## Compile and run a simple application
 

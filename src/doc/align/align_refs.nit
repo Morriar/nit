@@ -91,7 +91,7 @@ class MdAlignCodes
 
 	fun align_name_ref(node: MdCode, string: String) do
 		for mentity in model.mentities_by_name(string) do
-			node.md_refs.add new MdRefMEntity(node, mentity)
+			node.md_refs.add new MdRefSpan(node, mentity)
 		end
 	end
 
@@ -99,7 +99,7 @@ class MdAlignCodes
 		# Match full_name
 		var mentity = model.mentity_by_full_name(string)
 		if mentity != null then
-			node.md_refs.add new MdRefMEntity(node, mentity)
+			node.md_refs.add new MdRefSpan(node, mentity)
 			return
 		end
 
@@ -147,7 +147,7 @@ class MdAlignCodes
 		for mprop in mprops do
 			for mclass in mclasses do
 				if mclass.collect_accessible_mproperties(mainmodule).has(mprop) then
-					node.md_refs.add new MdRefMEntity(node, mprop)
+					node.md_refs.add new MdRefSpan(node, mprop)
 				end
 			end
 		end
@@ -230,6 +230,10 @@ class MdAlignCodes
 	fun is_annot(string: String): Bool do
 		return string.has(annot_re)
 	end
+end
+
+class MdRefSpan
+	super MdRefMEntity
 end
 
 class MdRefPath

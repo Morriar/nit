@@ -1,7 +1,14 @@
 # Abstract serialization services
 
-> match: serialization::serialization
-> match: serialization::engine_tools::Object::serialization_hash
+> match: serialization
+> match: serialization::custom_serialization
+> match: serialization::Serializer
+> match: serialization::serialization_core
+> match: serialization::Deserializer
+> match: serialization::inspect::InspectSerializer
+> match: serialization::DuplexCache
+> match: serialization::engine_tools
+> match: serialization::caching
 
 The serialization services are based on the `serialize` and the `noserialize` annotations,
 the `Serializable` interface and the implementations of `Serializer` and `Deserializer`.
@@ -9,22 +16,54 @@ the `Serializable` interface and the implementations of `Serializer` and `Deseri
 > match: serialization::Serializable
 > match: serialization::Serializer
 > match: serialization::Deserializer
-> match: serialization::serialization
+> match: serialization::inspect::InspectSerializer
+> match: serialization::SafeDeserializer
+> match: serialization::DirectSerializable
+> match: serialization::SerializerCache
+> match: serialization::CachingDeserializer
+> match: serialization::DeserializerCache
+> match: serialization::CachingSerializer
+> match: serialization::RestrictedSerializer
+> match: serialization::RestrictedJsonSerializer
+> match: serialization
+> match: serialization::custom_serialization
+> match: serialization::serialization_core
+> match: serialization::DuplexCache
+> match: serialization::engine_tools
+> match: serialization::AsyncCache
+> match: serialization::caching
+> match: serialization::inspect
 
 ## The `serialize` annotation
 
-> match: serialization::Serializer::serialize
-> match: serialization::inspect::InspectSerializer::first_attribute_serialized
-> match: serialization::inspect::Collection::serialize_as_inspect
-> match: serialization::Serializable::serialize_to
-> match: serialization::Serializer::serialize_reference
+> match: serialization
+> match: serialization::Serializable
+> match: serialization::DirectSerializable
+> match: serialization::SerializerCache
+> match: serialization::AsyncCache
+> match: serialization::custom_serialization
+> match: serialization::serialization_core
 
 A class annotated with `serialize` identifies it as a subclass of Serializable and
 triggers the generation of customized serialization and deserialization services.
 
 > match: serialization::Serializable
-> match: serialization::serialization
 > match: serialization::DirectSerializable
+> match: serialization
+> match: serialization::custom_serialization
+> match: serialization::serialization_core
+> match: serialization::Serializer
+> match: serialization::Deserializer
+> match: serialization::DuplexCache
+> match: serialization::inspect::InspectSerializer
+> match: serialization::AttributeError
+> match: serialization::AttributeMissingError
+> match: serialization::SafeDeserializer
+> match: serialization::engine_tools
+> match: serialization::SerializerCache
+> match: serialization::AsyncCache
+> match: serialization::safe
+> match: serialization::caching
 
 ~~~
 import serialization
@@ -51,6 +90,17 @@ So, in this case, we can compare both instances with `==` to test their equality
 
 > match: serialization::Serializable
 > match: serialization::DirectSerializable
+> match: serialization
+> match: serialization::serialization_core
+> match: serialization::StrictHashMap
+> match: serialization::Deserializer
+> match: serialization::SafeDeserializer
+> match: serialization::AttributeTypeError
+> match: serialization::RestrictedSerializer
+> match: serialization::custom_serialization
+> match: serialization::SerializerCache
+> match: serialization::DeserializerCache
+> match: serialization::AsyncCache
 
 Some conditions applies to the classes that can be annotated as `serialize`.
 All attributes of the class must be serializable, runtime errors will be
@@ -59,6 +109,16 @@ raised when trying to serialize non-serializable attributes.
 > match: serialization::Serializable
 > match: serialization::AttributeError
 > match: serialization::AttributeMissingError
+> match: serialization::DirectSerializable
+> match: serialization::AttributeTypeError
+> match: serialization
+> match: serialization::custom_serialization
+> match: serialization::serialization_core
+> match: serialization::SerializerCache
+> match: serialization::AsyncCache
+> match: serialization::inspect::InspectSerializer
+> match: serialization::RestrictedJsonSerializer
+> match: serialization::RestrictedSerializer
 
 In the class `Person`, all attributes are typed with classes the standards library.
 These common types are defined defined as serializable by this project.
@@ -67,6 +127,18 @@ classes or any other subclass of `Serializable`.
 
 > match: serialization::Serializable
 > match: serialization::AttributeTypeError
+> match: serialization::DirectSerializable
+> match: serialization::AttributeError
+> match: serialization::AttributeMissingError
+> match: serialization
+> match: serialization::AsyncCache
+> match: serialization::custom_serialization
+> match: serialization::serialization_core
+> match: serialization::SafeDeserializer
+> match: serialization::inspect::InspectSerializer
+> match: serialization::SerializerCache
+> match: serialization::RestrictedSerializer
+> match: serialization::inspect
 
 ~~~
 import serialization
@@ -99,18 +171,27 @@ end
 
 ### Scope of the `serialize` annotation
 
-> match: serialization::Serializer::serialize
-> match: serialization::inspect::InspectSerializer::first_attribute_serialized
-> match: serialization::inspect::Collection::serialize_as_inspect
-> match: serialization::Serializable::serialize_to
-> match: serialization::Serializer::serialize_reference
+> match: serialization
+> match: serialization::Serializable
+> match: serialization::DirectSerializable
+> match: serialization::SerializerCache
+> match: serialization::AsyncCache
+> match: serialization::custom_serialization
+> match: serialization::serialization_core
 
 `serialize` can annotate class definitions, modules and attributes:
 
-> match: serialization::AttributeTypeError::attribute
-> match: serialization::inspect::InspectSerializer::first_attribute_serialized
-> match: serialization::Serializer::serialize
-> match: serialization::Serializer::serialize_attribute
+> match: serialization::AttributeError
+> match: serialization::AttributeMissingError
+> match: serialization
+> match: serialization::custom_serialization
+> match: serialization::Serializable
+> match: serialization::DirectSerializable
+> match: serialization::SerializerCache
+> match: serialization::AsyncCache
+> match: serialization::inspect::InspectSerializer
+> match: serialization::AttributeTypeError
+> match: serialization::serialization_core
 
 * The annotation on a class applies only to the class definition,
   only attributes declared locally will be serialized.
@@ -138,21 +219,57 @@ end
   end
   ~~~
 
-> match: serialization::AttributeTypeError::attribute
-> match: serialization::inspect::InspectSerializer::first_attribute_serialized
-> match: serialization::Serializer::serialize
-> match: serialization::Serializer::serialize_attribute
+> match: serialization::AttributeError
+> match: serialization::AttributeMissingError
+> match: serialization
 > match: serialization::Serializable
+> match: serialization::custom_serialization
+> match: serialization::DirectSerializable
+> match: serialization::SerializerCache
+> match: serialization::serialization_core
+> match: serialization::AsyncCache
+> match: serialization::inspect::InspectSerializer
+> match: serialization::AttributeTypeError
 > match: serialization::Serializable
+> match: serialization::DirectSerializable
+> match: serialization::AttributeError
+> match: serialization::AttributeMissingError
+> match: serialization
+> match: serialization::serialization_core
+> match: serialization::custom_serialization
+> match: serialization::SerializerCache
+> match: serialization::AsyncCache
+> match: serialization::inspect::InspectSerializer
+> match: serialization::AttributeTypeError
+> match: serialization::Serializable
+> match: serialization
+> match: serialization::DirectSerializable
+> match: serialization::AttributeError
+> match: serialization::AttributeMissingError
+> match: serialization::custom_serialization
+> match: serialization::SerializerCache
+> match: serialization::serialization_core
+> match: serialization::AsyncCache
+> match: serialization::inspect::InspectSerializer
+> match: serialization::AttributeTypeError
+> match: serialization::RestrictedJsonSerializer
+> match: serialization::RestrictedSerializer
 
 ## The `noserialize` annotation
 
+> match: serialization
+> match: serialization::E::semi_private
+> match: serialization::serialization_core
+
 The `noserialize` annotation mark an exception in a `serialize` module or class definition.
 
-> match: serialization::Serializer::serialize
-> match: serialization::inspect::InspectSerializer::first_attribute_serialized
-> match: serialization::inspect::Collection::serialize_as_inspect
-> match: serialization::Serializable::serialize_to
+> match: serialization
+> match: serialization::Serializable
+> match: serialization::DirectSerializable
+> match: serialization::serialization_core
+> match: serialization::SerializerCache
+> match: serialization::AsyncCache
+> match: serialization::custom_serialization
 
 * By default a module is `noserialize`. There is no need to declare it as such.
 
@@ -176,27 +293,81 @@ The `noserialize` annotation mark an exception in a `serialize` module or class 
   ~~~
 
 > match: serialization
+> match: serialization::DeserializerCache
+> match: serialization::serialization_core
 > match: serialization::Serializable
+> match: serialization::DirectSerializable
+> match: serialization
+> match: serialization::serialization_core
+> match: serialization::SerializerCache
+> match: serialization::AsyncCache
+> match: serialization::custom_serialization
 > match: serialization::Serializable
 > match: serialization::AttributeError
 > match: serialization::AttributeMissingError
+> match: serialization
+> match: serialization::DirectSerializable
+> match: serialization::custom_serialization
+> match: serialization::inspect::InspectSerializer
+> match: serialization::AttributeTypeError
+> match: serialization::serialization_core
+> match: serialization::SerializerCache
+> match: serialization::Deserializer
+> match: serialization::AsyncCache
+> match: serialization::SafeDeserializer
+> match: serialization::DeserializerCache
+> match: serialization::DuplexCache
+> match: serialization::A
+> match: serialization::B
+> match: serialization::StrictHashMap
+> match: serialization::E
+> match: serialization::RestrictedJsonSerializer
+> match: serialization::safe
+> match: serialization::RestrictedSerializer
 
 ## The `serialize_as` annotation
+
+> match: serialization
+> match: serialization::E::semi_private
+> match: serialization::serialization_core
 
 By default, an attribute is identified in the serialization format by its Nit name.
 The `serialize_as` attribute changes this behavior and sets the name of an attribute in the serialization format.
 
-> match: serialization::AttributeTypeError::attribute
-> match: serialization::serialization
-> match: serialization::AttributeError::attribute_name
+> match: serialization::AttributeError
+> match: serialization::AttributeMissingError
+> match: serialization
+> match: serialization::custom_serialization
+> match: serialization::inspect::InspectSerializer
+> match: serialization::serialization_core
+> match: serialization::Serializer
+> match: serialization::DuplexCache
+> match: serialization::AttributeTypeError
+> match: serialization::RestrictedSerializer
+> match: serialization::E
+> match: serialization::engine_tools
+> match: serialization::RestrictedJsonSerializer
+> match: serialization::caching
 
 This annotation can be useful to change the name of an attribute to what is expected by a remote service.
 Or to use identifiers in the serialization format that are reserved keywords in Nit (like `class` and `type`).
 
-> match: serialization::AttributeTypeError::attribute
-> match: serialization::serialization
-> match: serialization::AttributeTypeError::expected_type
-> match: serialization::AttributeError::attribute_name
+> match: serialization::AttributeTypeError
+> match: serialization::AttributeError
+> match: serialization::AttributeMissingError
+> match: serialization
+> match: serialization::custom_serialization
+> match: serialization::Serializer
+> match: serialization::serialization_core
+> match: serialization::Deserializer
+> match: serialization::inspect::InspectSerializer
+> match: serialization::DuplexCache
+> match: serialization::engine_tools
+> match: serialization::SafeDeserializer
+> match: serialization::RestrictedSerializer
+> match: serialization::AsyncCache
+> match: serialization::caching
+> match: serialization::inspect
 
 ~~~
 import serialization
@@ -215,14 +386,29 @@ end
 ## Custom serializable classes
 
 > match: serialization::Serializable
+> match: serialization::DirectSerializable
+> match: serialization::custom_serialization
+> match: serialization
+> match: serialization::serialization_core
 
 The annotation `serialize` should be enough for most cases,
 but in some cases you need more control over the serialization process.
 
-> match: serialization::serialization
-> match: serialization::Serializer::serialize
-> match: serialization::inspect::InspectSerializer::first_attribute_serialized
-> match: serialization::engine_tools::Object::serialization_hash
+> match: serialization
+> match: serialization::custom_serialization
+> match: serialization::serialization_core
+> match: serialization::Serializer
+> match: serialization::Serializable
+> match: serialization::inspect::InspectSerializer
+> match: serialization::DuplexCache
+> match: serialization::E
+> match: serialization::DirectSerializable
+> match: serialization::SerializerCache
+> match: serialization::AsyncCache
+> match: serialization::RestrictedSerializer
+> match: serialization::engine_tools
+> match: serialization::caching
+> match: serialization::inspect
 
 For more control, create a subclass to `Serializable` and redefine `core_serialize_to`.
 This method should use `Serializer::serialize_attribute` to serialize its components.
@@ -230,6 +416,21 @@ This method should use `Serializer::serialize_attribute` to serialize its compon
 
 > match: serialization::Serializable
 > match: serialization::Serializer
+> match: serialization::inspect::InspectSerializer
+> match: serialization::DirectSerializable
+> match: serialization::SerializerCache
+> match: serialization::AttributeError
+> match: serialization::AttributeMissingError
+> match: serialization::CachingSerializer
+> match: serialization::RestrictedSerializer
+> match: serialization::RestrictedJsonSerializer
+> match: serialization
+> match: serialization::serialization_core
+> match: serialization::custom_serialization
+> match: serialization::E
+> match: serialization::AsyncCache
+> match: serialization::AttributeTypeError
+> match: serialization::inspect
 
 You will also need to redefine `Deserializer::deserialize_class` to support this specific class.
 The method should only act on known class names, and call super otherwise.
@@ -237,17 +438,32 @@ The method should only act on known class names, and call super otherwise.
 > match: serialization::Deserializer
 > match: serialization::SafeDeserializer
 > match: serialization::CachingDeserializer
+> match: serialization::DeserializerCache
+> match: serialization
+> match: serialization::serialization_core
+> match: serialization::RestrictedSerializer
+> match: serialization::E
+> match: serialization::RestrictedJsonSerializer
+> match: serialization::custom_serialization
 
 ### Example: the User class
 
 > match: serialization>examples>
+> match: serialization
+> match: serialization::custom_serialization
+> match: serialization::serialization_core
 
 The following example cannot use the `serialize` annotations
 because some of the arguments to the `User` class need special treatment:
 
 > match: serialization>examples>
-> match: serialization::Serializer::serialize
-> match: serialization::inspect::InspectSerializer::first_attribute_serialized
+> match: serialization
+> match: serialization::Serializable
+> match: serialization::custom_serialization
+> match: serialization::DirectSerializable
+> match: serialization::SerializerCache
+> match: serialization::serialization_core
+> match: serialization::AsyncCache
 
 * The `name` attribute is perfectly normal, it can be serialized and deserialized
   directly.
@@ -260,30 +476,68 @@ because some of the arguments to the `User` class need special treatment:
   serialize the path to its source on the file system.
   The data is reloaded on deserialization.
 
-> match: serialization::AttributeTypeError::attribute
-> match: serialization::AttributeError::attribute_name
-> match: serialization::inspect::InspectSerializer::first_attribute_serialized
-> match: serialization::Deserializer::deserialize_attribute_missing
-> match: serialization::Deserializer::deserialize
-> match: serialization::Serializer::serialize
-> match: serialization::Serializer::serialize_attribute
-> match: serialization::Deserializer::deserialize_attribute
-> match: serialization::AttributeTypeError::attribute
-> match: serialization::inspect::InspectSerializer::first_attribute_serialized
-> match: serialization::Serializer::serialize
-> match: serialization::Serializer::serialize_attribute
-> match: serialization::AttributeTypeError::attribute
-> match: serialization::inspect::InspectSerializer::first_attribute_serialized
-> match: serialization::Serializer::serialize
-> match: serialization::Serializer::serialize_attribute
+> match: serialization::AttributeError
+> match: serialization::AttributeMissingError
+> match: serialization
+> match: serialization::AttributeTypeError
+> match: serialization::custom_serialization
+> match: serialization::Deserializer
+> match: serialization::Serializable
+> match: serialization::SafeDeserializer
+> match: serialization::serialization_core
+> match: serialization::DirectSerializable
+> match: serialization::SerializerCache
+> match: serialization::DeserializerCache
+> match: serialization::AsyncCache
+> match: serialization::inspect::InspectSerializer
+> match: serialization::AttributeError
+> match: serialization::AttributeMissingError
+> match: serialization
+> match: serialization::custom_serialization
+> match: serialization::Deserializer
+> match: serialization::Serializable
+> match: serialization::DuplexCache
+> match: serialization::SafeDeserializer
+> match: serialization::serialization_core
+> match: serialization::DirectSerializable
+> match: serialization::SerializerCache
+> match: serialization::AsyncCache
+> match: serialization::inspect::InspectSerializer
+> match: serialization::AttributeTypeError
+> match: serialization::safe
+> match: serialization::AttributeError
+> match: serialization::AttributeMissingError
+> match: serialization
+> match: serialization::Serializable
+> match: serialization::custom_serialization
+> match: serialization::DirectSerializable
+> match: serialization::SerializerCache
+> match: serialization::AsyncCache
+> match: serialization::serialization_core
+> match: serialization::Deserializer
+> match: serialization::DuplexCache
+> match: serialization::SafeDeserializer
+> match: serialization::inspect::InspectSerializer
+> match: serialization::AttributeTypeError
+> match: serialization::safe
 
 For this customization, the following code snippet implements
 two serialization services: `User::core_serialize_to` and
 `Deserializer::deserialize_class`.
 
-> match: serialization::serialization
 > match: serialization::Deserializer
 > match: serialization::CachingDeserializer
+> match: serialization
+> match: serialization::custom_serialization
+> match: serialization::Serializer
+> match: serialization::serialization_core
+> match: serialization::inspect::InspectSerializer
+> match: serialization::DuplexCache
+> match: serialization::DeserializerCache
+> match: serialization::engine_tools
+> match: serialization::RestrictedSerializer
+> match: serialization::E
+> match: serialization::caching
 
 ~~~
 module user_credentials
@@ -360,12 +614,31 @@ See the documentation of the module `serialization::serialization` for more
 information on the services to redefine.
 
 > match: serialization::serialization
-> match: serialization::engine_tools::Object::serialization_hash
+> match: serialization
+> match: serialization::custom_serialization
+> match: serialization::Serializer
+> match: serialization::serialization_core
+> match: serialization::Deserializer
+> match: serialization::inspect::InspectSerializer
+> match: serialization::DuplexCache
+> match: serialization::engine_tools
+> match: serialization::A
+> match: serialization::E
+> match: serialization::RestrictedSerializer
+> match: serialization::caching
+> match: serialization::inspect
 
 ## Serialization services
 
-> match: serialization::serialization
-> match: serialization::engine_tools::Object::serialization_hash
+> match: serialization
+> match: serialization::custom_serialization
+> match: serialization::Serializer
+> match: serialization::serialization_core
+> match: serialization::Deserializer
+> match: serialization::inspect::InspectSerializer
+> match: serialization::DuplexCache
+> match: serialization::engine_tools
+> match: serialization::caching
 
 The `serialize` annotation and the `Serializable` class are used on
 classes specific to the business domain.
@@ -375,12 +648,34 @@ you must use implementations of `Serializer` and `Deserializer`.
 > match: serialization::Serializer
 > match: serialization::Deserializer
 > match: serialization::Serializable
+> match: serialization::inspect::InspectSerializer
+> match: serialization::DirectSerializable
+> match: serialization::SafeDeserializer
+> match: serialization::SerializerCache
+> match: serialization::CachingDeserializer
+> match: serialization::DeserializerCache
+> match: serialization::CachingSerializer
+> match: serialization::RestrictedJsonSerializer
+> match: serialization::RestrictedSerializer
+> match: serialization
+> match: serialization::serialization_core
+> match: serialization::custom_serialization
+> match: serialization::E
+> match: serialization::A
+> match: serialization::B
+> match: serialization::AsyncCache
+> match: serialization::StrictHashMap
 
 The main implementations of these services are `JsonSerializer` and `JsonDeserializer`,
 from the `json_serialization` module.
 
 > match: serialization::Deserializer
 > match: serialization::Serializer
+> match: serialization
+> match: serialization::serialization
+> match: serialization::RestrictedJsonSerializer
+> match: serialization::engine_tools
+> match: serialization::serialization_core
 
 ~~~nitish
 mport json
@@ -407,12 +702,18 @@ assert couple == deserialize_couple
 
 ## Limitations and TODO
 
-> match: serialization>
+> match: serialization
 
 The serialization has some limitations:
 
-> match: serialization::serialization
-> match: serialization::engine_tools::Object::serialization_hash
+> match: serialization
+> match: serialization::custom_serialization
+> match: serialization::serialization_core
+> match: serialization::Serializer
+> match: serialization::inspect::InspectSerializer
+> match: serialization::DuplexCache
+> match: serialization::engine_tools
+> match: serialization::caching
 
 * A limitation of the JSON parser prevents deserializing from files
   with more than one object.
@@ -435,17 +736,60 @@ The serialization has some limitations:
 > match: serialization::RestrictedJsonSerializer
 > match: serialization::CachingDeserializer
 > match: serialization::CachingSerializer
-> match: serialization::serialization
-> match: serialization::AttributeError::attribute_name
-> match: serialization::engine_tools::Object::is_same_serialized
-> match: serialization::Serializer::serialize
-> match: serialization::engine_tools::Object::serialization_hash
-> match: serialization::serialization
+> match: serialization
+> match: serialization::DeserializerCache
+> match: serialization::SerializerCache
+> match: serialization::AsyncCache
+> match: serialization::custom_serialization
+> match: serialization::E
+> match: serialization::RestrictedSerializer
+> match: serialization::Serializable
+> match: serialization::A
+> match: serialization::serialization_core
+> match: serialization::B
+> match: serialization::DirectSerializable
+> match: serialization::inspect::InspectSerializer
+> match: serialization::SafeDeserializer
 > match: serialization::AttributeTypeError
+> match: serialization::StrictHashMap
+> match: serialization::inspect
+> match: serialization
+> match: serialization::custom_serialization
+> match: serialization::serialization_core
+> match: serialization::AsyncCache
+> match: serialization::Serializer
+> match: serialization::Serializable
+> match: serialization::inspect::InspectSerializer
+> match: serialization::DuplexCache
+> match: serialization::DirectSerializable
+> match: serialization::SerializerCache
+> match: serialization::RestrictedJsonSerializer
+> match: serialization::engine_tools
+> match: serialization::RestrictedSerializer
+> match: serialization::caching
+> match: serialization::AttributeTypeError
+> match: serialization
+> match: serialization::custom_serialization
+> match: serialization::serialization_core
+> match: serialization::RestrictedJsonSerializer
+> match: serialization::Serializer
+> match: serialization::inspect::InspectSerializer
+> match: serialization::DuplexCache
+> match: serialization::RestrictedSerializer
+> match: serialization::SafeDeserializer
+> match: serialization::AsyncCache
+> match: serialization::engine_tools
+> match: serialization::caching
 
 ## Dealing with generic types
 
 > match: serialization::AttributeTypeError
+> match: serialization
+> match: serialization::RestrictedJsonSerializer
+> match: serialization::RestrictedSerializer
+> match: serialization::SafeDeserializer
+> match: serialization::AsyncCache
+> match: serialization::serialization_core
 
 One limitation of the serialization support in the compiler is with generic types.
 For example, the `Array` class is generic and serializable.
@@ -453,9 +797,21 @@ However, the runtime types of Array instances are parameterized and are unknown 
 So the compiler won't support serializing instances of `Array[MySerializable]`.
 
 > match: serialization::Serializable
-> match: serialization::serialization
 > match: serialization>examples>
 > match: serialization::AttributeTypeError
+> match: serialization::DirectSerializable
+> match: serialization
+> match: serialization::custom_serialization
+> match: serialization::serialization_core
+> match: serialization::AsyncCache
+> match: serialization::SafeDeserializer
+> match: serialization::Serializer
+> match: serialization::StrictHashMap
+> match: serialization::inspect::InspectSerializer
+> match: serialization::DuplexCache
+> match: serialization::SerializerCache
+> match: serialization::engine_tools
+> match: serialization::caching
 
 The tool `nitserial` solves this problem at the level of user modules.
 It does so by parsing a Nit module, group or project to find all known
@@ -464,10 +820,31 @@ It will then generating a Nit module to handle deserialization of these types.
 
 > match: serialization::AttributeTypeError
 > match: serialization::engine_tools
+> match: serialization>
+> match: serialization
+> match: serialization::SafeDeserializer
+> match: serialization::RestrictedSerializer
+> match: serialization::Deserializer
+> match: serialization::DuplexCache
+> match: serialization::serialization_core
+> match: serialization::AsyncCache
+> match: serialization::AttributeError
+> match: serialization::AttributeMissingError
+> match: serialization::DeserializerCache
+> match: serialization::safe
+> match: serialization::custom_serialization
 
 Usage steps to serialize parameterized types:
 
 > match: serialization::AttributeTypeError
+> match: serialization
+> match: serialization::AsyncCache
+> match: serialization::Serializable
+> match: serialization::DirectSerializable
+> match: serialization::SerializerCache
+> match: serialization::custom_serialization
+> match: serialization::SafeDeserializer
+> match: serialization::serialization_core
 
 * Write your program, let's call it `my_prog.nit`,
   it must use some parameterized serializable types.
@@ -483,7 +860,17 @@ Usage steps to serialize parameterized types:
 > match: serialization::DirectSerializable
 > match: serialization::AttributeTypeError
 > match: serialization
+> match: serialization::serialization_core
+> match: serialization::inspect::InspectSerializer
+> match: serialization::SafeDeserializer
+> match: serialization::RestrictedSerializer
+> match: serialization::AsyncCache
 > match: serialization
+> match: serialization::RestrictedSerializer
+> match: serialization::serialization_core
+> match: serialization
+> match: serialization::RestrictedSerializer
+> match: serialization::serialization_core
 
 This was a simple example, in practical cases you may need
 to use more than one generated file.
@@ -494,7 +881,15 @@ one for the server and one for the client.
 Both the files should be compiled with both the client and the server.
 
 > match: serialization>examples>
-> match: serialization::Serializer::serialize
-> match: serialization::inspect::InspectSerializer::first_attribute_serialized
-> match: serialization::Serializer::serialize_reference
+> match: serialization
+> match: serialization::AsyncCache
+> match: serialization::Serializable
+> match: serialization::DirectSerializable
+> match: serialization::custom_serialization
+> match: serialization::E
+> match: serialization::SerializerCache
+> match: serialization::serialization_core
+> match: serialization::RestrictedSerializer
+> match: serialization::StrictHashMap
+> match: serialization::inspect
 

@@ -16,6 +16,7 @@ Optionally, install ios-sim to run compiled apps in the simulator: `brew install
 
 
 > match: ios
+> match: app
 > match: ios::app
 
 ## Compile and run a simple application

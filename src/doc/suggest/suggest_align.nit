@@ -25,7 +25,7 @@ import align_refs
 import align_text
 import align_code_blocks
 import align_nlp
-# import align_block
+import align_block
 import align_filter
 
 class MDocAligner
@@ -66,8 +66,8 @@ class MDocAligner
 		# filter_kind.filter_document(document)
 
 		# Align texts
-		var align_texts = new MdAlignTexts(model, mainmodule, context)
-		align_texts.align_document(document)
+		# var align_texts = new MdAlignTexts(model, mainmodule, context)
+		# align_texts.align_document(document)
 
 		# filter = new MdFilterNameDistance
 		# filter.filter_document(document)
@@ -102,25 +102,35 @@ class MDocAligner
 		# filter = new MdFilterNameConflictsContext(context)
 		# filter.filter_document(document)
 
+		# var propagate = new MdTopDownPropagation
+		# propagate.enter_visit(document)
+
+		# filter = new MdFilterHeadings(context)
+		# filter.filter_document(document)
+		# filter = new MdFilterParagraphs(context)
+		# filter.filter_document(document)
+
 		# / GOOD
 
-		var align_nlp = new MdAlignNLP(model, mainmodule, context, mentity_index)
-		align_nlp.align_document(document)
+		# var align_nlp = new MdAlignNLP(model, mainmodule, context, mentity_index)
+		# align_nlp.align_document(document)
 
-		filter = new MdFilterAll
-		filter.filter_document(document)
+		# filter = new MdFilterAll
+		# filter.filter_document(document)
 
-		filter = new MdFilterContext(context)
-		filter.filter_document(document)
+		# filter = new MdFilterContext(context)
+		# filter.filter_document(document)
 
-		filter = new MdFilterPackage
-		filter.filter_document(document)
+		# filter = new MdFilterSmartContext(context)
+		# filter.filter_document(document)
 
+		# filter = new MdFilterPackage
+		# filter.filter_document(document)
 
 		# filter = new MdFilterNameConflictsDistance
 		# TODO and not intro
 		# filter.filter_document(document)
-
+#
 		# var filter_context = new MdFilterNameConflicts(context)
 		# filter_context.filter_document(document)
 
@@ -131,8 +141,8 @@ class MDocAligner
 		# filter_kind.filter_document(document)
 
 		# Align code bloks
-		# var align_blockcodes = new MdAlignBlockCodes(model, mainmodule, context, mentity_index)
-		# align_blockcodes.align_document(document)
+		var align_blockcodes = new MdAlignBlockCodes(model, mainmodule, context, mentity_index)
+		align_blockcodes.align_document(document)
 
 		# var filter_context = new MdFilterContext(context)
 		# filter_context.filter_document(document)
@@ -207,51 +217,53 @@ class MDocSpanReferencesVisitor
 
 				# Span refs
 				need_space = false
-				for ref in md_refs do
-					if ref isa MdRefMEntity and ref.node isa MdCode then
-						# print "> match: {ref.mentity.full_name}".trim
-						need_space = true
-					end
-				end
+				# for ref in node.local_context.spans_refs do
+					# print "> match: {ref.mentity.full_name}".trim
+					# need_space = true
+				# end
 				# if need_space then print ""
 
 				# Name refs
-				# need_space = false
-				for ref in md_refs do
-					if ref isa MdRefText then
+				need_space = false
+				# for ref in md_refs do
+					# if ref isa MdRefText then
 						# print "> name: {ref.mentity.full_name}".trim
-						need_space = true
-					end
-				end
+						# need_space = true
+					# end
+				# end
 				# if need_space then print ""
 
 				# Code refs
-				# need_space = false
-				for ref in md_refs do
-					if ref isa MdRefCode then
-						# print "> match: {ref.mentity.full_name}"
-						need_space = true
-					end
-				end
+				need_space = false
+				# for ref in node.local_context.codes_refs do
+					# print "> match: {ref.mentity.full_name}"
+					# need_space = true
+				# end
 				# if need_space then print ""
 
 				# TODO examples
-				# print "> example: {ref.mentity.full_name}"
-				# need_space = true
+				need_space = false
+				for ref in md_refs do
+					if ref isa MdRefExample then
+						# print "> example: {ref.mentity.full_name} ({ref.similarity})"
+						print "> example: {ref.mentity.full_name}"
+						need_space = true
+					end
+				end
 
 				# NLP refs
 				# need_space = false
 				# var names = new Array[String]
-				for ref in md_refs do
-					if ref isa MdRefNLP then
+				# for ref in md_refs do
+					# if ref isa MdRefNLP then
 						# if names.has(ref.mentity.full_name) then continue
 						# names.add ref.mentity.full_name
 						# names.add "{ref.mentity.full_name} (s: {ref.score})"
 						# print "> match: {ref.mentity.full_name} (conf: {ref.score})"
-						print "> match: {ref.mentity.full_name}"
-						need_space = true
-					end
-				end
+						# print "> match: {ref.mentity.full_name}"
+						# need_space = true
+					# end
+				# end
 				# default_comparator.sort(names)
 				# for name in names do
 					# print "> match: {name}"
@@ -288,7 +300,6 @@ class MDocSpanReferencesVisitor
 				# end
 			# end
 		end
-
 		node.visit_all(self)
 	end
 end

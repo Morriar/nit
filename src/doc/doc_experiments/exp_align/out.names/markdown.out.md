@@ -1,6 +1,9 @@
 # A markdown parser for Nit
 
 > name: markdown
+> name: markdown
+> name: markdown
+> name: markdown
 
 Markdown documentation can be found in http://daringfireball.net/projects/markdown/.
 This parser is inspired by the famous TxtMark for Java (https://github.com/rjeschke/txtmark).
@@ -30,16 +33,6 @@ This parser passes all tests inside http://daringfireball.net/projects/downloads
 1. Images.text: fails because this parser doesn't produce empty 'title' image attributes.
 2. Literal quotes in titles.text: because markdown accepts unescaped quotes in titles and this is wrong.
 
-> name: markdown::MDBlock::text
-> name: markdown::MDLine::text
-> name: markdown::LinkRef::title
-> name: markdown::HeadLine::title
-> name: markdown::LinkRef::title
-> name: markdown::HeadLine::title
-> name: markdown::LinkRef::title
-> name: markdown::HeadLine::title
-> name: markdown::MDBlock::text
-> name: markdown::MDLine::text
 > name: markdown
 
 ## Testing

@@ -1,5 +1,7 @@
 # Portable game and multimedia framework for Nit
 
+> name: gamnit
+
 _gamnit_ is a modular framework to create portable 2D or 3D apps in Nit.
 It is based on the portability framework _app.nit_ and the OpenGL ES 2.0 standard.
 
@@ -12,7 +14,6 @@ It is based on the portability framework _app.nit_ and the OpenGL ES 2.0 standar
 To compile the _gamnit_ apps packaged with the Nit repository on GNU/Linux you need to install the dev version of a few libraries and some tools.
 On Debian 8.2, this command should install everything needed:
 
-> name: gamnit::Shader::compile
 > name: gamnit
 > name: app
 > name: linux
@@ -44,7 +45,6 @@ _gamnit_ is modular, different services of the framework are available through d
 
 > name: gamnit
 > name: gamnit::gamnit
-> name: gamnit::flat_core::GroupedArray::available
 
 * The main entrypoint `gamnit` provides low-level abstractions over some services of OpenGL ES 2.0, like textures, shaders and programs.
   It defines the basic methods to implement in order to obtain a working game:
@@ -83,10 +83,8 @@ _gamnit_ is modular, different services of the framework are available through d
 > name: gamnit::Texture
 > name: gamnit::Shader
 > name: gamnit::programs
-> name: gamnit::flat_core::App::update
 > name: gamnit::Sprite
 > name: gamnit::client
-> name: gamnit::Server::clients
 > name: gamnit::Sprite
 > name: gamnit::Sprite
 > name: gamnit::cameras
@@ -95,23 +93,9 @@ _gamnit_ is modular, different services of the framework are available through d
 > name: gamnit::cameras
 > name: gamnit::Camera
 > name: gamnit::display
-> name: gamnit::Camera::display
-> name: gamnit::gamnit::App::display
-> name: gamnit::CheckerTexture::size
-> name: gamnit::ShaderVariable::size
-> name: gamnit::BMFont::size
-> name: gamnit::Server::clients
 > name: gamnit::client
-> name: gamnit::CustomTexture::fill
-> name: gamnit::Animation::frames
-> name: gamnit::Camera::position
-> name: gamnit::Light::position
-> name: gamnit::Sprite::rotation
-> name: gamnit::ShadowDepthProgram::rotation
-> name: gamnit::SelectionProgram::rotation
 > name: gamnit
 > name: gamnit::keys
-> name: gamnit::VirtualGamepadSpritesheet::key
 > name: gamnit::Model
 > name: gamnit>virtual_gamepad>assets>
 > name: gamnit::client

@@ -17,6 +17,9 @@ index terms.
 It is used in information filtering, information retrieval, indexing and
 relevancy rankings.
 
+
+> match: vsm
+
 The `vsm` package provides the following features:
 
 
@@ -29,16 +32,21 @@ The `vsm` package provides the following features:
 
 > match: vsm::Vector
 > match: vsm::IndexMatch::similarity
+> match: vsm
 > match: vsm::FileIndex
 > match: vsm::StringIndex
 > match: vsm::VSMIndex
 > match: vsm::Vector::cosine_similarity
 > match: vsm::vsm::TermComparator::vector
+> match: vsm::StringIndex::match_string
+> match: vsm::VSMIndex::match_vector
+> match: vsm::FileIndex::index_file
 
 ## Vectors
 
 
 > match: vsm::Vector
+> match: vsm
 
 With VSM, documents are represented by a n-dimensions vector.
 Each dimension represent an attribute of the document or object.
@@ -88,7 +96,9 @@ assert vector.norm.is_approx(2.236, 0.001)
 
 
 > match: vsm::Vector
+> match: vsm
 > match: vsm::Vector::consine_similarity
+> match: vsm::vsm::TermComparator::vector
 
 ~~~
 import vsm

@@ -127,6 +127,7 @@ method GET, POST, PUT or DELETE (other methods are not suported yet).
 Each route can have one or more handler methods, which are executed when the route is matched.
 
 
+> match: popcorn>examples>handlers>
 > match: nitcorn::Route
 > match: nitcorn::Routes
 > match: popcorn::Handler
@@ -136,6 +137,7 @@ Route handlers definition takes the following form:
 
 > match: nitcorn::Route
 > match: nitcorn::Routes
+> match: popcorn>examples>handlers>
 > match: popcorn::Handler
 
 ~~~nitish
@@ -162,6 +164,7 @@ Where:
 > match: popcorn::Handler::post
 > match: popcorn::Handler::put
 > match: popcorn::Handler::delete
+> match: popcorn>examples>handlers>
 > match: popcorn::Handler
 > match: popcorn::App
 
@@ -195,6 +198,7 @@ end
 To make your handler responds to a specific route, you have to add it to the app.
 
 
+> match: popcorn>examples>handlers>
 > match: popcorn::Handler
 > match: popcorn::App
 
@@ -245,6 +249,7 @@ Popcorn built-in handler `StaticHandler`.
 > match: popcorn>examples>static_files>files>
 > match: popcorn::Router::use
 > match: popcorn
+> match: popcorn>examples>handlers>
 > match: popcorn::Handler
 > match: popcorn::popcorn
 

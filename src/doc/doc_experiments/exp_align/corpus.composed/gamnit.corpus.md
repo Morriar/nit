@@ -1,5 +1,8 @@
 # Portable game and multimedia framework for Nit
 
+
+> match: gamnit
+
 _gamnit_ is a modular framework to create portable 2D or 3D apps in Nit.
 It is based on the portability framework _app.nit_ and the OpenGL ES 2.0 standard.
 
@@ -35,6 +38,7 @@ You need to install and setup Xcode, and you may install the GLSL shader validat
 
 
 > match: ios
+> match: app
 
 ~~~bash
 brew install glslang

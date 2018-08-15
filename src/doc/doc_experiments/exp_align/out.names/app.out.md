@@ -1,7 +1,12 @@
 # _app.nit_, a framework for portable applications
 
 > name: app
-> name: app::App
+> name: app
+> name: app
+> name: app
+> name: app
+> name: app
+> name: app
 
 The framework provides services to manage common needs of modern mobile applications:
 
@@ -91,8 +96,6 @@ Here is a subset of the most useful controls and views:
 
 * `HorizontalLayout` and `VerticalLayout` organize other controls in order.
 
-> name: app::TextView::text
-> name: app::TextView::text
 > name: app::Control
 
 Each control is notified of input events by callbacks to `on_event`.
@@ -106,13 +109,7 @@ So there is two ways  to customize the behavior on a given event:
 
 * Add an observer to a `Button` instance, and implement `on_event` in the observer.
 
-> name: app::CompositeControl::add
-> name: app::ui::AppComponent::observers
-> name: app::ui::AppComponent::observers
-
 ### Usage Example
-
-> name: app>examples>
 
 The example at `examples/ui_example.nit` shows off most features of `app::ui` in a minimal program.
 You can also take a look at the calculator (`../../examples/calculator/src/calculator.nit`) which is a concrete usage example.
@@ -121,8 +118,6 @@ You can also take a look at the calculator (`../../examples/calculator/src/calcu
 > name: app>examples>
 
 ### Platform-specific UI
-
-> name: app::ui
 
 You can go beyond the portable UI API of _app.nit_ by using the natives services of a platform.
 
@@ -142,7 +137,6 @@ the interesting module is in this repository at ../../examples/calculator/src/an
 ## Persistent State with data_store
 
 > name: app::data_store
-> name: app::data_store::App::data_store
 
 _app.nit_ offers the submodule `app::data_store` to easily save the application state and user preferences.
 The service is accessible by the method `App::data_store`. The `DataStore` itself defines 2 methods:
@@ -156,8 +150,6 @@ The service is accessible by the method `App::data_store`. The `DataStore` itsel
 
 * `DataStore::[]` returns the object associated to a `String` key.
   It returns `null` if nothing is associated to the key.
-
-> name: app::CompositeControl::clear
 
 ### Usage Example
 
@@ -239,11 +231,7 @@ The _app.nit_ framework defines three annotations to customize the application p
   those associated to modules lower in the importation hierarchy have higher priority.
 
 > name: app::Window
-> name: app::CompositeControl::has
 > name: android
-> name: app::Asset::path
-> name: app::PlayableAudio::path
-> name: app::Control::parent
 
 ### Usage Example
 
@@ -297,9 +285,6 @@ There is two main ways to achieve this goal:
   # ...
   ~~~
 
-> name: app::AsyncHttpRequest::before
-> name: app::TextAsset::load
-> name: app::PlayableAudio::load
 > name: app
 > name: app::app
 > name: app::App

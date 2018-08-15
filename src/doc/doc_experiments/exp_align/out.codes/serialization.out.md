@@ -26,10 +26,7 @@ class Person
 end
 ~~~
 
-> code: serialization::serialization
-> code: serialization::Serializer
-> code: serialization::Serializable
-> code: serialization::Deserializer
+> example: serialization::custom_serialization
 
 The `Person` class also defines `==` and `hash`, this is optional but we will use it to make an important point.
 By definition of a serializable class, an instance can be serialized to a stream, then deserialized.
@@ -74,10 +71,7 @@ class Partnership
 end
 ~~~
 
-> code: serialization::serialization
-> code: serialization::Serializer
-> code: serialization::Serializable
-> code: serialization::Deserializer
+> example: serialization::custom_serialization
 
 ### Scope of the `serialize` annotation
 
@@ -109,11 +103,8 @@ end
   end
   ~~~
 
-> code: serialization::serialization
-> code: serialization::serialization
-> code: serialization::Serializable
-> code: serialization::Serializer
-> code: serialization::Deserializer
+> example: serialization::custom_serialization
+> example: serialization::custom_serialization
 
 ## The `noserialize` annotation
 
@@ -140,10 +131,7 @@ The `noserialize` annotation mark an exception in a `serialize` module or class 
   end
   ~~~
 
-> code: serialization::serialization
-> code: serialization::Serializable
-> code: serialization::Serializer
-> code: serialization::Deserializer
+> example: serialization::custom_serialization
 
 ## The `serialize_as` annotation
 
@@ -167,10 +155,7 @@ class UserCredentials
 end
 ~~~
 
-> code: serialization::serialization
-> code: serialization::Serializer
-> code: serialization::Serializable
-> code: serialization::Deserializer
+> example: serialization::custom_serialization
 
 ## Custom serializable classes
 
@@ -275,13 +260,7 @@ end
 
 ~~~
 
-> code: serialization::serialization
-> code: serialization::Deserializer
-> code: serialization::Serializer
-> code: serialization::Serializable
-> code: core::Path
-> code: core::file::Text::to_path
-> code: core::Path::read_all
+> example: serialization::custom_serialization
 
 See the documentation of the module `serialization::serialization` for more
 information on the services to redefine.
@@ -318,9 +297,6 @@ reader.close
 
 assert couple == deserialize_couple
 ~~~
-
-> code: serialization::Serializer::serialize
-> code: serialization::Deserializer::deserialize
 
 ## Limitations and TODO
 

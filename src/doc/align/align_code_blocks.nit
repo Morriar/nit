@@ -43,6 +43,9 @@ class MdAlignBlockCodes
 			return
 		end
 
+		# if node.location.line_start != 182 then return
+		# print node
+
 		# Find code usages
 		var vector = new Vector
 		for key, count in code_vector do
@@ -82,18 +85,22 @@ class MdAlignBlockCodes
 		end
 
 		# Examples
-		# var example_query = new Vector
-		# example_query.add_all code_vector
-		# example_query.inc "+in: {context.full_name}"
-		# example_query.inc "+is_example: true"
-		# example_query.inc "+kind: MModule"
-		# var example_all_matches = mentity_index.match_query(example_query)
-		# var example_matches = new MDocMatches
-		# for match in example_all_matches do
-			# match.similarity = code_vector.cosine_similarity(match.document.code_vector)
-			# if match.similarity > 0.0 then example_matches.add match
-		# end
-		# node.example_refs = matches_to_refs(example_matches.sort.limit(1), node)
+		var example_query = new Vector
+		example_query.add_all code_vector
+		example_query.inc "+in: {context.full_name}"
+		example_query.inc "+is_example: true"
+		example_query.inc "+kind: MModule"
+		# print example_query
+		var example_all_matches = mentity_index.match_query(example_query)
+		var example_matches = new MDocMatches
+		for match in example_all_matches do
+			match.similarity = code_vector.cosine_similarity(match.document.code_vector)
+			if match.similarity > 0.0 then example_matches.add match
+		end
+		for match in example_matches.sort.limit(1) do
+			# res.add new MdRefCode(node, match.document.mentity)
+			node.md_refs.add new MdRefExample(node, match.document.mentity, match.similarity)
+		end
 	end
 
 	fun visit_raw_code(node: MdCodeBlock) do
@@ -106,6 +113,25 @@ class MdAlignBlockCodes
 		var vector = new Vector
 		vector.inc "-kind: MPropDef"
 		vector.inc "-kind: MClassDef"
+
+		# for def in literal.search_all(def_re) do
+
+		# end
+
+		# for match in literal.search_all(call_re) do
+			# var call = match.to_s.trim
+			# if keywords.has(call) then continue
+			# var names = call.search_all(name_re)
+			# if names.is_empty then continue
+			# var name = names.first
+			# print call
+			# print name
+			# print "--"
+			# var args = c.search_all(arg_re)
+			# if args.not_empty then args.shift
+			# vector.inc "call: {names.first.to_s.trim}({args.length})"
+		# end
+		# print vector
 
 		for name in literal.search_all(name_re) do
 			var id = name.to_s.trim
@@ -120,7 +146,20 @@ class MdAlignBlockCodes
 		end
 	end
 
-	var name_re: Regex = "([a-zA-Z_][a-zA-Z0-9_=]*)".to_re
+	var name_pt = "([a-zA-Z_][a-zA-Z0-9_=]*)"
+	var name_re: Regex = name_pt.to_re is lazy
+
+	var arg_pt = "([^,()]*)"
+	var arg_re: Regex = arg_pt.to_re is lazy
+	var args_pt = "({arg_pt}(, ?{arg_pt})*)"
+	var sign_pt = "(\\({args_pt}?\\))"
+	var sign_re: Regex = sign_pt.to_re is lazy
+
+	var def_pt = "fun {name_pt}({sign_pt})?"
+	var def_re: Regex = def_pt.to_re is lazy
+
+	var call_pt = "({name_pt}(\\.{name_pt})*({sign_pt})?)"
+	var call_re: Regex = call_pt.to_re is lazy
 
 	var keywords = [
 		"end", "not", "null", "var", "do", "then", "catch", "else", "loop", "is",
@@ -139,12 +178,15 @@ class MdAlignBlockCodes
 	end
 end
 
-# redef class MdCodeBlock
-	# var example_refs = new Array[MdRefCode]
-# end
-
 class MdRefCode
 	super MdRefMEntity
 
 	# var token: String
+end
+
+class MdRefExample
+	super MdRefMEntity
+
+	var similarity: Float
+
 end

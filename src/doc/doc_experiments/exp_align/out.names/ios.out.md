@@ -1,20 +1,21 @@
 # iOS support for _app.nit_
 
 > name: ios
-> name: ios::app
+> name: ios
+> name: ios
+> name: ios
+> name: ios
+> name: ios
 
 ## System configuration
-
-> name: ios::UIButtonType::system
 
 Configure your system for OS X by installing Xcode and brew.
 Follow the instructions in `README.md` at the root of the repository.
 
-> name: ios::UIButtonType::system
-
 Optionally, install ios-sim to run compiled apps in the simulator: `brew install ios-sim`
 
 > name: ios
+> name: app
 > name: ios::app
 
 ## Compile and run a simple application
@@ -41,9 +42,6 @@ for portable applications working on GNU/Linux, OS X, iOS and Android.
 
 To associate icons to your application, create the directory `ios/AppIcon.appiconset` and fill it with standard icons and `Contents.json`.
 These files can be generated in a number of different ways:
-
-> name: ios::UIStackViewDistribution::fill
-> name: ios::UIStackViewAlignment::fill
 
 * Using the tool `svg_to_icons` packaged with the Nit repository at `contrib/inkscape_tools/bin/svg_to_icons`.
 

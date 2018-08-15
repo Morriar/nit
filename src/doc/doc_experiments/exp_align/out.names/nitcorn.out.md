@@ -1,14 +1,15 @@
 # Lightweight framework for Web applications development
 
+> name: nitcorn
+> name: nitcorn
+
 ## Features
 
 Dynamic content is served by subclassing `Action` and implementing `answer`.
 This method receives an `HttpRequest` and must return an `HttpResponse`.
 _nitcorn_ provides `FileServer`, a simple `Action` to serve static files.
 
-> name: nitcorn::HttpRequest::method
 > name: nitcorn
-> name: nitcorn::HttpResponse::files
 
 `HttpRequest` contains the GET and POST arguments as well as session data it one exists.
 The produced `HttpResponse` should contain the HTTP status code, the body,
@@ -16,14 +17,9 @@ session data to preserve or create a session, and optionally list files to appen
 
 > name: nitcorn::sessions
 > name: nitcorn::Session
-> name: nitcorn::HttpStatusCodes::codes
-> name: nitcorn::HttpRequest::body
-> name: nitcorn::http_request::HttpRequestParser::body
-> name: nitcorn::HttpResponse::body
-> name: nitcorn::ErrorTemplate::body
-> name: nitcorn::sessions
 > name: nitcorn::sessions
 > name: nitcorn::Session
+> name: nitcorn::sessions
 > name: nitcorn::Session
 
 Each `Action` may be associated to many instances of `Route`.
@@ -32,7 +28,6 @@ but also define parameters within the URI.
 
 > name: nitcorn::Route
 > name: nitcorn::Routes
-> name: nitcorn::HttpRequest::uri
 
 _nitcorn_ instances are configured dynamically in Nit code with the interfaces and routes created as needed.
 
@@ -61,7 +56,6 @@ More general examples are available at `lib/nitcorn/examples/`.
 For an example of a larger project merging many _nitcorn_ applications into one server,
 take a look at the configuration of `http://xymus.net/` at `../contrib/xymus_net/xymus_net.nit`.
 
-> name: nitcorn::MyData::more
 > name: nitcorn>examples>
 > name: nitcorn>examples>
 > name: nitcorn

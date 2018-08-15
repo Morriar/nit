@@ -187,8 +187,10 @@ class CardMEntity
 			<div class='card-body'>
 				<h5 class='card-heading'>
 					{{{mentity.html_declaration.write_to_string}}}
-				</h5>
-				<p><small>{{{mentity.html_namespace.write_to_string}}}</small></p>"""
+				</h5>"""
+		if not mentity isa MPackage then
+			addn """<p><small>{{{mentity.html_namespace.write_to_string}}}</small></p>"""
+		end
 		var mdoc = mentity.mdoc_or_fallback
 		if mdoc != null then
 			if full_doc then

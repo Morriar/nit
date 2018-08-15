@@ -14,6 +14,7 @@ This module provides a Nit object oriented interface to access the Github api.
 ### `GithubAPI` - # Client to Github API
 
 > name: github
+> name: github::api
 > name: github::GithubAPI
 
 To access the API you need an instance of a `GithubAPI` client.
@@ -89,10 +90,13 @@ assert user.login == "Morriar"
 ### `User` - # A Github user
 
 > name: github
+> name: github::User
+
 Provides access to [Github user data](https://developer.github.com/v3/users/).
 Should be accessed from `GithubAPI::load_user`.
 
 > name: github
+> name: github::User
 
 * `api$User$SELF` - # Type of this instance, automatically specialized in every class
 
@@ -132,11 +136,18 @@ Should be accessed from `GithubAPI::load_user`.
 
 * `name=` - # User public name if any.
 
+> name: github::User
+> name: github
+> name: github::User::blog
+> name: github::User::login
+> name: github::User::name
+> name: github::User::avatar_url
+> name: github::User::email
+> name: serialization
+
 ### Retrieving repo data
 
-> name: serialization
 > name: github::Repo
-> name: github
 
 ### `load_repo` - # Get the Github repo with `full_name`.
 
@@ -214,6 +225,12 @@ Should be accessed from `GithubAPI::load_repo`.
 
 * `owner=` - # Get the repo owner.
 
+> name: github::Repo
+> name: github::default_branch
+> name: github::full_name
+> name: github::mongo_id
+> name: github::name
+> name: github::owner
 > name: github
 > name: serialization
 
@@ -269,6 +286,7 @@ Should be accessed from `GithubAPI::load_repo`.
 
 > name: github
 > name: github::github
+> name: github::Repo
 > name: github::Branch
 > name: github::Comment
 > name: github::Commit
@@ -320,6 +338,8 @@ assert err.message == "Not Found"
 ~~~
 
 #### Change the user agent
+
+> name: github::GithubAPI::user_agent
 
 ### `user_agent` - # User agent used for HTTP requests.
 
@@ -415,6 +435,7 @@ GithubAPI can trigger different events depending on the hook configuration.
 
 > name: github::GithubAPI
 > name: github::events
+> name: github::hooks
 
 ### `GithubEvent` - # Github event stub.
 

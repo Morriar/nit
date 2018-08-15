@@ -100,7 +100,7 @@ class MdAlignNLP
 			# vector["tid: {(lemma or else "null").as(String).capitalize}"] += freq
 		end
 		# print vector
-		node.md_refs = matches_to_refs(mentity_index.match_query(vector).above_threshold, node)
+		node.md_refs = matches_to_refs(mentity_index.match_query(vector), node)
 		# .above_threshold
 	end
 

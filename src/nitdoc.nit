@@ -74,6 +74,7 @@ redef class ToolContext
 	redef init do
 		super
 		option_context.add_option(
+			opt_dir,
 			opt_share_dir, opt_shareurl, opt_custom_title,
 			opt_custom_footer, opt_custom_intro, opt_custom_brand,
 			opt_piwik_tracker, opt_piwik_site_id,
@@ -103,7 +104,7 @@ class Nitdoc
 
 	redef var mdoc_post_processors is lazy do
 		var processors = super
-		processors.add new MDocProcessImages(output_dir, "/")
+		processors.add new MDocProcessImages(toolcontext, output_dir, "/")
 		return processors
 	end
 
@@ -111,7 +112,7 @@ class Nitdoc
 	var doc = new DocModel(model, mainmodule, modelbuilder, catalog, filter) is lazy
 
 	# Output directory
-	var output_dir: String = toolcontext.opt_dir.value or else "doc"
+	var output_dir: String = toolcontext.opt_dir.value or else "doc" is lazy
 
 	redef fun execute do
 

@@ -7,6 +7,7 @@ For services provided by some implementations of POSIX but absent from any POSIX
 import `posix::ext`.
 
 > name: posix
+> name: posix::posix
 > name: posix
 > name: posix
 > name: posix

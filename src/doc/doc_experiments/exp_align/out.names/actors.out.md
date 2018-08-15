@@ -1,6 +1,9 @@
 # Nit Actor Model
 
-> name: actors::Actor
+> name: actors
+> name: actors
+> name: actors
+> name: actors
 > name: actors
 
 This group introduces the `actors` module which contains the abstraction of a Nit Actor Model,
@@ -46,8 +49,6 @@ executed by the actor.
 For instance, if you call `a.async.foo` and `foo` doesn't have a return value, it will send
 a message to the mailbox of the actor attached to `a` which will process it asynchronously.
 
-> name: actors::Actor::instance
-> name: actors::Future::value
 > name: actors::Message
 > name: actors::Mailbox
 > name: actors
@@ -57,12 +58,9 @@ On the other hand, if you call `a.async.bar` and `bar` returns an`Int`, it will 
 a message to the actor, but you'll get a `Future[Int]` to be able to retrieve the value.
 When using `join` on the future, the calling thread will wait until the value of the future is set.
 
-> name: actors::simple_simulation::Agent::others
-> name: actors::ProxyAgent::others
 > name: actors::Message
 > name: actors
 > name: actors::Actor
-> name: actors::Future::value
 > name: actors::Future
 > name: actors::Future
 
@@ -75,7 +73,6 @@ When you annotate a class with `actor` and create an instance of it with `new`, 
 automatically created (which means you can completely skip the use of the actors if you
 don't need them for a specific program).
 
-> name: actors::Actor::instance
 > name: actors
 > name: actors::Actor
 > name: actors
@@ -104,8 +101,8 @@ if you need to. For this, you need to use the `async` property of your annotated
 > name: actors
 > name: actors::Actor
 > name: actors::Message
-> name: actors::Message
 > name: actors::Mailbox
+> name: actors::Message
 > name: actors
 > name: actors::Actor
 > name: actors::Message

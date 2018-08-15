@@ -1,6 +1,6 @@
 # POSIX Threads support
 
-> name: pthreads::Thread
+> name: pthreads
 
 The threads can be manipulated and synchronized using the classes `Thread`,
 `Mutex` and `Barrier`.

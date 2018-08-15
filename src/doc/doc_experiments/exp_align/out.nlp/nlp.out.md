@@ -1,5 +1,8 @@
 # Nit wrapper for Stanford CoreNLP
 
+> match: nlp
+> match: nlp::stanford
+> match: nlp::NLPServer
 
 Stanford CoreNLP provides a set of natural language analysis tools which can take
 raw text input and give the base forms of words, their parts of speech, whether
@@ -8,27 +11,40 @@ quantities, and mark up the structure of sentences in terms of phrases and word
 dependencies, indicate which noun phrases refer to the same entities, indicate
 sentiment, etc.
 
-> match: nlp::NLPToken::word
-> match: nlp::NLPClient::language
+> match: nlp
+> match: nlp::NLPProcessor
+> match: nlp::stanford
+> match: nlp::NLPToken
+> match: nlp::NLPDocument
+> match: nlp::NLPSentence
+> match: nlp::NLPServer
+> match: nlp::NLPFileIndex
 
 This wrapper needs the Stanford CoreNLP jars that run on Java 1.8+.
 
-> match: nlp::NLPJavaProcessor::java_cp
-> match: nlp::nlp_server::Config::opt_java_cp
-> match: nlp::NLPServer::java_cp
+> match: nlp
+> match: nlp::stanford
+> match: nlp::NLPJavaProcessor
+> match: nlp::NLPServer
 
 See http://nlp.stanford.edu/software/corenlp.shtml.
 
-> match: nlp::nlp
+> match: nlp
+> match: nlp::NLPServer
+> match: nlp::stanford
 
 ## NLPProcessor
 
 > match: nlp::NLPProcessor
+> match: nlp::NLPClient
+> match: nlp::NLPIndex
+> match: nlp::NLPFileIndex
+> match: nlp
 
 ### Java client
 
-> match: nlp::nlp_server::Config::opt_java_cp
-> match: nlp::NLPJavaProcessor::java_cp
+> match: nlp::NLPJavaProcessor
+> match: nlp
 
 ~~~nit
 import nlp
@@ -47,14 +63,21 @@ end
 ### NLPServer
 
 > match: nlp::NLPServer
+> match: nlp::NLPClient
+> match: nlp
 
 The NLPServer provides a wrapper around the StanfordCoreNLPServer.
 
 > match: nlp::NLPServer
+> match: nlp
+> match: nlp::NLPClient
+> match: nlp::NLPProcessor
 
 See `https://stanfordnlp.github.io/CoreNLP/corenlp-server.html`.
 
 > match: nlp::NLPServer
+> match: nlp
+> match: nlp::stanford
 
 ~~~nit
 import nlp
@@ -67,10 +90,16 @@ srv.start
 ### NLPClient
 
 > match: nlp::NLPClient
+> match: nlp
 
 The NLPClient is used as a NLPProcessor with a NLPServer backend.
 
 > match: nlp::NLPClient
+> match: nlp::NLPProcessor
+> match: nlp::NLPServer
+> match: nlp
+> match: nlp::NLPIndex
+> match: nlp::NLPFileIndex
 
 ~~~nit
 import nlp
@@ -82,12 +111,16 @@ var doc = cli.process("String to analyze")
 ## NLPIndex
 
 > match: nlp::NLPIndex
+> match: nlp
 
 NLPIndex extends the StringIndex to use a NLPProcessor to tokenize, lemmatize and
 tag the terms of a document.
 
 > match: nlp::NLPIndex
 > match: nlp::NLPProcessor
+> match: nlp
+> match: nlp::NLPClient
+> match: nlp::NLPFileIndex
 
 ~~~nit
 import nlp
@@ -112,5 +145,10 @@ assert matches.first.document == d1
 
 > match: nlp
 > match: nlp
-> match: nlp::NLPDocument::sentences
+> match: nlp
+> match: nlp::NLPSentence
+> match: nlp::NLPProcessor
+> match: nlp::NLPDocument
+> match: nlp
+> match: nlp::NLPProcessor
 

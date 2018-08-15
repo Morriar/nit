@@ -200,18 +200,35 @@ private class UMLPhase
 		uml_opts.clusterize_groups = false
 		uml_opts.clusterize_modules = false
 		uml_opts.clusterize_classes = false
-		# uml_opts.show_methods = # false
+		uml_opts.show_classes = false
+		# uml_opts.show_methods = false
 		# uml_opts.show_attributes = false
 		var mentities = new Array[MEntity]
-		mentities.add model.mentity_by_full_name("markdown2::MdRenderer").as(not null)
-		mentities.add model.mentity_by_full_name("markdown2::HtmlRenderer").as(not null)
-		mentities.add model.mentity_by_full_name("markdown2::MarkdownRenderer").as(not null)
-		mentities.add model.mentity_by_full_name("markdown2::ManRenderer").as(not null)
-		mentities.add model.mentity_by_full_name("markdown2::LatexRenderer").as(not null)
+		mentities.add model.mentity_by_full_name("markdown2::MdBlock").as(not null)
+		mentities.add model.mentity_by_full_name("markdown2::MdHeading").as(not null)
+		mentities.add model.mentity_by_full_name("markdown2::MdParagraph").as(not null)
+		mentities.add model.mentity_by_full_name("markdown2::MdThematicBreak").as(not null)
+		mentities.add model.mentity_by_full_name("markdown2::MdBlockQuote").as(not null)
+		mentities.add model.mentity_by_full_name("markdown2::MdListBlock").as(not null)
+		mentities.add model.mentity_by_full_name("markdown2::MdOrderedList").as(not null)
+		mentities.add model.mentity_by_full_name("markdown2::MdUnorderedList").as(not null)
+		mentities.add model.mentity_by_full_name("markdown2::MdCodeBlock").as(not null)
+		mentities.add model.mentity_by_full_name("markdown2::MdIndentedCodeBlock").as(not null)
+		mentities.add model.mentity_by_full_name("markdown2::MdFencedCodeBlock").as(not null)
+
+		# mentities.add model.mentity_by_full_name("markdown2::MdInline").as(not null)
+
+		# mentities.add model.mentity_by_full_name("markdown2::markdown2").as(not null)
+		# mentities.add model.mentity_by_full_name("markdown2::MdRenderer").as(not null)
+		# mentities.add model.mentity_by_full_name("markdown2::HtmlRenderer").as(not null)
+		# mentities.add model.mentity_by_full_name("markdown2::MarkdownRenderer").as(not null)
+		# mentities.add model.mentity_by_full_name("markdown2::ManRenderer").as(not null)
+		# mentities.add model.mentity_by_full_name("markdown2::LatexRenderer").as(not null)
 		diagram.draw_mentities(mentities)
-		diagram.draw_inheritance(mentities)
-		# diagram.draw_parents(mentities, pdepth)
-		# diagram.draw_children(mentities, pdepth)
+		# diagram.draw_inheritance(mentities)
+		# diagram.draw_parents(mentities, 1)
+		diagram.draw_parents(mentities, pdepth)
+		diagram.draw_children(mentities, cdepth)
 
 		# if center != null then
 		#	uml_opts.center = center

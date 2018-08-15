@@ -147,7 +147,7 @@ class UMLDiagram
 	var mainmodule: MModule
 
 	# TODO
-	var filter: nullable ModelFilter
+	var filter: nullable ModelFilter is writable
 
 	# Diagram options
 	var options: UMLDiagramOptions
@@ -453,7 +453,7 @@ class UMLDiagram
 			for oentity in mentities do
 				if mentity == oentity then continue
 
-				if mentity.collect_ancestors(mainmodule, filter).has(oentity) then
+				if mentity.collect_parents(mainmodule, filter).has(oentity) then
 					draw_edge(mentity, oentity)
 				end
 			end

@@ -1,9 +1,9 @@
 # POSIX Threads support
 
 
-> match: pthreads::Thread
-> match: posix
 > match: pthreads
+> match: posix
+> match: pthreads::Thread
 
 The threads can be manipulated and synchronized using the classes `Thread`,
 `Mutex` and `Barrier`.

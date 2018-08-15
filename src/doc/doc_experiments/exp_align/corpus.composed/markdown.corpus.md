@@ -45,7 +45,6 @@ This parser passes all tests inside http://daringfireball.net/projects/downloads
 > match: markdown::LinkRef::title
 > match: markdown::HeadLine::title
 > match: markdown
-> match: markdown::markdown
 
 ## Testing
 

@@ -1,6 +1,11 @@
 # Low-level wrapper of the SDL 2.0 library (as `sdl2`) and SDL_image 2.0 (as `sdl2::image`)
 
-> name: sdl2::SDL
+> name: sdl2
+> name: sdl2
+> name: sdl2
+> name: sdl2
+> name: sdl2
+> name: sdl2
 
 The main entry point of this project, `sdl2`, exposes some features of the base
 library: video, events, syswm, etc. The alternative entry point `sdl2::image` offers

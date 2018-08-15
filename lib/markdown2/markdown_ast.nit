@@ -366,9 +366,14 @@ end
 
 # Inline nodes
 
+# A node that is not a block
+abstract class MdInline
+	super MdNode
+end
+
 # A line break (soft or hard)
 abstract class MdLineBreak
-	super MdNode
+	super MdInline
 end
 
 # A hardline break (`\\n` or `  \n`)
@@ -386,7 +391,7 @@ end
 
 # An inline code string
 class MdCode
-	super MdNode
+	super MdInline
 
 	# Emphasis delimiter
 	var delimiter: String
@@ -401,7 +406,7 @@ end
 #
 # For example the emphasis: `*bold*`.
 abstract class MdDelimited
-	super MdNode
+	super MdInline
 
 	# Emphasis delimiter
 	var delimiter: String
@@ -427,7 +432,7 @@ end
 
 # An inlined html string
 class MdHtmlInline
-	super MdNode
+	super MdInline
 
 	# Literal content
 	var literal: String is writable
@@ -437,7 +442,7 @@ end
 
 # A link or image
 abstract class MdLinkOrImage
-	super MdNode
+	super MdInline
 
 	# Link destination
 	var destination: String is writable
@@ -466,7 +471,7 @@ end
 
 # A raw text token
 class MdText
-	super MdNode
+	super MdInline
 
 	# Literal content
 	var literal: String is writable

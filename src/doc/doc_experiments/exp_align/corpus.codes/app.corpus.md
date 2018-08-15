@@ -220,7 +220,6 @@ There is two main ways to achieve this goal:
   # ...
   ~~~
 
-> example: examples::calculator
 > code: examples::calculator
 > code: android::android
 

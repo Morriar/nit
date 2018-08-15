@@ -1,7 +1,9 @@
 # read and write JSON formatted text
 
 > name: json
-> name: json::serialization_read::JsonDeserializer::text
+> name: json
+> name: json
+> name: json
 
 These services can be useful to communicate with a remote server or client,
 save data locally or even debug and understand the structure of a Nit object.
@@ -38,8 +40,6 @@ The Nit objects to write must subclass `Serializable` and implement its services
 Most classes from the `core` library are already supported, including collections, numeric values, etc.
 For your local objects, you can annotate them with `serialize` to automate subclassing
 `Serializable` and the implementation of its services.
-
-> name: json::JsonValue::value
 
 #### Example
 
@@ -151,8 +151,6 @@ The type to recreate is either declared or inferred:
    or the type name passed to `deserialize`.
 
 > name: json
-> name: json::JsonKeyError::key
-> name: json::JsonValue::value
 > name: json::static
 
 The method `deserialize_json` is a shortcut to `JsonDeserializer` which prints
@@ -229,8 +227,6 @@ When an attribute is not found, the deserialization engine acts in one of three 
 3. Otherwise, the engine raises an error and does not set the attribute.
    The caller must check for `errors` and must not read from the attribute.
 
-> name: json::JsonValue::value
-> name: json::JsonValue::value
 > name: json::error
 > name: json::static
 > name: json::error

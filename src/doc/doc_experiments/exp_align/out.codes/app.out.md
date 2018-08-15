@@ -123,14 +123,8 @@ redef class App
 end
 ~~~
 
-> code: app::data_store
-> code: app::App
-> code: app::DataStore
-> code: app::app_base::Sys::app
-> code: app::DataStore::[]=
-> code: app::DataStore::[]
-> code: app::AppComponent::on_save_state
-> code: app::AppComponent::on_restore_state
+> example: app::ui_example (0.081)
+> example: app::http_request_example (0.025)
 
 ## Async HTTP request
 
@@ -180,7 +174,8 @@ module my_module is
 end
 ~~~
 
-> code: app::App
+> example: app::http_request_example (0.039)
+> example: app::ui_example (0.031)
 
 ## Compiling and Packaging an Application
 
@@ -218,5 +213,6 @@ There is two main ways to achieve this goal:
   # ...
   ~~~
 
-> code: android::android
+> example: app::http_request_example (0.022)
+> example: app::ui_example (0.017)
 

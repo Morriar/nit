@@ -1,6 +1,7 @@
 # Vector Space Model
 
 > match: vsm
+> match: vsm::Vector
 
 Vector Space Model (VSM) is an algebraic model for representing text documents
 (and any objects, in general) as vectors of identifiers, such as, for example,
@@ -32,6 +33,9 @@ The `vsm` package provides the following features:
 > match: vsm::Vector
 > match: vsm::Vector::cosine_similarity
 > match: vsm::vsm::TermComparator::vector
+> match: vsm::StringIndex::match_string
+> match: vsm::VSMIndex::match_vector
+> match: vsm::FileIndex::index_file
 
 ## Vectors
 
@@ -76,6 +80,7 @@ assert vector.norm.is_approx(2.236, 0.001)
 > match: vsm
 > match: vsm::Vector
 > match: vsm::Vector::consine_similarity
+> match: vsm::vsm::TermComparator::vector
 
 ~~~
 import vsm

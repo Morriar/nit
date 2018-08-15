@@ -1,6 +1,7 @@
 # Nit wrapper for Stanford CoreNLP
 
-> name: nlp::stanford
+> name: nlp
+> name: nlp
 
 Stanford CoreNLP provides a set of natural language analysis tools which can take
 raw text input and give the base forms of words, their parts of speech, whether
@@ -46,8 +47,6 @@ end
 
 ### NLPServer
 
-> name: nlp::NLPServer
-
 The NLPServer provides a wrapper around the StanfordCoreNLPServer.
 
 > name: nlp::NLPServer
@@ -63,8 +62,6 @@ srv.start
 ~~~
 
 ### NLPClient
-
-> name: nlp::NLPClient
 
 The NLPClient is used as a NLPProcessor with a NLPServer backend.
 
@@ -110,6 +107,4 @@ assert matches.first.document == d1
 * Use options to choose CoreNLP analyzers
 * Analyze sentences dependencies
 * Analyze sentiment
-
-> name: nlp::NLPDocument::sentences
 

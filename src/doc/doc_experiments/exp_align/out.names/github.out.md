@@ -1,10 +1,10 @@
 # Nit wrapper for Github API
 
 > name: github
-> name: github::api
-> name: github::ContributorStats::api
-> name: github::GithubWallet::api
-> name: github::HookListener::api
+> name: github
+> name: github
+> name: github
+> name: github
 
 This module provides a Nit object oriented interface to access the Github api.
 
@@ -18,26 +18,15 @@ This module provides a Nit object oriented interface to access the Github api.
 ## Accessing the API
 
 > name: github::api
-> name: github::ContributorStats::api
-> name: github::GithubWallet::api
-> name: github::HookListener::api
 
 ### `GithubAPI` - # Client to Github API
 
-> name: github::LoaderConfig::client
-> name: github
 > name: github::api
 > name: github::ContributorStats::api
-> name: github::GithubWallet::api
-> name: github::HookListener::api
 
 To access the API you need an instance of a `GithubAPI` client.
 
 > name: github::api
-> name: github::ContributorStats::api
-> name: github::GithubWallet::api
-> name: github::HookListener::api
-> name: github::LoaderConfig::client
 
 ~~~
 import github
@@ -53,16 +42,8 @@ var api = new GithubAPI(token)
 The API client allows you to get Github API entities.
 
 > name: github::api
-> name: github::ContributorStats::api
-> name: github::GithubWallet::api
-> name: github::HookListener::api
-> name: github::api
-> name: github::ContributorStats::api
-> name: github::GithubWallet::api
-> name: github::HookListener::api
-> name: github::LoaderConfig::client
-> name: github::GithubAPI::get
 > name: github
+> name: github::api
 
 ~~~
 import github
@@ -87,9 +68,6 @@ Token can also be recovered from user config with `get_github_oauth`.
 ### `get_github_oauth` - # Gets the Github token from `git` configuration
 
 > name: github::GithubAPI::get
-> name: github
-> name: github::GithubWallet::tokens
-> name: github::LoaderConfig::tokens
 
 Return the value of `git config --get github.oauthtoken`
 or `""` if no key exists.
@@ -100,15 +78,11 @@ or `""` if no key exists.
 
 ### `load_user` - # Get the Github user with `login`
 
-> name: github
 > name: github::User
 
 Loads the `User` from the API or returns `null` if the user cannot be found.
 
 > name: github::api
-> name: github::ContributorStats::api
-> name: github::GithubWallet::api
-> name: github::HookListener::api
 > name: github::User
 
 ~~~
@@ -122,7 +96,6 @@ assert user.login == "Morriar"
 
 ### `User` - # A Github user
 
-> name: github
 > name: github::User
 
 Provides access to [Github user data](https://developer.github.com/v3/users/).
@@ -173,7 +146,6 @@ Should be accessed from `GithubAPI::load_user`.
 > name: github::User
 > name: github::User
 > name: github
-> name: github::User::login
 > name: github::User
 > name: github::User
 > name: github::User
@@ -183,9 +155,7 @@ Should be accessed from `GithubAPI::load_user`.
 > name: github::User
 > name: github::User
 > name: github
-> name: github::User::login
 > name: github
-> name: github::User::login
 > name: github::User
 > name: github::User
 
@@ -195,15 +165,11 @@ Should be accessed from `GithubAPI::load_user`.
 
 ### `load_repo` - # Get the Github repo with `full_name`.
 
-> name: github
 > name: github::Repo
 
 Loads the `Repo` from the API or returns `null` if the repo cannot be found.
 
 > name: github::api
-> name: github::ContributorStats::api
-> name: github::GithubWallet::api
-> name: github::HookListener::api
 > name: github::Repo
 
 ~~~
@@ -217,8 +183,6 @@ assert repo.default_branch == "master"
 ~~~
 
 ### `Repo` - # A Github repository.
-
-> name: github
 
 Provides access to [Github repo data](https://developer.github.com/v3/repos/).
 Should be accessed from `GithubAPI::load_repo`.
@@ -352,51 +316,25 @@ Should be accessed from `GithubAPI::load_repo`.
 > name: github::Commit
 > name: github::Commit
 > name: github::User
-> name: github::LoaderConfig::client
 > name: github
 > name: github::api
-> name: github::ContributorStats::api
-> name: github::GithubWallet::api
-> name: github::HookListener::api
 > name: json::JsonDeserializer
 > name: github
 > name: github
 > name: github::api
-> name: github::ContributorStats::api
-> name: github::GithubWallet::api
-> name: github::HookListener::api
 > name: github
-> name: github::Commit::files
 > name: github
 > name: github::Issue
 > name: github::Comment
 > name: github
 > name: github::Issue
-> name: github::IssueEvent::event
 > name: github::events
 > name: github
 > name: github
 > name: github::Label
 > name: github
 > name: github::Milestone
-> name: github::PullRequestEvent::pull
-> name: github::PullRequestReviewCommentEvent::pull
-> name: github::Loader::pulls
-> name: github::PullRequest::head
-> name: github::PullRequest::base
 > name: github
-> name: github::PullRequestEvent::pull
-> name: github::PullRequestReviewCommentEvent::pull
-> name: github::Loader::pulls
-> name: github::IssueEvent::rename
-> name: github::GithubEvent::action
-> name: github::GithubEvent::action
-> name: github::GithubError::name
-> name: github::User::name
-> name: github::Repo::name
-> name: github::Branch::name
-> name: github::Label::name
-> name: github::DeploymentEvent::name
 > name: github
 > name: github::Comment
 > name: github
@@ -412,16 +350,13 @@ Should be accessed from `GithubAPI::load_repo`.
 ### `get` - # Execute a GET request on Github API.
 
 > name: github::GithubAPI::get
-> name: github
 > name: github::api
 > name: github::ContributorStats::api
-> name: github::GithubWallet::api
-> name: github::HookListener::api
 
 This method returns raw json data.
 See other `load_*` methods to use more expressive types.
 
-> name: github::GithubError::json
+> name: json
 
 ~~~
 import github
@@ -466,13 +401,8 @@ See <https://developer.github.com/v3/#user-agent-required>
 
 ### `verbose_lvl` - # Verbosity level.
 
-> name: github::HookListener::verbosity
-
 * `0`: only errors (default)
 * `1`: verbose
-
-> name: github::Loader::error
-> name: github::GithubWallet::verbose
 
 #### Using with GitLab
 
@@ -480,22 +410,13 @@ If URL scheme of GitLab API follows the one of Github API, it may be possible to
 configure this wrapper to use a custom URL.
 
 > name: github::api
-> name: github::ContributorStats::api
-> name: github::GithubWallet::api
-> name: github::HookListener::api
-> name: github::api
-> name: github::ContributorStats::api
-> name: github::GithubWallet::api
-> name: github::HookListener::api
 > name: github
+> name: github::api
 
 ### `api_url` - # Github API base url.
 
-> name: github
 > name: github::api
 > name: github::ContributorStats::api
-> name: github::GithubWallet::api
-> name: github::HookListener::api
 > name: github::PullRequest::base
 
 Default is `https://api.github.com` and should not be changed.
@@ -508,12 +429,8 @@ Using this API you can create Github hooks able to respond to actions performed
 on a repository.
 
 > name: github::api
-> name: github::ContributorStats::api
-> name: github::GithubWallet::api
-> name: github::HookListener::api
 > name: github
 > name: github::hooks
-> name: github::GithubEvent::action
 
 ### `hooks` - # Github hook event listening with `nitcorn`.
 
@@ -557,7 +474,6 @@ var listener = new LogHookListener(api, "127.0.0.1", 8080)
 ## Dealing with events
 
 > name: github::events
-> name: github::IssueEvent::event
 
 GithubAPI can trigger different events depending on the hook configuration.
 
@@ -567,7 +483,6 @@ GithubAPI can trigger different events depending on the hook configuration.
 
 ### `GithubEvent` - # Github event stub.
 
-> name: github
 > name: github::IssueEvent::event
 > name: github::events
 
@@ -611,18 +526,13 @@ GithubAPI can trigger different events depending on the hook configuration.
 > name: json::JsonDeserializer
 > name: github
 > name: github
-> name: github::IssueEvent::event
 > name: github::events
 > name: github::Issue
 > name: github::Comment
 > name: github::events
 > name: github::Issue
 > name: github::User
-> name: github::IssueEvent::event
 > name: github::events
-> name: github::PullRequestEvent::pull
-> name: github::PullRequestReviewCommentEvent::pull
-> name: github::Loader::pulls
 > name: github::Comment
 > name: github::Branch
 > name: github::Commit

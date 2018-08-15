@@ -8,6 +8,8 @@ It offers simple generic classes to extends.
 
 
 > match: ai
+> match: ai::backtrack
+> match: ai::search
 
 Contents:
 
@@ -22,7 +24,13 @@ See the `examples` subdirectory for examples:
 
 
 > match: ai>examples>
+> match: ai::queens
+> match: ai::puzzle
 
 * `examples/queens.nit`
 * `examples/puzzle.nit`
+
+
+> match: ai::queens
+> match: ai::puzzle
 

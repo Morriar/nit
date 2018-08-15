@@ -31,10 +31,9 @@ This parser passes all tests inside http://daringfireball.net/projects/downloads
 1. Images.text: fails because this parser doesn't produce empty 'title' image attributes.
 2. Literal quotes in titles.text: because markdown accepts unescaped quotes in titles and this is wrong.
 
-> match: markdown
-> match: markdown::markdown
 > match: markdown::LinkRef::title
 > match: markdown::HeadLine::title
+> match: markdown
 
 ## Testing
 

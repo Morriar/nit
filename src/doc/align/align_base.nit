@@ -31,7 +31,7 @@ end
 redef class MdNode
 	var md_refs = new Array[MdRef] is writable
 
-	var all_md_refs: Array[MdRef] is lazy do
+	fun all_md_refs: Array[MdRef] do
 		var v = new MdRefVisitor
 		v.enter_visit(self)
 		return v.md_refs
@@ -68,7 +68,7 @@ abstract class MdRef
 	redef fun to_s do return "{class_name}\{{node}\}"
 end
 
-class MdRefMEntity
+abstract class MdRefMEntity
 	super MdRef
 
 	var mentity:  MEntity

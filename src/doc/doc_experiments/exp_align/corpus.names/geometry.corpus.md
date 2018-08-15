@@ -28,6 +28,7 @@ It means a simple and fast way to test collision but not really accurate since i
 ## Quadtrees
 
 > name: geometry::quadtree
+> name: geometry::QuadTree
 
 A QuadTree is a tree data structure in which each internal node has exactly four children
 They're most often used to partition two-dimensional space by recursively subdividing

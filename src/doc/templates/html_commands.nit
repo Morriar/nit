@@ -219,7 +219,7 @@ redef class CmdGraph
 	redef fun to_html do
 		var output = render
 		if output == null then return ""
-		return output.write_to_string
+		return output.write_to_string.replace_first("width=\"[0-9]+pt\" height=\"[0-9]+pt\"".to_re, "width=\"100%\"")
 	end
 end
 
