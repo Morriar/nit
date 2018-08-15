@@ -41,7 +41,7 @@ class MDocAligner
 
 	fun align_mdoc(mdoc: MDoc) do
 		var document = mdoc.mdoc_document
-		var filter: MdFilter
+		# var filter: MdFilter
 
 		# Align structure
 		var align_struct = new MdAlignStructure(model, mainmodule, context)
@@ -141,8 +141,8 @@ class MDocAligner
 		# filter_kind.filter_document(document)
 
 		# Align code bloks
-		var align_blockcodes = new MdAlignBlockCodes(model, mainmodule, context, mentity_index)
-		align_blockcodes.align_document(document)
+		# var align_blockcodes = new MdAlignBlockCodes(model, mainmodule, context, mentity_index)
+		# align_blockcodes.align_document(document)
 
 		# var filter_context = new MdFilterContext(context)
 		# filter_context.filter_document(document)
@@ -169,7 +169,7 @@ class MDocAligner
 
 
 
-		span_visitor.enter_visit(document)
+		# span_visitor.enter_visit(document)
 
 		# Align pieces of code
 		# code_visitor.enter_visit(document)

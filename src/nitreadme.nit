@@ -23,6 +23,7 @@ module nitreadme
 
 import doc::doc_tool
 import suggest_insert
+import suggest_edit
 import name_index
 import mentities_index
 
@@ -250,6 +251,9 @@ redef class MPackage
 
 		var aligner = new MDocAligner(model, mainmodule, mentity_index, toolcontext.modelbuilder.model.mdoc_parser, self)
 		aligner.align_mdoc(mdoc)
+
+		var editor = new MDocEditor
+		editor.edit_document(mdoc.mdoc_document)
 
 		# var suggest = new MDocSuggester(self, mentity_index)
 		# suggest.suggest(mdoc.mdoc_document)
