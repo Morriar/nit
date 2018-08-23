@@ -2,6 +2,8 @@
 
 ## Points and Lines
 
+[[uml: geometry | format: svg, mentities: geometry::geometry;geometry::angles;geometry::points_and_lines;geometry::boxes;geometry::quadtree;geometry::polygon]]
+
 The very basics of geometry needs, for two and three-dimensional space.
 
 ## Boxes and detection collision

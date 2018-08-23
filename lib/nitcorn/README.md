@@ -2,6 +2,8 @@
 
 ## Features
 
+![Diagram for `nitcorn`](uml-nitcorn.svg)
+
 Dynamic content is served by subclassing `Action` and implementing `answer`.
 This method receives an `HttpRequest` and must return an `HttpResponse`.
 _nitcorn_ provides `FileServer`, a simple `Action` to serve static files.

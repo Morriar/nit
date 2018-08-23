@@ -28,6 +28,8 @@ This project requires the following packages:
 
 ### Run `app_base`
 
+![Diagram for `app`](uml-app.svg)
+
 Compile `app_base` with the following command:
 
 ~~~bash

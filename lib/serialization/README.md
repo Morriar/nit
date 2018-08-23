@@ -5,6 +5,8 @@ the `Serializable` interface and the implementations of `Serializer` and `Deseri
 
 ## The `serialize` annotation
 
+![Diagram for `serialization`](uml-serialization.svg)
+
 A class annotated with `serialize` identifies it as a subclass of Serializable and
 triggers the generation of customized serialization and deserialization services.
 

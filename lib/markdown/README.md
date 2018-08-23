@@ -16,6 +16,8 @@ This project requires the following packages:
 
 ### Run `nitmd`
 
+![Diagram for `markdown`](uml-markdown.svg)
+
 `nitmd` can be used as a standalone tool:
 
 ~~~bash

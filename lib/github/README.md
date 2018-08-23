@@ -18,6 +18,8 @@ This project requires the following packages:
 
 ### Run `loader`
 
+![Diagram for `github`](uml-github.svg)
+
 Compile `loader` with the following command:
 
 ~~~bash

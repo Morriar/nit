@@ -15,6 +15,8 @@ The `vsm` package provides the following features:
 
 ## Vectors
 
+[[uml: vsm | format: svg, mentities: vsm::IndexMatchSorter;vsm::IndexMatch;vsm::StringIndex;vsm::Vector;vsm::FileIndex;vsm::Document;vsm::VSMIndex]]
+
 With VSM, documents are represented by a n-dimensions vector.
 Each dimension represent an attribute of the document or object.
 

@@ -16,6 +16,8 @@ See the `examples` subdirectory for examples:
 
 [[code: ai::puzzle]]
 
+[[uml: ai | format: svg, mentities: ai::ai;ai::backtrack;ai::search]]
+
 ## Authors
 
 This project is maintained by [[ini-maintainer: ai]].

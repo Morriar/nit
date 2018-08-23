@@ -18,6 +18,8 @@ This project requires the following packages:
 
 ### Run `nit_activity`
 
+![Diagram for `android`](uml-android.svg)
+
 Compile `nit_activity` with the following command:
 
 ~~~bash

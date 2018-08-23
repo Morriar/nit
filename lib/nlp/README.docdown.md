@@ -13,6 +13,8 @@ See http://nlp.stanford.edu/software/corenlp.shtml.
 
 ## NLPProcessor
 
+[[uml: nlp | format: svg, mentities: nlp::nlp_server;nlp::nlp;nlp::nlp_index;nlp::stanford]]
+
 ### Java client
 
 ~~~nit

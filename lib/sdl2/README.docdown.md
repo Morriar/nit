@@ -11,6 +11,8 @@ Example from `sdl2::minimal`:
 
 [[code: sdl2::minimal]]
 
+[[uml: sdl2 | format: svg, mentities: sdl2::all;sdl2::sdl2;sdl2::syswm;sdl2::image;sdl2::mixer;sdl2::events;sdl2::sdl2_base]]
+
 ## Examples
 
 See the `minimal` example within this project at `examples/minimal` for a simple example

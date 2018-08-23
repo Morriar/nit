@@ -9,6 +9,8 @@ Example from `actors::chameneosredux`:
 
 ## What is an actor ?
 
+[[uml: actors | format: svg, mentities: actors::actors_simple;actors::actors_mandelbrot;actors::actors_thread_ring;actors::actors_simple_simulation;actors::actors_agent_simulation;actors::actors_chameneosredux;actors::actors_fannkuchredux;actors::actors]]
+
 An actor is an entity which receives messages and does some kind of computation based on it.
 An actor has a mailbox in which it receives its messages, and process them one at a time.
 

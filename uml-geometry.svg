@@ -9,8 +9,15 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 328)">
 <title>G</title>
 <polygon fill="white" stroke="none" points="-4,4 -4,-328 254,-328 254,4 -4,4"/>
+<!-- geometry::geometry -->
+<g id="node1" class="node"><title>geometry::geometry</title>
+<polygon fill="#fffaf3" stroke="black" points="45.8333,-33 -0.5,-33 -0.5,-17 48.5,-17 48.5,-30.3333 45.8333,-33"/>
+<polyline fill="none" stroke="black" points="45.8333,-33 45.8333,-30.3333 "/>
+<polyline fill="none" stroke="black" points="48.5,-30.3333 45.8333,-30.3333 "/>
+<text text-anchor="start" x="2" y="-23.5" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="10.00">geometry</text>
+</g>
 <!-- geometry::angles -->
-<g id="node1" class="node"><title>geometry::angles</title>
+<g id="node2" class="node"><title>geometry::angles</title>
 <polygon fill="#fffaf3" stroke="black" points="34,-152 4,-152 4,-112 40,-112 40,-146 34,-152"/>
 <polyline fill="none" stroke="black" points="34,-152 34,-146 "/>
 <polyline fill="none" stroke="black" points="40,-146 34,-146 "/>
@@ -20,38 +27,13 @@
 <text text-anchor="start" x="6" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
 <text text-anchor="start" x="13" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">Point</text>
 </g>
-<!-- geometry::points_and_lines -->
-<g id="node4" class="node"><title>geometry::points_and_lines</title>
-<polygon fill="#fffaf3" stroke="black" points="140.5,-324 61.5,-324 61.5,-214 146.5,-214 146.5,-318 140.5,-324"/>
-<polyline fill="none" stroke="black" points="140.5,-324 140.5,-318 "/>
-<polyline fill="none" stroke="black" points="146.5,-318 140.5,-318 "/>
-<text text-anchor="start" x="64" y="-314.5" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="10.00">points_and_lines</text>
-<text text-anchor="start" x="64" y="-299" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
-<text text-anchor="start" x="71" y="-299" font-family="Helvetica,sans-Serif" font-size="10.00">Deserializer</text>
-<text text-anchor="start" x="64" y="-289" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
-<text text-anchor="start" x="71" y="-289" font-family="Helvetica,sans-Serif" font-size="10.00">ILine</text>
-<text text-anchor="start" x="64" y="-279" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
-<text text-anchor="start" x="71" y="-279" font-family="Helvetica,sans-Serif" font-size="10.00">ILine3d</text>
-<text text-anchor="start" x="64" y="-269" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
-<text text-anchor="start" x="71" y="-269" font-family="Helvetica,sans-Serif" font-size="10.00">IPoint</text>
-<text text-anchor="start" x="64" y="-259" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
-<text text-anchor="start" x="71" y="-259" font-family="Helvetica,sans-Serif" font-size="10.00">IPoint3d</text>
-<text text-anchor="start" x="64" y="-249" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
-<text text-anchor="start" x="71" y="-249" font-family="Helvetica,sans-Serif" font-size="10.00">Line</text>
-<text text-anchor="start" x="64" y="-239" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
-<text text-anchor="start" x="71" y="-239" font-family="Helvetica,sans-Serif" font-size="10.00">Line3d</text>
-<text text-anchor="start" x="64" y="-229" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
-<text text-anchor="start" x="71" y="-229" font-family="Helvetica,sans-Serif" font-size="10.00">Point</text>
-<text text-anchor="start" x="64" y="-219" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
-<text text-anchor="start" x="71" y="-219" font-family="Helvetica,sans-Serif" font-size="10.00">Point3d</text>
-</g>
-<!-- geometry::angles&#45;&gt;geometry::points_and_lines -->
-<g id="edge1" class="edge"><title>geometry::angles&#45;&gt;geometry::points_and_lines</title>
-<path fill="none" stroke="black" stroke-width="0.5" stroke-dasharray="5,2" d="M30.5573,-152.252C35.9882,-163.974 43.404,-179.122 51,-192 54.3864,-197.741 58.0651,-203.615 61.8528,-209.428"/>
-<polygon fill="black" stroke="black" stroke-width="0.5" points="64.7675,-213.859 60.1396,-210.918 63.3934,-211.77 62.0193,-209.682 62.0193,-209.682 62.0193,-209.682 63.3934,-211.77 63.899,-208.445 64.7675,-213.859 64.7675,-213.859"/>
+<!-- geometry::geometry&#45;&gt;geometry::angles -->
+<g id="edge1" class="edge"><title>geometry::geometry&#45;&gt;geometry::angles</title>
+<path fill="none" stroke="black" stroke-width="0.5" stroke-dasharray="5,2" d="M23.8625,-33.2171C23.5786,-48.1211 22.9163,-82.8944 22.4631,-106.688"/>
+<polygon fill="black" stroke="black" stroke-width="0.5" points="22.3641,-111.884 20.2098,-106.842 22.4118,-109.385 22.4594,-106.885 22.4594,-106.885 22.4594,-106.885 22.4118,-109.385 24.709,-106.928 22.3641,-111.884 22.3641,-111.884"/>
 </g>
 <!-- geometry::boxes -->
-<g id="node2" class="node"><title>geometry::boxes</title>
+<g id="node4" class="node"><title>geometry::boxes</title>
 <polygon fill="#fffaf3" stroke="black" points="140,-192 62,-192 62,-72 146,-72 146,-186 140,-192"/>
 <polyline fill="none" stroke="black" points="140,-192 140,-186 "/>
 <polyline fill="none" stroke="black" points="146,-186 140,-186 "/>
@@ -77,30 +59,66 @@
 <text text-anchor="start" x="64" y="-77" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
 <text text-anchor="start" x="71" y="-77" font-family="Helvetica,sans-Serif" font-size="10.00">IPoint3d</text>
 </g>
-<!-- geometry::boxes&#45;&gt;geometry::points_and_lines -->
-<g id="edge2" class="edge"><title>geometry::boxes&#45;&gt;geometry::points_and_lines</title>
-<path fill="none" stroke="black" stroke-width="0.5" stroke-dasharray="5,2" d="M104,-192.213C104,-197.746 104,-203.354 104,-208.885"/>
-<polygon fill="black" stroke="black" stroke-width="0.5" points="104,-213.94 101.75,-208.939 104,-211.44 104,-208.94 104,-208.94 104,-208.94 104,-211.44 106.25,-208.94 104,-213.94 104,-213.94"/>
-</g>
-<!-- geometry::geometry -->
-<g id="node3" class="node"><title>geometry::geometry</title>
-<polygon fill="#fffaf3" stroke="black" points="45.8333,-33 -0.5,-33 -0.5,-17 48.5,-17 48.5,-30.3333 45.8333,-33"/>
-<polyline fill="none" stroke="black" points="45.8333,-33 45.8333,-30.3333 "/>
-<polyline fill="none" stroke="black" points="48.5,-30.3333 45.8333,-30.3333 "/>
-<text text-anchor="start" x="2" y="-23.5" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="10.00">geometry</text>
-</g>
-<!-- geometry::geometry&#45;&gt;geometry::angles -->
-<g id="edge3" class="edge"><title>geometry::geometry&#45;&gt;geometry::angles</title>
-<path fill="none" stroke="black" stroke-width="0.5" stroke-dasharray="5,2" d="M23.8625,-33.2171C23.5786,-48.1211 22.9163,-82.8944 22.4631,-106.688"/>
-<polygon fill="black" stroke="black" stroke-width="0.5" points="22.3641,-111.884 20.2098,-106.842 22.4118,-109.385 22.4594,-106.885 22.4594,-106.885 22.4594,-106.885 22.4118,-109.385 24.709,-106.928 22.3641,-111.884 22.3641,-111.884"/>
-</g>
 <!-- geometry::geometry&#45;&gt;geometry::boxes -->
-<g id="edge4" class="edge"><title>geometry::geometry&#45;&gt;geometry::boxes</title>
+<g id="edge2" class="edge"><title>geometry::geometry&#45;&gt;geometry::boxes</title>
 <path fill="none" stroke="black" stroke-width="0.5" stroke-dasharray="5,2" d="M29.4987,-33.2171C35.9749,-41.717 47.3749,-56.6795 59.3388,-72.3822"/>
 <polygon fill="black" stroke="black" stroke-width="0.5" points="62.39,-76.3868 57.57,-73.7733 60.8748,-74.3983 59.3597,-72.4097 59.3597,-72.4097 59.3597,-72.4097 60.8748,-74.3983 61.1494,-71.046 62.39,-76.3868 62.39,-76.3868"/>
 </g>
+<!-- geometry::points_and_lines -->
+<g id="node3" class="node"><title>geometry::points_and_lines</title>
+<polygon fill="#fffaf3" stroke="black" points="140.5,-324 61.5,-324 61.5,-214 146.5,-214 146.5,-318 140.5,-324"/>
+<polyline fill="none" stroke="black" points="140.5,-324 140.5,-318 "/>
+<polyline fill="none" stroke="black" points="146.5,-318 140.5,-318 "/>
+<text text-anchor="start" x="64" y="-314.5" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="10.00">points_and_lines</text>
+<text text-anchor="start" x="64" y="-299" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
+<text text-anchor="start" x="71" y="-299" font-family="Helvetica,sans-Serif" font-size="10.00">Deserializer</text>
+<text text-anchor="start" x="64" y="-289" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
+<text text-anchor="start" x="71" y="-289" font-family="Helvetica,sans-Serif" font-size="10.00">ILine</text>
+<text text-anchor="start" x="64" y="-279" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
+<text text-anchor="start" x="71" y="-279" font-family="Helvetica,sans-Serif" font-size="10.00">ILine3d</text>
+<text text-anchor="start" x="64" y="-269" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
+<text text-anchor="start" x="71" y="-269" font-family="Helvetica,sans-Serif" font-size="10.00">IPoint</text>
+<text text-anchor="start" x="64" y="-259" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
+<text text-anchor="start" x="71" y="-259" font-family="Helvetica,sans-Serif" font-size="10.00">IPoint3d</text>
+<text text-anchor="start" x="64" y="-249" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
+<text text-anchor="start" x="71" y="-249" font-family="Helvetica,sans-Serif" font-size="10.00">Line</text>
+<text text-anchor="start" x="64" y="-239" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
+<text text-anchor="start" x="71" y="-239" font-family="Helvetica,sans-Serif" font-size="10.00">Line3d</text>
+<text text-anchor="start" x="64" y="-229" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
+<text text-anchor="start" x="71" y="-229" font-family="Helvetica,sans-Serif" font-size="10.00">Point</text>
+<text text-anchor="start" x="64" y="-219" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
+<text text-anchor="start" x="71" y="-219" font-family="Helvetica,sans-Serif" font-size="10.00">Point3d</text>
+</g>
+<!-- geometry::angles&#45;&gt;geometry::points_and_lines -->
+<g id="edge3" class="edge"><title>geometry::angles&#45;&gt;geometry::points_and_lines</title>
+<path fill="none" stroke="black" stroke-width="0.5" stroke-dasharray="5,2" d="M30.5573,-152.252C35.9882,-163.974 43.404,-179.122 51,-192 54.3864,-197.741 58.0651,-203.615 61.8528,-209.428"/>
+<polygon fill="black" stroke="black" stroke-width="0.5" points="64.7675,-213.859 60.1396,-210.918 63.3934,-211.77 62.0193,-209.682 62.0193,-209.682 62.0193,-209.682 63.3934,-211.77 63.899,-208.445 64.7675,-213.859 64.7675,-213.859"/>
+</g>
+<!-- geometry::boxes&#45;&gt;geometry::points_and_lines -->
+<g id="edge4" class="edge"><title>geometry::boxes&#45;&gt;geometry::points_and_lines</title>
+<path fill="none" stroke="black" stroke-width="0.5" stroke-dasharray="5,2" d="M104,-192.213C104,-197.746 104,-203.354 104,-208.885"/>
+<polygon fill="black" stroke="black" stroke-width="0.5" points="104,-213.94 101.75,-208.939 104,-211.44 104,-208.94 104,-208.94 104,-208.94 104,-211.44 106.25,-208.94 104,-213.94 104,-213.94"/>
+</g>
+<!-- geometry::quadtree -->
+<g id="node5" class="node"><title>geometry::quadtree</title>
+<polygon fill="#fffaf3" stroke="black" points="129.5,-50 72.5,-50 72.5,-0 135.5,-0 135.5,-44 129.5,-50"/>
+<polyline fill="none" stroke="black" points="129.5,-50 129.5,-44 "/>
+<polyline fill="none" stroke="black" points="135.5,-44 129.5,-44 "/>
+<text text-anchor="start" x="75" y="-40.5" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="10.00">quadtree</text>
+<text text-anchor="start" x="75" y="-25" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
+<text text-anchor="start" x="82" y="-25" font-family="Helvetica,sans-Serif" font-size="10.00">DQuadTree</text>
+<text text-anchor="start" x="75" y="-15" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
+<text text-anchor="start" x="82" y="-15" font-family="Helvetica,sans-Serif" font-size="10.00">QuadTree</text>
+<text text-anchor="start" x="75" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
+<text text-anchor="start" x="82" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">SQuadTree</text>
+</g>
+<!-- geometry::quadtree&#45;&gt;geometry::boxes -->
+<g id="edge5" class="edge"><title>geometry::quadtree&#45;&gt;geometry::boxes</title>
+<path fill="none" stroke="black" stroke-width="0.5" stroke-dasharray="5,2" d="M104,-50.0891C104,-55.0955 104,-60.5952 104,-66.2982"/>
+<polygon fill="black" stroke="black" stroke-width="0.5" points="104,-71.5845 101.75,-66.5845 104,-69.0845 104,-66.5845 104,-66.5845 104,-66.5845 104,-69.0845 106.25,-66.5846 104,-71.5845 104,-71.5845"/>
+</g>
 <!-- geometry::polygon -->
-<g id="node5" class="node"><title>geometry::polygon</title>
+<g id="node6" class="node"><title>geometry::polygon</title>
 <polygon fill="#fffaf3" stroke="black" points="244,-162 168,-162 168,-102 250,-102 250,-156 244,-162"/>
 <polyline fill="none" stroke="black" points="244,-162 244,-156 "/>
 <polyline fill="none" stroke="black" points="250,-156 244,-156 "/>
@@ -115,27 +133,9 @@
 <text text-anchor="start" x="177" y="-107" font-family="Helvetica,sans-Serif" font-size="10.00">Sys</text>
 </g>
 <!-- geometry::polygon&#45;&gt;geometry::points_and_lines -->
-<g id="edge5" class="edge"><title>geometry::polygon&#45;&gt;geometry::points_and_lines</title>
+<g id="edge6" class="edge"><title>geometry::polygon&#45;&gt;geometry::points_and_lines</title>
 <path fill="none" stroke="black" stroke-width="0.5" stroke-dasharray="5,2" d="M186.217,-162.293C175.43,-176.162 162.147,-193.24 149.428,-209.592"/>
 <polygon fill="black" stroke="black" stroke-width="0.5" points="146.209,-213.732 147.502,-208.403 147.744,-211.758 149.279,-209.785 149.279,-209.785 149.279,-209.785 147.744,-211.758 151.055,-211.166 146.209,-213.732 146.209,-213.732"/>
-</g>
-<!-- geometry::quadtree -->
-<g id="node6" class="node"><title>geometry::quadtree</title>
-<polygon fill="#fffaf3" stroke="black" points="129.5,-50 72.5,-50 72.5,-0 135.5,-0 135.5,-44 129.5,-50"/>
-<polyline fill="none" stroke="black" points="129.5,-50 129.5,-44 "/>
-<polyline fill="none" stroke="black" points="135.5,-44 129.5,-44 "/>
-<text text-anchor="start" x="75" y="-40.5" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="10.00">quadtree</text>
-<text text-anchor="start" x="75" y="-25" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
-<text text-anchor="start" x="82" y="-25" font-family="Helvetica,sans-Serif" font-size="10.00">DQuadTree</text>
-<text text-anchor="start" x="75" y="-15" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
-<text text-anchor="start" x="82" y="-15" font-family="Helvetica,sans-Serif" font-size="10.00">QuadTree</text>
-<text text-anchor="start" x="75" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="forestgreen">+</text>
-<text text-anchor="start" x="82" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">SQuadTree</text>
-</g>
-<!-- geometry::quadtree&#45;&gt;geometry::boxes -->
-<g id="edge6" class="edge"><title>geometry::quadtree&#45;&gt;geometry::boxes</title>
-<path fill="none" stroke="black" stroke-width="0.5" stroke-dasharray="5,2" d="M104,-50.0891C104,-55.0955 104,-60.5952 104,-66.2982"/>
-<polygon fill="black" stroke="black" stroke-width="0.5" points="104,-71.5845 101.75,-66.5845 104,-69.0845 104,-66.5845 104,-66.5845 104,-66.5845 104,-69.0845 106.25,-66.5846 104,-71.5845 104,-71.5845"/>
 </g>
 </g>
 </svg>

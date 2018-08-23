@@ -12,6 +12,8 @@ This project requires the following packages:
 
 ### Run `nit_activity`
 
+[[uml: android | format: svg, mentities: android::portrait;android::landscape;android::android;android::at_boot;android::shared_preferences;android::intent_api12;android::intent_api17;android::intent_api19;android::intent_api14;android::platform;android::intent_api18;android::activities;android::intent_api11;android::vibration;android::toast;android::cardboard;android::native_notification;android::data_store;android::aware;android::intent_api15;android::intent;android::key_event;android::wifi;android::game;android::shared_preferences_api11;android::dalvik;android::assets;android::service;android::log;android::intent_api16;android::load_image;android::http_request;android::native_app_glue;android::nit_activity;android::notification;android::gamepad;android::ui;android::native_ui;android::input_events;android::sensors;android::assets_and_resources;android::shared_preferences_api10;android::bundle;android::audio;android::intent_api10]]
+
 Compile `nit_activity` with the following command:
 
 [[main-compile: android::nit_activity]]

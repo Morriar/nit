@@ -15,6 +15,8 @@ The `vsm` package provides the following features:
 
 ## Vectors
 
+![Diagram for `vsm`](uml-vsm.svg)
+
 With VSM, documents are represented by a n-dimensions vector.
 Each dimension represent an attribute of the document or object.
 

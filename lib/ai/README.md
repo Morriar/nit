@@ -298,6 +298,8 @@ for arg in args do
 end
 ~~~
 
+![Diagram for `ai`](uml-ai.svg)
+
 ## Authors
 
 This project is maintained by **Jean Privat <mailto:jean@pryen.org>**.

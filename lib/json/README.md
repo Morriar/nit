@@ -6,6 +6,8 @@ There is a single API to write JSON, and three API to read depending on the use 
 
 ## Write JSON
 
+![Diagram for `json`](uml-json.svg)
+
 Writing Nit objects to JSON format can be useful to communicate with a remote service,
 save data locally or even debug and understand the structure of an object.
 There is two related services to write JSON object, the method

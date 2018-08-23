@@ -15,6 +15,8 @@ This project requires the following packages:
 
 ### Run `app`
 
+![Diagram for `ios`](uml-ios.svg)
+
 Compile `app` with the following command:
 
 ~~~bash

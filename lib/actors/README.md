@@ -150,6 +150,8 @@ work(n, 10)
 
 ## What is an actor ?
 
+![Diagram for `actors`](uml-actors.svg)
+
 An actor is an entity which receives messages and does some kind of computation based on it.
 An actor has a mailbox in which it receives its messages, and process them one at a time.
 

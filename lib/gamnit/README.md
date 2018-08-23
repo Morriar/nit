@@ -34,6 +34,8 @@ This project requires the following packages:
 
 ### Run `texture_atlas_parser`
 
+![Diagram for `gamnit`](uml-gamnit.svg)
+
 Compile `texture_atlas_parser` with the following command:
 
 ~~~bash

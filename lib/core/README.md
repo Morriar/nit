@@ -4,6 +4,8 @@ Core classes and methods used by default by Nit programs and libraries.
 
 ## Core Basic Types and Operations
 
+![Diagram for `core`](uml-core.svg)
+
 This module is the root of the module hierarchy.
 It provides a very minimal set of classes and services used as a
 foundation to define other classes and methods.

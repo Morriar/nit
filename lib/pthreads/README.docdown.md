@@ -31,6 +31,8 @@ Example from `pthreads::concurrent_array_and_barrier`:
 
 ## For more information:
 
+[[uml: pthreads | format: svg, mentities: pthreads::extra;pthreads::threadpool;pthreads::pthreads;pthreads::redef_collections;pthreads::concurrent_collections]]
+
 * See: `man pthreads`
 * See: `examples/concurrent_array_and_barrier.nit`
 * See: `examples/threaded_example.nit`

@@ -2,6 +2,8 @@
 
 ## Points and Lines
 
+![Diagram for `geometry`](uml-geometry.svg)
+
 The very basics of geometry needs, for two and three-dimensional space.
 
 ## Boxes and detection collision

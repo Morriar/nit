@@ -116,6 +116,8 @@ sdl.img.quit
 sys.sdl.quit
 ~~~
 
+![Diagram for `sdl2`](uml-sdl2.svg)
+
 ## Examples
 
 See the `minimal` example within this project at `examples/minimal` for a simple example

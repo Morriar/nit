@@ -14,6 +14,8 @@ This project requires the following packages:
 
 ### Run `loader`
 
+[[uml: github | format: svg, mentities: github::github;github::cache;github::github_curl;github::wallet;github::hooks;github::events;github::loader;github::api]]
+
 Compile `loader` with the following command:
 
 [[main-compile: github::loader]]

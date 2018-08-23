@@ -15,6 +15,8 @@ This project requires the following packages:
 
 ### Run `nitmd`
 
+[[uml: markdown | format: svg, mentities: markdown::nitmd;markdown::wikilinks;markdown::man;markdown::decorators;markdown::markdown]]
+
 `nitmd` can be used as a standalone tool:
 
 [[main-compile: markdown::nitmd]]

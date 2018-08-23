@@ -10,6 +10,8 @@ without all the boiler plate code.
 
 ## What does it taste like?
 
+![Diagram for `popcorn`](uml-popcorn.svg)
+
 Set up is quick and easy as 10 lines of code.
 Create a file `app.nit` and add the following code:
 

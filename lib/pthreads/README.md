@@ -88,6 +88,8 @@ print "{array.length} strings inserted"
 
 ## For more information:
 
+![Diagram for `pthreads`](uml-pthreads.svg)
+
 * See: `man pthreads`
 * See: `examples/concurrent_array_and_barrier.nit`
 * See: `examples/threaded_example.nit`

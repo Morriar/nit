@@ -12,6 +12,8 @@ This project requires the following packages:
 
 ### Run `app`
 
+[[uml: ios | format: svg, mentities: ios::platform;ios::ios;ios::http_request;ios::assets;ios::data_store;ios::app;ios::audio;ios::glkit;ios::uikit;ios::ui]]
+
 Compile `app` with the following command:
 
 [[main-compile: ios::app]]

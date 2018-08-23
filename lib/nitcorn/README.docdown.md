@@ -2,6 +2,9 @@
 
 ## Features
 
+[[uml: nitcorn | format: svg, mentities: nitcorn::pthreads;nitcorn::nitcorn;nitcorn::signal_handler;nitcorn::token;nitcorn::proxy;nitcorn::server_config;nitcorn::restful;nitcorn::sessions;nitcorn::http_errors;nitcorn::log;nitcorn::http_request_buffer;nitcorn::reactor;nitcorn::vararg_routes;nitcorn::file_server;nitcorn::http_request;nitcorn::http_response;nitcorn::media_types]]
+
+
 Dynamic content is served by subclassing `Action` and implementing `answer`.
 This method receives an `HttpRequest` and must return an `HttpResponse`.
 _nitcorn_ provides `FileServer`, a simple `Action` to serve static files.

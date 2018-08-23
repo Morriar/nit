@@ -24,6 +24,8 @@ This project requires the following packages:
 
 ### Run `app_base`
 
+[[uml: app | format: svg, mentities: app::app;app::data_store;app::assets;app::audio;app::app_base;app::http_request;app::ui]]
+
 Compile `app_base` with the following command:
 
 [[main-compile: app::app_base]]
