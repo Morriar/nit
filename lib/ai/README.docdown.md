@@ -12,3 +12,8 @@ See the `examples` subdirectory for examples:
 
 * `examples/queens.nit`
 * `examples/puzzle.nit`
+
+## Authors
+
+This project is maintained by [[ini-maintainer: ai]].
+

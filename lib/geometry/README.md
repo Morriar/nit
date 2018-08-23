@@ -54,3 +54,7 @@ Services provided :
 * Intersection of convex polygon
 * Convex hull of a set of points
 * Triangulation of polygon
+
+## Authors
+
+This project is maintained by **Romain Chanoir <mailto:romain.chanoir@viacesi.fr>**.

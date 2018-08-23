@@ -79,3 +79,7 @@ assert matches.first.document == d1
 * Use options to choose CoreNLP analyzers
 * Analyze sentences dependencies
 * Analyze sentiment
+
+## Authors
+
+This project is maintained by **Alexandre Terrasa <mailto:alexandre@moz-code.org>**.

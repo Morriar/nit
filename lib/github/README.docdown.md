@@ -380,3 +380,7 @@ Run the nitunit automated tests with the following command:
 
 [[testing: github]]
 
+## Authors
+
+This project is maintained by [[ini-maintainer: github]].
+

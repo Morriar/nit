@@ -51,3 +51,10 @@ Run the nitunit automated tests with the following command:
 
 [[testing: core]]
 
+## Authors
+
+This project is maintained by [[ini-maintainer: core]].
+
+Thanks to the contribution of:
+[[ini-contributors: core]]
+

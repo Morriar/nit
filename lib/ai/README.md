@@ -12,3 +12,7 @@ See the `examples` subdirectory for examples:
 
 * `examples/queens.nit`
 * `examples/puzzle.nit`
+
+## Authors
+
+This project is maintained by **Jean Privat <mailto:jean@pryen.org>**.

@@ -405,3 +405,7 @@ Run the nitunit automated tests with the following command:
 ~~~bash
 nitunit .
 ~~~
+
+## Authors
+
+This project is maintained by **Alexandre Terrasa <mailto:alexandre@moz-code.org>**.

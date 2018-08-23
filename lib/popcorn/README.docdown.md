@@ -861,3 +861,7 @@ Run the nitunit automated tests with the following command:
 
 [[testing: popcorn]]
 
+## Authors
+
+This project is maintained by [[ini-maintainer: popcorn]].
+

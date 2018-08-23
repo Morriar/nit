@@ -55,3 +55,7 @@ Run the test suite:
 ~~~bash
 nitunit .
 ~~~
+
+## Authors
+
+This project is maintained by **Alexandre Terrasa <mailto:alexandre@moz-code.org>**.

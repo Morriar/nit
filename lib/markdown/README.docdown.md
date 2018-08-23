@@ -45,3 +45,8 @@ Minimalists tests are prefixed with `test_process_*`. All tests from daringfireb
 Run the test suite:
 
 [[testing: markdown]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: markdown]].
+

@@ -30,3 +30,7 @@ A call to the `join` method will block the execution until the threaded method i
 * See: `man pthreads`
 * See: `examples/concurrent_array_and_barrier.nit`
 * See: `examples/threaded_example.nit`
+
+## Authors
+
+This project is maintained by **Alexis Laferrière <mailto:alexis.laf@xymus.net>**.

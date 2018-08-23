@@ -123,3 +123,7 @@ var index = new FileIndex
 
 index.index_files(["/path/to/doc/1", "/path/to/doc/2"])
 ~~~
+
+## Authors
+
+This project is maintained by **Alexandre Terrasa <mailto:alexandre@moz-code.org>**.

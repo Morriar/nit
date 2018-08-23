@@ -245,3 +245,19 @@ Run the nitunit automated tests with the following command:
 ~~~bash
 nitunit .
 ~~~
+
+## Authors
+
+This project is maintained by **Jean Privat <mailto:jean@pryen.org>**.
+
+Thanks to the contribution of:
+
+* **Jean-Christophe Beaupré <mailto:jcbrinfo@users.noreply.github.com>**
+* **Romain Chanoir <mailto:romain.chanoir@viacesi.fr>**
+* **Christophe Gigax <mailto:christophe.gigax@viacesi.fr>**
+* **Frédéric Vachon <mailto:fredvac@gmail.com>**
+* **Jean-Sebastien Gelinas <mailto:calestar@gmail.com>**
+* **Alexandre Blondin Massé <mailto:alexandre.blondin.masse@gmail.com>**
+* **Johan Kayser <mailto:johan.kayser@viacesi.fr>**
+* **Johann Dubois <mailto:johann.dubois@outlook.com>**
+* **Julien Pagès <mailto:julien.projet@gmail.com>**

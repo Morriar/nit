@@ -88,3 +88,14 @@ Jean-Philippe Caissy, Guillaume Auger, Frederic Sevillano, Justin Michaud-Ouelle
 Stephan Michaud and Maxime Bélanger.
 
 It has been adapted to a library, and is currently maintained, by Alexis Laferrière.
+
+This project is maintained by **Alexis Laferrière <mailto:alexis.laf@xymus.net>**.
+
+Thanks to the contribution of:
+
+* **Jean-Philippe Caissy <mailto:jean-philippe.caissy@shopify.com>**
+* **Guillaume Auger**
+* **Frederic Sevillano**
+* **Justin Michaud-Ouellette**
+* **Stephan Michaud**
+* **Maxime Bélanger**

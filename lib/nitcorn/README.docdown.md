@@ -88,3 +88,9 @@ Jean-Philippe Caissy, Guillaume Auger, Frederic Sevillano, Justin Michaud-Ouelle
 Stephan Michaud and Maxime Bélanger.
 
 It has been adapted to a library, and is currently maintained, by Alexis Laferrière.
+
+This project is maintained by [[ini-maintainer: nitcorn]].
+
+Thanks to the contribution of:
+[[ini-contributors: nitcorn]]
+

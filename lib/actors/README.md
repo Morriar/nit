@@ -68,3 +68,7 @@ using actors for fork/join parallelism instead of concurrency).
 
 You can find example of differents small programs implemented with Nit actors in the `examples`
 directory. For a really simple example, you can check `examples/simple`.
+
+## Authors
+
+This project is maintained by **Romain Chanoir <mailto:romain.chanoir@viacesi.fr>**.

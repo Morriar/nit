@@ -234,3 +234,7 @@ There is two main ways to achieve this goal:
 
   # ...
   ~~~
+
+## Authors
+
+This project is maintained by **Alexis Laferrière <mailto:alexis.laf@xymus.net>**.

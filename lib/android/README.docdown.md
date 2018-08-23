@@ -182,3 +182,8 @@ APK file, it can then be published on the Play Store.
 
 3. Call `nitc` with the `--release` options. You will be prompted for the
    required passwords as needed by `jarsigner`.
+
+## Authors
+
+This project is maintained by [[ini-maintainer: android]].
+

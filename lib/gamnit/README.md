@@ -104,3 +104,7 @@ _gamnit_ is modular, different services of the framework are available through d
 * `model_parsers` provides services to read and parse models from the asset folder.
 
 * `network` provides a simple communication framework for multiplayer client/server games.
+
+## Authors
+
+This project is maintained by **Alexis Laferrière <mailto:alexis.laf@xymus.net>**.
