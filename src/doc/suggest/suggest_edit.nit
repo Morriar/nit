@@ -52,17 +52,17 @@ class MDocEditor
 		var ctx = cbuilder.context
 
 		titles.edit_document(ctx, document)
-		intros.edit_document(ctx, document)
-		tocs.edit_document(ctx, document)
-		starting.edit_document(ctx, document)
-		api.edit_document(ctx, document)
-		testing.edit_document(ctx, document)
-		authors.edit_document(ctx, document)
+		# intros.edit_document(ctx, document)
+		# tocs.edit_document(ctx, document)
+		# starting.edit_document(ctx, document)
+		# api.edit_document(ctx, document)
+		# testing.edit_document(ctx, document)
+		# authors.edit_document(ctx, document)
 
 		# examples_replace.edit_document(ctx, document)
-		examples.edit_document(ctx, document)
-		lists.edit_document(ctx, document)
-		uml.edit_document(ctx, document)
+		# examples.edit_document(ctx, document)
+		# lists.edit_document(ctx, document)
+		# uml.edit_document(ctx, document)
 		# links.edit_document(ctx, document)
 		# var render = new MarkdownRenderer
 		# var md = render.render(document)
