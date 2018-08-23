@@ -54,7 +54,7 @@ class MDocEditor
 		titles.edit_document(ctx, document)
 		# intros.edit_document(ctx, document)
 		# tocs.edit_document(ctx, document)
-		# starting.edit_document(ctx, document)
+		starting.edit_document(ctx, document)
 		# api.edit_document(ctx, document)
 		# testing.edit_document(ctx, document)
 		# authors.edit_document(ctx, document)
@@ -394,9 +394,10 @@ class MdStartingEditor
 	var mainmodule: MModule
 
 	redef fun edit_document(context,doc) do
-		if context.has_starting then
+		# if context.has_starting then
 			# TODO
-		else
+		# else
+		do
 			var card = null
 			var mentity = context.mentity
 			var model = mentity.model
@@ -412,6 +413,7 @@ class MdStartingEditor
 			var res_mains = cmd_mains.init_command
 			if res_mains isa CmdSuccess then mains.add_all cmd_mains.results.as(not null)
 
+			print mains
 			if mains.is_empty then return
 
 			var cmd_parents = new CmdParents(model, mainmodule, filter, mentity)

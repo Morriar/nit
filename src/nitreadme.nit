@@ -69,7 +69,7 @@ class NitReadme
 		post_processors.add new MDocProcessMEntityLinks(toolcontext, model, mainmodule)
 		post_processors.add new MDocProcessTextReferences(toolcontext, model, mainmodule)
 		post_processors.add new MDocProcessCommands(toolcontext, cmd_parser)
-		post_processors.add new MDocProcessImages(toolcontext, "/dev/null", "path")
+		# post_processors.add new MDocProcessImages(toolcontext, "/dev/null", "path")
 		post_processors.add new MDocProcessSummary
 		return post_processors
 	end
