@@ -1,0 +1,25 @@
+# `poset` - [[ini-desc: poset]]
+
+[[toc: poset]]
+
+## Features
+
+### `POSet` - Pre-order set graph.
+
+[[doc: poset::POSet | no-synopsis]]
+
+Properties:
+
+[[features: poset::POSet | min-visibility: public, no-redef]]
+
+### `POSetElement` - View of an object in a poset
+
+[[doc: poset::POSetElement | no-synopsis]]
+
+Properties:
+
+[[features: poset::POSetElement | min-visibility: public, no-redef]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: poset]].

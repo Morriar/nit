@@ -1,0 +1,19 @@
+# `ini` - [[ini-desc: ini]]
+
+[[toc: ini]]
+
+[[doc: ini::ConfigTree]]
+
+## Features
+
+### `ConfigTree` - A configuration tree that can read and store data in ini format
+
+[[doc: ini::ConfigTree | no-synopsis]]
+
+Properties:
+
+[[features: ini::ConfigTree | min-visibility: public, no-redef]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: ini]].
