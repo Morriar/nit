@@ -1,0 +1,9 @@
+# `c` - Structures and services for compatibility with the C language
+
+## Classes from `c`
+
+[[features: c::c | mentities: c::CArray;c::NativeCArray;c::CIntArray;c::NativeCIntArray;c::CUInt16Array;c::NativeCUInt16Array;c::CByteArray;c::NativeCByteArray;c::CCStringArray;c::NativeCStringArray]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: c]].

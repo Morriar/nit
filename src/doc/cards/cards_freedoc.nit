@@ -84,9 +84,6 @@ abstract class CardMEntity
 
 	var mentity: MEntity is noserialize
 
-	# Markdown content to insert into the document
-	fun markdown: String is abstract
-
 	fun html: Writable do
 		var ast = mdoc_parser.parse(markdown)
 		ast.mdoc = mentity.mdoc
@@ -106,13 +103,23 @@ class CardDoc
 	super CardMEntity
 	serialize
 
+	redef var id is lazy do return "free-doc-{mentity.full_name}"
+
 	redef var icon = "book"
 	redef var title = "Suggested content for {mentity.html_link.write_to_string}" is lazy
 	redef var description = "You should include this documentation:"
 
+	var level: nullable Int = null is optional
+
+
 	redef var markdown is lazy do
 		var tpl = new Template
-		tpl.addn "[[doc: {mentity.full_name}]]"
+
+		var level = self.level
+		if level != null then
+			tpl.addn "{"#" * level} [[sign: {mentity.full_name}]]\n"
+		end
+		tpl.addn "> [[doc: {mentity.full_name}]]\n"
 		return tpl.write_to_string
 	end
 
@@ -122,11 +129,20 @@ class CardDoc
 		options["no-fallback"] = "false"
 		return options
 	end
+
+	redef fun commands do
+		var res = super
+		res.add "sign: {mentity.full_name}"
+		res.add "doc: {mentity.full_name}"
+		return res
+	end
 end
 
 class CardLink
 	super CardMEntity
 	serialize
+
+	redef var id is lazy do return "free-lnk-{mentity.full_name}"
 
 	redef var icon = "link"
 	redef var title = "Suggested API link for {mentity.html_link.write_to_string}" is lazy
@@ -149,9 +165,27 @@ class CardLink
 	end
 end
 
+class CardMdTitle
+	super CardMEntity
+	serialize
+	autoinit md_level, md_title
+
+	var md_level: Int
+	var md_title: String
+
+	redef var markdown is lazy do
+		var tpl = new Template
+		tpl.addn "{"#" * md_level} {md_title}"
+		return tpl.write_to_string
+	end
+end
+
+
 class CardExample
 	super CardMEntity
 	serialize
+
+	redef var id is lazy do return "free-ex-{mentity.full_name}-{example.full_name}"
 
 	var is_code = true
 	var example: MEntity is noserialize
@@ -179,15 +213,29 @@ class CardUML
 	super CardMEntity
 	serialize
 
+	redef var id is lazy do return "free-uml-{mentity.full_name}-mentities:{(mentities or else new Array[MEntity]).join(";")}"
+
 	var is_graph = true
 
 	redef var icon = "object-align-vertical"
 	redef var title = "Suggested diagram for {mentity.html_link.write_to_string}" is lazy
 	redef var description = "You should include this diagram:"
 
+	var mentities: nullable Array[MEntity] = null is optional, writable
+
 	redef var markdown is lazy do
 		var tpl = new Template
-		tpl.addn "[[uml: {mentity.full_name} | format: svg]]"
+		var mentities = self.mentities
+		if mentities != null then
+			var names = new Array[String]
+			for mentity in mentities do
+				names.add mentity.full_name
+			end
+			tpl.addn "[[uml: {mentity.full_name} | format: svg, mentities: {names.join(";")}]]"
+		else
+			tpl.addn "[[uml: {mentity.full_name} | format: svg]]"
+		end
+		# tpl.addn "[[uml: {mentity.full_name} | format: svg]]"
 		return tpl.write_to_string
 	end
 
@@ -201,6 +249,8 @@ end
 class CardFeatures
 	super CardMEntity
 	serialize
+
+	redef var id is lazy do return "free-features-{mentity.full_name}"
 
 	redef var icon = "list"
 	redef var title = "Suggested features of {mentity.html_link.write_to_string}" is lazy
@@ -219,9 +269,94 @@ class CardFeatures
 	end
 end
 
+class CardList
+	super CardMEntity
+	serialize
+
+	redef var id is lazy do return "free-lst-{mentity.full_name}-mentities:{(mentities or else new Array[MEntity]).join(";")}"
+
+	redef var icon = "list"
+	redef var title = "Suggested list" is lazy
+	redef var description = "You should write about these features:"
+
+	var list_title: nullable String = null is optional
+	var list_level: nullable Int = null is optional
+
+	var mentities: nullable Array[MEntity] = null is optional, writable
+
+	redef var markdown is lazy do
+		var tpl = new Template
+
+		var title = list_title
+		if title != null then
+			var lvl = list_level
+			if lvl != null then
+				tpl.add "#" * lvl
+				if lvl > 0 then tpl.add " "
+			end
+			tpl.addn "{title}\n"
+		end
+
+		var mentities = self.mentities
+		if mentities != null then
+			var names = new Array[String]
+			for mentity in mentities do
+				names.add mentity.full_name
+			end
+			tpl.addn "[[features: {mentity.full_name} | mentities: {names.join(";")}]]\n"
+		else
+			tpl.addn "[[features: {mentity.full_name}]]\n"
+		end
+		return tpl.write_to_string
+	end
+
+	redef fun options do
+		var options = new HashMap[String, String]
+		options["opt"] = ""
+		return options
+	end
+
+	redef fun commands do
+		var res = super
+		var mentities = self.mentities
+		if mentities != null then
+			var names = new Array[String]
+			for mentity in mentities do names.add mentity.full_name
+			res.add "features: {mentity.full_name} | mentities: {names.join(";")}"
+		else
+			res.add "features: {mentity.full_name}"
+		end
+		return res
+	end
+end
+
+class CardListPeople
+	super CardMEntity
+	serialize
+
+	redef var id is lazy do return "free-lst-pp-{mentity.full_name}"
+
+	redef var icon = "list"
+	redef var title = "Suggested list" is lazy
+	redef var description = "You should thank these people:"
+
+	var list_title: nullable String = null is optional
+	var list_level: nullable Int = null is optional
+
+	redef var markdown is lazy do return "[[ini-contributors: {mentity.full_name}]]\n\n"
+
+	redef fun commands do
+		var res = super
+		res.add "[[ini-contributors: {mentity.full_name}]]"
+		return res
+	end
+end
+
 class CardCode
 	super CardMEntity
 	serialize
+
+	redef var id is lazy do return "free-code-{mentity.full_name}"
 
 	redef var icon = "console"
 	redef var title = "code"
@@ -229,7 +364,8 @@ class CardCode
 
 	redef var markdown is lazy do
 		var tpl = new Template
-		tpl.addn "[[code: {mentity.full_name} | format: html]]"
+		# tpl.addn "[[code: {mentity.full_name} | format: html]]"
+		tpl.addn "[[code: {mentity.full_name}]]"
 		return tpl.write_to_string
 	end
 

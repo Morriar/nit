@@ -495,6 +495,15 @@ redef class MGroup
 		return res
 	end
 
+	# Collect all properties introduced in `self`
+	fun collect_intro_mproperties(filter: nullable ModelFilter): HashSet[MProperty] do
+		var res = new HashSet[MProperty]
+		for mmodule in collect_all_mmodules(filter) do
+			res.add_all mmodule.collect_intro_mproperties(filter)
+		end
+		return res
+	end
+
 	redef fun has_mentity(mentity, filter) do
 		if mentity == self then return true
 		if mentity isa MPackage then return false
@@ -621,8 +630,10 @@ redef class MModule
 	# Collect all properties introduced in `self`
 	fun collect_intro_mproperties(filter: nullable ModelFilter): Set[MProperty] do
 		var res = new HashSet[MProperty]
-		for mclass in collect_intro_mclasses(filter) do
-			res.add_all mclass.collect_intro_mproperties(filter)
+		for mclassdef in collect_local_mclassdefs(filter) do
+			for mpropdef in mclassdef.collect_intro_mpropdefs(filter) do
+				res.add mpropdef.mproperty
+			end
 		end
 		return res
 	end

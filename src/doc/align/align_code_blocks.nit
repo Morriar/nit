@@ -87,6 +87,7 @@ class MdAlignBlockCodes
 		# Examples
 		var example_query = new Vector
 		example_query.add_all code_vector
+		example_query.inc "in: {context.full_name}"
 		example_query.inc "+in: {context.full_name}"
 		example_query.inc "+is_example: true"
 		example_query.inc "+kind: MModule"

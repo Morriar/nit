@@ -1,0 +1,51 @@
+# `libevent` - Low-level wrapper around the libevent library to manage events on file descriptors
+
+ * [`NativeEventBase` - Structure to hold information and state for a Libevent dispatch loop.](#`NativeEventBase`---Structure-to-hold-information-and-state-for-a-Libevent-dispatch-loop.)
+ * [`Connection` - Spawned to manage a specific connection](#`Connection`---Spawned-to-manage-a-specific-connection)
+ * [Other classes from `libevent`](#Other-classes-from-`libevent`)
+ * [Authors](#Authors)
+
+For mor information, refer to the [libevent](libevent) documentation at
+http://monkey.org/~provos/libevent/doxygen-2.0.1/
+
+## `NativeEventBase` - Structure to hold information and state for a Libevent dispatch loop.
+
+The event_base lies at the center of Libevent; every application will
+have one.  It keeps track of all pending and active events, and
+notifies your application of the active ones.
+
+Properties:
+
+* `dispatch` - Event dispatching loop
+* `is_valid` - Has `self` been correctly initialized?
+* `loopexit` - Exit the event loop
+* `new` - Create a new event_base to use with the rest of Libevent
+* `reinit` - Reinitialize the event base after a fork
+
+## `Connection` - Spawned to manage a specific connection
+
+TODO, use polls
+
+Properties:
+
+* `event_callback` - Callback method on events: EOF, user-defined timeout and unrecoverable errors
+* `force_close` - Force closing this connection and freeing `native_buffer_event`
+* `read_callback` - Callback method when data is available to read
+* `write_callback` - Callback method on a write event
+* `write_file` - Write a file to the connection
+
+## Other classes from `libevent`
+
+* `ConnectionFactory` - Factory to listen on sockets and create new `Connection`
+* `ConnectionListener` - A listener acting on an interface and port, spawns `Connection` on new connections
+* `EventCallback` - Receiver of event callbacks
+* `InputNativeEvBuffer` - An input buffer
+* `NativeBufferEvent` - A buffer event structure, strongly associated to a connection, an input buffer and an output_buffer
+* `NativeEvBuffer` - A single buffer
+* `NativeEvSignal` - Signal event
+* `NativeEvent` - Event, libevent's basic unit of operation
+* `OutputNativeEvBuffer` - An output buffer
+
+## Authors
+
+This project is maintained by **Alexis Laferrière <alexis.laf@xymus.net>**.

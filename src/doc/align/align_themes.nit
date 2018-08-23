@@ -25,24 +25,31 @@ class MdAlignThemes
 	redef fun visit(node) do
 		node.visit_all(self)
 
-		if node isa MdBlock then
-			if has_md_ref(node) then
-				node.md_themes.add new MdThemeAPI
+		if node isa MdBlock and not node isa MdHeading then
+			# if has_md_ref(node) then
+				# node.md_themes.add new MdThemeAPI
+			# end
+			var section = node.md_section
+			if section != null then
+				var parent = section.parent
+				if parent == null or  parent.is_root then
+					node.md_themes.add new MdThemeIntro
+				end
 			end
 		end
 
 		if node isa MdListBlock then
-			node.md_themes.add new MdThemeFeatures
+			if node.has_anchors then
+				node.md_themes.add new MdThemeTOC
+			else
+				node.md_themes.add new MdThemeFeatures
+			end
 		end
 
 		if node isa MdHeading then
-			var section = node.md_section
-			if section != null then
-				var parent = section.parent
-				if parent != null and parent.is_root then
-					node.md_themes.add new MdThemeTitle
-					return
-				end
+			if node.prev == null then
+				node.md_themes.add new MdThemeTitle
+				return
 			end
 			align_heading(node)
 			# var text = node.raw_text
@@ -55,6 +62,8 @@ class MdAlignThemes
 			align_paragraph(node)
 		else if node isa MdBlock then
 			# node.md_themes.add new MdThemeOther
+		else if node isa MdWikilink then
+			if node.raw_text.has("toc:") then node.md_block.md_themes.add new MdThemeTOC
 		end
 		# if node isa MdDocument then
 			# visit_document(node)
@@ -72,14 +81,16 @@ class MdAlignThemes
 	end
 
 	var re_title_intro: Regex = "(preview|intro|provide)".to_re
-	var re_title_install: Regex = "(pre-req|prereq|dependenc|install|set-up|setup)".to_re
+	var re_title_toc: Regex = "(summary|content)".to_re
+	var re_title_install: Regex = "(pre-req|prereq|dependenc|install|set-up|setup|start)".to_re
 	var re_title_usage: Regex = "(compile|usage)".to_re
+	var re_title_api: Regex = "(api|features)".to_re
 	var re_title_features: Regex = "(feature|content|service)".to_re
 	var re_title_examples: Regex = "(example)".to_re
 	var re_title_todos: Regex = "(todo|known|bug)".to_re
 	var re_title_tests: Regex = "(test|nitunit)".to_re
-	var re_title_contrib: Regex = "(contribute|contributing)".to_re
 	var re_title_authors: Regex = "(credit|contributor|author)".to_re
+	var re_title_contrib: Regex = "(contrib)".to_re
 	var re_title_license: Regex = "(license|licensing|copyright)".to_re
 	var re_title_refs: Regex = "(reference|see)".to_re
 	var re_nit_tools: Regex = "(nit)[a-z]+".to_re
@@ -90,6 +101,10 @@ class MdAlignThemes
 
 		if ltxt.has(re_title_intro) then
 			node.md_themes.add new MdThemeIntro
+		else if ltxt.has(re_title_toc) then
+			node.md_themes.add new MdThemeTOC
+		else if ltxt.has(re_title_api) then
+			node.md_themes.add new MdThemeAPI
 		else if ltxt.has(re_title_examples) then
 			node.md_themes.add new MdThemeExamples
 		else if ltxt.has(re_title_install) or ltxt.has(re_title_usage) then
@@ -98,34 +113,84 @@ class MdAlignThemes
 			node.md_themes.add new MdThemeFeatures
 		else if ltxt.has(re_title_todos) then
 			node.md_themes.add new MdThemeTODO
+		else if ltxt.has(re_title_authors) then
+			node.md_themes.add new MdThemeAuthors
 		else if ltxt.has(re_title_contrib) then
 			node.md_themes.add new MdThemeContribute
 		else if ltxt.has(re_title_tests) then
 			node.md_themes.add new MdThemeTests
-		else if ltxt.has(re_title_authors) then
-			node.md_themes.add new MdThemeAuthors
 		else if ltxt.has(re_title_license) then
 			node.md_themes.add new MdThemeLicense
 		else if ltxt.has(re_title_refs) then
 			node.md_themes.add new MdThemeRefs
 		else
-			node.md_themes.add new MdThemeFeatures
+			node.md_themes.add new MdThemeAPI
+			# node.md_themes.add new MdThemeFeatures
+		end
+
+		if ltxt.has(re_title_authors) then
+			node.md_themes.add new MdThemeAuthors
+		end
+		if ltxt.has(re_title_contrib) then
+			node.md_themes.add new MdThemeContribute
 		end
 	end
+
+
+	# var re_title_intro: Regex = "(preview|intro|provide)".to_re
+	# var re_title_toc: Regex = "(summary|content)".to_re
+	# var re_title_install: Regex = "(pre-req|prereq|dependenc|install|set-up|setup|start)".to_re
+	# var re_title_usage: Regex = "(compile|usage)".to_re
+	# var re_title_api: Regex = "(api|features)".to_re
+	# var re_title_features: Regex = "(feature|content|service)".to_re
+	# var re_title_examples: Regex = "(example)".to_re
+	# var re_title_todos: Regex = "(todo|known|bug)".to_re
+	# var re_title_tests: Regex = "(test|nitunit)".to_re
+	# var re_title_authors: Regex = "(credit|contributor|author)".to_re
+	# var re_title_contrib: Regex = "(contrib)".to_re
+	# var re_title_license: Regex = "(license|licensing|copyright)".to_re
+	# var re_title_refs: Regex = "(reference|see)".to_re
+	# var re_nit_tools: Regex = "(nit)[a-z]+".to_re
+    #
+	# fun align_heading(node: MdHeading) do
+	#	var text = node.raw_text
+	#	var ltxt = text.to_lower
+    #
+	#	if ltxt.has(re_title_intro) then
+	#		node.md_themes.add new MdThemeIntro
+	#	else if ltxt.has(re_title_toc) then
+	#		node.md_themes.add new MdThemeTOC
+	#	else if ltxt.has(re_title_api) then
+	#		node.md_themes.add new MdThemeAPI
+	#	else if ltxt.has(re_title_examples) then
+	#		node.md_themes.add new MdThemeExamples
+	#	else if ltxt.has(re_title_install) or ltxt.has(re_title_usage) then
+	#		node.md_themes.add new MdThemeUsage
+	#	else if ltxt.has(re_title_features) then
+	#		node.md_themes.add new MdThemeFeatures
+	#	else if ltxt.has(re_title_todos) then
+	#		node.md_themes.add new MdThemeTODO
+	#	else if ltxt.has(re_title_authors) then
+	#		node.md_themes.add new MdThemeAuthors
+	#	else if ltxt.has(re_title_contrib) then
+	#		node.md_themes.add new MdThemeContribute
+	#	else if ltxt.has(re_title_tests) then
+	#		node.md_themes.add new MdThemeTests
+	#	else if ltxt.has(re_title_license) then
+	#		node.md_themes.add new MdThemeLicense
+	#	else if ltxt.has(re_title_refs) then
+	#		node.md_themes.add new MdThemeRefs
+	#	else
+	#		# node.md_themes.add new MdThemeFeatures
+	#	end
+	# end
 
 	fun align_paragraph(node: MdParagraph) do
 		var text = node.raw_text
 		var ltxt = text.to_lower
 
-		var section = node.md_section
-		if section != null then
-			var parent = section.parent
-			if parent == null or  parent.is_root then
-				node.md_themes.add new MdThemeIntro
-			end
-		end
-
 		if text.has(re_author) then
+			var section = node.md_section
 			if section != null then
 				var title = section.title
 				if title != null then
@@ -238,14 +303,45 @@ end
 
 redef class MdSection
 	var md_theme: nullable MdTheme = null
+
+	fun has_theme(name: String): Bool do
+		var title = self.title
+		if title != null then
+			if title.all_md_themes_names.has(name) then return true
+		end
+		for block in blocks do
+			if block.all_md_themes_names.has(name) then return true
+		end
+		return false
+	end
+
+	fun has_theme_recurse(name: String): Bool do
+		var parent: nullable MdSection = self
+		while parent != null do
+			if has_theme(name) then return true
+			parent = parent.parent
+		end
+		return false
+	end
 end
 
 redef class MdBlock
 	var md_themes = new Array[MdTheme]
 
+	var all_md_themes: Array[MdTheme] is lazy do
+		var v = new MdCollectThemes
+		return v.collect_themes(self)
+	end
+
 	var md_themes_names: Array[String] is lazy do
 		var res = new Array[String]
 		for theme in md_themes do res.add theme.to_s
+		return res
+	end
+
+	var all_md_themes_names: Array[String] is lazy do
+		var res = new Array[String]
+		for theme in all_md_themes do res.add theme.to_s
 		return res
 	end
 end
@@ -262,6 +358,11 @@ end
 class MdThemeIntro
 	super MdTheme
 	redef fun to_s do return "intro"
+end
+
+class MdThemeTOC
+	super MdTheme
+	redef fun to_s do return "toc"
 end
 
 class MdThemeFeatures
@@ -542,5 +643,55 @@ class MdCollectExamples
 			if ref.mentity.is_example then res.add ref
 		end
 		return res
+	end
+end
+
+class MdCollectThemes
+	super MdVisitor
+
+	var themes: Array[MdTheme] is noinit
+
+	fun collect_themes(node: MdNode): Array[MdTheme] do
+		themes = new Array[MdTheme]
+		enter_visit(node)
+		return themes
+	end
+
+	redef fun visit(node) do
+		if node isa MdBlock then
+			themes.add_all node.md_themes
+		end
+		node.visit_all(self)
+	end
+end
+
+redef class MdListBlock
+	fun has_anchors: Bool do
+		# var v = new MdCollectLInks
+		# var links = v.collect_links(self)
+		# if links.is_empty then return false
+		# for link in links do
+			# if link.destination.has_prefix("#") then return true
+		# end
+		return false
+	end
+end
+
+class MdCollectLInks
+	super MdVisitor
+
+	var links: Array[MdLink] is noinit
+
+	fun collect_links(node: MdNode): Array[MdLink] do
+		links = new Array[MdLink]
+		# enter_visit(node)
+		return links
+	end
+
+	redef fun visit(node) do
+		if node isa MdLink then
+			links.add node
+		end
+		node.visit_all(self)
 	end
 end

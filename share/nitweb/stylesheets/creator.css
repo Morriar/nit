@@ -77,6 +77,7 @@
 .suggest-card pre :first-child, .suggest-card .well :first-child { margin-top: 0; }
 .suggest-card pre :last-child, .suggest-card .well :last-child { margin-bottom: 0; }
 
+.suggest-card pre ul, .suggest-card .well ul { padding-left: 25px; }
 .suggest-card pre h1, .suggest-card .well h1 { font-size: 180%; }
 .suggest-card pre h2, .suggest-card .well h2 { font-size: 155%; }
 .suggest-card pre h3, .suggest-card .well h3 { font-size: 140%; }

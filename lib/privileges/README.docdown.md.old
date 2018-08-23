@@ -1,0 +1,12 @@
+# `privileges` - Process privileges management utilities
+
+Used mainly by daemons and such to aquire resources as su and
+then drop back to a restricted user.
+
+## Classes from `privileges`
+
+[[features: privileges::privileges | mentities: privileges::UserGroup;privileges::OptionUserAndGroup]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: privileges]].

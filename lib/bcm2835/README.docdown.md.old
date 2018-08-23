@@ -1,0 +1,13 @@
+# `bcm2835` - Services to control the bcm2835 chipset used in the Raspberry Pi
+
+Uses the C library by Mike McCauley available at http://www.airspayce.com/mikem/bcm2835/
+
+This module targets the model B revision 1, it could be tweaked for other versions.
+
+## Classes from `bcm2835`
+
+[[features: bcm2835::bcm2835 | mentities: bcm2835::Pin;bcm2835::HD44780;bcm2835::Switch]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: bcm2835]].

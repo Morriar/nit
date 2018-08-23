@@ -1,0 +1,37 @@
+# `mpi` - Implementation of the Message Passing Interface protocol by wrapping OpenMPI
+
+[[toc: mpi]]
+
+OpenMPI is used only at linking and for it's `mpi.h`. Other implementations
+could be used without much modification.
+
+Supports transfer of any valid `Serializable` instances as well as basic
+C arrays defined in module `c`. Using C arrays is encouraged when performance
+is critical.
+
+Since this module is a thin wrapper around OpenMPI, in case of missing
+documentation, you can refer to https://www.open-mpi.org/doc/v1.8/.
+
+## `Op` - An MPI operation
+
+[[doc: mpi::Op | no-synopsis]]
+
+Properties:
+
+[[features: mpi::Op | min-visibility: public, no-redef]]
+
+## `Sendable` - Something sendable directly and efficiently over MPI
+
+[[doc: mpi::Sendable | no-synopsis]]
+
+## `Receptacle` - Something which can receive data directly and efficiently from MPI
+
+[[doc: mpi::Receptacle | no-synopsis]]
+
+## Other classes from `mpi`
+
+[[features: mpi::mpi | mentities: mpi::MPI;mpi::Comm;mpi::DataType;mpi::Status;mpi::SuccessOrError;mpi::ErrorClass;mpi::Rank;mpi::Tag]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: mpi]].

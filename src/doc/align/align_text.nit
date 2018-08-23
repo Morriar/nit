@@ -19,7 +19,8 @@ import align_refs
 class MdAlignTexts
 	super MdAligner
 
-	var sep_re: Regex = "[\n\t ,.?!~`@#$%^&*()+=/\\|\"':;><-]".to_re
+	# var sep_re: Regex = "[\n\t ,.?!~`@#$%^&*()+=/\\|\"':;><-]".to_re
+	var sep_re: Regex = "[\n\t ,.]".to_re
 
 	redef fun align_document(document) do
 		super
@@ -37,19 +38,6 @@ class MdAlignTexts
 			if word.trim.is_empty then continue
 			node.md_refs.add_all align_word(node, word)
 		end
-	end
-
-	# TODO move to `ModelIndex`
-	var name_index: Map[String, Array[MEntity]] is lazy do
-		var index = new HashMap[String, Array[MEntity]]
-		for mentity in model.collect_mentities do
-			var name = lemmatize_name(mentity.name)
-			if not index.has_key(name) then
-				index[name] = new Array[MEntity]
-			end
-			index[name].add mentity
-		end
-		return index
 	end
 
 	var stopwords = ["from", "new", "to", "code", "all", "set", "output", "other"]
@@ -79,32 +67,20 @@ class MdAlignTexts
 		end
 
 		# Lemma match
-		var name = lemmatize_name(word)
-		if name_index.has_key(name) then
-			for mentity in name_index[name] do
-				if direct_matches.has(mentity) then continue
-				if mentity isa MClassDef then continue
-				if mentity isa MPropDef then continue
-				if mentity isa MProperty then
-					if mentity.name.length <= 2 then continue
-					if stopwords.has(mentity.name) then continue
-					if not context.has_mentity(mentity) then continue
-				end
-				res.add new MdRefText(node, mentity, original_word)
+		var name = model.lemmatize_name(word)
+		for mentity in model.mentities_by_lemma(name) do
+			if direct_matches.has(mentity) then continue
+			if mentity isa MClassDef then continue
+			if mentity isa MPropDef then continue
+			if mentity isa MProperty then
+				if mentity.name.length <= 2 then continue
+				if stopwords.has(mentity.name) then continue
+				if not context.has_mentity(mentity) then continue
 			end
+			res.add new MdRefText(node, mentity, original_word)
 		end
 
 		return res
-	end
-
-	# TODO use NLP
-	fun lemmatize_name(name: String): String do
-		name = name.to_lower
-		name = name.replace("[^r]ing$".to_re, "e")
-		name = name.replace("ies$".to_re, "y")
-		name = name.replace("xes$".to_re, "x")
-		name = name.replace("s$".to_re, "")
-		return name
 	end
 end
 

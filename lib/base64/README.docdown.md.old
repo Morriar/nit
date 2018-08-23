@@ -1,0 +1,11 @@
+# `base64` - Offers the base 64 encoding and decoding algorithms
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+[[testing: base64]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: base64]].

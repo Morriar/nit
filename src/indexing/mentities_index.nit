@@ -66,6 +66,8 @@ class MEntityIndex
 
 	var toolcontext: ToolContext
 
+	var mainmodule: MModule
+
 	var nlp_processor: NLPProcessor
 
 	fun index_model(model: Model, filter: nullable ModelFilter) do
@@ -77,7 +79,7 @@ class MEntityIndex
 
 	fun index_mentity(mentity: MEntity):MEntityDocument do
 		var document = new MEntityDocument(mentity)
-		document.build_vector(self)
+		document.build_vector(mainmodule, self)
 		index_document(document, false)
 		return document
 	end
@@ -272,8 +274,9 @@ class MEntityDocument
 
 	var code_vector = new Vector
 
-	fun build_vector(index: MEntityIndex) do
+	fun build_vector(mainmodule: MModule, index: MEntityIndex) do
 		mentity.build_base_vector(terms_count)
+		mentity.build_hierarchy_vector(terms_count, mainmodule)
 		mentity.build_sign_vector(terms_count)
 		# mentity.build_nlp_vector(terms_count, index)
 		mentity.build_code_vector(code_vector, index)
@@ -363,17 +366,51 @@ redef class MEntity
 		vector.inc "name: {name}"
 		vector.inc "kind: {class_name}"
 		vector.inc "visibility: {visibility.to_s}"
+		vector.inc "is_test: {is_test}"
 		vector.inc "is_example: {is_example}"
 		vector.inc "is_fictive: {is_fictive}"
 
+		if is_example then
+			var mexample = self.mexample
+			if mexample != null then
+				for mentity, w in mexample.example_for do
+					vector["example_for: {mentity.full_name}"] += w.to_f
+				end
+			end
+		end
+
 		var mdoc = mdoc_or_fallback
 		if mdoc == null then return
+
+		vector.inc "has_mdoc: true"
+		if not mdoc.synopsis.trim.is_empty then
+			vector.inc "has_synopsis: true"
+		end
+		if not mdoc.comment.trim.is_empty then
+			vector.inc "has_comment: true"
+		end
+
 		var text_renderer = new RawTextVisitor
 		var ast = mdoc.mdoc_document
 		var text = text_renderer.render(ast).to_lower
 
 		for word in text.split("[ \n]+".to_re) do
 			vector.inc "comment: {word}"
+		end
+	end
+
+	private fun build_hierarchy_vector(vector: Vector, mainmodule: MModule) do
+		for ancestor in collect_ancestors(mainmodule) do
+			vector.inc "ancestor: {ancestor.full_name}"
+		end
+		for parent in collect_parents(mainmodule) do
+			vector.inc "parent: {parent.full_name}"
+		end
+		for child in collect_children(mainmodule) do
+			vector.inc "child: {child.full_name}"
+		end
+		for descendant in collect_descendants(mainmodule) do
+			vector.inc "descendant: {descendant.full_name}"
 		end
 	end
 
@@ -469,6 +506,19 @@ redef class MPackage
 	redef fun build_base_vector(vector) do
 		super
 		vector.inc "in: {full_name}"
+
+		for mentity in collect_all_mgroups do
+			vector.inc "has: {mentity.full_name}"
+		end
+		for mentity in collect_mmodules do
+			vector.inc "has: {mentity.full_name}"
+		end
+		for mentity in collect_intro_mclasses do
+			vector.inc "has: {mentity.full_name}"
+		end
+		for mentity in collect_intro_mproperties do
+			vector.inc "has: {mentity.full_name}"
+		end
 	end
 
 	redef fun build_sign_vector(vector) do
@@ -482,6 +532,19 @@ redef class MGroup
 		super
 		vector.inc "in: {mpackage.full_name}"
 		vector.inc "in: {full_name}"
+
+		for mentity in collect_mgroups do
+			vector.inc "has: {mentity.full_name}"
+		end
+		for mentity in collect_mmodules do
+			vector.inc "has: {mentity.full_name}"
+		end
+		for mentity in collect_intro_mclasses do
+			vector.inc "has: {mentity.full_name}"
+		end
+		for mentity in collect_intro_mproperties do
+			vector.inc "has: {mentity.full_name}"
+		end
 	end
 
 	redef fun build_sign_vector(vector) do
@@ -499,6 +562,13 @@ redef class MModule
 			vector.inc "in: {mgroup.full_name}"
 		end
 		vector.inc "in: {full_name}"
+
+		for mentity in collect_intro_mclasses do
+			vector.inc "has: {mentity.full_name}"
+		end
+		for mentity in collect_intro_mproperties do
+			vector.inc "has: {mentity.full_name}"
+		end
 	end
 
 	redef fun build_sign_vector(vector) do
@@ -517,6 +587,10 @@ redef class MClass
 			vector.inc "in: {mgroup.full_name}"
 		end
 		vector.inc "in: {full_name}"
+
+		for mentity in collect_intro_mproperties do
+			vector.inc "has: {mentity.full_name}"
+		end
 	end
 
 	redef fun build_sign_vector(vector) do
@@ -744,6 +818,8 @@ redef class ASendExpr
 			var args = callsite.signaturemap.as(not null).map.length
 			v.vector.inc "call: {callsite.mpropdef.full_name}({args})"
 			v.vector.inc "call: {callsite.mpropdef.mproperty.full_name}({args})"
+			v.vector.inc "call: {callsite.mpropdef.full_name}"
+			v.vector.inc "call: {callsite.mpropdef.mproperty.full_name}"
 			var recv = callsite.recv
 			if recv isa MClassType then
 				v.vector.inc "call: {recv.mclass.full_name}"

@@ -1,0 +1,55 @@
+# `more_collections` - Highly specific, but useful, collections-related classes.
+
+[[toc: more_collections]]
+
+## `MultiHashMap` - Simple way to store an `HashMap[K, Array[V]]`
+
+[[doc: more_collections::MultiHashMap | no-synopsis]]
+
+Properties:
+
+[[features: more_collections::MultiHashMap | min-visibility: public, no-redef]]
+
+## `HashMap2` - Simple way to store an `HashMap[K1, HashMap[K2, V]]`
+
+[[doc: more_collections::HashMap2 | no-synopsis]]
+
+Properties:
+
+[[features: more_collections::HashMap2 | min-visibility: public, no-redef]]
+
+## `HashMap3` - Simple way to store an `HashMap[K1, HashMap[K2, HashMap[K3, V]]]`
+
+[[doc: more_collections::HashMap3 | no-synopsis]]
+
+Properties:
+
+[[features: more_collections::HashMap3 | min-visibility: public, no-redef]]
+
+## `HashMap4` - Simple way to store an `HashMap[K1, HashMap[K2, HashMap[K3, HashMap[K4, V]]]]`
+
+[[doc: more_collections::HashMap4 | no-synopsis]]
+
+Properties:
+
+[[features: more_collections::HashMap4 | min-visibility: public, no-redef]]
+
+## `DefaultMap` - A map with a default value.
+
+[[doc: more_collections::DefaultMap | no-synopsis]]
+
+## `UnrolledList` - An unrolled linked list
+
+[[doc: more_collections::UnrolledList | no-synopsis]]
+
+## `BestDistance` - Keep track of the best elements according to a distance value.
+
+[[doc: more_collections::BestDistance | no-synopsis]]
+
+Properties:
+
+[[features: more_collections::BestDistance | min-visibility: public, no-redef]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: more_collections]].

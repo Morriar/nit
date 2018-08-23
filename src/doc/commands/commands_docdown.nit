@@ -18,10 +18,7 @@ module commands_docdown
 import commands::commands_model
 import doc_down
 
-# Retrieve the MDoc summary
-#
-# List all MarkdownHeading found and their ids.
-class CmdSummary
+redef class CmdSummary
 	super CmdComment
 
 	# Headings found in the MDoc
@@ -32,7 +29,7 @@ class CmdSummary
 		var res = super
 		if not res isa CmdSuccess then return res
 		var mdoc = self.mdoc.as(not null)
-		self.headings = mdoc.mdoc_headings
+		# self.headings = mdoc.mdoc_headings
 		return res
 	end
 end

@@ -1,0 +1,11 @@
+# `md5` - Native MD5 digest implementation as `Text::md5`
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+[[testing: md5]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: md5]].

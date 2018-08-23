@@ -151,10 +151,43 @@ redef class Model
 		return index
 	end
 
+	# TODO
+	var lemma_index: Map[String, Array[MEntity]] is lazy do
+		var index = new HashMap[String, Array[MEntity]]
+		for mentity in model.collect_mentities do
+			var name = lemmatize_name(mentity.name)
+			if not index.has_key(name) then
+				index[name] = new Array[MEntity]
+			end
+			index[name].add mentity
+		end
+		return index
+	end
+
+	# TODO use NLP
+	fun lemmatize_name(name: String): String do
+		name = name.to_lower
+		name = name.replace("[^r]ing$".to_re, "e")
+		name = name.replace("ies$".to_re, "y")
+		name = name.replace("xes$".to_re, "x")
+		name = name.replace("s$".to_re, "")
+		return name
+	end
+
 	redef fun mentities_by_name(name, filter) do
 		var res = new Array[MEntity]
 		if not index.names.has_key(name) then return res
 		for mentity in index.names[name] do
+			if filter == null or filter.accept_mentity(mentity) then res.add mentity
+		end
+		return res
+	end
+
+	# TODO
+	fun mentities_by_lemma(name: String, filter: nullable ModelFilter): Array[MEntity] do
+		var res = new Array[MEntity]
+		if not lemma_index.has_key(name) then return res
+		for mentity in lemma_index[name] do
 			if filter == null or filter.accept_mentity(mentity) then res.add mentity
 		end
 		return res

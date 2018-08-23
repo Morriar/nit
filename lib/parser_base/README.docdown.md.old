@@ -1,0 +1,9 @@
+# `parser_base` - Simple base for hand-made parsers of all kinds
+
+## Classes from `parser_base`
+
+[[features: parser_base::parser_base | mentities: parser_base::StringProcessor;parser_base::Location]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: parser_base]].

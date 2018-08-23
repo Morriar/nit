@@ -1,0 +1,15 @@
+# `bcm2835` - Services to control the bcm2835 chipset used in the Raspberry Pi
+
+Uses the C library by Mike McCauley available at http://www.airspayce.com/mikem/bcm2835/
+
+This module targets the model B revision 1, it could be tweaked for other versions.
+
+## Classes from `bcm2835`
+
+* `HD44780` - Hitachi HD44780 or similar 2-4 lines LCD displays
+* `Pin` - A physical binary pin
+* `Switch` - Component for any kind of buttons or switches
+
+## Authors
+
+This project is maintained by **Alexis Laferrière <alexis.laf@xymus.net>**.

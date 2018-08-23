@@ -1,33 +1,49 @@
-# A markdown parser for Nit
+# `markdown` - [[ini-desc: markdown]]
 
-Markdown documentation can be found in http://daringfireball.net/projects/markdown/.
-This parser is inspired by the famous TxtMark for Java (https://github.com/rjeschke/txtmark).
+[[toc: markdown]]
 
-## Usage
+## Getting Started
 
-`nitmd` can be used as a standalone tool:
+These instructions will get you a copy of the project up and running on your local machine.
 
-~~~bash
-$ nitmd file.md
-~~~
+### Dependencies
 
-Or you can use it programmatically by importing the `markdown` module.
+This project requires the following packages:
 
-## Differences with Markdown specification
+[[parents: markdown]]
 
-This parser passes all tests inside http://daringfireball.net/projects/downloads/MarkdownTest_1.0_2007-05-09.tgz execpt of two:
+### Run `nitmd`
 
-1. Images.text: fails because this parser doesn't produce empty 'title' image attributes.
-2. Literal quotes in titles.text: because markdown accepts unescaped quotes in titles and this is wrong.
+Compile `nitmd` with the following command:
 
-## Testing
+[[main-compile: markdown::nitmd]]
 
-The NitUnit test suite can be found in `tests`.
+Then run it with:
 
-Minimalists tests are prefixed with `test_process_*`. All tests from daringfireball are prefixed with `test_daring*`.
+[[main-run: markdown::nitmd]]
 
-Run the test suite:
+Options:
 
-~~~bash
-$ nitunit lib/markdown/markdown.nit -t lib/markdown/test_markdown.nit
-~~~
+[[main-opts: markdown::nitmd]]
+
+## Features
+
+[[uml: markdown | format: svg, mentities: markdown::decorators;markdown::man;markdown::markdown;markdown::nitmd;markdown::wikilinks]]
+
+### `wikilinks` - Wikilinks handling.
+
+[[doc: markdown::wikilinks | no-synopsis]]
+
+## Other features
+
+[[features: markdown | mentities: markdown::decorators;markdown::man;markdown::nitmd]]
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+[[testing: markdown]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: markdown]].

@@ -1,0 +1,13 @@
+# `saxophonit` - A SAX 2 parser in Nit.
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+~~~bash
+nitunit .
+~~~
+
+## Authors
+
+This project is maintained by **Jean-Christophe Beaupré <jcbrinfo@users.noreply.github.com>**.

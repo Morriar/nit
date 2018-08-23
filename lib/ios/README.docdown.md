@@ -1,33 +1,37 @@
-# iOS support for _app.nit_
+# `ios` - [[ini-desc: ios]]
 
-## System configuration
+[[toc: ios]]
 
-Configure your system for OS X by installing Xcode and brew.
-Follow the instructions in `README.md` at the root of the repository.
+Example from `ios::hello_ios`:
 
-Optionally, install ios-sim to run compiled apps in the simulator: `brew install ios-sim`
+[[code: ios::hello_ios]]
 
-## Compile and run a simple application
+## Getting Started
 
-Let's use the `hello_ios` example in the folder `lib/ios/examples/`.
+These instructions will get you a copy of the project up and running on your local machine.
 
-Compile with: `nitc hello_world.nit`
+### Dependencies
 
-Run in the simulator with: `ios-sim hello_world.app`
+This project requires the following packages:
 
-## Sample portable applications
+[[parents: ios]]
 
-See the calculator example at `examples/calculator` and the Tnitter client at `contrib/tnitter/`
-for portable applications working on GNU/Linux, OS X, iOS and Android.
+### Run `app`
 
-## Application icon
+Compile `app` with the following command:
 
-To associate icons to your application, create the directory `ios/AppIcon.appiconset` and fill it with standard icons and `Contents.json`.
-These files can be generated in a number of different ways:
+[[main-compile: ios::app]]
 
-* Using the tool `svg_to_icons` packaged with the Nit repository at `contrib/inkscape_tools/bin/svg_to_icons`.
+## Features
 
-* Using Xcode to assign images to each slot, create the folder and the file `Contents.json`.
+[[uml: ios | format: svg, mentities: ios>;ios>ui>]]
 
-* Write or modify the file `Contents.json` manually.
-  It is in Json format and easily readable.
+[[features: ios | mentities: ios::app;ios::assets;ios::audio;ios::data_store;ios::glkit;ios::http_request;ios::platform]]
+
+Then run it with:
+
+[[main-run: ios::app]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: ios]].

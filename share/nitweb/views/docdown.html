@@ -18,9 +18,9 @@
 			<li>
 				<a data-target='#docs' data-toggle='tab'>My Docs</a>
 			</li>
-			<li>
+			<!--li>
 				<a data-target='#debug' data-toggle='tab'>Debug</a>
-			</li>
+			</li-->
 		</ul>
 
 		<div class='tab-content'>
@@ -52,9 +52,9 @@
 					<div ng-repeat='suggest in vm.suggestions'>
 						<!--suggest-card card='suggest' index='$index' ng-if='!suggest.is_scaffoling'/-->
 
-						<card-scaffolding card='suggest' ng-if='suggest.is_scaffolding' />
-						<card-freedoc card='suggest' ng-if='suggest.is_freedoc' />
-						<card-tip card='suggest' ng-if='suggest.is_tip' />
+						<card-scaffolding index='$index' card='suggest' ng-if='suggest.is_scaffolding' />
+						<card-freedoc index='$index' card='suggest' ng-if='suggest.is_freedoc' />
+						<card-tip index='$index' card='suggest' ng-if='suggest.is_tip' />
 					</div>
 				</div>
 			</div>
@@ -144,8 +144,13 @@
 			</button>
 			<ul class='dropdown-menu'>
 				<li><a ng-click='vm.renderHtml()'>HTML</a></li>
-				<li><a ng-click='vm.renderHtml()'>Markdown</a></li>
+				<li><a ng-click='vm.renderMd()'>Markdown</a></li>
 			</ul>
+		</div>
+		<div class='btn-group pull-right'>
+			<button type='button' class='btn btn-danger btn-link' ng-click='vm.clearSession()'>
+				Clear
+			</button>
 		</div>
 	</div>
 

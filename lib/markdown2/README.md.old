@@ -1,0 +1,54 @@
+# `markdown2` - A markdown parser for Nit
+
+ * [Getting Started](#Getting-Started)
+ * [Dependencies](#Dependencies)
+ * [Run `nitmd`](#Run-`nitmd`)
+ * [Running the tests](#Running-the-tests)
+ * [Authors](#Authors)
+
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine.
+
+### Dependencies
+
+This project requires the following packages:
+
+* `config` - Configuration options for nit tools and apps
+* `core` - Nit common library of core classes and methods
+* `json` - read and write JSON formatted text
+* `md5` - Native MD5 digest implementation as `Text::md5`
+* `template` - Basic template system
+
+### Run `nitmd`
+
+Compile `nitmd` with the following command:
+
+~~~bash
+nitc ./nitmd.nit
+~~~
+
+Then run it with:
+
+~~~bash
+nitmd [-t format] <file.md>
+~~~
+
+Options:
+
+~~~bash
+* -t, --to		Specify output format (html, md, man)
+* -h, -?, --help		Show Help (the list of options).
+~~~
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+~~~bash
+nitunit .
+~~~
+
+## Authors
+
+This project is maintained by **Alexandre Terrasa <alexandre@moz-code.org>**.

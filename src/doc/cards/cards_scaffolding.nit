@@ -16,6 +16,7 @@ module cards_scaffolding
 
 import doc::cards::cards_base
 import doc::commands
+import doc::templates::md_commands
 import doc::templates::html_commands
 
 class ReadmeScaffolder
@@ -185,11 +186,9 @@ abstract class CardTip
 
 	var mdoc_renderer = new MDocHtmlRenderer is noserialize
 
-	# Markdown content to insert into the document
-	fun markdown: String is abstract
-
 	redef fun description do
 		var ast = mdoc_parser.parse(markdown)
+		mdoc_parser.post_process(ast)
 		return mdoc_renderer.render(ast)
 	end
 
@@ -199,9 +198,22 @@ abstract class CardTip
 	end
 end
 
+class CardTipCommand
+	super CardTip
+	serialize
+
+	var command: String
+
+	redef var title = "Card preview"
+
+	redef fun markdown do return "[[{command}]]"
+end
+
 class CardTipIni
 	super CardTip
 	serialize
+
+	redef var id is lazy do return "tip-ini-{mentity.full_name}"
 
 	var mentity: MEntity is noserialize
 
@@ -233,6 +245,8 @@ class CardTipIniDesc
 	super CardTip
 	serialize
 
+	redef var id is lazy do return "tip-ini-desc"
+
 	redef var title = "Add a project short description"
 
 	redef fun markdown do
@@ -250,6 +264,8 @@ end
 class CardTipIniGit
 	super CardTip
 	serialize
+
+	redef var id is lazy do return "tip-ini-git"
 
 	redef var title = "Provide a Git repository"
 
@@ -269,6 +285,8 @@ class CardTipIniIssues
 	super CardTip
 	serialize
 
+	redef var id is lazy do return "tip-ini-issues"
+
 	redef var title = "Provide a way to raise issues"
 
 	redef fun markdown do
@@ -286,6 +304,8 @@ end
 class CardTipIniContrib
 	super CardTip
 	serialize
+
+	redef var id is lazy do return "tip-ini-contrib"
 
 	redef var title = "Explain how users can contribute"
 
@@ -305,6 +325,8 @@ class CardTipIniAuthor
 	super CardTip
 	serialize
 
+	redef var id is lazy do return "tip-ini-authors"
+
 	redef var title = "Be proud of your work"
 
 	redef fun markdown do
@@ -323,6 +345,8 @@ class CardTipIniContributors
 	super CardTip
 	serialize
 
+	redef var id is lazy do return "tip-ini-contribs"
+
 	redef var title = "Thank your contributors"
 
 	redef fun markdown do
@@ -336,9 +360,28 @@ class CardTipIniContributors
 	end
 end
 
+class CardTipExamples
+	super CardTip
+	serialize
+
+	redef var id is lazy do return "tip-examples"
+
+	redef var title = "Create testable examples"
+
+	redef fun markdown do
+		var tpl = new Template
+		tpl.addn "Explain how to use your code with the `is example` annotation.\n"
+		tpl.addn "See the [NitUnit documentation](https://nitlanguage.org/tools/nitunit.html) to"
+		tpl.addn "learn how to use NitUnit to test your examples."
+		return tpl.write_to_string
+	end
+end
+
 class CardTipTests
 	super CardTip
 	serialize
+
+	redef var id is lazy do return "tip-testing"
 
 	redef var title = "Test your code with NitUnit"
 
@@ -354,6 +397,8 @@ end
 class CardTipIniLicense
 	super CardTip
 	serialize
+
+	redef var id is lazy do return "tip-ini-license"
 
 	redef var title = "Give your project license"
 
@@ -373,6 +418,8 @@ class CardTipContribFile
 	super CardTip
 	serialize
 
+	redef var id is lazy do return "tip-file-contrib"
+
 	redef var title = "Explain your contribution rules"
 
 	redef fun markdown do
@@ -386,6 +433,8 @@ end
 class CardTipLicenseFile
 	super CardTip
 	serialize
+
+	redef var id is lazy do return "tip-file-license"
 
 	redef var title = "Explain your license details"
 
@@ -403,6 +452,8 @@ class CardTipMan
 
 	var main: MEntity
 
+	redef var id is lazy do return "tip-man-{main.full_name}"
+
 	redef var title = "Add a manpage for your binary"
 
 	redef fun markdown do
@@ -419,6 +470,8 @@ class CardTipManSynopsis
 	serialize
 
 	var main: MEntity
+
+	redef var id is lazy do return "tip-man-syn-{main.full_name}"
 
 	redef var title = "Document the synopsis of your binary in the manpage"
 
@@ -438,6 +491,8 @@ class CardTipManOptions
 	super CardTip
 	serialize
 
+	redef var id is lazy do return "tip-man-opts-{main.full_name}"
+
 	var main: MEntity
 
 	redef var title = "Document the options of your binary in the manpage"
@@ -456,6 +511,21 @@ class CardTipManOptions
 	end
 end
 
+class CardTipFinished
+	super CardTip
+	serialize
+
+	redef var id is lazy do return "tip-finished"
+
+	redef var title = "Your README is ready!"
+
+	redef fun markdown do
+		var tpl = new Template
+		tpl.addn "Use the button on the bottom of the screen to render it.\n"
+		return tpl.write_to_string
+	end
+end
+
 # Scaffolding
 
 abstract class CardScaffolding
@@ -469,9 +539,6 @@ abstract class CardScaffolding
 	var mdoc_renderer = new MDocHtmlRenderer is noserialize
 
 	var mentity: MEntity is noserialize
-
-	# Markdown content to insert into the document
-	fun markdown: String is abstract
 
 	fun html: Writable do
 		var ast = mdoc_parser.parse(markdown)
@@ -492,18 +559,36 @@ class CardTitle
 	super CardScaffolding
 	serialize
 
+	redef var id is lazy do return "scaff-title-{mentity.full_name}"
+
+	redef fun commands do
+		var res = super
+		res.add "{mentity.full_name}"
+		res.add "ini-desc: {mentity.full_name}"
+		return res
+	end
+
 	var no_desc: Bool is noserialize
 
-	redef var title = "Readme Title"
-	redef var description = "Provide a good title and a short description of your project."
+	redef var title = "Add a descriptive title"
+	redef var description = "A good README starts with a title and a short description of your project."
+
+	init from_mpackage(mdoc_parser: MdParser, mpackage: MPackage) do
+		var no_desc = true
+		var ini = mpackage.ini
+		if ini != null then
+			no_desc = ini.has_key("package.desc")
+		end
+		init(mdoc_parser, mpackage, no_desc)
+	end
 
 	redef var markdown is lazy do
 		var tpl = new Template
-		tpl.addn "# [[{mentity.full_name}]]\n"
+		tpl.add "# [[{mentity.full_name}]]"
 		if no_desc then
-			tpl.addn "**TODO**: Add a short description of your project.\n"
+			tpl.addn " - **TODO**: Add a short description of your project.\n"
 		else
-			tpl.addn "[[ini-desc: {mentity.full_name}]]\n"
+			tpl.addn " - [[ini-desc: {mentity.full_name}]]\n"
 		end
 		return tpl.write_to_string
 	end
@@ -512,6 +597,8 @@ end
 class CardOverview
 	super CardScaffolding
 	serialize
+
+	redef var id is lazy do return "scaff-overview-{mentity.full_name}"
 
 	redef var title = "Project Overview"
 	redef var description = "List the most interesting features of your project to explain what it does and why it is useful."
@@ -524,16 +611,36 @@ class CardOverview
 
 	redef var markdown is lazy do
 		var tpl = new Template
-		tpl.addn "## Overview\n"
+		# tpl.addn "## Overview\n"
 		tpl.addn "Main features:"
 		tpl.addn "[[defs: {mentity.full_name}]]\n"
 		return tpl.write_to_string
 	end
 end
 
+class CardTOC
+	super CardScaffolding
+	serialize
+
+	redef var id is lazy do return "scaff-toc-{mentity.full_name}"
+
+	redef var title = "Table of contents"
+	redef var description = "Add a table of contents so readers can jump directly to what they are looking for."
+
+	redef var markdown is lazy do
+		var tpl = new Template
+		# tpl.addn "## Contents\n"
+		tpl.addn "[[toc: {mentity.full_name}]]"
+		return tpl.write_to_string
+	end
+end
+
+
 class CardGettingStarted
 	super CardScaffolding
 	serialize
+
+	redef var id is lazy do return "scaff-starting-{mentity.full_name}"
 
 	redef var title = "Project Installation & Compilation"
 	redef var description = "Explain how a new user can obtain a working copy of your project and run it."
@@ -543,6 +650,7 @@ class CardGettingStarted
 	var mains: nullable Array[MEntity] is noserialize
 	var main_with_synopsis: HashSet[MEntity] is noserialize
 	var main_with_options: HashSet[MEntity] is noserialize
+	var is_nit = false is optional, writable
 
 	redef fun options do
 		var options = new HashMap[String, String]
@@ -558,11 +666,11 @@ class CardGettingStarted
 
 		if not no_parent then
 			tpl.addn "### Dependencies\n"
-			tpl.addn "This project requires the following packages:"
+			tpl.addn "This project requires the following packages:\n"
 			tpl.addn "[[parents: {mentity.full_name}]]\n"
 		end
 
-		if not no_git then
+		if not no_git and not is_nit then
 			tpl.addn "### Getting the sources\n"
 			tpl.addn "Clone the source from the git repository:\n"
 			tpl.addn "[[git-clone: {mentity.full_name}]]\n"
@@ -571,14 +679,14 @@ class CardGettingStarted
 		var mains = self.mains
 		if mains != null then
 			for main in mains do
-				tpl.addn "### Run [[{main.full_name}]]\n"
-				tpl.addn "Compile [[{main.full_name}]] with the following command:"
+				tpl.addn "### Run `{main.name}`\n"
+				tpl.addn "Compile `{main.name}` with the following command:\n"
 				tpl.addn "[[main-compile: {main.full_name}]]\n"
 
-				if main_with_synopsis.has(main) then
+				# if main_with_synopsis.has(main) then
 					tpl.addn "Then run it with:\n"
 					tpl.addn "[[main-run: {main.full_name}]]\n"
-				end
+				# end
 				if main_with_options.has(main) then
 					tpl.addn "Options:\n"
 					tpl.addn "[[main-opts: {main.full_name}]]\n"
@@ -590,9 +698,106 @@ class CardGettingStarted
 	end
 end
 
+class CardAPI
+	super CardScaffolding
+	serialize
+
+	redef var id is lazy do return "scaff-api-{mentity.full_name}"
+
+	var level: Int
+
+	redef var title = "???"
+	redef var description = "???"
+
+	redef var markdown is lazy do
+		var mentity = self.mentity
+		var tpl = new Template
+		tpl.add "{"#" * level} "
+		if mentity isa MProperty then
+			tpl.add "`{mentity.intro.mclassdef.mclass.name}::{mentity.name}`"
+		else
+			tpl.add "`{mentity.name}`"
+		end
+
+		var mdoc = mentity.mdoc_or_fallback
+		if mdoc != null then
+			var syn = mdoc.md_synopsis.write_to_string
+			if not syn.is_empty then
+				tpl.addn " - {syn.replace("# ", "")}"
+			else
+				tpl.addn "\n"
+			end
+		else
+			tpl.addn "\n"
+		end
+		tpl.addn "[[doc: {mentity.full_name} | no-synopsis]]\n"
+
+		var cmd_features = new CmdFeatures(mentity.model,
+			new ModelFilter(
+				min_visibility = public_visibility,
+				accept_redef = false,
+				accept_test = false,
+				accept_example = false
+			), mentity)
+		var res_features = cmd_features.init_command
+
+		if res_features isa CmdSuccess and cmd_features.results.as(not null).not_empty then
+			if mentity isa MClass then
+				tpl.addn "Properties:\n"
+				tpl.addn "[[features: {mentity.full_name} | min-visibility: public, no-redef]]"
+			end
+		end
+		return tpl.write_to_string
+	end
+end
+
+class CardExamples
+	super CardScaffolding
+	serialize
+
+	redef var id is lazy do return "scaff-testing-{mentity.full_name}"
+
+	redef fun commands do
+		var res = super
+		if examples.length > 1 then
+			var names = new Array[String]
+			for mentity in examples do
+				names.add mentity.full_name
+			end
+			res.add "features: {mentity.full_name} | mentities: {names.join(";")}"
+		else if examples.not_empty then
+			res.add "code: {examples.first.full_name} | format: html"
+		end
+		return res
+	end
+
+
+	redef var title = "Usage examples" is lazy
+	redef var description = "Explain how to use your project with code examples."
+
+	var examples: Array[MEntity]
+
+	redef var markdown is lazy do
+		var tpl = new Template
+		tpl.addn "## Example{if examples.length > 1 then "s" else ""}\n"
+		if examples.length > 1 then
+			var names = new Array[String]
+			for mentity in examples do
+				names.add mentity.full_name
+			end
+			tpl.addn "[[features: {mentity.full_name} | mentities: {names.join(";")}]]\n"
+		else if examples.not_empty then
+			tpl.addn "[[code: {examples.first.full_name} | format: html]]\n"
+		end
+		return tpl.write_to_string
+	end
+end
+
 class CardTesting
 	super CardScaffolding
 	serialize
+
+	redef var id is lazy do return "scaff-testing-{mentity.full_name}"
 
 	redef var title = "Testing"
 	redef var description = "Explain how to run the test units for your project."
@@ -600,7 +805,7 @@ class CardTesting
 	redef var markdown is lazy do
 		var tpl = new Template
 		tpl.addn "## Running the tests\n"
-		tpl.addn "Run the nitunit automated tests with the following command:"
+		tpl.addn "Run the nitunit automated tests with the following command:\n"
 		tpl.addn "[[testing: {mentity.full_name}]]\n"
 		return tpl.write_to_string
 	end
@@ -609,6 +814,8 @@ end
 class CardIssues
 	super CardScaffolding
 	serialize
+
+	redef var id is lazy do return "scaff-issues-{mentity.full_name}"
 
 	redef var title = "Issues"
 	redef var description = "Explain how your users can contact you or raise an issue."
@@ -624,6 +831,8 @@ end
 class CardContributing
 	super CardScaffolding
 	serialize
+
+	redef var id is lazy do return "scaff-contrib-{mentity.full_name}"
 
 	var no_git: Bool is noserialize
 	var no_contrib_file: Bool is noserialize
@@ -652,11 +861,20 @@ class CardAuthors
 	super CardScaffolding
 	serialize
 
+	redef var id is lazy do return "scaff-authors-{mentity.full_name}"
+
 	var no_author: Bool is noserialize
 	var no_contrib: Bool is noserialize
 
 	redef var title = "Authors"
 	redef var description = "List the authors and contributors of your project."
+
+	init from_mentity(mdoc_parser: MdParser, mentity: MEntity) do
+		var ini = mentity.as(MPackage).ini
+		var no_author = ini == null or not ini.has_key("package.maintainer")
+		var no_contrib = ini == null or not ini.has_key("package.more_contributors")
+		init(mdoc_parser, mentity, no_author, no_contrib)
+	end
 
 	redef var markdown is lazy do
 		var tpl = new Template
@@ -676,6 +894,8 @@ end
 class CardLicense
 	super CardScaffolding
 	serialize
+
+	redef var id is lazy do return "scaff-license-{mentity.full_name}"
 
 	var no_license: Bool is noserialize
 	var no_license_file: Bool is noserialize

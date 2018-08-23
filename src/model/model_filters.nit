@@ -53,7 +53,10 @@ class ModelFilter
 			accept_attribute = filter.accept_attribute,
 			accept_empty_doc = filter.accept_empty_doc,
 			accept_inherited = filter.accept_inherited,
-			accept_full_name = filter.accept_full_name
+			accept_full_name = filter.accept_full_name,
+			accept_doc = filter.accept_doc,
+			accept_bin = filter.accept_bin,
+			accept_man = filter.accept_man
 		)
 	end
 
@@ -74,6 +77,9 @@ class ModelFilter
 		if not accept_mentity_empty_doc(mentity) then return false
 		if not accept_mentity_inherited(mentity) then return false
 		if not accept_mentity_full_name(mentity) then return false
+		if not accept_mentity_doc(mentity) then return false
+		if not accept_mentity_bin(mentity) then return false
+		if not accept_mentity_man(mentity) then return false
 		return true
 	end
 
@@ -273,5 +279,38 @@ class ModelFilter
 	fun accept_mentity_broken(mentity: MEntity): Bool do
 		if accept_broken then return true
 		return not mentity.is_broken
+	end
+
+	# Accept groups named `doc`
+	#
+	# Default is `true`.
+	var accept_doc = true is optional, writable
+
+	# Accept only entities that are not example related
+	fun accept_mentity_doc(mentity: MEntity): Bool do
+		if accept_doc then return true
+		return not mentity isa MGroup or mentity.name != "doc"
+	end
+
+	# Accept groups named `bin`
+	#
+	# Default is `true`.
+	var accept_bin = true is optional, writable
+
+	# Accept only entities that are not example related
+	fun accept_mentity_bin(mentity: MEntity): Bool do
+		if accept_doc then return true
+		return not mentity isa MGroup or mentity.name != "bin"
+	end
+
+	# Accept groups named `man`
+	#
+	# Default is `true`.
+	var accept_man = true is optional, writable
+
+	# Accept only entities that are not example related
+	fun accept_mentity_man(mentity: MEntity): Bool do
+		if accept_doc then return true
+		return not mentity isa MGroup or mentity.name != "man"
 	end
 end

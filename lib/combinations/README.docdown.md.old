@@ -1,0 +1,26 @@
+# `combinations` - Memory-efficient Cartesian products, combinations and permutation on collections.
+
+[[toc: combinations]]
+
+This module offers memory-efficient views on combinatoric collections.
+Methods of the views create objects only when needed.
+Moreover, produced objects during iterations are free to be collected and
+their memory reused.
+
+This enable these views and method to works with very combinatoric large collections.
+
+When small combinatoric views need to be kept in memory (for fast access by example).
+The `Collection::to_a` method and other related factories can be used to transform
+the combinatoric views into extensive collections,
+
+## `CartesianCollection` - A view of a Cartesian-product collection over homogeneous collections.
+
+[[doc: combinations::CartesianCollection | no-synopsis]]
+
+## `CombinationCollection` - A view of some combinations over a base collections.
+
+[[doc: combinations::CombinationCollection | no-synopsis]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: combinations]].

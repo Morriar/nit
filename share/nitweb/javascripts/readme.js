@@ -36,12 +36,27 @@
 						.error(cbErr);
 				},
 				renderHtml: function(md, cb, cbErr) {
-					$http.post('/api/readme', md)
+					$http.post('/api/readme?format=html', md)
+						.success(cb)
+						.error(cbErr);
+				},
+				renderMd: function(md, cb, cbErr) {
+					$http.post('/api/readme?format=md', md)
 						.success(cb)
 						.error(cbErr);
 				},
 				suggest: function(target, md, line, column, cb, cbErr) {
 					$http.post('/api/readme/suggest?line=' + line + '&column=' + column + '&target=' + target, md)
+						.success(cb)
+						.error(cbErr);
+				},
+				dismiss: function(card, cb, cbErr) {
+					$http.post('/api/readme/dismiss', card.id)
+						.success(cb)
+						.error(cbErr);
+				},
+				clearSession: function(cb, cbErr) {
+					$http.post('/api/readme/clear')
 						.success(cb)
 						.error(cbErr);
 				}
@@ -93,6 +108,26 @@
 					});
 			}
 
+			this.renderMd = function() {
+				DocDown.renderMd(vm.markdown,
+					function(data) {
+						vm.html = $sce.trustAsHtml(data);
+						$('#renderModal').modal();
+					}, function(err) {
+						vm.error = err;
+					});
+			}
+
+			this.clearSession = function() {
+				DocDown.clearSession(
+					function(data) {
+						var pos = vm.editor.doc.getCursor();
+						vm.updateSuggestions(vm.target, vm.markdown, pos.line + 1, pos.ch + 1);
+					}, function(err) {
+						vm.error = err;
+					});
+			}
+
 			this.updateSuggestions = function(target, markdown, linePos, lineChar) {
 				DocDown.suggest(target, markdown, linePos, lineChar,
 					function(data) {
@@ -117,7 +152,7 @@
 
 			$scope.$on('doc-change', function(e, data, pos) {
 				vm.markdown = data;
-				//vm.updateSuggestions(vm.target, data, pos.line + 1, pos.ch + 1);
+				vm.updateSuggestions(vm.target, data, pos.line + 1, pos.ch + 1);
 			})
 
 			$scope.$on('insert-card', function(e, card) {
@@ -128,6 +163,8 @@
 			$scope.$on('insert-content', function(e, content) {
 				var cursor = vm.editor.doc.getCursor();
 				vm.editor.doc.replaceRange(content, cursor);
+				vm.editor.focus();
+				//vm.updateSuggestions(vm.target, vm.markdown, 1, 1);
 			})
 
 			$scope.$on('edit-card', function(e, card, index) {
@@ -136,10 +173,15 @@
 				$('#editModal').modal();
 			})
 
-			$scope.$on('dismiss-card', function(e, index) {
-				//console.log(card);
-				// TODO Send card dismiss
-				vm.suggestions.splice(index, 1);
+			$scope.$on('dismiss-card', function(e, index, card) {
+				DocDown.dismiss(card,
+					function(data) {
+						var pos = vm.editor.doc.getCursor();
+						vm.updateSuggestions(vm.target, vm.markdown, pos.line + 1, pos.ch + 1);
+					}, function(err) {
+						vm.error = err;
+					});
+				//vm.suggestions.splice(index, 1);
 			})
 
 			$scope.$on('update-target', function(e, target) {
@@ -148,7 +190,7 @@
 			})
 
 			//TODO remove
-			vm.target = 'markdown2';
+			vm.target = 'vsm';
 			vm.markdown = '';
 			/*if($location.search().snippet) {
 				vm.markdown = atob($location.search().snippet);
@@ -184,7 +226,7 @@
 					var vm = this;
 
 					this.dismissCard = function() {
-						$scope.$emit('dismiss-card', vm.index);
+						$scope.$emit('dismiss-card', vm.index, vm.card);
 					}
 				},
 				controllerAs: 'vm',
@@ -215,11 +257,11 @@
 
 					this.insertCard = function() {
 						$scope.$emit('insert-content', vm.card.markdown);
-						$scope.$emit('dismiss-card', vm.index);
+						//$scope.$emit('dismiss-card', vm.index, vm.card);
 					}
 
 					this.dismissCard = function() {
-						$scope.$emit('dismiss-card', vm.index);
+						$scope.$emit('dismiss-card', vm.index, vm.card);
 					}
 
 					this.editCard = function() {
@@ -257,11 +299,11 @@
 
 					this.insertCard = function() {
 						$scope.$emit('insert-content', vm.card.markdown);
-						$scope.$emit('dismiss-card', vm.index);
+						//$scope.$emit('dismiss-card', vm.index, vm.card);
 					}
 
 					this.dismissCard = function() {
-						$scope.$emit('dismiss-card', vm.index);
+						$scope.$emit('dismiss-card', vm.index, vm.card);
 					}
 
 					this.editCard = function() {

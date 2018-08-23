@@ -1,0 +1,29 @@
+# `for_abuse` - Service management through the `for` control structure.
+
+[[toc: for_abuse]]
+
+The module is a proof-of-concept to investigate the abuse of
+the `for` structure to implement various services.
+
+The idea is that, with a `for`, the service-provider can:
+
+* control the end of the service (thus can finalize things
+  like releasing ressources)
+* communicate data with the user on each iteration; the used can
+  also communicate results to the provider.
+
+## `ForAbuser` - Encapsulation of service in a `for`-compatible interface.
+
+[[doc: for_abuse::ForAbuser | no-synopsis]]
+
+Properties:
+
+[[features: for_abuse::ForAbuser | min-visibility: public, no-redef]]
+
+## `CompareQuery` - A comparison query.
+
+[[doc: for_abuse::CompareQuery | no-synopsis]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: for_abuse]].

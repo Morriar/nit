@@ -95,13 +95,16 @@ class CmdUML
 	super CmdEntity
 	super CmdGraph
 
-	autoinit(model, mainmodule, filter, mentity, mentity_name, pdepth, cdepth, format, graph)
+	autoinit(model, mainmodule, filter, mentity, mentity_name, pdepth, cdepth, mentities, format, graph)
 
 	# Parents depth to display
 	var pdepth: nullable Int = null is optional, writable
 
 	# Children depth to display
 	var cdepth: nullable Int = null is optional, writable
+
+	# TODO
+	var mentities: nullable Array[MEntity] = null is optional, writable
 
 	# UML diagram to return
 	var graph: nullable UMLDiagram = null is optional, writable
@@ -130,6 +133,21 @@ class CmdUML
 		# Build diagram
 		var filter = new ModelFilter(min_visibility = protected_visibility)
 		var uml = new UMLDiagram(model, mainmodule, filter, opts)
+
+		var mentities = self.mentities
+		if mentities != null then
+			if mentities.not_empty then
+				for oentity in mentities do
+					uml.draw_node(oentity)
+				end
+				uml.draw_inheritance(mentities)
+			else
+				return new WarningNoUML(mentity)
+			end
+			self.graph = uml
+			return res
+		end
+
 		if mentity isa MPackage or mentity isa MGroup or mentity isa MModule then
 			uml.draw_package_diagram(mentity)
 		else if mentity isa MClass or mentity isa MProperty then

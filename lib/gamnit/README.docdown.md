@@ -1,63 +1,55 @@
-# Portable game and multimedia framework for Nit
+# `gamnit` - [[ini-desc: gamnit]]
 
-_gamnit_ is a modular framework to create portable 2D or 3D apps in Nit.
-It is based on the portability framework _app.nit_ and the OpenGL ES 2.0 standard.
+[[toc: gamnit]]
 
-## System configuration
+## Getting Started
 
-To compile the _gamnit_ apps packaged with the Nit repository on GNU/Linux you need to install the dev version of a few libraries and some tools.
-On Debian 8.2, this command should install everything needed:
+These instructions will get you a copy of the project up and running on your local machine.
 
-~~~bash
-apt-get install libgles2-mesa-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev inkscape
-~~~
+### Dependencies
 
-On Windows 64 bits, using msys2, you can install the required packages with:
+This project requires the following packages:
 
-~~~bash
-pacman -S mingw-w64-x86_64-angleproject-git mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_image mingw-w64-x86_64-SDL2_mixer
-~~~
+[[parents: gamnit]]
 
-While macOS isn't supported, it can create iOS apps.
-You need to install and setup Xcode, and you may install the GLSL shader validation tool via `brew`:
+### Run `texture_atlas_parser`
 
-~~~bash
-brew install glslang
-~~~
+Compile `texture_atlas_parser` with the following command:
 
-## Services by submodules
+[[main-compile: gamnit::texture_atlas_parser]]
 
-_gamnit_ is modular, different services of the framework are available through different submodules:
+## Features
 
-* The main entrypoint `gamnit` provides low-level abstractions over some services of OpenGL ES 2.0, like textures, shaders and programs.
-  It defines the basic methods to implement in order to obtain a working game:
-  `App::frame_core` to update the screen and `App::accept_event` to receive user inputs.
+[[uml: gamnit | format: svg, mentities: gamnit>;gamnit>depth>;gamnit>flat>;gamnit>model_parsers>;gamnit>network>;gamnit>virtual_gamepad>;gamnit>virtual_gamepad>art>;gamnit>virtual_gamepad>assets>;gamnit>virtual_gamepad>assets>images>]]
 
-* `flat` provides an easy to use API for 2D games based on sprites.
-  Clients of this API redefine `App::update` to update the game logic and fill lists of sprites with objects to draw.
+### `android19` - Variation using features from Android API 19
 
-  `App::sprites` lists the sprites of the game world, they are drawn form the point of view of the `world_camera`.
-  This camera can be moved around in the world by updating the x and y of its `position`,
-  and the zoom can easily be set using `reset_depth(desired_world_units_on_y)` or the `z` of its `position`
+[[doc: gamnit::android19 | no-synopsis]]
 
-  `App::ui_sprites` lists the UI sprites drawn from the point of view of `ui_camera`.
-  By default, this camera is pixel-perfect with the origin in the top left corner of the window.
-  However to support screens with different DPI, it is recommended to standardize
-  the display size using `reset_depth(height_of_reference_display)`.
+### `bmfont` - Parse Angel Code BMFont format and draw text
 
-* `depth` defines an API for 3D games based on instances of `Actor`.
+[[doc: gamnit::bmfont | no-synopsis]]
 
-  This framework is build upon `flat`, see the doc of this submodule first (just above).
-  As such, clients should still implement `update` with the game logic, and fill `ui_sprites` for UI elements.
+### `display_android` - Gamnit display implementation for Android
 
-  At each frame, elements in the list `actors` are drawn to screen.
-  Each `Actor` is composed of a `Model` and other information specific to this instance:
-  position in the world, rotation and scaling.
+[[doc: gamnit::display_android | no-synopsis]]
 
-* `limit_fps` refines existing services of _gamnit_ to limit the framerate to a customizable value.
+### `dynamic_resolution` - Virtual screen with a resolution independent from the real screen
 
-* `keys` provides `app.pressed_keys` keeping track of the currently pressed keys.
+[[doc: gamnit::dynamic_resolution | no-synopsis]]
 
-* `model_parsers` provides services to read and parse models from the asset folder.
+### `keys` - Simple service keeping track of which keys are currently pressed
 
-* `network` provides a simple communication framework for multiplayer client/server games.
+[[doc: gamnit::keys | no-synopsis]]
+
+## Other features
+
+[[features: gamnit | mentities: gamnit::camera_control;gamnit::camera_control_android;gamnit::camera_control_linux;gamnit::cameras;gamnit::cameras_cache;gamnit::display;gamnit::display_ios;gamnit::display_linux;gamnit::egl;gamnit::font;gamnit::gamnit_android;gamnit::gamnit_ios;gamnit::gamnit_linux;gamnit::input_ios;gamnit::landscape;gamnit::limit_fps;gamnit::portrait;gamnit::programs;gamnit::texture_atlas_parser;gamnit::textures;gamnit::tileset]]
+
+Then run it with:
+
+[[main-run: gamnit::texture_atlas_parser]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: gamnit]].

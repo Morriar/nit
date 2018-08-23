@@ -1,0 +1,23 @@
+# `deriving` - Automatic derivable implementations of standard basic methods.
+
+[[toc: deriving]]
+
+This module introduce `Derivable` as the main interface to implement (or auto-implement) and
+provides additional mixin-interfaces with specific default behavior of standard basic methods based
+on the services of this interface.
+
+The name *[[deriving]]* is inspired from the deriving mechanism of Haskell.
+
+This module also introduce a new annotation `auto_derive`. See `Derivable` for details.
+
+## `DeriveToS` - Implementation of `to_s` for `Derivable` objects.
+
+[[doc: deriving::DeriveToS | no-synopsis]]
+
+## `DeriveEqual` - Implementation of `==` and `hash` for `Derivable` objects.
+
+[[doc: deriving::DeriveEqual | no-synopsis]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: deriving]].

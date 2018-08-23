@@ -1,0 +1,46 @@
+# `dot` - Dot rendering library
+
+[[toc: dot]]
+
+Example:
+
+~~~
+import dot
+
+var graph = new DotGraph("G", "digraph")
+
+var hello = graph.add_node("hello")
+var world = graph.add_node("world")
+
+graph.add_edge(hello, world)
+
+print graph.to_dot
+~~~
+
+## `DotGraph` - A Graph representation suited for dot format.
+
+[[doc: dot::DotGraph | no-synopsis]]
+
+Properties:
+
+[[features: dot::DotGraph | min-visibility: public, no-redef]]
+
+## `DotNode` - A dot node
+
+[[doc: dot::DotNode | no-synopsis]]
+
+## `DotEdge` - A dot edge that links two nodes
+
+[[doc: dot::DotEdge | no-synopsis]]
+
+## `DotCluster` - A dot cluster allows nested nodes
+
+[[doc: dot::DotCluster | no-synopsis]]
+
+## Other classes from `dot`
+
+[[features: dot::dot | mentities: dot::DotElement;dot::AttributeMap]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: dot]].

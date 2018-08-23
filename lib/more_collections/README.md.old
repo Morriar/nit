@@ -1,0 +1,157 @@
+# `more_collections` - Highly specific, but useful, collections-related classes.
+
+ * [`MultiHashMap` - Simple way to store an `HashMap[K, Array[V]]`](#`MultiHashMap`---Simple-way-to-store-an-`HashMap[K,-Array[V]]`)
+ * [`HashMap2` - Simple way to store an `HashMap[K1, HashMap[K2, V]]`](#`HashMap2`---Simple-way-to-store-an-`HashMap[K1,-HashMap[K2,-V]]`)
+ * [`HashMap3` - Simple way to store an `HashMap[K1, HashMap[K2, HashMap[K3, V]]]`](#`HashMap3`---Simple-way-to-store-an-`HashMap[K1,-HashMap[K2,-HashMap[K3,-V]]]`)
+ * [`HashMap4` - Simple way to store an `HashMap[K1, HashMap[K2, HashMap[K3, HashMap[K4, V]]]]`](#`HashMap4`---Simple-way-to-store-an-`HashMap[K1,-HashMap[K2,-HashMap[K3,-HashMap[K4,-V]]]]`)
+ * [`DefaultMap` - A map with a default value.](#`DefaultMap`---A-map-with-a-default-value.)
+ * [`UnrolledList` - An unrolled linked list](#`UnrolledList`---An-unrolled-linked-list)
+ * [`BestDistance` - Keep track of the best elements according to a distance value.](#`BestDistance`---Keep-track-of-the-best-elements-according-to-a-distance-value.)
+ * [Authors](#Authors)
+
+## `MultiHashMap` - Simple way to store an `HashMap[K, Array[V]]`
+
+Unlike standard HashMap, MultiHashMap provides a new
+empty array on the first access on a unknown key.
+
+    var m = new MultiHashMap[String, Char]
+    assert not m.has_key("four")
+    m["four"].add('i')
+    m["four"].add('i')
+    m["four"].add('i')
+    m["four"].add('i')
+    assert m.has_key("four")
+    assert m["four"] == ['i', 'i', 'i', 'i']
+    assert m["zzz"] == new Array[Char]
+
+Properties:
+
+* `add_one` - Add `v` to the array associated with `k`.
+* `lookup_joined_values` - Search the values in `pe.greaters` from the most smaller elements that have a value.
+* `remove_one` - Remove an occurrence of `v` from the array associated with `k`.
+
+## `HashMap2` - Simple way to store an `HashMap[K1, HashMap[K2, V]]`
+
+~~~~
+var hm2 = new HashMap2[Int, String, Float]
+hm2[1, "one"] = 1.0
+hm2[2, "two"] = 2.0
+assert hm2[1, "one"] == 1.0
+assert hm2[2, "not-two"] == null
+~~~~
+
+Properties:
+
+* `[]` - Return the value associated to the keys `k1` and `k2`.
+* `[]=` - Set `v` the value associated to the keys `k1` and `k2`.
+* `clear` - Remove all items
+* `has` - Is there a value at `k1, k2`?
+* `remove_at` - Remove the item at `k1` and `k2`
+
+## `HashMap3` - Simple way to store an `HashMap[K1, HashMap[K2, HashMap[K3, V]]]`
+
+~~~~
+var hm3 = new HashMap3[Int, String, Int, Float]
+hm3[1, "one", 11] = 1.0
+hm3[2, "two", 22] = 2.0
+assert hm3[1, "one", 11] == 1.0
+assert hm3[2, "not-two", 22] == null
+~~~~
+
+Properties:
+
+* `[]` - Return the value associated to the keys `k1`, `k2`, and `k3`.
+* `[]=` - Set `v` the value associated to the keys `k1`, `k2`, and `k3`.
+* `clear` - Remove all items
+* `has` - Is there a value at `k1, k2, k3`?
+* `remove_at` - Remove the item at `k1`, `k2` and `k3`
+
+## `HashMap4` - Simple way to store an `HashMap[K1, HashMap[K2, HashMap[K3, HashMap[K4, V]]]]`
+
+~~~~
+var hm4 = new HashMap4[Int, String, Int, String, Float]
+hm4[1, "one", 11, "un"] = 1.0
+hm4[2, "two", 22, "deux"] = 2.0
+assert hm4[1, "one", 11, "un"] == 1.0
+assert hm4[2, "not-two", 22, "deux"] == null
+~~~~
+
+Properties:
+
+* `[]` - Return the value associated to the keys `k1`, `k2`, `k3` and `k4`.
+* `[]=` - Set `v` the value associated to the keys `k1`, `k2`, `k3` and `k4`.
+* `clear` - Remove all items
+* `has` - Is there a value at `k1, k2, k3, k4`?
+* `remove_at` - Remove the item at `k1`, `k2`, `k3` and `k4`
+
+## `DefaultMap` - A map with a default value.
+
+~~~~
+var dm = new DefaultMap[String, Int](10)
+assert dm["a"] == 10
+~~~~
+
+The default value is used when the key is not present.
+And getting a default value does not register the key.
+
+~~~~
+assert dm["a"] == 10
+assert dm.length == 0
+assert dm.has_key("a") == false
+~~~~
+
+It also means that removed key retrieve the default value.
+
+~~~~
+dm["a"] = 2
+assert dm["a"] == 2
+dm.keys.remove("a")
+assert dm["a"] == 10
+~~~~
+
+Warning: the default value is used as is, so using mutable object might
+cause side-effects.
+
+~~~~
+var dma = new DefaultMap[String, Array[Int]](new Array[Int])
+
+dma["a"].add(65)
+assert dma["a"] == [65]
+assert dma.default == [65]
+assert dma["c"] == [65]
+
+dma["b"] += [66]
+assert dma["b"] == [65, 66]
+assert dma.default == [65]
+~~~~
+
+## `UnrolledList` - An unrolled linked list
+
+A sequence implemented as a linked list of arrays.
+
+This data structure is similar to the `List` but it can benefit from
+better cache performance, lower data overhead for the nodes metadata and
+it spares the GC to allocate many small nodes.
+
+## `BestDistance` - Keep track of the best elements according to a distance value.
+
+~~~
+var bests = new BestDistance[String](5)
+bests.update(10, "Too big")
+assert bests.best_items.is_empty
+bests.update(5, "Just fine")
+bests.update(5, "Another one")
+assert bests.best_items.has_exactly(["Just fine", "Another one"])
+bests.update(2, "A better one")
+bests.update(4, "Not good enough")
+assert bests.best_distance == 2
+assert bests.best_items.has_exactly(["A better one"])
+~~~
+
+Properties:
+
+* `update` - Register a `candidate` with a `distance`
+
+## Authors
+
+This project is maintained by **Jean Privat <jean@pryen.org>**.

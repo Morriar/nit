@@ -40,7 +40,7 @@ class CommandParser
 
 	# List of allowed command names for this parser
 	var allowed_commands: Array[String] = [
-	"link", "doc", "code", "lin", "uml", "graph", "search",
+	"link", "doc", "code", "lin", "uml", "graph", "search", "features", "toc", "sign",
 	"parents", "ancestors", "children", "descendants",
 	"param", "return", "new", "call", "defs", "list", "random",
 	"ini-desc", "ini-git", "ini-issues", "ini-maintainer", "ini-contributors", "ini-license",
@@ -180,11 +180,14 @@ class CommandParser
 	# You must redefine this method to add new custom commands.
 	fun new_command(name: String): nullable DocCommand do
 		# CmdEntity
+		if name == "sign" then return new CmdSignature(model)
 		if name == "link" then return new CmdEntityLink(model)
 		if name == "doc" then return new CmdComment(model)
+		if name == "toc" then return new CmdSummary(model)
 		if name == "code" then return new CmdEntityCode(model, modelbuilder)
 		if name == "lin" then return new CmdLinearization(model, mainmodule)
 		if name == "defs" then return new CmdFeatures(model)
+		if name == "features" then return new CmdFeatures2(model)
 		if name == "parents" then return new CmdParents(model, mainmodule)
 		if name == "ancestors" then return new CmdAncestors(model, mainmodule)
 		if name == "children" then return new CmdChildren(model, mainmodule)
@@ -294,16 +297,28 @@ redef class CmdList
 		if opt_page != null then page = opt_page
 		var opt_limit = options.opt_int("limit")
 		if opt_limit != null then limit = opt_limit
+		var opt_mentities = options.opt_mentities(model, "mentities")
+		if opt_mentities != null then results = opt_mentities
 		return super
 	end
 end
 
 # Model commands
 
+redef class CmdSignature
+	redef fun parser_init(mentity_name, options) do
+		var opt_no_type = options.opt_bool("no-type")
+		if opt_no_type != null then no_type = opt_no_type
+		return super
+	end
+end
+
 redef class CmdComment
 	redef fun parser_init(mentity_name, options) do
 		var opt_full_doc = options.opt_bool("only-synopsis")
 		if opt_full_doc != null then full_doc = not opt_full_doc
+		var opt_synopsis = options.opt_bool("no-synopsis")
+		if opt_synopsis != null then no_synopsis = opt_synopsis
 		var opt_fallback = options.opt_bool("no-fallback")
 		if opt_fallback != null then fallback = not opt_fallback
 		var opt_format = options.opt_string("format")
@@ -376,6 +391,8 @@ redef class CmdUML
 		if options.has_key("cdepth") and options["cdepth"].is_int then
 			cdepth = options["cdepth"].to_i
 		end
+		var opt_mentities = options.opt_mentities(model, "mentities")
+		if opt_mentities != null then mentities = opt_mentities
 		return super
 	end
 end
@@ -461,7 +478,7 @@ class CmdOptions
 	fun opt_visibility(key: String): nullable MVisibility do
 		var value = opt_string(key)
 		if value == null then return null
-		if not allowed_visibility.keys.has(key) then return null
+		if not allowed_visibility.keys.has(value) then return null
 		return allowed_visibility[value]
 	end
 
@@ -479,6 +496,28 @@ class CmdOptions
 		var mentities = model.mentities_by_name(value)
 		if mentities.is_empty or mentities.length > 1 then return null
 		return mentities.first
+	end
+
+	# Get option as an Array[MEntity]
+	private fun opt_mentities(model: Model, key: String): nullable Array[MEntity] do
+		var value = opt_string(key)
+		if value == null or value.is_empty then return null
+
+		var res = new Array[MEntity]
+
+		var full_names = value.split(";")
+		for full_name in full_names do
+			var mentity = model.mentity_by_full_name(full_name.trim)
+			if mentity != null then
+				res.add mentity
+			else
+				var mentities = model.mentities_by_name(value)
+				if mentities.is_empty or mentities.length > 1 then continue
+				res.add mentities.first
+			end
+		end
+
+		return res
 	end
 end
 

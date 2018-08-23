@@ -1,0 +1,28 @@
+# `websocket` - Adds support for a websocket connection in Nit
+
+ * [`WebsocketServer` - Websocket compatible server](#`WebsocketServer`---Websocket-compatible-server)
+ * [`WebsocketConnection` - Connection to a websocket client](#`WebsocketConnection`---Connection-to-a-websocket-client)
+ * [Authors](#Authors)
+
+## `WebsocketServer` - Websocket compatible server
+
+Produces Websocket client-server connections
+
+Properties:
+
+* `accept` - Accepts an incoming connection
+* `close` - Close the server and the socket below it
+* `with_infos` - Creates a new Websocket server listening on given port
+
+## `WebsocketConnection` - Connection to a websocket client
+
+Can be used to communicate with a client
+
+Properties:
+
+* `can_read` - Is there some data available to be read ?
+* `connected` - Checks if a connection to a client is available
+
+## Authors
+
+This project is maintained by **Lucas Bajolet <r4pass@hotmail.com>**.

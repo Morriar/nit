@@ -66,6 +66,10 @@ redef class CmdEntities
 		for mentity in mentities do
 			var mdoc = mentity.mdoc_or_fallback
 			tpl.add "<li>"
+			if mentity isa MProperty then
+				tpl.add mentity.intro.mclassdef.mclass.html_link
+				tpl.add "::"
+			end
 			tpl.add mentity.html_link
 			if mdoc != null then
 				tpl.add " - "
@@ -78,6 +82,22 @@ redef class CmdEntities
 	end
 end
 
+redef class CmdSignature
+	redef fun to_html do
+		var mentity = self.mentity
+		if mentity == null then return ""
+
+		var tpl = new Template
+		if mentity isa MProperty then
+			tpl.add mentity.intro.mclassdef.mclass.html_link
+			tpl.add "::"
+		end
+		tpl.add mentity.html_link
+		tpl.add mentity.html_signature
+		return tpl.write_to_string
+	end
+end
+
 redef class CmdComment
 	redef fun to_html do
 		var mentity = self.mentity
@@ -85,23 +105,32 @@ redef class CmdComment
 
 		var mdoc = self.mdoc
 		var tpl = new Template
-		tpl.add "<h3>"
-		# FIXME comments left here until I figure out what to do about the presentation options
-		# if not opts.has_key("no-link") then
-			tpl.add mentity.html_link
-		# end
-		if mdoc != null then
-			# if not opts.has_key("no-link") and not opts.has_key("no-synopsis") then
-				tpl.add " - "
+		if not no_synopsis then
+			# tpl.add "<h3>"
+			# FIXME comments left here until I figure out what to do about the presentation options
+			# if not opts.has_key("no-link") then
+				# if mentity isa MProperty then
+				# end
+				# tpl.add mentity.html_link
 			# end
-			# if not opts.has_key("no-synopsis") then
-				tpl.add mdoc.html_synopsis
-			# end
+			if mdoc != null then
+				# if not opts.has_key("no-link") and not opts.has_key("no-synopsis") then
+					# tpl.add " - "
+				# end
+				# if not opts.has_key("no-synopsis") then
+					tpl.add "<b>"
+					tpl.add mdoc.html_synopsis
+					tpl.add "</b>"
+				# end
+			end
+			# tpl.add "</h3>"
 		end
-		tpl.add "</h3>"
 		if mdoc != null then
 			# if not opts.has_key("no-comment") then
-				tpl.add mdoc.html_comment
+				if not mdoc.comment.trim.is_empty then
+					tpl.add "<br><br>"
+					tpl.add mdoc.html_comment
+				end
 			# end
 		end
 		return tpl.write_to_string
@@ -121,8 +150,11 @@ end
 
 redef class CmdSummary
 	redef fun to_html do
+		print "to_html"
 		var tpl = new Template
 		var headings = self.headings
+		print self
+		print headings or else "NULL"
 		if headings == null then return tpl
 
 		var doc = mdoc.as(not null).html_documentation
@@ -329,10 +361,15 @@ end
 
 redef class CmdManSynopsis
 	redef fun to_html do
-		var synopsis = self.synopsis
-		if synopsis == null then return ""
+		var mentity = self.mentity
+		if mentity == null then return ""
 
-		return "<pre>{synopsis}</pre>"
+		var synopsis = self.synopsis
+		if synopsis == null then
+			return "<pre>./{mentity.name}</pre>"
+		else
+			return "<pre>{synopsis}</pre>"
+		end
 	end
 end
 
@@ -371,7 +408,6 @@ end
 redef class MdWikilink
 	redef fun render_html(v) do
 		var command = self.command
-		print command or else "NULL"
 		if command == null then return
 		v.add_raw command.to_html.write_to_string
 	end

@@ -1,0 +1,11 @@
+# `saxophonit` - A SAX 2 parser in Nit.
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+[[testing: saxophonit]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: saxophonit]].

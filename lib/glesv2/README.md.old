@@ -1,0 +1,66 @@
+# `glesv2` - OpenGL graphics rendering library for embedded systems, version 2.0
+
+ * [`GLDataType` - All data types of OpenGL ES 2.0 shaders](#`GLDataType`---All-data-types-of-OpenGL-ES-2.0-shaders)
+ * [Other classes from `glesv2`](#Other-classes-from-`glesv2`)
+ * [Authors](#Authors)
+
+This is a low-level wrapper, it can be useful for developers already familiar
+with the C API of OpenGL. Most developers will prefer to use the higher level
+graphic API `gammit`.
+
+Defines the annotations `glsl_vertex_shader` and `glsl_fragment_shader`
+applicable on string literals to check shader code using `glslangValidator`.
+The tool must be in PATH. It can be downloaded from
+https://www.khronos.org/opengles/sdk/tools/Reference-Compiler/
+
+Most services of this module are a direct wrapper of the underlying
+C library. If a method or class is not documented in Nit, refer to
+the official documentation by the Khronos Group at:
+http://www.khronos.org/opengles/sdk/docs/man/
+
+## `GLDataType` - All data types of OpenGL ES 2.0 shaders
+
+These types can be used by shader uniforms, as seen with
+`GLProgram::active_uniform_type`.
+
+## Other classes from `glesv2`
+
+* `GLArrayBuffer` - Target to which bind the buffer with `glBindBuffer`
+* `GLAttachment` - Renderbuffer attachment point to a framebuffer
+* `GLBlendFactor` - Pixel arithmetic for blending operations
+* `GLBuffer` - Set of buffers as a bitwise OR mask
+* `GLBufferUsage` - Expected usage of a buffer
+* `GLCap` - A server-side capability
+* `GLCapabilities` - Entry point to OpenGL server-side capabilities
+* `GLCullFaceMode` - Candidates for culling
+* `GLDepthFunc` - Condition under which a pixel will be drawn
+* `GLDrawMode` - Kind of primitives to render
+* `GLES` - OpenGL ES 2.0 services
+* `GLEnum` - General type for OpenGL enumerations
+* `GLError` - An OpenGL ES 2.0 error code
+* `GLFragmentShader` - An OpenGL ES 2.0 fragment shader
+* `GLFramebufferStatus` - Return value of `glCheckFramebufferStatus`
+* `GLFramebufferTarget` - Target of `glBindFramebuffer`
+* `GLFrontFaceMode` - Orientation of front-facing polygons
+* `GLGetParameterName` - Shader parameter
+* `GLHintMode` - Hint mode for `glHint`
+* `GLHintTarget` - Hint target for `glHint`
+* `GLPack` - Symbolic name of the parameter to be set with `glPixelStorei`
+* `GLPixelFormat` - Format of pixel data
+* `GLProgram` - OpenGL ES program to which we attach shaders
+* `GLRenderbufferFormat` - Format for a renderbuffer
+* `GLRenderbufferTarget` - Target of `glBindRenderbuffer`
+* `GLShader` - Abstract OpenGL ES shader object, implemented by `GLFragmentShader` and `GLVertexShader`
+* `GLShaderType` - Shader type
+* `GLTexParameteri` - Texture minifying and magnifying function
+* `GLTexParameteriName` - Name of parameters of textures
+* `GLTextureTarget` - Target texture
+* `GLTextureUnit` - Texture unit, the number of texture units is implementation dependent
+* `GLVertexShader` - An OpenGL ES 2.0 vertex shader
+* `GLfloatArray` - Low level array of `Float`
+* `NativeGLfloatArray` - An array of `GLfloat` in C (`GLfloat*`)
+* `VertexArray` - An array of `Float` associated to a program variable
+
+## Authors
+
+This project is maintained by **Alexis Laferrière <alexis.laf@xymus.net>**.

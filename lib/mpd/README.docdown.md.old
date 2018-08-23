@@ -1,0 +1,9 @@
+# `mpd` - Music Player Daemon client library
+
+## Classes from `mpd`
+
+[[features: mpd::mpd | mentities: mpd::MPDConnection;mpd::SongInfo;mpd::ServerStatus]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: mpd]].

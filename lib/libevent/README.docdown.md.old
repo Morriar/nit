@@ -1,0 +1,30 @@
+# `libevent` - Low-level wrapper around the libevent library to manage events on file descriptors
+
+[[toc: libevent]]
+
+For mor information, refer to the [[libevent]] documentation at
+http://monkey.org/~provos/libevent/doxygen-2.0.1/
+
+## `NativeEventBase` - Structure to hold information and state for a Libevent dispatch loop.
+
+[[doc: libevent::NativeEventBase | no-synopsis]]
+
+Properties:
+
+[[features: libevent::NativeEventBase | min-visibility: public, no-redef]]
+
+## `Connection` - Spawned to manage a specific connection
+
+[[doc: libevent::Connection | no-synopsis]]
+
+Properties:
+
+[[features: libevent::Connection | min-visibility: public, no-redef]]
+
+## Other classes from `libevent`
+
+[[features: libevent::libevent | mentities: libevent::NativeEvent;libevent::NativeEvSignal;libevent::EventCallback;libevent::NativeBufferEvent;libevent::NativeEvBuffer;libevent::InputNativeEvBuffer;libevent::OutputNativeEvBuffer;libevent::ConnectionListener;libevent::ConnectionFactory]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: libevent]].

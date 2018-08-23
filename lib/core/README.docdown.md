@@ -1,46 +1,40 @@
-# Nit common library of core classes and methods
+# `core` - [[ini-desc: core]]
 
-Core classes and methods used by default by Nit programs and libraries.
+[[toc: core]]
 
-## Core Basic Types and Operations
+## Features
 
-[[doc: kernel]]
+[[uml: core | format: svg, mentities: core>;core>codecs>;core>collection>;core>text>]]
 
-### Object
+### `fixed_ints` - Basic integers of fixed-precision
 
-[[doc: Object]]
+[[doc: core::fixed_ints | no-synopsis]]
 
-#### Equality
+### `kernel` - Most basic classes and methods.
 
-[[doc: core::Object::==]]
-[[doc: core::Object::!=]]
-[[doc: core::Object::hash]]
-[[doc: core::Object::is_same_instance]]
-[[doc: core::Object::object_id]]
+[[doc: core::kernel | no-synopsis]]
 
-#### Debuging
+### `queue` - Queuing data structures and wrappers
 
-[[doc: core::Object::output]]
-[[doc: core::Object::output_class_name]]
-[[doc: core::Object::is_same_type]]
+[[doc: core::queue | no-synopsis]]
 
-### Sys
+### `re` - Regular expression support for all services based on `Pattern`
 
-[[doc: Sys]]
+[[doc: core::re | no-synopsis]]
 
-#### Program Execution
+## Other features
 
-[[doc: core::Sys::main]]
-[[doc: core::Sys::run]]
+[[features: core | mentities: core::bitset;core::bytes;core::environ;core::error;core::exec;core::file;core::gc;core::math;core::numeric;core::protocol;core::stream;core::time]]
 
-### Other
+## Running the tests
 
-[[defs: kernel]]
+Run the nitunit automated tests with the following command:
 
-## Core Collections
+[[testing: core]]
 
-[[doc: core::collection]]
+## Authors
 
-## String and Text manipulation
+This project is maintained by [[ini-maintainer: core]].
 
-[[doc: core::text]]
+Thanks to the contribution of:
+[[ini-contributors: core]]

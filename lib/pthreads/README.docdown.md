@@ -1,32 +1,31 @@
-# POSIX Threads support
+# `pthreads` - [[ini-desc: pthreads]]
 
-The threads can be manipulated and synchronized using the classes `Thread`,
-`Mutex` and `Barrier`.
+[[toc: pthreads]]
 
-This group also provides two optional modules with thread-safe collections:
+Example from `pthreads::jointask_example`:
 
-* `redef_collections` redefines existing collection to make them thread-safe.
-  This incures a small overhead in all usage of the redefined collections.
-* `concurrent_collections` intro new thread-safe collections.
+[[code: pthreads::jointask_example]]
 
-Theses services are implemented using the POSIX threads.
+## Features
 
-You can also use the `is threaded` annotation on methods, which makes them run on their own thread.
-Methods with self calls are not supported.
+[[uml: pthreads | format: svg, mentities: pthreads::concurrent_collections;pthreads::extra;pthreads::pthreads;pthreads::redef_collections;pthreads::threadpool]]
 
-A method or function annotated with `is threaded` has its return value changed during compilation.
-You will get a subclass of `Thread`, even if there wasn't a return value before. You can know if the threaded method is done with the `is_done` boolean from `Thread`.
-A call to the `join` method will block the execution until the threaded method is done, or immediatly return if it's already done.
-`join` will return an object typed with the orginial return type, or `null` if there wasn't.
+### `concurrent_collections` - Introduces thread-safe concurrent collections
 
-## Known limitations:
+[[doc: pthreads::concurrent_collections | no-synopsis]]
 
-* Most services from the Nit library are not thread-safe. You must manage
-  your own mutex to avoid conflicts on shared data.
-* FFI's global references are not thread-safe.
+Example from `pthreads::concurrent_array_and_barrier`:
 
-## For more information:
+[[code: pthreads::concurrent_array_and_barrier]]
 
-* See: `man pthreads`
-* See: `examples/concurrent_array_and_barrier.nit`
-* See: `examples/threaded_example.nit`
+### `redef_collections` - Redef _some_ basic collections to be thread-safe
+
+[[doc: pthreads::redef_collections | no-synopsis]]
+
+## Other features
+
+[[features: pthreads | mentities: pthreads::extra;pthreads::threadpool]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: pthreads]].

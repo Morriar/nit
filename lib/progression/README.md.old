@@ -1,0 +1,10 @@
+# `progression` - Event-based interface to track the progression of an operation.
+
+## Classes from `progression`
+
+* `ProgressionListener` - Listens to the progression of a possibly long-running operation.
+* `Trackable` - An operation that is trackable using a `ProgressionListener`.
+
+## Authors
+
+This project is maintained by **Jean-Christophe Beaupré <jcbrinfo@users.noreply.github.com>**.

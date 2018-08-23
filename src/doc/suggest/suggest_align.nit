@@ -22,6 +22,7 @@ intrude import model_index
 import align_structure
 import align_themes
 import align_refs
+import align_commands
 import align_text
 import align_code_blocks
 import align_nlp
@@ -35,14 +36,9 @@ class MDocAligner
 
 	var mentity_index: MEntityIndex
 
-	var md_parser: MdParser
-
 	var context: MEntity
 
-	fun align_mdoc(mdoc: MDoc) do
-		var document = mdoc.mdoc_document
-		# var filter: MdFilter
-
+	fun align_mdoc(document: MdDocument) do
 		# Align structure
 		var align_struct = new MdAlignStructure(model, mainmodule, context)
 		align_struct.align_document(document)
@@ -56,23 +52,34 @@ class MDocAligner
 		# p.visit_document(document)
 
 		# Align spans
-		# var align_codes = new MdAlignCodes(model, mainmodule, context)
-		# align_codes.align_document(document)
+		var align_codes = new MdAlignCodes(model, mainmodule, context)
+		align_codes.align_document(document)
 
 		# var filter_context = new MdFilterNameConflicts(context)
-		# filter_context.filter_document(document)
+		# filter = new MdFilterSmartContext(context)
+		# filter.filter_document(document)
 
-		# var filter_kind = new MdFilterKind
-		# filter_kind.filter_document(document)
+		# filter = new MdFilterKind
+		# filter.filter_document(document)
+
+		# Align commands
+		var align_commands = new MdAlignWiikilinks(model, mainmodule, context)
+		align_commands.align_document(document)
 
 		# Align texts
-		# var align_texts = new MdAlignTexts(model, mainmodule, context)
-		# align_texts.align_document(document)
+		var align_texts = new MdAlignTexts(model, mainmodule, context)
+		align_texts.align_document(document)
 
 		# filter = new MdFilterNameDistance
 		# filter.filter_document(document)
 
+		# filter = new MdFilterKind
+		# filter.filter_document(document)
+
 		# filter = new MdFilterSmartContext(context)
+		# filter.filter_document(document)
+
+		# filter = new MdFilterNameConflictsContext(context)
 		# filter.filter_document(document)
 
 		# filter = new MdFilterSmartContext(context)
@@ -141,8 +148,8 @@ class MDocAligner
 		# filter_kind.filter_document(document)
 
 		# Align code bloks
-		# var align_blockcodes = new MdAlignBlockCodes(model, mainmodule, context, mentity_index)
-		# align_blockcodes.align_document(document)
+		var align_blockcodes = new MdAlignBlockCodes(model, mainmodule, context, mentity_index)
+		align_blockcodes.align_document(document)
 
 		# var filter_context = new MdFilterContext(context)
 		# filter_context.filter_document(document)

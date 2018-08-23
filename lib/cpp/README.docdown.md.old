@@ -1,0 +1,9 @@
+# `cpp` - Services for compatibility with C++ code and libraries
+
+## Classes from `cpp`
+
+[[features: cpp::cpp | mentities: cpp::CppString]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: cpp]].

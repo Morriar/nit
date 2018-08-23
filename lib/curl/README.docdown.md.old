@@ -1,0 +1,7 @@
+# `curl` - Data transfer powered by the native curl library
+
+Download or upload over HTTP with `CurlHTTPRequest` and send emails with `CurlMail`.
+
+## Authors
+
+This project is maintained by [[ini-maintainer: curl]].

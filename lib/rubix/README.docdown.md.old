@@ -1,0 +1,24 @@
+# `rubix` - Rubix-cube modelization library
+
+As for now the library supports basic representation of a [[rubix | text: Rubix]]-cube
+The library is built for speed, most operations cost no allocations to perform.
+This does however mean that the library is NOT thread-safe and should be handled
+with the appropriate mutual-exclusion mechanisms to avoid memory corruption
+or unintended side-effects on a single cube.
+
+The library supports the singmaster notation as a way to perform operations
+on a Rubix cube.
+
+No solver is (yet) provided along with the library.
+
+## `rubix::RubixCube` - In-memory representation of a Rubix Cube
+
+[[doc: rubix::RubixCube | no-synopsis]]
+
+Properties:
+
+[[features: rubix::RubixCube | min-visibility: public, no-redef]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: rubix]].

@@ -1,0 +1,13 @@
+# `ordered_tree` - Manipulation and presentation of ordered trees.
+
+## `ordered_tree::OrderedTree` - Generic structure to manage and display an ordered tree
+
+[[doc: ordered_tree::OrderedTree | no-synopsis]]
+
+Properties:
+
+[[features: ordered_tree::OrderedTree | min-visibility: public, no-redef]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: ordered_tree]].

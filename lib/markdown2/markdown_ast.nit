@@ -495,4 +495,81 @@ class MdLocation
 	var column_end: Int is writable
 
 	redef fun to_s do return "{line_start},{column_start}--{line_end},{column_end}"
+
+	# ~~~
+	# var l1 = new MdLocation(1, 1, 40, 55)
+	# assert not l1.has(new MdLocation(0, 0, 0, 0))
+	# assert not l1.has(new MdLocation(1, 0, 1, 0))
+	# assert not l1.has(new MdLocation(1, 0, 1, 1))
+	# assert not l1.has(new MdLocation(1, 0, 1, 2))
+	#
+	# assert l1.has(new MdLocation(1, 1, 40, 55))
+	# assert l1.has(new MdLocation(1, 2, 40, 54))
+	# assert l1.has(new MdLocation(2, 0, 40, 0))
+	#
+	# assert not l1.has(new MdLocation(40, 0, 40, 56))
+	# assert not l1.has(new MdLocation(40, 56, 40, 56))
+	# assert not l1.has(new MdLocation(41, 0, 41, 0))
+	#
+	# var l2 = new MdLocation(1, 1, 1, 10)
+	# assert not l2.has(new MdLocation(0, 0, 0, 0))
+	# assert not l2.has(new MdLocation(1, 0, 1, 0))
+	# assert not l2.has(new MdLocation(1, 0, 1, 1))
+	# assert not l2.has(new MdLocation(1, 0, 1, 2))
+	#
+	# assert l2.has(new MdLocation(1, 1, 1, 10))
+	# assert l2.has(new MdLocation(1, 2, 1, 10))
+	# assert l2.has(new MdLocation(1, 1, 1, 9))
+	# assert l2.has(new MdLocation(1, 2, 1, 9))
+	# assert l2.has(new MdLocation(1, 1, 1, 1))
+	#
+	# assert not l2.has(new MdLocation(1, 9, 1, 11))
+	# assert not l2.has(new MdLocation(1, 10, 1,11))
+	# assert not l2.has(new MdLocation(1, 0, 1, 10))
+	# ~~~
+	fun has(other: MdLocation): Bool do
+		if other.line_start < line_start then return false
+		if other.line_start > line_end then return false
+
+		if other.line_end < line_start then return false
+		if other.line_end > line_end then return false
+
+		if other.line_start == line_start then
+			if other.column_start < column_start then return false
+		end
+		if other.line_end == line_end then
+			if other.column_end > column_end then return false
+		end
+
+		return true
+	end
+
+	# ~~~
+	# var l1 = new MdLocation(2, 1, 4, 1)
+	#
+	# assert l1 < (new MdLocation(4, 2, 4, 2))
+	# assert l1 < (new MdLocation(5, 1, 5, 1))
+	# assert l1 < (new MdLocation(5, 0, 5, 0))
+	# assert not l1 < (new MdLocation(1, 0, 1, 0))
+	# assert not l1 < (new MdLocation(2, 1, 2, 1))
+	# assert not l1 < (new MdLocation(2, 0, 2, 0))
+	# assert not l1 < (new MdLocation(1, 0, 10, 0))
+	# ~~~
+	fun <=(other: MdLocation): Bool do
+		if line_start > other.line_start then return false
+		if line_start > other.line_end then return false
+
+		if line_end > other.line_start then return false
+		if line_end > other.line_end then return false
+
+		if line_start == other.line_start then
+			if column_start > column_start then return false
+		end
+		if line_end == other.line_end then
+			if column_end > other.column_end then return false
+		end
+
+		return true
+	end
+
 end

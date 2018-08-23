@@ -79,7 +79,7 @@ class CmdMainCompile
 	var command: nullable String is lazy do
 		var path = test_path(file)
 		if path == null then return null
-		return "nitc {path}"
+		return "nitc .{path}"
 	end
 
 	redef fun init_command do
@@ -137,12 +137,13 @@ class CmdTesting
 		if results == null then return null
 
 		var tpl = new Template
-		tpl.add "nitunit"
-		for result in results do
-			var path = test_path(result)
-			if path == null then continue
-			tpl.add " {path}"
-		end
+		tpl.add "nitunit ."
+		# for result in results do
+			# var path = test_path(result)
+			# if path == null then continue
+			# tpl.add " {path}"
+			# tpl.add " ."
+		# end
 		return tpl.write_to_string
 	end
 

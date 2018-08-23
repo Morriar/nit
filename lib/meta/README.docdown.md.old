@@ -1,0 +1,57 @@
+# `meta` - Simple user-defined meta-level to manipulate types of instances as object.
+
+[[toc: meta]]
+
+Unfortunately, since the meta-objects are user-defined they are provided without
+any pre-defined information or behavior.
+For the same reasons, the Nit OO mechanisms do not rely on this user-defined meta-level.
+
+However [[meta | text: `meta`]] permits the definition of user-defined meta-classes at any level
+of meta, even with user-defined meta-loops.
+
+## Meta-classes
+
+Meta-classes can be defined easily in 3 steps:
+
+* define a root for the class hierarchy (eg `XObject`)
+* define a meta-class (eq `XClass[E: XObject] super Class[E]`)
+* redefine `CLASS` and `class_factory` in the root
+
+~~~nitish because broke with nitc, see Limitation bellow
+class XObject
+   redef CLASS: XClass[SELF]
+   redef class_factory(name) do return new XClass[SELF](name)
+end
+class XClass[E: XObject] super Class[E] end
+
+var x1 = new XObject
+var x2 = new XObject
+assert x1.get_class == x2.get_class
+assert x1.get_class isa XClass[XObject]
+assert x1.get_class.get_class isa Class[XClass[XObject]]
+~~~
+
+## Limitation
+
+Currently works only with the interpreter `nit` and the compiler with `--erasure` (without `--rta`).
+
+`--rta` will try to detect all the runtime types, and will infinitely discover `Class[Class[Class[....]]]`.
+Unfortunately, `--separate` and `--global` require `--rta`.
+
+Moreover, the interpreter and `--erasure` have a different behavior with generics since
+with `--erasure` a single meta-instance is shared for all type variations of a same generic class.
+
+Class names are used as a primary key to identify classes.
+But name conflicts are not managed and will make the program crashes at runtime (on some cast error)
+
+## `GetName` - Helper to get the name of a type
+
+[[doc: meta::GetName | no-synopsis]]
+
+## Other classes from `meta`
+
+[[features: meta::meta | mentities: meta::Class]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: meta]].

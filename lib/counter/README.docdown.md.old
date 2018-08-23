@@ -1,0 +1,13 @@
+# `counter` - Simple numerical statistical analysis and presentation
+
+## `counter::Counter` - A counter counts occurrences of things
+
+[[doc: counter::Counter | no-synopsis]]
+
+Properties:
+
+[[features: counter::Counter | min-visibility: public, no-redef]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: counter]].

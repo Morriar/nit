@@ -1,0 +1,37 @@
+# `markdown2` - A markdown parser for Nit
+
+[[toc: markdown2]]
+
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine.
+
+### Dependencies
+
+This project requires the following packages:
+
+[[parents: markdown2]]
+
+### Run `nitmd`
+
+Compile `nitmd` with the following command:
+
+[[main-compile: markdown2::nitmd]]
+
+Then run it with:
+
+[[main-run: markdown2::nitmd]]
+
+Options:
+
+[[main-opts: markdown2::nitmd]]
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+[[testing: markdown2]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: markdown2]].

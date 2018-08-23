@@ -1,0 +1,81 @@
+# `meta` - Simple user-defined meta-level to manipulate types of instances as object.
+
+ * [Meta-classes](#Meta-classes)
+ * [Limitation](#Limitation)
+ * [`GetName` - Helper to get the name of a type](#`GetName`---Helper-to-get-the-name-of-a-type)
+ * [Other classes from `meta`](#Other-classes-from-`meta`)
+ * [Authors](#Authors)
+
+Unfortunately, since the meta-objects are user-defined they are provided without
+any pre-defined information or behavior.
+For the same reasons, the Nit OO mechanisms do not rely on this user-defined meta-level.
+
+However [`meta`](meta) permits the definition of user-defined meta-classes at any level
+of meta, even with user-defined meta-loops.
+
+## Meta-classes
+
+Meta-classes can be defined easily in 3 steps:
+
+* define a root for the class hierarchy (eg `XObject`)
+* define a meta-class (eq `XClass[E: XObject] super Class[E]`)
+* redefine `CLASS` and `class_factory` in the root
+
+~~~nitish because broke with nitc, see Limitation bellow
+class XObject
+   redef CLASS: XClass[SELF]
+   redef class_factory(name) do return new XClass[SELF](name)
+end
+class XClass[E: XObject] super Class[E] end
+
+var x1 = new XObject
+var x2 = new XObject
+assert x1.get_class == x2.get_class
+assert x1.get_class isa XClass[XObject]
+assert x1.get_class.get_class isa Class[XClass[XObject]]
+~~~
+
+## Limitation
+
+Currently works only with the interpreter `nit` and the compiler with `--erasure` (without `--rta`).
+
+`--rta` will try to detect all the runtime types, and will infinitely discover `Class[Class[Class[....]]]`.
+Unfortunately, `--separate` and `--global` require `--rta`.
+
+Moreover, the interpreter and `--erasure` have a different behavior with generics since
+with `--erasure` a single meta-instance is shared for all type variations of a same generic class.
+
+Class names are used as a primary key to identify classes.
+But name conflicts are not managed and will make the program crashes at runtime (on some cast error)
+
+## `GetName` - Helper to get the name of a type
+
+This is one of the hackiest way to retrieve the name of a random type.
+
+~~~
+var dummy = new GetName[Sequence[nullable Comparable]]
+assert dummy.to_s == "Sequence[nullable Comparable]"
+~~~
+
+This also works to resolve formal types
+
+~~~
+class G[T]
+  type V: Collection[T]
+
+  var name_of_v: String = (new GetName[V]).to_s is lazy
+end
+
+var g = new G[Bool]
+assert g.name_of_v == "Collection[Bool]"
+~~~
+
+Warning: this does not work if --erasure is used.
+
+## Other classes from `meta`
+
+* `Class` - This meta-class is the root the meta-class hierarchy
+
+## Authors
+
+This project is maintained by **Jean Privat <jean@pryen.org>**.

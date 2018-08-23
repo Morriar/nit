@@ -1,0 +1,41 @@
+# `counter` - Simple numerical statistical analysis and presentation
+
+## `counter::Counter` - A counter counts occurrences of things
+
+~~~
+var c = new Counter[String].from(["a", "a", "b", "b", "b", "c"])
+assert c["a"]   == 2
+assert c["b"]   == 3
+assert c["c"]   == 1
+assert c["d"]   == 0
+~~~
+
+The counter class can also be used to gather statistical informations.
+
+~~~~
+assert c.length == 3   # because 3 distinct values
+assert c.max    == "b" # because "b" has the most count (3)
+assert c.avg    == 2.0 # because it is the mean of the counts
+~~~~
+
+Properties:
+
+* `avg` - Values average (aka. arithmetic mean)
+* `dec` - Decrement the value of `e` by 1
+* `dec_all` - Decrement the value for each element of `es`
+* `entropy` - The information entropy (Shannon entropy) of the elements in the counter (in bits).
+* `from` - A new Counter initialized with `inc_all`.
+* `inc` - Count one more occurrence of `e`
+* `inc_all` - Count one more for each element of `es`
+* `max` - Return the element with the highest value (aka. the mode)
+* `min` - Return the couple with the lowest value
+* `pack` - Packs elements into separate arrays based on their occurences
+* `print_content` - Prints the content of the counter along with statistics
+* `print_elements` - Display up to `count` most used elements and `count` least used elements
+* `print_summary` - Display statistical information
+* `sort` - Return an array of elements sorted by occurrences
+* `std_dev` - The standard derivation of the counter values
+
+## Authors
+
+This project is maintained by **Jean Privat <jean@pryen.org>**.

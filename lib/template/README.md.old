@@ -1,0 +1,16 @@
+# `template` - Basic template system
+
+The recommended usage of this framework is to define specific subclasses of
+Template to provide structural elements on the final document
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+~~~bash
+nitunit .
+~~~
+
+## Authors
+
+This project is maintained by **Jean Privat <jean@pryen.org>**.

@@ -1,0 +1,13 @@
+# `privileges` - Process privileges management utilities
+
+Used mainly by daemons and such to aquire resources as su and
+then drop back to a restricted user.
+
+## Classes from `privileges`
+
+* `OptionUserAndGroup` - Option to ask for a username and group
+* `UserGroup` - Class to manage user groups
+
+## Authors
+
+This project is maintained by **Alexis Laferrière <alexis.laf@xymus.net>**.

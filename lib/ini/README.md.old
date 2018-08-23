@@ -1,0 +1,32 @@
+# `ini` - Handle ini config files.
+
+## `ini::ConfigTree` - A configuration tree that can read and store data in ini format
+
+Write example:
+
+    var config = new ConfigTree("config.ini")
+    config["goo"] = "goo"
+    config["foo.bar"] = "foobar"
+    config["foo.baz"] = "foobaz"
+    config.save
+    assert config.to_map.length == 3
+
+Read example:
+
+    config = new ConfigTree("config.ini")
+    assert config.has_key("foo.bar")
+    assert config["foo.bar"] == "foobar"
+
+Properties:
+
+* `[]` - Get the config value for `key`
+* `[]=` - Set `value` at `key`
+* `at` - Get the config values under `key`
+* `has_key` - Is `key` in the config?
+* `load` - Reload config from file
+* `save` - Save config to file
+* `to_map` - Get `self` as a Map of `key`, `value`
+
+## Authors
+
+This project is maintained by **Alexandre Terrasa <alexandre@moz-code.org>**.

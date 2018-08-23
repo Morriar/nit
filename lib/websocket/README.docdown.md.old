@@ -1,0 +1,23 @@
+# `websocket` - Adds support for a websocket connection in Nit
+
+[[toc: websocket]]
+
+## `WebsocketServer` - Websocket compatible server
+
+[[doc: websocket::WebsocketServer | no-synopsis]]
+
+Properties:
+
+[[features: websocket::WebsocketServer | min-visibility: public, no-redef]]
+
+## `WebsocketConnection` - Connection to a websocket client
+
+[[doc: websocket::WebsocketConnection | no-synopsis]]
+
+Properties:
+
+[[features: websocket::WebsocketConnection | min-visibility: public, no-redef]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: websocket]].

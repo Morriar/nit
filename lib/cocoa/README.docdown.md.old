@@ -1,0 +1,10 @@
+# `cocoa` - Cocoa API, the development layer of OS X
+
+This module is only compatible with OS X.
+
+This wrapper of the [[cocoa | text: Cocoa]] API regroups the Foundation Kit and the
+Application Kit.
+
+## Authors
+
+This project is maintained by [[ini-maintainer: cocoa]].

@@ -1,0 +1,35 @@
+# `mongodb` - MongoDB Nit Driver.
+
+This is actually a wrapper around the [MongoDB C Driver](http://api.mongodb.org/c/1.1.4/index.html).
+
+Usage:
+
+~~~
+# Opens the connexion with the Mongo server.
+var client = new MongoClient("mongodb://localhost:27017/")
+
+# Select the database.
+var db_suffix = "NIT_TESTING_ID".environ
+var db_name = "test_{db_suffix}"
+var db = client.database(db_name)
+
+# Retrieve a collection.
+var col = db.collection("test")
+
+# Insert a document in the collection.
+var doc = new JsonObject
+doc["foo"] = 10
+doc["bar"] = "bar"
+doc["baz"] = new JsonArray
+assert col.insert(doc)
+
+# Retrieve a document from the collection.
+var query = new JsonObject
+query["foo"] = 10
+var res = col.find(query)
+assert res["bar"] == "bar"
+~~~
+
+## Authors
+
+This project is maintained by [[ini-maintainer: mongodb]].

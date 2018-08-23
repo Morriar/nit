@@ -1,0 +1,13 @@
+# `base64` - Offers the base 64 encoding and decoding algorithms
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+~~~bash
+nitunit .
+~~~
+
+## Authors
+
+This project is maintained by **Lucas Bajolet <r4pass@hotmail.com>**.

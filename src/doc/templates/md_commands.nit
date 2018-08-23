@@ -58,12 +58,19 @@ redef class CmdEntities
 		var tpl = new Template
 		for mentity in mentities do
 			var mdoc = mentity.mdoc_or_fallback
-			tpl.add "* `{mentity}`"
+			if mentity isa MProperty then
+				tpl.add "* `{mentity.intro.mclassdef.mclass}::{mentity}`"
+			else
+				tpl.add "* `{mentity}`"
+			end
 			if mdoc != null then
 				tpl.add " - "
-				tpl.add mdoc.md_synopsis
+				tpl.add mdoc.md_synopsis.write_to_string.
+					replace_first("# ", "").
+					replace_first("`{mentity.full_name}` - ", "")
+			else
+				tpl.add "\n"
 			end
-			tpl.add "\n"
 		end
 		return tpl.write_to_string
 	end
@@ -76,16 +83,16 @@ redef class CmdComment
 
 		var mdoc = self.mdoc
 		var tpl = new Template
-		tpl.add "### `{mentity}`"
+		# tpl.add "### `{mentity}`"
 		if mdoc != null then
-			tpl.add " - "
-			tpl.add mdoc.md_synopsis
+			# TODO
+			# tpl.add " - "
+			# tpl.add mdoc.md_synopsis
 		end
 		if mdoc != null then
 			var comment = mdoc.md_comment.write_to_string
 			if not comment.is_empty then
-				tpl.add "\n"
-				tpl.add "\n"
+				# tpl.add "\n"
 				tpl.add comment
 			end
 		end
@@ -104,11 +111,38 @@ redef class CmdComment
 	end
 end
 
+redef class CmdSummary
+	redef fun to_md do
+		print "to_md"
+		var tpl = new Template
+
+		var mentity = self.mentity
+		if mentity == null then return ""
+
+		var mdoc = self.mdoc
+		if mdoc == null then return ""
+
+		var headings = mdoc.mdoc_headings
+
+		var renderer = new MDocMdRenderer
+		for heading in headings do
+			if heading.level == 1 then continue
+			var md = renderer.render(heading).replace_first("#+ ".to_re, "")
+			tpl.addn " * [{md.trim}](#{md.trim.replace(" ", "-")})"
+		end
+		return tpl.write_to_string
+	end
+end
+
 redef class CmdEntityLink
 	redef fun to_md do
 		var mentity = self.mentity
 		if mentity == null then return ""
-		return "`{mentity}`"
+		var text = self.text
+		if text != null then
+			return "[{text}]({mentity.full_name})"
+		end
+		return "[{mentity.name}]({mentity.full_name})"
 	end
 end
 
@@ -120,7 +154,7 @@ redef class CmdCode
 		var code = render_code(node)
 		var tpl = new Template
 		tpl.addn "~~~"
-		tpl.add code.write_to_string
+		tpl.addn code.write_to_string
 		tpl.addn "~~~"
 		return tpl.write_to_string
 	end
@@ -157,6 +191,28 @@ end
 
 redef class CmdLinearization
 	redef fun to_md do return super # FIXME lin
+end
+
+# Graph commands
+
+redef class CmdUML
+	# TODO
+	fun to_md_image: String do
+		var mentity = self.mentity
+		if mentity == null then return ""
+
+		var count = 1
+		var file = "uml-{mentity.name}.svg"
+		while file.file_exists do
+			file = "uml-{mentity.name}-{count}.svg"
+			count += 1
+		end
+		var output = render
+		if output == null then return ""
+		output.write_to_file(file)
+
+		return "![Diagram for `{mentity}`]({file})"
+	end
 end
 
 # Usage commands
@@ -298,12 +354,18 @@ end
 
 redef class CmdManSynopsis
 	redef fun to_md do
+		var mentity = self.mentity
+		if mentity == null then return ""
+
 		var synopsis = self.synopsis
-		if synopsis == null then return ""
 
 		var tpl = new Template
-		tpl.addn "~~~"
-		tpl.addn synopsis
+		tpl.addn "~~~bash"
+		if synopsis == null then
+			tpl.addn "./{mentity.name}"
+		else
+			tpl.addn synopsis
+		end
 		tpl.addn "~~~"
 		return tpl.write_to_string
 	end
@@ -315,7 +377,7 @@ redef class CmdManOptions
 		if options == null or options.is_empty then return ""
 
 		var tpl = new Template
-		tpl.addn "~~~"
+		tpl.addn "~~~bash"
 		for opt, desc in options do
 			tpl.addn "* {opt}\t\t{desc}"
 		end
@@ -374,6 +436,9 @@ end
 # Markdown renderer to Markdown
 class MDocMdRenderer
 	super MarkdownRenderer
+
+	# TODO
+	var render_uml = false is writable
 end
 
 # Markdown renderer to inline Markdown
@@ -390,8 +455,17 @@ end
 
 redef class MdWikilink
 	redef fun render_md(v) do
+		if not v isa MDocMdRenderer then
+			super
+			return
+		end
 		var command = self.command
 		if command == null then return
-		v.add_raw command.to_md.write_to_string.r_trim
+
+		if command isa CmdUML and v.render_uml then
+			v.add_raw command.to_md_image.write_to_string.r_trim
+		else
+			v.add_raw command.to_md.write_to_string.r_trim
+		end
 	end
 end

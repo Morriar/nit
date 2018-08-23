@@ -1,13 +1,27 @@
-# Low-level wrapper of the SDL 2.0 library (as `sdl2`) and SDL_image 2.0 (as `sdl2::image`)
+# `sdl2` - [[ini-desc: sdl2]]
 
-The main entry point of this project, `sdl2`, exposes some features of the base
-library: video, events, syswm, etc. The alternative entry point `sdl2::image` offers
-mainly `SDLSurface::load` to load images from PNG, JPG or TIF files.
+[[toc: sdl2]]
 
-You can also import `sdl2::all` to get `sdl2` and all its sister libraries, which is only
-`sdl2::image` at this point.
+## Features
 
-## Examples
+[[uml: sdl2 | format: svg, mentities: sdl2::all;sdl2::events;sdl2::image;sdl2::mixer;sdl2::sdl2;sdl2::sdl2_base;sdl2::syswm]]
 
-See the `minimal` example within this project at `examples/minimal` for a simple example
-of how to use this project.
+### `image` - Services of the SDL_image 2.0 library
+
+[[doc: sdl2::image | no-synopsis]]
+
+### `mixer` - SDL2 mixer with sample/sounds and music
+
+[[doc: sdl2::mixer | no-synopsis]]
+
+Example from `sdl2::minimal`:
+
+[[code: sdl2::minimal]]
+
+## Other features
+
+[[features: sdl2 | mentities: sdl2::all;sdl2::events;sdl2::sdl2_base;sdl2::syswm]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: sdl2]].

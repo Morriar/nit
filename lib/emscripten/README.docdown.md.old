@@ -1,0 +1,8 @@
+# `emscripten` - Platform for the _emscripten_ framework
+
+Importing this module from your project will tell `nitc` to compile
+to JavaScript for the _[[emscripten]]_ framework.
+
+## Authors
+
+This project is maintained by [[ini-maintainer: emscripten]].

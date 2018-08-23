@@ -20,6 +20,14 @@ module commands_model
 import commands_base
 import modelize
 
+# Retieve the entity signature
+class CmdSignature
+	super CmdEntity
+
+	# TODO
+	var no_type = false is optional, writable
+end
+
 # Retrieve the MDoc related to a MEntity
 class CmdComment
 	super CmdEntity
@@ -49,6 +57,9 @@ class CmdComment
 	# MDoc to return
 	var mdoc: nullable MDoc = null is optional, writable
 
+	# TMP
+	var no_synopsis = false is optional, writable
+
 	# Same states than `CmdEntity::init_mentity`
 	#
 	# Plus returns `WarningNoMDoc` if no MDoc was found for the MEntity.
@@ -69,9 +80,18 @@ class CmdComment
 		var mdoc = self.mdoc
 		if mdoc == null then return null
 
-		if full_doc then return mdoc.documentation
+		if no_synopsis then
+			return mdoc.comment
+		else if full_doc then return mdoc.documentation
 		return mdoc.synopsis
 	end
+end
+
+# Retrieve the MDoc summary
+#
+# List all MarkdownHeading found and their ids.
+class CmdSummary
+	super CmdComment
 end
 
 # No MDoc for `mentity`
@@ -327,6 +347,47 @@ class CmdFeatures
 		return res
 	end
 end
+
+# MEntity feature list
+#
+# Mostly a list of mentities defined in `mentity`.
+class CmdFeatures2
+	super CmdEntityList
+
+	# Same as `CmdEntity::init_mentity`
+	#
+	# Plus `WarningNoFeatures` if no features are found for `mentity`.
+	redef fun init_results do
+		if results != null then return new CmdSuccess
+
+		var res = super
+		if not res isa CmdSuccess then return res
+		var mentity = self.mentity.as(not null)
+
+		var mentities = new Array[MEntity]
+		if mentity isa MPackage then
+			mentities.add_all mentity.collect_mgroups(filter)
+			mentities.add_all mentity.collect_mmodules(filter)
+		else if mentity isa MGroup then
+			mentities.add_all mentity.collect_mgroups(filter)
+			mentities.add_all mentity.collect_mmodules(filter)
+		else if mentity isa MModule then
+			mentities.add_all mentity.collect_intro_mclasses(filter)
+		else if mentity isa MClass then
+			mentities.add_all mentity.collect_local_mproperties(filter)
+		else if mentity isa MClassDef then
+			mentities.add_all mentity.collect_intro_mpropdefs(filter)
+			mentities.add_all mentity.collect_redef_mpropdefs(filter)
+		else if mentity isa MProperty then
+			mentities.add_all mentity.collect_mpropdefs(filter)
+		else
+			return new WarningNoFeatures(mentity)
+		end
+		self.results = mentities
+		return res
+	end
+end
+
 
 # TODO remove once the filters/sorters are merged
 class CmdIntros

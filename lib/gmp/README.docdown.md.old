@@ -1,0 +1,11 @@
+# `gmp` - Multi precision integer and rational number using gmp lib
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+[[testing: gmp]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: gmp]].

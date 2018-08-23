@@ -1,0 +1,29 @@
+# `scene2d` - Framework for 2D management of game elements
+
+[[toc: scene2d]]
+
+TODO: collision framework (with quad tree?)
+
+## `Sprite` - The basic atomic living and moving object.
+
+[[doc: scene2d::Sprite | no-synopsis]]
+
+Properties:
+
+[[features: scene2d::Sprite | min-visibility: public, no-redef]]
+
+## `View` - Abstract view do draw sprites
+
+[[doc: scene2d::View | no-synopsis]]
+
+Properties:
+
+[[features: scene2d::View | min-visibility: public, no-redef]]
+
+## Other classes from `scene2d`
+
+[[features: scene2d::scene2d | mentities: scene2d::LiveObject;scene2d::LiveGroup;scene2d::Scene]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: scene2d]].

@@ -237,7 +237,9 @@ redef class MPackage
 			toolcontext.error(location, "No `mdoc` for `{name}`")
 			return
 		end
-		mdoc.mdoc_document
+
+		# if mdoc == null then
+		# mdoc.mdoc_document
 		# var aligner = new MDocAligner(toolcontext.modelbuilder.model)
 		# aligner.align(mdoc)
 
@@ -249,10 +251,11 @@ redef class MPackage
 			# end
 		# end
 
-		var aligner = new MDocAligner(model, mainmodule, mentity_index, toolcontext.modelbuilder.model.mdoc_parser, self)
-		aligner.align_mdoc(mdoc)
+		print self
+		var aligner = new MDocAligner(model, mainmodule, mentity_index, self)
+		aligner.align_mdoc(mdoc.mdoc_document)
 
-		var editor = new MDocEditor
+		var editor = new MDocEditor(self, mainmodule)
 		editor.edit_document(mdoc.mdoc_document)
 
 		# var suggest = new MDocSuggester(self, mentity_index)
@@ -264,6 +267,30 @@ redef class MPackage
 		# end
 		# var checker = new MDocChecker(toolcontext)
 		# checker.check_mdoc(self)
+
+		var renderer: MdRenderer = new MarkdownRenderer
+		var md = renderer.render(mdoc.mdoc_document)
+		print md
+
+		var docdown_path = self.docdown_path.as(not null)
+		md.write_to_file(docdown_path)
+		# return readme_path
+
+		print "---"
+
+		var renderer2 = new MDocMdRenderer
+		renderer2.render_uml = true
+		var nast = model.mdoc_parser.parse(md)
+		model.mdoc_parser.post_process(nast)
+		var md2 = renderer2.render(nast)
+		var nast2 = model.mdoc_parser.parse(md2)
+		var md3 = renderer2.render(nast2)
+		print md3
+
+		var readme_path = self.readme_path.as(not null)
+		md3.write_to_file(readme_path)
+		# return readme_path
+
 	end
 
 	private fun copy_docdown(toolcontext: ToolContext): nullable String do

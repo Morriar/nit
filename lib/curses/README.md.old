@@ -1,0 +1,9 @@
+# `curses` - Curses for Nit
+
+## Classes from `curses`
+
+* `Window` - A curse windows
+
+## Authors
+
+This project is maintained by **Jean Privat <jean@pryen.org>**.

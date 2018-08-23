@@ -1,0 +1,81 @@
+# `rubix` - Rubix-cube modelization library
+
+As for now the library supports basic representation of a [Rubix](rubix)-cube
+The library is built for speed, most operations cost no allocations to perform.
+This does however mean that the library is NOT thread-safe and should be handled
+with the appropriate mutual-exclusion mechanisms to avoid memory corruption
+or unintended side-effects on a single cube.
+
+The library supports the singmaster notation as a way to perform operations
+on a Rubix cube.
+
+No solver is (yet) provided along with the library.
+
+## `rubix::RubixCube` - In-memory representation of a Rubix Cube
+
+Faces are represented in memory as if they were a flattened cube like:
+
+~~~raw
+      B B B
+      B B B
+      B B B
+      U U U
+      U U U
+      U U U
+L L L F F F R R R
+L L L F F F R R R
+L L L F F F R R R
+      D D D
+      D D D
+      D D D
+~~~
+
+All the commands detailed in the class respect the Singmaster notation
+
+Properties:
+
+* `cclock_B` - B' command
+* `cclock_D` - D' command
+* `cclock_E` - E' command
+* `cclock_F` - F' command
+* `cclock_L` - L' command
+* `cclock_M` - M' command
+* `cclock_R` - R' command
+* `cclock_S` - S' command
+* `cclock_U` - U' command
+* `cclock_b` - b' command
+* `cclock_d` - d' command
+* `cclock_f` - f' command
+* `cclock_l` - l' command
+* `cclock_r` - r' command
+* `cclock_u` - u' command
+* `ccube_X_rotation` - X' command
+* `ccube_Y_rotation` - Y' command
+* `ccube_Z_rotation` - Z' command
+* `clock_B` - B command
+* `clock_D` - D command
+* `clock_E` - E command
+* `clock_F` - F command
+* `clock_L` - L command
+* `clock_M` - M command
+* `clock_R` - R command
+* `clock_S` - S command
+* `clock_U` - U command
+* `clock_b` - b command
+* `clock_d` - d command
+* `clock_f` - f command
+* `clock_l` - l command
+* `clock_r` - r command
+* `clock_u` - u command
+* `cube_X_rotation` - X command
+* `cube_Y_rotation` - Y command
+* `cube_Z_rotation` - Z command
+* `do_cmd` - Applies a command `cmd` to `self`, returns the number of operations performed during the command
+* `is_solved` - Is `self` a solved Rubix Cube ?
+* `reset` - Reset the Rubix Cube to a solved position
+* `scrambled` - Build a new Rubix Cube with a scrambled layout
+* `solved` - Build a new Rubix Cube with a solved layout
+
+## Authors
+
+This project is maintained by **Lucas Bajolet<r4pass@hotmail.com>**.

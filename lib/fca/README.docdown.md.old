@@ -1,0 +1,77 @@
+# `fca` - Formal Concept Analysis
+
+[[toc: fca]]
+
+Formal concept analysis ([[fca | text: FCA]]) is a principled way of deriving a concept hierarchy
+or formal ontology from a collection of objects and their properties.
+This means deriving implicit relationships between objects regarding their
+attributes.
+
+Each concept in the hierarchy represents the set of objects sharing the same
+values for a certain set of properties; and each sub-concept in the hierarchy
+contains a subset of the objects in the concepts above it.
+
+Formal concept analysis finds practical application in fields including data
+mining, text mining, machine learning or semantic web.
+
+## Building a FormalContext
+
+We use the example from https://en.wikipedia.org/wiki/Formal_concept_analysis:
+
+~~~
+var fc = new FormalContext[Int, String]
+fc.set_object_attributes(1, ["odd", "square"])
+fc.set_object_attributes(2, ["even", "prime"])
+fc.set_object_attributes(3, ["odd", "prime"])
+fc.set_object_attributes(4, ["even", "composite", "square"])
+fc.set_object_attributes(5, ["odd", "prime"])
+fc.set_object_attributes(6, ["even", "composite"])
+fc.set_object_attributes(7, ["odd", "prime"])
+fc.set_object_attributes(8, ["even", "composite"])
+fc.set_object_attributes(9, ["odd", "square", "composite"])
+fc.set_object_attributes(10, ["even", "composite"])
+~~~
+
+## Computing the set of FormalConcept
+
+~~~
+var concepts = fc.formal_concepts
+for concept in concepts do
+	print concept
+end
+~~~
+
+## Visualizing formal concept with ConceptLattice
+
+~~~nitish
+var cl = new ConceptLattice[Int, String].from_concepts(concepts)
+cl.show_dot
+~~~
+
+## `FormalContext` - Formal Context
+
+[[doc: fca::FormalContext | no-synopsis]]
+
+Properties:
+
+[[features: fca::FormalContext | min-visibility: public, no-redef]]
+
+## `FormalConcept` - Formal Concept
+
+[[doc: fca::FormalConcept | no-synopsis]]
+
+Properties:
+
+[[features: fca::FormalConcept | min-visibility: public, no-redef]]
+
+## `ConceptLattice` - Concept Lattice
+
+[[doc: fca::ConceptLattice | no-synopsis]]
+
+Properties:
+
+[[features: fca::ConceptLattice | min-visibility: public, no-redef]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: fca]].

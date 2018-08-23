@@ -1,0 +1,35 @@
+# `console` - Defines some ANSI Terminal Control Escape Sequences.
+
+[[toc: console]]
+
+The color methods (e.g. `Text::green`) format the text to appear colored
+in a ANSI/VT100 terminal. By default, this coloring is skipped if stdout
+is not a TTY, but it can be forced by setting `force_console_colors = true`.
+
+## `TermClearDisplay` - ANSI/VT100 code to clear the entire display and move the cursor to the top left of screen (ED 2).
+
+[[doc: console::TermClearDisplay | no-synopsis]]
+
+## `TermCharFormat` - ANSI/VT100 code to change character look (SGR).
+
+[[doc: console::TermCharFormat | no-synopsis]]
+
+Properties:
+
+[[features: console::TermCharFormat | min-visibility: public, no-redef]]
+
+## `TermProgress` - A dynamic progress bar displayable in console.
+
+[[doc: console::TermProgress | no-synopsis]]
+
+Properties:
+
+[[features: console::TermProgress | min-visibility: public, no-redef]]
+
+## Other classes from `console`
+
+[[features: console::console | mentities: console::TermEscape;console::TermDirectionalMove;console::TermMoveUp;console::TermMoveDown;console::TermMoveFoward;console::TermMoveBackward;console::TermMove;console::TermEraseDisplayDown;console::TermEraseDisplayUp;console::TermEraseLineFoward;console::TermEraseLineBackward;console::TermClearLine;console::TermSaveCursor;console::TermRestoreCursor]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: console]].

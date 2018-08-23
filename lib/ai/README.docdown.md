@@ -1,14 +1,27 @@
-# Simple library for basic artificial intelligence algorithms
+# `ai` - [[ini-desc: ai]]
 
-This library provides some frameworks for basic algorithms used for artificial intelligence.
-It offers simple generic classes to extends.
+[[toc: ai]]
 
-Contents:
+## Features
 
-* see `backtrack`
-* see `search`
+[[uml: ai | format: svg, mentities: ai::ai;ai::backtrack;ai::search]]
 
-See the `examples` subdirectory for examples:
+### `backtrack` - Basic framework for active backtrack solver
 
-* `examples/queens.nit`
-* `examples/puzzle.nit`
+[[doc: ai::backtrack | no-synopsis]]
+
+Example from `ai::queens`:
+
+[[code: ai::queens]]
+
+### `search` - Basic framework for search problems and solver.
+
+[[doc: ai::search | no-synopsis]]
+
+Example from `ai::puzzle`:
+
+[[code: ai::puzzle]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: ai]].

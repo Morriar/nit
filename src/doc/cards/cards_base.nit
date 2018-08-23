@@ -19,6 +19,8 @@ import serialization
 abstract class DocCard
 	serialize
 
+	fun id: String is abstract
+
 	# Card icon
 	fun icon: String is abstract
 
@@ -42,4 +44,8 @@ abstract class DocCard
 		v.serialize_attribute("has_options", has_options)
 		v.serialize_attribute("kind", class_name)
 	end
+
+	fun markdown: String is abstract
+
+	fun commands: Array[String] do return new Array[String]
 end

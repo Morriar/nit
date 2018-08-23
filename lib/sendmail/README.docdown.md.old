@@ -1,0 +1,19 @@
+# Send emails using the `sendmail` program
+
+Usage example:
+
+~~~~
+if sendmail_is_available then
+    var mail = new Mail("from@example.com", "Title", "Content")
+    mail.to.add "to@example.org"
+    mail.send
+else print "please install sendmail"
+~~~~
+
+## Classes from `sendmail`
+
+[[features: sendmail::sendmail | mentities: sendmail::Mail]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: sendmail]].

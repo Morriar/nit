@@ -1,0 +1,9 @@
+# `progression` - Event-based interface to track the progression of an operation.
+
+## Classes from `progression`
+
+[[features: progression::progression | mentities: progression::Trackable;progression::ProgressionListener]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: progression]].

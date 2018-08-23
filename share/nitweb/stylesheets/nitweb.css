@@ -58,6 +58,8 @@ a {
     border: none;
 }
 
+blockquote { font-size: 110%; }
+
 /* ui */
 
 .btn-bar { margin-top: -5px; float: right }
