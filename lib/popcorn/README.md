@@ -14,6 +14,8 @@ Set up is quick and easy as 10 lines of code.
 Create a file `app.nit` and add the following code:
 
 ~~~
+module example_hello is example
+
 import popcorn
 
 class HelloHandler
@@ -236,6 +238,8 @@ get, post, put, and delete.
 The request query string is accessed through the `req` parameter:
 
 ~~~
+module example_query_string is example
+
 import popcorn
 import template
 
@@ -261,6 +265,8 @@ app.listen("localhost", 3000)
 Post parameters can also be accessed through the `req` parameter:
 
 ~~~
+module example_post_handler is example
+
 import popcorn
 import template
 
@@ -372,6 +378,8 @@ The following example declares a handler `UserHome` that responds with the `user
 name.
 
 ~~~
+module example_param_route is example
+
 import popcorn
 
 class UserHome
@@ -406,6 +414,8 @@ Here we define a `UserItem` handler that will respond to any URI matching the pr
 Note that glob route are compatible with route parameters.
 
 ~~~
+module example_glob_route is example
+
 import popcorn
 
 class UserItem
@@ -515,6 +525,8 @@ uri, the response status and the time it took to Popcorn to process the request.
 This example gives a simplified version of the `RequestClock` and `ConsoleLog` middlewares.
 
 ~~~
+module example_advanced_logger is example
+
 import popcorn
 import realtime
 
@@ -529,7 +541,7 @@ class RequestTimeHandler
 	redef fun all(req, res) do req.timer = new Clock
 end
 
-class LogHandler
+class AdvancedLoggerHandler
 	super Handler
 
 	redef fun all(req, res) do
@@ -542,7 +554,7 @@ class LogHandler
 	end
 end
 
-class HelloHandler
+class AnotherHandler
 	super Handler
 
 	redef fun get(req, res) do res.send "Hello World!"
@@ -550,8 +562,8 @@ end
 
 var app = new App
 app.use_before("/*", new RequestTimeHandler)
-app.use("/", new HelloHandler)
-app.use_after("/*", new LogHandler)
+app.use("/", new AnotherHandler)
+app.use_after("/*", new AdvancedLoggerHandler)
 app.listen("localhost", 3000)
 ~~~
 
@@ -600,6 +612,8 @@ The following example creates a router as a module, loads a middleware handler i
 defines some routes, and mounts the router module on a path in the main app.
 
 ~~~
+module example_router is example
+
 import popcorn
 
 class AppHome
@@ -614,7 +628,7 @@ class UserLogger
 	redef fun all(req, res) do print "User logged"
 end
 
-class UserHome
+class UserHomepage
 	super Handler
 
 	redef fun get(req, res) do res.send "User Home"
@@ -628,7 +642,7 @@ end
 
 var user_router = new Router
 user_router.use("/*", new UserLogger)
-user_router.use("/", new UserHome)
+user_router.use("/", new UserHomepage)
 user_router.use("/profile", new UserProfile)
 
 var app = new App
@@ -647,6 +661,8 @@ as call the `Time` middleware handler that is specific to the route.
 Define error-handling middlewares in the same way as other middleware handlers:
 
 ~~~
+module example_simple_error_handler is example
+
 import popcorn
 
 class SimpleErrorHandler
@@ -654,19 +670,20 @@ class SimpleErrorHandler
 
 	redef fun all(req, res) do
 		if res.status_code != 200 then
-			print "An error occurred! {res.status_code})"
+			res.send("An error occurred!", res.status_code)
 		end
 	end
 end
 
-class HelloHandler
+class SomeHandler
 	super Handler
 
 	redef fun get(req, res) do res.send "Hello World!"
 end
 
+
 var app = new App
-app.use("/", new HelloHandler)
+app.use("/", new SomeHandler)
 app.use("/*", new SimpleErrorHandler)
 app.listen("localhost", 3000)
 ~~~
@@ -724,6 +741,8 @@ app.listen("localhost", 3000)
 Here a simple example of login button that define a value in the `req` session.
 
 ~~~
+module example_session is example
+
 import popcorn
 
 redef class Session
@@ -748,7 +767,7 @@ class AppLogin
 end
 
 var app = new App
-app.use_before("/*", new SessionInit)
+app.use("/*", new SessionInit)
 app.use("/", new AppLogin)
 app.listen("localhost", 3000)
 ~~~
@@ -773,6 +792,8 @@ Then we define a handler that displays the user creation form on GET requests.
 POST requests are used to save the user data.
 
 ~~~
+module example_mongodb is example
+
 import popcorn
 import mongodb
 import template
@@ -786,33 +807,26 @@ class UserList
 		var users = db.collection("users").find_all(new JsonObject)
 
 		var tpl = new Template
-		tpl.add "<h1>Users</h1>"
-		tpl.add "<table>"
-		for user in users do
-			tpl.add """<tr>
-				<td>{{{user["login"] or else "null"}}}</td>
-				<td>{{{user["password"] or else "null"}}}</td>
-			</tr>"""
-		end
-		tpl.add "</table>"
-		res.html tpl
-	end
-end
+		tpl.add """
+		<h1>Users</h1>
 
-class UserForm
-	super Handler
-
-	var db: MongoDb
-
-	redef fun get(req, res) do
-		var tpl = new Template
-		tpl.add """<h1>Add a new user</h1>
-		<form action="/new" method="POST">
+		<h2>Add a new user</h2>
+		<form action="/" method="POST">
 			<input type="text" name="login" />
 			<input type="password" name="password" />
 			<input type="submit" value="save" />
-		</form>"""
-		res.html tpl
+		</form>
+
+		<h2>All users</h2>
+		<table>"""
+		for user in users do
+			tpl.add """<tr>
+			<td>{{{user["login"] or else "null"}}}</td>
+			<td>{{{user["password"] or else "null"}}}</td>
+			</tr>"""
+		end
+		tpl.add "</table>"
+		res.html(tpl)
 	end
 
 	redef fun post(req, res) do
@@ -820,7 +834,7 @@ class UserForm
 		json["login"] = req.post_args["login"]
 		json["password"] = req.post_args["password"]
 		db.collection("users").insert(json)
-		res.redirect "/"
+		res.redirect("/")
 	end
 end
 
@@ -829,7 +843,6 @@ var db = mongo.database("mongo_example")
 
 var app = new App
 app.use("/", new UserList(db))
-app.use("/new", new UserForm(db))
 app.listen("localhost", 3000)
 ~~~
 
@@ -841,10 +854,12 @@ Using the StaticHandler with a glob route, you can easily redirect all HTTP requ
 to your angular controller:
 
 ~~~
+module example_static_default is example
+
 import popcorn
 
 var app = new App
-app.use("/*", new StaticHandler("my-ng-app/", "index.html"))
+app.use("/", new StaticHandler("public/", "default.html"))
 app.listen("localhost", 3000)
 ~~~
 
