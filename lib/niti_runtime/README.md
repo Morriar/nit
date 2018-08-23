@@ -1,7 +1,0 @@
-# `niti_runtime` - Runtime library to loop around the main program for each line in file-name arguments
-
-Used by the interpreter when `-n` is used
-
-## Authors
-
-This project is maintained by **Jean Privat <mailto:jean@pryen.org>**.
