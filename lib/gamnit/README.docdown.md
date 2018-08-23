@@ -51,17 +51,17 @@ brew install glslang
 
 ## Services by submodules
 
-_gamnit_ is modular, different services of the framework are available through different submodules:
+_[[gamnit::gamnit]]_ is modular, different services of the framework are available through different submodules:
 
-* The main entrypoint `gamnit` provides low-level abstractions over some services of OpenGL ES 2.0, like textures, shaders and programs.
+* The main entrypoint [[gamnit | text: `gamnit`]] provides low-level abstractions over some services of OpenGL ES 2.0, like [[gamnit::Texture | text: textures]], [[gamnit::Shader | text: shaders]] and programs.
   It defines the basic methods to implement in order to obtain a working game:
   `App::frame_core` to update the screen and `App::accept_event` to receive user inputs.
 
-* `flat` provides an easy to use API for 2D games based on sprites.
+* [[gamnit>flat> | text: `flat`]] provides an easy to use API for 2D games based on sprites.
   Clients of this API redefine `App::update` to update the game logic and fill lists of sprites with objects to draw.
 
   `App::sprites` lists the sprites of the game world, they are drawn form the point of view of the `world_camera`.
-  This camera can be moved around in the world by updating the x and y of its `position`,
+  This [[gamnit::Camera | text: camera]] can be moved around in the world by updating the x and y of its `position`,
   and the zoom can easily be set using `reset_depth(desired_world_units_on_y)` or the `z` of its `position`
 
   `App::ui_sprites` lists the UI sprites drawn from the point of view of `ui_camera`.
@@ -69,7 +69,7 @@ _gamnit_ is modular, different services of the framework are available through d
   However to support screens with different DPI, it is recommended to standardize
   the display size using `reset_depth(height_of_reference_display)`.
 
-* `depth` defines an API for 3D games based on instances of `Actor`.
+* [[gamnit>depth> | text: `depth`]] defines an API for 3D games based on instances of `Actor`.
 
   This framework is build upon `flat`, see the doc of this submodule first (just above).
   As such, clients should still implement `update` with the game logic, and fill `ui_sprites` for UI elements.
@@ -82,9 +82,9 @@ _gamnit_ is modular, different services of the framework are available through d
 
 * `keys` provides `app.pressed_keys` keeping track of the currently pressed keys.
 
-* `model_parsers` provides services to read and parse models from the asset folder.
+* [[gamnit>model_parsers> | text: `model_parsers`]] provides services to read and parse models from the [[gamnit>virtual_gamepad>assets> | text: asset]] folder.
 
-* `network` provides a simple communication framework for multiplayer client/server games.
+* [[gamnit>network> | text: `network`]] provides a simple communication framework for multiplayer client/server games.
 
   [[features: gamnit | mentities: gamnit::landscape;gamnit::portrait;gamnit::common;gamnit::camera_control;gamnit::network;gamnit::vr;gamnit::android19;gamnit::gamnit_ios;gamnit::display;gamnit::flat;gamnit::keys;gamnit::depth_core;gamnit::limit_fps;gamnit::camera_control_linux;gamnit::input_ios;gamnit::display_ios;gamnit::gamnit;gamnit::display_android;gamnit::font;gamnit::cardboard;gamnit::stereoscopic_view;gamnit::texture_atlas_parser;gamnit::client;gamnit::cameras_cache;gamnit::depth;gamnit::mtl;gamnit::gamnit_linux;gamnit::camera_control_android;gamnit::display_linux;gamnit::server;gamnit::particles;gamnit::tileset;gamnit::virtual_gamepad_spritesheet;gamnit::obj;gamnit::more_lights;gamnit::gamnit_android;gamnit::model_parser_base;gamnit::model_dimensions;gamnit::textures;gamnit::egl;gamnit::selection;gamnit::more_meshes;gamnit::dynamic_resolution;gamnit::virtual_gamepad;gamnit::programs;gamnit::cameras;gamnit::bmfont;gamnit::shadow;gamnit::more_models;gamnit::more_materials;gamnit::flat_core]]
 

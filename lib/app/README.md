@@ -26,7 +26,7 @@ The framework provides services to manage common needs of modern mobile applicat
 * Package metadata
 * Compilation and packaging
 
-The features offered by _app.nit_ are common to all platforms, but
+The features offered by _[app](app).nit_ are common to all platforms, but
 may not be available on all devices.
 
 ## Getting Started
@@ -93,8 +93,8 @@ Life-cycle events related to saving and restoring the application state are prov
 * `on_restore_state`: The app is launching, restore its state from a previous `on_save_state`.
 
 These events are synchronized to the native platforms applications
-The `App` instance is the first to be notified of these events.
-Other UI elements, from the `ui` submodule, are notified of the same events using a simple depth first visit.
+The [`App`](app::App) instance is the first to be notified of these events.
+Other UI elements, from the [`ui`](app::ui) submodule, are notified of the same events using a simple depth first visit.
 So all UI elements can react separately to live-cycle events.
 
 ## `ui`
@@ -116,21 +116,21 @@ redef fun root_window do return new MyWindow
 ~~~
 
 The `app::ui` module defines an abstract API to build a portable graphical application.
-The API is composed of interactive `Control`s, visible `View`s and an active `Window`.
+The API is composed of interactive `Control`s, visible [`View`](app::View)s and an active [`Window`](app::Window).
 
 Here is a subset of the most useful controls and views:
 
-* The classic pushable `Button` with text (usually rectangular).
+* The classic pushable [`Button`](app::Button) with text (usually rectangular).
 
-* `TextInput` is a field for the user to enter text.
+* [`TextInput`](app::TextInput) is a field for the user to enter text.
 
-* `HorizontalLayout` and `VerticalLayout` organize other controls in order.
+* [`HorizontalLayout`](app::HorizontalLayout) and [`VerticalLayout`](app::VerticalLayout) organize other controls in order.
 
 Each control is notified of input events by callbacks to `on_event`.
 All controls have observers that are also notified of the events.
 So there is two ways  to customize the behavior on a given event:
 
-* Create a subclass of the wanted `Control`, let's say `Button`, and specialize `on_event`.
+* Create a subclass of the wanted [`Control`](app::Control), let's say `Button`, and specialize `on_event`.
 
 * Add an observer to a `Button` instance, and implement `on_event` in the observer.
 
@@ -293,8 +293,8 @@ req.start
 
 ~~~
 
-The module `app::http_request` provides services to execute asynchronous HTTP request.
-The class `AsyncHttpRequest` hides the complex parallel logic and
+The module [`app::http_request`](app::http_request) provides services to execute asynchronous HTTP request.
+The class [`AsyncHttpRequest`](app::AsyncHttpRequest) hides the complex parallel logic and
 lets the user implement methods acting only on the UI thread.
 See the documentation of `AsyncHttpRequest` for more information and
 the full example at `examples/http_request_example.nit`.

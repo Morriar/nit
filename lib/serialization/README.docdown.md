@@ -2,7 +2,7 @@
 
 [[toc: serialization]]
 
-The serialization services are based on the `serialize` and the `noserialize` annotations,
+The [[serialization]] services are based on the `serialize` and the `noserialize` annotations,
 the `Serializable` interface and the implementations of `Serializer` and `Deserializer`.
 
 ## The `serialize` annotation
@@ -42,7 +42,7 @@ raised when trying to serialize non-serializable attributes.
 In the class `Person`, all attributes are typed with classes the standards library.
 These common types are defined defined as serializable by this project.
 The attributes could also be typed with user-defined `serialize`
-classes or any other subclass of `Serializable`.
+classes or any other subclass of [[serialization::Serializable | text: `Serializable`]].
 
 ~~~
 import serialization
@@ -257,7 +257,7 @@ end
 
 ~~~
 
-See the documentation of the module `serialization::serialization` for more
+See the documentation of the module [[serialization::serialization | text: `serialization::serialization`]] for more
 information on the services to redefine.
 
 ## Serialization services
@@ -265,7 +265,7 @@ information on the services to redefine.
 The `serialize` annotation and the `Serializable` class are used on
 classes specific to the business domain.
 To write (and read) instances of these classes to a persistent format
-you must use implementations of `Serializer` and `Deserializer`.
+you must use implementations of [[serialization::Serializer | text: `Serializer`]] and [[serialization::Deserializer | text: `Deserializer`]].
 
 The main implementations of these services are `JsonSerializer` and `JsonDeserializer`,
 from the `json_serialization` module.

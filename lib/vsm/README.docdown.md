@@ -4,7 +4,7 @@
 
 > [[doc: vsm::vsm]]
 
-The `vsm` package provides the following features:
+The [[vsm | text: `vsm`]] package provides the following features:
 
 * Vector comparison with cosine similarity.
 * Vector indexing and matching with tf * idf.
@@ -20,7 +20,7 @@ The `vsm` package provides the following features:
 
 [[uml: vsm | format: svg, mentities: vsm::IndexMatchSorter;vsm::IndexMatch;vsm::StringIndex;vsm::Vector;vsm::FileIndex;vsm::Document;vsm::VSMIndex]]
 
-With VSM, documents are represented by a n-dimensions vector.
+With VSM, [[vsm::Document | text: documents]] are represented by a n-dimensions [[vsm::Vector | text: vector]].
 Each dimension represent an attribute of the document or object.
 
 For text document, the count of each term found in the document if often used to
@@ -62,7 +62,7 @@ assert s1 > s2
 
 ## [[sign: vsm::VSMIndex]]
 
-VSMIndex is a Document index based on VSM.
+[[vsm::VSMIndex]] is a Document index based on VSM.
 
 > [[doc: vsm::VSMIndex]]
 
@@ -101,7 +101,7 @@ assert matches.first.document == d1
 
 ## [[sign: vsm::StringIndex]]
 
-The StringIndex provides usefull services to index and match strings.
+The [[vsm::StringIndex]] provides usefull services to index and match strings.
 
 ~~~
 import vsm
@@ -122,7 +122,7 @@ Example from `vsm::example_vsm`:
 
 ## [[sign: vsm::FileIndex]]
 
-The FileIndex is a StringIndex able to index and retrieve files.
+The [[vsm::FileIndex]] is a StringIndex able to index and retrieve files.
 
 ~~~nit
 import vsm

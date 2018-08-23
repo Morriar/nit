@@ -10,8 +10,8 @@
 * [For more information:](#For-more-information:)
 * [Authors](#Authors)
 
-The threads can be manipulated and synchronized using the classes `Thread`,
-`Mutex` and `Barrier`.
+The threads can be manipulated and synchronized using the classes [`Thread`](pthreads::Thread),
+[`Mutex`](pthreads::Mutex) and [`Barrier`](pthreads::Barrier).
 
 This group also provides two optional modules with thread-safe collections:
 

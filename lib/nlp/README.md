@@ -63,7 +63,7 @@ end
 For more details about the stanford NLP server see
 https://stanfordnlp.github.io/CoreNLP/corenlp-server.html
 
-The NLPServer provides a wrapper around the StanfordCoreNLPServer.
+The [NLPServer](nlp::NLPServer) provides a wrapper around the StanfordCoreNLPServer.
 
 See `https://stanfordnlp.github.io/CoreNLP/corenlp-server.html`.
 
@@ -77,7 +77,7 @@ srv.start
 
 ### NLPClient
 
-The NLPClient is used as a NLPProcessor with a NLPServer backend.
+The [NLPClient](nlp::NLPClient) is used as a [NLPProcessor](nlp::NLPProcessor) with a NLPServer backend.
 
 ~~~nit
 import nlp
@@ -88,7 +88,7 @@ var doc = cli.process("String to analyze")
 
 ## NLPIndex
 
-NLPIndex extends the StringIndex to use a NLPProcessor to tokenize, lemmatize and
+[NLPIndex](nlp::NLPIndex) extends the StringIndex to use a NLPProcessor to tokenize, lemmatize and
 tag the terms of a document.
 
 ~~~nit

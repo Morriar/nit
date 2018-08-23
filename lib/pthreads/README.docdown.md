@@ -2,8 +2,8 @@
 
 [[toc: pthreads]]
 
-The threads can be manipulated and synchronized using the classes `Thread`,
-`Mutex` and `Barrier`.
+The threads can be manipulated and synchronized using the classes [[pthreads::Thread | text: `Thread`]],
+[[pthreads::Mutex | text: `Mutex`]] and [[pthreads::Barrier | text: `Barrier`]].
 
 This group also provides two optional modules with thread-safe collections:
 

@@ -11,7 +11,7 @@ The framework provides services to manage common needs of modern mobile applicat
 * Package metadata
 * Compilation and packaging
 
-The features offered by _app.nit_ are common to all platforms, but
+The features offered by _[[app]].nit_ are common to all platforms, but
 may not be available on all devices.
 
 ## Getting Started
@@ -69,8 +69,8 @@ Life-cycle events related to saving and restoring the application state are prov
 * `on_restore_state`: The app is launching, restore its state from a previous `on_save_state`.
 
 These events are synchronized to the native platforms applications
-The `App` instance is the first to be notified of these events.
-Other UI elements, from the `ui` submodule, are notified of the same events using a simple depth first visit.
+The [[app::App | text: `App`]] instance is the first to be notified of these events.
+Other UI elements, from the [[app::ui | text: `ui`]] submodule, are notified of the same events using a simple depth first visit.
 So all UI elements can react separately to live-cycle events.
 
 ## [[sign: app::ui]]
@@ -78,21 +78,21 @@ So all UI elements can react separately to live-cycle events.
 > [[doc: app::ui]]
 
 The `app::ui` module defines an abstract API to build a portable graphical application.
-The API is composed of interactive `Control`s, visible `View`s and an active `Window`.
+The API is composed of interactive `Control`s, visible [[app::View | text: `View`]]s and an active [[app::Window | text: `Window`]].
 
 Here is a subset of the most useful controls and views:
 
-* The classic pushable `Button` with text (usually rectangular).
+* The classic pushable [[app::Button | text: `Button`]] with text (usually rectangular).
 
-* `TextInput` is a field for the user to enter text.
+* [[app::TextInput | text: `TextInput`]] is a field for the user to enter text.
 
-* `HorizontalLayout` and `VerticalLayout` organize other controls in order.
+* [[app::HorizontalLayout | text: `HorizontalLayout`]] and [[app::VerticalLayout | text: `VerticalLayout`]] organize other controls in order.
 
 Each control is notified of input events by callbacks to `on_event`.
 All controls have observers that are also notified of the events.
 So there is two ways  to customize the behavior on a given event:
 
-* Create a subclass of the wanted `Control`, let's say `Button`, and specialize `on_event`.
+* Create a subclass of the wanted [[app::Control | text: `Control`]], let's say `Button`, and specialize `on_event`.
 
 * Add an observer to a `Button` instance, and implement `on_event` in the observer.
 
@@ -113,8 +113,8 @@ the interesting module is in this repository at ../../examples/calculator/src/an
 
 > [[doc: app::data_store]]
 
-_app.nit_ offers the submodule `app::data_store` to easily save the application state and user preferences.
-The service is accessible by the method `App::data_store`. The `DataStore` itself defines 2 methods:
+_[[app::app]].nit_ offers the submodule [[app::data_store | text: `app::data_store`]] to easily save the application state and user preferences.
+The service is accessible by the method `App::data_store`. The [[app::DataStore | text: `DataStore`]] itself defines 2 methods:
 
 * `DataStore::[]=` saves and associates any serializable instances to a `String` key.
   Pass `null` to clear the value associated to a key.
@@ -163,8 +163,8 @@ end
 
 > [[doc: app::http_request]]
 
-The module `app::http_request` provides services to execute asynchronous HTTP request.
-The class `AsyncHttpRequest` hides the complex parallel logic and
+The module [[app::http_request | text: `app::http_request`]] provides services to execute asynchronous HTTP request.
+The class [[app::AsyncHttpRequest | text: `AsyncHttpRequest`]] hides the complex parallel logic and
 lets the user implement methods acting only on the UI thread.
 See the documentation of `AsyncHttpRequest` for more information and
 the full example at `examples/http_request_example.nit`.

@@ -36,11 +36,11 @@
 
 ![Diagram for `geometry`](uml-geometry.svg)
 
-The very basics of geometry needs, for two and three-dimensional space.
+The very basics of [geometry](geometry) needs, for two and three-dimensional space.
 
 ## Boxes and detection collision
 
-Boxes module introduces Bounding boxes for Points and Lines and services to detect collision or inclusion between boxes.
+[Boxes](geometry::Box) module introduces Bounding [boxes](geometry::boxes) for Points and Lines and services to detect collision or inclusion between boxes.
 It means a simple and fast way to test collision but not really accurate since it uses bounding boxes.
 
 ### `Box`
@@ -64,16 +64,16 @@ It means a simple and fast way to test collision but not really accurate since i
 > This module introduces 2 main implementation of the structure,
 > a static and a dynamic QuadTree.
 
-A QuadTree is a tree data structure in which each internal node has exactly four children
+A [QuadTree](geometry::QuadTree) is a tree data structure in which each internal node has exactly four children
 They're most often used to partition two-dimensional space by recursively subdividing
 it into four quadrants or regions.
 
 * They decompose space into adaptable cells
 * Each cell has a maximum capacity. When maximum is reached, the cell splits.
 
-Quadtrees are using Boxed objects to determine their distribution in the 2D space.
+Quadtrees are using [Boxed](geometry::Boxed) objects to determine their distribution in the 2D space.
 
-This API provides two different types of Quadtree : Static and Dynamic (respectively `SQuadTree` and `DQuadTree`).
+This API provides two different types of Quadtree : Static and Dynamic (respectively [`SQuadTree`](geometry::SQuadTree) and [`DQuadTree`](geometry::DQuadTree)).
 
 * Static: When you create the QuadTree, you need to specify the region that it will cover
 
@@ -94,14 +94,14 @@ This API provides two different types of Quadtree : Static and Dynamic (respecti
 
 ## Polygons
 
-Some basic polygon services.
+Some basic [polygon](geometry::Polygon) services.
 
-This module contains interesting algorithms for `ConvexPolygon`only at the moment. A Convex polygon can be defined as follow :
+This module contains interesting algorithms for [`ConvexPolygon`](geometry::ConvexPolygon)only at the moment. A Convex [polygon](geometry::polygon) can be defined as follow :
 
 * All its interior angles are less than 180°. this means that all the vertices of the polygon
-  will point outwards, away from the interior of the shape.
+  will [point](geometry::Point) outwards, away from the interior of the shape.
 
-* Every point on every line segment between two points inside or on the boundary of the polygon
+* Every point on every [line](geometry::Line) segment between two points inside or on the boundary of the polygon
   remains inside or on the boundary.
 
 * The polygon is entirely contained in a closed half-plane defined by each of its edges.

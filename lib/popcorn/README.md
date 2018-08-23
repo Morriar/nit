@@ -35,7 +35,7 @@
 
 **Why endure plain corn when you can pop it?!**
 
-Popcorn is a minimal yet powerful nit web application framework that provides cool
+[Popcorn](popcorn) is a minimal yet powerful nit web application framework that provides cool
 features for lazy developpers.
 
 Popcorn is built over nitcorn to provide a clean and user friendly interface
@@ -172,7 +172,7 @@ For more details about routing, see the routing section.
 ## Serving static files with Popcorn
 
 To serve static files such as images, CSS files, and JavaScript files, use the
-Popcorn built-in handler `StaticHandler`.
+Popcorn built-in handler [`StaticHandler`](popcorn::StaticHandler).
 
 Pass the name of the directory that contains the static assets to the StaticHandler
 init method to start serving the files directly.
@@ -262,7 +262,7 @@ app.use("/", new HelloHandler)
 ### Route methods
 
 A **route method** is derived from one of the HTTP methods, and is attached to an
-instance of the Handler class.
+instance of the [Handler](popcorn::Handler) class.
 
 The following code is an example of routes that are defined for the GET and the POST
 methods to the root of the app.
@@ -538,7 +538,7 @@ receive a `404 Not found` error.
 
 ## Response cycle
 
-When the popcorn `App` receives a request, the response cycle is the following:
+When the popcorn [`App`](popcorn::App) receives a request, the response cycle is the following:
 
 1. `pre-middlewares` lookup matching middlewares registered with `use_before(pre_middleware)`:
    1. execute matching middleware by registration order
@@ -608,7 +608,7 @@ with the `use_before` method.
 Next, we’ll create a middleware handler called “LogHandler” that prints the requested
 uri, the response status and the time it took to Popcorn to process the request.
 
-This example gives a simplified version of the `RequestClock` and `ConsoleLog` middlewares.
+This example gives a simplified version of the [`RequestClock`](popcorn::RequestClock) and [`ConsoleLog`](popcorn::ConsoleLog) middlewares.
 
 ~~~
 module example_advanced_logger is example
@@ -690,7 +690,7 @@ be used to develop your app faster.
 
 ## Mountable routers
 
-Use the `Router` class to create modular, mountable route handlers.
+Use the [`Router`](popcorn::Router) class to create modular, mountable route handlers.
 A Router instance is a complete middleware and routing system; for this reason,
 it is often referred to as a “mini-app”.
 
@@ -858,7 +858,7 @@ Notice the use of the `SessionInit` on the `/*` route. You must use the
 `SessionInit` first to initialize the request session.
 Without that, your request session will be set to `null`.
 
-**Sessions** can be used thanks to the built-in `SessionInit` middleware.
+**Sessions** can be used thanks to the built-in [`SessionInit`](popcorn::SessionInit) middleware.
 
 Here a simple example of login button that define a value in the `req` session.
 

@@ -2,7 +2,7 @@
 
 [[toc: sdl2]]
 
-The main entry point of this project, `sdl2`, exposes some features of the base
+The main entry point of this project, [[sdl2 | text: `sdl2`]], exposes some features of the base
 library: video, events, syswm, etc. The alternative entry point `sdl2::image` offers
 mainly `SDLSurface::load` to load images from PNG, JPG or TIF files.
 

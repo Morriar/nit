@@ -2,7 +2,7 @@
 
 [[toc: markdown]]
 
-Markdown documentation can be found in http://daringfireball.net/projects/markdown/.
+[[markdown | text: Markdown]] documentation can be found in http://daringfireball.net/projects/markdown/.
 This parser is inspired by the famous TxtMark for Java (https://github.com/rjeschke/txtmark).
 
 ## Getting Started
@@ -31,7 +31,7 @@ Options:
 
 [[main-opts: markdown::nitmd]]
 
-Or you can use it programmatically by importing the `markdown` module.
+Or you can use it programmatically by importing the [[markdown::markdown | text: `markdown`]] module.
 
 [[features: markdown | mentities: markdown::nitmd;markdown::wikilinks;markdown::man;markdown::decorators;markdown::markdown]]
 

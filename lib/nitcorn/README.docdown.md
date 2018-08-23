@@ -8,19 +8,19 @@
 
 [[uml: nitcorn | format: svg, mentities: nitcorn::pthreads;nitcorn::nitcorn;nitcorn::signal_handler;nitcorn::token;nitcorn::proxy;nitcorn::server_config;nitcorn::restful;nitcorn::sessions;nitcorn::http_errors;nitcorn::log;nitcorn::http_request_buffer;nitcorn::reactor;nitcorn::vararg_routes;nitcorn::file_server;nitcorn::http_request;nitcorn::http_response;nitcorn::media_types]]
 
-Dynamic content is served by subclassing `Action` and implementing `answer`.
-This method receives an `HttpRequest` and must return an `HttpResponse`.
-_nitcorn_ provides `FileServer`, a simple `Action` to serve static files.
+Dynamic content is served by subclassing [[nitcorn::Action | text: `Action`]] and implementing `answer`.
+This method receives an [[nitcorn::HttpRequest | text: `HttpRequest`]] and must return an [[nitcorn::HttpResponse | text: `HttpResponse`]].
+_nitcorn_ provides [[nitcorn::FileServer | text: `FileServer`]], a simple `Action` to serve static files.
 
-`HttpRequest` contains the GET and POST arguments as well as session data it one exists.
+`HttpRequest` contains the GET and POST arguments as well as [[nitcorn::Session | text: session]] data it one exists.
 The produced `HttpResponse` should contain the HTTP status code, the body,
 session data to preserve or create a session, and optionally list files to append.
 
-Each `Action` may be associated to many instances of `Route`.
-These routes can simply identify the root of a service,
+Each `Action` may be associated to many instances of [[nitcorn::Route | text: `Route`]].
+These [[nitcorn::Routes | text: routes]] can simply identify the root of a service,
 but also define parameters within the URI.
 
-_nitcorn_ instances are configured dynamically in Nit code with the interfaces and routes created as needed.
+_nitcorn_ instances are configured dynamically in Nit code with the [[nitcorn::Interface | text: interfaces]] and routes created as needed.
 
 _nitcorn_ plays well with other Nit services and tools such as `serialization`, `mongodb`, `sqlite` and `nitiwiki`.
 It also benefits from the full power of the Nit language:
@@ -38,14 +38,14 @@ Example from `nitcorn::nitcorn_reverse_proxy`:
 A minimal example follows with a custom `Action` and using `FileServer`.
 
 More general examples are available at `lib/nitcorn/examples/`.
-For an example of a larger project merging many _nitcorn_ applications into one server,
+For an example of a larger project merging many _[[nitcorn]]_ applications into one server,
 take a look at the configuration of `http://xymus.net/` at `../contrib/xymus_net/xymus_net.nit`.
 
 Larger projects using _nitcorn_ can be found in the `contrib/` folder:
 
 * _opportunity_ is a meetup planner heavily based on _nitcorn_.
 * _tnitter_ is a micro-blogging platform with a simple Web and RESTful interface.
-* _benitlux_ uses a custom `Action` to subscribe people to a mailing list and define a RESTful interface.
+* _benitlux_ uses a custom `Action` to subscribe people to a mailing list and define a RESTful [[nitcorn::Interfaces | text: interface]].
   Example from `nitcorn::nitcorn_hello_world`:
 
 [[code: nitcorn::nitcorn_hello_world]]

@@ -15,7 +15,7 @@
 It is used in information filtering, information retrieval, indexing and
 relevancy rankings.
 
-The `vsm` package provides the following features:
+The [`vsm`](vsm) package provides the following features:
 
 * Vector comparison with cosine similarity.
 
@@ -47,7 +47,7 @@ The `vsm` package provides the following features:
 
 ![Diagram for `vsm`](uml-vsm.svg)
 
-With VSM, documents are represented by a n-dimensions vector.
+With VSM, [documents](vsm::Document) are represented by a n-dimensions [vector](vsm::Vector).
 Each dimension represent an attribute of the document or object.
 
 For text document, the count of each term found in the document if often used to
@@ -89,7 +89,7 @@ assert s1 > s2
 
 ## `VSMIndex`
 
-VSMIndex is a Document index based on VSM.
+[VSMIndex](vsm::VSMIndex) is a Document index based on VSM.
 
 > Using VSMIndex you can index documents associated with their vector.
 > Documents can then be matched to query vectors.
@@ -129,7 +129,7 @@ assert matches.first.document == d1
 
 ## `StringIndex`
 
-The StringIndex provides usefull services to index and match strings.
+The [StringIndex](vsm::StringIndex) provides usefull services to index and match strings.
 
 ~~~
 import vsm
@@ -202,7 +202,7 @@ end
 
 ## `FileIndex`
 
-The FileIndex is a StringIndex able to index and retrieve files.
+The [FileIndex](vsm::FileIndex) is a StringIndex able to index and retrieve files.
 
 ~~~nit
 import vsm

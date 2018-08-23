@@ -9,7 +9,7 @@
 * [Running the tests](#Running-the-tests)
 * [Authors](#Authors)
 
-Markdown documentation can be found in http://daringfireball.net/projects/markdown/.
+[Markdown](markdown) documentation can be found in http://daringfireball.net/projects/markdown/.
 This parser is inspired by the famous TxtMark for Java (https://github.com/rjeschke/txtmark).
 
 ## Getting Started
@@ -46,7 +46,7 @@ Options:
 * -t, --to		Specify output format (html, md, man).
 ~~~
 
-Or you can use it programmatically by importing the `markdown` module.
+Or you can use it programmatically by importing the [`markdown`](markdown::markdown) module.
 
 * `decorators` - Decorators for `markdown` parsing.
 * `man` - Simple *groff* decorator restricted for manpages.

@@ -46,7 +46,7 @@ Run in the simulator with: `ios-sim hello_world.app`
 ## Sample portable applications
 
 See the calculator example at `examples/calculator` and the Tnitter client at `contrib/tnitter/`
-for portable applications working on GNU/Linux, OS X, iOS and Android.
+for portable applications working on GNU/Linux, OS X, [[ios | text: iOS]] and Android.
 
 Example from `ios::hello_ios`:
 

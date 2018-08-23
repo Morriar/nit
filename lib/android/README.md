@@ -68,7 +68,7 @@ Then run it with:
 
 ## Compilation for Android
 
-The compiler generates an APK file as the output when the `android`
+The compiler generates an APK file as the output when the [`android`](android)
 module is imported by the compilation target. The path to the generated
 file can be specified using the `-o` and `--dir` options.
 
@@ -121,7 +121,7 @@ it may be possible to support other platforms with some tweaks.
 
 ## Configure the Android application
 
-The _app.nit_ framework and this project offers some services to
+The _app.nit_ framework and this project offers some [services](android>service>) to
 customize the generated Android application.
 
 ### Annotations
@@ -156,11 +156,11 @@ customize the generated Android application.
 ### Android implementation
 
 There is two core implementation for Nit apps on Android.
-`android::nit_activity` is used by apps with standard windows and native UI controls.
+`android::nit_activity` is used by apps with standard windows and native [UI](android>ui>) controls.
 `android::game` is used by, well, games and the game frameworks `mnit` and `gamnit`.
 
 Clients don't have to select the core implementation, it is imported by other relevant modules.
-For example, a module importing `app::ui` and `android` will trigger the importation of `android::nit_activity`.
+For example, a module importing `app::ui` and [`android`](android::android) will trigger the importation of [`android::nit_activity`](android::nit_activity).
 
 * `activities` - Android Activities wrapper
 * `android` - Android services and implementation of app.nit

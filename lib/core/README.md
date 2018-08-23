@@ -20,7 +20,7 @@
 * [Running the tests](#Running-the-tests)
 * [Authors](#Authors)
 
-Core classes and methods used by default by Nit programs and libraries.
+[Core](core) classes and methods used by default by Nit programs and libraries.
 
 * `abstract_collection` - Abstract collection classes and services.
 * `abstract_text` - Abstract class for manipulation of sequences of characters

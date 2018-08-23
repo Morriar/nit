@@ -7,7 +7,7 @@
 * [Examples](#Examples)
 * [Authors](#Authors)
 
-This group introduces the `actors` module which contains the abstraction of a Nit Actor Model,
+This group introduces the [`actors`](actors::actors) module which contains the abstraction of a Nit Actor Model,
 based on Celluloid (https://github.com/celluloid/celluloid).
 
 Example from `actors::chameneosredux`:
@@ -157,10 +157,10 @@ work(n, 10)
 
 ## What is an actor ?
 
-![Diagram for `actors`](uml-actors.svg)
+![Diagram for `actors`](uml-actors-7.svg)
 
-An actor is an entity which receives messages and does some kind of computation based on it.
-An actor has a mailbox in which it receives its messages, and process them one at a time.
+An actor is an entity which receives [messages](actors::Message) and does some kind of computation based on it.
+An actor has a [mailbox](actors::Mailbox) in which it receives its messages, and process them one at a time.
 
 Example from `actors::simple_simulation`:
 
@@ -221,18 +221,18 @@ clock_agent.async.do_step
 
 ## `actor` annotation
 
-The `actors` module introduces the annotation `actor` which is to be used on classes.
+The [`actors`](actors) module introduces the annotation `actor` which is to be used on classes.
 This annotation transform a normal Nit class into an actor.
 
 In practice, it adds a new property `async` to the annotated class.
 When using `async` on your annotated class, this means that you want your calls to be asynchronous,
-executed by the actor.
+executed by the [actor](actors::Actor).
 
 For instance, if you call `a.async.foo` and `foo` doesn't have a return value, it will send
 a message to the mailbox of the actor attached to `a` which will process it asynchronously.
 
 On the other hand, if you call `a.async.bar` and `bar` returns an`Int`, it will still send
-a message to the actor, but you'll get a `Future[Int]` to be able to retrieve the value.
+a message to the actor, but you'll get a [`Future[Int]`](actors::Future) to be able to retrieve the value.
 When using `join` on the future, the calling thread will wait until the value of the future is set.
 
 Example from `actors::mandelbrot`:

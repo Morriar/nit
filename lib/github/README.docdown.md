@@ -2,7 +2,7 @@
 
 [[toc: github]]
 
-This module provides a Nit object oriented interface to access the Github api.
+This module provides a Nit object oriented interface to access the [[github::github | text: Github]] [[github::api]].
 
 [[features: github | mentities: github::github;github::cache;github::github_curl;github::wallet;github::hooks;github::events;github::loader;github::api]]
 
@@ -36,7 +36,7 @@ Options:
 
 ### `GithubAPI` - # Client to Github API
 
-To access the API you need an instance of a `GithubAPI` client.
+To access the API you need an instance of a [[github::GithubAPI | text: `GithubAPI`]] client.
 
 ~~~
 import github
@@ -49,7 +49,7 @@ assert not token.is_empty
 var api = new GithubAPI(token)
 ~~~
 
-The API client allows you to get Github API entities.
+The API client allows you to get [[github | text: Github]] API entities.
 
 ~~~
 import github
@@ -79,7 +79,7 @@ or `""` if no key exists.
 
 ### `load_user` - # Get the Github user with `login`
 
-Loads the `User` from the API or returns `null` if the user cannot be found.
+Loads the [[github::User | text: `User`]] from the API or returns `null` if the user cannot be found.
 
 ~~~
 import github
@@ -137,7 +137,7 @@ Should be accessed from `GithubAPI::load_user`.
 
 ### `load_repo` - # Get the Github repo with `full_name`.
 
-Loads the `Repo` from the API or returns `null` if the repo cannot be found.
+Loads the [[github::Repo | text: `Repo`]] from the API or returns `null` if the repo cannot be found.
 
 ~~~
 import github
@@ -156,7 +156,7 @@ Should be accessed from `GithubAPI::load_repo`.
 
 * `api$Repo$SELF` - # Type of this instance, automatically specialized in every class
 
-* `_default_branch` - # Repo default branch name.
+* `_default_branch` - # Repo default [[github::Branch | text: branch]] name.
 
 * `_full_name` - # Repo full name on Github.
 
@@ -200,9 +200,9 @@ Should be accessed from `GithubAPI::load_repo`.
 
 * `api$Branch` - # A Github branch.
 
-* `api$Comment` - # A Github comment
+* `api$Comment` - # A Github [[github::Comment | text: comment]]
 
-* `api$Commit` - # A Github commit.
+* `api$Commit` - # A Github [[github::Commit | text: commit]].
 
 * `api$CommitComment` - # A comment made on a commit.
 
@@ -228,11 +228,11 @@ Should be accessed from `GithubAPI::load_repo`.
 
 * `api$IssueComment` - # Comments made on Github issue and pull request pages.
 
-* `api$IssueEvent` - # An event that occurs on a Github `Issue`.
+* `api$IssueEvent` - # An event that occurs on a Github [[github::Issue | text: `Issue`]].
 
-* `api$Label` - # A Github label.
+* `api$Label` - # A Github [[github::Label | text: label]].
 
-* `api$Milestone` - # A Github milestone.
+* `api$Milestone` - # A Github [[github::Milestone | text: milestone]].
 
 * `api$PullRef` - # A pull request reference (used for head and base).
 
