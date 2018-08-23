@@ -1,5 +1,35 @@
 # `android` - Android platform support and APIs
 
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine.
+
+### Dependencies
+
+This project requires the following packages:
+
+* `app` - _app.nit_, a framework for portable applications
+* `c` - Structures and services for compatibility with the C language
+* `core` - Nit common library of core classes and methods
+* `gamnit` - Portable game and multimedia framework for Nit
+* `java` - Supporting services for the FFI with Java and to access Java libraries
+* `json` - read and write JSON formatted text
+* `mnit`
+
+### Run `nit_activity`
+
+Compile `nit_activity` with the following command:
+
+~~~bash
+nitc ./nit_activity.nit
+~~~
+
+Then run it with:
+
+~~~bash
+./nit_activity
+~~~
+
 ## Compilation for Android
 
 The compiler generates an APK file as the output when the `android`

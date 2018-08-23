@@ -1,5 +1,26 @@
 # `ios` - iOS support for _app.nit_
 
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine.
+
+### Dependencies
+
+This project requires the following packages:
+
+[[parents: ios]]
+
+### Run `app`
+
+Compile `app` with the following command:
+
+[[main-compile: ios::app]]
+
+Then run it with:
+
+[[main-run: ios::app]]
+
+
 ## System configuration
 
 Configure your system for OS X by installing Xcode and brew.

@@ -2,6 +2,54 @@
 
 This module provides a Nit object oriented interface to access the Github api.
 
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine.
+
+### Dependencies
+
+This project requires the following packages:
+
+* `console` - Defines some ANSI Terminal Control Escape Sequences.
+* `curl` - Data transfer powered by the native curl library
+* `json` - read and write JSON formatted text
+* `nitcorn` - Lightweight framework for Web applications development
+* `popcorn` - Web application framework for Nit
+
+### Run `loader`
+
+Compile `loader` with the following command:
+
+~~~bash
+nitc ./loader.nit
+~~~
+
+Then run it with:
+
+~~~bash
+loader <repo_name>
+~~~
+
+Options:
+
+~~~bash
+* -h, -?, --help		Show this help message.
+* --config		Path to config file.
+* --db-host		MongoDb host.
+* --db-name		MongoDb database name.
+* --tokens		Token list.
+* --show-wallet		Show wallet status.
+* -v, --verbose		Verbosity level.
+* --no-colors		Do not use colors in output.
+* --show-jobs		Show jobs status.
+* --no-commits		Do not load commits from default branch.
+* --no-issues		Do not load issues.
+* --no-comments		Do not load issue comments.
+* --no-events		Do not load issues events.
+* --from		Start loading issues from a number.
+* --clear		Clear job for given repo name.
+~~~
+
 ## Accessing the API
 
 ### `GithubAPI` - # Client to Github API

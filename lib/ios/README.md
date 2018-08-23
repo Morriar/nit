@@ -1,5 +1,32 @@
 # `ios` - iOS support for _app.nit_
 
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine.
+
+### Dependencies
+
+This project requires the following packages:
+
+* `app` - _app.nit_, a framework for portable applications
+* `cocoa` - Cocoa API, the development layer of OS X
+* `core` - Nit common library of core classes and methods
+* `json` - read and write JSON formatted text
+
+### Run `app`
+
+Compile `app` with the following command:
+
+~~~bash
+nitc ./app.nit
+~~~
+
+Then run it with:
+
+~~~bash
+./app
+~~~
+
 ## System configuration
 
 Configure your system for OS X by installing Xcode and brew.

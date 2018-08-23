@@ -1,5 +1,26 @@
 # `android` - Android platform support and APIs
 
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine.
+
+### Dependencies
+
+This project requires the following packages:
+
+[[parents: android]]
+
+### Run `nit_activity`
+
+Compile `nit_activity` with the following command:
+
+[[main-compile: android::nit_activity]]
+
+Then run it with:
+
+[[main-run: android::nit_activity]]
+
+
 ## Compilation for Android
 
 The compiler generates an APK file as the output when the `android`

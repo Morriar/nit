@@ -3,13 +3,29 @@
 Markdown documentation can be found in http://daringfireball.net/projects/markdown/.
 This parser is inspired by the famous TxtMark for Java (https://github.com/rjeschke/txtmark).
 
-## Usage
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine.
+
+### Dependencies
+
+This project requires the following packages:
+
+[[parents: markdown]]
+
+### Run `nitmd`
 
 `nitmd` can be used as a standalone tool:
 
-~~~bash
-$ nitmd file.md
-~~~
+[[main-compile: markdown::nitmd]]
+
+Then run it with:
+
+[[main-run: markdown::nitmd]]
+
+Options:
+
+[[main-opts: markdown::nitmd]]
 
 Or you can use it programmatically by importing the `markdown` module.
 

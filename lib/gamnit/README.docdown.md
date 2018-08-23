@@ -3,6 +3,27 @@
 _gamnit_ is a modular framework to create portable 2D or 3D apps in Nit.
 It is based on the portability framework _app.nit_ and the OpenGL ES 2.0 standard.
 
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine.
+
+### Dependencies
+
+This project requires the following packages:
+
+[[parents: gamnit]]
+
+### Run `texture_atlas_parser`
+
+Compile `texture_atlas_parser` with the following command:
+
+[[main-compile: gamnit::texture_atlas_parser]]
+
+Then run it with:
+
+[[main-run: gamnit::texture_atlas_parser]]
+
+
 ## System configuration
 
 To compile the _gamnit_ apps packaged with the Nit repository on GNU/Linux you need to install the dev version of a few libraries and some tools.

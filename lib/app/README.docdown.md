@@ -12,6 +12,27 @@ The framework provides services to manage common needs of modern mobile applicat
 The features offered by _app.nit_ are common to all platforms, but
 may not be available on all devices.
 
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine.
+
+### Dependencies
+
+This project requires the following packages:
+
+[[parents: app]]
+
+### Run `app_base`
+
+Compile `app_base` with the following command:
+
+[[main-compile: app::app_base]]
+
+Then run it with:
+
+[[main-run: app::app_base]]
+
+
 ## Application Life-Cycle
 
 The _app.nit_ application life-cycle is compatible with all target platforms.

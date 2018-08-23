@@ -3,6 +3,49 @@
 _gamnit_ is a modular framework to create portable 2D or 3D apps in Nit.
 It is based on the portability framework _app.nit_ and the OpenGL ES 2.0 standard.
 
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine.
+
+### Dependencies
+
+This project requires the following packages:
+
+* `android` - Android platform support and APIs
+* `app` - _app.nit_, a framework for portable applications
+* `core` - Nit common library of core classes and methods
+* `dom` - Easy XML DOM parser
+* `egl` - Interface between rendering APIs (OpenGL, OpenGL ES, etc.) and the native windowing system.
+* `gen_nit` - Support to generate and otherwise manipulate Nit code
+* `geometry` - Basic geometry data structures and services
+* `glesv2` - OpenGL graphics rendering library for embedded systems, version 2.0
+* `ios` - iOS support for _app.nit_
+* `linux` - Implementation of app.nit for the Linux platform
+* `matrix` - Services for matrices of `Float` values
+* `mnit`
+* `more_collections` - Highly specific, but useful, collections-related classes.
+* `msgpack` - MessagePack, an efficient binary serialization format
+* `opts` - Management of options on the command line
+* `parser_base` - Simple base for hand-made parsers of all kinds
+* `performance_analysis` - Services to gather information on the performance of events by categories
+* `realtime` - Services to keep time of the wall clock time
+* `sdl2` - Low-level wrapper of the SDL 2.0 library (as `sdl2`) and SDL_image 2.0 (as `sdl2::image`)
+* `socket` - Socket services
+
+### Run `texture_atlas_parser`
+
+Compile `texture_atlas_parser` with the following command:
+
+~~~bash
+nitc ./texture_atlas_parser.nit
+~~~
+
+Then run it with:
+
+~~~bash
+./texture_atlas_parser
+~~~
+
 ## System configuration
 
 To compile the _gamnit_ apps packaged with the Nit repository on GNU/Linux you need to install the dev version of a few libraries and some tools.

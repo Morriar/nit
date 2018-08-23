@@ -2,6 +2,31 @@
 
 This module provides a Nit object oriented interface to access the Github api.
 
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine.
+
+### Dependencies
+
+This project requires the following packages:
+
+[[parents: github]]
+
+### Run `loader`
+
+Compile `loader` with the following command:
+
+[[main-compile: github::loader]]
+
+Then run it with:
+
+[[main-run: github::loader]]
+
+Options:
+
+[[main-opts: github::loader]]
+
+
 ## Accessing the API
 
 ### `GithubAPI` - # Client to Github API
