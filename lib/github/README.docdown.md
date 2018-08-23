@@ -1,5 +1,7 @@
 # `github` - Nit wrapper for Github API
 
+[[toc: github]]
+
 This module provides a Nit object oriented interface to access the Github api.
 
 ## Getting Started

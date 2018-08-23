@@ -1,5 +1,36 @@
 # `github` - Nit wrapper for Github API
 
+* [Getting Started](#Getting-Started)
+* [Dependencies](#Dependencies)
+* [Run `loader`](#Run-`loader`)
+* [Accessing the API](#Accessing-the-API)
+* [`GithubAPI` - # Client to Github API](#`GithubAPI`---#-Client-to-Github-API)
+* [Authentification](#Authentification)
+* [`get_github_oauth` - # Gets the Github token from `git` configuration](#`get_github_oauth`---#-Gets-the-Github-token-from-`git`-configuration)
+* [Retrieving user data](#Retrieving-user-data)
+* [`load_user` - # Get the Github user with `login`](#`load_user`---#-Get-the-Github-user-with-`login`)
+* [`User` - # A Github user](#`User`---#-A-Github-user)
+* [Retrieving repo data](#Retrieving-repo-data)
+* [`load_repo` - # Get the Github repo with `full_name`.](#`load_repo`---#-Get-the-Github-repo-with-`full_name`.)
+* [`Repo` - # A Github repository.](#`Repo`---#-A-Github-repository.)
+* [Other data](#Other-data)
+* [Advanced uses](#Advanced-uses)
+* [Caching](#Caching)
+* [Custom requests](#Custom-requests)
+* [`get` - # Execute a GET request on Github API.](#`get`---#-Execute-a-GET-request-on-Github-API.)
+* [Change the user agent](#Change-the-user-agent)
+* [`user_agent` - # User agent used for HTTP requests.](#`user_agent`---#-User-agent-used-for-HTTP-requests.)
+* [Debugging](#Debugging)
+* [`verbose_lvl` - # Verbosity level.](#`verbose_lvl`---#-Verbosity-level.)
+* [Using with GitLab](#Using-with-GitLab)
+* [`api_url` - # Github API base url.](#`api_url`---#-Github-API-base-url.)
+* [Creating hooks](#Creating-hooks)
+* [`hooks` - # Github hook event listening with `nitcorn`.](#`hooks`---#-Github-hook-event-listening-with-`nitcorn`.)
+* [Dealing with events](#Dealing-with-events)
+* [`GithubEvent` - # Github event stub.](#`GithubEvent`---#-Github-event-stub.)
+* [Running the tests](#Running-the-tests)
+* [Authors](#Authors)
+
 This module provides a Nit object oriented interface to access the Github api.
 
 ## Getting Started

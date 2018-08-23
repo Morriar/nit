@@ -1,5 +1,36 @@
 # `android` - Android platform support and APIs
 
+* [Getting Started](#Getting-Started)
+* [Dependencies](#Dependencies)
+* [Run `nit_activity`](#Run-`nit_activity`)
+* [Compilation for Android](#Compilation-for-Android)
+* [Host system configuration](#Host-system-configuration)
+* [Configure the Android application](#Configure-the-Android-application)
+* [Annotations](#Annotations)
+* [Android implementation](#Android-implementation)
+* [Lock app orientation](#Lock-app-orientation)
+* [`landscape`](#`landscape`)
+* [Resources and application icon](#Resources-and-application-icon)
+* [`assets_and_resources`](#`assets_and_resources`)
+* [`assets`](#`assets`)
+* [Compilation modes](#Compilation-modes)
+* [Debug mode](#Debug-mode)
+* [Release mode](#Release-mode)
+* [`android`](#`android`)
+* [`shared_preferences`](#`shared_preferences`)
+* [`vibration`](#`vibration`)
+* [`cardboard`](#`cardboard`)
+* [`data_store`](#`data_store`)
+* [`aware`](#`aware`)
+* [`intent`](#`intent`)
+* [`wifi`](#`wifi`)
+* [`native_app_glue`](#`native_app_glue`)
+* [`nit_activity`](#`nit_activity`)
+* [`notification`](#`notification`)
+* [`sensors`](#`sensors`)
+* [`audio`](#`audio`)
+* [Authors](#Authors)
+
 > This module provides basic logging facilities, advanced logging can be
 > achieved by importing `android::log`.
 

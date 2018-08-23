@@ -1,5 +1,14 @@
 # `markdown` - A markdown parser for Nit
 
+* [Getting Started](#Getting-Started)
+* [Dependencies](#Dependencies)
+* [Run `nitmd`](#Run-`nitmd`)
+* [Differences with Markdown specification](#Differences-with-Markdown-specification)
+* [`MarkdownProcessor`](#`MarkdownProcessor`)
+* [`wikilinks`](#`wikilinks`)
+* [Running the tests](#Running-the-tests)
+* [Authors](#Authors)
+
 Markdown documentation can be found in http://daringfireball.net/projects/markdown/.
 This parser is inspired by the famous TxtMark for Java (https://github.com/rjeschke/txtmark).
 

@@ -1,5 +1,7 @@
 # `json` - read and write JSON formatted text
 
+[[toc: json]]
+
 These services can be useful to communicate with a remote server or client,
 save data locally or even debug and understand the structure of a Nit object.
 There is a single API to write JSON, and three API to read depending on the use case.

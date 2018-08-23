@@ -1,5 +1,7 @@
 # `actors` - Nit Actor Model
 
+[[toc: actors]]
+
 This group introduces the `actors` module which contains the abstraction of a Nit Actor Model,
 based on Celluloid (https://github.com/celluloid/celluloid).
 

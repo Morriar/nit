@@ -1,5 +1,7 @@
 # `app` - _app.nit_, a framework for portable applications
 
+[[toc: app]]
+
 The framework provides services to manage common needs of modern mobile applications:
 
 * Life-cycle

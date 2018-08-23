@@ -1,5 +1,7 @@
 # `android` - Android platform support and APIs
 
+[[toc: android]]
+
 > [[doc: android::android]]
 
 ## Getting Started

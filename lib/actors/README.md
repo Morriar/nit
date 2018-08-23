@@ -1,5 +1,12 @@
 # `actors` - Nit Actor Model
 
+* [What is an actor ?](#What-is-an-actor-?)
+* [`actor` annotation](#`actor`-annotation)
+* [Managing actors](#Managing-actors)
+* [Waiting for all actors to finish processing](#Waiting-for-all-actors-to-finish-processing)
+* [Examples](#Examples)
+* [Authors](#Authors)
+
 This group introduces the `actors` module which contains the abstraction of a Nit Actor Model,
 based on Celluloid (https://github.com/celluloid/celluloid).
 

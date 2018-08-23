@@ -1,5 +1,18 @@
 # `json` - read and write JSON formatted text
 
+* [Write JSON](#Write-JSON)
+* [Write plain JSON](#Write-plain-JSON)
+* [Example](#Example)
+* [Write JSON with metadata](#Write-JSON-with-metadata)
+* [Read JSON](#Read-JSON)
+* [`dynamic`](#`dynamic`)
+* [`JsonValue`](#`JsonValue`)
+* [`static`](#`static`)
+* [`store`](#`store`)
+* [Example](#Example)
+* [Missing attributes and default values](#Missing-attributes-and-default-values)
+* [Authors](#Authors)
+
 These services can be useful to communicate with a remote server or client,
 save data locally or even debug and understand the structure of a Nit object.
 There is a single API to write JSON, and three API to read depending on the use case.

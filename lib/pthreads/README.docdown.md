@@ -1,5 +1,7 @@
 # `pthreads` - POSIX Threads support
 
+[[toc: pthreads]]
+
 The threads can be manipulated and synchronized using the classes `Thread`,
 `Mutex` and `Barrier`.
 

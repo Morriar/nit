@@ -1,5 +1,7 @@
 # `ios` - iOS support for _app.nit_
 
+[[toc: ios]]
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine.

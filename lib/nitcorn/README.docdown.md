@@ -1,5 +1,7 @@
 # `nitcorn` - Lightweight framework for Web applications development
 
+[[toc: nitcorn]]
+
 > [[doc: nitcorn::nitcorn]]
 
 ## Features

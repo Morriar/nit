@@ -1,5 +1,7 @@
 # `core` - Nit common library of core classes and methods
 
+[[toc: core]]
+
 Core classes and methods used by default by Nit programs and libraries.
 
 ## Core Basic Types and Operations

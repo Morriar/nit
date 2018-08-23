@@ -1,5 +1,7 @@
 # `markdown` - A markdown parser for Nit
 
+[[toc: markdown]]
+
 Markdown documentation can be found in http://daringfireball.net/projects/markdown/.
 This parser is inspired by the famous TxtMark for Java (https://github.com/rjeschke/txtmark).
 

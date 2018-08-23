@@ -1,5 +1,38 @@
 # `popcorn` - Web application framework for Nit
 
+* [What does it taste like?](#What-does-it-taste-like?)
+* [Basic routing](#Basic-routing)
+* [Serving static files with Popcorn](#Serving-static-files-with-Popcorn)
+* [Advanced Routing](#Advanced-Routing)
+* [Route methods](#Route-methods)
+* [Route paths](#Route-paths)
+* [Route parameters](#Route-parameters)
+* [Glob routes](#Glob-routes)
+* [Response methods](#Response-methods)
+* [Response cycle](#Response-cycle)
+* [Middlewares](#Middlewares)
+* [Overview](#Overview)
+* [Ultra simple logger example](#Ultra-simple-logger-example)
+* [Ultra cool, more advanced logger example](#Ultra-cool,-more-advanced-logger-example)
+* [Built-in middlewares](#Built-in-middlewares)
+* [Mountable routers](#Mountable-routers)
+* [Error handling](#Error-handling)
+* [`pop_sessions`](#`pop_sessions`)
+* [Database integration](#Database-integration)
+* [Mongo DB](#Mongo-DB)
+* [Angular.JS integration](#Angular.JS-integration)
+* [`pop_tasks`](#`pop_tasks`)
+* [`pop_json`](#`pop_json`)
+* [`pop_templates`](#`pop_templates`)
+* [`pop_config`](#`pop_config`)
+* [`pop_tests`](#`pop_tests`)
+* [`pop_repos`](#`pop_repos`)
+* [`pop_auth`](#`pop_auth`)
+* [`pop_tracker`](#`pop_tracker`)
+* [`pop_validation`](#`pop_validation`)
+* [Running the tests](#Running-the-tests)
+* [Authors](#Authors)
+
 **Why endure plain corn when you can pop it?!**
 
 Popcorn is a minimal yet powerful nit web application framework that provides cool

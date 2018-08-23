@@ -1,5 +1,26 @@
 # `gamnit` - Portable game and multimedia framework for Nit
 
+* [Getting Started](#Getting-Started)
+* [Dependencies](#Dependencies)
+* [Run `texture_atlas_parser`](#Run-`texture_atlas_parser`)
+* [System configuration](#System-configuration)
+* [Services by submodules](#Services-by-submodules)
+* [`network`](#`network`)
+* [`android19`](#`android19`)
+* [`flat`](#`flat`)
+* [`keys`](#`keys`)
+* [`display_android`](#`display_android`)
+* [`cardboard`](#`cardboard`)
+* [`client`](#`client`)
+* [`server`](#`server`)
+* [`particles`](#`particles`)
+* [`selection`](#`selection`)
+* [`dynamic_resolution`](#`dynamic_resolution`)
+* [`virtual_gamepad`](#`virtual_gamepad`)
+* [`bmfont`](#`bmfont`)
+* [`shadow`](#`shadow`)
+* [Authors](#Authors)
+
 _gamnit_ is a modular framework to create portable 2D or 3D apps in Nit.
 It is based on the portability framework _app.nit_ and the OpenGL ES 2.0 standard.
 

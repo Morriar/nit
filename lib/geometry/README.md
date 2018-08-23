@@ -1,5 +1,16 @@
 # `geometry` - Basic geometry data structures and services
 
+* [Points and Lines](#Points-and-Lines)
+* [Boxes and detection collision](#Boxes-and-detection-collision)
+* [`Box`](#`Box`)
+* [`Box3d`](#`Box3d`)
+* [`BoxedArray`](#`BoxedArray`)
+* [`quadtree`](#`quadtree`)
+* [`SQuadTree`](#`SQuadTree`)
+* [`DQuadTree`](#`DQuadTree`)
+* [Polygons](#Polygons)
+* [Authors](#Authors)
+
 ## Points and Lines
 
 ![Diagram for `geometry`](uml-geometry.svg)

@@ -1,5 +1,15 @@
 # `ios` - iOS support for _app.nit_
 
+* [Getting Started](#Getting-Started)
+* [Dependencies](#Dependencies)
+* [Run `app`](#Run-`app`)
+* [System configuration](#System-configuration)
+* [Compile and run a simple application](#Compile-and-run-a-simple-application)
+* [Sample portable applications](#Sample-portable-applications)
+* [Application icon](#Application-icon)
+* [`uikit`](#`uikit`)
+* [Authors](#Authors)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine.

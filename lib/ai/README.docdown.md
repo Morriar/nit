@@ -1,5 +1,7 @@
 # `ai` - Simple library for basic artificial intelligence algorithms
 
+[[toc: ai]]
+
 This library provides some frameworks for basic algorithms used for artificial intelligence.
 It offers simple generic classes to extends.
 

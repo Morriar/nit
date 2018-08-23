@@ -1,5 +1,15 @@
 # `pthreads` - POSIX Threads support
 
+* [`redef_collections`](#`redef_collections`)
+* [`concurrent_collections`](#`concurrent_collections`)
+* [`BlockingQueue`](#`BlockingQueue`)
+* [`Barrier`](#`Barrier`)
+* [`Mutex`](#`Mutex`)
+* [`Thread`](#`Thread`)
+* [Known limitations:](#Known-limitations:)
+* [For more information:](#For-more-information:)
+* [Authors](#Authors)
+
 The threads can be manipulated and synchronized using the classes `Thread`,
 `Mutex` and `Barrier`.
 

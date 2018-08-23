@@ -1,5 +1,7 @@
 # `vsm` - Vector Space Model
 
+[[toc: vsm]]
+
 > [[doc: vsm::vsm]]
 
 The `vsm` package provides the following features:
@@ -114,7 +116,7 @@ Example from `vsm::example_vsm`:
 
 [[code: vsm::example_vsm]]
 
-## ## [[sign: vsm::FileIndex]]
+## [[sign: vsm::FileIndex]]
 
 The FileIndex is a StringIndex able to index and retrieve files.
 

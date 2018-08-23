@@ -1,5 +1,20 @@
 # `serialization` - Abstract serialization services
 
+* [The `serialize` annotation](#The-`serialize`-annotation)
+* [Scope of the `serialize` annotation](#Scope-of-the-`serialize`-annotation)
+* [The `noserialize` annotation](#The-`noserialize`-annotation)
+* [The `serialize_as` annotation](#The-`serialize_as`-annotation)
+* [Custom serializable classes](#Custom-serializable-classes)
+* [Example: the User class](#Example:-the-User-class)
+* [Serialization services](#Serialization-services)
+* [Limitations and TODO](#Limitations-and-TODO)
+* [Dealing with generic types](#Dealing-with-generic-types)
+* [`serialization_core`](#`serialization_core`)
+* [`DeserializerCache`](#`DeserializerCache`)
+* [`SerializerCache`](#`SerializerCache`)
+* [`Deserializer`](#`Deserializer`)
+* [Authors](#Authors)
+
 The serialization services are based on the `serialize` and the `noserialize` annotations,
 the `Serializable` interface and the implementations of `Serializer` and `Deserializer`.
 

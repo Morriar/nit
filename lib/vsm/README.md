@@ -1,5 +1,13 @@
 # `vsm` - Vector Space Model
 
+* [`Vector`](#`Vector`)
+* [Creating a vector](#Creating-a-vector)
+* [Comparing vectors](#Comparing-vectors)
+* [`VSMIndex`](#`VSMIndex`)
+* [`StringIndex`](#`StringIndex`)
+* [## `FileIndex`](###-`FileIndex`)
+* [Authors](#Authors)
+
 > Vector Space Model (VSM) is an algebraic model for representing text documents
 > (and any objects, in general) as vectors of identifiers, such as, for example,
 > index terms.
@@ -172,7 +180,7 @@ loop
 end
 ~~~
 
-## ## `FileIndex`
+## `FileIndex`
 
 The FileIndex is a StringIndex able to index and retrieve files.
 

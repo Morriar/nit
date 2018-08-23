@@ -1,5 +1,7 @@
 # `geometry` - Basic geometry data structures and services
 
+[[toc: geometry]]
+
 ## Points and Lines
 
 [[uml: geometry | format: svg, mentities: geometry::geometry;geometry::angles;geometry::points_and_lines;geometry::boxes;geometry::quadtree;geometry::polygon]]

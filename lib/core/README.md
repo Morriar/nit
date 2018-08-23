@@ -1,5 +1,25 @@
 # `core` - Nit common library of core classes and methods
 
+* [Core Basic Types and Operations](#Core-Basic-Types-and-Operations)
+* [`kernel`](#`kernel`)
+* [`Object`](#`Object`)
+* [Equality](#Equality)
+* [Debuging](#Debuging)
+* [`Sys`](#`Sys`)
+* [Program Execution](#Program-Execution)
+* [Other](#Other)
+* [Core Collections](#Core-Collections)
+* [`abstract_collection`](#`abstract_collection`)
+* [`queue`](#`queue`)
+* [`sorter`](#`sorter`)
+* [String and Text manipulation](#String-and-Text-manipulation)
+* [`ropes`](#`ropes`)
+* [`codec_base`](#`codec_base`)
+* [`re`](#`re`)
+* [`fixed_ints`](#`fixed_ints`)
+* [Running the tests](#Running-the-tests)
+* [Authors](#Authors)
+
 Core classes and methods used by default by Nit programs and libraries.
 
 ## Core Basic Types and Operations
