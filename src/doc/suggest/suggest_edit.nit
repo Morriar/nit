@@ -62,9 +62,9 @@ class MDocEditor
 
 		examples_replace.edit_document(ctx, document)
 		examples.edit_document(ctx, document)
-		# lists.edit_document(ctx, document)
+		lists.edit_document(ctx, document)
 		uml.edit_document(ctx, document)
-		# links.edit_document(ctx, document)
+		links.edit_document(ctx, document)
 		# var render = new MarkdownRenderer
 		# var md = render.render(document)
 		# print md
@@ -1151,6 +1151,7 @@ class MdListInsert
 
 		for kind in kinds do
 			if kind == "MGroup" then continue # TODO
+			if kind == "MProperty" then continue # TODO
 			var qq = new Vector.from(q)
 			qq.inc "+kind: {kind}"
 			var matches = context.index.match_query(qq)
@@ -1160,8 +1161,47 @@ class MdListInsert
 				var card = new CardList(context.model.mdoc_parser, context.mentity, null, null, mentities)
 				cards.add card
 			end
-			if cards.not_empty then break
+			# if cards.not_empty then break
 		end
+
+		print cards
+		for card in cards do
+			if not card isa CardList then continue
+			var qq = new Vector
+			qq.inc("ref: MdRefSpan")
+			qq.inc("-ref: MdRefCode")
+			# q.inc("block_theme: intro")
+			qq.inc("block_theme: class")
+			qq.inc("block_theme: module")
+			qq.inc("block: MdParagraph")
+			qq.inc("block: MdHeading")
+
+			for mentity in card.mentities.as(not null) do
+				qq.inc("mentity: {mentity.full_name}")
+				qq.inc("string: {mentity.name}")
+			end
+
+			var matches = context.refs_index.find(qq)
+			print matches
+			if not matches.is_empty then
+				var md = card.markdown
+				var l = new MdLocation(0, 0, 0, 0)
+				var p = new MdParagraph(l)
+				p.append_child new MdText(l, md)
+
+
+				var section = matches.first.ref.node.md_block.md_section
+				if section == null then continue
+				if section.blocks.is_empty then
+					if section.title != null then
+						section.title.as(not null).insert_after(p)
+					end
+				else
+					section.blocks.last.insert_after(p)
+				end
+			end
+		end
+
 
 		# TODO
 		# Groups / Other groups
