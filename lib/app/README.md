@@ -1,4 +1,21 @@
-_app.nit_, a framework for portable applications
+# `app` - _app.nit_, a framework for portable applications
+
+* [Getting Started](#Getting-Started)
+* [Dependencies](#Dependencies)
+* [Run `app_base`](#Run-`app_base`)
+* [`app`](#`app`)
+* [Application Life-Cycle](#Application-Life-Cycle)
+* [`ui`](#`ui`)
+* [Usage Example](#Usage-Example)
+* [Platform-specific UI](#Platform-specific-UI)
+* [`data_store`](#`data_store`)
+* [Usage Example](#Usage-Example)
+* [`http_request`](#`http_request`)
+* [Metadata annotations](#Metadata-annotations)
+* [Usage Example](#Usage-Example)
+* [Compiling and Packaging an Application](#Compiling-and-Packaging-an-Application)
+* [`audio`](#`audio`)
+* [Authors](#Authors)
 
 The framework provides services to manage common needs of modern mobile applications:
 
@@ -9,10 +26,45 @@ The framework provides services to manage common needs of modern mobile applicat
 * Package metadata
 * Compilation and packaging
 
-The features offered by _app.nit_ are common to all platforms, but
+The features offered by _[app](app).nit_ are common to all platforms, but
 may not be available on all devices.
 
-# Application Life-Cycle
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine.
+
+### Dependencies
+
+This project requires the following packages:
+
+* `android` - Android platform support and APIs
+* `core` - Nit common library of core classes and methods
+* `json` - read and write JSON formatted text
+* `pthreads` - POSIX Threads support
+* `serialization` - Abstract serialization services
+
+### Run `app_base`
+
+![Diagram for `app`](uml-app.svg)
+
+Compile `app_base` with the following command:
+
+~~~bash
+nitc ./app_base.nit
+~~~
+
+Then run it with:
+
+~~~bash
+./app_base
+~~~
+
+## `app`
+
+> The features offered by this modules are common to all platforms, but
+> may not be available on all devices.
+
+## Application Life-Cycle
 
 The _app.nit_ application life-cycle is compatible with all target platforms.
 It relies on the following sequence of events, represented here by their callback method name:
@@ -41,37 +93,53 @@ Life-cycle events related to saving and restoring the application state are prov
 * `on_restore_state`: The app is launching, restore its state from a previous `on_save_state`.
 
 These events are synchronized to the native platforms applications
-The `App` instance is the first to be notified of these events.
-Other UI elements, from the `ui` submodule, are notified of the same events using a simple depth first visit.
+The [`App`](app::App) instance is the first to be notified of these events.
+Other UI elements, from the [`ui`](app::ui) submodule, are notified of the same events using a simple depth first visit.
 So all UI elements can react separately to live-cycle events.
 
-# User Interface
+## `ui`
+
+> ~~~
+import app::ui
+
+class MyWindow
+    super Window
+
+    var layout = new ListLayout(parent=self)
+    var lbl = new Label(parent=layout, text="Hello world", align=0.5)
+    var but = new Button(parent=layout, text="Press here")
+
+    redef fun on_event(event) do lbl.text = "Pressed!"
+end
+
+redef fun root_window do return new MyWindow
+~~~
 
 The `app::ui` module defines an abstract API to build a portable graphical application.
-The API is composed of interactive `Control`s, visible `View`s and an active `Window`.
+The API is composed of interactive `Control`s, visible [`View`](app::View)s and an active [`Window`](app::Window).
 
 Here is a subset of the most useful controls and views:
 
-* The classic pushable `Button` with text (usually rectangular).
+* The classic pushable [`Button`](app::Button) with text (usually rectangular).
 
-* `TextInput` is a field for the user to enter text.
+* [`TextInput`](app::TextInput) is a field for the user to enter text.
 
-* `HorizontalLayout` and `VerticalLayout` organize other controls in order.
+* [`HorizontalLayout`](app::HorizontalLayout) and [`VerticalLayout`](app::VerticalLayout) organize other controls in order.
 
 Each control is notified of input events by callbacks to `on_event`.
 All controls have observers that are also notified of the events.
 So there is two ways  to customize the behavior on a given event:
 
-* Create a subclass of the wanted `Control`, let's say `Button`, and specialize `on_event`.
+* Create a subclass of the wanted [`Control`](app::Control), let's say `Button`, and specialize `on_event`.
 
 * Add an observer to a `Button` instance, and implement `on_event` in the observer.
 
-## Usage Example
+### Usage Example
 
 The example at `examples/ui_example.nit` shows off most features of `app::ui` in a minimal program.
 You can also take a look at the calculator (`../../examples/calculator/src/calculator.nit`) which is a concrete usage example.
 
-## Platform-specific UI
+### Platform-specific UI
 
 You can go beyond the portable UI API of _app.nit_ by using the natives services of a platform.
 
@@ -79,18 +147,97 @@ The suggested approach is to use platform specific modules to customize the appl
 See the calculator example for an adaptation of the UI on Android,
 the interesting module is in this repository at ../../examples/calculator/src/android_calculator.nit
 
-# Persistent State with data\_store
+## `data_store`
+
+> The main services is `App::data_store`, a `DataStore` holding any
+> serializable Nit object.
 
 _app.nit_ offers the submodule `app::data_store` to easily save the application state and user preferences.
 The service is accessible by the method `App::data_store`. The `DataStore` itself defines 2 methods:
 
 * `DataStore::[]=` saves and associates any serializable instances to a `String` key.
-Pass `null` to clear the value associated to a key.
+  Pass `null` to clear the value associated to a key.
 
 * `DataStore::[]` returns the object associated to a `String` key.
-It returns `null` if nothing is associated to the key.
+  It returns `null` if nothing is associated to the key.
 
-## Usage Example
+  Example from `app::http_request_example`:
+
+~~~
+# Example for the `app::http_request` main service `AsyncHttpRequest`
+module http_request_example is
+	example
+	app_name "app.nit HTTP"
+	app_namespace "org.nitlanguage.http_example"
+	android_api_target 15
+end
+
+import app::ui
+import app::http_request
+import android::aware # for android_api_target
+
+# Simple asynchronous HTTP request to http://example.com/ displaying feedback to the window
+class MyHttpRequest
+	super AsyncHttpRequest
+
+	# Back reference to the window to show feedback to the user
+	var win: HttpRequestClientWindow
+
+	# ---
+	# Config the request
+
+	redef fun uri do return "http://example.com/"
+	redef fun deserialize_json do return false
+
+	# ---
+	# Customize callbacks
+
+	redef fun before
+	do
+		win.label_response.text = "Sending request..."
+
+		# Disable button to prevent double requests
+		win.button_request.enabled = false
+	end
+
+	redef fun on_load(data, status)
+	do win.label_response.text = "Received response code {status} with {data.as(Text).byte_length} bytes"
+
+	redef fun on_fail(error)
+	do win.label_response.text = "Connection error: {error}"
+
+	redef fun after do win.button_request.enabled = true
+end
+
+# Simple window with a label and a button
+class HttpRequestClientWindow
+	super Window
+
+	# Root layout
+	var layout = new ListLayout(parent=self)
+
+	# Button to send request
+	var button_request = new Button(parent=layout, text="Press to send HTTP request")
+
+	# Label displaying feedback to user
+	var label_response = new Label(parent=layout, text="No response yet.")
+
+	init do button_request.observers.add self
+
+	redef fun on_event(event)
+	do
+		if event isa ButtonPressEvent and event.sender == button_request then
+			# Prepare and send request
+			var request = new MyHttpRequest(self)
+			request.start
+		end
+	end
+end
+
+redef fun root_window do return new HttpRequestClientWindow
+~~~
+
+### Usage Example
 
 ~~~
 import app::data_store
@@ -123,15 +270,123 @@ redef class App
 end
 ~~~
 
-# Async HTTP request
+## `http_request`
 
-The module `app::http_request` provides services to execute asynchronous HTTP request.
-The class `AsyncHttpRequest` hides the complex parallel logic and
+> ~~~nitish
+~~~
+
+import app::http_request
+
+class MyHttpRequest
+super AsyncHttpRequest
+
+    redef fun uri do return "http://example.com/"
+
+    redef fun on_load(data, status) do print "Received: {data or else "null"}"
+
+    redef fun on_fail(error) do print "Connection error: {error}"
+
+end
+
+var req = new MyHttpRequest
+req.start
+
+~~~
+
+The module [`app::http_request`](app::http_request) provides services to execute asynchronous HTTP request.
+The class [`AsyncHttpRequest`](app::AsyncHttpRequest) hides the complex parallel logic and
 lets the user implement methods acting only on the UI thread.
 See the documentation of `AsyncHttpRequest` for more information and
 the full example at `examples/http_request_example.nit`.
 
-# Metadata annotations
+Example from `app::ui_example`:
+
+~~~
+# User interface example using `app::ui`
+module ui_example is
+	example
+	app_name "app.nit UI"
+	app_namespace "org.nitlanguage.ui_example"
+	android_api_min 21
+	android_api_target 21
+	android_manifest_activity "android:theme=\"@android:style/Theme.Material\""
+end
+
+import app::ui
+import app::data_store
+import android::aware # for android_api_target
+
+# Window showing off some the available controls
+class UiExampleWindow
+	super Window
+
+	# Root layout
+	var layout = new ListLayout(parent=self)
+
+	# Some label
+	var some_label = new Label(parent=layout, text="Sample Window using a ListLayout.")
+
+	# A checkbox
+	var checkbox = new CheckBox(parent=layout, text="A CheckBox")
+
+	# Horizontal organization
+	var h_layout = new HorizontalLayout(parent=layout)
+
+	# Description for the `user_input`
+	var user_input_label = new Label(parent=h_layout, text="Input some text:", align=0.5)
+
+	# Field for the user to enter data
+	var user_input = new TextInput(parent=h_layout, text="Default text")
+
+	# Button to open a new window with a ListLayout
+	var button_window = new Button(parent=layout, text="Open a new window")
+
+	# URL to open
+	var example_url = "http://nitlanguage.org/"
+
+	# Button to open the browser
+	var button_browser = new Button(parent=layout, text="Open {example_url}")
+
+	redef fun on_event(event)
+	do
+		if event isa ButtonPressEvent then
+			if event.sender == button_browser then
+				example_url.open_in_browser
+			else if event.sender == button_window then
+				app.push_window new SecondWindow
+			end
+		else if event isa ToggleEvent then
+			if event.sender == checkbox then checkbox.text = if checkbox.is_checked then "Checked" else "Unchecked"
+		end
+	end
+end
+
+# Another window with a small `VerticalLayout`
+class SecondWindow
+	super Window
+
+	# Root layout
+	var layout = new VerticalLayout(parent=self)
+
+	# Some label
+	var a_label = new Label(parent=layout, text="This window uses a VerticalLayout.")
+
+	# Another label
+	var another_label = new Label(parent=layout, text="Close it by tapping the back button.")
+end
+
+redef fun root_window do return new UiExampleWindow
+~~~
+
+* `app` - app.nit is a framework to create cross-platform applications
+* `app_base` - Base of the _app.nit_ framework, defines `App`
+* `assets` - Portable services to load resources from the assets folder
+* `audio` - Services to load and play `Sound` and `Music` from the assets folder
+* `data_store` - Key/value storage services
+* `http_request` - HTTP request services: `AsyncHttpRequest` and `Text::http_get`
+* `ui` - Portable UI controls for mobiles apps
+
+## Metadata annotations
 
 The _app.nit_ framework defines three annotations to customize the application package.
 
@@ -161,7 +416,7 @@ The _app.nit_ framework defines three annotations to customize the application p
   In case of name conflicts in the resource files, the files from the project root have the lowest priority,
   those associated to modules lower in the importation hierarchy have higher priority.
 
-## Usage Example
+### Usage Example
 
 ~~~
 module my_module is
@@ -171,7 +426,7 @@ module my_module is
 end
 ~~~
 
-# Compiling and Packaging an Application
+## Compiling and Packaging an Application
 
 The Nit compiler detects the target platform from the importations and generates the appropriate application format and package.
 
@@ -183,7 +438,7 @@ There is two main ways to achieve this goal:
 * The mixin option (`-m module`) imports an additional module before compiling.
   It can be used to load platform specific implementations of the _app.nit_ portable UI.
 
-  ~~~
+  ~~~bash
   # GNU/Linux version, using GTK
   nitc calculator.nit -m linux
 
@@ -206,3 +461,13 @@ There is two main ways to achieve this goal:
 
   # ...
   ~~~
+
+## `audio`
+
+> Get a handle to a sound using `new Sound` or `new Music` at any time.
+> Call `load` at or after `App::on_create` or leave it to be loaded
+> on demand by the first call to `play`.
+
+## Authors
+
+This project is maintained by **Alexis Laferrière <mailto:alexis.laf@xymus.net>**.

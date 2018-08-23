@@ -1,20 +1,53 @@
-# Vector Space Model
+# `vsm` - Vector Space Model
 
-Vector Space Model (VSM) is an algebraic model for representing text documents
-(and any objects, in general) as vectors of identifiers, such as, for example,
-index terms.
+* [`Vector`](#`Vector`)
+* [Creating a vector](#Creating-a-vector)
+* [Comparing vectors](#Comparing-vectors)
+* [`VSMIndex`](#`VSMIndex`)
+* [`StringIndex`](#`StringIndex`)
+* [`FileIndex`](#`FileIndex`)
+* [Authors](#Authors)
+
+> Vector Space Model (VSM) is an algebraic model for representing text documents
+> (and any objects, in general) as vectors of identifiers, such as, for example,
+> index terms.
 
 It is used in information filtering, information retrieval, indexing and
 relevancy rankings.
 
-The `vsm` package provides the following features:
+The [`vsm`](vsm) package provides the following features:
+
 * Vector comparison with cosine similarity.
+
 * Vector indexing and matching with tf * idf.
+
 * File indexing and matching to free text queries.
 
-## Vectors
+* `bm25`
 
-With VSM, documents are represented by a n-dimensions vector.
+* `vsm` - Vector Space Model
+
+* `Document` - A Document to add in a VSMIndex
+
+* `FileIndex` - A VSMIndex for file indexing and matching
+
+* `IndexMatch` - A match to a `request` in an `Index`
+
+* `IndexMatchSorter` - Sort matches by similarity
+
+* `StringIndex` - A VSMIndex for string indexing and matching
+
+* `VSMIndex` - A Document index based on VSM
+
+* `Vector` - A n-dimensions vector
+
+## `Vector`
+
+> *n-dimensions* vectors are used to represent a text document or an object.
+
+![Diagram for `vsm`](uml-vsm.svg)
+
+With VSM, [documents](vsm::Document) are represented by a n-dimensions [vector](vsm::Vector).
 Each dimension represent an attribute of the document or object.
 
 For text document, the count of each term found in the document if often used to
@@ -23,6 +56,8 @@ build vectors.
 ### Creating a vector
 
 ~~~
+import vsm
+
 var vector = new Vector
 vector["term1"] = 2.0
 vector["term2"] = 1.0
@@ -34,6 +69,8 @@ assert vector.norm.is_approx(2.236, 0.001)
 ### Comparing vectors
 
 ~~~
+import vsm
+
 var v1 = new Vector
 v1["term1"] = 1.0
 v1["term2"] = 2.0
@@ -50,17 +87,30 @@ var s2 = query.cosine_similarity(v2)
 assert s1 > s2
 ~~~
 
-## VSMIndex
+## `VSMIndex`
 
-VSMIndex is a Document index based on VSM.
+[VSMIndex](vsm::VSMIndex) is a Document index based on VSM.
 
-Using VSMIndex you can index documents associated with their vector.
-Documents can then be matched to query vectors.
+> Using VSMIndex you can index documents associated with their vector.
+> Documents can then be matched to query vectors.
 
 This represents a minimalistic search engine.
 
 ~~~
+import vsm
+
 var index = new VSMIndex
+
+var v1 = new Vector
+v1["term1"] = 1.0
+v1["term2"] = 2.0
+
+var v2 = new Vector
+v2["term2"] = 1.0
+v2["term3"] = 3.0
+
+var query = new Vector
+query["term2"] = 1.0
 
 var d1 = new Document("Doc 1", "/uri/1", v1)
 index.index_document(d1)
@@ -77,27 +127,91 @@ var matches = index.match_vector(query)
 assert matches.first.document == d1
 ~~~
 
-## StringIndex
+## `StringIndex`
 
-The StringIndex provides usefull services to index and match strings.
+The [StringIndex](vsm::StringIndex) provides usefull services to index and match strings.
 
 ~~~
-index = new StringIndex
+import vsm
 
-d1 = index.index_string("Doc 1", "/uri/1", "this is a sample")
-d2 = index.index_string("Doc 2", "/uri/2", "this and this is another example")
+var index = new StringIndex
+
+var d1 = index.index_string("Doc 1", "/uri/1", "this is a sample")
+var d2 = index.index_string("Doc 2", "/uri/2", "this and this is another example")
 assert index.documents.length == 2
 
-matches = index.match_string("this sample")
+var matches = index.match_string("this sample")
 assert matches.first.document == d1
 ~~~
 
-## FileIndex
+Example from `vsm::example_vsm`:
 
-The FileIndex is a StringIndex able to index and retrieve files.
+~~~
+# Example using a `FileIndex`
+#
+# This example shows of to index files from the system and retrieve them
+# with text queries.
+module example_vsm is example
+
+import vsm
+import config
+
+redef class Config
+
+	# --whitelist-exts
+	var opt_white_exts = new OptionArray("Allowed file extensions (default is [])",
+		"-w", "--whitelist-exts")
+
+	# --blacklist-exts
+	var opt_black_exts = new OptionArray("Allowed file extensions (default is [])",
+		"-b", "--blacklist-exts")
+
+	redef init do
+		opts.add_option(opt_white_exts, opt_black_exts)
+	end
+end
+
+var config = new Config
+config.tool_description = "usage: example_vsm <files>"
+config.parse_options(args)
+
+if args.length < 1 then
+	config.usage
+	exit 1
+end
+
+var index = new FileIndex
+index.whitelist_exts = config.opt_white_exts.value
+index.blacklist_exts = config.opt_black_exts.value
+
+print "Building index..."
+index.index_files(args, true)
+print "Indexed {index.documents.length} documents"
+
+loop
+	print "\nEnter query:"
+	printn "> "
+	var input = sys.stdin.read_line
+	var matches = index.match_string(input)
+	printn ""
+	for match in matches do
+		print match
+	end
+end
+~~~
+
+## `FileIndex`
+
+The [FileIndex](vsm::FileIndex) is a StringIndex able to index and retrieve files.
 
 ~~~nit
-index = new FileIndex
+import vsm
+
+var index = new FileIndex
 
 index.index_files(["/path/to/doc/1", "/path/to/doc/2"])
 ~~~
+
+## Authors
+
+This project is maintained by **Alexandre Terrasa <mailto:alexandre@moz-code.org>**.
