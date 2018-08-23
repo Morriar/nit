@@ -62,7 +62,7 @@ class MDocEditor
 
 		examples_replace.edit_document(ctx, document)
 		examples.edit_document(ctx, document)
-		lists.edit_document(ctx, document)
+		# lists.edit_document(ctx, document)
 		uml.edit_document(ctx, document)
 		links.edit_document(ctx, document)
 		# var render = new MarkdownRenderer
