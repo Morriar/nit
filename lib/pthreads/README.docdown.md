@@ -1,4 +1,4 @@
-# POSIX Threads support
+# `pthreads` - POSIX Threads support
 
 The threads can be manipulated and synchronized using the classes `Thread`,
 `Mutex` and `Barrier`.

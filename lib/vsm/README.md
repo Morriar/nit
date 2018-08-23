@@ -1,4 +1,4 @@
-# VSM - Vector Space Model
+# `vsm` - Vector Space Model
 
 Vector Space Model (VSM) is an algebraic model for representing text documents
 (and any objects, in general) as vectors of identifiers, such as, for example,
@@ -21,7 +21,7 @@ Each dimension represent an attribute of the document or object.
 For text document, the count of each term found in the document if often used to
 build vectors.
 
-### Creating a Vector
+### Creating a vector
 
 ~~~
 import vsm
@@ -34,7 +34,7 @@ assert vector["term2"] == 1.0
 assert vector.norm.is_approx(2.236, 0.001)
 ~~~
 
-### Comparing Vectors
+### Comparing vectors
 
 ~~~
 import vsm
@@ -67,8 +67,9 @@ This represents a minimalistic search engine.
 ~~~
 import vsm
 
-var v1 = new Vector
+var index = new VSMIndex
 
+var v1 = new Vector
 v1["term1"] = 1.0
 v1["term2"] = 2.0
 
@@ -76,7 +77,8 @@ var v2 = new Vector
 v2["term2"] = 1.0
 v2["term3"] = 3.0
 
-var index = new VSMIndex
+var query = new Vector
+query["term2"] = 1.0
 
 var d1 = new Document("Doc 1", "/uri/1", v1)
 index.index_document(d1)
@@ -86,7 +88,7 @@ index.index_document(d2)
 
 assert index.documents.length == 2
 
-var query = new Vector
+query = new Vector
 query["term1"] = 1.0
 
 var matches = index.match_vector(query)

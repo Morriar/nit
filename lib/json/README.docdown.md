@@ -1,4 +1,4 @@
-# read and write JSON formatted text
+# `json` - read and write JSON formatted text
 
 These services can be useful to communicate with a remote server or client,
 save data locally or even debug and understand the structure of a Nit object.

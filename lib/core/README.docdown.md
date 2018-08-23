@@ -1,4 +1,4 @@
-# Nit common library of core classes and methods
+# `core` - Nit common library of core classes and methods
 
 Core classes and methods used by default by Nit programs and libraries.
 

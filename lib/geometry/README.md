@@ -1,4 +1,4 @@
-# Basic geometry data structures and services
+# `geometry` - Basic geometry data structures and services
 
 ## Points and Lines
 

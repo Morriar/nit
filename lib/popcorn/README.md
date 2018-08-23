@@ -1,4 +1,4 @@
-# Popcorn
+# `popcorn` - Web application framework for Nit
 
 **Why endure plain corn when you can pop it?!**
 
@@ -84,6 +84,7 @@ end
 ~~~
 
 Where:
+
 * `MyHandler` is the name of the handler you will add to the app.
 * `METHOD` can be replaced by `get`, `post`, `put` or `delete`.
 
@@ -321,7 +322,7 @@ which requests can be made.
 Route paths can be strings, parameterized strings or glob patterns.
 Query strings such as `?q=foo`are not part of the route path.
 
-Popcorn uses the `Handler::match(uri)` method to match the route paths.
+Popcorn uses the `AppRoute::match(uri)` method to match the route paths.
 
 Here are some examples of route paths based on strings.
 
@@ -444,17 +445,17 @@ receive a `404 Not found` error.
 When the popcorn `App` receives a request, the response cycle is the following:
 
 1. `pre-middlewares` lookup matching middlewares registered with `use_before(pre_middleware)`:
-	1. execute matching middleware by registration order
-	2. if a middleware send a response then let the `pre-middlewares` loop continue
-	   with the next middleware
+   1. execute matching middleware by registration order
+   2. if a middleware send a response then let the `pre-middlewares` loop continue
+      with the next middleware
 2. `response-handlers` lookup matching handlers registered with `use(handler)`:
-	1. execute matching middleware by registration order
-	2. if a middleware send a response then stop the `response-handlers` loop
-	3. if no hander matches or sends a response, generate a 404 response
+   1. execute matching middleware by registration order
+   2. if a middleware send a response then stop the `response-handlers` loop
+   3. if no hander matches or sends a response, generate a 404 response
 3. `post-middlewares` lookup matching handlers registered with `use_after(post_handler)`:
-	1. execute matching middleware by registration order
-	2. if a middleware send a response then let the `post-middlewares` loop continue
-	   with the next middleware
+   1. execute matching middleware by registration order
+   2. if a middleware send a response then let the `post-middlewares` loop continue
+      with the next middleware
 
 ## Middlewares
 
@@ -586,7 +587,7 @@ be used to develop your app faster.
 * `RequestClock`: initializes requests clock.
 * `ConsoleLog`: displays resquest and response status in console (can be used with `RequestClock`).
 * `SessionInit`: initializes requests session (see the `Sessions` section).
-* `StaticServer`: serves static files (see the `Serving static files with Popcorn` section).
+* `StaticHandler`: serves static files (see the `Serving static files with Popcorn` section).
 * `Router`: a mountable mini-app (see the `Mountable routers` section).
 
 ## Mountable routers

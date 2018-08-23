@@ -1,4 +1,4 @@
-# Android platform support and APIs
+# `android` - Android platform support and APIs
 
 ## Compilation for Android
 
@@ -23,22 +23,22 @@ it may be possible to support other platforms with some tweaks.
    You will probably need to tweak it to you system or update the download URL
    to the latest SDK tools from https://developer.android.com/studio/index.html#command-tools
 
-	~~~bash
-	# Fetch and extract SDK tools
-	mkdir -p ~/Android/Sdk
-	cd ~/Android/Sdk
-	wget https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
-	unzip sdk-tools-linux-3859397.zip
+   ~~~bash
+   	# Fetch and extract SDK tools
+   	mkdir -p ~/Android/Sdk
+   	cd ~/Android/Sdk
+   	wget https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+   	unzip sdk-tools-linux-3859397.zip
 
-	# Update tools
-	tools/bin/sdkmanager --update
+   	# Update tools
+   	tools/bin/sdkmanager --update
 
-	# Accept the licenses
-	tools/bin/sdkmanager --licenses
+   	# Accept the licenses
+   	tools/bin/sdkmanager --licenses
 
-	# Install the basic build tools
-	tools/bin/sdkmanager "build-tools;27.0.0" ndk-bundle
-	~~~
+   	# Install the basic build tools
+   	tools/bin/sdkmanager "build-tools;27.0.0" ndk-bundle
+   ~~~
 
 2. Set the environment variable ANDROID_HOME to the SDK installation directory, usually `~/Android/Sdk/`.
    Use the following command to setup the variable for bash.

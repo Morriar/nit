@@ -1,4 +1,4 @@
-# iOS support for _app.nit_
+# `ios` - iOS support for _app.nit_
 
 ## System configuration
 

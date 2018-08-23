@@ -1,4 +1,4 @@
-# Nit wrapper for Stanford CoreNLP
+# `nlp` - Nit wrapper for Stanford CoreNLP
 
 Stanford CoreNLP provides a set of natural language analysis tools which can take
 raw text input and give the base forms of words, their parts of speech, whether

@@ -1,4 +1,4 @@
-# Portable game and multimedia framework for Nit
+# `gamnit` - Portable game and multimedia framework for Nit
 
 _gamnit_ is a modular framework to create portable 2D or 3D apps in Nit.
 It is based on the portability framework _app.nit_ and the OpenGL ES 2.0 standard.

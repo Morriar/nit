@@ -1,4 +1,4 @@
-# Lightweight framework for Web applications development
+# `nitcorn` - Lightweight framework for Web applications development
 
 ## Features
 
