@@ -5,7 +5,7 @@
 * [Comparing vectors](#Comparing-vectors)
 * [`VSMIndex`](#`VSMIndex`)
 * [`StringIndex`](#`StringIndex`)
-* [## `FileIndex`](###-`FileIndex`)
+* [`FileIndex`](#`FileIndex`)
 * [Authors](#Authors)
 
 > Vector Space Model (VSM) is an algebraic model for representing text documents
