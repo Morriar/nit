@@ -47,6 +47,56 @@ Run in the simulator with: `ios-sim hello_world.app`
 See the calculator example at `examples/calculator` and the Tnitter client at `contrib/tnitter/`
 for portable applications working on GNU/Linux, OS X, iOS and Android.
 
+Example from `ios::hello_ios`:
+
+~~~
+# Simple iOS app with a single label
+module hello_ios is
+	example
+	app_name "Hello iOS"
+	app_namespace "nit.app.hello_ios"
+	app_version(0, 5, git_revision)
+end
+
+import ios
+
+redef class App
+	redef fun did_finish_launching_with_options
+	do
+		return app_delegate.hello_world
+	end
+end
+
+redef class AppDelegate
+
+	# Print and show "Hello World!"
+	private fun hello_world: Bool in "ObjC" `{
+
+		// Print to the console
+		NSLog(@"Hello World!");
+
+		// Display "Hello world!" on the screen
+		CGRect frame = [[UIScreen mainScreen] bounds];
+		self.window = [[UIWindow alloc] initWithFrame: frame];
+		self.window.backgroundColor = [UIColor whiteColor];
+
+		UILabel *label = [[UILabel alloc] init];
+		label.text = @"Hello World!";
+		label.center = CGPointMake(100, 100);
+		[label sizeToFit];
+
+		// As with `self.window` we must set a `rootViewController`
+		self.window.rootViewController = [[UIViewController alloc]initWithNibName:nil bundle:nil];
+		self.window.rootViewController.view = label;
+
+		[self.window addSubview: label];
+		[self.window makeKeyAndVisible];
+
+		return YES;
+	`}
+end
+~~~
+
 ## Application icon
 
 To associate icons to your application, create the directory `ios/AppIcon.appiconset` and fill it with standard icons and `Contents.json`.

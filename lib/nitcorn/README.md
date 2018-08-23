@@ -21,6 +21,29 @@ It also benefits from the full power of the Nit language:
 class refinement can be used to customize default services and merge many applications in a single server,
 and the FFI enables calling services in different languages.
 
+Example from `nitcorn::nitcorn_reverse_proxy`:
+
+~~~
+# Minimal example using a `ProxyAction`
+module nitcorn_reverse_proxy is example
+
+import nitcorn::proxy
+
+# Create the virtualhost for your nitcorn server
+var vh = new VirtualHost("localhost:8080")
+
+# Create the interface to represent your proxy target
+var proxy_interface = new Interface("localhost", 31337)
+
+# Add your action as usual
+vh.routes.add new Route("/", new ProxyAction(proxy_interface))
+
+# Let it be (serve)
+var factory = new HttpFactory.and_libevent
+factory.config.virtual_hosts.add vh
+factory.run
+~~~
+
 ## Examples
 
 A minimal example follows with a custom `Action` and using `FileServer`.
@@ -34,6 +57,76 @@ Larger projects using _nitcorn_ can be found in the `contrib/` folder:
 * _opportunity_ is a meetup planner heavily based on _nitcorn_.
 * _tnitter_ is a micro-blogging platform with a simple Web and RESTful interface.
 * _benitlux_ uses a custom `Action` to subscribe people to a mailing list and define a RESTful interface.
+  Example from `nitcorn::nitcorn_hello_world`:
+
+~~~
+# Hello World Web server example
+#
+# The main page, `index.html`, is served dynamicly with `MyAction`.
+# The rest of the Web site fetches files from the local directory
+# `www/hello_world/`.
+module nitcorn_hello_world is example
+
+import nitcorn
+
+# An action that responds by displaying a static html content.
+class StaticAction
+	super Action
+
+	redef fun answer(http_request, turi)
+	do
+		var response = new HttpResponse(200)
+		var title = "Hello World from Nitcorn!"
+		response.body = """
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<title>{{{title}}}</title>
+</head>
+<body>
+	<div class="container">
+		<h1>{{{title}}}</h1>
+		<p>See also a <a href="/dir/">directory</a>.</p>
+	</div>
+</body>
+</html>"""
+		return response
+	end
+end
+
+# An action that uses parameterized uris to customize the output.
+class ParamAction
+	super Action
+
+	redef fun answer(http_request, turi)
+	do
+		var response = new HttpResponse(200)
+		var name = http_request.param("name")
+		if name == null then
+			response.body = "No name..."
+		else
+			response.body = "Hello {name}"
+		end
+		return response
+	end
+end
+
+
+var vh = new VirtualHost("localhost:8080")
+
+# Serve index.html with our custom handler
+vh.routes.add new Route("/index.html", new StaticAction)
+vh.routes.add new Route("/hello/:name", new ParamAction)
+
+# Serve everything else with a standard `FileServer` with a root at "www/hello_world/"
+vh.routes.add new Route(null, new FileServer("www/hello_world/"))
+
+var factory = new HttpFactory.and_libevent
+factory.config.virtual_hosts.add vh
+factory.run
+~~~
 
 ### Simple hello world server
 
@@ -99,3 +192,93 @@ Thanks to the contribution of:
 * **Justin Michaud-Ouellette**
 * **Stephan Michaud**
 * **Maxime Bélanger**
+
+Example from `nitcorn::htcpcp_server`:
+
+~~~
+# A server that implements HTCPCP. At the moment there are no additions.
+module htcpcp_server is example
+
+import nitcorn
+
+# Nitcorn Action used to answer requests.
+class HTCPCPAction
+	super Action
+
+	# Brewing status.
+	var brewing = false
+
+	# Teapot status.
+	var is_teapot = false
+
+	redef fun answer(http_request, turi) do
+		var message: String
+		var method = http_request.method
+		var response: HttpResponse
+
+		if is_teapot then
+			response = new HttpResponse(418)
+			response.body = "I'm a teapot!\n"
+			response.header["Content-Type"] = "text"
+			return response
+		end
+
+		if method == "POST" or method == "BREW" then
+			if brewing then
+				message = "Pot Busy"
+				response = new HttpResponse(400)
+			else
+				message = "Brewing a new pot of coffee\n"
+				brewing = true
+				response = new HttpResponse(200)
+			end
+		else if method == "WHEN" then
+			if brewing then
+				message = "Stopped adding milk, your coffee is ready!\n"
+				brewing = false
+				response = new HttpResponse(200)
+			else
+				message = "There is no coffee brewing!\n"
+				response = new HttpResponse(405)
+			end
+		else if method == "PROPFIND" or method == "GET" then
+			if brewing then
+				message = "The pot is busy\n"
+			else
+				message = "The pot is ready to brew more coffee\n"
+			end
+			response = new HttpResponse(200)
+		else
+			message = "Unknown method: {method}"
+			brewing = false
+			response = new HttpResponse(405)
+		end
+
+		response.header["Content-Type"] = "text"
+		response.body = message
+
+		return response
+	end
+end
+
+# Nitcorn server.
+class HTCPCServer
+
+	# Port to listen to.
+	var port: Int
+
+	# Start listening.
+	fun run do
+		var vh = new VirtualHost("localhost:{port}")
+		vh.routes.add new Route("/", new HTCPCPAction)
+		var factory = new HttpFactory.and_libevent
+		factory.config.virtual_hosts.add vh
+		print "Nit4Coffee is now running at port: {port}"
+		factory.run
+	end
+end
+
+var server = new HTCPCServer(1227)
+
+server.run
+~~~

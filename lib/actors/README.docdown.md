@@ -3,10 +3,18 @@
 This group introduces the `actors` module which contains the abstraction of a Nit Actor Model,
 based on Celluloid (https://github.com/celluloid/celluloid).
 
+Example from `actors::chameneosredux`:
+
+[[code: actors::chameneosredux]]
+
 ## What is an actor ?
 
 An actor is an entity which receives messages and does some kind of computation based on it.
 An actor has a mailbox in which it receives its messages, and process them one at a time.
+
+Example from `actors::simple_simulation`:
+
+[[code: actors::simple_simulation]]
 
 ## `actor` annotation
 
@@ -23,6 +31,10 @@ a message to the mailbox of the actor attached to `a` which will process it asyn
 On the other hand, if you call `a.async.bar` and `bar` returns an`Int`, it will still send
 a message to the actor, but you'll get a `Future[Int]` to be able to retrieve the value.
 When using `join` on the future, the calling thread will wait until the value of the future is set.
+
+Example from `actors::mandelbrot`:
+
+[[code: actors::mandelbrot]]
 
 ## Managing actors
 
@@ -49,6 +61,10 @@ if you need to. For this, you need to use the `async` property of your annotated
 For now, there isn't any mecanism to recreate and actor after it was terminated.
 Sending messages after terminating it results in unspecified behaviour.
 
+Example from `actors::simple`:
+
+[[code: actors::simple]]
+
 ## Waiting for all actors to finish processing
 
 Let's imagine you create a whole bunch of actors and make them do things asynchronously from the main thread.
@@ -64,10 +80,18 @@ actor, `active_actors` is empty.
 You can use this property as a mean of synchronisation in some specific cases (for example if you're
 using actors for fork/join parallelism instead of concurrency).
 
+Example from `actors::fannkuchredux`:
+
+[[code: actors::fannkuchredux]]
+
 ## Examples
 
 You can find example of differents small programs implemented with Nit actors in the `examples`
 directory. For a really simple example, you can check `examples/simple`.
+
+Example from `actors::agent_simulation`:
+
+[[code: actors::agent_simulation]]
 
 ## Authors
 

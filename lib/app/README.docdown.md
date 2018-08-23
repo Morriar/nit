@@ -110,6 +110,10 @@ The service is accessible by the method `App::data_store`. The `DataStore` itsel
 * `DataStore::[]` returns the object associated to a `String` key.
   It returns `null` if nothing is associated to the key.
 
+  Example from `app::http_request_example`:
+
+[[code: app::http_request_example]]
+
 ### Usage Example
 
 ~~~
@@ -150,6 +154,10 @@ The class `AsyncHttpRequest` hides the complex parallel logic and
 lets the user implement methods acting only on the UI thread.
 See the documentation of `AsyncHttpRequest` for more information and
 the full example at `examples/http_request_example.nit`.
+
+Example from `app::ui_example`:
+
+[[code: app::ui_example]]
 
 ## Metadata annotations
 

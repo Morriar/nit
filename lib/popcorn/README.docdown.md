@@ -15,7 +15,6 @@ Create a file `app.nit` and add the following code:
 
 [[code: popcorn::example_hello]]
 
-
 The Popcorn app listens on port 3000 for connections.
 The app responds with "Hello World!" for requests to the root URL (`/`) or **route**.
 For every other path, it will respond with a **404 Not Found**.
@@ -226,11 +225,9 @@ The request query string is accessed through the `req` parameter:
 
 [[code: popcorn::example_query_string]]
 
-
 Post parameters can also be accessed through the `req` parameter:
 
 [[code: popcorn::example_post_handler]]
-
 
 There is a special routing method, `all(res, req)`, which is not derived from any
 HTTP method. This method is used to respond at a path for all request methods.
@@ -322,7 +319,6 @@ name.
 
 [[code: popcorn::example_param_route]]
 
-
 The `UserHome` handler listen to every path matching `/:user`. This can be `/Morriar`,
 `/10`, ... but not `/Morriar/profile` since route follow the strict matching rule.
 
@@ -338,6 +334,9 @@ Note that glob route are compatible with route parameters.
 
 [[code: popcorn::example_glob_route]]
 
+Example from `popcorn::example_angular`:
+
+[[code: popcorn::example_angular]]
 
 ## Response methods
 
@@ -428,7 +427,6 @@ This example gives a simplified version of the `RequestClock` and `ConsoleLog` m
 
 [[code: popcorn::example_advanced_logger]]
 
-
 First, we attach a new attribute `timer` to every `HttpRequest`.
 Doing so we can access our data from all handlers that import our module, directly
 from the `req` parameter.
@@ -475,7 +473,6 @@ defines some routes, and mounts the router module on a path in the main app.
 
 [[code: popcorn::example_router]]
 
-
 The app will now be able to handle requests to /user and /user/profile, as well
 as call the `Time` middleware handler that is specific to the route.
 
@@ -486,7 +483,6 @@ as call the `Time` middleware handler that is specific to the route.
 Define error-handling middlewares in the same way as other middleware handlers:
 
 [[code: popcorn::example_simple_error_handler]]
-
 
 In this example, every non-200 response is caught by the `SimpleErrorHandler`
 that print an error in stdout.
@@ -542,7 +538,6 @@ Here a simple example of login button that define a value in the `req` session.
 
 [[code: popcorn::example_session]]
 
-
 Notice the use of the `SessionInit` on the `/*` route. You must use the
 `SessionInit` first to initialize the request session.
 Without that, your request session will be set to `null`.
@@ -564,7 +559,6 @@ POST requests are used to save the user data.
 
 [[code: popcorn::example_mongodb]]
 
-
 ## Angular.JS integration
 
 Loving [AngularJS](https://angularjs.org/)? Popcorn is made for Angular and for you!
@@ -573,7 +567,6 @@ Using the StaticHandler with a glob route, you can easily redirect all HTTP requ
 to your angular controller:
 
 [[code: popcorn::example_static_default]]
-
 
 Because the StaticHandler will not find the angular routes as static files,
 you must specify the path to the default angular controller.

@@ -437,6 +437,43 @@ app.use("/user/:user/item/:item/*", new UserItem)
 app.listen("localhost", 3000)
 ~~~
 
+Example from `popcorn::example_angular`:
+
+~~~
+# This is an example of how to use angular.js with popcorn
+module example_angular is example
+
+import popcorn
+import popcorn::pop_json
+
+class CounterAPI
+	super Handler
+
+	var counter = 0
+
+	fun json_counter: JsonObject do
+		var json = new JsonObject
+		json["label"] = "Visitors"
+		json["value"] = counter
+		return json
+	end
+
+	redef fun get(req, res) do
+		res.json(json_counter)
+	end
+
+	redef fun post(req, res) do
+		counter += 1
+		res.json(json_counter)
+	end
+end
+
+var app = new App
+app.use("/counter", new CounterAPI)
+app.use("/*", new StaticHandler("www/", "index.html"))
+app.listen("localhost", 3000)
+~~~
+
 ## Response methods
 
 The methods on the response object (`res`), can is used to manipulate the

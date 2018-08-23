@@ -12,6 +12,9 @@ See the `examples` subdirectory for examples:
 
 * `examples/queens.nit`
 * `examples/puzzle.nit`
+  Example from `ai::puzzle`:
+
+[[code: ai::puzzle]]
 
 ## Authors
 

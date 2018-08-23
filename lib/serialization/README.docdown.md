@@ -99,6 +99,10 @@ end
   end
   ~~~
 
+  Example from `serialization::custom_serialization`:
+
+[[code: serialization::custom_serialization]]
+
 ## The `noserialize` annotation
 
 The `noserialize` annotation mark an exception in a `serialize` module or class definition.

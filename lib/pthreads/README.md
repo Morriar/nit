@@ -19,6 +19,67 @@ You will get a subclass of `Thread`, even if there wasn't a return value before.
 A call to the `join` method will block the execution until the threaded method is done, or immediatly return if it's already done.
 `join` will return an object typed with the orginial return type, or `null` if there wasn't.
 
+Example from `pthreads::concurrent_array_and_barrier`:
+
+~~~
+# A basic usage example of the modules `pthreads` and `pthreads::cocurrent_collections`
+#
+# 20 threads share an array and a barrier. They each insert 1000 strings into
+# the array and wait at a barrier before finishing.
+module concurrent_array_and_barrier is example
+
+import pthreads::concurrent_collections
+
+private class MyThread
+	super Thread
+
+	# This `ConcurrentArray` has its own `Mutex`
+	var array: ConcurrentArray[String]
+
+	# Use an explicit `Barrier`
+	var barrier: Barrier
+
+	var id: Int
+
+	redef fun main
+	do
+		# Print and add to Array 1000 times
+		for i in 1000.times do
+			var str = "thread {id}: {i}"
+			array.add str
+		end
+
+		# Wait at the `barrier`
+		barrier.wait
+
+		return id
+	end
+end
+
+var n_threads = 20
+
+# This `ConcurrentArray` has its own `Mutex`
+var array = new ConcurrentArray[String]
+
+# Use an explicit `Barrier`
+var barrier = new Barrier(n_threads)
+
+# Create all our threads
+var threads = new Array[Thread]
+for t in n_threads.times do
+	var thread = new MyThread(array, barrier, t)
+	threads.add thread
+	thread.start
+end
+
+# Wait for the threads to complete
+for thread in threads do
+	print "Thread {thread.join or else "null"} is done"
+end
+
+print "{array.length} strings inserted"
+~~~
+
 ## Known limitations:
 
 * Most services from the Nit library are not thread-safe. You must manage

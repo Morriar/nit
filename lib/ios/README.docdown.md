@@ -40,6 +40,10 @@ Run in the simulator with: `ios-sim hello_world.app`
 See the calculator example at `examples/calculator` and the Tnitter client at `contrib/tnitter/`
 for portable applications working on GNU/Linux, OS X, iOS and Android.
 
+Example from `ios::hello_ios`:
+
+[[code: ios::hello_ios]]
+
 ## Application icon
 
 To associate icons to your application, create the directory `ios/AppIcon.appiconset` and fill it with standard icons and `Contents.json`.

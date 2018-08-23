@@ -19,6 +19,10 @@ You will get a subclass of `Thread`, even if there wasn't a return value before.
 A call to the `join` method will block the execution until the threaded method is done, or immediatly return if it's already done.
 `join` will return an object typed with the orginial return type, or `null` if there wasn't.
 
+Example from `pthreads::concurrent_array_and_barrier`:
+
+[[code: pthreads::concurrent_array_and_barrier]]
+
 ## Known limitations:
 
 * Most services from the Nit library are not thread-safe. You must manage

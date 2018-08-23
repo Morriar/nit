@@ -112,6 +112,10 @@ var matches = index.match_string("this sample")
 assert matches.first.document == d1
 ~~~
 
+Example from `vsm::example_vsm`:
+
+[[code: vsm::example_vsm]]
+
 ## FileIndex
 
 The FileIndex is a StringIndex able to index and retrieve files.

@@ -21,6 +21,10 @@ It also benefits from the full power of the Nit language:
 class refinement can be used to customize default services and merge many applications in a single server,
 and the FFI enables calling services in different languages.
 
+Example from `nitcorn::nitcorn_reverse_proxy`:
+
+[[code: nitcorn::nitcorn_reverse_proxy]]
+
 ## Examples
 
 A minimal example follows with a custom `Action` and using `FileServer`.
@@ -34,6 +38,9 @@ Larger projects using _nitcorn_ can be found in the `contrib/` folder:
 * _opportunity_ is a meetup planner heavily based on _nitcorn_.
 * _tnitter_ is a micro-blogging platform with a simple Web and RESTful interface.
 * _benitlux_ uses a custom `Action` to subscribe people to a mailing list and define a RESTful interface.
+  Example from `nitcorn::nitcorn_hello_world`:
+
+[[code: nitcorn::nitcorn_hello_world]]
 
 ### Simple hello world server
 
@@ -93,3 +100,7 @@ This project is maintained by [[ini-maintainer: nitcorn]].
 
 Thanks to the contribution of:
 [[ini-contributors: nitcorn]]
+
+Example from `nitcorn::htcpcp_server`:
+
+[[code: nitcorn::htcpcp_server]]
