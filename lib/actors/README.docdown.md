@@ -72,4 +72,3 @@ directory. For a really simple example, you can check `examples/simple`.
 ## Authors
 
 This project is maintained by [[ini-maintainer: actors]].
-

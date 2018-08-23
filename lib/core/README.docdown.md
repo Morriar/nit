@@ -57,4 +57,3 @@ This project is maintained by [[ini-maintainer: core]].
 
 Thanks to the contribution of:
 [[ini-contributors: core]]
-

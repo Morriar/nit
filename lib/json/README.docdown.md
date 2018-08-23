@@ -247,4 +247,3 @@ assert obj.player_name == "Bob"
 ## Authors
 
 This project is maintained by [[ini-maintainer: json]].
-

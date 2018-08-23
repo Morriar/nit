@@ -49,4 +49,3 @@ Run the test suite:
 ## Authors
 
 This project is maintained by [[ini-maintainer: markdown]].
-

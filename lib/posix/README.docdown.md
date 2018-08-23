@@ -7,4 +7,3 @@ import `posix::ext`.
 ## Authors
 
 This project is maintained by [[ini-maintainer: posix]].
-

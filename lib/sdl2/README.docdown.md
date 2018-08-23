@@ -15,4 +15,3 @@ of how to use this project.
 ## Authors
 
 This project is maintained by [[ini-maintainer: sdl2]].
-

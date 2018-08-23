@@ -340,4 +340,3 @@ Both the files should be compiled with both the client and the server.
 ## Authors
 
 This project is maintained by [[ini-maintainer: serialization]].
-

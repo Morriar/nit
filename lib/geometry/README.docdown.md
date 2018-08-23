@@ -58,4 +58,3 @@ Services provided :
 ## Authors
 
 This project is maintained by [[ini-maintainer: geometry]].
-

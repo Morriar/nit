@@ -186,4 +186,3 @@ APK file, it can then be published on the Play Store.
 ## Authors
 
 This project is maintained by [[ini-maintainer: android]].
-

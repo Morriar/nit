@@ -127,4 +127,3 @@ index.index_files(["/path/to/doc/1", "/path/to/doc/2"])
 ## Authors
 
 This project is maintained by [[ini-maintainer: vsm]].
-

@@ -83,4 +83,3 @@ assert matches.first.document == d1
 ## Authors
 
 This project is maintained by [[ini-maintainer: nlp]].
-

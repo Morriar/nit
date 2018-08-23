@@ -16,4 +16,3 @@ See the `examples` subdirectory for examples:
 ## Authors
 
 This project is maintained by [[ini-maintainer: ai]].
-

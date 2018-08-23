@@ -93,4 +93,3 @@ This project is maintained by [[ini-maintainer: nitcorn]].
 
 Thanks to the contribution of:
 [[ini-contributors: nitcorn]]
-

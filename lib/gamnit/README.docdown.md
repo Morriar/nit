@@ -85,4 +85,3 @@ _gamnit_ is modular, different services of the framework are available through d
 ## Authors
 
 This project is maintained by [[ini-maintainer: gamnit]].
-

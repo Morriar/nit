@@ -383,4 +383,3 @@ Run the nitunit automated tests with the following command:
 ## Authors
 
 This project is maintained by [[ini-maintainer: github]].
-

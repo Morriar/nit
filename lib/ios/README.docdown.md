@@ -55,4 +55,3 @@ These files can be generated in a number of different ways:
 ## Authors
 
 This project is maintained by [[ini-maintainer: ios]].
-

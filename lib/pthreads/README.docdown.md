@@ -34,4 +34,3 @@ A call to the `join` method will block the execution until the threaded method i
 ## Authors
 
 This project is maintained by [[ini-maintainer: pthreads]].
-
