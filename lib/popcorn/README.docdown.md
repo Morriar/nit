@@ -1,31 +1,25 @@
-# Popcorn
+# `popcorn` - Web application framework for Nit
+
+[[toc: popcorn]]
 
 **Why endure plain corn when you can pop it?!**
 
-Popcorn is a minimal yet powerful nit web application framework that provides cool
+[[popcorn | text: Popcorn]] is a minimal yet powerful nit web application framework that provides cool
 features for lazy developpers.
 
 Popcorn is built over nitcorn to provide a clean and user friendly interface
 without all the boiler plate code.
 
+[[features: popcorn | mentities: popcorn::pop_sessions;popcorn::pop_tasks;popcorn::pop_json;popcorn::pop_templates;popcorn::pop_config;popcorn::popcorn;popcorn::pop_tests;popcorn::pop_routes;popcorn::pop_repos;popcorn::pop_auth;popcorn::pop_logging;popcorn::pop_tracker;popcorn::pop_handlers;popcorn::pop_validation]]
+
 ## What does it taste like?
+
+[[uml: popcorn | format: svg, mentities: popcorn::pop_sessions;popcorn::pop_tasks;popcorn::pop_json;popcorn::pop_templates;popcorn::pop_config;popcorn::popcorn;popcorn::pop_tests;popcorn::pop_routes;popcorn::pop_repos;popcorn::pop_auth;popcorn::pop_logging;popcorn::pop_tracker;popcorn::pop_handlers;popcorn::pop_validation]]
 
 Set up is quick and easy as 10 lines of code.
 Create a file `app.nit` and add the following code:
 
-~~~
-import popcorn
-
-class HelloHandler
-	super Handler
-
-	redef fun get(req, res) do res.html "<h1>Hello World!</h1>"
-end
-
-var app = new App
-app.use("/", new HelloHandler)
-app.listen("localhost", 3000)
-~~~
+[[code: popcorn::example_hello]]
 
 The Popcorn app listens on port 3000 for connections.
 The app responds with "Hello World!" for requests to the root URL (`/`) or **route**.
@@ -84,6 +78,7 @@ end
 ~~~
 
 Where:
+
 * `MyHandler` is the name of the handler you will add to the app.
 * `METHOD` can be replaced by `get`, `post`, `put` or `delete`.
 
@@ -120,7 +115,7 @@ For more details about routing, see the routing section.
 ## Serving static files with Popcorn
 
 To serve static files such as images, CSS files, and JavaScript files, use the
-Popcorn built-in handler `StaticHandler`.
+Popcorn built-in handler [[popcorn::StaticHandler | text: `StaticHandler`]].
 
 Pass the name of the directory that contains the static assets to the StaticHandler
 init method to start serving the files directly.
@@ -210,7 +205,7 @@ app.use("/", new HelloHandler)
 ### Route methods
 
 A **route method** is derived from one of the HTTP methods, and is attached to an
-instance of the Handler class.
+instance of the [[popcorn::Handler]] class.
 
 The following code is an example of routes that are defined for the GET and the POST
 methods to the root of the app.
@@ -234,53 +229,11 @@ get, post, put, and delete.
 
 The request query string is accessed through the `req` parameter:
 
-~~~
-import popcorn
-import template
-
-class QueryStringHandler
-	super Handler
-
-	redef fun get(req, res) do
-		var tpl = new Template
-		tpl.addn "URI: {req.uri}"
-		tpl.addn "Query string: {req.query_string}"
-		for name, arg in req.get_args do
-			tpl.addn "{name}: {arg}"
-		end
-        res.send tpl
-	end
-end
-
-var app = new App
-app.use("/", new QueryStringHandler)
-app.listen("localhost", 3000)
-~~~
+[[code: popcorn::example_query_string]]
 
 Post parameters can also be accessed through the `req` parameter:
 
-~~~
-import popcorn
-import template
-
-class PostHandler
-	super Handler
-
-	redef fun post(req, res) do
-		var tpl = new Template
-		tpl.addn "URI: {req.uri}"
-		tpl.addn "Body: {req.body}"
-		for name, arg in req.post_args do
-			tpl.addn "{name}: {arg}"
-		end
-        res.send tpl
-	end
-end
-
-var app = new App
-app.use("/", new PostHandler)
-app.listen("localhost", 3000)
-~~~
+[[code: popcorn::example_post_handler]]
 
 There is a special routing method, `all(res, req)`, which is not derived from any
 HTTP method. This method is used to respond at a path for all request methods.
@@ -321,7 +274,7 @@ which requests can be made.
 Route paths can be strings, parameterized strings or glob patterns.
 Query strings such as `?q=foo`are not part of the route path.
 
-Popcorn uses the `Handler::match(uri)` method to match the route paths.
+Popcorn uses the `AppRoute::match(uri)` method to match the route paths.
 
 Here are some examples of route paths based on strings.
 
@@ -370,26 +323,7 @@ Parameters in a route are prefixed with a colon `:` like in `:userId`, `:year`.
 The following example declares a handler `UserHome` that responds with the `user`
 name.
 
-~~~
-import popcorn
-
-class UserHome
-	super Handler
-
-	redef fun get(req, res) do
-		var user = req.param("user")
-		if user != null then
-			res.send "Hello {user}"
-		else
-			res.send("Nothing received", 400)
-		end
-	end
-end
-
-var app = new App
-app.use("/:user", new UserHome)
-app.listen("localhost", 3000)
-~~~
+[[code: popcorn::example_param_route]]
 
 The `UserHome` handler listen to every path matching `/:user`. This can be `/Morriar`,
 `/10`, ... but not `/Morriar/profile` since route follow the strict matching rule.
@@ -404,27 +338,11 @@ Here we define a `UserItem` handler that will respond to any URI matching the pr
 `/user/:user/item/:item`.
 Note that glob route are compatible with route parameters.
 
-~~~
-import popcorn
+[[code: popcorn::example_glob_route]]
 
-class UserItem
-	super Handler
+Example from `popcorn::example_angular`:
 
-	redef fun get(req, res) do
-		var user = req.param("user")
-		var item = req.param("item")
-		if user == null or item == null then
-			res.send("Nothing received", 400)
-		else
-			res.send "Here the item {item} of the use {user}."
-		end
-	end
-end
-
-var app = new App
-app.use("/user/:user/item/:item/*", new UserItem)
-app.listen("localhost", 3000)
-~~~
+[[code: popcorn::example_angular]]
 
 ## Response methods
 
@@ -441,20 +359,20 @@ receive a `404 Not found` error.
 
 ## Response cycle
 
-When the popcorn `App` receives a request, the response cycle is the following:
+When the popcorn [[popcorn::App | text: `App`]] receives a request, the response cycle is the following:
 
 1. `pre-middlewares` lookup matching middlewares registered with `use_before(pre_middleware)`:
-	1. execute matching middleware by registration order
-	2. if a middleware send a response then let the `pre-middlewares` loop continue
-	   with the next middleware
+   1. execute matching middleware by registration order
+   2. if a middleware send a response then let the `pre-middlewares` loop continue
+      with the next middleware
 2. `response-handlers` lookup matching handlers registered with `use(handler)`:
-	1. execute matching middleware by registration order
-	2. if a middleware send a response then stop the `response-handlers` loop
-	3. if no hander matches or sends a response, generate a 404 response
+   1. execute matching middleware by registration order
+   2. if a middleware send a response then stop the `response-handlers` loop
+   3. if no hander matches or sends a response, generate a 404 response
 3. `post-middlewares` lookup matching handlers registered with `use_after(post_handler)`:
-	1. execute matching middleware by registration order
-	2. if a middleware send a response then let the `post-middlewares` loop continue
-	   with the next middleware
+   1. execute matching middleware by registration order
+   2. if a middleware send a response then let the `post-middlewares` loop continue
+      with the next middleware
 
 ## Middlewares
 
@@ -511,48 +429,9 @@ with the `use_before` method.
 Next, we’ll create a middleware handler called “LogHandler” that prints the requested
 uri, the response status and the time it took to Popcorn to process the request.
 
-This example gives a simplified version of the `RequestClock` and `ConsoleLog` middlewares.
+This example gives a simplified version of the [[popcorn::RequestClock | text: `RequestClock`]] and [[popcorn::ConsoleLog | text: `ConsoleLog`]] middlewares.
 
-~~~
-import popcorn
-import realtime
-
-redef class HttpRequest
-	# Time that request was received by the Popcorn app.
-	var timer: nullable Clock = null
-end
-
-class RequestTimeHandler
-	super Handler
-
-	redef fun all(req, res) do req.timer = new Clock
-end
-
-class LogHandler
-	super Handler
-
-	redef fun all(req, res) do
-		var timer = req.timer
-		if timer != null then
-			print "{req.method} {req.uri} {res.color_status} ({timer.total}s)"
-		else
-			print "{req.method} {req.uri} {res.color_status}"
-		end
-	end
-end
-
-class HelloHandler
-	super Handler
-
-	redef fun get(req, res) do res.send "Hello World!"
-end
-
-var app = new App
-app.use_before("/*", new RequestTimeHandler)
-app.use("/", new HelloHandler)
-app.use_after("/*", new LogHandler)
-app.listen("localhost", 3000)
-~~~
+[[code: popcorn::example_advanced_logger]]
 
 First, we attach a new attribute `timer` to every `HttpRequest`.
 Doing so we can access our data from all handlers that import our module, directly
@@ -586,55 +465,19 @@ be used to develop your app faster.
 * `RequestClock`: initializes requests clock.
 * `ConsoleLog`: displays resquest and response status in console (can be used with `RequestClock`).
 * `SessionInit`: initializes requests session (see the `Sessions` section).
-* `StaticServer`: serves static files (see the `Serving static files with Popcorn` section).
+* `StaticHandler`: serves static files (see the `Serving static files with Popcorn` section).
 * `Router`: a mountable mini-app (see the `Mountable routers` section).
 
 ## Mountable routers
 
-Use the `Router` class to create modular, mountable route handlers.
+Use the [[popcorn::Router | text: `Router`]] class to create modular, mountable route handlers.
 A Router instance is a complete middleware and routing system; for this reason,
 it is often referred to as a “mini-app”.
 
 The following example creates a router as a module, loads a middleware handler in it,
 defines some routes, and mounts the router module on a path in the main app.
 
-~~~
-import popcorn
-
-class AppHome
-	super Handler
-
-	redef fun get(req, res) do res.send "Site Home"
-end
-
-class UserLogger
-	super Handler
-
-	redef fun all(req, res) do print "User logged"
-end
-
-class UserHome
-	super Handler
-
-	redef fun get(req, res) do res.send "User Home"
-end
-
-class UserProfile
-	super Handler
-
-	redef fun get(req, res) do res.send "User Profile"
-end
-
-var user_router = new Router
-user_router.use("/*", new UserLogger)
-user_router.use("/", new UserHome)
-user_router.use("/profile", new UserProfile)
-
-var app = new App
-app.use("/", new AppHome)
-app.use("/user", user_router)
-app.listen("localhost", 3000)
-~~~
+[[code: popcorn::example_router]]
 
 The app will now be able to handle requests to /user and /user/profile, as well
 as call the `Time` middleware handler that is specific to the route.
@@ -645,30 +488,7 @@ as call the `Time` middleware handler that is specific to the route.
 
 Define error-handling middlewares in the same way as other middleware handlers:
 
-~~~
-import popcorn
-
-class SimpleErrorHandler
-	super Handler
-
-	redef fun all(req, res) do
-		if res.status_code != 200 then
-			print "An error occurred! {res.status_code})"
-		end
-	end
-end
-
-class HelloHandler
-	super Handler
-
-	redef fun get(req, res) do res.send "Hello World!"
-end
-
-var app = new App
-app.use("/", new HelloHandler)
-app.use("/*", new SimpleErrorHandler)
-app.listen("localhost", 3000)
-~~~
+[[code: popcorn::example_simple_error_handler]]
 
 In this example, every non-200 response is caught by the `SimpleErrorHandler`
 that print an error in stdout.
@@ -716,41 +536,15 @@ app.use("/*", new HtmlErrorHandler)
 app.listen("localhost", 3000)
 ~~~
 
-## Sessions
+## [[sign: popcorn::pop_sessions]]
 
-**Sessions** can be used thanks to the built-in `SessionInit` middleware.
+> [[doc: popcorn::pop_sessions]]
+
+**Sessions** can be used thanks to the built-in [[popcorn::SessionInit | text: `SessionInit`]] middleware.
 
 Here a simple example of login button that define a value in the `req` session.
 
-~~~
-import popcorn
-
-redef class Session
-	var is_logged = false
-end
-
-class AppLogin
-	super Handler
-
-	redef fun get(req, res) do
-		res.html """
-		<p>Is logged: {{{req.session.as(not null).is_logged}}}</p>
-		<form action="/" method="POST">
-			<input type="submit" value="Login" />
-		</form>"""
-	end
-
-	redef fun post(req, res) do
-		req.session.as(not null).is_logged = true
-		res.redirect("/")
-	end
-end
-
-var app = new App
-app.use_before("/*", new SessionInit)
-app.use("/", new AppLogin)
-app.listen("localhost", 3000)
-~~~
+[[code: popcorn::example_session]]
 
 Notice the use of the `SessionInit` on the `/*` route. You must use the
 `SessionInit` first to initialize the request session.
@@ -771,66 +565,7 @@ The mongo database reference is passed to the UserList handler through the `db` 
 Then we define a handler that displays the user creation form on GET requests.
 POST requests are used to save the user data.
 
-~~~
-import popcorn
-import mongodb
-import template
-
-class UserList
-	super Handler
-
-	var db: MongoDb
-
-	redef fun get(req, res) do
-		var users = db.collection("users").find_all(new JsonObject)
-
-		var tpl = new Template
-		tpl.add "<h1>Users</h1>"
-		tpl.add "<table>"
-		for user in users do
-			tpl.add """<tr>
-				<td>{{{user["login"] or else "null"}}}</td>
-				<td>{{{user["password"] or else "null"}}}</td>
-			</tr>"""
-		end
-		tpl.add "</table>"
-		res.html tpl
-	end
-end
-
-class UserForm
-	super Handler
-
-	var db: MongoDb
-
-	redef fun get(req, res) do
-		var tpl = new Template
-		tpl.add """<h1>Add a new user</h1>
-		<form action="/new" method="POST">
-			<input type="text" name="login" />
-			<input type="password" name="password" />
-			<input type="submit" value="save" />
-		</form>"""
-		res.html tpl
-	end
-
-	redef fun post(req, res) do
-		var json = new JsonObject
-		json["login"] = req.post_args["login"]
-		json["password"] = req.post_args["password"]
-		db.collection("users").insert(json)
-		res.redirect "/"
-	end
-end
-
-var mongo = new MongoClient("mongodb://localhost:27017/")
-var db = mongo.database("mongo_example")
-
-var app = new App
-app.use("/", new UserList(db))
-app.use("/new", new UserForm(db))
-app.listen("localhost", 3000)
-~~~
+[[code: popcorn::example_mongodb]]
 
 ## Angular.JS integration
 
@@ -839,13 +574,7 @@ Loving [AngularJS](https://angularjs.org/)? Popcorn is made for Angular and for 
 Using the StaticHandler with a glob route, you can easily redirect all HTTP requests
 to your angular controller:
 
-~~~
-import popcorn
-
-var app = new App
-app.use("/*", new StaticHandler("my-ng-app/", "index.html"))
-app.listen("localhost", 3000)
-~~~
+[[code: popcorn::example_static_default]]
 
 Because the StaticHandler will not find the angular routes as static files,
 you must specify the path to the default angular controller.
@@ -853,3 +582,49 @@ In this example, the StaticHandler will redirect any unknown requests to the `in
 angular controller.
 
 See the examples for a more detailed use case working with a JSON API.
+
+## [[sign: popcorn::pop_tasks]]
+
+> [[doc: popcorn::pop_tasks]]
+
+## [[sign: popcorn::pop_json]]
+
+> [[doc: popcorn::pop_json]]
+
+## [[sign: popcorn::pop_templates]]
+
+> [[doc: popcorn::pop_templates]]
+
+## [[sign: popcorn::pop_config]]
+
+> [[doc: popcorn::pop_config]]
+
+## [[sign: popcorn::pop_tests]]
+
+> [[doc: popcorn::pop_tests]]
+
+## [[sign: popcorn::pop_repos]]
+
+> [[doc: popcorn::pop_repos]]
+
+## [[sign: popcorn::pop_auth]]
+
+> [[doc: popcorn::pop_auth]]
+
+## [[sign: popcorn::pop_tracker]]
+
+> [[doc: popcorn::pop_tracker]]
+
+## [[sign: popcorn::pop_validation]]
+
+> [[doc: popcorn::pop_validation]]
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+[[testing: popcorn]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: popcorn]].

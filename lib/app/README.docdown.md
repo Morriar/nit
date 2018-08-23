@@ -1,4 +1,6 @@
-_app.nit_, a framework for portable applications
+# `app` - _app.nit_, a framework for portable applications
+
+[[toc: app]]
 
 The framework provides services to manage common needs of modern mobile applications:
 
@@ -9,10 +11,36 @@ The framework provides services to manage common needs of modern mobile applicat
 * Package metadata
 * Compilation and packaging
 
-The features offered by _app.nit_ are common to all platforms, but
+The features offered by _[[app]].nit_ are common to all platforms, but
 may not be available on all devices.
 
-# Application Life-Cycle
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine.
+
+### Dependencies
+
+This project requires the following packages:
+
+[[parents: app]]
+
+### Run `app_base`
+
+[[uml: app | format: svg, mentities: app::app;app::data_store;app::assets;app::audio;app::app_base;app::http_request;app::ui]]
+
+Compile `app_base` with the following command:
+
+[[main-compile: app::app_base]]
+
+Then run it with:
+
+[[main-run: app::app_base]]
+
+## [[sign: app::app]]
+
+> [[doc: app::app]]
+
+## Application Life-Cycle
 
 The _app.nit_ application life-cycle is compatible with all target platforms.
 It relies on the following sequence of events, represented here by their callback method name:
@@ -41,37 +69,39 @@ Life-cycle events related to saving and restoring the application state are prov
 * `on_restore_state`: The app is launching, restore its state from a previous `on_save_state`.
 
 These events are synchronized to the native platforms applications
-The `App` instance is the first to be notified of these events.
-Other UI elements, from the `ui` submodule, are notified of the same events using a simple depth first visit.
+The [[app::App | text: `App`]] instance is the first to be notified of these events.
+Other UI elements, from the [[app::ui | text: `ui`]] submodule, are notified of the same events using a simple depth first visit.
 So all UI elements can react separately to live-cycle events.
 
-# User Interface
+## [[sign: app::ui]]
+
+> [[doc: app::ui]]
 
 The `app::ui` module defines an abstract API to build a portable graphical application.
-The API is composed of interactive `Control`s, visible `View`s and an active `Window`.
+The API is composed of interactive `Control`s, visible [[app::View | text: `View`]]s and an active [[app::Window | text: `Window`]].
 
 Here is a subset of the most useful controls and views:
 
-* The classic pushable `Button` with text (usually rectangular).
+* The classic pushable [[app::Button | text: `Button`]] with text (usually rectangular).
 
-* `TextInput` is a field for the user to enter text.
+* [[app::TextInput | text: `TextInput`]] is a field for the user to enter text.
 
-* `HorizontalLayout` and `VerticalLayout` organize other controls in order.
+* [[app::HorizontalLayout | text: `HorizontalLayout`]] and [[app::VerticalLayout | text: `VerticalLayout`]] organize other controls in order.
 
 Each control is notified of input events by callbacks to `on_event`.
 All controls have observers that are also notified of the events.
 So there is two ways  to customize the behavior on a given event:
 
-* Create a subclass of the wanted `Control`, let's say `Button`, and specialize `on_event`.
+* Create a subclass of the wanted [[app::Control | text: `Control`]], let's say `Button`, and specialize `on_event`.
 
 * Add an observer to a `Button` instance, and implement `on_event` in the observer.
 
-## Usage Example
+### Usage Example
 
 The example at `examples/ui_example.nit` shows off most features of `app::ui` in a minimal program.
 You can also take a look at the calculator (`../../examples/calculator/src/calculator.nit`) which is a concrete usage example.
 
-## Platform-specific UI
+### Platform-specific UI
 
 You can go beyond the portable UI API of _app.nit_ by using the natives services of a platform.
 
@@ -79,18 +109,24 @@ The suggested approach is to use platform specific modules to customize the appl
 See the calculator example for an adaptation of the UI on Android,
 the interesting module is in this repository at ../../examples/calculator/src/android_calculator.nit
 
-# Persistent State with data\_store
+## [[sign: app::data_store]]
 
-_app.nit_ offers the submodule `app::data_store` to easily save the application state and user preferences.
-The service is accessible by the method `App::data_store`. The `DataStore` itself defines 2 methods:
+> [[doc: app::data_store]]
+
+_[[app::app]].nit_ offers the submodule [[app::data_store | text: `app::data_store`]] to easily save the application state and user preferences.
+The service is accessible by the method `App::data_store`. The [[app::DataStore | text: `DataStore`]] itself defines 2 methods:
 
 * `DataStore::[]=` saves and associates any serializable instances to a `String` key.
-Pass `null` to clear the value associated to a key.
+  Pass `null` to clear the value associated to a key.
 
 * `DataStore::[]` returns the object associated to a `String` key.
-It returns `null` if nothing is associated to the key.
+  It returns `null` if nothing is associated to the key.
 
-## Usage Example
+  Example from `app::http_request_example`:
+
+[[code: app::http_request_example]]
+
+### Usage Example
 
 ~~~
 import app::data_store
@@ -123,15 +159,23 @@ redef class App
 end
 ~~~
 
-# Async HTTP request
+## [[sign: app::http_request]]
 
-The module `app::http_request` provides services to execute asynchronous HTTP request.
-The class `AsyncHttpRequest` hides the complex parallel logic and
+> [[doc: app::http_request]]
+
+The module [[app::http_request | text: `app::http_request`]] provides services to execute asynchronous HTTP request.
+The class [[app::AsyncHttpRequest | text: `AsyncHttpRequest`]] hides the complex parallel logic and
 lets the user implement methods acting only on the UI thread.
 See the documentation of `AsyncHttpRequest` for more information and
 the full example at `examples/http_request_example.nit`.
 
-# Metadata annotations
+Example from `app::ui_example`:
+
+[[code: app::ui_example]]
+
+[[features: app | mentities: app::app;app::data_store;app::assets;app::audio;app::app_base;app::http_request;app::ui]]
+
+## Metadata annotations
 
 The _app.nit_ framework defines three annotations to customize the application package.
 
@@ -161,7 +205,7 @@ The _app.nit_ framework defines three annotations to customize the application p
   In case of name conflicts in the resource files, the files from the project root have the lowest priority,
   those associated to modules lower in the importation hierarchy have higher priority.
 
-## Usage Example
+### Usage Example
 
 ~~~
 module my_module is
@@ -171,7 +215,7 @@ module my_module is
 end
 ~~~
 
-# Compiling and Packaging an Application
+## Compiling and Packaging an Application
 
 The Nit compiler detects the target platform from the importations and generates the appropriate application format and package.
 
@@ -183,7 +227,7 @@ There is two main ways to achieve this goal:
 * The mixin option (`-m module`) imports an additional module before compiling.
   It can be used to load platform specific implementations of the _app.nit_ portable UI.
 
-  ~~~
+  ~~~bash
   # GNU/Linux version, using GTK
   nitc calculator.nit -m linux
 
@@ -206,3 +250,11 @@ There is two main ways to achieve this goal:
 
   # ...
   ~~~
+
+## [[sign: app::audio]]
+
+> [[doc: app::audio]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: app]].

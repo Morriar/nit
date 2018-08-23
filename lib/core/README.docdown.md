@@ -1,14 +1,22 @@
-# Nit common library of core classes and methods
+# `core` - Nit common library of core classes and methods
 
-Core classes and methods used by default by Nit programs and libraries.
+[[toc: core]]
+
+[[core | text: Core]] classes and methods used by default by Nit programs and libraries.
+
+[[features: core | mentities: core::codecs;core::text;core::bitset;core::gc;core::codec_base;core::core;core::error;core::environ;core::protocol;core::iso8859_1;core::utf8;core::collection;core::numeric;core::range;core::time;core::exec;core::union_find;core::math;core::queue;core::fixed_ints_text;core::hash_collection;core::sorter;core::circular_array;core::native;core::list;core::re;core::abstract_collection;core::string_search;core::kernel;core::stream;core::fixed_ints;core::array;core::ropes;core::file;core::bytes;core::abstract_text;core::flat]]
 
 ## Core Basic Types and Operations
 
-[[doc: kernel]]
+[[uml: core | format: svg, mentities: core::codecs;core::text;core::bitset;core::gc;core::codec_base;core::core;core::error;core::environ;core::protocol;core::iso8859_1;core::utf8;core::collection;core::numeric;core::range;core::time;core::exec;core::union_find;core::math;core::queue;core::fixed_ints_text;core::hash_collection;core::sorter;core::circular_array;core::native;core::list;core::re;core::abstract_collection;core::string_search;core::kernel;core::stream;core::fixed_ints;core::array;core::ropes;core::file;core::bytes;core::abstract_text;core::flat]]
 
-### Object
+## [[sign: core::kernel]]
 
-[[doc: Object]]
+> [[doc: core::kernel]]
+
+### [[sign: core::Object]]
+
+> [[doc: core::Object]]
 
 #### Equality
 
@@ -24,9 +32,9 @@ Core classes and methods used by default by Nit programs and libraries.
 [[doc: core::Object::output_class_name]]
 [[doc: core::Object::is_same_type]]
 
-### Sys
+### [[sign: core::Sys]]
 
-[[doc: Sys]]
+> [[doc: core::Sys]]
 
 #### Program Execution
 
@@ -41,6 +49,47 @@ Core classes and methods used by default by Nit programs and libraries.
 
 [[doc: core::collection]]
 
+### [[sign: core::abstract_collection]]
+
+> [[doc: core::abstract_collection]]
+
+### [[sign: core::queue]]
+
+> [[doc: core::queue]]
+
+### [[sign: core::sorter]]
+
+> [[doc: core::sorter]]
+
 ## String and Text manipulation
 
 [[doc: core::text]]
+
+### [[sign: core::ropes]]
+
+> [[doc: core::ropes]]
+
+## [[sign: core::codec_base]]
+
+> [[doc: core::codec_base]]
+
+## [[sign: core::re]]
+
+> [[doc: core::re]]
+
+## [[sign: core::fixed_ints]]
+
+> [[doc: core::fixed_ints]]
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+[[testing: core]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: core]].
+
+Thanks to the contribution of:
+[[ini-contributors: core]]

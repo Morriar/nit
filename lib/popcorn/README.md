@@ -1,19 +1,70 @@
-# Popcorn
+# `popcorn` - Web application framework for Nit
+
+* [What does it taste like?](#What-does-it-taste-like?)
+* [Basic routing](#Basic-routing)
+* [Serving static files with Popcorn](#Serving-static-files-with-Popcorn)
+* [Advanced Routing](#Advanced-Routing)
+* [Route methods](#Route-methods)
+* [Route paths](#Route-paths)
+* [Route parameters](#Route-parameters)
+* [Glob routes](#Glob-routes)
+* [Response methods](#Response-methods)
+* [Response cycle](#Response-cycle)
+* [Middlewares](#Middlewares)
+* [Overview](#Overview)
+* [Ultra simple logger example](#Ultra-simple-logger-example)
+* [Ultra cool, more advanced logger example](#Ultra-cool,-more-advanced-logger-example)
+* [Built-in middlewares](#Built-in-middlewares)
+* [Mountable routers](#Mountable-routers)
+* [Error handling](#Error-handling)
+* [`pop_sessions`](#`pop_sessions`)
+* [Database integration](#Database-integration)
+* [Mongo DB](#Mongo-DB)
+* [Angular.JS integration](#Angular.JS-integration)
+* [`pop_tasks`](#`pop_tasks`)
+* [`pop_json`](#`pop_json`)
+* [`pop_templates`](#`pop_templates`)
+* [`pop_config`](#`pop_config`)
+* [`pop_tests`](#`pop_tests`)
+* [`pop_repos`](#`pop_repos`)
+* [`pop_auth`](#`pop_auth`)
+* [`pop_tracker`](#`pop_tracker`)
+* [`pop_validation`](#`pop_validation`)
+* [Running the tests](#Running-the-tests)
+* [Authors](#Authors)
 
 **Why endure plain corn when you can pop it?!**
 
-Popcorn is a minimal yet powerful nit web application framework that provides cool
+[Popcorn](popcorn) is a minimal yet powerful nit web application framework that provides cool
 features for lazy developpers.
 
 Popcorn is built over nitcorn to provide a clean and user friendly interface
 without all the boiler plate code.
 
+* `pop_auth` - Authentification handlers.
+* `pop_config` - Configuration file and options for Popcorn apps
+* `pop_handlers` - Route handlers.
+* `pop_json` - Introduce useful services for JSON REST API handlers.
+* `pop_logging`
+* `pop_repos` - Repositories for data management.
+* `pop_routes` - Internal routes representation.
+* `pop_sessions` - Session handlers
+* `pop_tasks` - Popcorn threaded tasks
+* `pop_templates` - Template rendering for popcorn
+* `pop_tests` - Popcorn testing services
+* `pop_tracker` - * `pop_validation` - Quick and easy validation framework for Json inputs
+* `popcorn` - Application server abstraction on top of nitcorn.
+
 ## What does it taste like?
+
+![Diagram for `popcorn`](uml-popcorn-3.svg)
 
 Set up is quick and easy as 10 lines of code.
 Create a file `app.nit` and add the following code:
 
 ~~~
+module example_hello is example
+
 import popcorn
 
 class HelloHandler
@@ -84,6 +135,7 @@ end
 ~~~
 
 Where:
+
 * `MyHandler` is the name of the handler you will add to the app.
 * `METHOD` can be replaced by `get`, `post`, `put` or `delete`.
 
@@ -120,7 +172,7 @@ For more details about routing, see the routing section.
 ## Serving static files with Popcorn
 
 To serve static files such as images, CSS files, and JavaScript files, use the
-Popcorn built-in handler `StaticHandler`.
+Popcorn built-in handler [`StaticHandler`](popcorn::StaticHandler).
 
 Pass the name of the directory that contains the static assets to the StaticHandler
 init method to start serving the files directly.
@@ -210,7 +262,7 @@ app.use("/", new HelloHandler)
 ### Route methods
 
 A **route method** is derived from one of the HTTP methods, and is attached to an
-instance of the Handler class.
+instance of the [Handler](popcorn::Handler) class.
 
 The following code is an example of routes that are defined for the GET and the POST
 methods to the root of the app.
@@ -235,6 +287,8 @@ get, post, put, and delete.
 The request query string is accessed through the `req` parameter:
 
 ~~~
+module example_query_string is example
+
 import popcorn
 import template
 
@@ -260,6 +314,8 @@ app.listen("localhost", 3000)
 Post parameters can also be accessed through the `req` parameter:
 
 ~~~
+module example_post_handler is example
+
 import popcorn
 import template
 
@@ -321,7 +377,7 @@ which requests can be made.
 Route paths can be strings, parameterized strings or glob patterns.
 Query strings such as `?q=foo`are not part of the route path.
 
-Popcorn uses the `Handler::match(uri)` method to match the route paths.
+Popcorn uses the `AppRoute::match(uri)` method to match the route paths.
 
 Here are some examples of route paths based on strings.
 
@@ -371,6 +427,8 @@ The following example declares a handler `UserHome` that responds with the `user
 name.
 
 ~~~
+module example_param_route is example
+
 import popcorn
 
 class UserHome
@@ -405,6 +463,8 @@ Here we define a `UserItem` handler that will respond to any URI matching the pr
 Note that glob route are compatible with route parameters.
 
 ~~~
+module example_glob_route is example
+
 import popcorn
 
 class UserItem
@@ -426,6 +486,43 @@ app.use("/user/:user/item/:item/*", new UserItem)
 app.listen("localhost", 3000)
 ~~~
 
+Example from `popcorn::example_angular`:
+
+~~~
+# This is an example of how to use angular.js with popcorn
+module example_angular is example
+
+import popcorn
+import popcorn::pop_json
+
+class CounterAPI
+	super Handler
+
+	var counter = 0
+
+	fun json_counter: JsonObject do
+		var json = new JsonObject
+		json["label"] = "Visitors"
+		json["value"] = counter
+		return json
+	end
+
+	redef fun get(req, res) do
+		res.json(json_counter)
+	end
+
+	redef fun post(req, res) do
+		counter += 1
+		res.json(json_counter)
+	end
+end
+
+var app = new App
+app.use("/counter", new CounterAPI)
+app.use("/*", new StaticHandler("www/", "index.html"))
+app.listen("localhost", 3000)
+~~~
+
 ## Response methods
 
 The methods on the response object (`res`), can is used to manipulate the
@@ -441,20 +538,20 @@ receive a `404 Not found` error.
 
 ## Response cycle
 
-When the popcorn `App` receives a request, the response cycle is the following:
+When the popcorn [`App`](popcorn::App) receives a request, the response cycle is the following:
 
 1. `pre-middlewares` lookup matching middlewares registered with `use_before(pre_middleware)`:
-	1. execute matching middleware by registration order
-	2. if a middleware send a response then let the `pre-middlewares` loop continue
-	   with the next middleware
+   1. execute matching middleware by registration order
+   2. if a middleware send a response then let the `pre-middlewares` loop continue
+      with the next middleware
 2. `response-handlers` lookup matching handlers registered with `use(handler)`:
-	1. execute matching middleware by registration order
-	2. if a middleware send a response then stop the `response-handlers` loop
-	3. if no hander matches or sends a response, generate a 404 response
+   1. execute matching middleware by registration order
+   2. if a middleware send a response then stop the `response-handlers` loop
+   3. if no hander matches or sends a response, generate a 404 response
 3. `post-middlewares` lookup matching handlers registered with `use_after(post_handler)`:
-	1. execute matching middleware by registration order
-	2. if a middleware send a response then let the `post-middlewares` loop continue
-	   with the next middleware
+   1. execute matching middleware by registration order
+   2. if a middleware send a response then let the `post-middlewares` loop continue
+      with the next middleware
 
 ## Middlewares
 
@@ -511,9 +608,11 @@ with the `use_before` method.
 Next, we’ll create a middleware handler called “LogHandler” that prints the requested
 uri, the response status and the time it took to Popcorn to process the request.
 
-This example gives a simplified version of the `RequestClock` and `ConsoleLog` middlewares.
+This example gives a simplified version of the [`RequestClock`](popcorn::RequestClock) and [`ConsoleLog`](popcorn::ConsoleLog) middlewares.
 
 ~~~
+module example_advanced_logger is example
+
 import popcorn
 import realtime
 
@@ -528,7 +627,7 @@ class RequestTimeHandler
 	redef fun all(req, res) do req.timer = new Clock
 end
 
-class LogHandler
+class AdvancedLoggerHandler
 	super Handler
 
 	redef fun all(req, res) do
@@ -541,7 +640,7 @@ class LogHandler
 	end
 end
 
-class HelloHandler
+class AnotherHandler
 	super Handler
 
 	redef fun get(req, res) do res.send "Hello World!"
@@ -549,8 +648,8 @@ end
 
 var app = new App
 app.use_before("/*", new RequestTimeHandler)
-app.use("/", new HelloHandler)
-app.use_after("/*", new LogHandler)
+app.use("/", new AnotherHandler)
+app.use_after("/*", new AdvancedLoggerHandler)
 app.listen("localhost", 3000)
 ~~~
 
@@ -586,12 +685,12 @@ be used to develop your app faster.
 * `RequestClock`: initializes requests clock.
 * `ConsoleLog`: displays resquest and response status in console (can be used with `RequestClock`).
 * `SessionInit`: initializes requests session (see the `Sessions` section).
-* `StaticServer`: serves static files (see the `Serving static files with Popcorn` section).
+* `StaticHandler`: serves static files (see the `Serving static files with Popcorn` section).
 * `Router`: a mountable mini-app (see the `Mountable routers` section).
 
 ## Mountable routers
 
-Use the `Router` class to create modular, mountable route handlers.
+Use the [`Router`](popcorn::Router) class to create modular, mountable route handlers.
 A Router instance is a complete middleware and routing system; for this reason,
 it is often referred to as a “mini-app”.
 
@@ -599,6 +698,8 @@ The following example creates a router as a module, loads a middleware handler i
 defines some routes, and mounts the router module on a path in the main app.
 
 ~~~
+module example_router is example
+
 import popcorn
 
 class AppHome
@@ -613,7 +714,7 @@ class UserLogger
 	redef fun all(req, res) do print "User logged"
 end
 
-class UserHome
+class UserHomepage
 	super Handler
 
 	redef fun get(req, res) do res.send "User Home"
@@ -627,7 +728,7 @@ end
 
 var user_router = new Router
 user_router.use("/*", new UserLogger)
-user_router.use("/", new UserHome)
+user_router.use("/", new UserHomepage)
 user_router.use("/profile", new UserProfile)
 
 var app = new App
@@ -646,6 +747,8 @@ as call the `Time` middleware handler that is specific to the route.
 Define error-handling middlewares in the same way as other middleware handlers:
 
 ~~~
+module example_simple_error_handler is example
+
 import popcorn
 
 class SimpleErrorHandler
@@ -653,19 +756,20 @@ class SimpleErrorHandler
 
 	redef fun all(req, res) do
 		if res.status_code != 200 then
-			print "An error occurred! {res.status_code})"
+			res.send("An error occurred!", res.status_code)
 		end
 	end
 end
 
-class HelloHandler
+class SomeHandler
 	super Handler
 
 	redef fun get(req, res) do res.send "Hello World!"
 end
 
+
 var app = new App
-app.use("/", new HelloHandler)
+app.use("/", new SomeHandler)
 app.use("/*", new SimpleErrorHandler)
 app.listen("localhost", 3000)
 ~~~
@@ -716,11 +820,9 @@ app.use("/*", new HtmlErrorHandler)
 app.listen("localhost", 3000)
 ~~~
 
-## Sessions
+## `pop_sessions`
 
-**Sessions** can be used thanks to the built-in `SessionInit` middleware.
-
-Here a simple example of login button that define a value in the `req` session.
+> Here a simple example on how to use sessions with popcorn:
 
 ~~~
 import popcorn
@@ -755,6 +857,46 @@ app.listen("localhost", 3000)
 Notice the use of the `SessionInit` on the `/*` route. You must use the
 `SessionInit` first to initialize the request session.
 Without that, your request session will be set to `null`.
+
+**Sessions** can be used thanks to the built-in [`SessionInit`](popcorn::SessionInit) middleware.
+
+Here a simple example of login button that define a value in the `req` session.
+
+~~~
+module example_session is example
+
+import popcorn
+
+redef class Session
+	var is_logged = false
+end
+
+class AppLogin
+	super Handler
+
+	redef fun get(req, res) do
+		res.html """
+		<p>Is logged: {{{req.session.as(not null).is_logged}}}</p>
+		<form action="/" method="POST">
+			<input type="submit" value="Login" />
+		</form>"""
+	end
+
+	redef fun post(req, res) do
+		req.session.as(not null).is_logged = true
+		res.redirect("/")
+	end
+end
+
+var app = new App
+app.use("/*", new SessionInit)
+app.use("/", new AppLogin)
+app.listen("localhost", 3000)
+~~~
+
+Notice the use of the `SessionInit` on the `/*` route. You must use the
+`SessionInit` first to initialize the request session.
+Without that, your request session will be set to `null`.
 If you don't use sessions in your app, you do not need to include that middleware.
 
 ## Database integration
@@ -772,6 +914,8 @@ Then we define a handler that displays the user creation form on GET requests.
 POST requests are used to save the user data.
 
 ~~~
+module example_mongodb is example
+
 import popcorn
 import mongodb
 import template
@@ -785,33 +929,26 @@ class UserList
 		var users = db.collection("users").find_all(new JsonObject)
 
 		var tpl = new Template
-		tpl.add "<h1>Users</h1>"
-		tpl.add "<table>"
-		for user in users do
-			tpl.add """<tr>
-				<td>{{{user["login"] or else "null"}}}</td>
-				<td>{{{user["password"] or else "null"}}}</td>
-			</tr>"""
-		end
-		tpl.add "</table>"
-		res.html tpl
-	end
-end
+		tpl.add """
+		<h1>Users</h1>
 
-class UserForm
-	super Handler
-
-	var db: MongoDb
-
-	redef fun get(req, res) do
-		var tpl = new Template
-		tpl.add """<h1>Add a new user</h1>
-		<form action="/new" method="POST">
+		<h2>Add a new user</h2>
+		<form action="/" method="POST">
 			<input type="text" name="login" />
 			<input type="password" name="password" />
 			<input type="submit" value="save" />
-		</form>"""
-		res.html tpl
+		</form>
+
+		<h2>All users</h2>
+		<table>"""
+		for user in users do
+			tpl.add """<tr>
+			<td>{{{user["login"] or else "null"}}}</td>
+			<td>{{{user["password"] or else "null"}}}</td>
+			</tr>"""
+		end
+		tpl.add "</table>"
+		res.html(tpl)
 	end
 
 	redef fun post(req, res) do
@@ -819,7 +956,7 @@ class UserForm
 		json["login"] = req.post_args["login"]
 		json["password"] = req.post_args["password"]
 		db.collection("users").insert(json)
-		res.redirect "/"
+		res.redirect("/")
 	end
 end
 
@@ -828,7 +965,6 @@ var db = mongo.database("mongo_example")
 
 var app = new App
 app.use("/", new UserList(db))
-app.use("/new", new UserForm(db))
 app.listen("localhost", 3000)
 ~~~
 
@@ -840,10 +976,12 @@ Using the StaticHandler with a glob route, you can easily redirect all HTTP requ
 to your angular controller:
 
 ~~~
+module example_static_default is example
+
 import popcorn
 
 var app = new App
-app.use("/*", new StaticHandler("my-ng-app/", "index.html"))
+app.use("/", new StaticHandler("public/", "default.html"))
 app.listen("localhost", 3000)
 ~~~
 
@@ -853,3 +991,517 @@ In this example, the StaticHandler will redirect any unknown requests to the `in
 angular controller.
 
 See the examples for a more detailed use case working with a JSON API.
+
+## `pop_tasks`
+
+> Tasks allow you to execute code in another thread than the app listening loop.
+> Useful when you want to run some tasks periodically.
+
+Let's say you want to purge the `downloads/` directory of your app every hour:
+
+~~~nitish
+class PurgeTask
+	super PopTask
+
+	var dir: String
+
+	redef fun main do
+		loop
+			dir.rmdir
+			3600.sleep
+		end
+	end
+end
+
+var app = new App
+
+# Register a new task
+app.register_task(new PurgeTask("downloads/"))
+
+# Add your handlers
+# app.use('/', new MyHandler)
+
+# Run the tasks
+app.run_tasks
+
+# Start the app
+app.listen("0.0.0.0", 3000)
+~~~
+
+## `pop_json`
+
+> Validation and Deserialization of request bodies:
+
+~~~nit
+class MyJsonHandler
+	super Handler
+
+	# Validator used do validate the body
+	redef var validator = new MyFormValidator
+
+	# Define the kind of objects expected by the deserialization process
+	redef type BODY: MyForm
+
+	redef fun post(req, res) do
+		var post = validate_body(req, res)
+		if post == null then return # Validation error: let popcorn return a HTTP 400
+		var form = deserialize_body(req, res)
+		if form == null then return # Deserialization error: let popcorn return a HTTP 400
+
+		# TODO do something with the input
+		print form.name
+	end
+end
+
+class MyForm
+	serialize
+
+	var name: String
+end
+
+class MyFormValidator
+	super ObjectValidator
+
+	init do
+		add new StringField("name", min_size=1, max_size=255)
+	end
+end
+~~~
+
+## `pop_templates`
+
+> ## Basic templates
+
+Use TemplateString to render really basic templates that just need macro
+replacements.
+
+Example:
+
+~~~nit
+class TemplateStringHandler
+	super Handler
+
+	redef fun get(req, res) do
+		# Values to add in the template
+		var values = new HashMap[String, String]
+		values["USER"] = "Morriar"
+		values["MYSITE"] = "My super website"
+
+		# Render it with a shortcut
+		res.template_string("""
+			<h1>Hello %USER%!</h1>
+			<p>Welcome to %MYSITE%.</p>
+		""", values)
+	end
+end
+~~~
+
+For larger templates, you can also use external files (makes your Nit code cleaner):
+
+~~~nit
+class TemplateFileHandler
+	super Handler
+
+	redef fun get(req, res) do
+		# Values to add in the template
+		var values = new HashMap[String, String]
+		values["USER"] = "Morriar"
+		values["MYSITE"] = "My super website"
+
+		# Render it from an external file
+		res.template_file("example_template.tpl", values)
+	end
+end
+~~~
+
+## Using pug templates
+
+Pug is a templating format provided by the external command `pug`.
+For complex templates that need conditional or loop statements, pug can be a solution.
+
+See the pug syntax here: https://pugjs.org/api/getting-started.html
+
+~~~nit
+class PugFileHandler
+	super Handler
+
+	redef fun get(req, res) do
+		# Values to add in the template
+		var json = new JsonObject
+		json["user"] = "Morriar"
+		json["mysite"] = "My super website"
+
+		# Render it from an external file
+		res.pug_file("example_template.pug", json)
+	end
+end
+~~~
+
+## `pop_config`
+
+> `pop_config` provide a configuration framework for Popcorn apps based on ini
+> files.
+
+By default `AppConfig` provides `app.host` and `app.port` keys, it's all we
+need to start an app:
+
+~~~
+import popcorn
+import popcorn::pop_config
+
+# Build config from options
+var config = new AppConfig
+config.parse_options(args)
+
+# Use options
+var app = new App
+app.listen(config.app_host, config.app_port)
+~~~
+
+For more advanced uses, `AppConfig` and `AppOptions` can be specialized to
+offer additional config options:
+
+~~~
+import popcorn
+import popcorn::pop_config
+
+class MyConfig
+	super AppConfig
+
+	# My secret code I don't want to share in my source repository
+	fun secret: String do return opt_secret.value or else ini["secret"] or else "my-secret"
+
+	# opt --secret
+	var opt_secret = new OptionString("My secret string", "--secret")
+
+	redef init do
+		super
+		add_option opt_secret
+	end
+end
+
+class SecretHandler
+	super Handler
+
+	# Config to use to access `secret`
+	var config: MyConfig
+
+	redef fun get(req, res) do
+		res.send config.secret
+	end
+end
+
+var config = new MyConfig
+config.parse_options(args)
+
+var app = new App
+app.use("/secret", new SecretHandler(config))
+app.listen(config.app_host, config.app_port)
+~~~
+
+## `pop_tests`
+
+> ## Blackbox testing
+
+Popcorn allows you to test your apps using nitunit blackbox testing.
+
+With blackbox testing you compare the output of your program with a result file.
+
+To get started with blackbox testing, create a nitunit test suite and imports
+the `pop_tests` module.
+
+You then need to build the app that will be tested by nitunit as shown in the
+`TestExampleHello::test_example_hello` method.
+Calling `run_test` will automatically set the `TestPopcorn::host` and `TestPopcorn::port` used for testing.
+
+Redefine the `client_test` method to write your scenario.
+Here we use `curl` to access some URI on the app.
+
+~~~nitish
+module test_example_hello is test
+
+import pop_tests
+import example_hello
+
+class TestExampleHello
+	super TestPopcorn
+	test
+
+	fun test_example_hello is test do
+		var app = new App
+		app.use("/", new HelloHandler)
+		run_test(app)
+	end
+
+	redef fun client_test do
+		system "curl -s {host}:{port}"
+		system "curl -s {host}:{port}/"
+		system "curl -s {host}:{port}///////////"
+		system "curl -s {host}:{port}/not_found"
+		system "curl -s {host}:{port}/not_found/not_found"
+	end
+end
+~~~
+
+The blackbox testing needs a reference result file against wich the test output
+will be compared.
+Create your expected result file in `test_example_hello.sav/test_example_hello.res`.
+
+Test your app by running nitunit:
+
+~~~bash
+nitunit ./example_hello.nit
+~~~
+
+See `examples/hello_world` for the complete example.
+
+## `pop_repos`
+
+> Repositories are used to apply persistence on instances (or **documents**).
+> Using repositories one can store and retrieve instance in a clean and maintenable
+> way.
+
+This module provides the base interface `Repository` that defines the persistence
+services available in all kind of repos.
+`JsonRepository` factorizes all repositories dedicated to Json data or objects
+serializable to Json.
+
+`MongoRepository` is provided as a concrete example of repository.
+It implements all the services from `Repository` using a Mongo database as backend.
+
+Repositories can be used in Popcorn app to manage your data persistence.
+Here an example with a book management app:
+
+~~~
+# First we declare the `Book` class. It has to be serializable so it can be used
+# within a `Repository`.
+
+import popcorn
+import popcorn::pop_repos
+import popcorn::pop_json
+
+# Serializable book representation.
+class Book
+	serialize
+
+	# Book uniq ID
+	var id: String = (new MongoObjectId).id is serialize_as "_id"
+
+	# Book title
+	var title: String
+
+	# ... Other fields
+
+	redef fun to_s do return title
+	redef fun ==(o) do return o isa SELF and id == o.id
+	redef fun hash do return id.hash
+end
+
+# We then need to subclass the `MongoRepository` to provide Book specific services.
+
+# Book repository for Mongo
+class BookRepo
+	super MongoRepository[Book]
+
+	# Find books by title
+	fun find_by_title(title: String): Array[Book] do
+		var q = new JsonObject
+		q["title"] = title
+		return find_all(q)
+	end
+end
+
+# The repository can be used in a Handler to manage book in a REST API.
+
+class BookHandler
+	super Handler
+
+	var repo: BookRepo
+
+	# Return a json array of all books
+	#
+	# If the get parameters `title` is provided, returns a json array of books
+	# matching the `title`.
+	redef fun get(req, res) do
+		var title = req.string_arg("title")
+		if title == null then
+			res.json new JsonArray.from(repo.find_all)
+		else
+			res.json new JsonArray.from(repo.find_by_title(title))
+		end
+	end
+
+	# Insert a new Book
+	redef fun post(req, res) do
+		var title = req.string_arg("title")
+		if title == null then
+			res.error 400
+			return
+		end
+		var book = new Book(title)
+		repo.save book
+		res.json book
+	end
+end
+
+# Let's wrap it all together in a Popcorn app:
+
+# Init database
+var mongo = new MongoClient("mongodb://localhost:27017/")
+var db = mongo.database("tests_app_{100000.rand}")
+var coll = db.collection("books")
+
+# Init app
+var app = new App
+var repo = new BookRepo(coll)
+app.use("/books", new BookHandler(repo))
+app.listen("localhost", 3000)
+~~~
+
+## `pop_auth`
+
+> For now, only Github OAuth is provided.
+
+See https://developer.github.com/v3/oauth/.
+
+This module provide 4 base classes that can be used together to implement a
+Github OAuth handshake.
+
+Here an example of application using the Github Auth as login mechanism.
+
+There is 4 available routes:
+
+* `/login`: redirects the user to the Github OAuth login page (see `GithubLogin`)
+* `/profile`: shows the currently logged in user (see `Profile Handler`)
+* `/logout`: logs out the user by destroying the entry from the session (see `GithubLogout`)
+* `/oauth`: callback url for Github service after player login (see `GithubOAuthCallBack`)
+
+Routes redirection are handled at the OAuth service registration. Please see
+https://developer.github.com/v3/oauth/#redirect-urls for more niformation on how
+to configure your service to provide smouth redirections beween your routes.
+
+~~~
+import popcorn
+import popcorn::pop_auth
+
+class ProfileHandler
+	super Handler
+
+	redef fun get(req, res) do
+		var session = req.session
+		if session == null then
+			res.send "No session :("
+			return
+		end
+		var user = session.user
+		if user == null then
+			res.send "Not logged in"
+			return
+		end
+		res.send "<h1>Hello {user.login}</h1>"
+	end
+end
+
+var client_id = "github client id"
+var client_secret = "github client secret"
+
+var app = new App
+app.use("/*", new SessionInit)
+app.use("/login", new GithubLogin(client_id))
+app.use("/oauth", new GithubOAuthCallBack(client_id, client_secret))
+app.use("/logout", new GithubLogout)
+app.use("/profile", new ProfileHandler)
+app.listen("localhost", 3000)
+~~~
+
+Optionaly, you can use the `GithubUser` handler to provide access to the
+Github user stored in session:
+
+~~~
+app.use("/api/user", new GithubUser)
+~~~
+
+## `pop_tracker`
+
+> ~~~nitish
+~~~
+
+app.use_after("/api/*", new PopTracker(config))
+app.use_after("/admin/*", new PopTracker(config))
+
+~~~
+
+To retrieve your tracker data use the `PopTrackerAPI` which serves the tracker
+data in JSON format.
+
+~~~nitish
+app.use("/api/tracker_data", new PopTrackerAPI(config))
+~~~
+
+## `pop_validation`
+
+> Validators can be used in Popcorn apps to valid your json inputs before
+> data processing and persistence.
+
+Here an example with a Book management app. We use an ObjectValidator to validate
+the books passed to the API in the `POST /books` handler.
+
+~~~
+import popcorn
+import popcorn::pop_json
+import serialization
+
+# Serializable book representation.
+class Book
+	super Serializable
+
+	# Book ISBN
+	var isbn: String
+
+	# Book title
+	var title: String
+
+	# Book image (optional)
+	var img: nullable String
+
+	# Book price
+	var price: Float
+end
+
+class BookValidator
+	super ObjectValidator
+
+	redef init do
+		add new ISBNField("isbn")
+		add new StringField("title", min_size=1, max_size=255)
+		add new StringField("img", required=false)
+		add new FloatField("price", min=0.0, max=999.0)
+	end
+end
+
+class BookHandler
+	super Handler
+
+	# Insert a new Book
+	redef fun post(req, res) do
+		var validator = new BookValidator
+		if not validator.validate(req.body) then
+			res.json(validator.validation, 400)
+			return
+		end
+		# TODO data persistence
+	end
+end
+~~~
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+~~~bash
+nitunit .
+~~~
+
+## Authors
+
+This project is maintained by **Alexandre Terrasa <mailto:alexandre@moz-code.org>**.

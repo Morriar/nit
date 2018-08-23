@@ -1,9 +1,13 @@
-# Abstract serialization services
+# `serialization` - Abstract serialization services
 
-The serialization services are based on the `serialize` and the `noserialize` annotations,
+[[toc: serialization]]
+
+The [[serialization]] services are based on the `serialize` and the `noserialize` annotations,
 the `Serializable` interface and the implementations of `Serializer` and `Deserializer`.
 
 ## The `serialize` annotation
+
+[[uml: serialization | format: svg, mentities: serialization::serialization;serialization::engine_tools;serialization::safe;serialization::caching;serialization::serialization_core;serialization::inspect]]
 
 A class annotated with `serialize` identifies it as a subclass of Serializable and
 triggers the generation of customized serialization and deserialization services.
@@ -38,9 +42,25 @@ raised when trying to serialize non-serializable attributes.
 In the class `Person`, all attributes are typed with classes the standards library.
 These common types are defined defined as serializable by this project.
 The attributes could also be typed with user-defined `serialize`
-classes or any other subclass of `Serializable`.
+classes or any other subclass of [[serialization::Serializable | text: `Serializable`]].
 
 ~~~
+import serialization
+
+# Simple serializable class identifying a human
+class Person
+	serialize
+
+	# First and last name
+	var name: String
+
+	# Year of birth (`null` if unknown)
+	var birth: nullable Int
+
+	redef fun ==(o) do return o isa SELF and name == o.name and birth == o.birth
+	redef fun hash do return name.hash
+end
+
 # This `serialize` class is composed of two `serialize` attributes
 class Partnership
 	serialize
@@ -66,6 +86,7 @@ end
 
   ~~~
   module shared_between_clients is serialize
+  import serialization
   ~~~
 
 * Attribute annotated with `serialize` states that it is to be serialized, when the rest of the class does not.
@@ -73,12 +94,18 @@ end
   Only the attributes with the `serialize` annotation will be serialized.
 
   ~~~
+  import serialization
+
   # Only serialize the `name`
   class UserCredentials
       var name: String is serialize
       var avatar_path: String = "/somepath/"+name is lazy
   end
   ~~~
+
+  Example from `serialization::custom_serialization`:
+
+[[code: serialization::custom_serialization]]
 
 ## The `noserialize` annotation
 
@@ -94,6 +121,8 @@ The `noserialize` annotation mark an exception in a `serialize` module or class 
   Usually, it will also be annotated with `lazy` to get its value by another mean after the object has been deserialized.
 
   ~~~
+  import serialization
+
   # Once again, only serialize the `name`
   class UserCredentials
       serialize
@@ -112,6 +141,8 @@ This annotation can be useful to change the name of an attribute to what is expe
 Or to use identifiers in the serialization format that are reserved keywords in Nit (like `class` and `type`).
 
 ~~~
+import serialization
+
 class UserCredentials
 	serialize
 
@@ -158,6 +189,8 @@ two serialization services: `User::core_serialize_to` and
 ~~~
 module user_credentials
 
+import serialization
+
 # User credentials for a website
 class User
 	super Serializable
@@ -191,13 +224,13 @@ redef class Deserializer
 	do
 		if name == "User" then
 			# Deserialize normally
-			var user = deserialize_attribute("name")
+			var user = deserialize_attribute("name").as(String)
 
 			# Decrypt password
-			var pass = deserialize_attribute("pass").rot(-13)
+			var pass = deserialize_attribute("pass").as(String).rot(-13)
 
 			# Deserialize the path and load the avatar from the file system
-			var avatar_path = deserialize_attribute("avatar_path")
+			var avatar_path = deserialize_attribute("avatar_path").as(String)
 			var avatar = new Image(avatar_path)
 
 			return new User(user, pass, avatar)
@@ -205,6 +238,10 @@ redef class Deserializer
 
 		return super
 	end
+end
+
+redef class String
+	fun rot(s: Int): String do return self
 end
 
 # An image loaded in memory as ASCII art
@@ -215,12 +252,12 @@ class Image
 	var path: String
 
 	# ASCII art composing this image
-	var ascii_art: String = path.read_all is lazy
+	var ascii_art: String = path.to_path.read_all is lazy
 end
 
 ~~~
 
-See the documentation of the module `serialization::serialization` for more
+See the documentation of the module [[serialization::serialization | text: `serialization::serialization`]] for more
 information on the services to redefine.
 
 ## Serialization services
@@ -228,13 +265,13 @@ information on the services to redefine.
 The `serialize` annotation and the `Serializable` class are used on
 classes specific to the business domain.
 To write (and read) instances of these classes to a persistent format
-you must use implementations of `Serializer` and `Deserializer`.
+you must use implementations of [[serialization::Serializer | text: `Serializer`]] and [[serialization::Deserializer | text: `Deserializer`]].
 
 The main implementations of these services are `JsonSerializer` and `JsonDeserializer`,
 from the `json_serialization` module.
 
-~~~
-import json
+~~~nitish
+mport json
 import user_credentials
 
 # Data to be serialized and deserialized
@@ -307,3 +344,23 @@ server-side, serialized and the used client-side.
 In this case, two files will be generated by nitserial,
 one for the server and one for the client.
 Both the files should be compiled with both the client and the server.
+
+## [[sign: serialization::serialization_core]]
+
+> [[doc: serialization::serialization_core]]
+
+## [[sign: serialization::DeserializerCache]]
+
+> [[doc: serialization::DeserializerCache]]
+
+## [[sign: serialization::SerializerCache]]
+
+> [[doc: serialization::SerializerCache]]
+
+## [[sign: serialization::Deserializer]]
+
+> [[doc: serialization::Deserializer]]
+
+## Authors
+
+This project is maintained by [[ini-maintainer: serialization]].
