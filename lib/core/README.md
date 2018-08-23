@@ -22,6 +22,44 @@
 
 Core classes and methods used by default by Nit programs and libraries.
 
+* `abstract_collection` - Abstract collection classes and services.
+* `abstract_text` - Abstract class for manipulation of sequences of characters
+* `array` - This module introduces the standard array structure.
+* `bitset` - Services to handle BitSet
+* `bytes` - Services for byte streams and arrays
+* `circular_array` - Efficient data structure to access both end of the sequence.
+* `codec_base` - Base for codecs to use with streams
+* `codecs` - Group module for all codec-related manipulations
+* `collection` - This module define several collection classes.
+* `core` - Standard classes and methods used by default by Nit programs and libraries.
+* `environ` - Access to the environment variables of the process
+* `error` - Standard error-management infrastructure.
+* `exec` - Invocation and management of operating system sub-processes.
+* `file` - File manipulations (create, read, write, etc.)
+* `fixed_ints` - Basic integers of fixed-precision
+* `fixed_ints_text` - Text services to complement `fixed_ints`
+* `flat` - All the array-based text representations
+* `gc` - Access to the Nit internal garbage collection mechanism
+* `hash_collection` - Introduce `HashMap` and `HashSet`.
+* `iso8859_1` - Codec for ISO8859-1 I/O
+* `kernel` - Most basic classes and methods.
+* `list` - This module handle double linked lists
+* `math` - Mathematical operations
+* `native` - Native structures for text and bytes
+* `numeric` - Advanced services for `Numeric` types
+* `protocol`
+* `queue` - Queuing data structures and wrappers
+* `range` - Module for range of discrete objects.
+* `re` - Regular expression support for all services based on `Pattern`
+* `ropes` - Tree-based representation of a String.
+* `sorter` - This module contains classes used to compare things and sorts arrays.
+* `stream` - Input and output streams of characters
+* `string_search` - Basic string search, match and replace.
+* `text` - All the classes and methods related to the manipulation of text entities
+* `time` - Management of time and dates
+* `union_find` - union–find algorithm using an efficient disjoint-set data structure
+* `utf8` - Codec for UTF-8 I/O
+
 ## Core Basic Types and Operations
 
 ![Diagram for `core`](uml-core.svg)

@@ -16,7 +16,14 @@ It offers simple generic classes to extends.
 Contents:
 
 * see `backtrack`
+
 * see `search`
+
+* `ai` - Simple toolkit for artificial intelligence.
+
+* `backtrack` - Basic framework for active backtrack solver
+
+* `search` - Basic framework for search problems and solver.
 
 See the `examples` subdirectory for examples:
 
@@ -309,6 +316,13 @@ end
 ~~~
 
 ![Diagram for `ai`](uml-ai.svg)
+
+* `BacktrackNode` - A node in the backtrack-zipper visited by a `BacktrackSolver`.
+* `BacktrackProblem` - Abstract backtrack problem of states (`S`) and actions (`A`).
+* `BacktrackSolver` - A running solver for a given problem, that can be configured and controlled.
+* `SearchNode` - A node in the search-tree visited by a `SearchSolver`.
+* `SearchProblem` - Abstract search problem over immutable states (`S`) and actions (`A`).
+* `SearchSolver` - A running solver for a given problem, to configure and control.
 
 ## `backtrack`
 

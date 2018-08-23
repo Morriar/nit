@@ -124,6 +124,14 @@ sdl.img.quit
 sys.sdl.quit
 ~~~
 
+
+* `all` - Unites the main `sdl2` module and its sister library `sdl2::image`
+* `events` - SDL 2 events and related services
+* `image` - Services of the SDL_image 2.0 library
+* `mixer` - SDL2 mixer with sample/sounds and music
+* `sdl2` - Simple DirectMedia Layer (SDL) 2.0 services for easy window creation and 2D drawing
+* `sdl2_base` - Basic SDL 2 features
+* `syswm` - Window manager related SDL 2 services
 ![Diagram for `sdl2`](uml-sdl2.svg)
 
 ## `image`

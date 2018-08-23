@@ -4,6 +4,8 @@
 
 Core classes and methods used by default by Nit programs and libraries.
 
+[[features: core | mentities: core::codecs;core::text;core::bitset;core::gc;core::codec_base;core::core;core::error;core::environ;core::protocol;core::iso8859_1;core::utf8;core::collection;core::numeric;core::range;core::time;core::exec;core::union_find;core::math;core::queue;core::fixed_ints_text;core::hash_collection;core::sorter;core::circular_array;core::native;core::list;core::re;core::abstract_collection;core::string_search;core::kernel;core::stream;core::fixed_ints;core::array;core::ropes;core::file;core::bytes;core::abstract_text;core::flat]]
+
 ## Core Basic Types and Operations
 
 [[uml: core | format: svg, mentities: core::codecs;core::text;core::bitset;core::gc;core::codec_base;core::core;core::error;core::environ;core::protocol;core::iso8859_1;core::utf8;core::collection;core::numeric;core::range;core::time;core::exec;core::union_find;core::math;core::queue;core::fixed_ints_text;core::hash_collection;core::sorter;core::circular_array;core::native;core::list;core::re;core::abstract_collection;core::string_search;core::kernel;core::stream;core::fixed_ints;core::array;core::ropes;core::file;core::bytes;core::abstract_text;core::flat]]

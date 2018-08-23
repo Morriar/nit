@@ -15,6 +15,8 @@ Example from `sdl2::minimal`:
 
 [[uml: sdl2 | format: svg, mentities: sdl2::all;sdl2::sdl2;sdl2::syswm;sdl2::image;sdl2::mixer;sdl2::events;sdl2::sdl2_base]]
 
+[[features: sdl2 | mentities: sdl2::all;sdl2::sdl2;sdl2::syswm;sdl2::image;sdl2::mixer;sdl2::events;sdl2::sdl2_base]]
+
 ## [[sign: sdl2::image]]
 
 > [[doc: sdl2::image]]

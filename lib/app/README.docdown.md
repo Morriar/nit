@@ -173,6 +173,8 @@ Example from `app::ui_example`:
 
 [[code: app::ui_example]]
 
+[[features: app | mentities: app::app;app::data_store;app::assets;app::audio;app::app_base;app::http_request;app::ui]]
+
 ## Metadata annotations
 
 The _app.nit_ framework defines three annotations to customize the application package.

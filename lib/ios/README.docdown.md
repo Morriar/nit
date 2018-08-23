@@ -2,6 +2,8 @@
 
 [[toc: ios]]
 
+[[features: ios | mentities: ios::platform;ios::ios;ios::http_request;ios::assets;ios::data_store;ios::app;ios::audio;ios::glkit;ios::uikit;ios::ui]]
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine.
@@ -38,6 +40,8 @@ Let's use the `hello_ios` example in the folder `lib/ios/examples/`.
 Compile with: `nitc hello_world.nit`
 
 Run in the simulator with: `ios-sim hello_world.app`
+
+[[features: ios | mentities: ios::UIEvent;ios::UIApplication;ios::UITouch;ios::AppDelegate;ios::UITableViewStyle;ios::UITableViewDataSource;ios::UIWindow;ios::NSSet_UITouch;ios::UIScrollView;ios::UISwitch;ios::UITableViewCell;ios::NitViewController;ios::UILayoutConstraintAxis;ios::UITableViewDelegate;ios::UIButtonType;ios::UIButton;ios::UIControl;ios::UIViewController;ios::UIStackViewDistribution;ios::UITableView;ios::UITextField;ios::UIStackViewAlignment;ios::UILabel;ios::TableView;ios::UIStackView;ios::NitGLKView;ios::UIColor;ios::UIView]]
 
 ## Sample portable applications
 

@@ -10,6 +10,8 @@ Contents:
 * see `backtrack`
 * see `search`
 
+[[features: ai | mentities: ai::ai;ai::backtrack;ai::search]]
+
 See the `examples` subdirectory for examples:
 
 * `examples/queens.nit`
@@ -19,6 +21,8 @@ See the `examples` subdirectory for examples:
 [[code: ai::puzzle]]
 
 [[uml: ai | format: svg, mentities: ai::ai;ai::backtrack;ai::search]]
+
+[[features: ai | mentities: ai::SearchNode;ai::BacktrackNode;ai::BacktrackProblem;ai::BacktrackSolver;ai::SearchProblem;ai::SearchSolver]]
 
 ## [[sign: ai::backtrack]]
 

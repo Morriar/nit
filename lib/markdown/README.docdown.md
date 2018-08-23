@@ -33,6 +33,8 @@ Options:
 
 Or you can use it programmatically by importing the `markdown` module.
 
+[[features: markdown | mentities: markdown::nitmd;markdown::wikilinks;markdown::man;markdown::decorators;markdown::markdown]]
+
 ## Differences with Markdown specification
 
 This parser passes all tests inside http://daringfireball.net/projects/downloads/MarkdownTest_1.0_2007-05-09.tgz execpt of two:

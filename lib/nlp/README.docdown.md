@@ -13,6 +13,8 @@ This wrapper needs the Stanford CoreNLP jars that run on Java 1.8+.
 
 > [[doc: nlp::nlp]]
 
+> [[features: nlp | mentities: nlp::NLPSentence;nlp::NLPFileIndex;nlp::NLPDocument;nlp::NLPJavaProcessor;nlp::NLPClient;nlp::NLPServer;nlp::NLPProcessor;nlp::NLPIndex;nlp::NLPToken]]
+
 ## [[sign: nlp::NLPProcessor]]
 
 > [[doc: nlp::NLPProcessor]]

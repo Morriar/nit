@@ -20,6 +20,8 @@ Example from `actors::simple_simulation`:
 
 [[code: actors::simple_simulation]]
 
+[[features: actors | mentities: actors::actors_simple;actors::actors_mandelbrot;actors::actors_thread_ring;actors::actors_simple_simulation;actors::actors_agent_simulation;actors::actors_chameneosredux;actors::actors_fannkuchredux;actors::actors]]
+
 ## `actor` annotation
 
 The `actors` module introduces the annotation `actor` which is to be used on classes.

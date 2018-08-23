@@ -116,6 +116,10 @@ The type to recreate is either declared or inferred:
 The method `deserialize_json` is a shortcut to `JsonDeserializer` which prints
 errors to the console. It is fit only for small scripts and other quick and dirty usage.
 
+[[features: json | mentities: json::json;json::error;json::store;json::dynamic;json::serialization_read;json::serialization_write;json::static]]
+
+[[features: json | mentities: json::JsonParseError;json::JsonSequenceRead;json::JsonKeyError;json::JsonMapRead;json::JsonArray;json::JsonObject;json::JsonStore;json::JsonDeserializer;json::JsonSerializer;json::JSONStringParser;json::JsonValue]]
+
 ### [[sign: json::dynamic]]
 
 > [[doc: json::dynamic]]

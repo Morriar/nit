@@ -41,6 +41,20 @@ features for lazy developpers.
 Popcorn is built over nitcorn to provide a clean and user friendly interface
 without all the boiler plate code.
 
+* `pop_auth` - Authentification handlers.
+* `pop_config` - Configuration file and options for Popcorn apps
+* `pop_handlers` - Route handlers.
+* `pop_json` - Introduce useful services for JSON REST API handlers.
+* `pop_logging`
+* `pop_repos` - Repositories for data management.
+* `pop_routes` - Internal routes representation.
+* `pop_sessions` - Session handlers
+* `pop_tasks` - Popcorn threaded tasks
+* `pop_templates` - Template rendering for popcorn
+* `pop_tests` - Popcorn testing services
+* `pop_tracker` - * `pop_validation` - Quick and easy validation framework for Json inputs
+* `popcorn` - Application server abstraction on top of nitcorn.
+
 ## What does it taste like?
 
 ![Diagram for `popcorn`](uml-popcorn-3.svg)

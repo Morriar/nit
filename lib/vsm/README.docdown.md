@@ -10,6 +10,10 @@ The `vsm` package provides the following features:
 * Vector indexing and matching with tf * idf.
 * File indexing and matching to free text queries.
 
+[[features: vsm | mentities: vsm::bm25;vsm::vsm]]
+
+[[features: vsm | mentities: vsm::IndexMatchSorter;vsm::IndexMatch;vsm::StringIndex;vsm::Vector;vsm::FileIndex;vsm::Document;vsm::VSMIndex]]
+
 ## [[sign: vsm::Vector]]
 
 > [[doc: vsm::Vector]]

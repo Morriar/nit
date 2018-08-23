@@ -90,6 +90,12 @@ end
 print "{array.length} strings inserted"
 ~~~
 
+* `concurrent_collections` - Introduces thread-safe concurrent collections
+* `extra` - Offers some POSIX threads services that are not available on all platforms
+* `pthreads` - Main POSIX threads support and intro the classes `Thread`, `Mutex` and `Barrier`
+* `redef_collections` - Redef _some_ basic collections to be thread-safe
+* `threadpool` - Introduces a minimal ThreadPool implementation using Tasks
+
 ## `redef_collections`
 
 > This modules is intended to be used with scripts or quick prototypes.

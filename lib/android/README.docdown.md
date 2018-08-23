@@ -122,6 +122,8 @@ There is two core implementation for Nit apps on Android.
 Clients don't have to select the core implementation, it is imported by other relevant modules.
 For example, a module importing `app::ui` and `android` will trigger the importation of `android::nit_activity`.
 
+[[features: android | mentities: android::portrait;android::landscape;android::android;android::at_boot;android::shared_preferences;android::intent_api12;android::intent_api17;android::intent_api19;android::intent_api14;android::platform;android::intent_api18;android::activities;android::intent_api11;android::vibration;android::toast;android::cardboard;android::native_notification;android::data_store;android::aware;android::intent_api15;android::intent;android::key_event;android::wifi;android::game;android::shared_preferences_api11;android::dalvik;android::assets;android::service;android::log;android::intent_api16;android::load_image;android::http_request;android::native_app_glue;android::nit_activity;android::notification;android::gamepad;android::ui;android::native_ui;android::input_events;android::sensors;android::assets_and_resources;android::shared_preferences_api10;android::bundle;android::audio;android::intent_api10]]
+
 ### Lock app orientation
 
 Importing `android::landscape` or `android::portrait` locks the generated

@@ -33,6 +33,15 @@
 
 This module provides a Nit object oriented interface to access the Github api.
 
+* `api` - Nit object oriented interface to [Github api](https://developer.github.com/v3/).
+* `cache` - Enable caching on Github API accesses.
+* `events` - Events are emitted by Github Hooks.
+* `github` - Nit wrapper for Github API
+* `github_curl` - Curl extention to access the Github API
+* `hooks` - Github hook event listening with `nitcorn`.
+* `loader`
+* `wallet` - Github OAuth tokens management
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine.
@@ -114,6 +123,59 @@ var user = api.load_user("Morriar")
 assert user != null
 assert user.login == "Morriar"
 ~~~
+
+* `Branch` - A Github branch.
+* `BranchRepo`
+* `Comment` - A Github comment
+* `Commit` - A Github commit.
+* `CommitComment` - A comment made on a commit.
+* `CommitCommentEvent` - Triggered when a commit comment is created.
+* `CommitRepo`
+* `ContributorStats` - Should be accessed from `Repo::contrib_stats`.
+* `CreateEvent` - Triggered when a repository, branch, or tag is created.
+* `DeleteEvent` - Triggered when a branch or a tag is deleted.
+* `DeploymentEvent` - Triggered when a new snapshot is deployed.
+* `DeploymentStatusEvent` - Triggered when a deployement's status changes.
+* `ForkEvent` - Triggered when a user forks a repository.
+* `GitCommit` - A Git Commit representation
+* `GitUser` - Git user authoring data
+* `GithubAPI` - Client to Github API
+* `GithubCurl` - Specific Curl that know hot to talk to the github API
+* `GithubDeserializer` - JsonDeserializer specific for Github objects.
+* `GithubEntity` - Something returned by the Github API.
+* `GithubError` - An error thrown by the Github API.
+* `GithubEvent` - Github event stub.
+* `GithubFile` - A Github file representation.
+* `GithubWallet` - Github OAuth tokens wallet
+* `HookListener` - A nitcorn listener for Github hooks.
+* `Issue` - A Github issue.
+* `IssueComment` - Comments made on Github issue and pull request pages.
+* `IssueCommentEvent` - Triggered when an issue comment is created.
+* `IssueCommentRepo`
+* `IssueEvent` - An event that occurs on a Github `Issue`.
+* `IssueEventRepo`
+* `IssueRepo`
+* `IssuesEvent` - Triggered when an event occurs on an issue.
+* `Label` - A Github label.
+* `Loader`
+* `LoaderConfig` - Loader configuration file
+* `LoaderJob` - Loader status by repo
+* `LoaderJobRepo` - Loader status repository
+* `MemberEvent` - Triggered when a user is added as a collaborator to a repository.
+* `Milestone` - A Github milestone.
+* `PullRef` - A pull request reference (used for head and base).
+* `PullRequest` - A Github pull request.
+* `PullRequestEvent` - Triggered when an event occurs on a pull request.
+* `PullRequestRepo`
+* `PullRequestReviewCommentEvent` - Triggered when a comment is created on a pull request diff.
+* `PushEvent` - Triggered when a repository branch is pushed to.
+* `RenameAction` - A rename action maintains the name before and after a renaming action.
+* `Repo` - A Github repository.
+* `RepoEntity`
+* `RepoRepo`
+* `ReviewComment` - Comments made on Github pull request diffs.
+* `StatusEvent` - Triggered when the status of a Git commit changes.
+* `User` - A Github user
 
 ### Authentification
 

@@ -162,6 +162,52 @@ There is two core implementation for Nit apps on Android.
 Clients don't have to select the core implementation, it is imported by other relevant modules.
 For example, a module importing `app::ui` and `android` will trigger the importation of `android::nit_activity`.
 
+* `activities` - Android Activities wrapper
+* `android` - Android services and implementation of app.nit
+* `assets` - Implementation of `app::assets`
+* `assets_and_resources` - Android Assets and Resources Management
+* `at_boot` - Import this module to launch `Service` at device boot
+* `audio` - Android audio services, wraps a part of android audio API
+* `aware` - Android compatibility module
+* `bundle` - A mapping class of `String` to various value types used by the
+* `cardboard` - Services from the Google Cardboard SDK for virtual reality on Android
+* `dalvik` - Java related services specific to Android and its Dalvik VM
+* `data_store` - Implements `app::data_store` using `shared_preferences`
+* `game` - Android services and implementation of app.nit for gamnit and mnit
+* `gamepad` - Support for gamepad events (over Bluetooth or USB)
+* `http_request` - Android implementation of `app:http_request`
+* `input_events` - Pointer and hardware key events
+* `intent` - Services allowing to launch activities and start/stop services using
+* `intent_api10` - Services allowing to launch activities and start/stop services using
+* `intent_api11` - Refines intent module to add API 11 services
+* `intent_api12` - Refines intent module to add API 12 services
+* `intent_api14` - Refines intent module to add API 14 services
+* `intent_api15` - Refines intent module to add API 15 services
+* `intent_api16` - Refines intent module to add API 16 services
+* `intent_api17` - Refines intent module to add API 17 services
+* `intent_api18` - Refines intent module to add API 18 services
+* `intent_api19` - Refines intent module to add API 19 services
+* `key_event`
+* `landscape` - Lock the application in the landscape orientation
+* `load_image` - Low-level services to load pixel data from the assets
+* `log` - Advanced Android logging services
+* `native_app_glue` - Wrapper of the Android native_app_glue framework to implement app.nit
+* `native_notification` - Native Java classes for notifications
+* `native_ui` - Native services from the `android.view` and `android.widget` namespaces
+* `nit_activity` - Core implementation of `app.nit` on Android using a custom Java entry point
+* `notification` - Services to show notification in the Android status bar
+* `platform` - Triggers compilation for the android platform
+* `portrait` - Config to set the portrait orientation
+* `sensors` - Access Android sensors
+* `service` - Android service support for _app.nit_ centered around the class `Service`
+* `shared_preferences` - Services allowing to save and load datas to internal android device
+* `shared_preferences_api10` - Services to save/load data using `android.content.SharedPreferences` for the android platform
+* `shared_preferences_api11` - Refines shared_preferences module to add API 11 services
+* `toast` - Services to display a _toast_, a small popup on Android
+* `ui` - Views and services to use the Android native user interface
+* `vibration` - Vibration services for Android
+* `wifi` - Simple wrapper of the Android WiFi services
+
 ### Lock app orientation
 
 Importing `android::landscape` or `android::portrait` locks the generated

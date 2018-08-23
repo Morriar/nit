@@ -31,6 +31,8 @@ Example from `nitcorn::nitcorn_reverse_proxy`:
 
 [[code: nitcorn::nitcorn_reverse_proxy]]
 
+[[features: nitcorn | mentities: nitcorn::pthreads;nitcorn::nitcorn;nitcorn::signal_handler;nitcorn::token;nitcorn::proxy;nitcorn::server_config;nitcorn::restful;nitcorn::sessions;nitcorn::http_errors;nitcorn::log;nitcorn::http_request_buffer;nitcorn::reactor;nitcorn::vararg_routes;nitcorn::file_server;nitcorn::http_request;nitcorn::http_response;nitcorn::media_types]]
+
 ## Examples
 
 A minimal example follows with a custom `Action` and using `FileServer`.

@@ -20,6 +20,17 @@ This wrapper needs the Stanford CoreNLP jars that run on Java 1.8+.
 
 > See http://nlp.stanford.edu/software/corenlp.shtml.
 
+> * `NLPClient` - A NLPProcessor using a NLPServer as backend
+
+* `NLPDocument` - A `Document` represent a text input given to the NLP processor.
+* `NLPFileIndex` - A FileIndex based using a NLPProcessor
+* `NLPIndex` - A StringIndex using a NLPProcessor to parse and vectorize strings
+* `NLPJavaProcessor` - Wrapper around StanfordNLP jar.
+* `NLPProcessor` - Natural Language Processor
+* `NLPSentence` - Represent one sentence in a `Document`.
+* `NLPServer` - Stanford web server
+* `NLPToken` - Represent one word (or puncutation mark) in a `NLPSentence`.
+
 ## `NLPProcessor`
 
 > NLPProcessor provides natural language processing for input text and files.

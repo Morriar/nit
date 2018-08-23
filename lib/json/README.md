@@ -127,6 +127,42 @@ The type to recreate is either declared or inferred:
 The method `deserialize_json` is a shortcut to `JsonDeserializer` which prints
 errors to the console. It is fit only for small scripts and other quick and dirty usage.
 
+* `dynamic` - Dynamic interface to read values from JSON strings
+
+* `error` - Intro `JsonParseError` which is exposed by all JSON reading APIs
+
+* `json` - Read and write JSON formatted text using the standard serialization services
+
+* `serialization_read` - Services to read JSON: `deserialize_json` and `JsonDeserializer`
+
+* `serialization_write` - Services to write Nit objects to JSON strings: `serialize_to_json` and `JsonSerializer`
+
+* `static` - Static interface to read Nit objects from JSON strings
+
+* `store` - Store and load json data.
+
+* `JSONStringParser` - A simple ad-hoc JSON parser
+
+* `JsonArray` - A JSON array.
+
+* `JsonDeserializer` - Deserializer from a Json string.
+
+* `JsonKeyError` - Key access error
+
+* `JsonMapRead` - A map that can be translated into a JSON object.
+
+* `JsonObject` - A JSON Object.
+
+* `JsonParseError` - JSON format error at parsing
+
+* `JsonSequenceRead` - A sequence that can be translated into a JSON array.
+
+* `JsonSerializer` - Serializer of Nit objects to Json string.
+
+* `JsonStore` - A JsonStore can save and load json data from file system.
+
+* `JsonValue` - Dynamic wrapper of a JSON value, created by `Text::to_json_value`
+
 ### `dynamic`
 
 > Most services are in `JsonValue`, which is created by `Text::to_json_value`.

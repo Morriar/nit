@@ -10,6 +10,8 @@ features for lazy developpers.
 Popcorn is built over nitcorn to provide a clean and user friendly interface
 without all the boiler plate code.
 
+[[features: popcorn | mentities: popcorn::pop_sessions;popcorn::pop_tasks;popcorn::pop_json;popcorn::pop_templates;popcorn::pop_config;popcorn::popcorn;popcorn::pop_tests;popcorn::pop_routes;popcorn::pop_repos;popcorn::pop_auth;popcorn::pop_logging;popcorn::pop_tracker;popcorn::pop_handlers;popcorn::pop_validation]]
+
 ## What does it taste like?
 
 [[uml: popcorn | format: svg, mentities: popcorn::pop_sessions;popcorn::pop_tasks;popcorn::pop_json;popcorn::pop_templates;popcorn::pop_config;popcorn::popcorn;popcorn::pop_tests;popcorn::pop_routes;popcorn::pop_repos;popcorn::pop_auth;popcorn::pop_logging;popcorn::pop_tracker;popcorn::pop_handlers;popcorn::pop_validation]]

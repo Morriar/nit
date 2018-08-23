@@ -1,15 +1,36 @@
 # `geometry` - Basic geometry data structures and services
 
 * [Points and Lines](#Points-and-Lines)
+
 * [Boxes and detection collision](#Boxes-and-detection-collision)
+
 * [`Box`](#`Box`)
+
 * [`Box3d`](#`Box3d`)
+
 * [`BoxedArray`](#`BoxedArray`)
+
 * [`quadtree`](#`quadtree`)
+
 * [`SQuadTree`](#`SQuadTree`)
+
 * [`DQuadTree`](#`DQuadTree`)
+
 * [Polygons](#Polygons)
+
 * [Authors](#Authors)
+
+* `angles` - Angle related service using `Float` to represent an angle in radians
+
+* `boxes` - Provides interfaces and classes to represent basic geometry needs.
+
+* `geometry` - Provides interfaces and classes to represent basic geometry needs.
+
+* `points_and_lines` - Interfaces and classes to represent basic geometry needs.
+
+* `polygon` - Convex Polygons manipulations
+
+* `quadtree` - QuadTree API mostly used for 2 dimensional collision detection
 
 ## Points and Lines
 
@@ -95,9 +116,52 @@ geometric problems are simpler and faster on convex objects than on non-convex o
 Services provided :
 
 * Point in convex polygon
+
 * Intersection of convex polygon
+
 * Convex hull of a set of points
+
 * Triangulation of polygon
+
+* `APolygon` - Abstraction of a Polygon
+
+* `Box` - A 2d bounded object and an implementation of `Boxed`
+
+* `Box3d` - A 3d bounded object and an implementation of Boxed
+
+* `Boxed` - An 2d abstract bounded object
+
+* `Boxed3d` - An 3d abstract bounded object
+
+* `BoxedArray` - `BoxedCollection` implemented by an array
+
+* `BoxedCollection` - Base for all data structures containing multiple Boxed Objects
+
+* `ConvexPolygon` - Convex Polygon class
+
+* `DQuadTree` - A dynamic implementation of the quadtree data structure
+
+* `ILine` - Abstract 2D line segment between two ordered points
+
+* `ILine3d` - Abstract 3D line segment between two ordered points
+
+* `IPoint` - Abstract 2d point, strongly linked to its implementation `Point`
+
+* `IPoint3d` - Abstract 3d point, strongly linked to its implementation `Point3d`
+
+* `Line` - 2D line segment between two ordered points
+
+* `Line3d` - 3D line segment between two ordered points
+
+* `Point` - 2D point with `x` and `z`
+
+* `Point3d` - 3D point with `x`, `y` and `z`
+
+* `Polygon` - A simple polygon
+
+* `QuadTree` - Abstract QuadTree implementing the basic functions and data
+
+* `SQuadTree` - Static implementation of the quadtree structure
 
 ## Authors
 

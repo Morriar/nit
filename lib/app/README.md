@@ -378,6 +378,14 @@ end
 redef fun root_window do return new UiExampleWindow
 ~~~
 
+* `app` - app.nit is a framework to create cross-platform applications
+* `app_base` - Base of the _app.nit_ framework, defines `App`
+* `assets` - Portable services to load resources from the assets folder
+* `audio` - Services to load and play `Sound` and `Music` from the assets folder
+* `data_store` - Key/value storage services
+* `http_request` - HTTP request services: `AsyncHttpRequest` and `Text::http_get`
+* `ui` - Portable UI controls for mobiles apps
+
 ## Metadata annotations
 
 The _app.nit_ framework defines three annotations to customize the application package.

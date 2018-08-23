@@ -100,6 +100,24 @@ factory.config.virtual_hosts.add vh
 factory.run
 ~~~
 
+* `file_server` - Provides the `FileServer` action, which is a standard and minimal file server
+* `http_errors` - Offers `ErrorTemplate` to display error pages
+* `http_request` - Provides the `HttpRequest` class and services to create it
+* `http_request_buffer` - Http request parsing for buffered inputs.
+* `http_response` - Provides the `HttpResponse` class and `http_status_codes`
+* `log` - Services inserting a timestamp in all prints and to log each requests
+* `media_types` - Services to identify Internet media types (or MIME types, Content-types)
+* `nitcorn` - The nitcorn Web server framework creates server-side Web apps in Nit
+* `proxy` - Provides the `ProxyAction` action, which redirects requests to another interface
+* `pthreads` - Activate the use of pthreads with `nitcorn`
+* `reactor` - Core of the `nitcorn` project, provides `HttpFactory` and `Action`
+* `restful` - Support module for the `nitrestful` tool and the `restful` annotation
+* `server_config` - Classes and services to configure the server
+* `sessions` - Automated session management
+* `signal_handler` - Handle SIGINT and SIGTERM to close the server after all active events
+* `token` - Simple `generate_token` service, independent of the rest of the nitcorn framework
+* `vararg_routes` - Routes with parameters.
+
 ## Examples
 
 A minimal example follows with a custom `Action` and using `FileServer`.

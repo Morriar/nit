@@ -128,6 +128,108 @@ _gamnit_ is modular, different services of the framework are available through d
 
 * `network` provides a simple communication framework for multiplayer client/server games.
 
+  * `android19` - Variation using features from Android API 19
+
+* `bmfont` - Parse Angel Code BMFont format and draw text
+
+* `camera_control` - Simple camera control for user, as the method `accept_scroll_and_zoom`
+
+* `camera_control_android` - Two fingers camera manipulation, pinch to zoom and slide to scroll
+
+* `camera_control_linux` - Mouse wheel and middle mouse button to control camera
+
+* `cameras` - Camera services producing Model-View-Projection matrices
+
+* `cameras_cache` - Cache the `Matrix` produced by `Camera::mvp_matrix`
+
+* `cardboard` - Update the orientation of `world_camera` at each frame using the head position given by `android::cardboard`
+
+* `client` - Client-side network services for games and such
+
+* `common` - Services common to the `client` and `server` modules
+
+* `depth` - Framework for 3D games in Nit
+
+* `depth_core` - Base entities of the depth 3D game framework
+
+* `display` - Abstract display services
+
+* `display_android` - Gamnit display implementation for Android
+
+* `display_ios` - Gamnit display implementation for iOS
+
+* `display_linux` - Gamnit display implementation for GNU/Linux using `egl`, `sdl` and `x11`
+
+* `dynamic_resolution` - Virtual screen with a resolution independent from the real screen
+
+* `egl` - Use of EGL to implement Gamnit on GNU/Linux and Android
+
+* `flat` - Simple API for 2D games, built around `Sprite` and `App::update`
+
+* `flat_core` - Core services for the `flat` API for 2D games
+
+* `font` - Abstract font drawing services, implemented by `bmfont` and `tileset`
+
+* `gamnit` - Game and multimedia framework for Nit
+
+* `gamnit_android` - Support services for Gamnit on Android
+
+* `gamnit_ios` - Support services for gamnit on iOS
+
+* `gamnit_linux` - Support services for Gamnit on GNU/Linux
+
+* `input_ios` - Gamnit event support for iOS
+
+* `keys` - Simple service keeping track of which keys are currently pressed
+
+* `landscape` - Lock the application in the landscape orientation
+
+* `limit_fps` - Frame-rate control for applications
+
+* `model_dimensions` - Dimensions related services for `Model` and `Mesh`
+
+* `model_parser_base` - Services to parse models from a text description
+
+* `more_lights` - More implementations of `Light`
+
+* `more_materials` - Various material implementations
+
+* `more_meshes` - More simple geometric meshes
+
+* `more_models` - Services to load models from the assets folder
+
+* `mtl` - Services to parse .mtl material files
+
+* `network` - Easy client/server logic for games and simple distributed applications
+
+* `obj` - Services to parse .obj geometry files
+
+* `particles` - Particle effects
+
+* `portrait` - Lock the application in the portrait orientation
+
+* `programs` - Services for graphical programs with shaders, attributes and uniforms
+
+* `selection` - Select `Actor` from a screen coordinate
+
+* `server` - Server-side network services for games and such
+
+* `shadow` - Shadow mapping using a depth texture
+
+* `stereoscopic_view` - Refine `EulerCamera` and `App::frame_core_draw` to get a stereoscopic view
+
+* `texture_atlas_parser` - Tool to parse XML texture atlas and generated Nit code to access subtextures
+
+* `textures` - Load textures, create subtextures and manage their life-cycle
+
+* `tileset` - Support for `TileSet`, `TileSetFont` and drawing text with `TextSprites`
+
+* `virtual_gamepad` - Virtual gamepad mapped to keyboard keys for quick and dirty mobile support
+
+* `virtual_gamepad_spritesheet`
+
+* `vr` - VR support for gamnit depth, for Android only
+
 ## `network`
 
 > Both `gamnit::client` and `gamnit::server` can be used separately or

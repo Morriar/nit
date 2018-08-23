@@ -4,6 +4,8 @@
 
 This module provides a Nit object oriented interface to access the Github api.
 
+[[features: github | mentities: github::github;github::cache;github::github_curl;github::wallet;github::hooks;github::events;github::loader;github::api]]
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine.
@@ -61,6 +63,8 @@ var user = api.load_user("Morriar")
 assert user != null
 assert user.login == "Morriar"
 ~~~
+
+[[features: github | mentities: github::RepoRepo;github::IssueRepo;github::CommitRepo;github::BranchRepo;github::IssueEventRepo;github::PullRequestRepo;github::IssueCommentRepo;github::LoaderJobRepo;github::CommitCommentEvent;github::GithubDeserializer;github::GithubFile;github::ForkEvent;github::MemberEvent;github::GitUser;github::Label;github::IssueCommentEvent;github::DeleteEvent;github::RenameAction;github::LoaderJob;github::PullRequestReviewCommentEvent;github::GithubCurl;github::RepoEntity;github::Branch;github::CommitComment;github::CreateEvent;github::PushEvent;github::GithubError;github::DeploymentStatusEvent;github::GitCommit;github::ContributorStats;github::PullRef;github::IssueComment;github::StatusEvent;github::Repo;github::User;github::PullRequestEvent;github::HookListener;github::GithubWallet;github::IssuesEvent;github::DeploymentEvent;github::ReviewComment;github::GithubEntity;github::Commit;github::IssueEvent;github::GithubEvent;github::Milestone;github::Comment;github::Loader;github::PullRequest;github::Issue;github::GithubAPI;github::LoaderConfig]]
 
 ### Authentification
 

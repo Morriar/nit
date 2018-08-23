@@ -18,8 +18,28 @@ relevancy rankings.
 The `vsm` package provides the following features:
 
 * Vector comparison with cosine similarity.
+
 * Vector indexing and matching with tf * idf.
+
 * File indexing and matching to free text queries.
+
+* `bm25`
+
+* `vsm` - Vector Space Model
+
+* `Document` - A Document to add in a VSMIndex
+
+* `FileIndex` - A VSMIndex for file indexing and matching
+
+* `IndexMatch` - A match to a `request` in an `Index`
+
+* `IndexMatchSorter` - Sort matches by similarity
+
+* `StringIndex` - A VSMIndex for string indexing and matching
+
+* `VSMIndex` - A Document index based on VSM
+
+* `Vector` - A n-dimensions vector
 
 ## `Vector`
 

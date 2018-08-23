@@ -86,6 +86,8 @@ _gamnit_ is modular, different services of the framework are available through d
 
 * `network` provides a simple communication framework for multiplayer client/server games.
 
+  [[features: gamnit | mentities: gamnit::landscape;gamnit::portrait;gamnit::common;gamnit::camera_control;gamnit::network;gamnit::vr;gamnit::android19;gamnit::gamnit_ios;gamnit::display;gamnit::flat;gamnit::keys;gamnit::depth_core;gamnit::limit_fps;gamnit::camera_control_linux;gamnit::input_ios;gamnit::display_ios;gamnit::gamnit;gamnit::display_android;gamnit::font;gamnit::cardboard;gamnit::stereoscopic_view;gamnit::texture_atlas_parser;gamnit::client;gamnit::cameras_cache;gamnit::depth;gamnit::mtl;gamnit::gamnit_linux;gamnit::camera_control_android;gamnit::display_linux;gamnit::server;gamnit::particles;gamnit::tileset;gamnit::virtual_gamepad_spritesheet;gamnit::obj;gamnit::more_lights;gamnit::gamnit_android;gamnit::model_parser_base;gamnit::model_dimensions;gamnit::textures;gamnit::egl;gamnit::selection;gamnit::more_meshes;gamnit::dynamic_resolution;gamnit::virtual_gamepad;gamnit::programs;gamnit::cameras;gamnit::bmfont;gamnit::shadow;gamnit::more_models;gamnit::more_materials;gamnit::flat_core]]
+
 ## [[sign: gamnit::network]]
 
 > [[doc: gamnit::network]]

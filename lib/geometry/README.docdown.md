@@ -2,6 +2,8 @@
 
 [[toc: geometry]]
 
+[[features: geometry | mentities: geometry::geometry;geometry::angles;geometry::points_and_lines;geometry::boxes;geometry::quadtree;geometry::polygon]]
+
 ## Points and Lines
 
 [[uml: geometry | format: svg, mentities: geometry::geometry;geometry::angles;geometry::points_and_lines;geometry::boxes;geometry::quadtree;geometry::polygon]]
@@ -80,6 +82,8 @@ Services provided :
 * Intersection of convex polygon
 * Convex hull of a set of points
 * Triangulation of polygon
+
+[[features: geometry | mentities: geometry::Polygon;geometry::ConvexPolygon;geometry::Line;geometry::ILine3d;geometry::Line3d;geometry::Point;geometry::BoxedCollection;geometry::ILine;geometry::IPoint3d;geometry::Boxed3d;geometry::DQuadTree;geometry::BoxedArray;geometry::Point3d;geometry::IPoint;geometry::APolygon;geometry::Box3d;geometry::Box;geometry::Boxed;geometry::SQuadTree;geometry::QuadTree]]
 
 ## Authors
 

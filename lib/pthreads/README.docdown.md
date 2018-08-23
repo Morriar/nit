@@ -25,6 +25,8 @@ Example from `pthreads::concurrent_array_and_barrier`:
 
 [[code: pthreads::concurrent_array_and_barrier]]
 
+[[features: pthreads | mentities: pthreads::extra;pthreads::threadpool;pthreads::pthreads;pthreads::redef_collections;pthreads::concurrent_collections]]
+
 ## [[sign: pthreads::redef_collections]]
 
 > [[doc: pthreads::redef_collections]]
