@@ -255,8 +255,8 @@ redef class MPackage
 		var aligner = new MDocAligner(model, mainmodule, mentity_index, self)
 		aligner.align_mdoc(mdoc.mdoc_document)
 
-		var editor = new MDocEditor(self, mainmodule)
-		editor.edit_document(mdoc.mdoc_document)
+		var editor = new MDocEditor(self, mainmodule, mentity_index)
+		# editor.edit_document(mdoc.mdoc_document)
 
 		# var suggest = new MDocSuggester(self, mentity_index)
 		# suggest.suggest(mdoc.mdoc_document)

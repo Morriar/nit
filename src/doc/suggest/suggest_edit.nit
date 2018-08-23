@@ -31,6 +31,7 @@ class MDocEditor
 
 	var mentity: MEntity
 	var mainmodule: MModule
+	var index: MEntityIndex
 
 	var titles = new MdTitleEditor
 	var intros = new MdIntroEditor
@@ -47,7 +48,7 @@ class MDocEditor
 	var uml = new MdUmlInsert(mainmodule) is lazy
 
 	fun edit_document(document: MdDocument) do
-		var cbuilder = new MDocContextBuilder(mentity)
+		var cbuilder = new MDocContextBuilder(mentity, index)
 		cbuilder.enter_visit(document)
 		var ctx = cbuilder.context
 
@@ -55,14 +56,14 @@ class MDocEditor
 		# intros.edit_document(ctx, document)
 		# tocs.edit_document(ctx, document)
 		starting.edit_document(ctx, document)
-		# api.edit_document(ctx, document)
-		# testing.edit_document(ctx, document)
-		# authors.edit_document(ctx, document)
+		api.edit_document(ctx, document)
+		testing.edit_document(ctx, document)
+		authors.edit_document(ctx, document)
 
-		# examples_replace.edit_document(ctx, document)
-		# examples.edit_document(ctx, document)
+		examples_replace.edit_document(ctx, document)
+		examples.edit_document(ctx, document)
 		# lists.edit_document(ctx, document)
-		# uml.edit_document(ctx, document)
+		uml.edit_document(ctx, document)
 		# links.edit_document(ctx, document)
 		# var render = new MarkdownRenderer
 		# var md = render.render(document)
@@ -80,6 +81,7 @@ end
 class MDocContext
 
 	var mentity: MEntity
+	var index: MEntityIndex
 
 	var model: Model is lazy do return mentity.model
 
@@ -134,8 +136,9 @@ class MDocContextBuilder
 	super MdVisitor
 
 	var mentity: MEntity
+	var index: MEntityIndex
 
-	var context = new MDocContext(mentity) is lazy
+	var context = new MDocContext(mentity, index) is lazy
 
 	redef fun enter_visit(node) do
 		var filter = new ModelFilter(
@@ -394,10 +397,9 @@ class MdStartingEditor
 	var mainmodule: MModule
 
 	redef fun edit_document(context,doc) do
-		# if context.has_starting then
+		if context.has_starting then
 			# TODO
-		# else
-		do
+		else
 			var card = null
 			var mentity = context.mentity
 			var model = mentity.model
@@ -468,7 +470,7 @@ class MdAPIEditor
 	var mainmodule: MModule
 
 	redef fun edit_document(context,doc) do
-		if context.has_api then return
+		# if context.has_api then return
 
 		var cards = new Array[DocCard]
 		var mmodules = context.mmodules
@@ -476,6 +478,37 @@ class MdAPIEditor
 
 		var mprops_mdoc = new Array[MProperty]
 		var mprops_other = new Array[MProperty]
+
+		var kinds = ["MGroup", "MModule", "MClass", "MProperty"]
+
+		var q = new Vector
+		q.inc "in: {context.mentity.full_name}"
+		q.inc "+in: {context.mentity.full_name}"
+		q.inc "-is_example: true"
+		q.inc "-is_test: true"
+		q.inc "+has_comment: true"
+		q.inc "+visibility: public"
+		q.inc "-name: SELF"
+		q.inc "-kind: MPackage"
+		q.inc "-kind: MGroup"
+		q.inc "-kind: MClassDef"
+		q.inc "-kind: MPropDef"
+
+
+		for kind in kinds do
+			if kind == "MGroup" then continue # TODO
+			if kind == "MProperty" then continue # TODO
+			var qq = new Vector.from(q)
+			qq.inc "+kind: {kind}"
+			# print qq
+			var matches = context.index.match_query(qq)
+			for match in matches do
+				var card = new CardDoc(context.model.mdoc_parser, match.document.mentity, 2)
+				cards.add card
+			end
+			# if cards.not_empty then break
+		end label kinds
+
 
 		# No mclass, show only mprops
 		if mclasses.is_empty then
@@ -1101,7 +1134,34 @@ end
 class MdListInsert
 	super MdEditor
 
-	redef fun visit_block(block) do
+	redef fun edit_document(context, document) do
+		var cards = new Array[DocCard]
+
+		var q = new Vector
+		q.inc "in: {context.mentity.full_name}"
+		q.inc "+in: {context.mentity.full_name}"
+		q.inc "-is_example: true"
+		q.inc "-is_test: true"
+		q.inc "+visibility: public"
+		q.inc "-name: SELF"
+		q.inc "-kind: MClassDef"
+		q.inc "-kind: MPropDef"
+
+		var kinds = ["MGroup", "MModule", "MClass", "MProperty"]
+
+		for kind in kinds do
+			if kind == "MGroup" then continue # TODO
+			var qq = new Vector.from(q)
+			qq.inc "+kind: {kind}"
+			var matches = context.index.match_query(qq)
+			if matches.length > 1 then
+				var mentities = new Array[MEntity]
+				for match in matches do mentities.add match.document.mentity
+				var card = new CardList(context.model.mdoc_parser, context.mentity, null, null, mentities)
+				cards.add card
+			end
+			if cards.not_empty then break
+		end
 
 		# TODO
 		# Groups / Other groups
@@ -1111,7 +1171,7 @@ class MdListInsert
 		# Tests
 		# See also
 
-		super
+
 	end
 end
 
@@ -1124,39 +1184,73 @@ class MdUmlInsert
 
 		var cards = new Array[DocCard]
 
+		var q = new Vector
+		q.inc "in: {context.mentity.full_name}"
+		q.inc "+in: {context.mentity.full_name}"
+		q.inc "-is_example: true"
+		q.inc "-is_test: true"
+		q.inc "+visibility: public"
+
 		for mentity, cardse in context.cards do
 			for card in cardse do if card isa CmdUML then return
 		end
 
-		# MClass diag
-		var mmodules = context.mmodules
-		if mmodules.length == 1 then
-			var mclasses = mmodules.first.collect_intro_mclasses(new ModelFilter(
-				min_visibility = public_visibility,
-				accept_test = false, accept_example = false, accept_fictive = false
-			)).to_a
+		var kinds = ["MGroup", "MModule", "MClass"]
 
-			if mclasses.length > 1 and mclasses.length <= 15 then
-				if has_inheritance(mclasses) > 2 then
-					cards.add new CardUML(context.mentity.model.mdoc_parser,
-						context.mentity, mclasses)
+		for kind in kinds do
+			if kind == "MGroup" then continue # TODO
+			var qq = new Vector.from(q)
+			qq.inc "+kind: {kind}"
+			var matches = context.index.match_query(qq)
+			if matches.length > 2 then
+				var mentities = new Array[MEntity]
+				for match in matches do
+					# if mentities.length >= 15 then break
+					mentities.add match.document.mentity
+				end
+				if has_inheritance(mentities) > 2 then
+					var card = new CardUML(context.model.mdoc_parser, context.mentity, mentities)
+					# if suggester.is_dismissed(card) then continue
+					# if doc.has_card(card) then continue
+					cards.add card
 				end
 			end
+			if cards.not_empty then break
 		end
 
-		# MModules diagrams
-		var mgroups = context.mgroups
-		if cards.is_empty and mgroups.length == 1 then
-			if mmodules.length > 1 and mmodules.length <= 10 then
-				cards.add new CardUML(context.mentity.model.mdoc_parser,
-					context.mentity, mmodules)
+		if cards.is_empty then
+
+
+			# MClass diag
+			var mmodules = context.mmodules
+			if mmodules.length <= 1 then
+				var mclasses = mmodules.first.collect_intro_mclasses(new ModelFilter(
+					min_visibility = public_visibility,
+					accept_test = false, accept_example = false, accept_fictive = false
+				)).to_a
+
+				if mclasses.length > 1 and mclasses.length <= 15 then
+					if has_inheritance(mclasses) > 2 then
+						cards.add new CardUML(context.mentity.model.mdoc_parser,
+							context.mentity, mclasses)
+					end
+				end
 			end
-		end
 
-		# MGroups diagrams
-		if cards.is_empty and mgroups.length > 1 then
-			cards.add new CardUML(context.mentity.model.mdoc_parser,
-				context.mentity, mgroups)
+			# MModules diagrams
+			var mgroups = context.mgroups
+			if cards.is_empty and mgroups.length == 1 then
+				if mmodules.length > 1 and mmodules.length <= 10 then
+					cards.add new CardUML(context.mentity.model.mdoc_parser,
+						context.mentity, mmodules)
+				end
+			end
+
+			# MGroups diagrams
+			if cards.is_empty and mgroups.length > 1 then
+				cards.add new CardUML(context.mentity.model.mdoc_parser,
+					context.mentity, mgroups)
+			end
 		end
 
 		# TODO
