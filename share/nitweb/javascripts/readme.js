@@ -190,7 +190,7 @@
 			})
 
 			//TODO remove
-			vm.target = 'vsm';
+			vm.target = 'pthreads';
 			vm.markdown = '';
 			/*if($location.search().snippet) {
 				vm.markdown = atob($location.search().snippet);

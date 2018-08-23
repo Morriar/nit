@@ -171,7 +171,7 @@ class APIReadmeSuggest
 			# TODO handle errors and show tips
 		end
 		if context == null then
-			print "no context"
+			# print "no context"
 			return
 		end
 
@@ -253,15 +253,23 @@ class MDocSuggester
 		self.current_node = node
 
 		if node != null then
-			suggestions.add_all node.suggest(self, context)
+			for card in node.suggest(self, context) do
+				if is_dismissed(card) then continue
+				if doc.has_card(card) then continue
+				suggestions.add card
+			end
 			if suggestions.not_empty then return suggestions
 		end
 
 		var current_state = get_current_state(node, doc, context)
-		print "current: {current_state or else "NULL"}"
+		# print "current: {current_state or else "NULL"}"
 
 		if current_state != null then
-			suggestions.add_all current_state.suggest(doc, context, node)
+			for card in current_state.suggest(doc, context, node) do
+				if is_dismissed(card) then continue
+				if doc.has_card(card) then continue
+				suggestions.add card
+			end
 		end
 
 		var states = get_next_states(node, doc, context)
@@ -270,9 +278,10 @@ class MDocSuggester
 		for state in states do
 			if state == current_state then continue
 
-			print "next: {state}"
+			# print "next: {state}"
 			for card in state.suggest(doc, context, node) do
 				if is_dismissed(card) then continue
+				if doc.has_card(card) then continue
 				cards.add card
 			end
 			for card in cards do
@@ -287,7 +296,17 @@ class MDocSuggester
 			end
 			# print suggestions
 		end label suggest
-		suggestions.add_all cards
+
+		print dismissed
+		print doc.cards
+		for card in cards do
+			if is_dismissed(card) then continue
+			if doc.has_card(card) then continue
+			suggestions.add card
+			print "* {card}"
+		end
+
+		# suggestions.add_all cards
 
 		return suggestions
 	end
@@ -295,7 +314,7 @@ class MDocSuggester
 	var md_sections: Array[MDocState] is lazy do
 		var states = new Array[MDocState]
 		states.add new MDocEmpty(self)
-		states.add new MDocTOC(self)
+		# states.add new MDocTOC(self)
 		states.add new MDocExample(self, mentities_index)
 		states.add new MDocStarting(self, mainmodule)
 		states.add new MDocAPI(self, mainmodule, mentities_index)
@@ -309,7 +328,7 @@ class MDocSuggester
 	var md_states: Array[MDocState] is lazy do
 		var states = new Array[MDocState]
 		states.add new MDocEmpty(self)
-		states.add new MDocTOC(self)
+		# states.add new MDocTOC(self)
 		states.add new MDocIntro(self, mainmodule, mentities_index)
 		states.add new MDocExample(self, mentities_index)
 		states.add new MDocStarting(self, mainmodule)
@@ -379,6 +398,23 @@ class MDocEmpty
 
 		var cards = new Array[DocCard]
 
+		var card
+
+		card = new CardTipWelcome(mdoc_parser)
+		if not suggester.is_dismissed(card) and not doc.has_card(card) then
+			cards.add card
+		end
+
+		card = new CardTipRefs(mdoc_parser)
+		if not suggester.is_dismissed(card) and not doc.has_card(card) then
+			cards.add card
+		end
+
+		card = new CardTipCommands(mdoc_parser)
+		if not suggester.is_dismissed(card) and not doc.has_card(card) then
+			cards.add card
+		end
+
 		var no_desc = true
 		if context isa MPackage then
 			var no_ini = context.ini == null
@@ -392,7 +428,7 @@ class MDocEmpty
 		end
 
 		do
-			var card = new CardTitle(mdoc_parser, context, no_desc)
+			card = new CardTitle(mdoc_parser, context, no_desc)
 			if suggester.is_dismissed(card) then break
 			if doc.has_card(card) then break
 			cards.add card
@@ -1122,7 +1158,7 @@ class MDocTesting
 
 		var parent = current_node
 		while parent != null do
-			print parent
+			# print parent
 			if parent isa MdListBlock then
 				in_list = true
 				break
@@ -1244,7 +1280,7 @@ class MDocAuthors
 
 		var parent = current_node
 		while parent != null do
-			print parent
+			# print parent
 			if parent isa MdListBlock then
 				in_list = true
 				break
@@ -1509,11 +1545,11 @@ end
 
 redef class CmdSummary
 	redef fun to_html do
-		print "to_html"
+		# print "to_html"
 		var tpl = new Template
 		var headings = mentity.as(not null).model.headings
-		print self
-		print headings
+		# print self
+		# print headings
 
 		var doc = mdoc.as(not null).html_documentation
 		if doc.write_to_string.is_empty then return tpl
@@ -1523,7 +1559,7 @@ redef class CmdSummary
 			if heading.level == 1 or heading.level > 2 then continue
 			# var id = heading.id
 			# if id == null then continue
-			var level = heading.level
+			# var level = heading.level
 			var title = heading.raw_text
 			tpl.addn "<li><a href='#{title.replace(" ", "-")}'>{title}</a></li>"
 		end

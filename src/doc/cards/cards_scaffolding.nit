@@ -202,6 +202,8 @@ class CardTipCommand
 	super CardTip
 	serialize
 
+	redef var id is lazy do return "tip-cmd-{command}"
+
 	var command: String
 
 	redef var title = "Card preview"
@@ -511,6 +513,72 @@ class CardTipManOptions
 	end
 end
 
+class CardTipWelcome
+	super CardTip
+	serialize
+
+	redef var id is lazy do return "tip-welcome"
+
+	redef var title = "Welcome to nitreadme!"
+
+	redef fun markdown do
+		var tpl = new Template
+		tpl.addn "nitreadme will help you produce a good README.\n"
+		tpl.addn "A good README starts with a good structure."
+		tpl.addn "People tend to follow this order:\n"
+		tpl.addn "1. Introduction"
+		tpl.addn "2. Usage example"
+		tpl.addn "3. Installation"
+		tpl.addn "4. Features & API"
+		tpl.addn "5. Testing"
+		tpl.addn "6. Contributing"
+		tpl.addn "7. Issues"
+		tpl.addn "8. Authors"
+		tpl.addn "9. License\n"
+		tpl.addn "Keep an eye on this part of the screen for suggestions you can apply to your README file.\n"
+		return tpl.write_to_string
+	end
+end
+
+class CardTipRefs
+	super CardTip
+	serialize
+
+	redef var id is lazy do return "tip-refs"
+
+	redef var title = "Use short references"
+
+	redef fun markdown do
+		var tpl = new Template
+		tpl.addn "Use Markdown ````spancodes```` or ```[[wikilinks]]``` to insert "
+		tpl.addn "links to mentities documentation.\n"
+		tpl.addn "Examples:\n"
+		tpl.addn "* ````Array````"
+		tpl.addn "* ````core::Array````"
+		tpl.addn "* ````[[core::Array]]````\n"
+		return tpl.write_to_string
+	end
+end
+
+class CardTipCommands
+	super CardTip
+	serialize
+
+	redef var id is lazy do return "tip-commands"
+
+	redef var title = "Use nitdoc cards"
+
+	redef fun markdown do
+		var tpl = new Template
+		tpl.add "Use `[[card: options]]` to insert nitdoc documentation cards like doc extracts, "
+		tpl.addn "examples or UML diagrams.\n"
+		tpl.addn "* `[[doc: core:Array]]`"
+		tpl.addn "* `[[code: core:Array]]`"
+		tpl.addn "* `[[uml: core:Array]]`\n"
+		return tpl.write_to_string
+	end
+end
+
 class CardTipFinished
 	super CardTip
 	serialize
@@ -600,6 +668,12 @@ class CardOverview
 
 	redef var id is lazy do return "scaff-overview-{mentity.full_name}"
 
+	redef fun commands do
+		var res = super
+		res.add "defs: {mentity.full_name}"
+		return res
+	end
+
 	redef var title = "Project Overview"
 	redef var description = "List the most interesting features of your project to explain what it does and why it is useful."
 
@@ -623,6 +697,12 @@ class CardTOC
 	serialize
 
 	redef var id is lazy do return "scaff-toc-{mentity.full_name}"
+
+	redef fun commands do
+		var res = super
+		res.add "toc: {mentity.full_name}"
+		return res
+	end
 
 	redef var title = "Table of contents"
 	redef var description = "Add a table of contents so readers can jump directly to what they are looking for."
@@ -696,6 +776,22 @@ class CardGettingStarted
 
 		return tpl.write_to_string
 	end
+
+	redef fun commands do
+		var res = super
+		if not no_parent then
+			res.add "parents: {mentity.full_name}"
+		end
+		if not no_git then
+			res.add "ini-git: {mentity.full_name}"
+		end
+		if mains != null and mains.as(not null).not_empty then
+			res.add "main-compile: {mentity.full_name}"
+			res.add "main-run: {mentity.full_name}"
+			res.add "main-opts: {mentity.full_name}"
+		end
+		return res
+	end
 end
 
 class CardAPI
@@ -748,6 +844,13 @@ class CardAPI
 			end
 		end
 		return tpl.write_to_string
+	end
+
+	redef fun commands do
+		var res = super
+		res.add "doc: {mentity.full_name}"
+		res.add "features: {mentity.full_name} | min-visibility: public, no-redef"
+		return res
 	end
 end
 
@@ -809,6 +912,12 @@ class CardTesting
 		tpl.addn "[[testing: {mentity.full_name}]]\n"
 		return tpl.write_to_string
 	end
+
+	redef fun commands do
+		var res = super
+		res.add "testig: {mentity.full_name}"
+		return res
+	end
 end
 
 class CardIssues
@@ -825,6 +934,12 @@ class CardIssues
 		tpl.addn "## Issues\n"
 		tpl.addn "Raise an issue or ask a question on [[ini-issues: {mentity.full_name}]].\n"
 		return tpl.write_to_string
+	end
+
+	redef fun commands do
+		var res = super
+		res.add "ini-issues: {mentity.full_name}"
+		return res
 	end
 end
 
@@ -846,7 +961,7 @@ class CardContributing
 
 		if not no_git then
 			tpl.addn "This project is versioned with git."
-			tpl.addn "We accept pull requests on [[ini-git: {mentity.full_name}]].\n"
+			tpl.addn "We accept pull requests on [[ini-git: {mentity.full_name} | contrib]].\n"
 		end
 
 		if not no_contrib_file then
@@ -854,6 +969,17 @@ class CardContributing
 			tpl.addn "of conduct, and the process for submitting pull requests to us.\n"
 		end
 		return tpl.write_to_string
+	end
+
+	redef fun commands do
+		var res = super
+		if not no_git then
+			res.add "ini-git: {mentity.full_name} | contrib"
+		end
+		if not no_contrib_file then
+			res.add "contrib-file: {mentity.full_name}"
+		end
+		return res
 	end
 end
 
@@ -889,6 +1015,17 @@ class CardAuthors
 		end
 		return tpl.write_to_string
 	end
+
+	redef fun commands do
+		var res = super
+		if not no_author then
+			res.add "ini-maintainer: {mentity.full_name}"
+		end
+		if not no_contrib then
+			res.add "ini-contributors: {mentity.full_name}"
+		end
+		return res
+	end
 end
 
 class CardLicense
@@ -917,5 +1054,16 @@ class CardLicense
 			tpl.addn "See the [[license-file: {mentity.full_name}]] file for details.\n"
 		end
 		return tpl.write_to_string
+	end
+
+	redef fun commands do
+		var res = super
+		if not no_license then
+			res.add "ini-license: {mentity.full_name}"
+		end
+		if not no_license_file then
+			res.add "license-file: {mentity.full_name}"
+		end
+		return res
 	end
 end

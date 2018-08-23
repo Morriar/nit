@@ -150,7 +150,7 @@ class CardLink
 
 	redef var markdown is lazy do
 		var tpl = new Template
-		tpl.addn "[[{mentity.full_name}]]"
+		tpl.addn "[[{mentity.full_name}]]\n"
 		return tpl.write_to_string
 	end
 
@@ -196,7 +196,7 @@ class CardExample
 
 	redef var markdown is lazy do
 		var tpl = new Template
-		tpl.addn "[[code: {example.full_name} | format: html]]"
+		tpl.addn "[[code: {example.full_name} | format: html]]\n"
 		return tpl.write_to_string
 	end
 
@@ -231,9 +231,9 @@ class CardUML
 			for mentity in mentities do
 				names.add mentity.full_name
 			end
-			tpl.addn "[[uml: {mentity.full_name} | format: svg, mentities: {names.join(";")}]]"
+			tpl.addn "[[uml: {mentity.full_name} | format: svg, mentities: {names.join(";")}]]\n"
 		else
-			tpl.addn "[[uml: {mentity.full_name} | format: svg]]"
+			tpl.addn "[[uml: {mentity.full_name} | format: svg]]\n"
 		end
 		# tpl.addn "[[uml: {mentity.full_name} | format: svg]]"
 		return tpl.write_to_string
@@ -243,6 +243,21 @@ class CardUML
 		var options = new HashMap[String, String]
 		options["opt"] = ""
 		return options
+	end
+
+	redef fun commands do
+		var res = super
+		var mentities = self.mentities
+		if mentities != null then
+			var names = new Array[String]
+			for mentity in mentities do
+				names.add mentity.full_name
+			end
+			res.add "uml: {mentity.full_name} | format: svg, mentities: {names.join(";")}"
+		else
+			res.add "uml: {mentity.full_name} | format: svg"
+		end
+		return res
 	end
 end
 
@@ -258,7 +273,7 @@ class CardFeatures
 
 	redef var markdown is lazy do
 		var tpl = new Template
-		tpl.addn "[[defs: {mentity.full_name}]]"
+		tpl.addn "[[defs: {mentity.full_name}]]\n"
 		return tpl.write_to_string
 	end
 
@@ -266,6 +281,12 @@ class CardFeatures
 		var options = new HashMap[String, String]
 		options["opt"] = ""
 		return options
+	end
+
+	redef fun commands do
+		var res = super
+		res.add "defs: {mentity.full_name}"
+		return res
 	end
 end
 
@@ -347,7 +368,7 @@ class CardListPeople
 
 	redef fun commands do
 		var res = super
-		res.add "[[ini-contributors: {mentity.full_name}]]"
+		res.add "ini-contributors: {mentity.full_name}"
 		return res
 	end
 end
