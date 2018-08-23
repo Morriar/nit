@@ -1,33 +1,73 @@
-A markdown parser for Nit.
+# `markdown` - A markdown parser for Nit
 
-Markdown documentation can be found in http://daringfireball.net/projects/markdown/.
-This parser is inspired by the famous TxtMark for Java (https://github.com/rjeschke/txtmark).
+* [Getting Started](#Getting-Started)
+* [Dependencies](#Dependencies)
+* [Run `nitmd`](#Run-`nitmd`)
+* [Features](#Features)
+* [`wikilinks` - Wikilinks handling.](#`wikilinks`---Wikilinks-handling.)
+* [Other features](#Other-features)
+* [Running the tests](#Running-the-tests)
+* [Authors](#Authors)
 
-## Usage
+## Getting Started
 
-`nitmd` can be used as a standalone tool:
+These instructions will get you a copy of the project up and running on your local machine.
 
-~~~bash
-$ nitmd file.md
-~~~
+### Dependencies
 
-Or you can use it programmatically by importing the `markdown` module.
+This project requires the following packages:
 
-## Differences with Markdown specification
+* `config` - Configuration options for nit tools and apps
+* `template` - Basic template system
 
-This parser passes all tests inside http://daringfireball.net/projects/downloads/MarkdownTest_1.0_2007-05-09.tgz execpt of two:
+### Run `nitmd`
 
-1. Images.text: fails because this parser doesn't produce empty 'title' image attributes.
-2. Literal quotes in titles.text: because markdown accepts unescaped quotes in titles and this is wrong.
-
-## Testing
-
-The NitUnit test suite can be found in `test_markdown.nit`.
-
-Minimalists tests are prefixed with `process_*`. All tests from daringfireball are prefixed with `process_daring*`.
-
-Run the test suite:
+Compile `nitmd` with the following command:
 
 ~~~bash
-$ nitunit lib/markdown/markdown.nit -t lib/markdown/test_markdown.nit
+nitc ./nitmd.nit
 ~~~
+
+Then run it with:
+
+~~~bash
+nitmd [-t format] <file.md>
+~~~
+
+Options:
+
+~~~bash
+* -h, -?, --help		Show this help message.
+* -t, --to		Specify output format (html, md, man).
+~~~
+
+## Features
+
+![Diagram for `markdown`](uml-markdown.svg)
+
+### `wikilinks` - Wikilinks handling.
+
+Wikilinks are on the form `[[link]]`.
+They can also contain a custom title with the syntax `[[title|link]]`.
+
+By importing this module, you enable the `MarkdownProcessor` to recognize
+`TokenWikiLink` but nothing will happen until you define a
+`Decorator::add_wikilink` customized to your applciation domain.
+
+## Other features
+
+* `decorators` - Decorators for `markdown` parsing.
+* `man` - Simple *groff* decorator restricted for manpages.
+* `nitmd` - A Markdown parser for Nit.
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+~~~bash
+nitunit .
+~~~
+
+## Authors
+
+This project is maintained by **Alexandre Terrasa <mailto:alexandre@moz-code.org>**.

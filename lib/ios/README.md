@@ -1,33 +1,100 @@
-iOS support for _app.nit_
+# `ios` - iOS support for _app.nit_
 
-# System configuration
+* [Getting Started](#Getting-Started)
+* [Dependencies](#Dependencies)
+* [Run `app`](#Run-`app`)
+* [Features](#Features)
+* [Authors](#Authors)
 
-Configure your system for OS X by installing Xcode and brew.
-Follow the instructions in `README.md` at the root of the repository.
+Example from `ios::hello_ios`:
 
-Optionally, install ios-sim to run compiled apps in the simulator: `brew install ios-sim`
+~~~
+# Simple iOS app with a single label
+module hello_ios is
+	example
+	app_name "Hello iOS"
+	app_namespace "nit.app.hello_ios"
+	app_version(0, 5, git_revision)
+end
 
-# Compile and run a simple application
+import ios
 
-Let's use the `hello_ios` example in the folder `lib/ios/examples/`.
+redef class App
+	redef fun did_finish_launching_with_options
+	do
+		return app_delegate.hello_world
+	end
+end
 
-Compile with: `nitc hello_world.nit`
+redef class AppDelegate
 
-Run in the simulator with: `ios-sim hello_world.app`
+	# Print and show "Hello World!"
+	private fun hello_world: Bool in "ObjC" `{
 
-# Sample portable applications
+		// Print to the console
+		NSLog(@"Hello World!");
 
-See the calculator example at `examples/calculator` and the Tnitter client at `contrib/tnitter/`
-for portable applications working on GNU/Linux, OS X, iOS and Android.
+		// Display "Hello world!" on the screen
+		CGRect frame = [[UIScreen mainScreen] bounds];
+		self.window = [[UIWindow alloc] initWithFrame: frame];
+		self.window.backgroundColor = [UIColor whiteColor];
 
-# Application icon
+		UILabel *label = [[UILabel alloc] init];
+		label.text = @"Hello World!";
+		label.center = CGPointMake(100, 100);
+		[label sizeToFit];
 
-To associate icons to your application, create the directory `ios/AppIcon.appiconset` and fill it with standard icons and `Contents.json`.
-These files can be generated in a number of different ways:
+		// As with `self.window` we must set a `rootViewController`
+		self.window.rootViewController = [[UIViewController alloc]initWithNibName:nil bundle:nil];
+		self.window.rootViewController.view = label;
 
-* Using the tool `svg_to_icons` packaged with the Nit repository at `contrib/inkscape_tools/bin/svg_to_icons`.
+		[self.window addSubview: label];
+		[self.window makeKeyAndVisible];
 
-* Using Xcode to assign images to each slot, create the folder and the file `Contents.json`.
+		return YES;
+	`}
+end
+~~~
 
-* Write or modify the file `Contents.json` manually.
-	It is in Json format and easily readable.
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine.
+
+### Dependencies
+
+This project requires the following packages:
+
+* `app` - _app.nit_, a framework for portable applications
+* `cocoa` - Cocoa API, the development layer of OS X
+* `core` - Nit common library of core classes and methods
+* `json` - read and write JSON formatted text
+
+### Run `app`
+
+Compile `app` with the following command:
+
+~~~bash
+nitc ./app.nit
+~~~
+
+## Features
+
+![Diagram for `ios`](uml-ios.svg)
+
+* `app` - Basic structure for Nit apps on iOS
+* `assets` - Implementation of `app::assets`
+* `audio` - iOS implementation of `app::audio` using `AVAudioPlayer`
+* `data_store` - Implements `app::data_store` using `NSUserDefaults`
+* `glkit` - GLKit services to create an OpenGL ES context on iOS
+* `http_request` - Implementation of `app::http_request` for iOS
+* `platform` - Triggers compilation for the iOS platform
+
+Then run it with:
+
+~~~bash
+./app
+~~~
+
+## Authors
+
+This project is maintained by **Alexis Laferrière <mailto:alexis.laf@xymus.net>**.

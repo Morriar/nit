@@ -1,72 +1,122 @@
-# Nit Actor Model
+# `actors` - Nit Actor Model
 
-This group introduces the `actors` module which contains the abstraction of a Nit Actor Model,
-based on Celluloid (https://github.com/celluloid/celluloid).
+Example from `actors::agent_simulation`:
 
-## What is an actor ?
+~~~
+# a "Framework" to make Multi-Agent Simulations in Nit
+module agent_simulation is example, no_warning("missing-doc")
 
-An actor is an entity which receives messages and does some kind of computation based on it.
-An actor has a mailbox in which it receives its messages, and process them one at a time.
+import actors
 
+# Master of the simulation, it initiates the steps and waits for them to terminate
+class ClockAgent
+	actor
 
-## `actor` annotation
+	# Number of steps to do in the simulation
+	var nb_steps: Int
 
-The `actors` module introduces the annotation `actor` which is to be used on classes.
-This annotation transform a normal Nit class into an actor.
+	# List of Agents in the simulation
+	var agents: Array[Agent]
 
-In practice, it adds a new property `async` to the annotated class.
-When using `async` on your annotated class, this means that you want your calls to be asynchronous,
-executed by the actor.
+	# Number of agents that finished their step
+	var nb_finished = 0
 
-For instance, if you call `a.async.foo` and `foo` doesn't have a return value, it will send
-a message to the mailbox of the actor attached to `a` which will process it asynchronously.
+	fun do_step do
+		for a in agents do a.async.do_step
+		nb_steps -= 1
+	end
 
-On the other hand, if you call `a.async.bar` and `bar` returns an`Int`, it will still send
-a message to the actor, but you'll get a `Future[Int]` to be able to retrieve the value.
-When using `join` on the future, the calling thread will wait until the value of the future is set.
+	fun finished_step do
+		nb_finished += 1
+		if nb_finished == agents.length then
+			nb_finished = 0
+			if nb_steps != 0 then async.do_step
+		end
+	end
+end
 
-## Managing actors
+class Agent
+	actor
 
-When you annotate a class with `actor` and create an instance of it with `new`, the actor is not
-automatically created (which means you can completely skip the use of the actors if you
-don't need them for a specific program).
+	# Doing a step in the simulation
+	fun do_step do
+	end
 
-The `async` added property is actually created lazily when you use it.
+	fun end_step do clock_agent.async.finished_step
 
-Actors are not automatically garbage collected, but you have solutions to terminate them
-if you need to. For this, you need to use the `async` property of your annotated class :
+end
 
-* `async.terminate` sends a shutdown message to the actor telling him to stop, so he'll finish
-processing every other messages in his mailbox before terminating properly. Every other messages sent
-to this actor after he received the shutdown message won't be processed.
-* `async.terminate_now` sends a shutdown message too, but this time it places it first, so
-if the actor is processing one message now, the next one will be the shutdown message, discarding
-every messages in its mailbox.
-* `async.wait_termination` wait for the actor to terminate properly. This call is synchronous.
-* `async.kill`. If you really need this actor to stop, without any regards of what he was doing
-or in which state he'll leave the memory, you can with this call. it's synchronous but not really
-blocking, since it's direcly canceling the native pthread associated to the actor.
+redef class Sys
+	var clock_agent: ClockAgent is noautoinit,writable
+end
+~~~
 
-For now, there isn't any mecanism to recreate and actor after it was terminated.
-Sending messages after terminating it results in unspecified behaviour.
+## Features
 
-## Waiting for all actors to finish processing
+* `AMessagebar`
+* `AMessagefoo`
+* `Actor` - Abstraction of an actor
+* `ActorA` - ###################### Actor classes #########################
+* `ActorAgent`
+* `ActorClockAgent` - ###################### Actor classes #########################
+* `ActorCreature` - ###################### Actor classes #########################
+* `ActorFannkuchRedux` - ###################### Actor classes #########################
+* `ActorThreadRing` - ###################### Actor classes #########################
+* `ActorWorker` - ###################### Actor classes #########################
+* `AgentMessagecount`
+* `AgentMessagedo_step`
+* `AgentMessageend_step`
+* `AgentMessagegreet`
+* `AgentMessagegreet_back`
+* `AgentMessageothers` - ###################### Redef classes #########################
+* `ClockAgentMessageagents`
+* `ClockAgentMessagedo_step`
+* `ClockAgentMessagefinished_step`
+* `ClockAgentMessagenb_finished`
+* `ClockAgentMessagenb_steps`
+* `CreatureMessagecolor`
+* `CreatureMessagecount`
+* `CreatureMessageid`
+* `CreatureMessageplace`
+* `CreatureMessagerun`
+* `CreatureMessagesamecount`
+* `CreatureMessageto_string`
+* `FannkuchReduxMessagecount`
+* `FannkuchReduxMessagecount_flips`
+* `FannkuchReduxMessagefirst_permutation`
+* `FannkuchReduxMessagenext_permutation`
+* `FannkuchReduxMessagep`
+* `FannkuchReduxMessagepp`
+* `FannkuchReduxMessageprint_p`
+* `FannkuchReduxMessagerun`
+* `FannkuchReduxMessagerun_task`
+* `Future` - The promise of a value which will be set asynchronously
+* `Mailbox` - A Blocking queue implemented from a `ConcurrentList`
+* `Message` - A Message received by a Mailbox
+* `MessageA` - ###################### Messages classes ######################
+* `MessageAgent`
+* `MessageClockAgent` - ###################### Messages classes ######################
+* `MessageCreature` - ###################### Messages classes ######################
+* `MessageFannkuchRedux` - ###################### Messages classes ######################
+* `MessageThreadRing` - ###################### Messages classes ######################
+* `MessageWorker` - ###################### Messages classes ######################
+* `Proxy` - Abstraction of proxies for threaded actors
+* `ProxyA`
+* `ProxyAgent`
+* `ProxyClockAgent`
+* `ProxyCreature`
+* `ProxyFannkuchRedux`
+* `ProxyThreadRing`
+* `ProxyWorker`
+* `ShutDownMessage` - A Message to Rule them all... properly shutdown an Actor
+* `SynchronizedCounter` - A counter on which threads can wait until its value is 0
+* `ThreadRingMessageid`
+* `ThreadRingMessagenext`
+* `ThreadRingMessagesend_token`
+* `WorkerMessageget_byte`
+* `WorkerMessageput_line`
+* `WorkerMessagework`
 
-Let's imagine you create a whole bunch of actors and make them do things asynchronously from the main thread.
-You don't want your program to exit right after giving work to your actors.
-To prevent that, we added a mecanism that waits before all your actors finished all their messages
-before quitting.
+## Authors
 
-It's materialized by the `active_actors` property added to `Sys` which is a `ReverseBlockingQueue`.
-In short, the `is_empty` method on this list is blocking until the list is effectively empty.
-When every actors finished working, and we're sure they won't even send another message to another
-actor, `active_actors` is empty.
-
-You can use this property as a mean of synchronisation in some specific cases (for example if you're
-using actors for fork/join parallelism instead of concurrency).
-
-
-## Examples
-
-You can find example of differents small programs implemented with Nit actors in the `examples`
-directory. For a really simple example, you can check `examples/simple`.
+This project is maintained by **Romain Chanoir <mailto:romain.chanoir@viacesi.fr>**.

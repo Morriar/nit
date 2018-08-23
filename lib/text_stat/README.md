@@ -1,0 +1,10 @@
+# `text_stat` - Injects stat-calculating functionalities to Text and its variants
+
+Every allocation is counted for each available type of Text in Core
+
+Cached operations are monitored and statistics of their use are printed
+at the end of the execution of a program
+
+## Authors
+
+This project is maintained by **Lucas Bajolet <mailto:r4pass@hotmail.com>**.
