@@ -1,8 +1,52 @@
 # `nitcorn` - Lightweight framework for Web applications development
 
+> The main classes are:
+
+* `Action` to answer to requests.
+* `Route` to represent a path to an action.
+* `VirtualHost` to listen on a specific interface and behave accordingly
+* `HttpFactory` which is the base dispatcher class.
+
+Basic usage example:
+
+~~~~
+class MyAction
+    super Action
+
+    redef fun answer(http_request, turi)
+    do
+        var response = new HttpResponse(200)
+        response.body = """
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>Hello World</title>
+</head>
+<body>
+    <p>Hello World</p>
+</body>
+</html>"""
+        return response
+    end
+end
+
+# Listen to port 8080 on all interfaces
+var vh = new VirtualHost("0.0.0.0:8080")
+
+# Serve index.html with our custom handler
+vh.routes.add new Route("/index.html", new MyAction)
+
+# Serve everything else with a standard `FileServer`
+vh.routes.add new Route(null, new FileServer("/var/www/"))
+
+var factory = new HttpFactory.and_libevent
+factory.config.virtual_hosts.add vh
+factory.run
+~~~~
+
 ## Features
 
-![Diagram for `nitcorn`](uml-nitcorn.svg)
+![Diagram for `nitcorn`](uml-nitcorn-1.svg)
 
 Dynamic content is served by subclassing `Action` and implementing `answer`.
 This method receives an `HttpRequest` and must return an `HttpResponse`.

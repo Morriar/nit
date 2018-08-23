@@ -1,5 +1,8 @@
 # `android` - Android platform support and APIs
 
+> This module provides basic logging facilities, advanced logging can be
+> achieved by importing `android::log`.
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine.
