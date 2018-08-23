@@ -397,3 +397,11 @@ GithubAPI can trigger different events depending on the hook configuration.
 * `events$PushEvent` - # Triggered when a repository branch is pushed to.
 
 * `events$StatusEvent` - # Triggered when the status of a Git commit changes.
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+~~~bash
+nitunit .
+~~~

@@ -44,3 +44,10 @@ Core classes and methods used by default by Nit programs and libraries.
 ## String and Text manipulation
 
 [[doc: core::text]]
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+[[testing: core]]
+

@@ -237,3 +237,11 @@ and inject specific work before or after the main part.
 ## Core Collections
 
 ## String and Text manipulation
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+~~~bash
+nitunit .
+~~~

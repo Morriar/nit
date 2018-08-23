@@ -854,3 +854,10 @@ In this example, the StaticHandler will redirect any unknown requests to the `in
 angular controller.
 
 See the examples for a more detailed use case working with a JSON API.
+
+## Running the tests
+
+Run the nitunit automated tests with the following command:
+
+[[testing: popcorn]]
+

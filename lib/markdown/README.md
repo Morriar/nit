@@ -44,7 +44,7 @@ This parser passes all tests inside http://daringfireball.net/projects/downloads
 1. Images.text: fails because this parser doesn't produce empty 'title' image attributes.
 2. Literal quotes in titles.text: because markdown accepts unescaped quotes in titles and this is wrong.
 
-## Testing
+## Running the tests
 
 The NitUnit test suite can be found in `tests`.
 
@@ -53,5 +53,5 @@ Minimalists tests are prefixed with `test_process_*`. All tests from daringfireb
 Run the test suite:
 
 ~~~bash
-$ nitunit lib/markdown/markdown.nit -t lib/markdown/test_markdown.nit
+nitunit .
 ~~~
