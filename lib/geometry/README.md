@@ -11,7 +11,26 @@ The very basics of geometry needs, for two and three-dimensional space.
 Boxes module introduces Bounding boxes for Points and Lines and services to detect collision or inclusion between boxes.
 It means a simple and fast way to test collision but not really accurate since it uses bounding boxes.
 
-## Quadtrees
+### `Box`
+
+> This class offers many constructors specialized for different usage. They are
+> named according to the order of their arguments.
+
+### `Box3d`
+
+> This class offers many constructors specialized for different usage. They are
+> named according to the order of their arguments.
+
+### `BoxedArray`
+
+> Linear performances for searching, but really fast creation and filling.
+
+## `quadtree`
+
+> The QuadTree data structure partition a 2D space by recursively
+> subdividing it into 4 regions when its capacity is reached.
+> This module introduces 2 main implementation of the structure,
+> a static and a dynamic QuadTree.
 
 A QuadTree is a tree data structure in which each internal node has exactly four children
 They're most often used to partition two-dimensional space by recursively subdividing
@@ -28,6 +47,18 @@ This API provides two different types of Quadtree : Static and Dynamic (respecti
 
 * Dynamic: You just need to fill the quadtree with objects, and when the threshold is reached,
   it will automatically divide the current region, depending on the distribution of objects already in the region.
+
+### `SQuadTree`
+
+> You need to specify a zone when creating the quadtree,
+> which will be the zone corresponding to the root node.
+> Each subdivision cut the space in 4 equal regions from
+> the center of the parent node.
+
+### `DQuadTree`
+
+> The center of the parent node is determined by the average
+> values of the data it contains when `item_limit` is reached.
 
 ## Polygons
 

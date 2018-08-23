@@ -16,7 +16,7 @@ This project requires the following packages:
 
 ### Run `nitmd`
 
-![Diagram for `markdown`](uml-markdown.svg)
+![Diagram for `markdown`](uml-markdown-2.svg)
 
 `nitmd` can be used as a standalone tool:
 
@@ -45,6 +45,27 @@ This parser passes all tests inside http://daringfireball.net/projects/downloads
 
 1. Images.text: fails because this parser doesn't produce empty 'title' image attributes.
 2. Literal quotes in titles.text: because markdown accepts unescaped quotes in titles and this is wrong.
+
+## `MarkdownProcessor`
+
+> Blocks are then outputed by an `MarkdownEmitter`.
+
+Usage:
+
+var proc = new MarkdownProcessor
+var html = proc.process("**Hello World!**")
+assert html == "<p><strong>Hello World!</strong></p>\n"
+
+SEE: `String::md_to_html` for a shortcut.
+
+## `wikilinks`
+
+> Wikilinks are on the form `[[link]]`.
+> They can also contain a custom title with the syntax `[[title|link]]`.
+
+By importing this module, you enable the `MarkdownProcessor` to recognize
+`TokenWikiLink` but nothing will happen until you define a
+`Decorator::add_wikilink` customized to your applciation domain.
 
 ## Running the tests
 

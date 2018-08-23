@@ -21,7 +21,7 @@ This project requires the following packages:
 
 ### Run `nit_activity`
 
-![Diagram for `android`](uml-android.svg)
+![Diagram for `android`](uml-android-3.svg)
 
 Compile `nit_activity` with the following command:
 
@@ -137,6 +137,10 @@ Importing `android::landscape` or `android::portrait` locks the generated
 application in the specified orientation. This can be useful for games and
 other multimedia applications.
 
+#### `landscape`
+
+> Adds `android:screenOrientation=="sensorLandscape"` to the manifest.
+
 ### Resources and application icon
 
 Resources specific to the Android platform should be placed in an `android/` folder at the root of the project.
@@ -150,6 +154,20 @@ The Nit compiler detects these files and uses them as the application icon.
 
 Additional `android/` folders may be placed next to more specific Nit modules to change the Android resources
 for application variants. The more specific resources will have priority over the project level `android/` files.
+
+#### `assets_and_resources`
+
+> Use the ResourceManager to retrieve resources from the `res` folder of your app
+> Use the AssetManager to retrieve resources files from the `assets` folder of your app
+> both are available from `App`
+> If you write your own resources in your NIT project part of the application,
+> you are obliged to set a string resource with the name "app_name" or it will be
+> impossible for you to compile the apk correctly
+
+#### `assets`
+
+> This module is a client of `assets_and_resources` as the latter
+> covers the services of Android.
 
 ## Compilation modes
 
@@ -273,6 +291,189 @@ APK file, it can then be published on the Play Store.
 
 3. Call `nitc` with the `--release` options. You will be prompted for the
    required passwords as needed by `jarsigner`.
+
+## `android`
+
+> This module provides basic logging facilities, advanced logging can be
+> achieved by importing `android::log`.
+
+## `shared_preferences`
+
+> By default, the API 10 is imported. You can import API 11 to have
+> access to this platform new features.
+
+## `vibration`
+
+> Importing this module will trigger the use of the VIBRATE permission
+
+## `cardboard`
+
+> Projects using this module should keep the `cardboard.jar` archive in the
+> `libs` folder at the root of the project.
+
+External resources:
+
+* Download `cardboard.jar` from
+  https://raw.githubusercontent.com/googlesamples/cardboard-java/master/CardboardSample/libs/cardboard.jar
+* Read about Cardboard at
+  https://developers.google.com/cardboard/
+* Find the Cardboard SDK documentation at
+  https://developers.google.com/cardboard/android/latest/reference/com/google/vrtoolkit/cardboard/package-summary
+
+## `data_store`
+
+> We use the shared preferences named "data_store" to store the data.
+
+## `aware`
+
+> Defines all Android related annotations, including `ldflags@android`.
+
+## `intent`
+
+> By default, API 10 is imported. Import more recent API to suit your needs.
+
+There's two ways of defining which activity/service to be launched :
+
+* Provide an explicit class to be launched with `set_class_name`
+* Provide a description of the activity to perform and let the system determine the best application to run
+
+To provide a description, you need to assign values using one or more of these
+methods :
+
+* `action=`
+* `data=`
+* `add_category`
+* `mime_type=`
+
+The Intent class wraps most of the `android.content.Intent` constants and is
+designed to be used with this syntax :
+
+* Action : `intent_action.main.to_s`
+* Category : `intent_category.home.to_s`
+* Extra : `intent_extra.phone_number.to_s`
+* Flag : `intent_flag.activity_brought_to_front`
+
+For further details about these constants meaning, refer to the official
+android Intent documentation :
+
+## `wifi`
+
+> Refer to the official Android documentation for the details on these services.
+
+## `native_app_glue`
+
+> The framework provides 3 different structures for a single C application
+> under Android. We use all 3 structures in this API to implement app.nit
+> on Android. Each structure is wrapped in a Nit extern class:
+
+* `NativeAppGlue` is the lowest level class, it is implemented by the C
+  structure `android_app`. It offers features on the main Android thread
+  (not on the same thread as Nit). For this reason, prefer to use
+  `NdkNativeActivity`.
+
+* `NdkNativeActivity` is implemented by the C structure `ANativeActivity`. It
+  is on the same thread as Nit and manages the synchronization with the
+  main Android thread.
+
+* `NativeNativeActivity` is implemented in Java by `android.app.NativeActivity`,
+  which is a subclass of `Activity` and `Context` (in Java). It represent
+  main activity of the running application. Use it to get anything related
+  to the `Context` and as anchor to execute Java UI code.
+
+## `nit_activity`
+
+> This module is implemented in 3 languages:
+
+* The Java code, in `NitActivity.java` acts as the entry point registered
+  to the Android OS. It relays most of the Android callbacks to C.
+  In theory, there may be more than one instance of `NitActivity` alive at
+  a given time. They hold a reference to the corresponding Nit `Activity`
+  in the attribute `nitActivity`.
+
+* The C code is defined in the top part of this source file. It acts as a
+  glue between Java and Nit by relaying calls between both languages.
+  It keeps a global variables reference to the Java VM and the Nit `App`.
+
+* The Nit code defines the `Activity` class with the callbacks from Android.
+  The callback methods should be redefined by user modules.
+
+The main is invoked when the native library is dynamically linked by
+the Java virtual machine. For this reason, the main _must_ execute quickly,
+on the main UI thread at least.
+
+## `notification`
+
+> ~~~~nitish
+~~~~
+
+# Create and show a notification
+
+var notif = new Notification("My Title", "Some content")
+notif.ticker = "Ticker text"
+notif.show
+
+# Update the notification
+
+notif.text = "New content!"
+notif.ongoing = true # Make it un-dismissable
+notif.show
+
+# Hide the notification
+
+notif.cancel
+
+~~~~
+
+For more information, see:
+http://developer.android.com/guide/topics/ui/notifiers/notifications.html
+
+## `sensors`
+
+> Sensors are to be enabled when `App` is created.
+The following example enables all sensors.
+The events (`SensorEvent`, `ASensorAccelerometer`, `ASensorMagneticField`...)
+are sent to the `input` callback of `App`
+
+~~~~nitish
+redef class App
+    init
+    do
+        sensors_support_enabled = true
+        accelerometer.enabled = true
+        accelerometer.eventrate = 10000
+        magnetic_field.enabled = true
+        gyroscope.enabled = true
+        light.enabled = true
+        proximity.enabled = true
+    end
+end
+~~~~
+
+## `audio`
+
+> `assets` contains the portable version of sounds, since the `res` folder exsists only in android projects.
+
+For this example, the sounds "test_sound" and "test_music" are located in the "assets/sounds" folder,
+they both have ".ogg" extension. "test_sound" is a short sound and "test_music" a music track
+
+~~~nitish
+# Note that you need to specify the path from "assets" folder and the extension
+var s = new Sound("sounds/test_sound.ogg")
+var m = new Music("sounds/test_music.ogg")
+s.play
+m.play
+~~~
+
+Now, the sounds are in "res/raw"
+
+~~~nitish
+s = app.load_sound_from_res("test_sound")
+m = app.load_music_from_res("test_sound")
+s.play
+m.play
+~~~
+
+See http://developer.android.com/reference/android/media/package-summary.html for more infos
 
 ## Authors
 

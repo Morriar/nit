@@ -2,8 +2,6 @@
 
 > [[doc: nitcorn::nitcorn]]
 
-
-
 ## Features
 
 [[uml: nitcorn | format: svg, mentities: nitcorn::pthreads;nitcorn::nitcorn;nitcorn::signal_handler;nitcorn::token;nitcorn::proxy;nitcorn::server_config;nitcorn::restful;nitcorn::sessions;nitcorn::http_errors;nitcorn::log;nitcorn::http_request_buffer;nitcorn::reactor;nitcorn::vararg_routes;nitcorn::file_server;nitcorn::http_request;nitcorn::http_response;nitcorn::media_types]]
@@ -93,6 +91,26 @@ var factory = new HttpFactory.and_libevent
 factory.config.virtual_hosts.add vh
 factory.run
 ~~~
+
+## [[sign: nitcorn::server_config]]
+
+> [[doc: nitcorn::server_config]]
+
+## [[sign: nitcorn::restful]]
+
+> [[doc: nitcorn::restful]]
+
+## [[sign: nitcorn::sessions]]
+
+> [[doc: nitcorn::sessions]]
+
+## [[sign: nitcorn::log]]
+
+> [[doc: nitcorn::log]]
+
+## [[sign: nitcorn::vararg_routes]]
+
+> [[doc: nitcorn::vararg_routes]]
 
 ## Credits
 

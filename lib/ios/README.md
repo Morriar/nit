@@ -15,7 +15,7 @@ This project requires the following packages:
 
 ### Run `app`
 
-![Diagram for `ios`](uml-ios.svg)
+![Diagram for `ios`](uml-ios-2.svg)
 
 Compile `app` with the following command:
 
@@ -110,6 +110,10 @@ These files can be generated in a number of different ways:
 
 * Write or modify the file `Contents.json` manually.
   It is in Json format and easily readable.
+
+## `uikit`
+
+> Partial wrapper of basic UIKit services.
 
 ## Authors
 

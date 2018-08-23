@@ -220,6 +220,167 @@ factory.config.virtual_hosts.add vh
 factory.run
 ~~~
 
+## `server_config`
+
+> The classes of interest are `VirtualHost`, `Interface`, `Route` and `Action`
+
+## `restful`
+
+> The `restful` annotation is applied on a method to assign it to an HTTP resource.
+> The `restful` method must be a property of a subclass of `RestfulAction` and
+> return an `HTTPResponse`.
+> Once an instance of the class is assigned to a route, the method
+> can be invoked as a resource under that route.
+> The returned `HTTPResponse` will be sent back to the client.
+
+The arguments of the method must be deserializable.
+So use simple data types like `String`, `Int`, `Float`, etc.
+or any other `Serializable` class.
+The method is invoked only if all the arguments are correctly passed
+in the JSON format by the HTTP client.
+There is one exception, `String` arguments are returned as is,
+they don't need the surrounding `""`.
+If an argument is missing or there a format error, the `answer` method responds to the request.
+Arguments that are `nullable` are optional,
+if they are missing `null` is passed to the `restful` method.
+
+The annotation accepts three kinds of arguments, in any order:
+
+* String literals rename or add an alias for the HTTP resource.
+  By default, the name of the HTTP resource is the name of the `restful` method.
+  The first string literal replaces the default name,
+  while additional string literals add aliases.
+
+* Ids such as `GET`, `POST`, `PUT` and `DELETE` restrict which HTTP methods
+  are accepted. By default, all HTTP methods are accepted.
+
+* The `async` keyword triggers executing calls to this service asynchronously
+  by the `thread_pool` attribute of the `RestfulAction`.
+  By default, each call are executed on the same thread in a FIFO order.
+
+See the example at `lib/nitcorn/examples/restful_annot.nit` or
+a real world use case at `contrib/benitlux/src/server/benitlux_controller.nit`.
+
+The `restful` annotation is implemented by then `nitrestful` tool.
+To compile a module (`my_module.nit`) that uses the `restful` annotation:
+
+* Run `nitrestful my_module.nit` to produce `my_module_rest.nit`
+* Link `my_module_rest.nit` at compilation: `nitc my_module.nit -m my_module_rest.nit`.
+
+## `sessions`
+
+> When parsing a request, this module associate a pre-existing session
+> to the request if there is one. It will also send the required cookie
+> with the response if a session has been associated to the response object.
+
+## `log`
+
+
+## `vararg_routes`
+
+> Using `vararg_routes`, a `Route` path can contain variable parts
+> that will be matched against a `HttpRequest` URL.
+
+Variable parameters of a route path can be specified using the `:` prefix:
+
+~~~nitish
+var iface = "http://localhost:3000"
+var vh = new VirtualHost(iface)
+vh.routes.add new Route("/blog/articles/:articleId", new BlogArticleAction)
+~~~
+
+Route arguments can be accessed from the `HttpRequest` within a nitcorn `Action`:
+
+~~~nitish
+class BlogArticleAction
+	super Action
+
+	redef fun answer(request, url) do
+		var param = request.param("articleId")
+		if param == null then
+			return new HttpResponse(400)
+		end
+
+		print url # let's say "/blog/articles/12"
+		print param # 12
+
+		return new HttpResponse(200)
+	end
+end
+~~~
+
+## Route matching
+
+Route can match variables expression.
+
+~~~
+# We need an Action to try routes.
+class DummyAction super Action end
+var action = new DummyAction
+
+var route = new Route("/users/:id", action)
+assert not route.match("/users")
+assert route.match("/users/1234")
+assert route.match("/users/") # empty id
+~~~
+
+Route without uri parameters still behave like before.
+
+~~~
+route = new Route("/users", action)
+assert route.match("/users")
+assert route.match("/users/1234")
+assert not route.match("/issues/1234")
+~~~
+
+## Route priority
+
+Priority depends on the order the routes were added to the `Routes` dispatcher.
+
+~~~
+var host = new VirtualHost("")
+var routes = new Routes(host)
+
+routes.add new Route("/:a/:b/:c", action)
+routes.add new Route("/users/:id", action)
+routes.add new Route("/:foo", action)
+
+assert routes["/a/b/c"].path == "/:a/:b/:c"
+assert routes["/a/b/c/d"].path == "/:a/:b/:c"
+assert routes["/users/1234/foo"].path == "/:a/:b/:c"
+
+assert routes["/users/"].path == "/users/:id"
+assert routes["users/"].path == "/users/:id"
+assert routes["/users/1234"].path == "/users/:id"
+
+assert routes["/users"].path == "/:foo"
+assert routes["/"].path == "/:foo"
+assert routes[""].path == "/:foo"
+~~~
+
+## Accessing uri parameter and values
+
+Parameters can be accessed by parsing the uri.
+
+~~~
+route = new Route("/users/:id", action)
+var params = route.parse_params("/users/1234")
+assert params.has_key("id")
+assert not params.has_key("foo")
+assert params["id"] == "1234"
+~~~
+
+Or from the `HttpRequest`.
+
+~~~
+route = new Route("/users/:id", action)
+var req = new HttpRequest
+req.uri_params = route.parse_params("/users/1234")
+assert req.params == ["id"]
+assert req.param("id") == "1234"
+assert req.param("foo") == null
+~~~
+
 ## Credits
 
 This nitcorn library is a fork from an independent project originally created in 2013 by

@@ -1,11 +1,6 @@
 # `vsm` - Vector Space Model
 
-Vector Space Model (VSM) is an algebraic model for representing text documents
-(and any objects, in general) as vectors of identifiers, such as, for example,
-index terms.
-
-It is used in information filtering, information retrieval, indexing and
-relevancy rankings.
+> [[doc: vsm::vsm]]
 
 The `vsm` package provides the following features:
 
@@ -13,7 +8,9 @@ The `vsm` package provides the following features:
 * Vector indexing and matching with tf * idf.
 * File indexing and matching to free text queries.
 
-## Vectors
+## [[sign: vsm::Vector]]
+
+> [[doc: vsm::Vector]]
 
 [[uml: vsm | format: svg, mentities: vsm::IndexMatchSorter;vsm::IndexMatch;vsm::StringIndex;vsm::Vector;vsm::FileIndex;vsm::Document;vsm::VSMIndex]]
 
@@ -57,12 +54,11 @@ var s2 = query.cosine_similarity(v2)
 assert s1 > s2
 ~~~
 
-## VSMIndex
+## [[sign: vsm::VSMIndex]]
 
 VSMIndex is a Document index based on VSM.
 
-Using VSMIndex you can index documents associated with their vector.
-Documents can then be matched to query vectors.
+> [[doc: vsm::VSMIndex]]
 
 This represents a minimalistic search engine.
 
@@ -97,7 +93,7 @@ var matches = index.match_vector(query)
 assert matches.first.document == d1
 ~~~
 
-## StringIndex
+## [[sign: vsm::StringIndex]]
 
 The StringIndex provides usefull services to index and match strings.
 
@@ -118,7 +114,7 @@ Example from `vsm::example_vsm`:
 
 [[code: vsm::example_vsm]]
 
-## FileIndex
+## ## [[sign: vsm::FileIndex]]
 
 The FileIndex is a StringIndex able to index and retrieve files.
 

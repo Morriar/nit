@@ -23,6 +23,30 @@ Example from `pthreads::concurrent_array_and_barrier`:
 
 [[code: pthreads::concurrent_array_and_barrier]]
 
+## [[sign: pthreads::redef_collections]]
+
+> [[doc: pthreads::redef_collections]]
+
+## [[sign: pthreads::concurrent_collections]]
+
+> [[doc: pthreads::concurrent_collections]]
+
+## [[sign: pthreads::BlockingQueue]]
+
+> [[doc: pthreads::BlockingQueue]]
+
+## [[sign: pthreads::Barrier]]
+
+> [[doc: pthreads::Barrier]]
+
+## [[sign: pthreads::Mutex]]
+
+> [[doc: pthreads::Mutex]]
+
+## [[sign: pthreads::Thread]]
+
+> [[doc: pthreads::Thread]]
+
 ## Known limitations:
 
 * Most services from the Nit library are not thread-safe. You must manage

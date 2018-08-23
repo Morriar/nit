@@ -2,8 +2,6 @@
 
 > [[doc: android::android]]
 
-
-
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine.
@@ -128,6 +126,10 @@ Importing `android::landscape` or `android::portrait` locks the generated
 application in the specified orientation. This can be useful for games and
 other multimedia applications.
 
+#### [[sign: android::landscape]]
+
+> [[doc: android::landscape]]
+
 ### Resources and application icon
 
 Resources specific to the Android platform should be placed in an `android/` folder at the root of the project.
@@ -141,6 +143,14 @@ The Nit compiler detects these files and uses them as the application icon.
 
 Additional `android/` folders may be placed next to more specific Nit modules to change the Android resources
 for application variants. The more specific resources will have priority over the project level `android/` files.
+
+#### [[sign: android::assets_and_resources]]
+
+> [[doc: android::assets_and_resources]]
+
+#### [[sign: android::assets]]
+
+> [[doc: android::assets]]
 
 ## Compilation modes
 
@@ -192,6 +202,58 @@ APK file, it can then be published on the Play Store.
 
 3. Call `nitc` with the `--release` options. You will be prompted for the
    required passwords as needed by `jarsigner`.
+
+## [[sign: android::android]]
+
+> [[doc: android::android]]
+
+## [[sign: android::shared_preferences]]
+
+> [[doc: android::shared_preferences]]
+
+## [[sign: android::vibration]]
+
+> [[doc: android::vibration]]
+
+## [[sign: android::cardboard]]
+
+> [[doc: android::cardboard]]
+
+## [[sign: android::data_store]]
+
+> [[doc: android::data_store]]
+
+## [[sign: android::aware]]
+
+> [[doc: android::aware]]
+
+## [[sign: android::intent]]
+
+> [[doc: android::intent]]
+
+## [[sign: android::wifi]]
+
+> [[doc: android::wifi]]
+
+## [[sign: android::native_app_glue]]
+
+> [[doc: android::native_app_glue]]
+
+## [[sign: android::nit_activity]]
+
+> [[doc: android::nit_activity]]
+
+## [[sign: android::notification]]
+
+> [[doc: android::notification]]
+
+## [[sign: android::sensors]]
+
+> [[doc: android::sensors]]
+
+## [[sign: android::audio]]
+
+> [[doc: android::audio]]
 
 ## Authors
 

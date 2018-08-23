@@ -114,6 +114,22 @@ The type to recreate is either declared or inferred:
 The method `deserialize_json` is a shortcut to `JsonDeserializer` which prints
 errors to the console. It is fit only for small scripts and other quick and dirty usage.
 
+### [[sign: json::dynamic]]
+
+> [[doc: json::dynamic]]
+
+#### [[sign: json::JsonValue]]
+
+> [[doc: json::JsonValue]]
+
+### [[sign: json::static]]
+
+> [[doc: json::static]]
+
+## [[sign: json::store]]
+
+> [[doc: json::store]]
+
 #### Example
 
 ~~~

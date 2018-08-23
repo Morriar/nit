@@ -300,6 +300,190 @@ end
 
 ![Diagram for `ai`](uml-ai.svg)
 
+## `backtrack`
+
+> This module provides a simple abstract class `BacktrackProblem[S,A]` to be specialized for a specific problem.
+
+The concrete class `BacktrackSolver` is used to configure, query, and run a solver for a given problem.
+
+For an example, see the `queens.nit` program in the `examples` subdirectory.
+
+### `BacktrackNode`
+
+> The solver visits the virtual search tree with a zipper.
+
+A node is the zipper (this class) is associated to:
+
+* a state of the problem (indirectly),
+* the actions not yet explored from the state (see `totry`)
+* the action that yields to the state (see `action`), used to backtrack.
+* and the parent node in the zipper (see `parent`).
+
+There is no direct link between a node and a state; it is unneeded
+since the same state is used, and mutated, during the whole execution of the solver.
+
+This class is exposed to allow queries on the solution provided by the solver.
+
+### `BacktrackProblem`
+
+> This class serves to model search problems using a backtracking approach.
+> A state, `S`, is a point in the search problem and fully model a given state of the world.
+> An action, `A`, is an available mean of transition between two states.
+> While there is a potential large number of distinct states and actions, there should be only
+> a small number of possible actions from a specific state (thus, a small, or at least finite, branching factor).
+
+The point this class is that the state is a mutable object, the roles of the actions is to modify
+the state.
+
+This abstract class is generic and made to work with any kind of states and actions.
+Therefore, specific subclasses must be developed to implements the required services:
+
+* `initial_state`
+* `actions`
+* `apply_action`
+* `backtrack`
+* `is_goal`
+
+# Basic search
+
+The method `solve` returns a new solver for a backtrack search.
+
+### `BacktrackSolver`
+
+> # Basic run and results.
+
+1. Instantiate it with the method `solve` from `BacktrackProblem`.
+2. Apply the method `run`, that will search and return a solution.
+3. Retrieve information from the solution.
+
+~~~~nitish
+var p: BacktrackProblem = new MyProblem
+var solver = p.solve
+var res = solver.run
+if res != null then
+  print "Found solution in {res.depth} actions: {res.plan.join(", ")}"
+  print "The state of the solution is: {solver.state}"
+end
+~~~~
+
+# Step-by-step runs and multiple runs
+
+The `run_steps` method (see also `steps`, and `steps_limit`) can be used to run only a maximum number of steps.
+Thus, this method can be used as a *co-routine* and be run periodically for a small amount of time.
+
+`run` and `run_steps` return the next solution.
+A subsequent call to `run` returns the following solution and so on.
+
+When there is no more solutions available, `null` is returned and `is_running` become false.
+
+Between run, the state of the current search can be read.
+
+# Search-trees
+
+Internally, solvers use a zipper on the virtual search-tree where nodes are elements in the apply/backtrack graph.
+See the class `BacktrackNode` for details
+
+The `run` and `node` methods return a `BacktrackNode` that can be used to retrieve a lot of useful information,
+like the full `path` or the `plan`.
+If only the solved state is required, the `state` method from the solver gives it.
+
+## `search`
+
+> The module provides a simple abstract class `SearchProblem[S,A]` to be specialized for a specific problem.
+
+The concrete class `SearchSolver` is used to configure, query, and run a solver for a given problem.
+
+For an example, see the `puzzle.nit` program in the `examples` subdirectory.
+
+### `SearchNode`
+
+> The root node is labeled by the initial state of the problem.
+
+This class is exposed to allow queries on the solution provided by the solver.
+
+### `SearchProblem`
+
+> This class serves to model problems of planing and path-finding.
+> A state, `S`, is a point in the search problem and fully models a given state of the world.
+> An action, `A`, is an available mean of transition between two states.
+
+This abstract class is generic made to work with any kind of states and actions.
+Therefore, specific subclasses must be developed to implement the required services:
+
+* `initial_state`
+* `actions`
+* `apply_action`
+* `is_goal`
+
+Note that the implemented methods should not temper with the parameters since it is expected
+that they remain unmodified.
+
+# Basic search
+
+These tree method are enough to trigger a basic search.
+
+The methods `breadth_first` and `depth_first` return pre-configured solvers for, respectively,
+a breadth-first search, a depth-first search.
+
+# Advanced search
+
+The `cost` method can be implemented to represent the cost of a single transition.
+By default, the cost is 1.
+
+The `heuristic` method can be implemented to represent a lower-bound estimation of the remaining
+cost to reach a goal state.
+By default, the heuristic is 0.
+
+If one of these (or both) methods are implemented, the `astar` method will return a pre-configured
+solver for a A* search.
+
+More configuration and optimization on the search can to be done in the `SearchSolver` class.
+
+### `SearchSolver`
+
+> For a given problem, a lot of variation of search algorithms can be made.
+> Thus this class permit the user to control the parameters of the search algorithm.
+
+Note that this class is not meant to be specialized, and usually not instantiated directly.
+
+# Basic run and result.
+
+1. Instantiate it with the method `breadth_first`, `depth_first`, or `astar` from `SearchProblem`.
+2. Apply the method `run`, that will search and return a solution.
+3. Retrieve information from the solution.
+
+~~~~nitish
+var p: SearchProblem = new MyProblem
+var res = p.astar.run
+if res != null then print "Found plan with {res.depth} actions, that cost {res.cost}: {res.plan.join(", ")}"
+~~~~
+
+# Step-by-step runs and multiple runs
+
+The `run_steps` method (see also `steps`, and `steps_limit`) can be used to run only a maximum number of steps.
+This method can be used as a *co-routine* and run them periodically for a small amount of time.
+
+`run` and `run_steps` return the next solution.
+A subsequent call to `run` returns the following solution and so on.
+
+When there is no more solutions available, `is_running` become false.
+
+# Search-trees
+
+Internally, solvers use a search-tree where nodes are labeled with states, and edges are labeled with actions.
+See `SearchNode` for details.
+
+The `run` method return a `SearchNode` that can be used to retrieve a lot of useful information,
+like the full `path` or the `plan`.
+
+# Configuration
+
+The solver provide some *knobs* to control how the search-tree is visited.
+
+* `memorize` (see also `memorize_late`)
+* `do_revisit` (see also `revisits`)
+* `depth_limit` (see also `iterative_deepening` and `depth_limit_reached`)
+
 ## Authors
 
 This project is maintained by **Jean Privat <mailto:jean@pryen.org>**.

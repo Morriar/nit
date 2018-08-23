@@ -34,6 +34,10 @@ Then run it with:
 
 [[main-run: app::app_base]]
 
+## [[sign: app::app]]
+
+> [[doc: app::app]]
+
 ## Application Life-Cycle
 
 The _app.nit_ application life-cycle is compatible with all target platforms.
@@ -67,7 +71,9 @@ The `App` instance is the first to be notified of these events.
 Other UI elements, from the `ui` submodule, are notified of the same events using a simple depth first visit.
 So all UI elements can react separately to live-cycle events.
 
-## User Interface
+## [[sign: app::ui]]
+
+> [[doc: app::ui]]
 
 The `app::ui` module defines an abstract API to build a portable graphical application.
 The API is composed of interactive `Control`s, visible `View`s and an active `Window`.
@@ -101,7 +107,9 @@ The suggested approach is to use platform specific modules to customize the appl
 See the calculator example for an adaptation of the UI on Android,
 the interesting module is in this repository at ../../examples/calculator/src/android_calculator.nit
 
-## Persistent State with data_store
+## [[sign: app::data_store]]
+
+> [[doc: app::data_store]]
 
 _app.nit_ offers the submodule `app::data_store` to easily save the application state and user preferences.
 The service is accessible by the method `App::data_store`. The `DataStore` itself defines 2 methods:
@@ -149,7 +157,9 @@ redef class App
 end
 ~~~
 
-## Async HTTP request
+## [[sign: app::http_request]]
+
+> [[doc: app::http_request]]
 
 The module `app::http_request` provides services to execute asynchronous HTTP request.
 The class `AsyncHttpRequest` hides the complex parallel logic and
@@ -236,6 +246,10 @@ There is two main ways to achieve this goal:
 
   # ...
   ~~~
+
+## [[sign: app::audio]]
+
+> [[doc: app::audio]]
 
 ## Authors
 

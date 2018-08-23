@@ -9,13 +9,18 @@ sentiment, etc.
 
 This wrapper needs the Stanford CoreNLP jars that run on Java 1.8+.
 
-See http://nlp.stanford.edu/software/corenlp.shtml.
+> See http://nlp.stanford.edu/software/corenlp.shtml.
 
-## NLPProcessor
+## `NLPProcessor`
 
-![Diagram for `nlp`](uml-nlp.svg)
+> NLPProcessor provides natural language processing for input text and files.
+> Analyzed documents can be manipulated through the resulting NLPDocument.
 
-### Java client
+![Diagram for `nlp`](uml-nlp-2.svg)
+
+### `NLPJavaProcessor`
+
+> FIXME this should use the Java FFI.
 
 ~~~nit
 import nlp
@@ -31,7 +36,12 @@ for sentence in doc.sentences do
 end
 ~~~
 
-### NLPServer
+### `NLPServer`
+
+> Runs the server on `port`.
+
+For more details about the stanford NLP server see
+https://stanfordnlp.github.io/CoreNLP/corenlp-server.html
 
 The NLPServer provides a wrapper around the StanfordCoreNLPServer.
 
@@ -74,6 +84,10 @@ assert index.documents.length == 2
 var matches = index.match_string("this sample")
 assert matches.first.document == d1
 ~~~
+
+## `NLPDocument`
+
+> Once processed, it contains a list of sentences that contain tokens.
 
 ## TODO
 

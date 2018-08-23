@@ -58,6 +58,10 @@ These files can be generated in a number of different ways:
 * Write or modify the file `Contents.json` manually.
   It is in Json format and easily readable.
 
+## [[sign: ios::uikit]]
+
+> [[doc: ios::uikit]]
+
 ## Authors
 
 This project is maintained by [[ini-maintainer: ios]].

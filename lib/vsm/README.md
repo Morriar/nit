@@ -1,8 +1,8 @@
 # `vsm` - Vector Space Model
 
-Vector Space Model (VSM) is an algebraic model for representing text documents
-(and any objects, in general) as vectors of identifiers, such as, for example,
-index terms.
+> Vector Space Model (VSM) is an algebraic model for representing text documents
+> (and any objects, in general) as vectors of identifiers, such as, for example,
+> index terms.
 
 It is used in information filtering, information retrieval, indexing and
 relevancy rankings.
@@ -13,7 +13,9 @@ The `vsm` package provides the following features:
 * Vector indexing and matching with tf * idf.
 * File indexing and matching to free text queries.
 
-## Vectors
+## `Vector`
+
+> *n-dimensions* vectors are used to represent a text document or an object.
 
 ![Diagram for `vsm`](uml-vsm.svg)
 
@@ -57,12 +59,12 @@ var s2 = query.cosine_similarity(v2)
 assert s1 > s2
 ~~~
 
-## VSMIndex
+## `VSMIndex`
 
 VSMIndex is a Document index based on VSM.
 
-Using VSMIndex you can index documents associated with their vector.
-Documents can then be matched to query vectors.
+> Using VSMIndex you can index documents associated with their vector.
+> Documents can then be matched to query vectors.
 
 This represents a minimalistic search engine.
 
@@ -97,7 +99,7 @@ var matches = index.match_vector(query)
 assert matches.first.document == d1
 ~~~
 
-## StringIndex
+## `StringIndex`
 
 The StringIndex provides usefull services to index and match strings.
 
@@ -170,7 +172,7 @@ loop
 end
 ~~~
 
-## FileIndex
+## `FileIndex`
 
 The FileIndex is a StringIndex able to index and retrieve files.
 

@@ -118,6 +118,28 @@ sys.sdl.quit
 
 ![Diagram for `sdl2`](uml-sdl2.svg)
 
+## `image`
+
+> Offers `SDLSurface::load` which supports more image formats than `sdl2::sdl2`
+> alone: JPG, PNG, TIF, GIT, ICO and much more.
+
+## `mixer`
+
+> C API documentation: https://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html
+
+## `SDLSysWMInfo`
+
+> Created using `SDLWindow::vm_info`
+
+## `SDLMouseButtonEvent`
+
+> This could as well be an abstract class. All instances of `SDLMouseButtonEvent`
+> is either a `SDLMouseButtonUpEvent` or a `SDLMouseButtonDownEvent`.
+
+## `SDLEventBuffer`
+
+> An instance of this class should be used to call `poll_event` and `to_event`.
+
 ## Examples
 
 See the `minimal` example within this project at `examples/minimal` for a simple example

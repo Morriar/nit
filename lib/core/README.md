@@ -6,15 +6,17 @@ Core classes and methods used by default by Nit programs and libraries.
 
 ![Diagram for `core`](uml-core.svg)
 
-This module is the root of the module hierarchy.
-It provides a very minimal set of classes and services used as a
-foundation to define other classes and methods.
+## `kernel`
 
-### Object
+> This module is the root of the module hierarchy.
+> It provides a very minimal set of classes and services used as a
+> foundation to define other classes and methods.
 
-Each other class implicitly specializes Object,
-therefore the services of Object are inherited by every other class and are usable
-on each value, including primitive types like integers (`Int`), strings (`String`) and arrays (`Array`).
+### `Object`
+
+> Each other class implicitly specializes Object,
+> therefore the services of Object are inherited by every other class and are usable
+> on each value, including primitive types like integers (`Int`), strings (`String`) and arrays (`Array`).
 
 Note that `nullable Object`, not `Object`, is the root of the type hierarchy
 since the special value `null` is not considered as an instance of Object.
@@ -153,9 +155,9 @@ The method returns false if the dynamic type of `other` is a subtype of the dyna
 Unless specific code, you should not use this method because it is inconsistent
 with the fact that a subclass can be used in lieu of a superclass.
 
-### Sys
+### `Sys`
 
-`Sys` is a singleton class, its only instance is accessible from everywhere with `sys`.
+> `Sys` is a singleton class, its only instance is accessible from everywhere with `sys`.
 
 Because of this, methods that should be accessible from everywhere, like `print` or `exit`,
 are defined in `Sys`.
@@ -238,7 +240,102 @@ and inject specific work before or after the main part.
 
 ## Core Collections
 
+### `abstract_collection`
+
+> TODO specify the behavior on iterators when collections are modified.
+
+### `queue`
+
+> Topics:
+
+* `Queue`
+* `Sequence::as_lifo`
+* `Sequence::as_fifo`
+* `SimpleCollection::as_random`
+* `MinHeap`
+
+### `sorter`
+
+> In order to provide your own sort class you should define a subclass of `Comparator` with
+> a custom `Comparator::compare` function and a specific `COMPARED` virtual type.
+
 ## String and Text manipulation
+
+### `ropes`
+
+> Ropes are a data structure introduced in a 1995 paper from
+> Hans J. Boehm, Russ Atkinson and Michael Plass.
+
+See:
+
+> Ropes: an Alternative to Strings,
+> *Software - Practice and Experience*,
+> Vol. 25(12), 1315-1330 (December 1995).
+
+The implementation developed here provides an automatic change
+of data structure depending on the length of the leaves.
+
+The length from which a `Rope` is built from a `flat` string
+if defined at top-level (see `maxlen`) and can be redefined by clients
+depending on their needs (e.g. if you need to bench the speed of
+the creation of concat nodes, lower the size of maxlen).
+
+A Rope as defined in the original paper is a Tree made of concatenation
+nodes and containing `Flat` (that is Array-based) strings as Leaves.
+
+Example :
+
+~~~raw
+	            Concat
+	          /        \
+	    Concat          Concat
+	   /      \        /      \
+	"My"     " Name"  " is"   " Simon."
+~~~
+
+Note that the above example is not representative of the actual implementation
+of `Ropes`, since short leaves are merged to keep the rope at an acceptable
+height (hence, this rope here might actually be a `FlatString` !).
+
+## `codec_base`
+
+> A Codec (Coder/Decoder) is a tranformer from a byte-format to another
+
+As Nit Strings are UTF-8, a codec works as :
+
+- Coder: From a UTF-8 string to a specified format (writing)
+- Decoder: From a specified format to a UTF-8 string (reading)
+
+## `re`
+
+> Implemented using libc regular expressions.
+
+The main entities are `Text::to_re` and `Regex`.
+
+## `fixed_ints`
+
+> All classes defined here have C-equivalents and the semantics of their
+> operations are the same as C's
+
+* Int8 => int8_t
+* Int16 => int16_t
+* UInt16 => uint16_t
+* Int32 => int32_t
+* UInt32 => uint32_t
+
+NOTE: No UInt8 is provided as Byte is the same
+SEE: kernel::Byte
+
+HOW TO USE:
+All classes can be instanciated via a literal rule.
+Namely, a suffix to append after the literal integer.
+
+* Int8 => i8
+* Byte => u8
+* Int16 => i16
+* UInt16 => u16
+* Int32 => i32
+* UInt32 => u32
 
 ## Running the tests
 

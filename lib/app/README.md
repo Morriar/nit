@@ -42,6 +42,11 @@ Then run it with:
 ./app_base
 ~~~
 
+## `app`
+
+> The features offered by this modules are common to all platforms, but
+> may not be available on all devices.
+
 ## Application Life-Cycle
 
 The _app.nit_ application life-cycle is compatible with all target platforms.
@@ -75,7 +80,23 @@ The `App` instance is the first to be notified of these events.
 Other UI elements, from the `ui` submodule, are notified of the same events using a simple depth first visit.
 So all UI elements can react separately to live-cycle events.
 
-## User Interface
+## `ui`
+
+> ~~~
+import app::ui
+
+class MyWindow
+    super Window
+
+    var layout = new ListLayout(parent=self)
+    var lbl = new Label(parent=layout, text="Hello world", align=0.5)
+    var but = new Button(parent=layout, text="Press here")
+
+    redef fun on_event(event) do lbl.text = "Pressed!"
+end
+
+redef fun root_window do return new MyWindow
+~~~
 
 The `app::ui` module defines an abstract API to build a portable graphical application.
 The API is composed of interactive `Control`s, visible `View`s and an active `Window`.
@@ -109,7 +130,10 @@ The suggested approach is to use platform specific modules to customize the appl
 See the calculator example for an adaptation of the UI on Android,
 the interesting module is in this repository at ../../examples/calculator/src/android_calculator.nit
 
-## Persistent State with data_store
+## `data_store`
+
+> The main services is `App::data_store`, a `DataStore` holding any
+> serializable Nit object.
 
 _app.nit_ offers the submodule `app::data_store` to easily save the application state and user preferences.
 The service is accessible by the method `App::data_store`. The `DataStore` itself defines 2 methods:
@@ -229,7 +253,28 @@ redef class App
 end
 ~~~
 
-## Async HTTP request
+## `http_request`
+
+> ~~~nitish
+~~~
+
+import app::http_request
+
+class MyHttpRequest
+super AsyncHttpRequest
+
+    redef fun uri do return "http://example.com/"
+
+    redef fun on_load(data, status) do print "Received: {data or else "null"}"
+
+    redef fun on_fail(error) do print "Connection error: {error}"
+
+end
+
+var req = new MyHttpRequest
+req.start
+
+~~~
 
 The module `app::http_request` provides services to execute asynchronous HTTP request.
 The class `AsyncHttpRequest` hides the complex parallel logic and
@@ -391,6 +436,12 @@ There is two main ways to achieve this goal:
 
   # ...
   ~~~
+
+## `audio`
+
+> Get a handle to a sound using `new Sound` or `new Music` at any time.
+> Call `load` at or after `App::on_create` or leave it to be loaded
+> on demand by the first call to `play`.
 
 ## Authors
 

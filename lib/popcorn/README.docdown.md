@@ -532,7 +532,9 @@ app.use("/*", new HtmlErrorHandler)
 app.listen("localhost", 3000)
 ~~~
 
-## Sessions
+## [[sign: popcorn::pop_sessions]]
+
+> [[doc: popcorn::pop_sessions]]
 
 **Sessions** can be used thanks to the built-in `SessionInit` middleware.
 
@@ -576,6 +578,42 @@ In this example, the StaticHandler will redirect any unknown requests to the `in
 angular controller.
 
 See the examples for a more detailed use case working with a JSON API.
+
+## [[sign: popcorn::pop_tasks]]
+
+> [[doc: popcorn::pop_tasks]]
+
+## [[sign: popcorn::pop_json]]
+
+> [[doc: popcorn::pop_json]]
+
+## [[sign: popcorn::pop_templates]]
+
+> [[doc: popcorn::pop_templates]]
+
+## [[sign: popcorn::pop_config]]
+
+> [[doc: popcorn::pop_config]]
+
+## [[sign: popcorn::pop_tests]]
+
+> [[doc: popcorn::pop_tests]]
+
+## [[sign: popcorn::pop_repos]]
+
+> [[doc: popcorn::pop_repos]]
+
+## [[sign: popcorn::pop_auth]]
+
+> [[doc: popcorn::pop_auth]]
+
+## [[sign: popcorn::pop_tracker]]
+
+> [[doc: popcorn::pop_tracker]]
+
+## [[sign: popcorn::pop_validation]]
+
+> [[doc: popcorn::pop_validation]]
 
 ## Running the tests
 

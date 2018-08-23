@@ -13,6 +13,26 @@ Example from `sdl2::minimal`:
 
 [[uml: sdl2 | format: svg, mentities: sdl2::all;sdl2::sdl2;sdl2::syswm;sdl2::image;sdl2::mixer;sdl2::events;sdl2::sdl2_base]]
 
+## [[sign: sdl2::image]]
+
+> [[doc: sdl2::image]]
+
+## [[sign: sdl2::mixer]]
+
+> [[doc: sdl2::mixer]]
+
+## [[sign: sdl2::SDLSysWMInfo]]
+
+> [[doc: sdl2::SDLSysWMInfo]]
+
+## [[sign: sdl2::SDLMouseButtonEvent]]
+
+> [[doc: sdl2::SDLMouseButtonEvent]]
+
+## [[sign: sdl2::SDLEventBuffer]]
+
+> [[doc: sdl2::SDLEventBuffer]]
+
 ## Examples
 
 See the `minimal` example within this project at `examples/minimal` for a simple example

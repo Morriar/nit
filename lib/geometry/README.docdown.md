@@ -11,7 +11,21 @@ The very basics of geometry needs, for two and three-dimensional space.
 Boxes module introduces Bounding boxes for Points and Lines and services to detect collision or inclusion between boxes.
 It means a simple and fast way to test collision but not really accurate since it uses bounding boxes.
 
-## Quadtrees
+### [[sign: geometry::Box]]
+
+> [[doc: geometry::Box]]
+
+### [[sign: geometry::Box3d]]
+
+> [[doc: geometry::Box3d]]
+
+### [[sign: geometry::BoxedArray]]
+
+> [[doc: geometry::BoxedArray]]
+
+## [[sign: geometry::quadtree]]
+
+> [[doc: geometry::quadtree]]
 
 A QuadTree is a tree data structure in which each internal node has exactly four children
 They're most often used to partition two-dimensional space by recursively subdividing
@@ -28,6 +42,14 @@ This API provides two different types of Quadtree : Static and Dynamic (respecti
 
 * Dynamic: You just need to fill the quadtree with objects, and when the threshold is reached,
   it will automatically divide the current region, depending on the distribution of objects already in the region.
+
+### [[sign: geometry::SQuadTree]]
+
+> [[doc: geometry::SQuadTree]]
+
+### [[sign: geometry::DQuadTree]]
+
+> [[doc: geometry::DQuadTree]]
 
 ## Polygons
 

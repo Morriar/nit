@@ -9,13 +9,17 @@ sentiment, etc.
 
 This wrapper needs the Stanford CoreNLP jars that run on Java 1.8+.
 
-See http://nlp.stanford.edu/software/corenlp.shtml.
+> [[doc: nlp::nlp]]
 
-## NLPProcessor
+## [[sign: nlp::NLPProcessor]]
+
+> [[doc: nlp::NLPProcessor]]
 
 [[uml: nlp | format: svg, mentities: nlp::nlp_server;nlp::nlp;nlp::nlp_index;nlp::stanford]]
 
-### Java client
+### [[sign: nlp::NLPJavaProcessor]]
+
+> [[doc: nlp::NLPJavaProcessor]]
 
 ~~~nit
 import nlp
@@ -31,7 +35,9 @@ for sentence in doc.sentences do
 end
 ~~~
 
-### NLPServer
+### [[sign: nlp::NLPServer]]
+
+> [[doc: nlp::NLPServer]]
 
 The NLPServer provides a wrapper around the StanfordCoreNLPServer.
 
@@ -74,6 +80,10 @@ assert index.documents.length == 2
 var matches = index.match_string("this sample")
 assert matches.first.document == d1
 ~~~
+
+## [[sign: nlp::NLPDocument]]
+
+> [[doc: nlp::NLPDocument]]
 
 ## TODO
 

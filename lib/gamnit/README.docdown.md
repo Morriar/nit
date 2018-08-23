@@ -84,6 +84,62 @@ _gamnit_ is modular, different services of the framework are available through d
 
 * `network` provides a simple communication framework for multiplayer client/server games.
 
+## [[sign: gamnit::network]]
+
+> [[doc: gamnit::network]]
+
+## [[sign: gamnit::android19]]
+
+> [[doc: gamnit::android19]]
+
+## [[sign: gamnit::flat]]
+
+> [[doc: gamnit::flat]]
+
+## [[sign: gamnit::keys]]
+
+> [[doc: gamnit::keys]]
+
+## [[sign: gamnit::display_android]]
+
+> [[doc: gamnit::display_android]]
+
+## [[sign: gamnit::cardboard]]
+
+> [[doc: gamnit::cardboard]]
+
+## [[sign: gamnit::client]]
+
+> [[doc: gamnit::client]]
+
+## [[sign: gamnit::server]]
+
+> [[doc: gamnit::server]]
+
+## [[sign: gamnit::particles]]
+
+> [[doc: gamnit::particles]]
+
+## [[sign: gamnit::selection]]
+
+> [[doc: gamnit::selection]]
+
+## [[sign: gamnit::dynamic_resolution]]
+
+> [[doc: gamnit::dynamic_resolution]]
+
+## [[sign: gamnit::virtual_gamepad]]
+
+> [[doc: gamnit::virtual_gamepad]]
+
+## [[sign: gamnit::bmfont]]
+
+> [[doc: gamnit::bmfont]]
+
+## [[sign: gamnit::shadow]]
+
+> [[doc: gamnit::shadow]]
+
 ## Authors
 
 This project is maintained by [[ini-maintainer: gamnit]].

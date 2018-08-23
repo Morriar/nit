@@ -114,6 +114,139 @@ The type to recreate is either declared or inferred:
 The method `deserialize_json` is a shortcut to `JsonDeserializer` which prints
 errors to the console. It is fit only for small scripts and other quick and dirty usage.
 
+### `dynamic`
+
+> Most services are in `JsonValue`, which is created by `Text::to_json_value`.
+
+#### `JsonValue`
+
+> Provides high-level services to explore JSON objects with minimal overhead
+> dealing with static types. Use this class to manipulate the JSON data first
+> and check for errors only before using the resulting data.
+
+For example, given:
+
+~~~
+var json_src = """
+{
+  "i": 123,
+  "m": {
+         "t": true,
+         "f": false
+       },
+  "a": ["zero", "one", "two"]
+}"""
+var json_value = json_src.to_json_value # Parse src to a `JsonValue`
+~~~
+
+Access array or map values using their indices.
+
+~~~
+var target_int = json_value["i"]
+assert target_int.is_int # Check for error and expected type
+assert target_int.to_i == 123 # Use the value
+~~~
+
+Use `get` to reach a value nested in multiple objects.
+
+~~~
+var target_str = json_value.get("a.0")
+assert target_str.is_string # Check for error and expected type
+assert target_str.to_s == "zero" # Use the value
+~~~
+
+This API is useful for scripts and when you need only a few values from a
+JSON object. To access many values or check the conformity of the JSON
+beforehand, use the `json` serialization services.
+
+### `static`
+
+> `Text::parse_json` returns a simple Nit object from the JSON source.
+> This object can then be type checked as usual with `isa` and `as`.
+
+## `store`
+
+> This simple system can be used to store and retrieve json data.
+
+## Usage
+
+### Initialization
+
+JsonStore use the file system to store and load json files.
+
+For initialization you need to give the directory used in the
+file system to save objects.
+
+~~~
+var store = new JsonStore("store_dir")
+~~~
+
+### Documents
+
+With JsonStore you manage *documents*.
+Documents are simple json files that can be stored and loaded from json store.
+
+JsonStore can store documents of type JsonObject and JsonArray.
+
+~~~
+var red = new JsonObject
+red["name"] = "red"
+red["code"] = "FF0000"
+~~~
+
+Data are stored under a *key*.
+This is the path to the document from `JsonStore::store_dir`
+without the `.json` extension.
+
+Examples:
+
+* key `document` will store data under `store_dir / "document.json"`
+* key `collection/data` will store data under `store_dir / "collection/data.json"`
+
+~~~
+var key = "colors/red"
+~~~
+
+Store the object.
+
+~~~
+store.store_object(key, red)
+~~~
+
+Load the object.
+
+~~~
+assert store.has_key(key)
+var obj = store.load_object(key)
+assert obj["name"] == obj["name"]
+~~~
+
+### Collections
+
+A collection is a set of documents stored under the same path.
+
+~~~
+var green = new JsonObject
+green["name"] = "green"
+green["code"] = "00FF00"
+store.store_object("colors/green", green)
+
+assert store.has_collection("colors")
+
+var col = store.list_collection("colors")
+assert col.length == 2
+assert col.has("green")
+assert col.has("red")
+~~~
+
+### Clearing store
+
+You can delete all the data contained in the `JsonStore::store_dir` with `clear`.
+
+~~~
+store.clear
+~~~
+
 #### Example
 
 ~~~

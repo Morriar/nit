@@ -18,6 +18,38 @@ See the `examples` subdirectory for examples:
 
 [[uml: ai | format: svg, mentities: ai::ai;ai::backtrack;ai::search]]
 
+## [[sign: ai::backtrack]]
+
+> [[doc: ai::backtrack]]
+
+### [[sign: ai::BacktrackNode]]
+
+> [[doc: ai::BacktrackNode]]
+
+### [[sign: ai::BacktrackProblem]]
+
+> [[doc: ai::BacktrackProblem]]
+
+### [[sign: ai::BacktrackSolver]]
+
+> [[doc: ai::BacktrackSolver]]
+
+## [[sign: ai::search]]
+
+> [[doc: ai::search]]
+
+### [[sign: ai::SearchNode]]
+
+> [[doc: ai::SearchNode]]
+
+### [[sign: ai::SearchProblem]]
+
+> [[doc: ai::SearchProblem]]
+
+### [[sign: ai::SearchSolver]]
+
+> [[doc: ai::SearchSolver]]
+
 ## Authors
 
 This project is maintained by [[ini-maintainer: ai]].

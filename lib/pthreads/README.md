@@ -80,6 +80,59 @@ end
 print "{array.length} strings inserted"
 ~~~
 
+## `redef_collections`
+
+> This modules is intended to be used with scripts or quick prototypes.
+> It makes thread safe _all_ instances of _some_ collections which
+> also slightly slow down single threaded use. For more robust software,
+> it is recommended to use `threads::concurrent_collections`.
+
+Thread-safe collections:
+
+- [x] `Array`
+- [ ] `List`
+- [ ] `HashMap`
+- [ ] `HashSet`
+- [ ] `Ref`
+- [ ] `Queue`
+
+## `concurrent_collections`
+
+> This module offers new thread-safe collections. If you want to
+> render basic collections thread-safe and don't mind the overhead cost,
+> you can use `threads::redef_collections`.
+
+Concurrent collections:
+
+- [x] `ConcurrentArray`
+- [x] `ConcurrentList`
+- [ ] `ConcurrentHashMap`
+- [ ] `ConcurrentHashSet`
+- [ ] `ConcurrentRef`
+- [ ] `ConcurrentQueue`
+
+Introduced collections specialize their critical methods according to the
+current implementation in the standard library. If additional services
+are added to the underlying collections by refinement or evolution, they
+might need to be covered in the concurrent version.
+
+## `BlockingQueue`
+
+
+## `Barrier`
+
+> Ensures that `count` threads call and block on `wait` before releasing them.
+
+## `Mutex`
+
+> Instances of this class can only be acquired by a single thread at any one
+> point in time. Uses the recursive protocol so they can be locked many time by
+> the same thread, must then be unlocked as many time.
+
+## `Thread`
+
+> Instances of this class are each used to launch and control a thread.
+
 ## Known limitations:
 
 * Most services from the Nit library are not thread-safe. You must manage
@@ -88,7 +141,7 @@ print "{array.length} strings inserted"
 
 ## For more information:
 
-![Diagram for `pthreads`](uml-pthreads.svg)
+![Diagram for `pthreads`](uml-pthreads-2.svg)
 
 * See: `man pthreads`
 * See: `examples/concurrent_array_and_barrier.nit`
