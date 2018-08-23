@@ -23,7 +23,6 @@ Then run it with:
 
 [[main-run: gamnit::texture_atlas_parser]]
 
-
 ## System configuration
 
 To compile the _gamnit_ apps packaged with the Nit repository on GNU/Linux you need to install the dev version of a few libraries and some tools.

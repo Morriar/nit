@@ -20,7 +20,6 @@ Then run it with:
 
 [[main-run: ios::app]]
 
-
 ## System configuration
 
 Configure your system for OS X by installing Xcode and brew.

@@ -32,7 +32,6 @@ Then run it with:
 
 [[main-run: app::app_base]]
 
-
 ## Application Life-Cycle
 
 The _app.nit_ application life-cycle is compatible with all target platforms.

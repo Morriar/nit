@@ -20,7 +20,6 @@ Then run it with:
 
 [[main-run: android::nit_activity]]
 
-
 ## Compilation for Android
 
 The compiler generates an APK file as the output when the `android`
