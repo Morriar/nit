@@ -172,7 +172,7 @@ loop
 end
 ~~~
 
-## `FileIndex`
+## ## `FileIndex`
 
 The FileIndex is a StringIndex able to index and retrieve files.
 
