@@ -209,6 +209,8 @@ class CardTipCommand
 	redef var title = "Card preview"
 
 	redef fun markdown do return "[[{command}]]"
+
+	var is_preview = true
 end
 
 class CardTipIni
@@ -550,12 +552,12 @@ class CardTipRefs
 
 	redef fun markdown do
 		var tpl = new Template
-		tpl.addn "Use Markdown ````spancodes```` or ```[[wikilinks]]``` to insert "
+		tpl.addn "Use Markdown ``` `spancodes` ``` or `[[wikilinks]]` to insert "
 		tpl.addn "links to mentities documentation.\n"
 		tpl.addn "Examples:\n"
-		tpl.addn "* ````Array````"
-		tpl.addn "* ````core::Array````"
-		tpl.addn "* ````[[core::Array]]````\n"
+		tpl.addn "* ``` `Array` ```"
+		tpl.addn "* ``` `core::Array` ```"
+		tpl.addn "* ```[[core::Array]]```\n"
 		return tpl.write_to_string
 	end
 end

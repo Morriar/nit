@@ -35,13 +35,13 @@
 						.success(cb)
 						.error(cbErr);
 				},
-				renderHtml: function(md, cb, cbErr) {
-					$http.post('/api/readme?format=html', md)
+				renderHtml: function(md, target, cb, cbErr) {
+					$http.post('/api/readme?format=html' + '&target=' + target, md)
 						.success(cb)
 						.error(cbErr);
 				},
-				renderMd: function(md, cb, cbErr) {
-					$http.post('/api/readme?format=md', md)
+				renderMd: function(md, target, cb, cbErr) {
+					$http.post('/api/readme?format=md' + '&target=' + target, md)
 						.success(cb)
 						.error(cbErr);
 				},
@@ -99,7 +99,7 @@
 			}
 
 			this.renderHtml = function() {
-				DocDown.renderHtml(vm.markdown,
+				DocDown.renderHtml(vm.markdown, vm.target,
 					function(data) {
 						vm.html = $sce.trustAsHtml(data);
 						$('#renderModal').modal();
@@ -109,7 +109,7 @@
 			}
 
 			this.renderMd = function() {
-				DocDown.renderMd(vm.markdown,
+				DocDown.renderMd(vm.markdown, vm.target,
 					function(data) {
 						vm.html = $sce.trustAsHtml(data);
 						$('#renderModal').modal();
@@ -190,7 +190,7 @@
 			})
 
 			//TODO remove
-			vm.target = 'pthreads';
+			vm.target = 'ai';
 			vm.markdown = '';
 			/*if($location.search().snippet) {
 				vm.markdown = atob($location.search().snippet);
@@ -224,6 +224,8 @@
 				},
 				controller: function($scope, $sce) {
 					var vm = this;
+					//vm.card.html = vm.card.html.replace('<p>', '');
+					vm.card.description = $sce.trustAsHtml(vm.card.description);
 
 					this.dismissCard = function() {
 						$scope.$emit('dismiss-card', vm.index, vm.card);

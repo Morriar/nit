@@ -98,7 +98,27 @@ class APIReadme
 	private var md_renderer = new MDocMdRenderer
 
 	redef fun post(req, res) do
+		var target_name = req.string_arg("target")
+		if target_name == "null" then target_name = null
+
+		var model = config.model
+
+		var tcmd = new CmdEntity(model, mentity_name = target_name)
+		var tres = tcmd.init_command
+		var context = null
+		if tres isa CmdSuccess then
+			context = tcmd.mentity
+			# TODO handle errors and show tips
+		end
+		if context == null then
+			# print "no context"
+			return
+		end
+
 		var ast = mdoc_parser.parse(req.body)
+		var mdoc = new MDoc(new nitc::Location(null, 0,0,0,0))
+		mdoc.original_mentity = context
+		ast.mdoc = mdoc
 		mdoc_parser.post_process(ast)
 
 		var format = req.string_arg("format")
@@ -154,12 +174,6 @@ class APIReadmeSuggest
 		# var mbuilder = config.modelbuilder
 		# var index = config.nlp_index
 
-		var doc = config.mdoc_parser.parse(req.body)
-		config.mdoc_parser.post_process(doc)
-
-		var v = new HeadingsVisitor
-		model.headings = v.collect_headings(doc)
-
 		var target_name = req.string_arg("target")
 		if target_name == "null" then target_name = null
 
@@ -174,6 +188,16 @@ class APIReadmeSuggest
 			# print "no context"
 			return
 		end
+
+		var doc = config.mdoc_parser.parse(req.body)
+		var mdoc = new MDoc(new nitc::Location(null, 0,0,0,0))
+		mdoc.original_mentity = context
+		doc.mdoc = mdoc
+		config.mdoc_parser.post_process(doc)
+
+		var v = new HeadingsVisitor
+		model.headings = v.collect_headings(doc)
+
 
 		var aligner = new MDocAligner(model, config.mainmodule, config.mentity_index, context)
 		aligner.align_mdoc(doc)
@@ -258,17 +282,21 @@ class MDocSuggester
 				if doc.has_card(card) then continue
 				suggestions.add card
 			end
-			if suggestions.not_empty then return suggestions
+			# if suggestions.not_empty then return suggestions
 		end
 
 		var current_state = get_current_state(node, doc, context)
 		# print "current: {current_state or else "NULL"}"
+
+		print dismissed
+		print doc.cards
 
 		if current_state != null then
 			for card in current_state.suggest(doc, context, node) do
 				if is_dismissed(card) then continue
 				if doc.has_card(card) then continue
 				suggestions.add card
+				print "* {card} ({card.commands.join(" ")})"
 			end
 		end
 
@@ -297,8 +325,6 @@ class MDocSuggester
 			# print suggestions
 		end label suggest
 
-		print dismissed
-		print doc.cards
 		for card in cards do
 			if is_dismissed(card) then continue
 			if doc.has_card(card) then continue
@@ -628,10 +654,13 @@ class MDocExample
 		else
 			var mentities = new Array[MEntity]
 			for match in matches do mentities.add match.document.mentity
-			var card = new CardList(mdoc_parser, context, null, null, mentities)
-			if suggester.is_dismissed(card) then return new Array[DocCard]
-			if doc.has_card(card) then return new Array[DocCard]
-			return [card]
+			if mentities.not_empty then
+				var card = new CardList(mdoc_parser, context, null, null, mentities)
+				if suggester.is_dismissed(card) then return new Array[DocCard]
+				if doc.has_card(card) then return new Array[DocCard]
+				return [card]
+			end
+			return new Array[DocCard]
 		end
 	end
 end
@@ -953,12 +982,16 @@ class MDocAPI
 
 				var mentities = new Array[MEntity]
 				var matches = mentities_index.match_query(qq)
-				for match in matches do mentities.add match.document.mentity
-				var card = new CardList(context.model.mdoc_parser, context, null, null, mentities)
-
-				if suggester.is_dismissed(card) then continue
-				if doc.has_card(card) then continue
-				cards.add card
+				for match in matches do
+					# print match.document.mentity
+					mentities.add match.document.mentity
+				end
+				if mentities.not_empty then
+					var card = new CardList(context.model.mdoc_parser, context, null, null, mentities)
+					if suggester.is_dismissed(card) then continue
+					if doc.has_card(card) then continue
+					cards.add card
+				end
 			end
 		end
 
@@ -975,10 +1008,12 @@ class MDocAPI
 			if matches.length > 1 then
 				var mentities = new Array[MEntity]
 				for match in matches do mentities.add match.document.mentity
-				var card = new CardList(context.model.mdoc_parser, context, null, null, mentities)
-				if suggester.is_dismissed(card) then continue
-				if doc.has_card(card) then continue
-				cards.add card
+				if mentities.not_empty then
+					var card = new CardList(context.model.mdoc_parser, context, null, null, mentities)
+					if suggester.is_dismissed(card) then continue
+					if doc.has_card(card) then continue
+					cards.add card
+				end
 			end
 			if cards.not_empty then break
 		end
@@ -1205,7 +1240,10 @@ class MDocTesting
 		else
 			var mentities = new Array[MEntity]
 			for match in matches do mentities.add match.document.mentity
-			return [new CardList(mdoc_parser, context, null, null, mentities)]
+			if mentities.not_empty then
+				return [new CardList(mdoc_parser, context, null, null, mentities)]
+			end
+			return new Array[DocCard]
 		end
 	end
 end
