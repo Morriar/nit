@@ -1,0 +1,659 @@
+# `actors` - Nit Actor Model
+
+* [What is an actor ?](#What-is-an-actor-?)
+* [`actor` annotation](#`actor`-annotation)
+* [Managing actors](#Managing-actors)
+* [Waiting for all actors to finish processing](#Waiting-for-all-actors-to-finish-processing)
+* [Examples](#Examples)
+* [Authors](#Authors)
+
+This group introduces the [`actors`](actors::actors) module which contains the abstraction of a Nit Actor Model,
+based on Celluloid (https://github.com/celluloid/celluloid).
+
+Example from `actors::chameneosredux`:
+
+~~~
+# Example implemented from "The computer Language Benchmarks Game" - Chameneos-Redux
+# http://benchmarksgame.alioth.debian.org/
+#
+# Complete description of the chameneos-redux :
+# https://benchmarksgame.alioth.debian.org/u64q/chameneosredux-description.html#chameneosredux
+module chameneosredux is example, no_warning("missing-doc")
+
+import actors
+
+class Creature
+	actor
+	var place: MeetingPlace
+	var color: Int
+	var id: Int
+	var count = 0
+	var samecount = 0
+
+	fun run do
+		loop
+			var p = place.meet(id, color)
+			if p == null then break
+			color = p.color
+			if p.sameid then samecount += 1
+			count += 1
+		end
+	end
+
+	fun to_string: String do return count.to_s + " " + numbers[samecount]
+end
+
+class Pair
+	var sameid: Bool
+	var color: Int
+end
+
+class MeetingPlace
+	var meetings_left: Int
+	var firstcolor: nullable Int
+	var firstid: Int = 0
+	var current: Future[Pair] is noinit
+
+	private var mutex = new Mutex
+
+	fun meet(id, c: Int): nullable Pair do
+		var new_pair = new Future[Pair]
+		mutex.lock
+		if meetings_left == 0 then
+			mutex.unlock
+			return null
+		else
+			if firstcolor == null then
+				firstcolor = c
+				firstid = id
+				current = new Future[Pair]
+			else
+				var color = complements[c][firstcolor.as(not null)]
+				current.set_value(new Pair(id == firstid, color))
+				firstcolor = null
+				meetings_left -= 1
+			end
+			new_pair = current
+		end
+		mutex.unlock
+		return new_pair.join
+	end
+end
+
+redef class Sys
+	fun blue: Int do return 0
+	fun red: Int do return 1
+	fun yellow: Int do return 2
+	var numbers = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+	var colors = ["blue", "red", "yellow"]
+	# Matrix for complementing colors
+	var complements: Array[Array[Int]] = [[0, 2, 1],
+	                                      [2, 1, 0],
+	                                      [1, 0, 2]]
+
+end
+
+fun print_all_colors do
+	print_colors(blue, blue)
+	print_colors(blue, red)
+	print_colors(blue, yellow)
+	print_colors(red, blue)
+	print_colors(red, red)
+	print_colors(red, yellow)
+	print_colors(yellow, blue)
+	print_colors(yellow, red)
+	print_colors(yellow, yellow)
+end
+
+fun print_colors(c1, c2: Int) do
+	print colors[c1] + " + " + colors[c2] + " -> " + colors[complements[c1][c2]]
+end
+
+fun get_number(n: Int): String do
+	var str = ""
+	var nstr = n.to_s
+	for c in nstr do
+		str += " " + numbers[c.to_i]
+	end
+	return str
+end
+
+fun work(n, nb_colors : Int ) do
+	var place = new MeetingPlace(n)
+	var creatures = new Array[Creature]
+	for i in [0..nb_colors[ do
+		printn " " + colors[i % 3]
+		creatures[i] = new Creature(place, i % 3, i)
+	end
+	print ""
+
+	for c in creatures do c.async.run
+
+	active_actors.wait
+
+	var total = 0
+	for c in creatures do
+		print c.to_string
+		total += c.count
+	end
+
+	print get_number(total)
+	print ""
+
+	for c in creatures do
+		c.async.terminate
+		c.async.wait_termination
+	end
+end
+
+var n = if args.is_empty then 600 else args[0].to_i
+
+print_all_colors
+print ""
+
+work(n, 3)
+work(n, 10)
+~~~
+
+## What is an actor ?
+
+![Diagram for `actors`](uml-actors-7.svg)
+
+An actor is an entity which receives [messages](actors::Message) and does some kind of computation based on it.
+An actor has a [mailbox](actors::Mailbox) in which it receives its messages, and process them one at a time.
+
+Example from `actors::simple_simulation`:
+
+~~~
+# Using `agent_simulation` by refining the Agent class to make
+# a multi-agent simulation where every agent know each other
+# The steps consist of each agent greeting each other, and
+# waiting for every other agent to respond before notifying
+# to the `ClockAgent` that they finished their step.
+module simple_simulation is example
+
+import agent_simulation
+
+redef class Agent
+	var others = new Array[Agent]
+	var count = 0
+
+	fun greet(message: String, other: Agent) do other.async.greet_back("Hello back !")
+
+	fun greet_back(message: String) do
+		count -= 1
+		if count == 0 then end_step
+	end
+
+	redef fun do_step do
+		for o in others do
+			o.async.greet("Hello !", self)
+			count += 1
+		end
+	end
+end
+
+var nb_steps = 0
+var nb_agents = 0
+if args.is_empty or args.length != 2 then
+	nb_steps = 10
+	nb_agents = 10
+else
+	nb_steps = args[0].to_i
+	nb_agents = args[1].to_i
+end
+
+var agents = new Array[Agent]
+for i in [0..nb_agents[ do agents.add(new Agent)
+for a in agents do for b in agents do if a != b then a.others.add(b)
+clock_agent = new ClockAgent(nb_steps, agents)
+clock_agent.async.do_step
+~~~
+
+* `actors` - Abstraction of the actors concepts
+* `actors_agent_simulation` - This file is generated by nitactors (threaded version)
+* `actors_chameneosredux` - This file is generated by nitactors (threaded version)
+* `actors_fannkuchredux` - This file is generated by nitactors (threaded version)
+* `actors_mandelbrot` - This file is generated by nitactors (threaded version)
+* `actors_simple` - This file is generated by nitactors (threaded version)
+* `actors_simple_simulation` - This file is generated by nitactors (threaded version)
+* `actors_thread_ring` - This file is generated by nitactors (threaded version)
+
+## `actor` annotation
+
+The [`actors`](actors) module introduces the annotation `actor` which is to be used on classes.
+This annotation transform a normal Nit class into an actor.
+
+In practice, it adds a new property `async` to the annotated class.
+When using `async` on your annotated class, this means that you want your calls to be asynchronous,
+executed by the [actor](actors::Actor).
+
+For instance, if you call `a.async.foo` and `foo` doesn't have a return value, it will send
+a message to the mailbox of the actor attached to `a` which will process it asynchronously.
+
+On the other hand, if you call `a.async.bar` and `bar` returns an`Int`, it will still send
+a message to the actor, but you'll get a [`Future[Int]`](actors::Future) to be able to retrieve the value.
+When using `join` on the future, the calling thread will wait until the value of the future is set.
+
+Example from `actors::mandelbrot`:
+
+~~~
+# Example implemented from "The computer Language Benchmarks Game" - Mandelbrot
+# http://benchmarksgame.alioth.debian.org/
+#
+# Complete description of mandelbrot :
+# https://benchmarksgame.alioth.debian.org/u64q/mandelbrot-description.html#mandelbrot
+module mandelbrot is example, no_warning("missing-doc")
+
+import actors
+
+class Worker
+	actor
+
+	fun get_byte(x, y: Int): Int do
+		var res = 0
+		for i in [0..8[.step(2) do
+			var zr1 = crb[x + i]
+			var zi1 = cib[y]
+
+			var zr2 = crb [x + i + 1]
+			var zi2 = cib[y]
+
+			var b = 0
+			for j in [0..nb_rounds[ do
+				var nzr1 = zr1 * zr1 - zi1 * zi1 + crb[x+i]
+				var nzi1 = zr1 * zi1 + zr1 * zi1 + cib[y]
+				zr1 = nzr1
+				zi1 = nzi1
+
+				var nzr2 = zr2 * zr2 - zi2 * zi2 + crb[x + i + 1]
+				var nzi2 = zr2 * zi2 + zr2 * zi2 + cib[y]
+				zr2 = nzr2
+				zi2 = nzi2
+
+				if zr1 * zr1 + zi1 * zi1 > 4.0 then b = b | 2
+				if zr2 * zr2 + zi2 * zi2 > 4.0 then b = b | 1
+				if b == 3 then break
+			end
+			res = (res << 2) + b
+		end
+		return res ^-1
+	end
+
+	fun put_line(y: Int, line: Array[Int]) do
+		for i in [0..line.length[ do line[i] = get_byte(i * 8, y)
+	end
+
+	fun work do
+		var line = 0
+		loop
+			line = atomic.get_and_increment
+			if line < n then put_line(line, data[line]) else break
+		end
+	end
+end
+
+redef class Sys
+	var n = 0
+	var inv_n: Float is noautoinit
+	var data: Array[Array[Int]] is noautoinit
+	var crb: Array[Float] is noautoinit
+	var cib: Array[Float] is noautoinit
+	var atomic = new AtomicInt(0)
+	var nb_threads = 8
+	# How many time do we iterate before deciding if the number
+	# is in the mandelbrot set or not
+	var nb_rounds  = 49
+end
+
+n = if args.is_empty then 200 else args[0].to_i
+
+sys.crb = new Array[Float].with_capacity(n)
+sys.cib = new Array[Float].with_capacity(n)
+sys.inv_n = 2.0 / n.to_f
+for i in [0..n[ do
+	sys.cib[i] = i.to_f * inv_n - 1.0
+	sys.crb[i] = i.to_f * inv_n - 1.5
+end
+sys.data = new Array[Array[Int]].with_capacity(n)
+for i in [0..n[ do sys.data[i] = new Array[Int].filled_with(0, (n) / 8)
+
+# Parallel Approach
+var actors = new Array[Worker]
+for i in [0..nb_threads[ do
+	var a = new Worker
+	actors.add(a)
+	a.async.work
+end
+
+for a in actors do
+	a.async.terminate
+	a.async.wait_termination
+end
+
+var filename = "WRITE".environ
+if filename == "" then filename = "out"
+var output = new FileWriter.open(filename)
+output.write_bytes("P4\n{n} {n}\n".to_bytes)
+for i in [0..n[ do
+	var length = data[i].length
+	for j in [0..length[ do output.write_byte(data[i][j])
+end
+output.close
+~~~
+
+## Managing actors
+
+When you annotate a class with `actor` and create an instance of it with `new`, the actor is not
+automatically created (which means you can completely skip the use of the actors if you
+don't need them for a specific program).
+
+The `async` added property is actually created lazily when you use it.
+
+Actors are not automatically garbage collected, but you have solutions to terminate them
+if you need to. For this, you need to use the `async` property of your annotated class :
+
+* `async.terminate` sends a shutdown message to the actor telling him to stop, so he'll finish
+  processing every other messages in his mailbox before terminating properly. Every other messages sent
+  to this actor after he received the shutdown message won't be processed.
+* `async.terminate_now` sends a shutdown message too, but this time it places it first, so
+  if the actor is processing one message now, the next one will be the shutdown message, discarding
+  every messages in its mailbox.
+* `async.wait_termination` wait for the actor to terminate properly. This call is synchronous.
+* `async.kill`. If you really need this actor to stop, without any regards of what he was doing
+  or in which state he'll leave the memory, you can with this call. it's synchronous but not really
+  blocking, since it's direcly canceling the native pthread associated to the actor.
+
+For now, there isn't any mecanism to recreate and actor after it was terminated.
+Sending messages after terminating it results in unspecified behaviour.
+
+Example from `actors::simple`:
+
+~~~
+# A very simple example of the actor model
+module simple is example
+
+import actors
+
+
+# A class anotated with `actor`
+# It automatically gets the `async` property to make asynchronous calls on it
+class A
+	actor
+
+	# Prints "foo"
+	fun foo do print "foo"
+
+	# Returns i^2
+	fun bar(i : Int): Int do return i * i
+end
+
+# Create a new instance of A
+var a = new A
+
+# Make an asynchronous call
+a.async.foo
+
+# Make a synchronous call
+a.foo
+
+# Make an asynchronous call
+# Which return a `Future[Int]` instead of `Int`
+var r = a.async.bar(5)
+
+# Retrieve the value of the future
+print r.join
+
+# Make a Synchronous call
+print a.bar(5)
+~~~
+
+## Waiting for all actors to finish processing
+
+Let's imagine you create a whole bunch of actors and make them do things asynchronously from the main thread.
+You don't want your program to exit right after giving work to your actors.
+To prevent that, we added a mecanism that waits before all your actors finished all their messages
+before quitting.
+
+It's materialized by the `active_actors` property added to `Sys` which is a `ReverseBlockingQueue`.
+In short, the `is_empty` method on this list is blocking until the list is effectively empty.
+When every actors finished working, and we're sure they won't even send another message to another
+actor, `active_actors` is empty.
+
+You can use this property as a mean of synchronisation in some specific cases (for example if you're
+using actors for fork/join parallelism instead of concurrency).
+
+Example from `actors::fannkuchredux`:
+
+~~~
+# Example implemented from "The computer Language Benchmarks Game" - Fannkuch-Redux
+# http://benchmarksgame.alioth.debian.org/
+#
+# Complete description of the fannkuch-redux :
+# https://benchmarksgame.alioth.debian.org/u64q/fannkuchredux-description.html#fannkuchredux
+module fannkuchredux is example, no_warning("missing-doc")
+
+import actors
+
+class FannkuchRedux
+	actor
+
+	var p: Array[Int] is noautoinit
+	var pp: Array[Int] is noautoinit
+	var count: Array[Int] is noautoinit
+
+	fun print_p do
+		for i in [0..p.length[ do printn p[i] + 1
+		print ""
+	end
+
+	fun first_permutation(idx: Int) do
+		for i in [0..p.length[ do p[i] = i
+
+		for i in [0..count.length[.reverse_iterator do
+			var d = idx / fact[i]
+			count[i] = d
+			idx = idx % fact[i]
+
+			p.copy_to(0, i+1, pp, 0)
+
+			for j in [0..i] do p[j] = if j + d <= i then pp[j+d] else pp[j+d-i-1]
+		end
+	end
+
+	fun next_permutation do
+		var first = p[1]
+		p[1] = p[0]
+		p[0] = first
+
+		var i = 1
+		count[i] += 1
+		while count[i] > i do
+			count[i] = 0
+			i += 1
+
+			p[0] = p[1]
+			var next = p[0]
+
+			for j in [1..i[ do p[j] = p[j+1]
+			p[i] = first
+			first = next
+
+			count[i] += 1
+		end
+	end
+
+	fun count_flips: Int do
+		var flips = 1
+		var first = p[0]
+		if p[first] != 0 then
+			p.copy_to(0, pp.length, pp, 0)
+			while pp[first] != 0 do
+				flips += 1
+				var lo = 1
+				var hi = first - 1
+				while lo < hi do
+					var t = pp[lo]
+					pp[lo] = pp[hi]
+					pp[hi] = t
+					lo += 1
+					hi -= 1
+				end
+				var t = pp[first]
+				pp[first] = first
+				first = t
+			end
+		end
+		return flips
+	end
+
+	fun run_task(task: Int) do
+		var idx_min = task * chunk_sz
+		var idx_max = fact[n].min(idx_min + chunk_sz)
+
+		first_permutation(idx_min)
+
+		var maxflips = 1
+		var chk_sum = 0
+
+		for i in [idx_min..idx_max[ do
+			if p[0] != 0 then
+				var flips = count_flips
+				maxflips = maxflips.max(flips)
+				chk_sum += if i % 2 == 0 then flips else -flips
+			end
+			if i + 1 != idx_max then next_permutation
+		end
+
+		max_flips[task] = maxflips
+		chk_sums[task] = chk_sum
+	end
+
+	fun run do
+		p = new Array[Int].with_capacity(n)
+		for i in [0..n[ do p.add(0)
+		pp = new Array[Int].with_capacity(n)
+		for i in [0..n[ do pp.add(0)
+		count = new Array[Int].with_capacity(n)
+		for i in [0..n[ do count.add(0)
+
+		var task = 0
+		loop
+			task = task_id.get_and_increment
+			if task < n_tasks then run_task(task) else break
+		end
+	end
+end
+
+redef class Sys
+	var n_chunks = 150
+	var chunk_sz: Int is noautoinit
+	var n_tasks: Int is noautoinit
+	var n: Int is noautoinit
+	var fact: Array[Int] is noautoinit
+	var max_flips: Array[Int] is noautoinit
+	var chk_sums: Array[Int] is noautoinit
+	var task_id = new AtomicInt(0)
+	var nb_actors = 8
+end
+
+fun print_result(n, res, chk: Int) do
+	print chk.to_s + "\nPfannfuchen(" + n.to_s + ") = " + res.to_s
+
+end
+
+n = if args.is_empty then 7 else args[0].to_i
+
+fact = new Array[Int].with_capacity(n+1)
+fact[0] = 1
+for i in [1..n] do fact.add(fact[i-1] * i)
+
+chunk_sz = (fact[n] + n_chunks - 1) / n_chunks
+n_tasks = (fact[n] + chunk_sz - 1) / chunk_sz
+max_flips = new Array[Int].with_capacity(n_tasks)
+for i in [0..n_tasks[ do max_flips.add(0)
+chk_sums = new Array[Int].with_capacity(n_tasks)
+for i in [0..n_tasks[ do chk_sums.add(0)
+
+var actors = new Array[FannkuchRedux].with_capacity(nb_actors)
+for i in [0..nb_actors[ do
+	var a = new FannkuchRedux
+	actors.add(a)
+	a.async.run
+end
+
+for i in [0..nb_actors[ do
+	actors[i].async.terminate
+	actors[i].async.wait_termination
+end
+
+var res = 0
+for i in max_flips do res = res.max(i)
+
+var chk = 0
+for i in chk_sums do
+	chk += i
+end
+
+print_result(n, res, chk)
+~~~
+
+## Examples
+
+You can find example of differents small programs implemented with Nit actors in the `examples`
+directory. For a really simple example, you can check `examples/simple`.
+
+Example from `actors::agent_simulation`:
+
+~~~
+# a "Framework" to make Multi-Agent Simulations in Nit
+module agent_simulation is example, no_warning("missing-doc")
+
+import actors
+
+# Master of the simulation, it initiates the steps and waits for them to terminate
+class ClockAgent
+	actor
+
+	# Number of steps to do in the simulation
+	var nb_steps: Int
+
+	# List of Agents in the simulation
+	var agents: Array[Agent]
+
+	# Number of agents that finished their step
+	var nb_finished = 0
+
+	fun do_step do
+		for a in agents do a.async.do_step
+		nb_steps -= 1
+	end
+
+	fun finished_step do
+		nb_finished += 1
+		if nb_finished == agents.length then
+			nb_finished = 0
+			if nb_steps != 0 then async.do_step
+		end
+	end
+end
+
+class Agent
+	actor
+
+	# Doing a step in the simulation
+	fun do_step do
+	end
+
+	fun end_step do clock_agent.async.finished_step
+
+end
+
+redef class Sys
+	var clock_agent: ClockAgent is noautoinit,writable
+end
+~~~
+
+## Authors
+
+This project is maintained by **Romain Chanoir <mailto:romain.chanoir@viacesi.fr>**.

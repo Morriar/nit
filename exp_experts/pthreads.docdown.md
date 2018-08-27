@@ -8,15 +8,15 @@ The Main functionnalities are introduced in the main module [[pthreads]].
 If you really don't want to write some threaded code and you don't have too specific needs, 
 you can start by using the `threaded` annotation on functions:
 
-[[code: pthreads::threaded_example]]
+[[code: pthreads::threaded_example | format: html]]
 
 **TODO:ecrire un exemple de Thread tout court**
 
 If you want to launch some tasks, and be able to retrieve their result, you can use `JoinTask`:
-[[code: pthreads::jointask_example]]
+[[code: pthreads::jointask_example | format: html]]
 
 Next, you can use [[threadpool]] if you want to add multiple tasks and allow them to run concurrently:
-[[code: pthreads::threadpool_example]]
+[[code: pthreads::threadpool_example | format: html]]
 
 ## Getting Started
 
