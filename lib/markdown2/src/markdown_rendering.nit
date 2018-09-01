@@ -18,6 +18,9 @@ module markdown_rendering
 import markdown_ast
 
 # Common interface for all markdown renderer
+#
+# The `MdRenderer` visits the AST nodes and `render` them.
+# The concrete behavior of `render` is to be defined by the user.
 interface MdRenderer
 	super MdVisitor
 

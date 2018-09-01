@@ -212,6 +212,22 @@ class APIReadmeSuggest
 		var suggester = new MDocSuggester(model, config.mainmodule, config.mentity_index, model.mdoc_parser, config.doc_session.dismissed)
 		var suggestions = suggester.suggest(doc, loc, context)
 
+		var mentity = model.mentity_by_full_name("markdown2::MdRenderer").as(not null)
+
+		var mentities = new Array[MEntity]
+		mentities.add model.mentity_by_full_name("markdown2::MdRenderer").as(not null)
+		mentities.add model.mentity_by_full_name("markdown2::HtmlRenderer").as(not null)
+		mentities.add model.mentity_by_full_name("markdown2::ManRenderer").as(not null)
+		mentities.add model.mentity_by_full_name("markdown2::LatexRenderer").as(not null)
+		var mexample = model.mentity_by_full_name("markdown2::example_html_rendering").as(not null)
+
+		suggestions.clear
+		suggestions.add new CardDoc(config.mdoc_parser, mentity)
+		suggestions.add new CardUML(config.mdoc_parser, mentity, mentities)
+		# suggestions.add new CardList(config.mdoc_parser, mentity, "Subclasses for MdRenderer", null, mentities.subarray(1, 3))
+		suggestions.add new CardExample(config.mdoc_parser, mentity, mexample)
+
+
 		var obj = new JsonObject
 		# obj["summary"] = doc.all_subsections
 		obj["suggestions"] = suggestions
