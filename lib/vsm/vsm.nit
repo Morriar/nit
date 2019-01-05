@@ -22,8 +22,6 @@
 # relevancy rankings.
 module vsm
 
-import counter
-
 # A n-dimensions vector
 #
 # *n-dimensions* vectors are used to represent a text document or an object.
