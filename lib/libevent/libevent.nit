@@ -163,6 +163,8 @@ class Connection
 	# Close this connection if possible, otherwise mark it to be closed later
 	redef fun close
 	do
+		print "close"
+		print closed
 		if closed then return
 
 		var i = native_buffer_event.input_buffer
@@ -210,6 +212,7 @@ class Connection
 	# Returns `true` if the native handles to `self` can be released.
 	fun event_callback(events: Int): Bool
 	do
+		print "event_callbaclk"
 		if events & bev_event_error != 0 or events & bev_event_eof != 0 then
 			if events & bev_event_error != 0 then
 				var sock_err = evutil_socket_error
@@ -232,6 +235,8 @@ class Connection
 	# Write a string to the connection
 	redef fun write(str)
 	do
+		print "write"
+		print close_requested
 		if close_requested then return
 		native_buffer_event.write(str.to_cstring, str.byte_length)
 	end

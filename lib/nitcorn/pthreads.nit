@@ -21,7 +21,7 @@ import ::pthreads
 redef class HttpFactory
 	redef init and_libevent
 	do
-		use_pthreads
+		print use_pthreads
 		super
 	end
 end
