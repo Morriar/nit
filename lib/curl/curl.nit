@@ -666,3 +666,43 @@ private class HeaderMapIterator
 	redef fun item do return self.iterator.item.second
 	redef fun key do return self.iterator.item.first
 end
+
+redef class Sys
+
+	# Send a HTTP GET request with `curl`
+	#
+	# ~~~
+	# var res = curl_get("http://nitlanguage.org")
+	# assert res isa CurlResponseSuccess
+	# assert res.status_code == 200
+	# assert res.body_str.has("nit")
+	# ~~~
+	fun curl_get(uri: String, headers: nullable HeaderMap): CurlResponse do
+		var request = new CurlHTTPRequest(uri)
+		request.headers = headers or else new HeaderMap
+		return request.execute
+	end
+
+	# Send a HTTP POST request with `curl`
+	#
+	# ~~~
+	# var data = """
+	# {
+	# }
+	# """
+	#
+	# var headers = new HeaderMap
+	# headers["Content-Type"] = "application/json"
+	#
+	# var res = curl_post("http://nitlanguage.org", data, headers)
+	# assert res isa CurlResponseSuccess
+	# assert res.status_code == 200
+	# assert res.body_str.has("nit")
+	# ~~~
+	fun curl_post(uri: String, data: nullable String, headers: nullable HeaderMap): CurlResponse do
+		var request = new CurlHTTPRequest(uri)
+		request.headers = headers or else new HeaderMap
+		request.body = data
+		return request.execute
+	end
+end
