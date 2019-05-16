@@ -90,7 +90,8 @@ class GithubAPI
 	end
 
 	# Deserialize an object
-	fun deserialize(string: String): nullable Object do
+	fun deserialize(string: nullable String): nullable Object do
+		if string == null then return null
 		var deserializer = new GithubDeserializer(string)
 		var res = deserializer.deserialize
 		# print deserializer.errors.join("\n") # DEBUG
