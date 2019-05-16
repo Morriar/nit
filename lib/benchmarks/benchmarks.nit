@@ -259,10 +259,11 @@ for group, res in benches.results do
 	# res.to_html.write_to_file "test.html"
 end
 
+# TODO fix display columns ----
 # TODO bench full html repport
 # TODO multiple series in same plot
 # TODO save logs, show timeline
-
+# TODO options
 # TODO bench -> runner
 # TODO more runners
 # TODO examples
