@@ -94,7 +94,9 @@ class GithubAPI
 		if string == null then return null
 		var deserializer = new GithubDeserializer(string)
 		var res = deserializer.deserialize
-		# print deserializer.errors.join("\n") # DEBUG
+		if deserializer.errors.not_empty then
+			return new GithubDeserializerErrors("Deserialization error", "DeserializerErrors", deserializer.errors)
+		end
 		return res
 	end
 
@@ -1173,4 +1175,15 @@ class GithubDeserializer
 		end
 		return super
 	end
+end
+
+# An error returned while deserializing an API response
+class GithubDeserializerErrors
+	super GithubError
+	serialize
+
+	# Errors returned by the deserializer
+	var deserizalization_errors: Array[Error]
+
+	redef fun to_s do return "{deserizalization_errors.join(", ")}"
 end
