@@ -81,6 +81,7 @@ class GithubCurl
 		request.headers = header
 		var response = request.execute
 		if response isa CurlResponseSuccess then
+			print response.body_str
 			var obj = response.body_str.parse_json
 			if obj isa JsonObject then
 				if obj.keys.has("message") and obj.keys.has("documentation_url") then
