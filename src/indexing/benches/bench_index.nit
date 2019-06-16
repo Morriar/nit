@@ -59,7 +59,7 @@ var nb_queries = 10000
 timer = new Clock
 for i in [0 .. nb_queries] do
 	var q = new Query
-	q["kind"] = "MModule"
+	# q["kind"] = "MModule"
 	index.find(q)
 end
 var time = timer.lapse
@@ -69,29 +69,29 @@ print "Total Time: {time} s"
 print "Time / Query: {time * 1000.0 / nb_queries.to_f} ms\n\n"
 
 var q = new Query
-q["kind"] = "MPackage"
+# q["kind"] = "MPackage"
 print "MPackages: {index.find(q).length}"
 
 q = new Query
-q["kind"] = "MGroup"
+# q["kind"] = "MGroup"
 print "MGroups: {index.find(q).length}"
 
 q = new Query
-q["kind"] = "MModule"
+# q["kind"] = "MModule"
 print "MModule: {index.find(q).length}"
 
 q = new Query
-q["kind"] = "MClass"
+# q["kind"] = "MClass"
 print "MClasses: {index.find(q).length}"
 
 q = new Query
-q["kind"] = "MClassDef"
+# q["kind"] = "MClassDef"
 print "MClassDef: {index.find(q).length}"
 
 q = new Query
-q["kind"] = "MProperty"
+# q["kind"] = "MProperty"
 print "MProperties: {index.find(q).length}"
 
 q = new Query
-q["kind"] = "MPropDef"
+# q["kind"] = "MPropDef"
 print "MPropDefs: {index.find(q).length}"

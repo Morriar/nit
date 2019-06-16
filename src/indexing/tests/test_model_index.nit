@@ -34,7 +34,7 @@ class TestIndexModel
 
 	fun test_modules is test do
 		var q = new Query
-		q["kind"] = "MModule"
+		q["kind"] = ["MModule"]
 
 		var index = self.index
 		var res = index.find(q)
