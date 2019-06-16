@@ -16,6 +16,9 @@ module db
 
 import frontend
 import model_collect
+
+import trees::trie
+# import trees::bktree
 import vsm
 
 class ModelDb
@@ -77,25 +80,27 @@ class ModelDb
 
 	fun find(ops: Array[MOp]): MResults do
 		var res = new MResults
-		# var index_matched = false
-		# for index in indexes do
-		#	for op in ops do
-		#		if not index.accept(op) then continue
-		#		res.add_all index.find(op)
-		#		index_matched = true
-		#	end
-		# end
-		# if index_matched then return res
+		if ops.is_empty then return res
+
+		var index_matched = false
+		var index_matches = new HashSet[MEntry]
+		for index in indexes do
+			for op in ops do
+				if not index.accept(op) then continue
+				index_matches.add_all index.find(op)
+				index_matched = true
+			end
+		end
+
+		var entries: Collection[MEntry] = self.entries
+		if index_matched then entries = index_matches
 
 		for entry in entries do
-			var keep = false
 			for op in ops do
-				if not op.match(entry) then continue
-				keep = true
-				break
+				if not op.match(entry) then continue label entry
 			end
-			if keep then res.add new MResult(entry)
-		end
+			res.add new MResult(entry)
+		end label entry
 		return res
 	end
 end
@@ -140,13 +145,36 @@ class MResult
 end
 
 class Index
-	var key: String
+	var key: Object
 
 	fun add(mentry: MEntry) is abstract
 
 	fun accept(op: MOp): Bool is abstract
 
-	fun find(op: MOp): MResults is abstract
+	fun find(op: MOp): Array[MEntry] is abstract
+end
+
+class ColumnIndex
+	super Index
+
+	private var entries = new HashSet[MEntry]
+
+	redef fun add(entry) do
+		if entry.has_key(key) then entries.add(entry)
+	end
+
+	redef fun accept(op) do
+		return op.key == self.key
+	end
+
+	redef fun find(op) do
+		var res = new Array[MEntry]
+		for entry in entries do
+			if op.match(entry) then res.add entry
+		end
+		return res
+	end
+
 end
 
 class HashIndex
@@ -164,24 +192,55 @@ class HashIndex
 
 	redef fun accept(op) do
 		if op.key != self.key then return false
-		return op isa OpEq
-		# TODO OpIn, OpAny, OpNot, OpHas, OpHasAny
+		return op isa OpEq or op isa OpIn
 	end
 
 	redef fun find(op) do
-		var res = new MResults
-		var hash = op.as(OpEq).value
-		if map.has_key(hash) then
-			for entry in map[hash] do
-				res.add new MResult(entry)
+		var res = new Array[MEntry]
+		var hashes = new Array[String]
+		if op isa OpEq then
+			hashes.add op.value.to_s
+		else if op isa OpIn then
+			for value in op.values do hashes.add value.to_s
+		end
+		for hash in hashes do
+			if map.has_key(hash) then res.add_all map[hash]
+		end
+		return res
+	end
+end
+
+class PrefixIndex
+	super Index
+
+	private var trie = new Trie[Array[MEntry]]
+
+	redef fun add(entry) do
+		var hash = "{entry[key] or else "null"}"
+		if not trie.has_key(hash) then
+			trie[hash] = new Array[MEntry]
+		end
+		trie[hash].add entry
+	end
+
+	redef fun accept(op) do
+		if op.key != self.key then return false
+		return op isa OpPrefix
+	end
+
+	redef fun find(op) do
+		assert op isa OpPrefix
+		var res = new Array[MEntry]
+		var key = op.prefix.to_s
+		if trie.has_prefix(key) then
+			for match in trie.find_by_prefix(key) do
+				res.add_all match
 			end
 		end
 		return res
 	end
-
 end
 
-# TODO prefix index
 # TODO vecotr index
 
 abstract class MOp
@@ -673,14 +732,8 @@ end
 	# ~name: core # lemma match
 	# name: !core # boost match?
 
-# TODO Indexing/Caching
-# db.unique_indexes("full_name")
-# db.indexes("name")
-# db.freeze
-
-
-
 # TODO Where am i?
- # Index columns: key: value
- # Search by index, then normal
+ # Column index, inverted index
+ # Similarity match / index (see BKTree)
+ # Index for Eq, Not, And, In, Bool, Prefix, Re, Has, HasAny, Vector
  # Search in subqueries (unfrozen mode)

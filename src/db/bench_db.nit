@@ -17,27 +17,58 @@ module bench_db
 import db
 import realtime
 
-class BenchDb
+class BenchmarksDb
 
 	fun run do
 		print "--- Parsing ----------------------------------------------------"
 		var ctx = bench_parsing("./lib")
 
-		print "--- Base -------------------------------------------------------"
-		var db1 = bench_indexing_base("base", ctx)
-		bench_query(db1, "base-empty", new Array[MOp], 0)
-		bench_query(db1, "base-easy1", [new OpEq("name", "HashMap")], 2)
-		bench_query(db1, "base-easy2", [new OpIn("name", ["HashMap", "Array"])], 10)
-		bench_query(db1, "base-easy3", [new OpEq("name", "get")], 41)
-		bench_query(db1, "base-bad1", [new OpEq("name", "zizitop")], 0)
+		var dbs = [
+			new BenchDb("base", new ModelDb),
+			new BenchDb("hash", new ModelDb([new HashIndex("name")])),
+			new BenchDb("pref", new ModelDb([new PrefixIndex("name")])),
+			new BenchDb("coli", new ModelDb([new ColumnIndex("is-test")]))
+		]
 
-		print "--- Hash -------------------------------------------------------"
-		var db2 = bench_indexing_hash("hash", ctx)
-		bench_query(db2, "hash-empty", new Array[MOp], 0)
-		bench_query(db2, "hash-easy1", [new OpEq("name", "HashMap")], 2)
-		bench_query(db2, "hash-easy2", [new OpIn("name", ["HashMap", "Array"])], 10)
-		bench_query(db2, "hash-easy3", [new OpEq("name", "get")], 41)
-		bench_query(db2, "hash-bad1", [new OpEq("name", "zizitop")], 0)
+		var queries = [
+			new BenchQuery("empty", new Array[MOp], 0),
+			new BenchQuery("eq-ok1", [new OpEq("name", "HashMap")], 2),
+			new BenchQuery("eq-ok2", [new OpEq("name", "get")], 41),
+			new BenchQuery("eq-ok3", [new OpEq("property", "core::Array::from")], 1),
+			new BenchQuery("eq-ko1", [new OpEq("name", "zizitop")], 0),
+			new BenchQuery("eq-bol1", [new OpBool("is-test", false)], 40999),
+			new BenchQuery("eq-bol2", [new OpBool("is-test", true)], 2726),
+			new BenchQuery("in-ok1", [new OpIn("name", ["Hash", "Array"])], 8),
+			new BenchQuery("pfx-ok1", [new OpPrefix("name", "Hash")], 29)
+		]
+
+		print "--- Indexing ---------------------------------------------------"
+		printn "\t"
+		for db in dbs do
+			printn "\t{db.name}"
+		end
+		printn "\nindexing"
+		for db in dbs do
+			var time = bench_indexing(ctx, db)
+			printn "\t{time}"
+		end
+		print ""
+
+		print "--- Querying ---------------------------------------------------"
+		printn "\t"
+		for db in dbs do
+			printn "\t{db.name}"
+		end
+		print ""
+
+		for query in queries do
+			printn "{query.name}\t"
+			for db in dbs do
+				var time = bench_query(db, query)
+				printn "\t{time}"
+			end
+			print ""
+		end
 	end
 
 	fun bench_parsing(path: String...): BenchContext do
@@ -59,27 +90,16 @@ class BenchDb
 		return new BenchContext(mainmodule, model)
 	end
 
-	fun bench_indexing_base(name: String, ctx: BenchContext): ModelDb do
+	fun bench_indexing(ctx: BenchContext, db: BenchDb): Float do
 		var clock = new Clock
-		var db = new ModelDb
-		db.index_model(ctx.mainmodule, ctx.model)
-		print "{name}: {clock.lapse}s"
-		return db
+		db.db.index_model(ctx.mainmodule, ctx.model)
+		return clock.lapse
 	end
 
-	fun bench_indexing_hash(name: String, ctx: BenchContext): ModelDb do
+	fun bench_query(db: BenchDb, query: BenchQuery): Float do
 		var clock = new Clock
-		var db = new ModelDb
-		db.indexes.add new HashIndex("name")
-		db.index_model(ctx.mainmodule, ctx.model)
-		print "{name}: {clock.lapse}s"
-		return db
-	end
-
-	fun bench_query(db: ModelDb, name: String, query: Array[MOp], assert_res: Int) do
-		var clock = new Clock
-		assert db.find(query).length == assert_res
-		print "{name}: {clock.lapse}s"
+		assert db.db.find(query.query).length == query.exp_results
+		return clock.lapse
 	end
 end
 
@@ -88,5 +108,16 @@ class BenchContext
 	var model: Model
 end
 
-var benches = new BenchDb
+class BenchQuery
+	var name: String
+	var query: Array[MOp]
+	var exp_results: Int
+end
+
+class BenchDb
+	var name: String
+	var db: ModelDb
+end
+
+var benches = new BenchmarksDb
 benches.run

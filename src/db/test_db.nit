@@ -63,7 +63,7 @@ class TestModelDb
 			new OpHas("kind", "package"),
 			new OpHas("ini-tags", "test")
 		])
-		assert r.length == 2
+		assert r.length == 1
 	end
 
 	fun query_has_any_kind is test do
