@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Nitlanguage.org</title>
+
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+		<link href="./assets/css/main.css" rel="stylesheet">
+
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<header class="container header fixed">
+	<div class="pageheader">
+		<a href="." class="toptitle" id="toptitle_first">the</a>
+		<a href="." class="toptitle" id="toptitle_second">Nit</a>
+		<a href="." class="toptitle" id="toptitle_third">Programming Language</a>
+	</div>
+	<div class="topsubtitle">
+		<p>a fun language for serious programming</p>
+	</div>
+</header>
+
+		<div class="container fixed">
+			
+			<div class="row">
+				<div class="col-sm-9 content"><article><h1 id="_What_is_Nit"># What is Nit?</h1>
+<p>Nit is an expressive language with a script-like syntax, a friendly type-system and aims at elegance, simplicity and intuitiveness.</p>
+<p>So, what does the famous hello world program look like, in Nit?</p>
+<pre class="hl">print <span class="hl str">&quot;Hello, World!&quot;</span>
+</pre><h1 id="_Development"># Development</h1>
+<p>The Nit project is currently in alpha stage, at v0.8. It is in active development, moving fast and the APIs are still evolving.</p>
+<p>You can follow the development on <a href="https://github.com/nitlang/nit/">Github</a>.</p>
+<h1 id="_Why_Nit"># Why Nit?</h1>
+<h2 id="Usability">Usability</h2>
+<p>Nit's goal is to be usable by real programmers for real projects</p>
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/KISS_principle">KISS</a> principle</li>
+<li>Script-like language without verbosity nor cryptic statements</li>
+<li>Painless static types: static typing should help programmers</li>
+<li>Efficient development, efficient execution, efficient evolution</li>
+<li>Easy bindings with C, C++, Java and Objective-C using the <a href="FFI">FFI</a></li>
+<li><a href="http://nitlanguage.org/doc/stdlib/module_android__android.html">Android</a> support in the compiler</li>
+<li>Smart autodoc, <a href="tools/nitdoc.html">nitdoc</a>, used to document the <a href="http://nitlanguage.org/doc/stdlib/module_android__android.html">standard lib</a></li>
+</ul>
+<h2 id="Object-Oriented">Object-Oriented</h2>
+<p>Nit's guideline is to follow the most powerful OO principles</p>
+<ul>
+<li><a href="everything_is_an_object.html">Everything Is An Object</a></li>
+<li><a href="multiple_inheritance.html">Multiple Inheritance</a></li>
+<li><a href="refinement.html">Static open classes</a></li>
+<li><a href="virtual_types.html">Virtual Types</a></li>
+</ul>
+<h2 id="Robustness">Robustness</h2>
+<p>Nit will help you write bug-free programs</p>
+<ul>
+<li>Strong static typing</li>
+<li>No more NullPointerException</li>
+</ul>
+<h1 id="_Published_packages_using_Nit"># Published packages using Nit</h1>
+<ul>
+<li><a href="catalog/p/opportunity.html">Opportunity</a>, a free event planner</li>
+<li><a href="catalog/p/nitiwiki.html">Nitiwiki</a>, the wiki engine used for the current website</li>
+<li><a href="catalog/p/brewnit.html">Brewnit</a>, a tool for home brewers</li>
+<li><a href="catalog/p/calculator.html">A simple calculator</a> using GTK for desktop and the native UI for Android while sharing the business logic</li>
+<li><a href="catalog/p/mnit_dino.html">Hunted Dino</a>, a simple game for desktop and Android using class refinement to cleanly separate preoccupations in the code</li>
+<li><a href="catalog/p/friendz.html">Chainz of Friendz</a>, a puzzle game for desktop and Android</li>
+<li>Bindings for <a href="catalog/p/glesv2.html">OpenGL ES 2.0</a>, <a href="catalog/p/sdl2.html">SDL 2.0</a>, <a href="catalog/p/gtk.html">GTK 3</a>, <a href="catalog/p/sqlite3.html">sqlite3</a></li>
+<li>Many libraries and program like the <a href="catalog/p/nitcorn.html">webserver nitcorn</a>, the <a href="catalog/p/app.html">portable applications framework app.nit</a>, and many other available in the <a href="catalog/">catalog</a></li>
+</ul>
+<h1 id="_Getting_Started"># Getting Started</h1>
+<p>Get Nit from its Git repository:</p>
+<pre class="hl">$ git clone http<span class="hl opt">://</span>nitlanguage.org<span class="hl opt">/</span>nit.git
+</pre><p>Ensure that dependencies (and recommendations) are installed:</p>
+<pre class="hl"><span class="hl slc"># Eg. for Debian Jessie (8.0)</span>
+$ sudo apt<span class="hl opt">-</span>get <span class="hl kwc">install</span> build<span class="hl opt">-</span>essential ccache libgc<span class="hl opt">-</span>dev graphviz libunwind<span class="hl opt">-</span>dev pkg<span class="hl opt">-</span>config
+<span class="hl slc"># Older versions of Debian or Ubuntu need `libunwind8-dev` or `libunwind7-dev`</span>
+</pre><p>Build the compiler (may be long):</p>
+<pre class="hl">$ <span class="hl kwb">cd</span> nit
+$ <span class="hl kwc">make</span>
+</pre><p>Setup your shell environment:</p>
+<pre class="hl">$ <span class="hl kwb">source</span> misc<span class="hl opt">/</span>nit_env.sh
+</pre><p>Compile a program:</p>
+<pre class="hl">$ nitc examples<span class="hl opt">/</span>hello_world.nit
+</pre><p>Execute the program:</p>
+<pre class="hl">$ .<span class="hl opt">/</span>hello_world
+</pre><p>And now?</p>
+<ul>
+<li>Install plugins for your <a href="ide.html">editor or IDE</a> to work with Nit</li>
+<li>Read the language <a href="manual">Manual</a></li>
+<li>Browse the <a href="http://nitlanguage.org/catalog">catalog of packages, programs and libraries</a></li>
+<li>Try <a href="internal">contributing</a> to the project</li>
+</ul>
+ </article></div><div class="col-sm-3 sidebar"><nav class="sideblock"><form method="get" action="https://www.google.com/search" id="searchform">
+ <div>
+  <input name="sitesearch" value="http://nitlanguage.org" type="hidden">
+  <input name="q" value="" id="searchbox" size="16" maxlength="255" type="text" placeholder="search">
+ </div>
+</form>
+</nav><nav class="sideblock"><h3 id="Download"><a href="download.html">Download</a></h3>
+<ul>
+<li><a href="http://nitlanguage.org/nit.git">Git repository</a></li>
+<li><a href="http://nitlanguage.org/nit.git/snapshot/HEAD.tar.gz">Snapshot (tar.gz)</a></li>
+<li><a href="https://hub.docker.com/r/nitlang/nit/">Docker Images</a></li>
+<li><a href="download.html">All download...</a></li>
+</ul>
+</nav><nav class="sideblock"><h3 id="Libraries_and_Programs">Libraries and Programs</h3>
+<ul>
+<li><a href="http://nitlanguage.org/catalog/">Catalog of all packages</a></li>
+<li><a href="http://nitlanguage.org/fdroid/">Experimental F-Droid repository</a></li>
+</ul>
+</nav><nav class="sideblock"><h3 id="Documentationdoc"><a href="doc">Documentation</a></h3>
+<ul>
+<li><a href="manual">Language manual</a></li>
+<li><a href="tools">Compiler and tools</a></li>
+<li><a href="http://nitlanguage.org/doc/stdlib">Standard library</a></li>
+<li><a href="faq">FAQ</a></li>
+<li><a href="doc">All documentation...</a></li>
+</ul>
+</nav><nav class="sideblock"><h3 id="Get_Involvedinternal"><a href="internal">Get Involved</a></h3>
+<ul>
+<li><a href="https://github.com/nitlang/nit/">Github</a></li>
+<li><a href="https://waffle.io/nitlang/nit">Waffle.io</a></li>
+<li><a href="https://gitter.im/nitlang/nit">Chatroom</a></li>
+<li><a href="https://github.com/nitlang/nit/issues?q=label%3Aforum">User Forum</a></li>
+<li><a href="https://groups.google.com/d/forum/nitlanguage">Newsletter</a></li>
+<li><a href="http://gresil.org/jenkins">Continuous integration</a></li>
+<li><a href="https://github.com/nitlang/nit/labels/bug">Bugs</a></li>
+<li><a href="internal">Other things...</a></li>
+</ul>
+</nav><nav class="sideblock"><h3 id="Sponsors">Sponsors</h3>
+<ul>
+<li><a href="http://gresil.org">Grésil</a></li>
+<li><a href="http://www.latece.uqam.ca">LATECE</a></li>
+<li><a href="http://www.nserc.ca">NSERC</a></li>
+<li><a href="http://www.uqam.ca">UQAM</a></li>
+<li><a href="http://www.lirmm.fr">LIRMM</a></li>
+<li><a href="http://www.univ-montp2.fr/">Université Montpellier II</a></li>
+<li><a href="http://www.cnrs.fr">CNRS</a></li>
+<li><a href="http://www.cr-languedocroussillon.fr">Région Languedoc-Roussillon</a></li>
+</ul>
+</nav></div>
+			</div>
+			
+		</div>
+		<footer class="container-fluid fixed">
+	<div class="text-center">
+		<p class="text-muted">Last modification Thu Jul  4 17:26:01 2019</p>
+		<p>
+			<a href="./sitemap.html">Sitemap</a>
+			<a href="./contribution_policy.html">Policy</a>
+			<br>
+			<a href="https://github.com/nitlang/nitlanguage/edit/master/pages/index.mdwn">Edit</a>
+			<a href="https://github.com/nitlang/nitlanguage/commits/master/pages/index.mdwn">Recent Changes</a>
+		</p>
+		<p class="text-muted">Proudly powered by
+			<a href="http://nitlanguage.org/catalog/p/nitiwiki.html">nitiwiki</a>!</p>
+	</div>
+</footer>
+
+
+		<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+		<!-- Piwik -->
+		<script type="text/javascript">
+		  var _paq = _paq || [];
+		  _paq.push(['trackPageView']);
+		  _paq.push(['enableLinkTracking']);
+		  (function() {
+			var u=(("https:" == document.location.protocol) ? "https" : "http") + "://pratchett.info.uqam.ca/piwik/";
+			_paq.push(['setTrackerUrl', u+'piwik.php']);
+			_paq.push(['setSiteId', 1]);
+			var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
+			g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+		  })();
+
+		</script>
+		<noscript><p><img src="http://pratchett.info.uqam.ca/piwik/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
+		<!-- End Piwik Code -->
+	</body>
+</html>

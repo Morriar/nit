@@ -1,0 +1,36 @@
+Grammar request;
+
+Lexer
+
+char_up = 'A' .. 'Z' ;
+char_lo = 'a' .. 'z' ;
+char_nb = '0' .. '9' ;
+
+/* ascii = ; */
+lf = #10;
+cr = #13;
+sp = #32;
+/* crlf = cr lf; */
+/* string = ascii+ ; */
+string = (#00 .. #09 | #11 | #12 | #14 .. #31 | #33 .. #99999999)+;
+/* string2 = (Any - cr - lf)+; */
+
+method	= char_up+ ;
+uri		= ( char_up | char_lo | char_nb |
+					'-' | '.' | '_' | '~' | ':' | '/' | '?' | '#' | '[' | ']' | '@' |
+					'!' | '$' | '&' | '\'' | '(' | ')' | '*' | '+' | ',' | ';' | '=' )+ ;
+version	= 'HTTP/' char_nb+ '.' char_nb+ ;
+
+field_name = char_up ( char_up | char_lo | '-' )* ;
+
+Parser
+
+/* Ignored sp; */
+
+request = method sp+ uri sp+ version sp* cr lf header?;
+
+header = field+ ;
+field = sp* field_name /*sp* ':' sp* value sp* cr lf*/;
+/* name = string; */
+value = string;
+

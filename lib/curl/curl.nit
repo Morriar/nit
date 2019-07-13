@@ -22,6 +22,7 @@
 module curl
 
 import native_curl
+import http
 
 # Curl library handle
 private class Curl
@@ -109,7 +110,7 @@ class CurlHTTPRequest
 	var body: nullable String is writable
 
 	# Header content of the request
-	var headers: nullable HeaderMap is writable
+	var headers: nullable HttpHeader is writable
 
 	# Delegates to customize the behavior when running `execute`
 	var delegate: nullable CurlCallbacks is writable

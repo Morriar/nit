@@ -1,0 +1,21 @@
+digraph g {
+rankdir=BT;
+n14879936 [label="Nodes[Node]"];
+n14823104 -> n14879936;
+n14823104 [label="method\n1:1-1:5\n'POST'",shape=box];
+n14880192 -> n14879936;
+n14880192 [label="Nodes[Nsp]"];
+n14823040 -> n14880192;
+n14823040 [label="sp\n1:5-1:6\n' '",shape=box];
+n14822976 -> n14879936;
+n14822976 [label="uri\n1:6-1:11\n'/post'",shape=box];
+n14880064 -> n14879936;
+n14880064 [label="Nodes[Nsp]"];
+n14822912 -> n14880064;
+n14822912 [label="sp\n1:11-1:12\n' '",shape=box];
+n14822848 -> n14879936;
+n14822848 [label="uri\n1:12-1:20\n'HTTP/1.1'",shape=box];
+{ rank=same
+n14823104->n14823040->n14822976->n14822912->n14822848[style=invis];
+}
+}

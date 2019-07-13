@@ -41,6 +41,15 @@ class HttpRequest
 
 	# HTTP version used (default is `HTTP/1.1`)
 	var version: String = "HTTP/1.1" is optional, writable
+
+	fun source: String do
+		var b = new Buffer
+		b.append "{method} {uri} {version}\r\n"
+		b.append header.source
+		b.append "\r\n"
+		b.append body or else ""
+		return b.to_s
+	end
 end
 
 class HttpResponse
@@ -52,7 +61,7 @@ class HttpResponse
 	# Http status message or reason
 	#
 	# See `status_codes` for the full list and associated codes.
-	var message: String
+	var message: String = sys.status_code(code) or else "NO MESSAGE" is optional
 
 	# Request header fields
 	#
@@ -64,6 +73,15 @@ class HttpResponse
 
 	# HTTP version used (default is `HTTP/1.1`)
 	var version: String = "HTTP/1.1" is optional, writable
+
+	fun source: String do
+		var b = new Buffer
+		b.append "{version} {code} {message}\r\n"
+		b.append header.source
+		b.append "\r\n"
+		b.append body or else ""
+		return b.to_s
+	end
 end
 
 class HttpHeader
@@ -329,6 +347,14 @@ class HttpHeader
 
 	redef fun length do return fields.length
 	redef fun is_empty do return fields.is_empty
+
+	fun source: String do
+		var b = new Buffer
+		for field in fields do
+			b.append "{field.name}: {field.value}\r\n"
+		end
+		return b.to_s
+	end
 end
 
 class HttpField
@@ -339,6 +365,11 @@ class HttpField
 end
 
 redef class Sys
+	fun status_code(code: Int): nullable String do
+		if not status_codes.has_key(code) then return null
+		return status_codes[code]
+	end
+
 	var status_codes: Map[Int, String] do
 		var codes = new Map[Int, String]
 		codes[100] = "Continue"
@@ -382,123 +413,5 @@ redef class Sys
 		codes[504] = "Gateway Timeout"
 		codes[505] = "HTTP Version Not Supported"
 		return codes
-	end
-end
-
-# TODO use nitcc
-class HttpParser
-	#
-	# ~~~
-	# var parser = new HttpParser
-	#
-	# var get_string = """
-	# GET /docs/index.html HTTP/1.1\r
-	# Host: nitlanguage.org\r
-	# Accept: image/gif, image/jpeg, */*\r
-	# Accept-Language: en-us\r
-	# Accept-Encoding: gzip, deflate\r
-	# User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)"""
-	#
-	# var get = parser.parse_request(get_string)
-	# assert get isa HttpRequest
-	# assert get.method == "GET"
-	# assert get.uri == "/docs/index.html"
-	# assert get.version == "HTTP/1.1"
-	# assert get.header.length == 5
-	# assert get.header["Host"] == "nitlanguage.org"
-	#
-	# var post_string = """
-	# POST /post HTTP/1.1\r
-	# Host: nitlanguage.org\r
-	# Connection: close\r
-	# Accept: */*\r
-	# User-Agent: Mozilla/4.0 (compatible; esp8266 Lua; Windows NT 5.1)\r
-	# Content-Type: application/json\r
-	# Content-Length: 25\r
-	# \r
-	# {\r
-	#	"hello": "world"\r
-	# }"""
-	#
-	# var post = parser.parse_request(post_string)
-	# assert post isa HttpRequest
-	# assert post.method == "POST"
-	# assert post.uri == "/post"
-	# assert post.version == "HTTP/1.1"
-	# assert post.header.length == 6
-	# assert post.body.length == post.header["Content-Length"].to_i
-	# ~~~
-	# TODO test errors
-	# TODO use logger
-	fun parse_request(string: String): nullable HttpRequest do
-		var i = 0
-		var len = string.length
-
-		# Parse status line
-		var method = new Buffer
-		i = read(string, method, i, len, ' ')
-		i = consume(string, i, ' ')
-		# TODO error
-		var uri = new Buffer
-		i = read(string, uri, i, len, ' ')
-		i = consume(string, i, ' ')
-		# TODO error
-		var version = new Buffer
-		i = read(string, version, i, len, '\r')
-		i = consume(string, i, '\n')
-		# TODO error
-
-		# Parse header
-		var header = new HttpHeader
-
-		loop
-			if i >= len then break
-
-			var name = new Buffer
-			i = read(string, name, i, len, ':')
-			var value = new Buffer
-			i = read(string, value, i, len, '\r')
-			i = consume(string, i, '\n')
-			# TODO multiline fields
-			header.add(name.trim.to_s, value.trim.to_s)
-
-			if i + 1 < len and string[i] == '\r' and string[i + 1] == '\n' then break
-		end
-
-		# Parse body
-		var body = new Buffer
-		i = read(string, body, i, len)
-
-		return new HttpRequest(method.to_s, uri.to_s, header, body.to_s, version.to_s)
-	end
-
-	fun parse_response(string: String) do
-		# TODO
-	end
-
-	private fun read(read: Text, write: Buffer, from, to: nullable Int, until: nullable Char): Int do
-		var i = from or else 0
-		to = to or else read.length
-		while i < to do
-			var c = read.chars[i]
-			i += 1
-			if until == c then
-				break
-			end
-			write.add c
-		end
-		return i
-	end
-
-	private fun consume(read: Text, from: nullable Int, char: Char): Int do
-		var i = from or else 0
-		while i < read.length do
-			var c = read.chars[i]
-			if char != c then
-				break
-			end
-			i += 1
-		end
-		return i
 	end
 end
