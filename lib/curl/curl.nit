@@ -561,7 +561,9 @@ abstract class CurlResponseSuccessIntern
 		var splitted = line.split_with(':')
 		if splitted.length > 1 then
 			var key = splitted.shift
-			self.headers[key] = splitted.to_s
+			var values = new Array[String]
+			for value in splitted do values.add value.trim
+			self.headers[key] = values.join("; ")
 		end
 	end
 end
