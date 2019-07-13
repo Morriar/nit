@@ -307,8 +307,9 @@ class CurlHTTPRequest
 			return answer_failure(0, "Unable to extract file name, please specify one")
 		end
 
-		success_response.file = new FileWriter.open(opt_name)
-		if not success_response.file.is_writable then
+		var file = new FileWriter.open(opt_name)
+		success_response.file = file
+		if not file.is_writable then
 			return answer_failure(0, "Unable to create associated file")
 		end
 
@@ -327,7 +328,7 @@ class CurlHTTPRequest
 		var time = self.curl.native.easy_getinfo_double(new CURLInfoDouble.total_time)
 		if not time == null then success_response.total_time = time
 
-		success_response.file.close
+		file.close
 
 		return success_response
 	end
@@ -551,6 +552,7 @@ abstract class CurlResponseSuccessIntern
 	super CurlCallbacks
 	super CurlResponse
 
+	# Response header
 	var headers = new HashMap[String, String]
 
 	# Receive headers from request due to headers callback registering
@@ -585,8 +587,13 @@ class CurlFileResponseSuccess
 	# Server HTTP response code
 	var status_code = 0
 
+	# Download speed (bytes / s)
 	var speed_download = 0.0
+
+	# Download size (bytes)
 	var size_download = 0.0
+
+	# Total time (ms)
 	var total_time = 0.0
 
 	private var file: nullable FileWriter = null
@@ -594,7 +601,8 @@ class CurlFileResponseSuccess
 	# Receive bytes stream from request due to stream callback registering
 	redef fun stream_callback(buffer)
 	do
-		file.write buffer
+		var file = self.file
+		if file != null then file.write buffer
 	end
 end
 
