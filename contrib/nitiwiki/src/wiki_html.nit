@@ -258,7 +258,7 @@ redef class WikiArticle
 			var hl = iter.item
 			# parse title as markdown
 			var title = wiki.inline_md(hl.title)
-			tpl.add "<li><a href=\"#{hl.id}\">{title}</a>"
+			# tpl.add "<li><a href=\"#{hl.id}\">{title}</a>"
 			iter.next
 			if iter.is_ok then
 				if iter.item.level > hl.level then

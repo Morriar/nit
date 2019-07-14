@@ -16,7 +16,7 @@
 module wiki_links
 
 import wiki_base
-import markdown::wikilinks
+import markdown2
 import ordered_tree
 
 redef class Nitiwiki
@@ -159,16 +159,23 @@ redef class WikiEntry
 		return null
 	end
 
-	private var md_proc: NitiwikiMdProcessor is lazy do
-		return new NitiwikiMdProcessor(wiki, self)
+	private fun parse_md(string: String): String do
+		var parser = new MdParser
+		parser.github_mode = true
+		parser.wikilinks_mode = true
+		parser.post_processors.add new WikilinksProcessor(wiki, self)
+		var node = parser.parse(string)
+		parser.post_process(node)
+		var renderer = new HtmlRenderer
+		return renderer.render(node)
 	end
 
 	# Process wikilinks from sidebar.
 	private fun render_sidebar_wikilinks do
 		var blocks = sidebar.blocks
 		for i in [0..blocks.length[ do
-			blocks[i] = md_proc.process(blocks[i].to_s).write_to_string
-			md_proc.decorator.headlines.clear
+			blocks[i] = parse_md(blocks[i].to_s)
+			# md_proc.decorator.headlines.clear
 		end
 	end
 end
@@ -192,7 +199,7 @@ end
 redef class WikiArticle
 
 	# Headlines ids and titles.
-	var headlines = new ArrayMap[String, HeadLine]
+	var headlines = new ArrayMap[String, MdHeading]
 
 	# Is `self` an index page?
 	#
@@ -211,8 +218,8 @@ redef class WikiArticle
 	redef fun render do
 		super
 		if not is_dirty and not wiki.force_render or not has_source then return
-		content = md_proc.process(md.as(not null))
-		headlines.add_all(md_proc.decorator.headlines)
+		content = parse_md(md.as(not null))
+		# headlines.add_all(md_proc.decorator.headlines)
 	end
 end
 
@@ -230,26 +237,8 @@ class WikiSectionIndex
 	redef fun dir_href do return section.dir_href
 end
 
-# A MarkdownProcessor able to parse wiki links.
-class NitiwikiMdProcessor
-	super MarkdownProcessor
-
-	# Wiki used to resolve links.
-	var wiki: Nitiwiki
-
-	# Article parsed by `self`.
-	#
-	# Used to contextualize links.
-	var context: WikiEntry
-
-	init do
-		decorator = new NitiwikiDecorator(wiki, context)
-	end
-end
-
-# The decorator associated to `MarkdownProcessor`.
-class NitiwikiDecorator
-	super HTMLDecorator
+private class WikilinksProcessor
+	super MdPostProcessor
 
 	# Wiki used to resolve links.
 	var wiki: Nitiwiki
@@ -257,62 +246,73 @@ class NitiwikiDecorator
 	# Article used to contextualize links.
 	var context: WikiEntry
 
-	redef fun add_wikilink(v, token) do
-		var wiki = v.as(NitiwikiMdProcessor).wiki
+	redef fun visit(node) do
+		if not node isa MdWikilink then
+			super
+			return
+		end
+
+		var link = node.link
+		if link.has_prefix("http://") or link.has_prefix("https://") then
+			super
+			return
+		end
+
 		var target: nullable WikiEntry = null
 		var anchor: nullable String = null
-		var link = token.link
-		if link == null then return
-		var name = token.name
-		v.add "<a "
-		if not link.has_prefix("http://") and not link.has_prefix("https://") then
-			# Extract commands from the link.
-			var command = null
-			var command_split = link.split_once_on(":")
-			if command_split.length > 1 then
-				command = command_split[0].trim
-				link = command_split[1].trim
-			end
 
-			if link.has("#") then
-				var parts = link.split_with("#")
-				link = parts.first
-				anchor = parts.subarray(1, parts.length - 1).join("#")
-			end
-			if link.has("/") then
-				target = wiki.lookup_entry_by_path(context, link.to_s)
-			else
-				target = wiki.lookup_entry_by_name(context, link.to_s)
-				if target == null then
-					target = wiki.lookup_entry_by_title(context, link.to_s)
-				end
-			end
-			if target != null then
-				if name == null then name = target.title
-				link = target.href_from(context)
+		# Extract commands from the link.
+		var command = null
+		var command_split = link.split_once_on(":")
+		if command_split.length > 1 then
+			command = command_split[0].trim
+			link = command_split[1].trim
+		end
 
-				if command == "trail" then
-					if target isa WikiSection then target = target.index
-					wiki.trails.add(context, target)
-				end
-			else
-				wiki.logger.warn "unknown wikilink `{link}` (in {context.src_path.as(not null)})"
-				v.add "class=\"broken\" "
+		if link.has("#") then
+			var parts = link.split_with("#")
+			link = parts.first
+			anchor = parts.subarray(1, parts.length - 1).join("#")
+		end
+		if link.has("/") then
+			target = wiki.lookup_entry_by_path(context, link.to_s)
+		else
+			target = wiki.lookup_entry_by_name(context, link.to_s)
+			if target == null then
+				target = wiki.lookup_entry_by_title(context, link.to_s)
 			end
 		end
-		v.add "href=\""
-		append_value(v, link)
-		if anchor != null then append_value(v, "#{anchor}")
-		v.add "\""
-		var comment = token.comment
-		if comment != null and not comment.is_empty then
-			v.add " title=\""
-			append_value(v, comment)
-			v.add "\""
+		if target != null then
+			if node.title == null then node.title = target.title
+			link = target.href_from(context)
+
+			if command == "trail" then
+				if target isa WikiSection then target = target.index
+				wiki.trails.add(context, target)
+			end
+		else
+			wiki.logger.warn "unknown wikilink `{link}` (in {context.src_path.as(not null)})"
+			node.broken = true
 		end
-		v.add ">"
-		if name == null then name = link
-		v.emit_text(name)
-		v.add "</a>"
+		if anchor != null then link = "{link}#{anchor}"
+		node.link = link
+	end
+end
+
+redef class MdWikilink
+	# Is this wikilink broken?
+	var broken = false is writable
+
+	redef fun render_html(v) do
+		v.add_raw "<a href=\"{link}\""
+		if broken then v.add_raw " class=\"broken\""
+		v.add_raw ">"
+		var title = self.title
+		if title != null then
+			v.add_raw title
+		else
+			visit_all v
+		end
+		v.add_raw "</a>"
 	end
 end
