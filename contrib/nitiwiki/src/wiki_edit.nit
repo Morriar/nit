@@ -16,7 +16,6 @@
 module wiki_edit
 
 import nitcorn
-import markdown
 import md5
 import config
 
