@@ -17,6 +17,7 @@ module wiki_base
 
 import template::macro
 import ini
+import logger
 
 # A Nitiwiki instance.
 #
@@ -37,8 +38,8 @@ class Nitiwiki
 	# Force render on all file even if the source is unmodified.
 	var force_render = false is writable
 
-	# Verbosity level.
-	var verbose_level = 0 is writable
+	# Logger used to output warning and debug messages.
+	var logger = new Logger(level = info_level, default_formatter = new NitiwikiLogFormatter)
 
 	# Delete all the output files.
 	fun clean do
@@ -51,7 +52,7 @@ class Nitiwiki
 		var root = expand_path(config.root_dir, config.out_dir)
 		var rsync_dir = config.rsync_dir
 		if rsync_dir == "" then
-			message("Error: configure `wiki.rsync_dir` to use rsync.", 0)
+			logger.error "configure `wiki.rsync_dir` to use rsync."
 			return
 		end
 		sys.system "rsync -vr --delete -- {root.escape_to_sh}/ {rsync_dir.escape_to_sh}"
@@ -110,11 +111,6 @@ class Nitiwiki
 		end
 	end
 
-	# Display msg if `level <= verbose_level`
-	fun message(msg: String, level: Int) do
-		if level <= verbose_level then print msg
-	end
-
 	# List markdown source files from a directory.
 	fun list_md_files(dir: String): Array[String] do
 		var files = new Array[String]
@@ -168,7 +164,7 @@ class Nitiwiki
 	# `path` is used to determine the ancestor sections.
 	protected fun new_article(path: String): WikiArticle do
 		if entries.has_key(path) then return entries[path].as(WikiArticle)
-		message("Found article `{path}`", 2)
+		logger.debug "Found article `{path}`"
 		var article = new WikiArticle.from_source(self, path)
 		var section = new_section(path.dirname)
 		section.add_child(article)
@@ -192,7 +188,7 @@ class Nitiwiki
 	# REQUIRE: `has_template`
 	fun load_template(name: String): TemplateString do
 		if not has_template(name) then
-			message("Error: can't load template `{name}`", 0)
+			logger.error "can't load template `{name}`"
 			exit 1
 		end
 		var file = expand_path(config.root_dir, config.templates_dir, name)
@@ -218,7 +214,7 @@ class Nitiwiki
 	# Load a markdown block with `name` from `WikiConfig::sidebar_dir`.
 	private fun load_sideblock(name: String): nullable String do
 		if not has_sideblock(name) then
-			message("Error: can't load sideblock `{name}`", 0)
+			logger.error "can't load sideblock `{name}`"
 			return null
 		end
 		name = "{name}.{config.md_ext}"
@@ -476,7 +472,7 @@ class WikiSection
 	private fun try_load_config do
 		var cfile = wiki.expand_path(wiki.config.root_dir, src_path, wiki.config_filename)
 		if not cfile.file_exists then return
-		wiki.message("Custom config for section {name}", 2)
+		wiki.logger.debug "Custom config for section {name}"
 		config = new SectionConfig(cfile)
 	end
 
@@ -871,4 +867,24 @@ class SectionConfig
 
 	# Custom footer file if any.
 	fun footer_file: nullable String do return value_or_null("section.footer")
+end
+
+private class NitiwikiLogFormatter
+	super Formatter
+
+	redef fun format(level, message) do
+		var string = message.write_to_string
+
+		if level == fatal_level then
+			string = "Fatal: {string}"
+		else if level == error_level then
+			string = "Error: {string}"
+		else if level == warn_level then
+			string = "Warning: {string}"
+		else if level == debug_level then
+			string = "Debug: {string}"
+		end
+
+		return string
+	end
 end

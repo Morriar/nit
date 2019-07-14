@@ -87,12 +87,12 @@ redef class WikiSection
 			sys.system "touch -- {out_full_path.escape_to_sh}"
 		end
 		if has_source then
-			wiki.message("Render section {name} -> {out_path}", 1)
+			wiki.logger.info "Render section {name} -> {out_path}"
 			copy_files
 		end
 		var index = self.index
 		if index isa WikiSectionIndex then
-			wiki.message("Render auto-index for section {name} -> {out_path}", 1)
+			wiki.logger.info "Render auto-index for section {name} -> {out_path}"
 			index.is_dirty = true
 			add_child index
 		end
@@ -181,7 +181,7 @@ redef class WikiArticle
 		super
 		if not is_dirty and not wiki.force_render then return
 		var file = out_full_path
-		wiki.message("Render article {name} -> {file}", 1)
+		wiki.logger.info "Render article {name} -> {file}"
 		file.dirname.mkdir
 		tpl_page.write_to_file file
 	end

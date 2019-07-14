@@ -69,7 +69,7 @@ private fun check_nit_dir(res: String): Bool do
 	return res.file_exists and "{res}/src/nit.nit".file_exists
 end
 
-var opt_verbose = new OptionCount("Verbose level", "-v")
+var opt_verbose = new OptionBool("Verbose level", "-v")
 var opt_config = new OptionString("Path to config.ini file", "-c", "--config")
 var opt_init = new OptionBool("Initialize a new wiki in the current directory", "--init")
 var opt_status = new OptionBool("Display wiki status", "--status")
@@ -137,7 +137,9 @@ var wiki_config = new WikiConfig(config_file)
 var wiki = new Nitiwiki(wiki_config)
 
 # --verbose
-wiki.verbose_level = opt_verbose.value
+if opt_verbose.value then
+	wiki.logger.level = debug_level
+end
 
 # --clean
 if opt_clean.value then

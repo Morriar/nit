@@ -29,7 +29,7 @@ test_args()
 
 	echo $BIN/$args > $OUT/$test.bin
 	chmod +x $OUT/$test.bin
-	OUTDIR=$outdir $OUT/$test.bin > $OUT/$test.res 2> $OUT/$test.err
+	OUTDIR=$outdir $OUT/$test.bin > $OUT/$test.res 2>&1
 
 	if [ -r $outdir ]; then
 		ls -aR $outdir >> $OUT/$test.res

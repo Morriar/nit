@@ -1,3 +1,12 @@
+Debug: Found article `wiki2/pages/contact.md`
+Debug: Found article `wiki2/pages/index.md`
+Debug: Found article `wiki2/pages/other_page.md`
+Debug: Found article `wiki2/pages/sec1/index.md`
+Debug: Found article `wiki2/pages/sec2/index.md`
+Debug: Custom config for section sec2
+Debug: Found article `wiki2/pages/sec2/sub-sec21/index.md`
+Debug: Found article `wiki2/pages/sec2/sub-sec22/index.md`
+Debug: Found article `wiki2/pages/sec2/sub-sec22/other.md`
 Render section pages -> out
 Warning: unknown wikilink `not found` (in pages/index.md)
 Warning: unknown wikilink `Not Found` (in pages/index.md)

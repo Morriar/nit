@@ -80,17 +80,17 @@ redef class NitiwikiDecorator
 		end
 
 		# Execute the command
-		wiki.message("Executing `{highlighter}` `{meta}` (in {context.src_path.as(not null)})", 2)
+		wiki.logger.debug "Executing `{highlighter}` `{meta}` (in {context.src_path.as(not null)})"
 		var proc = new ProcessDuplex("sh", "-c", highlighter, "", meta.to_s)
 		var res = proc.write_and_read(code)
 		if proc.status != 0 then
-			wiki.message("Warning: `{highlighter}` `{meta}` returned {proc.status} (in {context.src_path.as(not null)})", 0)
+			wiki.logger.warn "`{highlighter}` `{meta}` returned {proc.status} (in {context.src_path.as(not null)})"
 		end
 
 		# Check the result
 		if res.is_empty then
 			# No result, then defaults
-			wiki.message("  `{highlighter}` produced nothing, process internally instead (in {context.src_path.as(not null)})", 2)
+			wiki.logger.debug "  `{highlighter}` produced nothing, process internally instead (in {context.src_path.as(not null)})"
 			super
 			return
 		end

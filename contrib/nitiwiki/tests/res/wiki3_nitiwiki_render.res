@@ -1,3 +1,6 @@
+Debug: Found article `wiki3/pages/contact.mdwn`
+Debug: Found article `wiki3/pages/index.mdwn`
+Debug: Found article `wiki3/pages/other_page.mdwn`
 Render section pages -> out
 Render article index -> wiki3/out/index.html
 Render article contact -> wiki3/out/contact.html

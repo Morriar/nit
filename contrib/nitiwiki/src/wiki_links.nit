@@ -296,7 +296,7 @@ class NitiwikiDecorator
 					wiki.trails.add(context, target)
 				end
 			else
-				wiki.message("Warning: unknown wikilink `{link}` (in {context.src_path.as(not null)})", 0)
+				wiki.logger.warn "unknown wikilink `{link}` (in {context.src_path.as(not null)})"
 				v.add "class=\"broken\" "
 			end
 		end
