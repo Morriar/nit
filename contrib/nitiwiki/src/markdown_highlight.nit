@@ -59,41 +59,92 @@ redef class WikiConfig
 	end
 end
 
+redef class WikilinksProcessor
+	redef fun visit(node) do
+		if not node isa MdCodeBlock then
+			super
+			return
+		end
+
+		var highlighter = wiki.config.highlighter
+
+		# No highlighter, then defaults
+		if highlighter.is_empty then
+			super
+			return
+		end
+
+		var code = node.literal
+		if code == null then
+			super
+			return
+		end
+
+		print code
+
+		var meta = wiki.config.highlighter_default
+		if node isa MdFencedCodeBlock then
+			meta = node.info or else meta
+		end
+		print meta
+		print "-----"
+
+		# No meta nor forced meta, then defaults
+		if meta.is_empty then
+			super
+			return
+		end
+
+		# Execute the command
+		wiki.logger.debug "Executing `{highlighter}` `{meta}` (in {context.src_path.as(not null)})"
+		var proc = new ProcessDuplex("sh", "-c", highlighter, "", meta.to_s)
+		var res = proc.write_and_read(code)
+		if proc.status != 0 then
+			wiki.logger.warn "`{highlighter}` `{meta}` returned {proc.status} (in {context.src_path.as(not null)})"
+		end
+
+		# Check the result
+		if res.is_empty then
+			# No result, then defaults
+			wiki.logger.debug "  `{highlighter}` produced nothing, process internally instead (in {context.src_path.as(not null)})"
+			super
+			return
+		end
+
+		node.code = res
+	end
+end
+
 redef class MdCodeBlock
-	# Extends special cases for meta in fences
-	# redef fun add_code(v, block) do
-	#	var highlighter = wiki.config.highlighter
-    #
-	#	# No highlighter, then defaults
-	#	if highlighter.is_empty then
-	#		super
-	#		return
-	#	end
-    #
-	#	var code = block.raw_content
-	#	var meta = block.meta or else wiki.config.highlighter_default
-    #
-	#	# No meta nor forced meta, then defaults
-	#	if meta.is_empty then
-	#		super
-	#		return
-	#	end
-    #
-	#	# Execute the command
-	#	wiki.logger.debug "Executing `{highlighter}` `{meta}` (in {context.src_path.as(not null)})"
-	#	var proc = new ProcessDuplex("sh", "-c", highlighter, "", meta.to_s)
-	#	var res = proc.write_and_read(code)
-	#	if proc.status != 0 then
-	#		wiki.logger.warn "`{highlighter}` `{meta}` returned {proc.status} (in {context.src_path.as(not null)})"
-	#	end
-    #
-	#	# Check the result
-	#	if res.is_empty then
-	#		# No result, then defaults
-	#		wiki.logger.debug "  `{highlighter}` produced nothing, process internally instead (in {context.src_path.as(not null)})"
-	#		super
-	#		return
-	#	end
-	#	v.add(res)
-	# end
+
+	# Parsed code with highlighting tags
+	var code: nullable String = null
+
+	redef fun render_html(v) do
+		var info = self.info
+		v.add_line
+		v.add_raw "<pre>"
+		v.add_raw "<code"
+		if info != null and not info.is_empty then
+			v.add_raw " class=\"language-{info.split(" ").first}\""
+		end
+		v.add_raw ">"
+		var literal = self.literal
+		var code = self.code
+		if code != null then
+			v.add_raw code
+		else if literal != null then
+			var lines = literal.split("\n")
+			for i in [0..lines.length[ do
+				var line = lines[i]
+				v.add_raw v.html_escape(line, false)
+				if i < lines.length - 1 then
+					v.add_raw "\n"
+				end
+			end
+		end
+		v.add_raw "</code>"
+		v.add_raw "</pre>"
+		v.add_line
+	end
 end

@@ -167,6 +167,7 @@ redef class WikiEntry
 		var node = parser.parse(string)
 		parser.post_process(node)
 		var renderer = new HtmlRenderer
+		renderer.enable_heading_ids = true
 		return renderer.render(node)
 	end
 
@@ -237,7 +238,8 @@ class WikiSectionIndex
 	redef fun dir_href do return section.dir_href
 end
 
-private class WikilinksProcessor
+# Markdown pre-processor for wikilinks
+class WikilinksProcessor
 	super MdPostProcessor
 
 	# Wiki used to resolve links.
@@ -304,9 +306,9 @@ redef class MdWikilink
 	var broken = false is writable
 
 	redef fun render_html(v) do
-		v.add_raw "<a href=\"{link}\""
+		v.add_raw "<a"
 		if broken then v.add_raw " class=\"broken\""
-		v.add_raw ">"
+		v.add_raw " href=\"{link}\">"
 		var title = self.title
 		if title != null then
 			v.add_raw title
