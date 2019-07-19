@@ -530,6 +530,8 @@ end
 class WikiArticle
 	super WikiEntry
 
+	# TODO decouple from wiki?
+
 	# Articles can only have `WikiSection` as parents.
 	redef type PARENT: WikiSection
 
@@ -618,6 +620,7 @@ class WikiConfig
 	# Path to this file
 	var ini_file: String
 
+	# TODO provide a string version
 	init do load_file(ini_file)
 
 	# Returns the config value at `key` or return `default` if no key was found.
@@ -783,11 +786,12 @@ class WikiConfig
 	# * key: `wiki.sidebar.blocks`
 	# * default: `[]`
 	var sidebar_blocks: Array[String] is lazy do
+		# TODO fix ini
 		var res = new Array[String]
 		if not has_key("wiki.sidebar.blocks") then return res
-		for val in section("wiki.sidebar.blocks").as(not null).values do
-			res.add val.as(not null)
-		end
+		var blocks = self["wiki.sidebar.blocks"]
+		if blocks == null then return res
+		for block in blocks.split(";") do res.add block.trim
 		return res
 	end
 
