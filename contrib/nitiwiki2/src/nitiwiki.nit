@@ -22,6 +22,7 @@ import config
 import logger
 
 # TODO read from config file
+# TODO ignore hidden files
 
 class Nitiwiki
 
@@ -50,23 +51,14 @@ class Nitiwiki
 		return wiki
 	end
 
-	# auto titles
-	# breadcrumbs
-	# summaries
-	# is_hidden
-	# TODO load content
-	# TODO render to format
-	# TODO target dir
-	# TODO accepted input format
-	# TODO section config
-	# render only if needed
-
-	# TODO links
-	# TODO wikilinks
-	# TODO render html
-	# TODO assets and copy files
-	# TODO blocks
-	# TODO templates
+	# TODO options
+		# auto titles
+		# breadcrumbs
+		# summaries
+		# render to format
+		# target dir
+		# accepted input format
+		# render only if needed
 end
 
 class WikiConfig

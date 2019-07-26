@@ -14,6 +14,7 @@
 
 module wiki_base
 
+import config
 import template
 
 class Wiki
@@ -49,8 +50,11 @@ class Wiki
 		return null
 	end
 
-	fun to_ansi: String do
-		var v = new AnsiMapVisitor
+	fun to_ansi(show_assets, use_pretty_names: nullable Bool): String do
+		var v = new AnsiMapVisitor(
+			show_assets or else false,
+			use_pretty_names or else false
+		)
 		v.visit_wiki(self)
 		return v.ansi.write_to_string
 	end
@@ -106,8 +110,11 @@ end
 class Section
 	super Entry
 
+	# Section configuration
+	var config = new SectionConfig is optional, writable
+
 	# Sub entries of this section
-	var children = new Array[Entry]
+	var children = new Array[Entry] is optional
 
 	fun add(entry: Entry) do
 		children.add entry
@@ -124,6 +131,14 @@ class Section
 	fun has_index: Bool do return index != null
 
 	redef fun visit_all(v) do for child in children do v.visit(child)
+
+	redef fun pretty_name do
+		var title = config.title or else super
+		if config.is_hidden then
+			return "-{title}"
+		end
+		return title
+	end
 end
 
 # Root section of all wikis
@@ -146,10 +161,34 @@ class MdPage
 	var md: String
 
 	init from_file(name, file: String) do
-		assert file.file_exists
 		init(name, file.to_path.read_all)
 	end
 end
+
+class Asset
+	super Entry
+	autoinit(src_path)
+
+	var src_path: String
+
+	redef var name = src_path.to_path.filename is lazy
+end
+
+class SectionConfig
+	# Is this section hidden in sitemap and trees and menus?
+	var is_hidden = false is optional
+
+	# Custom section title if any.
+	var title: nullable String = null is optional
+
+	init from_ini(ini: IniFile) do
+		init
+		is_hidden = ini["section.hidden"] == "true" or is_hidden
+		title = ini["section.title"] or else title
+	end
+end
+
+# Utils
 
 abstract class WikiVisitor
 	fun visit_wiki(wiki: Wiki) do visit(wiki.root)
@@ -173,12 +212,21 @@ end
 private class AnsiMapVisitor
 	super WikiVisitor
 
+	var show_assets = false is optional
+	var use_pretty_names = false is optional
 	var indent_level = 0
 
 	var ansi = new Template
 
 	redef fun visit(entry) do
-		ansi.addn "{indent}{entry.name}"
+		if not show_assets and entry isa Asset then return
+
+		if use_pretty_names then
+			ansi.addn "{indent}{entry.pretty_name}"
+		else
+			ansi.addn "{indent}{entry.name}"
+		end
+
 		if entry isa Section then
 			indent_level += 1
 			entry.visit_all(self)

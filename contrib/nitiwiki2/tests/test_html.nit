@@ -15,15 +15,117 @@
 module test_html is test
 
 import wiki_html
-import test_base
 
-class TestEntryHtml
-	super TestBase
+class TestWiki2Html
+	# test
+
+	# TODO test full render
+end
+
+class TestSectionToHtml
 	test
 
-	# html link
-	# markdown processing
-		# commands
-		# links
-		# check links
+	fun test_wiki: Wiki do return new Wiki
+
+	fun html_link_from_root is test do
+		var section = new Section("test")
+		assert section.html_link(test_wiki.root) == "<a href=\"test\">Test</a>"
+	end
+
+	fun html_link_from_self is test do
+		var section = new Section("test")
+		assert section.html_link(section) == "<a href=\"#\">Test</a>"
+	end
+
+	fun html_link_from_unrelated is test do
+		var section = new Section("test")
+		var other = new Section("test2")
+		assert section.html_link(other) == "<a href=\"../test\">Test</a>"
+	end
+
+	# TODO check with config
+	# TODO check with index
+
+	# TODO check full render
+		# copu assets
+		# gen files
+		# gen index
+		# templates
+end
+
+class TestMdPageToHtml
+	test
+
+	fun test_wiki: Wiki do return new Wiki
+	fun wiki2html: Wiki2Html do return new Wiki2Html(test_wiki, "")
+
+	fun empty_md_to_html is test do
+		var page = new MdPage("test", "")
+		assert page.md == ""
+		assert page.html_body(wiki2html) == ""
+	end
+
+	fun simple_md_to_html is test do
+		var page = new MdPage("test", "# Test")
+		assert page.md == "# Test"
+		assert page.html_body(wiki2html) == "<h1 id=\"Test\">Test</h1>\n"
+	end
+
+	fun simple_md_to_html_without_template is test do
+		var page = new MdPage("test", "# Test")
+		assert page.md == "# Test"
+		assert page.html(wiki2html) == "<h1 id=\"Test\">Test</h1>\n"
+	end
+
+	fun simple_md_to_html_with_default_template_empty is test do
+		var v = self.wiki2html
+		v.default_template = new PageTemplate("")
+		var page = new MdPage("test", "# Test")
+		assert page.md == "# Test"
+		assert page.html(wiki2html) == ""
+	end
+
+	fun html_link_from_root is test do
+		var page = new MdPage("test", "")
+		assert page.html_link(test_wiki.root) == "<a href=\"test.html\">Test</a>"
+	end
+
+	fun html_link_from_self is test do
+		var page = new MdPage("test", "")
+		assert page.html_link(page) == "<a href=\"#\">Test</a>"
+	end
+
+	fun html_link_from_unrelated is test do
+		var page = new MdPage("test", "")
+		var other = new MdPage("test2", "")
+		assert page.html_link(other) == "<a href=\"../test.html\">Test</a>"
+	end
+
+	# TODO check md links and commands
+
+	# TODO check full render
+		# templates
+end
+
+class TestAssetToHtml
+	test
+
+	fun test_wiki: Wiki do return new Wiki
+	fun wiki2html: Wiki2Html do return new Wiki2Html(test_wiki, "")
+
+	fun html_link_from_root is test do
+		var asset = new Asset("/foo/bar/baz/test.jpg")
+		assert asset.html_link(test_wiki.root) == "<a href=\"test.jpg\">test.jpg</a>"
+	end
+
+	fun html_link_from_self is test do
+		var asset = new Asset("/foo/bar/baz/test.jpg")
+		assert asset.html_link(asset) == "<a href=\"#\">test.jpg</a>"
+	end
+
+	fun html_link_from_unrelated is test do
+		var asset = new Asset("/foo/bar/baz/test.jpg")
+		var other = new Asset("/baz/bar/foo/test2")
+		assert asset.html_link(other) == "<a href=\"../test.jpg\">test.jpg</a>"
+	end
 end

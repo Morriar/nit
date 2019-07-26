@@ -14,15 +14,36 @@
 
 module wiki_html
 
+import logger
 import wiki_base
 import markdown2
 
 class Wiki2Html
 	super WikiVisitor
 
+	# TODO template config
+	# TODO wiki config?
+
 	var wiki: Wiki
 
 	var out_path: String
+
+	var default_template: nullable String = null is optional, writable
+
+	var logger = new Logger(warn_level) is optional
+
+	private var sections_stack = new Array[Section]
+
+	private fun current_section: nullable Section do
+		if sections_stack.is_empty then return null
+		return sections_stack.last
+	end
+
+	private fun current_template: nullable String do
+		var section = current_section
+		if section == null then return default_template
+		return section.config.default_template
+	end
 
 	fun run do visit_wiki(wiki)
 
@@ -32,9 +53,11 @@ class Wiki2Html
 		sys.system "cp -R -- {from.escape_to_sh} {to.escape_to_sh}"
 	end
 
-	fun touch(path: String) do
-		sys.system "touch -- {path.escape_to_sh}"
-	end
+	# fun touch(path: String) do
+		# sys.system "touch -- {path.escape_to_sh}"
+	# end
+
+	# TODO render only if needed
 
 	# TODO sitemap
 	# Build the wiki sitemap page.
@@ -50,18 +73,26 @@ redef class Entry
 
 	fun html_title: String do return pretty_name
 
-	fun html_link(context: Entry): String is abstract
+	fun html_link(context: Entry): String do
+		var path = context.path_to(self)
+		if path.is_empty then
+			return "<a href=\"#\">{html_title}</a>"
+		end
+		return "<a href=\"{path}\">{html_title}</a>"
+	end
 end
 
 redef class Section
 
 	redef fun accept_html_visitor(v) do
+		v.sections_stack.push self
 		(v.out_path / path).mkdir
 		# TODO copy_files(src_path, out_path)
 		# TODO add index
 		# TODO add sitemap
-		# TODO section config?
+		# TODO section config
 		visit_all(v)
+		v.sections_stack.pop
 	end
 
 	# fun out_dir(v: Wiki2Html): String do
@@ -87,7 +118,16 @@ redef class Section
 		if index != null then
 			return index.html_link(context)
 		end
-		return "<a href=\"{context.path_to(self)}.html\">{html_title}</a>"
+		return super
+	end
+end
+
+redef class SectionConfig
+	var default_template: nullable String = null is optional
+
+	redef init from_ini(ini) do
+		super
+		default_template = ini["section.template"]
 	end
 end
 
@@ -98,10 +138,14 @@ redef class MdPage
 	end
 
 	redef fun html_link(context) do
-		return "<a href=\"{context.path_to(self)}.html\">{html_title}</a>"
+		var path = context.path_to(self)
+		if path.is_empty then
+			return "<a href=\"#\">{html_title}</a>"
+		end
+		return "<a href=\"{path}.html\">{html_title}</a>"
 	end
 
-	fun html(v: Wiki2Html): String do
+	fun html_body(v: Wiki2Html): String do
 		var parser = new MdParser
 		parser.github_mode = true
 		parser.wikilinks_mode = true
@@ -112,6 +156,34 @@ redef class MdPage
 		var renderer = new WikiHtmlRenderer(true, v, self)
 		return renderer.render(ast)
 	end
+
+	fun html(v: Wiki2Html): String do
+		var tpl_path = v.current_template
+		if tpl_path == null then return html_body(v)
+
+		var tpl = new PageTemplate(
+			path = tpl_path,
+			body = html_body(v)
+		)
+		return tpl.write_to_string
+	end
+end
+
+redef class Asset
+	redef fun html_title do return name
+end
+
+class PageTemplate
+	super Template
+
+	var path: nullable String
+
+	var title: nullable String = null is optional
+	var body: nullable String = null is optional
+
+	# TODO trail
+	# TODO menu
+	# TODO summary
 end
 
 class WikiMdProcessor
@@ -125,7 +197,9 @@ class MdProcessCommands
 	super WikiMdProcessor
 
 	redef fun post_process(parser, doc) do
-		# TODO
+		# TODO wikilinks
+			# name, title, file, assets
+		# TODO assets
 	end
 end
 
@@ -133,7 +207,7 @@ class MdProcessHighlight
 	super WikiMdProcessor
 
 	redef fun post_process(parser, doc) do
-		# TODO
+		# TODO highlight
 	end
 end
 
@@ -143,9 +217,6 @@ class WikiHtmlRenderer
 	var v: Wiki2Html
 	var context: nullable Entry
 
-	# TODO menu
-	# TODO summary
-	# TODO template
-	# TODO template vars
-	# TODO add breadcrumbs, trail, etc.
+	# TODO links
+	# TODO wikilinks
 end

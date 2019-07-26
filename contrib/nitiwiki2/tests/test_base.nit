@@ -162,6 +162,22 @@ end
 class TestSection
 	test
 
+	fun all_sections_have_a_default_config is test do
+		var s = new Section("test")
+		assert not s.config.is_hidden
+		assert s.name == "test"
+		assert s.config.title == null
+		assert s.pretty_name == "Test"
+	end
+
+	fun section_can_have_a_custom_config is test do
+		var s = new Section("test", new SectionConfig(is_hidden = true, title = "Title"))
+		assert s.config.is_hidden
+		assert s.name == "test"
+		assert s.config.title == "Title"
+		assert s.pretty_name == "-Title"
+	end
+
 	fun section_can_have_an_index is test do
 		var s = new Section("foo")
 		assert s.index == null
