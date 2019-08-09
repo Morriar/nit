@@ -17,6 +17,7 @@ module wiki_html
 import logger
 import wiki_base
 import markdown2
+import template::macro
 
 class Wiki2Html
 	super WikiVisitor
@@ -28,7 +29,7 @@ class Wiki2Html
 
 	var out_path: String
 
-	var default_template: nullable String = null is optional, writable
+	var default_template: nullable PageTemplate = null is optional, writable
 
 	var logger = new Logger(warn_level) is optional
 
@@ -39,11 +40,11 @@ class Wiki2Html
 		return sections_stack.last
 	end
 
-	private fun current_template: nullable String do
-		var section = current_section
-		if section == null then return default_template
-		return section.config.default_template
-	end
+	# private fun current_template: nullable String do
+	#	var section = current_section
+	#	if section == null then return default_template
+	#	return section.config.default_template
+	# end
 
 	fun run do visit_wiki(wiki)
 
@@ -84,6 +85,8 @@ end
 
 redef class Section
 
+	var template: nullable PageTemplate = null is optional, writable
+
 	redef fun accept_html_visitor(v) do
 		v.sections_stack.push self
 		(v.out_path / path).mkdir
@@ -122,14 +125,14 @@ redef class Section
 	end
 end
 
-redef class SectionConfig
-	var default_template: nullable String = null is optional
-
-	redef init from_ini(ini) do
-		super
-		default_template = ini["section.template"]
-	end
-end
+# redef class SectionConfig
+#	var default_template: nullable String = null is optional
+#
+#	redef init from_ini(ini) do
+#		super
+#		default_template = ini["section.template"]
+#	end
+# end
 
 redef class MdPage
 	redef fun accept_html_visitor(v) do
@@ -158,11 +161,15 @@ redef class MdPage
 	end
 
 	fun html(v: Wiki2Html): String do
-		var tpl_path = v.current_template
-		if tpl_path == null then return html_body(v)
+		var tpl = v.default_template
 
-		var tpl = new PageTemplate(
-			path = tpl_path,
+		var section = v.current_section
+		if section != null then tpl = section.template or else tpl
+
+		if tpl == null then return html_body(v)
+
+		tpl.insert_vars new PageVars(
+			# TODO other vars
 			body = html_body(v)
 		)
 		return tpl.write_to_string
@@ -174,12 +181,19 @@ redef class Asset
 end
 
 class PageTemplate
-	super Template
+	super TemplateString
 
-	var path: nullable String
+	fun insert_vars(vars: PageVars) do
+		if has_macro("BODY") then
+			replace("BODY", vars.body or else "")
+		end
+	end
+end
 
-	var title: nullable String = null is optional
-	var body: nullable String = null is optional
+class PageVars
+	var path: nullable String = null is optional, writable
+	var title: nullable String = null is optional, writable
+	var body: nullable String = null is optional, writable
 
 	# TODO trail
 	# TODO menu

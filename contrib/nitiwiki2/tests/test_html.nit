@@ -82,8 +82,18 @@ class TestMdPageToHtml
 		v.default_template = new PageTemplate("")
 		var page = new MdPage("test", "# Test")
 		assert page.md == "# Test"
-		assert page.html(wiki2html) == ""
+		assert page.html(v) == ""
 	end
+
+	fun simple_md_to_html_with_default_template_simple is test do
+		var v = self.wiki2html
+		v.default_template = new PageTemplate("<div>%BODY%</div>")
+		var page = new MdPage("test", "# Test")
+		assert page.md == "# Test"
+		assert page.html(v) == "<div><h1 id=\"Test\">Test</h1>\n</div>"
+	end
+
+	# TODO test all variables
 
 	fun html_link_from_root is test do
 		var page = new MdPage("test", "")
@@ -102,9 +112,6 @@ class TestMdPageToHtml
 	end
 
 	# TODO check md links and commands
-
-	# TODO check full render
-		# templates
 end
 
 class TestAssetToHtml

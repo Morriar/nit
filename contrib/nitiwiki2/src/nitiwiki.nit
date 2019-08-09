@@ -150,3 +150,6 @@ end
 
 class CmdFetch
 end
+
+print "NOT YET IMPLEMENTED"
+exit 1

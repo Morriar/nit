@@ -20,7 +20,7 @@ import test_base
 class TestWikiBuilder
 	test
 
-	private var tests_wikis: String = "tests/data/wikis" is lazy
+	private var tests_wikis: String = "tests/wikis" is lazy
 
 	private fun builder: WikiBuilder do return new WikiBuilder(
 		logger = new Logger(debug_level)
