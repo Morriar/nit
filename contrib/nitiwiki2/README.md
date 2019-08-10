@@ -1,11 +1,34 @@
 # TODO
 
-black box testing
+* handle `assets/`
+	- config
+	- add to model?
+	- copy assets
 
-templates
-commands
-code highlight
+* add sitemap
+* add index
 
-server mode
+* templates vars
+	- menu
+	- name
+	- title
+	- summary
+	- trail
 
-see jekyll features
+* parse md
+	- commands
+	- highligh
+
+* black box testing
+
+* server mode
+	see jekyll features
+
+* add examples and test them
+
+	add a ExampleWiki("""
+		config.ini
+		asset.file
+	""") for examples
+
+* grep for todos

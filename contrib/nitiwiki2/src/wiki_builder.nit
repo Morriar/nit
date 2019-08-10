@@ -15,6 +15,8 @@
 module wiki_builder
 
 import wiki_base
+import wiki_html # TODO remove onve moved template?
+import ini
 import logger
 
 class WikiBuilder
@@ -28,16 +30,35 @@ class WikiBuilder
 		if not root_path.file_exists then return null
 
 		var wiki = new Wiki
+
+		# Load wiki config
+		var ini_path = root_path / "nitiwiki.ini"
+		var ini = load_ini(ini_path)
+		if ini != null then
+			logger.debug "Found wiki config at {ini_path}"
+			# TODO wiki name?
+			wiki.assets_dir = ini["wiki.assets"]
+			var tpl = ini["wiki.template"]
+			if tpl != null then wiki.root.template = load_template(root_path / tpl)
+		end
+
+		# Build sections recursively starting from `root_path`
 		build_section(wiki.root, root_path / pages_path)
+
 		return wiki
 	end
 
 	private fun build_section(section: Section, path: String) do
 		# Build config
 		var ini_path = path / section_config
-		if ini_path.file_exists then
-			var ini = new IniFile.from_file(ini_path)
-			section.config = new SectionConfig.from_ini(ini)
+		var ini = load_ini(ini_path)
+		if ini != null then
+			logger.debug "Found section config at {ini_path}"
+
+			section.is_hidden = ini["section.hidden"] == "true"
+			section.title = ini["section.title"]
+			var ini_tpl = ini["section.template"]
+			if ini_tpl != null then section.template = load_template(path / ini_tpl)
 		end
 
 		# Build children
@@ -68,6 +89,18 @@ class WikiBuilder
 				end
 			end
 		end
+	end
+
+	private fun load_ini(path: nullable String): nullable IniFile do
+		if path == null then return null
+		if not path.file_exists then return null
+		return new IniFile.from_file(path)
+	end
+
+	private fun load_template(path: nullable String): nullable PageTemplate do
+		if path == null then return null
+		if not path.file_exists then return null
+		return new PageTemplate(path.to_path.read_all)
 	end
 
 	private var files_comparator = new DefaultComparator

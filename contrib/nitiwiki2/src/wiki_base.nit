@@ -14,7 +14,6 @@
 
 module wiki_base
 
-import config
 import template
 
 class Wiki
@@ -67,6 +66,9 @@ abstract class Entry
 
 	var name: String
 
+	# An entry can have a custom title
+	var title: nullable String = null is optional, writable
+
 	# Parent section of this entry
 	#
 	# Should never be set directly, see `Wiki::add` and `Section.add`.
@@ -97,6 +99,8 @@ abstract class Entry
 	redef fun to_s do return name
 
 	fun pretty_name: String do
+		var title = self.title
+		if title != null then return title
 		var name = self.name
 		name = name.replace("_", " ")
 		name = name.capitalized(keep_upper = true)
@@ -110,11 +114,23 @@ end
 class Section
 	super Entry
 
-	# Section configuration
-	var config = new SectionConfig is optional, writable
+	# Is this section hidden in sitemap and trees and menus?
+	# TODO a section in a hidden section should also be hidden
+	#
+	# You should use `is_hidden` is you want to take the parent into account?
+	var is_hidden = false is optional, writable
+
+	# TODO
+	# If you want to set this value see `hidden` instead.
+	fun hidden: Bool do
+		if hidden then return true
+		var parent = self.parent
+		if parent != null then return parent.is_hidden
+		return false
+	end
 
 	# Sub entries of this section
-	var children = new Array[Entry] is optional
+	var children = new Array[Entry]
 
 	fun add(entry: Entry) do
 		children.add entry
@@ -133,11 +149,8 @@ class Section
 	redef fun visit_all(v) do for child in children do v.visit(child)
 
 	redef fun pretty_name do
-		var title = config.title or else super
-		if config.is_hidden then
-			return "-{title}"
-		end
-		return title
+		if is_hidden then return "-{super}"
+		return super
 	end
 end
 
@@ -160,8 +173,8 @@ class MdPage
 
 	var md: String
 
-	init from_file(name, file: String) do
-		init(name, file.to_path.read_all)
+	init from_file(name, file: String, title: nullable String) do
+		init(name, title, file.to_path.read_all)
 	end
 end
 
@@ -174,26 +187,10 @@ class Asset
 	redef var name = src_path.to_path.filename is lazy
 end
 
-class SectionConfig
-	# Is this section hidden in sitemap and trees and menus?
-	var is_hidden = false is optional
-
-	# Custom section title if any.
-	var title: nullable String = null is optional
-
-	init from_ini(ini: IniFile) do
-		init
-		is_hidden = ini["section.hidden"] == "true" or is_hidden
-		title = ini["section.title"] or else title
-	end
-end
-
 # Utils
 
 abstract class WikiVisitor
 	fun visit_wiki(wiki: Wiki) do visit(wiki.root)
-
-	fun visit_entry(entry: Entry) do visit(entry)
 
 	fun visit(entry: Entry) is abstract
 end

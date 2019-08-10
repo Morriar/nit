@@ -22,15 +22,12 @@ import template::macro
 class Wiki2Html
 	super WikiVisitor
 
-	# TODO template config
-	# TODO wiki config?
-
 	var wiki: Wiki
 
-	var out_path: String
+	var root_path: String = "./" is optional, writable
+	var out_path: String = "out" is optional, writable
 
-	var default_template: nullable PageTemplate = null is optional, writable
-
+	# TODO use it...
 	var logger = new Logger(warn_level) is optional
 
 	private var sections_stack = new Array[Section]
@@ -40,18 +37,39 @@ class Wiki2Html
 		return sections_stack.last
 	end
 
-	# private fun current_template: nullable String do
-	#	var section = current_section
-	#	if section == null then return default_template
-	#	return section.config.default_template
-	# end
+	var default_template: nullable PageTemplate = null is optional, writable
+
+	private fun current_template: nullable PageTemplate do
+		var section = current_section
+		if section == null then return default_template
+		return section.template or else default_template
+	end
 
 	fun run do visit_wiki(wiki)
 
+	redef fun visit_wiki(wiki) do
+		super
+
+		var assets_dir = wiki.assets_dir
+		if assets_dir != null then
+			copy(root_path / assets_dir / "*", out_path)
+		end
+
+		# TODO add sitemap
+	end
+
 	redef fun visit(entry) do entry.accept_html_visitor(self)
+
+	fun mkdir(path: String) do
+		sys.system "mkdir -p -- {path.escape_to_sh}"
+	end
 
 	fun copy(from, to: String) do
 		sys.system "cp -R -- {from.escape_to_sh} {to.escape_to_sh}"
+	end
+
+	fun write_to_file(string, file: String) do
+		string.write_to_file(file)
 	end
 
 	# fun touch(path: String) do
@@ -67,6 +85,10 @@ class Wiki2Html
 	#	sitemap.is_dirty = true
 	#	return sitemap
 	# end
+end
+
+redef class Wiki
+	var assets_dir: nullable String = null is optional, writable
 end
 
 redef class Entry
@@ -85,36 +107,26 @@ end
 
 redef class Section
 
-	var template: nullable PageTemplate = null is optional, writable
+	var section_template: nullable PageTemplate = null is optional
+
+	fun template: nullable PageTemplate do
+		if section_template != null then return section_template
+		var parent = self.parent
+		if parent == null then return null
+		return parent.template
+	end
+
+	fun template=(template: nullable PageTemplate) do
+		section_template = template
+	end
 
 	redef fun accept_html_visitor(v) do
 		v.sections_stack.push self
-		(v.out_path / path).mkdir
-		# TODO copy_files(src_path, out_path)
+		v.mkdir v.out_path / path
 		# TODO add index
-		# TODO add sitemap
-		# TODO section config
 		visit_all(v)
 		v.sections_stack.pop
 	end
-
-	# fun out_dir(v: Wiki2Html): String do
-		# return (v.out_path / out_path).escape_to_sh
-	# end
-
-	# fun copy_files(out_path: String) do
-	#	assert has_source
-	#	var dir = src_full_path.as(not null).to_s
-	#	for name in dir.files do
-	#		if name == wiki.config_filename then continue
-	#		if name.has_suffix(".md") then continue
-	#		if has_child(name) then continue
-	#		var src = wiki.expand_path(dir, name)
-	#		var out = wiki.expand_path(out_full_path, name)
-	#		if not wiki.need_render(src, out) then continue
-	#		sys.system "cp -R -- {src.escape_to_sh} {out_full_path.escape_to_sh}"
-	#	end
-	# end
 
 	redef fun html_link(context) do
 		var index = self.index
@@ -125,19 +137,10 @@ redef class Section
 	end
 end
 
-# redef class SectionConfig
-#	var default_template: nullable String = null is optional
-#
-#	redef init from_ini(ini) do
-#		super
-#		default_template = ini["section.template"]
-#	end
-# end
-
 redef class MdPage
 	redef fun accept_html_visitor(v) do
 		var html = self.html(v)
-		html.write_to_file "{(v.out_path / path)}.html"
+		v.write_to_file(html, "{(v.out_path / path)}.html")
 	end
 
 	redef fun html_link(context) do
@@ -161,32 +164,34 @@ redef class MdPage
 	end
 
 	fun html(v: Wiki2Html): String do
-		var tpl = v.default_template
+		var page_template = v.current_template
+		if page_template == null then return html_body(v)
 
-		var section = v.current_section
-		if section != null then tpl = section.template or else tpl
-
-		if tpl == null then return html_body(v)
-
-		tpl.insert_vars new PageVars(
+		return page_template.compile(new PageVars(
 			# TODO other vars
 			body = html_body(v)
-		)
-		return tpl.write_to_string
+		)).write_to_string
 	end
 end
 
 redef class Asset
+	redef fun accept_html_visitor(v) do
+		v.copy(v.root_path / path, "{v.out_path / path}")
+	end
+
 	redef fun html_title do return name
 end
 
 class PageTemplate
-	super TemplateString
 
-	fun insert_vars(vars: PageVars) do
-		if has_macro("BODY") then
-			replace("BODY", vars.body or else "")
+	var string: String
+
+	fun compile(vars: PageVars): Template do
+		var tpl = new TemplateString(string)
+		if tpl.has_macro("BODY") then
+			tpl.replace("BODY", vars.body or else "")
 		end
+		return tpl
 	end
 end
 
