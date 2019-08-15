@@ -15,7 +15,6 @@
 module wiki_builder
 
 import wiki_base
-import wiki_html # TODO remove onve moved template?
 import ini
 import logger
 
@@ -39,7 +38,7 @@ class WikiBuilder
 			# TODO wiki name?
 			wiki.assets_dir = ini["wiki.assets"]
 			var tpl = ini["wiki.template"]
-			if tpl != null then wiki.root.template = load_template(root_path / tpl)
+			if tpl != null then wiki.root.default_template = load_template(root_path / tpl)
 		end
 
 		# Build sections recursively starting from `root_path`
@@ -58,7 +57,7 @@ class WikiBuilder
 			section.is_hidden = ini["section.hidden"] == "true"
 			section.title = ini["section.title"]
 			var ini_tpl = ini["section.template"]
-			if ini_tpl != null then section.template = load_template(path / ini_tpl)
+			if ini_tpl != null then section.default_template = load_template(path / ini_tpl)
 		end
 
 		# Build children

@@ -17,7 +17,6 @@ module wiki_html
 import logger
 import wiki_base
 import markdown2
-import template::macro
 
 class Wiki2Html
 	super WikiVisitor
@@ -37,12 +36,10 @@ class Wiki2Html
 		return sections_stack.last
 	end
 
-	var default_template: nullable PageTemplate = null is optional, writable
-
 	private fun current_template: nullable PageTemplate do
 		var section = current_section
-		if section == null then return default_template
-		return section.template or else default_template
+		if section == null then return wiki.default_template
+		return section.template or else wiki.default_template
 	end
 
 	fun run do visit_wiki(wiki)
@@ -87,10 +84,6 @@ class Wiki2Html
 	# end
 end
 
-redef class Wiki
-	var assets_dir: nullable String = null is optional, writable
-end
-
 redef class Entry
 	fun accept_html_visitor(v: Wiki2Html) is abstract
 
@@ -106,20 +99,6 @@ redef class Entry
 end
 
 redef class Section
-
-	var section_template: nullable PageTemplate = null is optional
-
-	fun template: nullable PageTemplate do
-		if section_template != null then return section_template
-		var parent = self.parent
-		if parent == null then return null
-		return parent.template
-	end
-
-	fun template=(template: nullable PageTemplate) do
-		section_template = template
-	end
-
 	redef fun accept_html_visitor(v) do
 		v.sections_stack.push self
 		v.mkdir v.out_path / path
@@ -167,7 +146,7 @@ redef class MdPage
 		var page_template = v.current_template
 		if page_template == null then return html_body(v)
 
-		return page_template.compile(new PageVars(
+		return page_template.compile(new TemplateVars(
 			# TODO other vars
 			body = html_body(v)
 		)).write_to_string
@@ -180,29 +159,6 @@ redef class Asset
 	end
 
 	redef fun html_title do return name
-end
-
-class PageTemplate
-
-	var string: String
-
-	fun compile(vars: PageVars): Template do
-		var tpl = new TemplateString(string)
-		if tpl.has_macro("BODY") then
-			tpl.replace("BODY", vars.body or else "")
-		end
-		return tpl
-	end
-end
-
-class PageVars
-	var path: nullable String = null is optional, writable
-	var title: nullable String = null is optional, writable
-	var body: nullable String = null is optional, writable
-
-	# TODO trail
-	# TODO menu
-	# TODO summary
 end
 
 class WikiMdProcessor

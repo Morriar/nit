@@ -12,17 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# TODO server mode
-# TODO edit
-
 module nitiwiki
 
 import wiki_base
 import config
 import logger
 
-# TODO read from config file
-# TODO ignore hidden files
+# TODO ignore hidden files?
 
 class Nitiwiki
 

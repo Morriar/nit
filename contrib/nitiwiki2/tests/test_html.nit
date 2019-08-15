@@ -63,9 +63,8 @@ $ write to out/test.html
 	fun render_page_with_default_template is test do
 		var page = new MdPage("test", md = "# Test")
 
-		var v = new MockWiki2Html(new Wiki, true)
-		# TODO move in base so we have the constructor?
-		v.default_template = new PageTemplate("<html>%BODY%</html>\n")
+		var wiki = new Wiki(default_template = new PageTemplate("<html>%BODY%</html>\n"))
+		var v = new MockWiki2Html(wiki, true)
 		v.visit(page)
 		assert v.test_output == """
 $ write to out/test.html
@@ -108,8 +107,8 @@ $ write to out/s1/p2.html
 		section.add new MdPage("p1", md = "# P1")
 		section.add new MdPage("p2", md = "# P2")
 
-		var v = new MockWiki2Html(new Wiki, true)
-		v.default_template = new PageTemplate("<html>%BODY%</html>\n")
+		var wiki = new Wiki(default_template = new PageTemplate("<html>%BODY%</html>\n"))
+		var v = new MockWiki2Html(wiki, true)
 		v.visit(section)
 		assert v.test_output == """
 $ mkdir -p -- 'out/s1'
@@ -123,12 +122,12 @@ $ write to out/s1/p2.html
 
 	fun render_section_with_section_template is test do
 		var section = new Section("s1")
-		section.template = new PageTemplate("<s1>%BODY%</s1>\n")
+		section.default_template = new PageTemplate("<s1>%BODY%</s1>\n")
 		section.add new MdPage("p1", md = "# P1")
 		section.add new MdPage("p2", md = "# P2")
 
-		var v = new MockWiki2Html(new Wiki, true)
-		v.default_template = new PageTemplate("<html>%BODY%</html>\n")
+		var wiki = new Wiki(default_template = new PageTemplate("<html>%BODY%</html>\n"))
+		var v = new MockWiki2Html(wiki, true)
 		v.visit(section)
 		assert v.test_output == """
 $ mkdir -p -- 'out/s1'
@@ -142,12 +141,12 @@ $ write to out/s1/p2.html
 
 	fun render_section_with_section_template_nested is test do
 		var section = new Section("s1")
-		section.template = new PageTemplate("<s1>%BODY%</s1>\n")
+		section.default_template = new PageTemplate("<s1>%BODY%</s1>\n")
 		section.add new MdPage("p1", md = "# P1")
 		section.add new MdPage("p2", md = "# P2")
 
 		var s11 = new Section("s11")
-		s11.template = new PageTemplate("<s11>%BODY%</s11>\n")
+		s11.default_template = new PageTemplate("<s11>%BODY%</s11>\n")
 		s11.add new MdPage("p11", md = "# P11")
 		section.add s11
 
@@ -155,8 +154,8 @@ $ write to out/s1/p2.html
 		s12.add new MdPage("p12", md = "# P12")
 		section.add s12
 
-		var v = new MockWiki2Html(new Wiki, true)
-		v.default_template = new PageTemplate("<html>%BODY%</html>\n")
+		var wiki = new Wiki(default_template = new PageTemplate("<html>%BODY%</html>\n"))
+		var v = new MockWiki2Html(wiki, true)
 		v.visit(section)
 		assert v.test_output == """
 $ mkdir -p -- 'out/s1'
@@ -328,14 +327,14 @@ class TestMdPageToHtml
 
 	fun simple_md_to_html_with_default_template_empty is test do
 		var v = self.wiki2html
-		v.default_template = new PageTemplate("")
+		v.wiki.default_template = new PageTemplate("")
 		var page = new MdPage("test", md = "# Test")
 		assert page.html(v) == ""
 	end
 
 	fun simple_md_to_html_with_default_template_simple is test do
 		var v = self.wiki2html
-		v.default_template = new PageTemplate("<div>%BODY%</div>")
+		v.wiki.default_template = new PageTemplate("<div>%BODY%</div>")
 		var page = new MdPage("test", md = "# Test")
 		assert page.html(v) == "<div><h1 id=\"Test\">Test</h1>\n</div>"
 	end

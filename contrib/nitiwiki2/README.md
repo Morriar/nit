@@ -1,30 +1,42 @@
 # TODO
 
-* handle `assets/`
-	- config
-	- add to model?
-	- copy assets
+* wiki_markdown
+	* Parse md
+	* Parse commands
 
-* add sitemap
-* add index
+* wiki2html
+	* handle `assets/`
+		- add to model?
+		- config
+		- copy assets
 
-* templates vars
-	- menu
-	- name
-	- title
-	- summary
-	- trail
+	* add sitemap
+	* add index
 
-* parse md
-	- commands
-	- highligh
+	* templates vars
+		- menu
+		- name
+		- title
+		- summary
+		- trail
+
+	* render md
+		- commands
+		- code blocks highligh
+
+* nitiwiki CLI + tests
 
 * black box testing
+	* from nitiwiki
+	* examples
+	* nitlang
+	* moz-code
 
 * server mode
 	see jekyll features
+	edit mode
 
-* add examples and test them
+* add README, examples and test them
 
 	add a ExampleWiki("""
 		config.ini
