@@ -18,38 +18,55 @@ import wiki_base
 import ini
 import logger
 
+redef class Wiki
+	var root_dir: nullable String = null is writable
+	var pages_dir = "pages/" is writable
+
+	# Wiki's assets directory
+	# TODO
+	#
+	# A Wiki may have a directory containing assets used to render its content
+	# like images, scripts, stylesheets...
+	# How this directory will be used depends on the renderer used.
+	# For example, a HTML renderer could simply copy the content of this directory
+	# to the `public/` one. Or a server renderer could serve the files in place.
+	var assets_dir: nullable String = null is writable
+end
+
 class WikiBuilder
 
 	var logger = new Logger(warn_level) is optional
-	var pages_path = "pages/" is optional
 	var section_config = "section.ini" is optional
 	var allowed_md_exts = ["md"] is optional, writable
 
-	fun build_wiki(root_path: String): nullable Wiki do
-		if not root_path.file_exists then return null
+	fun build_wiki(root_dir: String): nullable Wiki do
+		if not root_dir.file_exists then return null
 
 		var wiki = new Wiki
+		wiki.root_dir = root_dir
 
 		# Load wiki config
-		var ini_path = root_path / "nitiwiki.ini"
+		var ini_path = root_dir / "nitiwiki.ini"
 		var ini = load_ini(ini_path)
 		if ini != null then
 			logger.debug "Found wiki config at {ini_path}"
 			# TODO wiki name?
+			wiki.pages_dir = ini["wiki.pages"] or else wiki.pages_dir
 			wiki.assets_dir = ini["wiki.assets"]
+
 			var tpl = ini["wiki.template"]
-			if tpl != null then wiki.root.default_template = load_template(root_path / tpl)
+			if tpl != null then wiki.root.default_template = load_template(root_dir / tpl)
 		end
 
 		# Build sections recursively starting from `root_path`
-		build_section(wiki.root, root_path / pages_path)
+		build_section(wiki.root, root_dir / wiki.pages_dir)
 
 		return wiki
 	end
 
-	private fun build_section(section: Section, path: String) do
+	private fun build_section(section: Section, dir: String) do
 		# Build config
-		var ini_path = path / section_config
+		var ini_path = dir / section_config
 		var ini = load_ini(ini_path)
 		if ini != null then
 			logger.debug "Found section config at {ini_path}"
@@ -57,17 +74,17 @@ class WikiBuilder
 			section.is_hidden = ini["section.hidden"] == "true"
 			section.title = ini["section.title"]
 			var ini_tpl = ini["section.template"]
-			if ini_tpl != null then section.default_template = load_template(path / ini_tpl)
+			if ini_tpl != null then section.default_template = load_template(dir / ini_tpl)
 		end
 
 		# Build children
-		var files = path.files
+		var files = dir.files
 		files_comparator.sort(files)
 
 		for file in files do
 			if file == section_config then continue
 
-			var sub_path = (path / file)
+			var sub_path = (dir / file)
 			var sub_name = file.strip_extension
 
 			if sub_path.to_path.is_dir then

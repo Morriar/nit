@@ -14,20 +14,41 @@
 
 module wiki_html
 
-import logger
-import wiki_base
+import wiki_builder
 import markdown2
 
 class Wiki2Html
 	super WikiVisitor
 
+	# Wiki to render
 	var wiki: Wiki
 
-	var root_path: String = "./" is optional, writable
-	var out_path: String = "out" is optional, writable
+	# Output path
+	#
+	# Directory where the wiki will be rendered.
+	# If it does not exist it will be created.
+	var out_path: String = "out/" is optional, writable
 
 	# TODO use it...
 	var logger = new Logger(warn_level) is optional
+
+	fun render do visit_wiki(wiki)
+
+	redef fun visit_wiki(wiki) do
+		super
+
+		var assets_dir = wiki.assets_dir
+		if assets_dir != null then
+			var src_path = wiki.root_dir
+			assert src_path != null
+			copy(src_path / assets_dir / "*", out_path)
+		end
+
+		# TODO index
+		# TODO add sitemap
+	end
+
+	redef fun visit(entry) do entry.accept_html_visitor(self)
 
 	private var sections_stack = new Array[Section]
 
@@ -42,20 +63,7 @@ class Wiki2Html
 		return section.template or else wiki.default_template
 	end
 
-	fun run do visit_wiki(wiki)
-
-	redef fun visit_wiki(wiki) do
-		super
-
-		var assets_dir = wiki.assets_dir
-		if assets_dir != null then
-			copy(root_path / assets_dir / "*", out_path)
-		end
-
-		# TODO add sitemap
-	end
-
-	redef fun visit(entry) do entry.accept_html_visitor(self)
+	# utils
 
 	fun mkdir(path: String) do
 		sys.system "mkdir -p -- {path.escape_to_sh}"
@@ -74,6 +82,7 @@ class Wiki2Html
 	# end
 
 	# TODO render only if needed
+	# TODO --force option
 
 	# TODO sitemap
 	# Build the wiki sitemap page.
@@ -145,7 +154,7 @@ redef class MdPage
 	fun html(v: Wiki2Html): String do
 		var page_template = v.current_template
 		if page_template == null then return html_body(v)
-
+		# TODO move to base?
 		return page_template.compile(new TemplateVars(
 			# TODO other vars
 			body = html_body(v)
@@ -155,7 +164,9 @@ end
 
 redef class Asset
 	redef fun accept_html_visitor(v) do
-		v.copy(v.root_path / path, "{v.out_path / path}")
+		var root = v.wiki.root_dir
+		assert root != null
+		v.copy(root / v.wiki.pages_dir / path, "{v.out_path / path}")
 	end
 
 	redef fun html_title do return name

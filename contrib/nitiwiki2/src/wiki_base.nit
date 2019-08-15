@@ -33,16 +33,6 @@ class Wiki
 	# source files are located.
 	var root = new Root("<root>") is lazy
 
-	# Wiki's assets directory
-	#
-	# A Wiki may have a directory containing assets used to render its content
-	# like images, scripts, stylesheets...
-	#
-	# How this directory will be used depends on the renderer used.
-	# For example, a HTML renderer could simply copy the content of this directory
-	# to the `public/` one. Or a server renderer could serve the files in place.
-	var assets_dir: nullable String = null is optional, writable
-
 	# Wiki's default template
 	#
 	# A wiki may have a default template to render the pages.

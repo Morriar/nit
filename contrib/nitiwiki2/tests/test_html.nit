@@ -21,8 +21,12 @@ class MockWiki2Html
 	super Wiki2Html
 	autoinit wiki, save_html
 
-	redef fun out_path do return "out/"
+	redef fun out_path do return "out/" # We don't really use it as we mock the output
+
+	# Also save HTMl content of pages?
 	var save_html = true is optional, writable
+
+	# Output of the render
 	var test_output = new Buffer
 
 	redef fun mkdir(path) do
@@ -275,9 +279,7 @@ $ cp -R -- 'tests/wikis/assets/assets/*' 'out/'\n"""
 		assert wiki != null
 
 		var wiki2html = new MockWiki2Html(wiki, with_html)
-		# TODO this is ugly
-		wiki2html.root_path = tests_wikis / name
-		wiki2html.run
+		wiki2html.render
 		return wiki2html.test_output.to_s
 	end
 end
