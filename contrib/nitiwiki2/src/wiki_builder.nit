@@ -14,7 +14,7 @@
 
 module wiki_builder
 
-import wiki_base
+import wiki_markdown
 import ini
 import logger
 
@@ -59,12 +59,12 @@ class WikiBuilder
 		end
 
 		# Build sections recursively starting from `root_path`
-		build_section(wiki.root, root_dir / wiki.pages_dir)
+		build_section(wiki, wiki.root, root_dir / wiki.pages_dir)
 
 		return wiki
 	end
 
-	private fun build_section(section: Section, dir: String) do
+	private fun build_section(wiki: Wiki, section: Section, dir: String) do
 		# Build config
 		var ini_path = dir / section_config
 		var ini = load_ini(ini_path)
@@ -90,18 +90,18 @@ class WikiBuilder
 			if sub_path.to_path.is_dir then
 				# Create a new section
 				logger.debug "Found section at {sub_path}"
-				var sub_section = new Section(sub_name)
+				var sub_section = new Section(wiki, sub_name)
 				section.add sub_section
-				build_section(sub_section, sub_path)
+				build_section(wiki, sub_section, sub_path)
 			else
 				# Create a new page
 				var ext = if file.has(".") then file.split(".").last else null
 				if allowed_md_exts.has(ext) then
 					logger.debug "Found page at {sub_path}"
-					section.add new MdPage.from_file(sub_name, sub_path)
+					section.add new MdPage(wiki, sub_name, null, sub_path.to_path.read_all)
 				else
 					logger.debug "Found asset at {sub_path}"
-					section.add new Asset(sub_path)
+					section.add new Asset(wiki, null, sub_path)
 				end
 			end
 		end

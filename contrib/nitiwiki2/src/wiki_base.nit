@@ -31,7 +31,7 @@ class Wiki
 	#
 	# Every wiki as a Root, it represents the `pages/` directory where the wiki
 	# source files are located.
-	var root = new Root("<root>") is lazy
+	var root = new Root(self, "<root>") is lazy
 
 	# Wiki's default template
 	#
@@ -109,6 +109,9 @@ end
 #
 # Like a section, a page or an asset.
 abstract class Entry
+
+	# Every entry belongs to a wiki
+	var wiki: Wiki
 
 	# Entry's name
 	#
@@ -264,26 +267,13 @@ abstract class Page
 	super Entry
 end
 
-# A page from a Markdown source
-class MdPage
-	super Page
-
-	# Markdown string source
-	var md: String
-
-	# Init `self` from a `file`
-	init from_file(name, file: String, title: nullable String) do
-		init(name, title, file.to_path.read_all)
-	end
-end
-
 # An asset for a Wiki
 #
 # Assets are generally used for rendering like scripts, stylesheets or images.
 # We don't really care about their content as we will just copy or serve them.
 class Asset
 	super Entry
-	autoinit(src_path)
+	autoinit(wiki, title, src_path)
 
 	# Source path of this asset
 	var src_path: String

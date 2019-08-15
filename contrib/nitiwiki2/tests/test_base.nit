@@ -18,32 +18,32 @@ import wiki_base
 
 abstract class TestBase
 	fun wiki_simple: Wiki do
-		var wiki =new Wiki
-		wiki.add new Section("s1")
-		wiki.add new Section("s2")
-		wiki.add new DummyPage("p1")
-		wiki.add new DummyPage("p2")
+		var wiki = new Wiki
+		wiki.add new Section(wiki, "s1")
+		wiki.add new Section(wiki, "s2")
+		wiki.add new DummyPage(wiki, "p1")
+		wiki.add new DummyPage(wiki, "p2")
 		return wiki
 	end
 
 	fun wiki_nested: Wiki do
 		var wiki = new Wiki
-		wiki.add new DummyPage("p1")
-		var s1 = new Section("s1")
+		wiki.add new DummyPage(wiki, "p1")
+		var s1 = new Section(wiki, "s1")
 		wiki.add s1
-		s1.add new DummyPage("p2")
-		var s11 = new Section("s11")
+		s1.add new DummyPage(wiki, "p2")
+		var s11 = new Section(wiki, "s11")
 		s1.add s11
-		s11.add new DummyPage("p3")
-		var s12 = new Section("s12")
+		s11.add new DummyPage(wiki, "p3")
+		var s12 = new Section(wiki, "s12")
 		s1.add s12
-		var s2 = new Section("s2")
+		var s2 = new Section(wiki, "s2")
 		wiki.add s2
-		var s21 = new Section("s21")
+		var s21 = new Section(wiki, "s21")
 		s2.add s21
-		var s211 = new Section("s211")
+		var s211 = new Section(wiki, "s211")
 		s21.add s211
-		s211.add new DummyPage("p4")
+		s211.add new DummyPage(wiki, "p4")
 		return wiki
 	end
 end
@@ -91,11 +91,11 @@ class TestEntries
 
 	fun entries_can_be_searched_by_name is test do
 		var wiki = new Wiki
-		wiki.add new Section("foo")
-		wiki.add new Section("foo")
-		wiki.add new DummyPage("foo")
-		wiki.add new DummyPage("foo")
-		wiki.add new DummyPage("bar")
+		wiki.add new Section(wiki, "foo")
+		wiki.add new Section(wiki, "foo")
+		wiki.add new DummyPage(wiki, "foo")
+		wiki.add new DummyPage(wiki, "foo")
+		wiki.add new DummyPage(wiki, "bar")
 
 		assert wiki.entries_by_name("foo").length == 4
 		assert wiki.entries_by_name("bar").length == 1
@@ -131,17 +131,18 @@ class TestEntries
 	end
 
 	fun can_display_prettier_names is test do
-		assert (new DummyPage("")).pretty_name == ""
-		assert (new DummyPage(" ")).pretty_name == " "
-		assert (new DummyPage("_")).pretty_name == " "
-		assert (new DummyPage("f")).pretty_name == "F"
-		assert (new DummyPage("foo")).pretty_name == "Foo"
-		assert (new DummyPage("Foo")).pretty_name == "Foo"
-		assert (new DummyPage("ééé")).pretty_name == "ééé" # FIXME?
-		assert (new DummyPage("foo bar")).pretty_name == "Foo Bar"
-		assert (new DummyPage("foo/bar")).pretty_name == "Foo/Bar"
-		assert (new DummyPage("foo_bar")).pretty_name == "Foo Bar"
-		assert (new DummyPage(" foo ")).pretty_name == " Foo "
+		var wiki = new Wiki
+		assert (new DummyPage(wiki, "")).pretty_name == ""
+		assert (new DummyPage(wiki, " ")).pretty_name == " "
+		assert (new DummyPage(wiki, "_")).pretty_name == " "
+		assert (new DummyPage(wiki, "f")).pretty_name == "F"
+		assert (new DummyPage(wiki, "foo")).pretty_name == "Foo"
+		assert (new DummyPage(wiki, "Foo")).pretty_name == "Foo"
+		assert (new DummyPage(wiki, "ééé")).pretty_name == "ééé" # FIXME?
+		assert (new DummyPage(wiki, "foo bar")).pretty_name == "Foo Bar"
+		assert (new DummyPage(wiki, "foo/bar")).pretty_name == "Foo/Bar"
+		assert (new DummyPage(wiki, "foo_bar")).pretty_name == "Foo Bar"
+		assert (new DummyPage(wiki, " foo ")).pretty_name == " Foo "
 	end
 
 	private fun test_path(wiki: Wiki, path: String): Entry do
@@ -163,36 +164,39 @@ class TestSection
 	test
 
 	fun section_has_no_title_by_default is test do
-		var s = new Section("test")
+		var wiki = new Wiki
+		var s = new Section(wiki, "test")
 		assert s.name == "test"
 		assert s.title == null
 		assert s.pretty_name == "Test"
 
-		s = new Section("test", title = "My Title")
+		s = new Section(wiki, "test", title = "My Title")
 		assert s.name == "test"
 		assert s.title == "My Title"
 		assert s.pretty_name == "My Title"
 	end
 
 	fun section_is_not_hidden_by_default is test do
-		var s = new Section("test")
+		var wiki = new Wiki
+		var s = new Section(wiki, "test")
 		assert not s.is_hidden
 
-		s = new Section("test", is_hidden = true)
+		s = new Section(wiki, "test", is_hidden = true)
 		assert s.is_hidden
 	end
 
 	fun section_can_have_an_index is test do
-		var s = new Section("foo")
+		var wiki = new Wiki
+		var s = new Section(wiki, "foo")
 		assert s.index == null
 		assert not s.has_index
-		s.add new Section("foo")
+		s.add new Section(wiki, "foo")
 		assert not s.has_index
-		s.add new Section("index")
+		s.add new Section(wiki, "index")
 		assert not s.has_index
-		s.add new DummyPage("foo")
+		s.add new DummyPage(wiki, "foo")
 		assert not s.has_index
-		var index = new DummyPage("index")
+		var index = new DummyPage(wiki, "index")
 		s.add index
 		assert s.has_index
 		assert s.index == index

@@ -55,9 +55,10 @@ class TestWiki2Html
 	)
 
 	fun render_page is test do
-		var page = new MdPage("test", md = "# Test")
+		var wiki = new Wiki
+		var page = new MdPage(wiki, "test", md = "# Test")
 
-		var v = new MockWiki2Html(new Wiki, true)
+		var v = new MockWiki2Html(wiki, true)
 		v.visit(page)
 		assert v.test_output == """
 $ write to out/test.html
@@ -65,9 +66,9 @@ $ write to out/test.html
 	end
 
 	fun render_page_with_default_template is test do
-		var page = new MdPage("test", md = "# Test")
-
 		var wiki = new Wiki(default_template = new PageTemplate("<html>%BODY%</html>\n"))
+		var page = new MdPage(wiki, "test", md = "# Test")
+
 		var v = new MockWiki2Html(wiki, true)
 		v.visit(page)
 		assert v.test_output == """
@@ -77,9 +78,10 @@ $ write to out/test.html
 	end
 
 	fun render_section is test do
-		var section = new Section("s1")
-		section.add new MdPage("p1", md = "# P1")
-		section.add new MdPage("p2", md = "# P2")
+		var wiki = new Wiki
+		var section = new Section(wiki, "s1")
+		section.add new MdPage(wiki, "p1", md = "# P1")
+		section.add new MdPage(wiki, "p2", md = "# P2")
 
 		var v = new MockWiki2Html(new Wiki, true)
 		v.visit(section)
@@ -92,9 +94,10 @@ $ write to out/s1/p2.html
 	end
 
 	fun render_section_hidden_is_also_rendered is test do
-		var section = new Section("s1", is_hidden = true)
-		section.add new MdPage("p1", md = "# P1")
-		section.add new MdPage("p2", md = "# P2")
+		var wiki = new Wiki
+		var section = new Section(wiki, "s1", is_hidden = true)
+		section.add new MdPage(wiki, "p1", md = "# P1")
+		section.add new MdPage(wiki, "p2", md = "# P2")
 
 		var v = new MockWiki2Html(new Wiki, true)
 		v.visit(section)
@@ -107,11 +110,11 @@ $ write to out/s1/p2.html
 	end
 
 	fun render_section_with_default_template is test do
-		var section = new Section("s1")
-		section.add new MdPage("p1", md = "# P1")
-		section.add new MdPage("p2", md = "# P2")
-
 		var wiki = new Wiki(default_template = new PageTemplate("<html>%BODY%</html>\n"))
+		var section = new Section(wiki, "s1")
+		section.add new MdPage(wiki, "p1", md = "# P1")
+		section.add new MdPage(wiki, "p2", md = "# P2")
+
 		var v = new MockWiki2Html(wiki, true)
 		v.visit(section)
 		assert v.test_output == """
@@ -125,12 +128,12 @@ $ write to out/s1/p2.html
 	end
 
 	fun render_section_with_section_template is test do
-		var section = new Section("s1")
-		section.default_template = new PageTemplate("<s1>%BODY%</s1>\n")
-		section.add new MdPage("p1", md = "# P1")
-		section.add new MdPage("p2", md = "# P2")
-
 		var wiki = new Wiki(default_template = new PageTemplate("<html>%BODY%</html>\n"))
+		var section = new Section(wiki, "s1")
+		section.default_template = new PageTemplate("<s1>%BODY%</s1>\n")
+		section.add new MdPage(wiki, "p1", md = "# P1")
+		section.add new MdPage(wiki, "p2", md = "# P2")
+
 		var v = new MockWiki2Html(wiki, true)
 		v.visit(section)
 		assert v.test_output == """
@@ -144,21 +147,21 @@ $ write to out/s1/p2.html
 	end
 
 	fun render_section_with_section_template_nested is test do
-		var section = new Section("s1")
+		var wiki = new Wiki(default_template = new PageTemplate("<html>%BODY%</html>\n"))
+		var section = new Section(wiki, "s1")
 		section.default_template = new PageTemplate("<s1>%BODY%</s1>\n")
-		section.add new MdPage("p1", md = "# P1")
-		section.add new MdPage("p2", md = "# P2")
+		section.add new MdPage(wiki, "p1", md = "# P1")
+		section.add new MdPage(wiki, "p2", md = "# P2")
 
-		var s11 = new Section("s11")
+		var s11 = new Section(wiki, "s11")
 		s11.default_template = new PageTemplate("<s11>%BODY%</s11>\n")
-		s11.add new MdPage("p11", md = "# P11")
+		s11.add new MdPage(wiki, "p11", md = "# P11")
 		section.add s11
 
-		var s12 = new Section("s12")
-		s12.add new MdPage("p12", md = "# P12")
+		var s12 = new Section(wiki, "s12")
+		s12.add new MdPage(wiki, "p12", md = "# P12")
 		section.add s12
 
-		var wiki = new Wiki(default_template = new PageTemplate("<html>%BODY%</html>\n"))
 		var v = new MockWiki2Html(wiki, true)
 		v.visit(section)
 		assert v.test_output == """
@@ -288,18 +291,21 @@ class TestSectionToHtml
 	test
 
 	fun html_link_from_root is test do
-		var section = new Section("test")
-		assert section.html_link(new Root("test")) == "<a href=\"test\">Test</a>"
+		var wiki = new Wiki
+		var section = new Section(wiki, "test")
+		assert section.html_link(wiki.root) == "<a href=\"test\">Test</a>"
 	end
 
 	fun html_link_from_self is test do
-		var section = new Section("test")
+		var wiki = new Wiki
+		var section = new Section(wiki, "test")
 		assert section.html_link(section) == "<a href=\"#\">Test</a>"
 	end
 
 	fun html_link_from_unrelated is test do
-		var section = new Section("test")
-		var other = new Section("test2")
+		var wiki = new Wiki
+		var section = new Section(wiki, "test")
+		var other = new Section(wiki, "test2")
 		assert section.html_link(other) == "<a href=\"../test\">Test</a>"
 	end
 
@@ -309,53 +315,59 @@ end
 class TestMdPageToHtml
 	test
 
-	fun test_wiki: Wiki do return new Wiki
-	fun wiki2html: Wiki2Html do return new MockWiki2Html(test_wiki, false)
-
 	fun empty_md_to_html is test do
-		var page = new MdPage("test", md = "")
-		assert page.html_body(wiki2html) == ""
+		var wiki = new Wiki
+		var v = new MockWiki2Html(wiki, false)
+		var page = new MdPage(wiki, "test", md = "")
+		assert page.html_body(v) == ""
 	end
 
 	fun simple_md_to_html is test do
-		var page = new MdPage("test", md = "# Test")
-		assert page.html_body(wiki2html) == "<h1 id=\"Test\">Test</h1>\n"
+		var wiki = new Wiki
+		var v = new MockWiki2Html(wiki, false)
+		var page = new MdPage(wiki, "test", md = "# Test")
+		assert page.html_body(v) == "<h1 id=\"Test\">Test</h1>\n"
 	end
 
 	fun simple_md_to_html_without_template is test do
-		var page = new MdPage("test", md = "# Test")
-		assert page.html(wiki2html) == "<h1 id=\"Test\">Test</h1>\n"
+		var wiki = new Wiki
+		var v = new MockWiki2Html(wiki, false)
+		var page = new MdPage(wiki, "test", md = "# Test")
+		assert page.html(v) == "<h1 id=\"Test\">Test</h1>\n"
 	end
 
 	fun simple_md_to_html_with_default_template_empty is test do
-		var v = self.wiki2html
-		v.wiki.default_template = new PageTemplate("")
-		var page = new MdPage("test", md = "# Test")
+		var wiki = new Wiki(default_template = new PageTemplate(""))
+		var v = new MockWiki2Html(wiki, false)
+		var page = new MdPage(wiki, "test", md = "# Test")
 		assert page.html(v) == ""
 	end
 
 	fun simple_md_to_html_with_default_template_simple is test do
-		var v = self.wiki2html
-		v.wiki.default_template = new PageTemplate("<div>%BODY%</div>")
-		var page = new MdPage("test", md = "# Test")
+		var wiki = new Wiki(default_template = new PageTemplate("<div>%BODY%</div>"))
+		var v = new MockWiki2Html(wiki, false)
+		var page = new MdPage(wiki, "test", md = "# Test")
 		assert page.html(v) == "<div><h1 id=\"Test\">Test</h1>\n</div>"
 	end
 
 	# TODO test all variables
 
 	fun html_link_from_root is test do
-		var page = new MdPage("test", md = "")
-		assert page.html_link(test_wiki.root) == "<a href=\"test.html\">Test</a>"
+		var wiki = new Wiki
+		var page = new MdPage(wiki, "test", md = "")
+		assert page.html_link(wiki.root) == "<a href=\"test.html\">Test</a>"
 	end
 
 	fun html_link_from_self is test do
-		var page = new MdPage("test", md = "")
+		var wiki = new Wiki
+		var page = new MdPage(wiki, "test", md = "")
 		assert page.html_link(page) == "<a href=\"#\">Test</a>"
 	end
 
 	fun html_link_from_unrelated is test do
-		var page = new MdPage("test", md = "")
-		var other = new MdPage("test2", md = "")
+		var wiki = new Wiki
+		var page = new MdPage(wiki, "test", md = "")
+		var other = new MdPage(wiki, "test2", md = "")
 		assert page.html_link(other) == "<a href=\"../test.html\">Test</a>"
 	end
 
@@ -365,22 +377,22 @@ end
 class TestAssetToHtml
 	test
 
-	fun test_wiki: Wiki do return new Wiki
-	fun wiki2html: Wiki2Html do return new MockWiki2Html(test_wiki, false)
-
 	fun html_link_from_root is test do
-		var asset = new Asset("/foo/bar/baz/test.jpg")
-		assert asset.html_link(test_wiki.root) == "<a href=\"test.jpg\">test.jpg</a>"
+		var wiki = new Wiki
+		var asset = new Asset(wiki, null, "/foo/bar/baz/test.jpg")
+		assert asset.html_link(wiki.root) == "<a href=\"test.jpg\">test.jpg</a>"
 	end
 
 	fun html_link_from_self is test do
-		var asset = new Asset("/foo/bar/baz/test.jpg")
+		var wiki = new Wiki
+		var asset = new Asset(wiki, null, "/foo/bar/baz/test.jpg")
 		assert asset.html_link(asset) == "<a href=\"#\">test.jpg</a>"
 	end
 
 	fun html_link_from_unrelated is test do
-		var asset = new Asset("/foo/bar/baz/test.jpg")
-		var other = new Asset("/baz/bar/foo/test2")
+		var wiki = new Wiki
+		var asset = new Asset(wiki, null, "/foo/bar/baz/test.jpg")
+		var other = new Asset(wiki, null, "/baz/bar/foo/test2")
 		assert asset.html_link(other) == "<a href=\"../test.jpg\">test.jpg</a>"
 	end
 end

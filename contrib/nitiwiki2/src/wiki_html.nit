@@ -140,13 +140,9 @@ redef class MdPage
 	end
 
 	fun html_body(v: Wiki2Html): String do
-		var parser = new MdParser
-		parser.github_mode = true
-		parser.wikilinks_mode = true
-		parser.post_processors.add new MdProcessCommands(v, self)
-		parser.post_processors.add new MdProcessHighlight(v, self)
-		# TODO check links
-		var ast = parser.parse(md)
+		# TODO check html links
+		var ast = self.ast
+		assert ast != null
 		var renderer = new WikiHtmlRenderer(true, v, self)
 		return renderer.render(ast)
 	end
@@ -164,45 +160,45 @@ end
 
 redef class Asset
 	redef fun accept_html_visitor(v) do
-		var root = v.wiki.root_dir
+		var root = wiki.root_dir
 		assert root != null
-		v.copy(root / v.wiki.pages_dir / path, "{v.out_path / path}")
+		v.copy(root / wiki.pages_dir / path, "{v.out_path / path}")
 	end
 
 	redef fun html_title do return name
-end
-
-class WikiMdProcessor
-	super MdPostProcessor
-
-	var v: Wiki2Html
-	var context: nullable Entry
-end
-
-class MdProcessCommands
-	super WikiMdProcessor
-
-	redef fun post_process(parser, doc) do
-		# TODO wikilinks
-			# name, title, file, assets
-		# TODO assets
-	end
-end
-
-class MdProcessHighlight
-	super WikiMdProcessor
-
-	redef fun post_process(parser, doc) do
-		# TODO highlight
-	end
 end
 
 class WikiHtmlRenderer
 	super HtmlRenderer
 
 	var v: Wiki2Html
-	var context: nullable Entry
+	var context: Entry
 
-	# TODO links
-	# TODO wikilinks
+	# TODO code highlight
+end
+
+redef class MdWikilink
+	redef fun render_html(v) do
+		if not v isa WikiHtmlRenderer then
+			super
+			return
+		end
+		var target = self.target
+		# var anchor = self.anchor
+
+		v.add_raw "<a "
+		if target == null then
+			v.add_raw "<a class=\"broken\">broken</a>"
+		else
+			v.add_raw target.html_link(v.context)
+			# TODO anchor
+			# if anchor != null then append_value(v, "#{anchor}")
+			# TODO link title
+			# v.add " title=\""
+			# append_value(v, comment)
+			# v.add "\""
+			# TODO link text
+			# v.emit_text(name)
+		end
+	end
 end

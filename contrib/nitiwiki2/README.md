@@ -1,28 +1,23 @@
 # TODO
 
+* rename entry > resource
+
 * wiki_markdown
-	* Parse md
-	* Parse commands
+	* test
+	* add more commands
 
 * wiki2html
-	* handle `assets/`
-		- add to model?
-		- config
-		- copy assets
-
-	* add sitemap
-	* add index
-
+	* render md
+		- commands
+		- code blocks highligh
 	* templates vars
 		- menu
 		- name
 		- title
 		- summary
 		- trail
-
-	* render md
-		- commands
-		- code blocks highligh
+	* add sitemap
+	* add index
 
 * nitiwiki CLI + tests
 
