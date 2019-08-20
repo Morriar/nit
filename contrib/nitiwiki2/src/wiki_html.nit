@@ -29,7 +29,6 @@ class Wiki2Html
 	# If it does not exist it will be created.
 	var out_path: String = "out/" is optional, writable
 
-	# TODO use it...
 	var logger = new Logger(warn_level) is optional
 
 	fun render do visit_wiki(wiki)
@@ -41,6 +40,7 @@ class Wiki2Html
 		if assets_dir != null then
 			var src_path = wiki.root_dir
 			assert src_path != null
+			logger.debug "Copy assets from {src_path / assets_dir} to {out_path}"
 			copy(src_path / assets_dir / "*", out_path)
 		end
 
@@ -109,8 +109,10 @@ end
 
 redef class Section
 	redef fun accept_html_visitor(v) do
+		var out_path = v.out_path / path
+		v.logger.debug "Render section {self} to {out_path}"
 		v.sections_stack.push self
-		v.mkdir v.out_path / path
+		v.mkdir out_path
 		# TODO add index
 		visit_all(v)
 		v.sections_stack.pop
@@ -127,8 +129,10 @@ end
 
 redef class MdPage
 	redef fun accept_html_visitor(v) do
+		var out_path = "{(v.out_path / path)}.html"
+		v.logger.debug "Render page {self} to {out_path}"
 		var html = self.html(v)
-		v.write_to_file(html, "{(v.out_path / path)}.html")
+		v.write_to_file(html, out_path)
 	end
 
 	redef fun html_link(context) do
@@ -142,7 +146,6 @@ redef class MdPage
 	fun html_body(v: Wiki2Html): String do
 		# TODO check html links
 		var ast = self.ast
-		assert ast != null
 		var renderer = new WikiHtmlRenderer(true, v, self)
 		return renderer.render(ast)
 	end
@@ -162,7 +165,9 @@ redef class Asset
 	redef fun accept_html_visitor(v) do
 		var root = wiki.root_dir
 		assert root != null
-		v.copy(root / wiki.pages_dir / path, "{v.out_path / path}")
+		var out_path = v.out_path / path
+		v.logger.debug "Copy asset {self} to {out_path}"
+		v.copy(root / wiki.pages_dir / path, "{out_path}")
 	end
 
 	redef fun html_title do return name

@@ -1,25 +1,45 @@
 # TODO
 
-* rename entry > resource
-
-* wiki_markdown
+* markdown
 	* test
-	* add more commands
+	* relative paths
+	* use context
+	* link text and title
+	* commands
+		include file
+		asset
+		menu
+		summary
+		trail
+		name, title, date
+	* logging and errors
+	* check commands
+	* check links
+	* check anchors
+
+* rename entry > resource
 
 * wiki2html
 	* render md
-		- commands
-		- code blocks highligh
+		- links and tests
+		- code blocks highligh and tests
 	* templates vars
 		- menu
 		- name
 		- title
 		- summary
 		- trail
+	* check links
 	* add sitemap
 	* add index
 
 * nitiwiki CLI + tests
+	* status
+	* render
+	* sync
+	* fetch
+	* clean
+	* options
 
 * black box testing
 	* from nitiwiki

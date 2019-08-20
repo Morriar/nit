@@ -31,6 +31,9 @@ class MdPage
 		parser.wikilinks_mode = true
 		parser.post_processors.add new MdProcessCommands(wiki, self)
 
+		print path
+		print "--"
+
 		var ast = parser.parse(md)
 		parser.post_process(ast)
 		return ast
@@ -41,17 +44,7 @@ class MdProcessCommands
 	super MdPostProcessor
 
 	var wiki: Wiki
-	var context: nullable Entry
-
-	fun entries_by_title(title: String, context: nullable Entry): Array[Entry] do
-		# TODO context for desamb
-		var res = new Array[Entry]
-		for entry in wiki.entries do
-			if entry.title != title and entry.pretty_name != title then continue
-			res.add entry
-		end
-		return res
-	end
+	var context: Entry
 
 	redef fun visit(node) do
 		if not node isa MdWikilink then
@@ -70,11 +63,22 @@ class MdProcessCommands
 			end
 		end
 
-		# TODO partial path?
 		if link.has("/") then
-			node.target = wiki.entry_by_path(link.substring(1, link.length - 1))
-			return
+			if link.has_prefix("/") then
+				# Lookup by absolute path
+				node.target = wiki.entry_by_path(link.substring(1, link.length - 1))
+			else
+				# Lookup by relative path
+				var path = (context.path / link).simplify_path
+				# TODO partial path?
+				# Fix / to match root path
+				if path == "/" then path = ""
+				print path
+				node.target = wiki.entry_by_path(path)
+			end
 		end
+
+		if node.target != null then return
 
 		var targets = wiki.entries_by_name(link)
 		# TODO handle conflicts
@@ -85,17 +89,25 @@ class MdProcessCommands
 
 		if targets.is_empty then
 			# TODO handle conflicts
-			targets = entries_by_title(link)
+			targets = wiki.entries_by_title(link)
 			if targets.not_empty then
 				node.target = targets.first
 				return
 			end
 		end
+
+		# print link
 	end
-	# TODO logging and errors
+	# TODO logging
+	# TODO raise errors if not found
+	# TODO raise warning if conflict
+	# TODO other commands
 end
 
+# redef class Entry
+# end
+
 redef class MdWikilink
-	var target: nullable Entry
-	var anchor: nullable String
+	var target: nullable Entry = null
+	var anchor: nullable String = null
 end

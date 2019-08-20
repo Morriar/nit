@@ -86,6 +86,16 @@ class Wiki
 		return res
 	end
 
+	# TODO
+	fun entries_by_title(title: String): Array[Entry] do
+		var res = new Array[Entry]
+		for entry in entries do
+			if entry.title != title and entry.pretty_name != title then continue
+			res.add entry
+		end
+		return res
+	end
+
 	# Landing or home page of this wiki
 	fun index: nullable Page do return root.index
 

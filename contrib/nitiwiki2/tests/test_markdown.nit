@@ -171,10 +171,11 @@ class TestWikiMarkdown
 [[/s1/p1]]
 [[../]]
 [[../p11]]
-[[../../s1]]
-[[../../s1/p1]]
-[[../../s2]]
-[[../../s2/p2]]
+[[../../]]
+[[../../p1]]
+[[../../../]]
+[[../../../s2]]
+[[../../../s2/p2]]
 """)
 		s11.add page
 
@@ -185,8 +186,9 @@ class TestWikiMarkdown
 			"s1/p1",
 			"s1/s11",
 			"s1/s11/p11",
-			"s1/s11",
-			"s1/s11/p11",
+			"s1",
+			"s1/p1",
+			"",
 			"s2",
 			"s2/p2"
 		]
@@ -197,8 +199,8 @@ class TestWikiMarkdown
 	# TODO test nested_siblings
 	# TODO test conflicts
 	# TODO test logger
-	# TODO test index
-	# TODO test sitemap
+	# TODO test index?
+	# TODO test sitemap?
 	# TODO test other commands
 
 	fun links(ast: MdDocument): Array[String] do

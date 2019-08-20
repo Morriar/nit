@@ -21,7 +21,12 @@ class MockWiki2Html
 	super Wiki2Html
 	autoinit wiki, save_html
 
-	redef fun out_path do return "out/" # We don't really use it as we mock the output
+
+	init do
+		super
+		out_path = "out/" # We don't really use it as we mock the output
+		logger = new Logger(debug_level)
+	end
 
 	# Also save HTMl content of pages?
 	var save_html = true is optional, writable
@@ -213,7 +218,7 @@ $ mkdir -p -- 'out/section2/section21/section211'
 $ write to out/section2/section21/section211/index.html
 $ mkdir -p -- 'out/section2/section22'
 $ write to out/section2/section22/index.html\n"""
-	end
+end
 
 	fun render_wiki_conflicts is test do
 		assert render_wiki("conflicts", false) == """
