@@ -188,12 +188,15 @@ abstract class Resource
 	#
 	# Can be used to compose relative links for example.
 	fun path_to(resource: Resource): String do
-		print "self: {path}"
-		print "to: {resource.path}"
-		print path / resource.path
-		# return path / resource.path
-		# print path.relpath(resource.path)
 		return path.relpath(resource.path)
+	end
+
+	# Get a resource by its relative path from `self`
+	#
+	# Returns `null` if no entry is found.
+	fun resource_by_path(relative_path: String): nullable Resource do
+		var path = (self.path / relative_path).simplify_path
+		return wiki.resource_by_path(path)
 	end
 
 	# Visit self with `visitor`
@@ -327,11 +330,21 @@ class TemplateVars
 	# Page content
 	var body: nullable String = null is optional, writable
 
+	# TODO wiki title
+	# TODO subtitle?
+	# TODO logo?
+
+	# TODO root path
 	# TODO assets path
+	# TODO section_title
+	# TODO section_link
+
 	# TODO trail
 	# TODO menu
 	# TODO summary
-	# TODO ... ?
+	# TODO year
+	# TODO date
+	# TODO gen_time
 end
 
 # Utils

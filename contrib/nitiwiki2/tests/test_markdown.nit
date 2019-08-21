@@ -15,57 +15,235 @@
 module test_markdown is test
 
 import wiki_markdown
+import test_base
 
 class TestWikiMarkdown
+	super TestBase
 	test
 
-	fun parse_link_broken is test do
-		var wiki = new Wiki
+	fun parse_name_links is test do
+		var wiki = wiki_nested
 		var page = new MdPage(wiki, "test", md = """
-[[/foo]]
+[[p1]]
+[[s1]]
+[[p2]]
+[[s11]]
+[[p3]]
+[[s12]]
+[[s2]]
+[[s21]]
+[[s211]]
+[[p4]]
 [[foo]]
-[[Foo]]
-[[/foo#foo]]
-[[foo#foo]]
-[[Foo#foo]]
-		""")
+""")
 
-		var links = links(page.ast)
+		var links = links(page)
 		assert links == [
-			"broken",
-			"broken",
-			"broken",
-			"broken#foo",
-			"broken#foo",
+			"/p1",
+			"/s1",
+			"/s1/p2",
+			"/s1/s11",
+			"/s1/s11/p3",
+			"/s1/s12",
+			"/s2",
+			"/s2/s21",
+			"/s2/s21/s211",
+			"/s2/s21/s211/p4",
+			"broken"
+		]
+	end
+
+	fun parse_name_links_with_anchors is test do
+		var wiki = wiki_nested
+		var page = new MdPage(wiki, "test1", md = """
+[[p1#foo]]
+[[s1#foo]]
+[[p2#foo]]
+[[s11#foo]]
+[[p3#foo]]
+[[foo#foo]]""")
+		wiki.add page
+
+		var links = links(page)
+		assert links == [
+			"/p1#foo",
+			"/s1#foo",
+			"/s1/p2#foo",
+			"/s1/s11#foo",
+			"/s1/s11/p3#foo",
 			"broken#foo"
 		]
 	end
 
-	fun parse_link_self is test do
-		var wiki = new Wiki
+	fun parse_title_links is test do
+		var wiki = wiki_nested
+		var page = new MdPage(wiki, "test", md = """
+[[P1]]
+[[S1]]
+[[P2]]
+[[S11]]
+[[P3]]
+[[S12]]
+[[S2]]
+[[S21]]
+[[S211]]
+[[P4]]
+[[Foo]]
+""")
+
+		var links = links(page)
+		assert links == [
+			"/p1",
+			"/s1",
+			"/s1/p2",
+			"/s1/s11",
+			"/s1/s11/p3",
+			"/s1/s12",
+			"/s2",
+			"/s2/s21",
+			"/s2/s21/s211",
+			"/s2/s21/s211/p4",
+			"broken"
+		]
+	end
+
+	fun parse_title_links_with_anchors is test do
+		var wiki = wiki_nested
+		var page = new MdPage(wiki, "test", md = """
+[[P1#foo]]
+[[S1#foo]]
+[[P2#foo]]
+[[S11#foo]]
+[[P3#foo]]
+[[Foo#foo]]
+""")
+
+		var links = links(page)
+		assert links == [
+			"/p1#foo",
+			"/s1#foo",
+			"/s1/p2#foo",
+			"/s1/s11#foo",
+			"/s1/s11/p3#foo",
+			"broken#foo"
+		]
+	end
+
+	fun parse_absolute_links is test do
+		var wiki = wiki_nested
 		var page = new MdPage(wiki, "test1", md = """
-[[/test1]]
-[[test1]]
-[[Test1]]
-[[#foo]]
-[[/test1#foo]]
-[[test1#foo]]
-[[Test1#foo]]""")
+[[/]]
+[[/p1]]
+[[/s1]]
+[[/s1/p2]]
+[[/s1/s11]]
+[[/s1/s11/p3]]
+[[/s1/s12]]
+[[/s2]]
+[[/s2/s21]]
+[[/s2/s21/s211]]
+[[/s2/s21/s211/p4]]
+[[/foo]]""")
 		wiki.add page
 
-		var links = links(page.ast)
+		var links = links(page)
+		assert links == [
+			"/",
+			"/p1",
+			"/s1",
+			"/s1/p2",
+			"/s1/s11",
+			"/s1/s11/p3",
+			"/s1/s12",
+			"/s2",
+			"/s2/s21",
+			"/s2/s21/s211",
+			"/s2/s21/s211/p4",
+			"broken"
+		]
+	end
+
+	fun parse_absolute_links_with_anchors is test do
+		var wiki = wiki_nested
+		var page = new MdPage(wiki, "test1", md = """
+[[/#foo]]
+[[/p1#foo]]
+[[/s1#foo]]
+[[/s1/p2#foo]]
+[[/s1/s11#foo]]
+[[/s1/s11/p3#foo]]
+[[/foo#foo]]""")
+		wiki.add page
+
+		var links = links(page)
+		assert links == [
+			"/#foo",
+			"/p1#foo",
+			"/s1#foo",
+			"/s1/p2#foo",
+			"/s1/s11#foo",
+			"/s1/s11/p3#foo",
+			"broken#foo"
+		]
+	end
+
+	fun parse_relative_links_to_self is test do
+		var wiki = new Wiki
+		var page = new MdPage(wiki, "test1", md = """
+[[./]]
+[[.]]
+[[#foo]]
+[[./#foo]]
+[[.#foo]]""")
+		wiki.add page
+
+		var links = links(page)
 		assert links == [
 			"/test1",
 			"/test1",
-			"/test1",
-			"/test1#foo",
 			"/test1#foo",
 			"/test1#foo",
 			"/test1#foo"
 		]
 	end
 
-	fun parse_link_others is test do
+	fun parse_relative_links is test do
+		var wiki = wiki_nested
+		var page = new MdPage(wiki, "test1", md = """
+[[../]]
+[[../../p1]]
+[[../../s1]]
+[[../../s1/p2]]
+[[../s12]]
+[[p2]]
+[[./p2]]
+[[./s11]]
+[[s11]]
+[[s11/p3]]
+""")
+
+		var s1 = wiki.resource_by_path("/s1")
+		assert s1 isa Section
+		s1.add page
+
+		var links = links(page)
+		assert links == [
+			"/s1",
+			"/p1",
+			"/s1",
+			"/s1/p2",
+			"/s1/s12",
+			"/s1/p2",
+			"broken", # TODO should be /s1/p2
+			"broken", # TODO should be /s1/s11
+			"/s1/s11",
+			"broken" # TODO should be /s1/s11/p3
+		]
+	end
+
+  # TODO test conflicts
+
+  fun parse_links_to_all_resources is test do
 		var wiki = new Wiki
 		wiki.add new Section(wiki, "s1", "S1")
 		wiki.add new Section(wiki, "s2")
@@ -92,7 +270,7 @@ class TestWikiMarkdown
 """)
 		wiki.add page
 
-		var links = links(page.ast)
+		var links = links(page)
 		assert links == [
 			"/s1",
 			"/s1",
@@ -113,97 +291,56 @@ class TestWikiMarkdown
 		]
 	end
 
-	fun parse_link_nested_root is test do
-		var wiki = new Wiki
-		var s1 = new Section(wiki, "s1", "S1")
-		s1.add new MdPage(wiki, "p1", md = "# P1")
-		var s11 = new Section(wiki, "s11", "S11")
-		s11.add new MdPage(wiki, "p11", md = "# P11")
-		s1.add s11
-		wiki.add s1
+	fun test_parser_log_warnings_without_file is test do
+		var wiki = wiki_nested
+		var page = new MdPage(wiki, "test", md = """
+[[foo]] is broken.
 
-		var page = new MdPage(wiki, "test1", md = """
-[[/s1]]
-[[/s1/p1]]
-[[p1]]
-[[P1]]
-[[/s1/p1#foo]]
-[[p1#foo]]
-[[P1#foo]]
-[[/s1/s11]]
-[[/s1/s11/p11]]
-[[p11]]
-[[P11]]
+Another broken link [[/foo#bar]].
 """)
-		wiki.add page
 
-		var links = links(page.ast)
-		assert links == [
-			"/s1",
-			"/s1/p1",
-			"/s1/p1",
-			"/s1/p1",
-			"/s1/p1#foo",
-			"/s1/p1#foo",
-			"/s1/p1#foo",
-			"/s1/s11",
-			"/s1/s11/p11",
-			"/s1/s11/p11",
-			"/s1/s11/p11"
-		]
+		var s1 = wiki.resource_by_path("/s1")
+		assert s1 isa Section
+		s1.add page
+
+		var out = new StringWriter
+		var parser = new MdPageParser(wiki, new Logger(warn_level, out))
+		parser.parse_page(page)
+
+		assert out.to_s == """
+/s1/test:1,1--1,7: Link to unknown resource `foo`
+/s1/test:3,21--3,32: Link to unknown resource `/foo`
+"""
 	end
 
-	fun parse_link_nested_parent is test do
-		var wiki = new Wiki
-		var s1 = new Section(wiki, "s1", "S1")
-		s1.add new MdPage(wiki, "p1", md = "")
-		var s11 = new Section(wiki, "s11")
-		s1.add s11
-		s11.add new MdPage(wiki, "p11", md = "")
-		var s2 = new Section(wiki, "s2", "S2")
-		s2.add new MdPage(wiki, "p2", md = "")
-		wiki.add s1
-		wiki.add s2
+	fun test_parser_log_warnings_with_file is test do
+		var wiki = wiki_nested
+		var page = new MdPage(wiki, "test", file = "./page.md", md = """
+[[foo]] is broken.
 
-		var page = new MdPage(wiki, "test1", md = """
-[[./]]
-[[/]]
-[[/s1/p1]]
-[[../]]
-[[../p11]]
-[[../../]]
-[[../../p1]]
-[[../../../]]
-[[../../../s2]]
-[[../../../s2/p2]]
+Another broken link [[/foo#bar]].
 """)
-		s11.add page
 
-		var links = links(page.ast)
-		assert links == [
-			"/s1/s11/test1",
-			"/",
-			"/s1/p1",
-			"/s1/s11",
-			"/s1/s11/p11",
-			"/s1",
-			"/s1/p1",
-			"/",
-			"/s2",
-			"/s2/p2"
-		]
+		var s1 = wiki.resource_by_path("/s1")
+		assert s1 isa Section
+		s1.add page
+
+		var out = new StringWriter
+		var parser = new MdPageParser(wiki, new Logger(warn_level, out))
+		parser.parse_page(page)
+
+		assert out.to_s == """
+./page.md:1,1--1,7: Link to unknown resource `foo`
+./page.md:3,21--3,32: Link to unknown resource `/foo`
+"""
 	end
 
-	# TODO test contexts
-	# TODO test nested_children
-	# TODO test nested_siblings
-	# TODO test conflicts
-	# TODO test logger
 	# TODO test index?
-	# TODO test sitemap?
 	# TODO test other commands
 
-	fun links(ast: MdDocument): Array[String] do
+	fun links(page: MdPage): Array[String] do
+		var parser = new MdPageParser(page.wiki)
+		var ast = parser.parse_page(page)
 		var v = new MdWikilinkCollector
 		v.enter_visit(ast)
 		return v.wikilinks

@@ -102,18 +102,43 @@ class TestResources
 		assert wiki.resources_by_name("not_found").length == 0
 	end
 
-	fun resources_have_a_path is test do
+	fun resources_can_be_searched_by_absolute_path is test do
 		var wiki = wiki_nested
-		assert test_path(wiki, "/s1") isa Section
-		assert test_path(wiki, "/s2") isa Section
-		assert test_path(wiki, "/s1/s11") isa Section
-		assert test_path(wiki, "/s1/s12") isa Section
-		assert test_path(wiki, "/s2/s21") isa Section
-		assert test_path(wiki, "/s2/s21/s211") isa Section
-		assert test_path(wiki, "/p1") isa Page
-		assert test_path(wiki, "/s1/p2") isa Page
-		assert test_path(wiki, "/s1/s11/p3") isa Page
-		assert test_path(wiki, "/s2/s21/s211/p4") isa Page
+		assert wiki.resource_by_path("/s1") isa Section
+		assert wiki.resource_by_path("/s2") isa Section
+		assert wiki.resource_by_path("/s1/s11") isa Section
+		assert wiki.resource_by_path("/s1/s12") isa Section
+		assert wiki.resource_by_path("/s2/s21") isa Section
+		assert wiki.resource_by_path("/s2/s21/s211") isa Section
+		assert wiki.resource_by_path("/p1") isa Page
+		assert wiki.resource_by_path("/s1/p2") isa Page
+		assert wiki.resource_by_path("/s1/s11/p3") isa Page
+		assert wiki.resource_by_path("/s2/s21/s211/p4") isa Page
+	end
+
+	fun resources_can_be_searched_by_relative_path is test do
+		var wiki = wiki_nested
+		var s1 = wiki.resource_by_path("/s1")
+		assert s1 != null
+		var p2 = wiki.resource_by_path("/s1/p2")
+		assert p2 != null
+
+		assert wiki.root.resource_by_path("") == wiki.root
+		assert wiki.root.resource_by_path("./") == wiki.root
+		assert wiki.root.resource_by_path("s1") == s1
+		assert wiki.root.resource_by_path("../") == wiki.root
+		assert wiki.root.resource_by_path("../../../../") == null # TODO should be wiki.root
+
+		assert wiki.root.resource_by_path("s1/p2") == p2
+		assert p2.resource_by_path(".") == p2
+		assert p2.resource_by_path("..") == s1
+		assert p2.resource_by_path("../.") == s1
+		assert p2.resource_by_path("../p2") == p2
+		assert p2.resource_by_path("../..") == wiki.root
+		assert p2.resource_by_path("../../s1") == s1
+		assert p2.resource_by_path("../../s1/p2") == p2
+
+		assert wiki.root.resource_by_path("./broken") == null
 	end
 
 	fun resource_have_relative_path_to_another is test do

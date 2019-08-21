@@ -98,7 +98,7 @@ class WikiBuilder
 				var ext = if file.has(".") then file.split(".").last else null
 				if allowed_md_exts.has(ext) then
 					logger.debug "Found page at {sub_path}"
-					section.add new MdPage(wiki, sub_name, null, sub_path.to_path.read_all)
+					section.add new MdPage.from_file(wiki, sub_path)
 				else
 					logger.debug "Found asset at {sub_path}"
 					section.add new Asset(wiki, null, sub_path)

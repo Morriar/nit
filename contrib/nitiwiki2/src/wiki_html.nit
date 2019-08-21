@@ -77,6 +77,11 @@ class Wiki2Html
 		string.write_to_file(file)
 	end
 
+	fun parse_md_page(page: MdPage): MdDocument do
+		var parser = new MdPageParser(wiki)
+		return parser.parse_page(page)
+	end
+
 	# fun touch(path: String) do
 		# sys.system "touch -- {path.escape_to_sh}"
 	# end
@@ -145,7 +150,7 @@ redef class MdPage
 
 	fun html_body(v: Wiki2Html): String do
 		# TODO check html links
-		var ast = self.ast
+		var ast = v.parse_md_page(self)
 		var renderer = new WikiHtmlRenderer(true, v, self)
 		return renderer.render(ast)
 	end

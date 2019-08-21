@@ -17,24 +17,39 @@ module wiki_markdown
 import wiki_base
 
 import markdown2
+import logger
 
 # A page from a Markdown source
 class MdPage
 	super Page
 
 	# Markdown string source
-	var md: String
+	var md: String is writable
 
-	var ast: MdDocument is lazy do
+	# Source file if any
+	var file: nullable String = null is optional, writable
+
+	# Init `self` from a file
+	init from_file(wiki: Wiki, file: String, name, title: nullable String) do
+		name = name or else file.to_path.filename.strip_extension
+		var md = file.to_path.read_all
+		init(wiki, name, title, md, file)
+	end
+end
+
+class MdPageParser
+
+	var wiki: Wiki
+
+	var logger: Logger = new Logger(warn_level) is optional
+
+	fun parse_page(page: MdPage): MdDocument do
 		var parser = new MdParser
 		parser.github_mode = true
 		parser.wikilinks_mode = true
-		parser.post_processors.add new MdProcessCommands(wiki, self)
+		parser.post_processors.add new MdProcessCommands(self, page)
 
-		print path
-		print "--"
-
-		var ast = parser.parse(md)
+		var ast = parser.parse(page.md)
 		parser.post_process(ast)
 		return ast
 	end
@@ -43,8 +58,8 @@ end
 class MdProcessCommands
 	super MdPostProcessor
 
-	var wiki: Wiki
-	var context: Resource
+	var parser: MdPageParser
+	var context: MdPage
 
 	redef fun visit(node) do
 		if not node isa MdWikilink then
@@ -63,24 +78,16 @@ class MdProcessCommands
 			end
 		end
 
-		if link.has("/") then
-			if link.has_prefix("/") then
-				# Lookup by absolute path
-				node.target = wiki.resource_by_path(link)
-			else
-				# Lookup by relative path
-				var path = (context.path / link).simplify_path
-				# TODO partial path?
-				# Fix / to match root path
-				# if path == "/" then path = ""
-				# print path
-				node.target = wiki.resource_by_path(path)
-			end
+		if link.has_prefix("/") then
+			# Lookup by absolute path
+			node.target = parser.wiki.resource_by_path(link)
+		else
+			# Lookup by relative path
+			node.target = context.resource_by_path(link)
 		end
-
 		if node.target != null then return
 
-		var targets = wiki.resources_by_name(link)
+		var targets = parser.wiki.resources_by_name(link)
 		# TODO handle conflicts
 		if targets.not_empty then
 			node.target = targets.first
@@ -89,25 +96,24 @@ class MdProcessCommands
 
 		if targets.is_empty then
 			# TODO handle conflicts
-			targets = wiki.resources_by_title(link)
+			targets = parser.wiki.resources_by_title(link)
 			if targets.not_empty then
 				node.target = targets.first
 				return
 			end
 		end
 
-		# print link
+		if node.target == null then
+			var file = context.file or else context.path
+			parser.logger.warn("{file}:{node.location}: Link to unknown resource `{link}`")
+		end
+		# TODO did you mean
 	end
-	# TODO logging
-	# TODO raise errors if not found
-	# TODO raise warning if conflict
 	# TODO other commands
 end
-
-# redef class Resource
-# end
 
 redef class MdWikilink
 	var target: nullable Resource = null
 	var anchor: nullable String = null
+	# TODO errors/warnings & conflicts
 end

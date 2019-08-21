@@ -1,8 +1,9 @@
 # TODO
 
+* bug simplify path
+
 * markdown
-	* test
-	* conflicts
+	* conflicts & tests
 	* link text and title
 	* commands
 		include file
@@ -11,14 +12,13 @@
 		summary
 		trail
 		name, title, date
-	* logging and errors
 	* check commands
-	* check links
 	* check anchors
 
 * wiki2html
+	* clean path handling
 	* render md
-		- links and tests
+		- wikilinks and tests
 		- code blocks highligh and tests
 	* templates vars
 		- menu
@@ -26,11 +26,11 @@
 		- title
 		- summary
 		- trail
-	* check links
 	* add sitemap
 	* add index
 
 * nitiwiki CLI + tests
+	* check links (both internal and external)
 	* status
 	* render
 	* sync

@@ -21,7 +21,6 @@ class MockWiki2Html
 	super Wiki2Html
 	autoinit wiki, save_html
 
-
 	init do
 		super
 		out_path = "out/" # We don't really use it as we mock the output
