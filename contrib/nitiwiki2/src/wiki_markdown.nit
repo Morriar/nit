@@ -66,14 +66,14 @@ class MdProcessCommands
 		if link.has("/") then
 			if link.has_prefix("/") then
 				# Lookup by absolute path
-				node.target = wiki.entry_by_path(link.substring(1, link.length - 1))
+				node.target = wiki.entry_by_path(link)
 			else
 				# Lookup by relative path
 				var path = (context.path / link).simplify_path
 				# TODO partial path?
 				# Fix / to match root path
-				if path == "/" then path = ""
-				print path
+				# if path == "/" then path = ""
+				# print path
 				node.target = wiki.entry_by_path(path)
 			end
 		end

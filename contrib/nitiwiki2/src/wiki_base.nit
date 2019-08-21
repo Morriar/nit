@@ -180,7 +180,7 @@ abstract class Entry
 	# Based on entries nesting from `Wiki::root`.
 	fun path: String do
 		var section = self.section
-		if section == null then return name
+		if section == null then return "/{name}"
 		return section.path / name
 	end
 
@@ -188,6 +188,11 @@ abstract class Entry
 	#
 	# Can be used to compose relative links for example.
 	fun path_to(entry: Entry): String do
+		print "self: {path}"
+		print "to: {entry.path}"
+		print path / entry.path
+		# return path / entry.path
+		# print path.relpath(entry.path)
 		return path.relpath(entry.path)
 	end
 
@@ -267,7 +272,7 @@ end
 class Root
 	super Section
 
-	redef var path = ""
+	redef var path = "/"
 end
 
 # Abstract representation of a page

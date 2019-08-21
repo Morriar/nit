@@ -55,13 +55,13 @@ class TestWikiMarkdown
 
 		var links = links(page.ast)
 		assert links == [
-			"test1",
-			"test1",
-			"test1",
-			"test1#foo",
-			"test1#foo",
-			"test1#foo",
-			"test1#foo"
+			"/test1",
+			"/test1",
+			"/test1",
+			"/test1#foo",
+			"/test1#foo",
+			"/test1#foo",
+			"/test1#foo"
 		]
 	end
 
@@ -94,22 +94,22 @@ class TestWikiMarkdown
 
 		var links = links(page.ast)
 		assert links == [
-			"s1",
-			"s1",
-			"s1",
-			"s1#foo",
-			"s1#foo",
-			"s1#foo",
-			"p1",
-			"p1",
-			"p1",
-			"p1#foo",
-			"p1#foo",
-			"p1#foo",
-			"bar.baz",
-			"bar.baz",
-			"bar.baz#foo",
-			"bar.baz#foo"
+			"/s1",
+			"/s1",
+			"/s1",
+			"/s1#foo",
+			"/s1#foo",
+			"/s1#foo",
+			"/p1",
+			"/p1",
+			"/p1",
+			"/p1#foo",
+			"/p1#foo",
+			"/p1#foo",
+			"/bar.baz",
+			"/bar.baz",
+			"/bar.baz#foo",
+			"/bar.baz#foo"
 		]
 	end
 
@@ -139,17 +139,17 @@ class TestWikiMarkdown
 
 		var links = links(page.ast)
 		assert links == [
-			"s1",
-			"s1/p1",
-			"s1/p1",
-			"s1/p1",
-			"s1/p1#foo",
-			"s1/p1#foo",
-			"s1/p1#foo",
-			"s1/s11",
-			"s1/s11/p11",
-			"s1/s11/p11",
-			"s1/s11/p11"
+			"/s1",
+			"/s1/p1",
+			"/s1/p1",
+			"/s1/p1",
+			"/s1/p1#foo",
+			"/s1/p1#foo",
+			"/s1/p1#foo",
+			"/s1/s11",
+			"/s1/s11/p11",
+			"/s1/s11/p11",
+			"/s1/s11/p11"
 		]
 	end
 
@@ -181,16 +181,16 @@ class TestWikiMarkdown
 
 		var links = links(page.ast)
 		assert links == [
-			"s1/s11/test1",
-			"",
-			"s1/p1",
-			"s1/s11",
-			"s1/s11/p11",
-			"s1",
-			"s1/p1",
-			"",
-			"s2",
-			"s2/p2"
+			"/s1/s11/test1",
+			"/",
+			"/s1/p1",
+			"/s1/s11",
+			"/s1/s11/p11",
+			"/s1",
+			"/s1/p1",
+			"/",
+			"/s2",
+			"/s2/p2"
 		]
 	end
 

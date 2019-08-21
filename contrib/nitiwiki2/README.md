@@ -1,9 +1,11 @@
 # TODO
 
+* use root as `/`
+* rename entry > resource
+
 * markdown
 	* test
-	* relative paths
-	* use context
+	* conflicts
 	* link text and title
 	* commands
 		include file
@@ -16,8 +18,6 @@
 	* check commands
 	* check links
 	* check anchors
-
-* rename entry > resource
 
 * wiki2html
 	* render md

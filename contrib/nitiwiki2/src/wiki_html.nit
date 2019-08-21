@@ -109,7 +109,7 @@ end
 
 redef class Section
 	redef fun accept_html_visitor(v) do
-		var out_path = v.out_path / path
+		var out_path = v.out_path / path.substring(1, path.length - 1)
 		v.logger.debug "Render section {self} to {out_path}"
 		v.sections_stack.push self
 		v.mkdir out_path
@@ -129,7 +129,7 @@ end
 
 redef class MdPage
 	redef fun accept_html_visitor(v) do
-		var out_path = "{(v.out_path / path)}.html"
+		var out_path = "{(v.out_path / path.substring(1, path.length - 1))}.html"
 		v.logger.debug "Render page {self} to {out_path}"
 		var html = self.html(v)
 		v.write_to_file(html, out_path)
@@ -165,9 +165,9 @@ redef class Asset
 	redef fun accept_html_visitor(v) do
 		var root = wiki.root_dir
 		assert root != null
-		var out_path = v.out_path / path
+		var out_path = v.out_path / path.substring(1, path.length - 1)
 		v.logger.debug "Copy asset {self} to {out_path}"
-		v.copy(root / wiki.pages_dir / path, "{out_path}")
+		v.copy(root / wiki.pages_dir / path.substring(1, path.length - 1), "{out_path}")
 	end
 
 	redef fun html_title do return name

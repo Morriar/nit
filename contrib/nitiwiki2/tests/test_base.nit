@@ -104,30 +104,30 @@ class TestEntries
 
 	fun entries_have_a_path is test do
 		var wiki = wiki_nested
-		assert test_path(wiki, "s1") isa Section
-		assert test_path(wiki, "s2") isa Section
-		assert test_path(wiki, "s1/s11") isa Section
-		assert test_path(wiki, "s1/s12") isa Section
-		assert test_path(wiki, "s2/s21") isa Section
-		assert test_path(wiki, "s2/s21/s211") isa Section
-		assert test_path(wiki, "p1") isa Page
-		assert test_path(wiki, "s1/p2") isa Page
-		assert test_path(wiki, "s1/s11/p3") isa Page
-		assert test_path(wiki, "s2/s21/s211/p4") isa Page
+		assert test_path(wiki, "/s1") isa Section
+		assert test_path(wiki, "/s2") isa Section
+		assert test_path(wiki, "/s1/s11") isa Section
+		assert test_path(wiki, "/s1/s12") isa Section
+		assert test_path(wiki, "/s2/s21") isa Section
+		assert test_path(wiki, "/s2/s21/s211") isa Section
+		assert test_path(wiki, "/p1") isa Page
+		assert test_path(wiki, "/s1/p2") isa Page
+		assert test_path(wiki, "/s1/s11/p3") isa Page
+		assert test_path(wiki, "/s2/s21/s211/p4") isa Page
 	end
 
 	fun entry_have_relative_path_to_another is test do
 		var wiki = wiki_nested
-		assert test_path_to(wiki, "s1", "s1") == ""
-		assert test_path_to(wiki, "s1", "s2") == "../s2"
-		assert test_path_to(wiki, "s1", "s1/s11") == "s11"
-		assert test_path_to(wiki, "s1", "s1/s12") == "s12"
-		assert test_path_to(wiki, "s1", "s2/s21") == "../s2/s21"
-		assert test_path_to(wiki, "s1", "s2/s21/s211") == "../s2/s21/s211"
-		assert test_path_to(wiki, "s1", "p1") == "../p1"
-		assert test_path_to(wiki, "s1", "s1/p2") == "p2"
-		assert test_path_to(wiki, "s1", "s1/s11/p3") == "s11/p3"
-		assert test_path_to(wiki, "s1", "s2/s21/s211/p4") == "../s2/s21/s211/p4"
+		assert test_path_to(wiki, "/s1", "/s1") == ""
+		assert test_path_to(wiki, "/s1", "/s2") == "../s2"
+		assert test_path_to(wiki, "/s1", "/s1/s11") == "s11"
+		assert test_path_to(wiki, "/s1", "/s1/s12") == "s12"
+		assert test_path_to(wiki, "/s1", "/s2/s21") == "../s2/s21"
+		assert test_path_to(wiki, "/s1", "/s2/s21/s211") == "../s2/s21/s211"
+		assert test_path_to(wiki, "/s1", "/p1") == "../p1"
+		assert test_path_to(wiki, "/s1", "/s1/p2") == "p2"
+		assert test_path_to(wiki, "/s1", "/s1/s11/p3") == "s11/p3"
+		assert test_path_to(wiki, "/s1", "/s2/s21/s211/p4") == "../s2/s21/s211/p4"
 	end
 
 	fun can_display_prettier_names is test do
