@@ -29,7 +29,7 @@ class TestWikiBuilder
 	fun build_wiki_empty is test do
 		var wiki = builder.build_wiki(tests_wikis / "empty")
 		assert wiki != null
-		assert wiki.root.entries.is_empty
+		assert wiki.root.resources.is_empty
 	end
 
 	fun build_wiki_not_found is test do

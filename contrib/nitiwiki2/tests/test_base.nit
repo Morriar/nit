@@ -55,11 +55,11 @@ class TestWiki
 	fun every_wiki_has_a_root is test do
 		var wiki = new Wiki
 		assert wiki.root.name == "<root>"
-		assert wiki.entries.length == 1
+		assert wiki.resources.length == 1
 		assert wiki.to_ansi == "<root>\n"
 	end
 
-	fun wiki_contains_entries is test do
+	fun wiki_contains_resources is test do
 		var wiki = wiki_simple
 		assert wiki.to_ansi == """<root>
   s1
@@ -68,9 +68,9 @@ class TestWiki
   p2\n"""
 	end
 
-	fun entries_can_be_nested is test do
+	fun resources_can_be_nested is test do
 		var wiki = wiki_nested
-		assert wiki.entries.length == 11
+		assert wiki.resources.length == 11
 		assert wiki.to_ansi == """<root>
   p1
   s1
@@ -85,11 +85,11 @@ class TestWiki
 	end
 end
 
-class TestEntries
+class TestResources
 	super TestBase
 	test
 
-	fun entries_can_be_searched_by_name is test do
+	fun resources_can_be_searched_by_name is test do
 		var wiki = new Wiki
 		wiki.add new Section(wiki, "foo")
 		wiki.add new Section(wiki, "foo")
@@ -97,12 +97,12 @@ class TestEntries
 		wiki.add new DummyPage(wiki, "foo")
 		wiki.add new DummyPage(wiki, "bar")
 
-		assert wiki.entries_by_name("foo").length == 4
-		assert wiki.entries_by_name("bar").length == 1
-		assert wiki.entries_by_name("not_found").length == 0
+		assert wiki.resources_by_name("foo").length == 4
+		assert wiki.resources_by_name("bar").length == 1
+		assert wiki.resources_by_name("not_found").length == 0
 	end
 
-	fun entries_have_a_path is test do
+	fun resources_have_a_path is test do
 		var wiki = wiki_nested
 		assert test_path(wiki, "/s1") isa Section
 		assert test_path(wiki, "/s2") isa Section
@@ -116,7 +116,7 @@ class TestEntries
 		assert test_path(wiki, "/s2/s21/s211/p4") isa Page
 	end
 
-	fun entry_have_relative_path_to_another is test do
+	fun resource_have_relative_path_to_another is test do
 		var wiki = wiki_nested
 		assert test_path_to(wiki, "/s1", "/s1") == ""
 		assert test_path_to(wiki, "/s1", "/s2") == "../s2"
@@ -145,16 +145,16 @@ class TestEntries
 		assert (new DummyPage(wiki, " foo ")).pretty_name == " Foo "
 	end
 
-	private fun test_path(wiki: Wiki, path: String): Entry do
-		var e = wiki.entry_by_path(path)
+	private fun test_path(wiki: Wiki, path: String): Resource do
+		var e = wiki.resource_by_path(path)
 		assert e != null
 		return e
 	end
 
 	private fun test_path_to(wiki: Wiki, from, to: String): String do
-		var f = wiki.entry_by_path(from)
+		var f = wiki.resource_by_path(from)
 		assert f != null
-		var t = wiki.entry_by_path(to)
+		var t = wiki.resource_by_path(to)
 		assert t != null
 		return f.path_to(t)
 	end

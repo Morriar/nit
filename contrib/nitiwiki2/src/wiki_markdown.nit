@@ -44,7 +44,7 @@ class MdProcessCommands
 	super MdPostProcessor
 
 	var wiki: Wiki
-	var context: Entry
+	var context: Resource
 
 	redef fun visit(node) do
 		if not node isa MdWikilink then
@@ -66,7 +66,7 @@ class MdProcessCommands
 		if link.has("/") then
 			if link.has_prefix("/") then
 				# Lookup by absolute path
-				node.target = wiki.entry_by_path(link)
+				node.target = wiki.resource_by_path(link)
 			else
 				# Lookup by relative path
 				var path = (context.path / link).simplify_path
@@ -74,13 +74,13 @@ class MdProcessCommands
 				# Fix / to match root path
 				# if path == "/" then path = ""
 				# print path
-				node.target = wiki.entry_by_path(path)
+				node.target = wiki.resource_by_path(path)
 			end
 		end
 
 		if node.target != null then return
 
-		var targets = wiki.entries_by_name(link)
+		var targets = wiki.resources_by_name(link)
 		# TODO handle conflicts
 		if targets.not_empty then
 			node.target = targets.first
@@ -89,7 +89,7 @@ class MdProcessCommands
 
 		if targets.is_empty then
 			# TODO handle conflicts
-			targets = wiki.entries_by_title(link)
+			targets = wiki.resources_by_title(link)
 			if targets.not_empty then
 				node.target = targets.first
 				return
@@ -104,10 +104,10 @@ class MdProcessCommands
 	# TODO other commands
 end
 
-# redef class Entry
+# redef class Resource
 # end
 
 redef class MdWikilink
-	var target: nullable Entry = null
+	var target: nullable Resource = null
 	var anchor: nullable String = null
 end

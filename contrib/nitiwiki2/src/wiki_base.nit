@@ -16,8 +16,8 @@
 #
 # This module defines the base model representation of a Wiki.
 #
-# A Wiki is composed of entries.
-# An Entry can be a Page, a Section or an Asset.
+# A Wiki is composed of resources.
+# An Resource can be a Page, a Section or an Asset.
 module wiki_base
 
 import template::macro
@@ -39,59 +39,59 @@ class Wiki
 	# The format of this template and how it is used if left to clients.
 	var default_template: nullable PageTemplate = null is optional, writable
 
-	# List all entries in this wiki
+	# List all resources in this wiki
 	#
-	# A wiki is composed of entries like sections, pages or assets.
+	# A wiki is composed of resources like sections, pages or assets.
 	#
-	# Even if some entries can be nested like sections this method collects all
-	# entries.
-	fun entries: Array[Entry] do
-		var v = new EntriesVisitor
+	# Even if some resources can be nested like sections this method collects all
+	# resources.
+	fun resources: Array[Resource] do
+		var v = new ResourcesVisitor
 		v.visit_wiki(self)
-		return v.entries
+		return v.resources
 	end
 
-	# Add an entry to the root section of this wiki
-	fun add(entry: Entry) do root.add entry
+	# Add an resource to the root section of this wiki
+	fun add(resource: Resource) do root.add resource
 
-	# Get an entry by its `path`
+	# Get an resource by its `path`
 	#
-	# Since path are unique for a wiki, this returns a single entry.
-	# Returns `null` if no entry can be found for this `path`.
+	# Since path are unique for a wiki, this returns a single resource.
+	# Returns `null` if no resource can be found for this `path`.
 	#
-	# See `Entry::path`.
+	# See `Resource::path`.
 	#
 	# TODO Caching?
-	fun entry_by_path(path: String): nullable Entry do
-		for entry in entries do
-			if entry.path == path then return entry
+	fun resource_by_path(path: String): nullable Resource do
+		for resource in resources do
+			if resource.path == path then return resource
 		end
 		return null
 	end
 
-	# Get all entries with `name`
+	# Get all resources with `name`
 	#
 	# Since a name is not unique in a wiki this method can return more than
-	# one entry.
+	# one resource.
 	#
-	# See `entry_by_path` to get a single entry from its unique path.
-	# See `Entry::name` for more details about `name`.
+	# See `resource_by_path` to get a single resource from its unique path.
+	# See `Resource::name` for more details about `name`.
 	#
 	# TODO Caching?
-	fun entries_by_name(name: String): Array[Entry] do
-		var res = new Array[Entry]
-		for entry in entries do
-			if entry.name == name then res.add entry
+	fun resources_by_name(name: String): Array[Resource] do
+		var res = new Array[Resource]
+		for resource in resources do
+			if resource.name == name then res.add resource
 		end
 		return res
 	end
 
 	# TODO
-	fun entries_by_title(title: String): Array[Entry] do
-		var res = new Array[Entry]
-		for entry in entries do
-			if entry.title != title and entry.pretty_name != title then continue
-			res.add entry
+	fun resources_by_title(title: String): Array[Resource] do
+		var res = new Array[Resource]
+		for resource in resources do
+			if resource.title != title and resource.pretty_name != title then continue
+			res.add resource
 		end
 		return res
 	end
@@ -102,7 +102,7 @@ class Wiki
 	# Does `self` have a `index` page?
 	fun has_index: Bool do return root.has_index
 
-	# Get an ANSI tree representation of this wiki entries
+	# Get an ANSI tree representation of this wiki resources
 	#
 	# Useful for testing and debugging.
 	fun to_ansi(show_assets, use_pretty_names: nullable Bool): String do
@@ -115,17 +115,17 @@ class Wiki
 	end
 end
 
-# A Wiki entry
+# A Wiki resource
 #
 # Like a section, a page or an asset.
-abstract class Entry
+abstract class Resource
 
-	# Every entry belongs to a wiki
+	# Every resource belongs to a wiki
 	var wiki: Wiki
 
-	# Entry's name
+	# Resource's name
 	#
-	# The entry name is used internally to designate entries in logs and tests.
+	# The resource name is used internally to designate resources in logs and tests.
 	# It's generally based on files name and we try to never show it as it is to
 	# the end wiki user.
 	#
@@ -135,11 +135,11 @@ abstract class Entry
 	# See `title` and `pretty_name`.
 	var name: String
 
-	# Entry's title
+	# Resource's title
 	#
-	# An entry can have a custom title which will be presented to the end user.
+	# An resource can have a custom title which will be presented to the end user.
 	#
-	# For some entries, the title comes from configuration files like Section for
+	# For some resources, the title comes from configuration files like Section for
 	# other it comes from the content of the file like MdPage.
 	# For some there is no obvious title like assets so we generally fallback on
 	# `pretty_name`.
@@ -157,57 +157,57 @@ abstract class Entry
 		return name
 	end
 
-	# Entry's section
+	# Resource's section
 	#
 	# Should never be set directly, see `Wiki::add` and `Section.add`.
 	var section: nullable Section = null
 
-	# All entries from `self` to the root of the wiki
+	# All resources from `self` to the root of the wiki
 	#
 	# Can be used to compose breadcrumbs for example.
-	fun scopes: Array[Entry] do
+	fun scopes: Array[Resource] do
 		var section = self.section
-		if section == null then return new Array[Entry]
+		if section == null then return new Array[Resource]
 
-		var path = new Array[Entry].from(section.scopes)
+		var path = new Array[Resource].from(section.scopes)
 		path.add self
 		return path
 	end
 
-	# Unique identifier of an entry in a wiki
+	# Unique identifier of an resource in a wiki
 	#
 	# Should be unique accross the wiki.
-	# Based on entries nesting from `Wiki::root`.
+	# Based on resources nesting from `Wiki::root`.
 	fun path: String do
 		var section = self.section
 		if section == null then return "/{name}"
 		return section.path / name
 	end
 
-	# Path from `self` to `entry`
+	# Path from `self` to `resource`
 	#
 	# Can be used to compose relative links for example.
-	fun path_to(entry: Entry): String do
+	fun path_to(resource: Resource): String do
 		print "self: {path}"
-		print "to: {entry.path}"
-		print path / entry.path
-		# return path / entry.path
-		# print path.relpath(entry.path)
-		return path.relpath(entry.path)
+		print "to: {resource.path}"
+		print path / resource.path
+		# return path / resource.path
+		# print path.relpath(resource.path)
+		return path.relpath(resource.path)
 	end
 
 	# Visit self with `visitor`
 	fun visit_all(visitor: WikiVisitor) do end
 
-	# Return the entry `name`.
+	# Return the resource `name`.
 	redef fun to_s do return name
 end
 
-# A group of entries
+# A group of resources
 #
-# Wiki entries can be grouped into sections and sections can be nested.
+# Wiki resources can be grouped into sections and sections can be nested.
 class Section
-	super Entry
+	super Resource
 
 	# Is this section hidden in sitemap and trees and menus?
 	#
@@ -224,13 +224,13 @@ class Section
 		return false
 	end
 
-	# Entries contained in this section
-	var entries = new Array[Entry]
+	# Resources contained in this section
+	var resources = new Array[Resource]
 
-	# Add an entry to this section
-	fun add(entry: Entry) do
-		entries.add entry
-		entry.section = self
+	# Add an resource to this section
+	fun add(resource: Resource) do
+		resources.add resource
+		resource.section = self
 	end
 
 	# Section default template
@@ -251,7 +251,7 @@ class Section
 
 	# Landing page of this section
 	fun index: nullable Page do
-		for child in entries do
+		for child in resources do
 			if child isa Page and child.name == "index" then return child
 		end
 		return null
@@ -260,7 +260,7 @@ class Section
 	# Does this section have an `index` page?
 	fun has_index: Bool do return index != null
 
-	redef fun visit_all(v) do for child in entries do v.visit(child)
+	redef fun visit_all(v) do for child in resources do v.visit(child)
 
 	redef fun pretty_name do
 		if is_hidden then return "-{super}"
@@ -279,7 +279,7 @@ end
 #
 # Pages can have different source formats. It could be Markdown, HTML, LaTeX...
 abstract class Page
-	super Entry
+	super Resource
 end
 
 # An asset for a Wiki
@@ -287,13 +287,13 @@ end
 # Assets are generally used for rendering like scripts, stylesheets or images.
 # We don't really care about their content as we will just copy or serve them.
 class Asset
-	super Entry
+	super Resource
 	autoinit(wiki, title, src_path)
 
 	# Source path of this asset
 	var src_path: String
 
-	# Use the file name as entry name
+	# Use the file name as resource name
 	redef var name = src_path.to_path.filename is lazy
 end
 
@@ -336,34 +336,34 @@ end
 
 # Utils
 
-# A visitor that can visit Wiki entries
+# A visitor that can visit Wiki resources
 abstract class WikiVisitor
 
-	# Visit all entries in `wiki`
+	# Visit all resources in `wiki`
 	fun visit_wiki(wiki: Wiki) do visit(wiki.root)
 
-	# Visit `entry` and its children if any
-	fun visit(entry: Entry) is abstract
+	# Visit `resource` and its children if any
+	fun visit(resource: Resource) is abstract
 end
 
-# Collect all entries in a Wiki
-private class EntriesVisitor
+# Collect all resources in a Wiki
+private class ResourcesVisitor
 	super WikiVisitor
 
-	# All entries collected from a Wiki
+	# All resources collected from a Wiki
 	#
 	# See `visit_wiki`.
 	#
-	# Entries are listed in order of depth-first discovery.
-	var entries = new Array[Entry]
+	# Resources are listed in order of depth-first discovery.
+	var resources = new Array[Resource]
 
-	redef fun visit(entry) do
-		entries.add entry
-		entry.visit_all(self)
+	redef fun visit(resource) do
+		resources.add resource
+		resource.visit_all(self)
 	end
 end
 
-# Create an ANSI tree from a Wiki entries
+# Create an ANSI tree from a Wiki resources
 private class AnsiMapVisitor
 	super WikiVisitor
 
@@ -386,18 +386,18 @@ private class AnsiMapVisitor
 	# ANSI tree under construction
 	var ansi = new Template
 
-	redef fun visit(entry) do
-		if not show_assets and entry isa Asset then return
+	redef fun visit(resource) do
+		if not show_assets and resource isa Asset then return
 
 		if use_pretty_names then
-			ansi.addn "{indent}{entry.pretty_name}"
+			ansi.addn "{indent}{resource.pretty_name}"
 		else
-			ansi.addn "{indent}{entry.name}"
+			ansi.addn "{indent}{resource.name}"
 		end
 
-		if entry isa Section then
+		if resource isa Section then
 			indent_level += 1
-			entry.visit_all(self)
+			resource.visit_all(self)
 			indent_level -= 1
 		end
 	end

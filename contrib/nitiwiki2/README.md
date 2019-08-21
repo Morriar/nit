@@ -1,8 +1,5 @@
 # TODO
 
-* use root as `/`
-* rename entry > resource
-
 * markdown
 	* test
 	* conflicts

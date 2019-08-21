@@ -48,7 +48,7 @@ class Wiki2Html
 		# TODO add sitemap
 	end
 
-	redef fun visit(entry) do entry.accept_html_visitor(self)
+	redef fun visit(resource) do resource.accept_html_visitor(self)
 
 	private var sections_stack = new Array[Section]
 
@@ -93,12 +93,12 @@ class Wiki2Html
 	# end
 end
 
-redef class Entry
+redef class Resource
 	fun accept_html_visitor(v: Wiki2Html) is abstract
 
 	fun html_title: String do return pretty_name
 
-	fun html_link(context: Entry): String do
+	fun html_link(context: Resource): String do
 		var path = context.path_to(self)
 		if path.is_empty then
 			return "<a href=\"#\">{html_title}</a>"
@@ -177,7 +177,7 @@ class WikiHtmlRenderer
 	super HtmlRenderer
 
 	var v: Wiki2Html
-	var context: Entry
+	var context: Resource
 
 	# TODO code highlight
 end
