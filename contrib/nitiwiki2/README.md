@@ -2,9 +2,12 @@
 
 * bug simplify path
 
+* builder
+	* log warn on same name at same path
+
 * markdown
-	* conflicts & tests
-	* link text and title
+	* did you mean?
+	* links index
 	* commands
 		include file
 		asset
@@ -14,6 +17,7 @@
 		name, title, date
 	* check commands
 	* check anchors
+		* did you mean?
 
 * wiki2html
 	* clean path handling

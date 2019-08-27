@@ -48,6 +48,7 @@ class Wiki
 	fun resources: Array[Resource] do
 		var v = new ResourcesVisitor
 		v.visit_wiki(self)
+		v.resources.shift # remove the root
 		return v.resources
 	end
 
@@ -63,6 +64,7 @@ class Wiki
 	#
 	# TODO Caching?
 	fun resource_by_path(path: String): nullable Resource do
+		if path == root.path then return root
 		for resource in resources do
 			if resource.path == path then return resource
 		end
@@ -228,11 +230,21 @@ class Section
 	end
 
 	# Resources contained in this section
-	var resources = new Array[Resource]
+	var children = new Array[Resource]
 
-	# Add an resource to this section
+	# All resources contained in this section
+	#
+	# This means the section children and their children recursively.
+	fun resources: Array[Resource] do
+		var v = new ResourcesVisitor
+		v.visit(self)
+		v.resources.shift # remove the resource itself
+		return v.resources
+	end
+
+	# Add a resource to this section
 	fun add(resource: Resource) do
-		resources.add resource
+		children.add resource
 		resource.section = self
 	end
 
@@ -254,7 +266,7 @@ class Section
 
 	# Landing page of this section
 	fun index: nullable Page do
-		for child in resources do
+		for child in children do
 			if child isa Page and child.name == "index" then return child
 		end
 		return null
@@ -263,7 +275,7 @@ class Section
 	# Does this section have an `index` page?
 	fun has_index: Bool do return index != null
 
-	redef fun visit_all(v) do for child in resources do v.visit(child)
+	redef fun visit_all(v) do for child in children do v.visit(child)
 
 	redef fun pretty_name do
 		if is_hidden then return "-{super}"

@@ -62,58 +62,136 @@ class MdProcessCommands
 	var context: MdPage
 
 	redef fun visit(node) do
-		if not node isa MdWikilink then
+		if node isa MdWikilink then
+			parse_command(node)
+		else
 			super
+		end
+	end
+
+	fun parse_command(node: MdWikilink) do
+		var link = node.link.trim
+
+		# We don't know what to do with empty commands `[[]]`
+		if link.is_empty then
+			warn(node, "Empty command `[[]]`")
 			return
 		end
-		var link = node.link
 
-		if link.has("#") then
-			var parts = link.split_with("#")
-			link = parts.first
-			node.anchor = parts.subarray(1, parts.length - 1).join("#")
-			if link.is_empty then
-				node.target = context
-				return
+		# Links can have an anchor: [[resource#anchor]]
+		var parts = link.split_once_on("#")
+		if parts.length > 1 then
+			link = parts.shift.trim
+			node.anchor = parts.shift.trim # anchor can be empty (go to top)
+			if parts.not_empty then
+				# There should be only one anchor [[#foo#bar]]
+				warn(node, "Malformed link anchor `{node.link}`")
 			end
 		end
 
-		if link.has_prefix("/") then
-			# Lookup by absolute path
-			node.target = parser.wiki.resource_by_path(link)
-		else
-			# Lookup by relative path
-			node.target = context.resource_by_path(link)
-		end
-		if node.target != null then return
-
-		var targets = parser.wiki.resources_by_name(link)
-		# TODO handle conflicts
-		if targets.not_empty then
-			node.target = targets.first
+		if link.is_empty then
+			if node.anchor == null then
+				# We have no link nor anchor, this is an error
+				warn(node, "Empty link `{node.link}`")
+			else
+				# We only have an anchor, the link is internal to the page
+				node.target = context
+			end
 			return
 		end
+
+		if link == "." then
+			node.target = context
+			return
+		end
+
+		# Lookup by absolute path (no conflict)
+		if link.has_prefix("/") then
+			node.target = parser.wiki.resource_by_path(link)
+			if node.target == null then
+				warn(node, "Link to unknown resource `{link}`")
+			end
+			return
+		end
+
+		# Lookup by relative path
+		if link.has("/") then
+			node.target = context.resource_by_path(link)
+			if node.target == null then
+				# Also try from parent section
+				node.target = context.resource_by_path("../{link}")
+				if node.target == null then
+					warn(node, "Link to unknown resource `{link}`")
+				end
+			end
+			return
+		end
+
+		# Lookup by name and title
+		var targets = lookup_link(node, link)
 
 		if targets.is_empty then
-			# TODO handle conflicts
-			targets = parser.wiki.resources_by_title(link)
-			if targets.not_empty then
-				node.target = targets.first
-				return
-			end
+			warn(node, "Link to unknown resource `{link}`")
+			# TODO Did you mean?
+			return
 		end
 
-		if node.target == null then
-			var file = context.file or else context.path
-			parser.logger.warn("{file}:{node.location}: Link to unknown resource `{link}`")
+		node.target = targets.first
+
+		if targets.length > 1 then
+			# There are conflicts select the first one (already sorted by relevance) and warn
+			node.conflicts.add_all targets
+			var paths = new Array[String]
+			for conflict in targets do paths.add "`{conflict.path}`"
+			warn(node, "Link to conflicting resources: {paths.join(", ")}")
 		end
-		# TODO did you mean
 	end
-	# TODO other commands
+
+	fun lookup_link(node: MdWikilink, link: String): Array[Resource] do
+		var child_visitor = new LinkLookupVisitor(link)
+		# We look into siblings, then into cousins recursively
+		var section = context.section
+		while section != null do
+			child_visitor.visit(section)
+			section = section.section
+		end
+		# Then we look from root
+		child_visitor.visit(parser.wiki.root)
+		return child_visitor.resources.to_a
+	end
+
+	fun warn(node: MdWikilink, message: String) do
+		parser.logger.warn("{location(node)}: {message}")
+	end
+
+	# Get the location for a node using `context`
+	#
+	# If `context` does not point to a file, use the page path as a location.
+	private fun location(node: MdNode): String do
+		return "{context.file or else context.path}:{node.location}"
+	end
 end
 
 redef class MdWikilink
 	var target: nullable Resource = null
 	var anchor: nullable String = null
-	# TODO errors/warnings & conflicts
+	var conflicts = new Array[Resource]
+end
+
+# Use a breadth first visit so direct children may appear before descandants in conflicts
+private class LinkLookupVisitor
+	super WikiVisitor
+
+	var resources = new Set[Resource]
+	var done = new Set[Resource]
+	var query: String
+
+	redef fun visit(resource) do
+		if done.has(resource) then return
+		done.add resource
+		if resource.name == query or resource.title == query or resource.pretty_name == query then
+			resources.add resource
+		end
+		resource.visit_all(self)
+	end
 end

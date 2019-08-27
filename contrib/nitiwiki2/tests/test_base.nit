@@ -55,7 +55,7 @@ class TestWiki
 	fun every_wiki_has_a_root is test do
 		var wiki = new Wiki
 		assert wiki.root.name == "<root>"
-		assert wiki.resources.length == 1
+		assert wiki.resources.length == 0
 		assert wiki.to_ansi == "<root>\n"
 	end
 
@@ -70,7 +70,7 @@ class TestWiki
 
 	fun resources_can_be_nested is test do
 		var wiki = wiki_nested
-		assert wiki.resources.length == 11
+		assert wiki.resources.length == 10
 		assert wiki.to_ansi == """<root>
   p1
   s1
@@ -225,6 +225,25 @@ class TestSection
 		s.add index
 		assert s.has_index
 		assert s.index == index
+	end
+
+	fun section_can_have_children is test do
+		var wiki = new Wiki
+		var r1 = new Section(wiki, "foo")
+		var r2 = new Section(wiki, "bar")
+		var r3 = new DummyPage(wiki, "baz")
+
+		wiki.add r1
+		r1.add r2
+		r2.add r3
+
+		assert wiki.resources == [r1, r2, r3: Resource]
+		assert wiki.root.children == [r1]
+		assert wiki.root.resources == [r1, r2, r3: Resource]
+		assert r1.children == [r2]
+		assert r1.resources == [r2, r3: Resource]
+		assert r2.children == [r3]
+		assert r2.resources == [r3]
 	end
 end
 
