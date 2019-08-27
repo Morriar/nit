@@ -116,6 +116,10 @@ class WikiConfig
 	fun file_exists: Bool do return (root / default_config_file).file_exists
 end
 
+class WikiCommand
+	var config = new Config
+end
+
 class CmdHello
 	var config: WikiConfig
 

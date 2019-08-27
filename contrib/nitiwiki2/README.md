@@ -14,8 +14,8 @@
 		menu
 		summary
 		trail
+		code, file content?
 		name, title, date
-	* check commands
 	* check anchors
 		* did you mean?
 
@@ -32,6 +32,7 @@
 		- trail
 	* add sitemap
 	* add index
+	* render only if needed
 
 * nitiwiki CLI + tests
 	* check links (both internal and external)
