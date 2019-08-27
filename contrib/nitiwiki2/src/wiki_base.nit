@@ -242,6 +242,15 @@ class Section
 		return v.resources
 	end
 
+	# Get all resources with `name` inside `self` (direct and indirect)
+	fun resources_by_name(name: String): Array[Resource] do
+		var res = new Array[Resource]
+		for resource in resources do
+			if resource.name == name then res.add resource
+		end
+		return res
+	end
+
 	# Add a resource to this section
 	fun add(resource: Resource) do
 		children.add resource

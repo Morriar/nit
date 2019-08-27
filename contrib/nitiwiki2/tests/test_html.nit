@@ -263,7 +263,6 @@ $ write to out/s1/section12/index.html
 <S1>%BODY</S1>\n"""
 	end
 
-	# TODO
 	fun render_wiki_with_assets is test do
 		assert render_wiki("assets", false) == """
 $ mkdir -p -- 'out/'
@@ -375,7 +374,27 @@ class TestMdPageToHtml
 		assert page.html_link(other) == "<a href=\"../test.html\">Test</a>"
 	end
 
-	# TODO check md links and commands
+	fun render_wikilinks_links is test do
+		var wiki = new Wiki
+		var p1 = new MdPage(wiki, "p1", md = "")
+		wiki.add p1
+		var p2 = new MdPage(wiki, "p2", md = """
+[[p1]]
+[[p1#foo]]
+[[title | p1]]
+[[title | p1#foo]]""")
+		wiki.add p2
+
+		var v = new MockWiki2Html(wiki, false)
+		assert p2.html(v) == """
+<p><a href="../p1.html">P1</a>
+<a href="../p1.html#foo">P1</a>
+<a href="../p1.html">title</a>
+<a href="../p1.html#foo">title</a></p>
+"""
+	end
+
+	# TODO check commands
 end
 
 class TestAssetToHtml

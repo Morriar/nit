@@ -131,8 +131,17 @@ class MdProcessCommands
 		var targets = lookup_link(node, link)
 
 		if targets.is_empty then
-			warn(node, "Link to unknown resource `{link}`")
-			# TODO Did you mean?
+			var v = new DidYouMeanVisitor(link, context)
+			v.visit_wiki(parser.wiki)
+			var suggestions = v.similarities.keys.to_a
+			if suggestions.not_empty then
+				var comparator = new DidYouMeanComparator(v.similarities)
+				comparator.sort(suggestions)
+				var suggestion = suggestions.first
+				warn(node, "Link to unknown resource `{link}`. Did you mean `{suggestion.path}`?")
+			else
+				warn(node, "Link to unknown resource `{link}`")
+			end
 			return
 		end
 
@@ -178,7 +187,6 @@ redef class MdWikilink
 	var conflicts = new Array[Resource]
 end
 
-# Use a breadth first visit so direct children may appear before descandants in conflicts
 private class LinkLookupVisitor
 	super WikiVisitor
 
@@ -186,6 +194,7 @@ private class LinkLookupVisitor
 	var done = new Set[Resource]
 	var query: String
 
+	# Use a breadth first visit so direct children may appear before descandants in conflicts
 	redef fun visit(resource) do
 		if done.has(resource) then return
 		done.add resource
@@ -194,4 +203,38 @@ private class LinkLookupVisitor
 		end
 		resource.visit_all(self)
 	end
+end
+
+private class DidYouMeanVisitor
+	super WikiVisitor
+
+	var query: String
+	var context: Resource
+	var similarities = new HashMap[Resource, Int]
+
+	redef fun visit(resource) do
+		if resource isa Root or resource == context then
+			resource.visit_all(self)
+			return
+		end
+
+		var sim = query.levenshtein_distance(resource.name)
+		var title = resource.title
+		if title != null then
+			var sim_title = query.levenshtein_distance(title)
+			if sim_title < sim then sim = sim_title
+		end
+		similarities[resource] = sim
+		resource.visit_all(self)
+	end
+end
+
+private class DidYouMeanComparator
+	super Comparator
+
+	var similarities: HashMap[Resource, Int]
+
+	redef type COMPARED: Resource
+
+	redef fun compare(a, b) do return similarities[a] <=> similarities[b]
 end

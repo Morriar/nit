@@ -410,38 +410,33 @@ class TestWikiMarkdown
 	end
 
 	fun parser_can_log_warnings_without_file_location is test do
-		var wiki = wiki_nested
+		var wiki = new Wiki
 		var page = new MdPage(wiki, "test", md = """
 [[foo]] is broken.
 
 Another broken link [[/foo#bar]].
 """)
-
-		var s1 = wiki.resource_by_path("/s1")
-		assert s1 isa Section
-		s1.add page
+		wiki.add page
 
 		var out = new StringWriter
 		var parser = new MdPageParser(wiki, new Logger(warn_level, out))
 		parser.parse_page(page)
 
 		assert out.to_s == """
-/s1/test:1,1--1,7: Link to unknown resource `foo`
-/s1/test:3,21--3,32: Link to unknown resource `/foo`
+/test:1,1--1,7: Link to unknown resource `foo`
+/test:3,21--3,32: Link to unknown resource `/foo`
 """
 	end
 
 	fun parser_can_log_warnings_with_file_location is test do
-		var wiki = wiki_nested
+		var wiki = new Wiki
 		var page = new MdPage(wiki, "test", file = "./page.md", md = """
 [[foo]] is broken.
 
 Another broken link [[/foo#bar]].
 """)
 
-		var s1 = wiki.resource_by_path("/s1")
-		assert s1 isa Section
-		s1.add page
+		wiki.add page
 
 		var out = new StringWriter
 		var parser = new MdPageParser(wiki, new Logger(warn_level, out))
@@ -451,6 +446,21 @@ Another broken link [[/foo#bar]].
 ./page.md:1,1--1,7: Link to unknown resource `foo`
 ./page.md:3,21--3,32: Link to unknown resource `/foo`
 """
+	end
+
+	fun parser_can_suggest_good_links is test do
+		var wiki = new Wiki
+		wiki.add new DummyPage(wiki, "foo")
+		wiki.add new DummyPage(wiki, "bar")
+		wiki.add new DummyPage(wiki, "baz")
+		var page = new MdPage(wiki, "test", md = "[[boo]]")
+		wiki.add page
+
+		var out = new StringWriter
+		var parser = new MdPageParser(wiki, new Logger(warn_level, out))
+		parser.parse_page(page)
+
+		assert out.to_s == "/test:1,1--1,7: Link to unknown resource `boo`. Did you mean `/foo`?\n"
 	end
 
 	# TODO test index?

@@ -86,6 +86,7 @@ class WikiBuilder
 
 			var sub_path = (dir / file)
 			var sub_name = file.strip_extension
+			var has_conflict = section.resources_by_name(sub_name).not_empty
 
 			if sub_path.to_path.is_dir then
 				# Create a new section
@@ -103,6 +104,9 @@ class WikiBuilder
 					logger.debug "Found asset at {sub_path}"
 					section.add new Asset(wiki, null, sub_path)
 				end
+			end
+			if has_conflict then
+				logger.warn "Section `{section.path}` already contains a resource named `{sub_name}`"
 			end
 		end
 	end

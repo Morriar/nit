@@ -88,4 +88,54 @@ class TestWikiBuilder
   Section1
     Page1\n"""
 	end
+
+	fun build_log_what_it_does is test do
+		var stdout = new StringWriter
+		var builder = new WikiBuilder(logger = new Logger(debug_level, out = stdout))
+		builder.build_wiki(tests_wikis / "assets")
+		assert stdout.to_s == """
+Found wiki config at tests/wikis/assets/nitiwiki.ini
+Found asset at tests/wikis/assets/pages/.asset
+Found asset at tests/wikis/assets/pages/asset1
+Found asset at tests/wikis/assets/pages/asset2
+Found page at tests/wikis/assets/pages/index.md
+Found page at tests/wikis/assets/pages/page1.md
+Found section at tests/wikis/assets/pages/section1
+Found asset at tests/wikis/assets/pages/section1/asset.1
+Found page at tests/wikis/assets/pages/section1/index.md
+Found section at tests/wikis/assets/pages/section1/section11
+Found asset at tests/wikis/assets/pages/section1/section11/asset
+Found page at tests/wikis/assets/pages/section1/section11/index.md
+"""
+	end
+
+	fun build_warn_if_name_conflicts is test do
+		var stdout = new StringWriter
+		var builder = new WikiBuilder(logger = new Logger(debug_level, out = stdout))
+		builder.build_wiki(tests_wikis / "conflicts")
+		assert stdout.to_s == """
+Found section at tests/wikis/conflicts/pages/bar
+Found section at tests/wikis/conflicts/pages/bar/bar
+Found page at tests/wikis/conflicts/pages/bar/bar/bar.md
+Found section at tests/wikis/conflicts/pages/bar/foo
+Found section at tests/wikis/conflicts/pages/bar/foo/foo
+Found page at tests/wikis/conflicts/pages/bar/foo/foo/foo.md
+Found page at tests/wikis/conflicts/pages/bar/foo/foo.md
+Section `/bar/foo` already contains a resource named `foo`
+Found page at tests/wikis/conflicts/pages/bar/foo.md
+Section `/bar` already contains a resource named `foo`
+Found page at tests/wikis/conflicts/pages/bar.md
+Section `/` already contains a resource named `bar`
+Found section at tests/wikis/conflicts/pages/foo
+Found section at tests/wikis/conflicts/pages/foo/bar
+Found page at tests/wikis/conflicts/pages/foo/bar/bar.md
+Found section at tests/wikis/conflicts/pages/foo/foo
+Found page at tests/wikis/conflicts/pages/foo/foo/index.md
+Found page at tests/wikis/conflicts/pages/foo/foo.md
+Section `/foo` already contains a resource named `foo`
+Section `/` already contains a resource named `foo`
+Found page at tests/wikis/conflicts/pages/foo.md
+Section `/` already contains a resource named `foo`
+"""
+	end
 end

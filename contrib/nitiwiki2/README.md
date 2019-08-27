@@ -1,12 +1,23 @@
 # TODO
 
-* bug simplify path
-
+TODAY
 * builder
 	* log warn on same name at same path
+* wiki2html
+	* clean path handling
+	* code blocks highligh and tests
+	* render only if needed
+* nitiwiki CLI + tests
+	* commands lib
+	* status
+	* render
+	* clean
+
+
+
+* bug simplify path
 
 * markdown
-	* did you mean?
 	* links index
 	* commands
 		include file
@@ -20,10 +31,8 @@
 		* did you mean?
 
 * wiki2html
-	* clean path handling
 	* render md
-		- wikilinks and tests
-		- code blocks highligh and tests
+		- commands and tests
 	* templates vars
 		- menu
 		- name
@@ -32,15 +41,11 @@
 		- trail
 	* add sitemap
 	* add index
-	* render only if needed
 
 * nitiwiki CLI + tests
 	* check links (both internal and external)
-	* status
-	* render
 	* sync
 	* fetch
-	* clean
 	* options
 
 * black box testing

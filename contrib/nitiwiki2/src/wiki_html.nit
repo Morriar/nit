@@ -104,11 +104,13 @@ redef class Resource
 	fun html_title: String do return pretty_name
 
 	fun html_link(context: Resource): String do
+		return "<a href=\"{href_to(context)}\">{html_title}</a>"
+	end
+
+	fun href_to(context: Resource): String do
 		var path = context.path_to(self)
-		if path.is_empty then
-			return "<a href=\"#\">{html_title}</a>"
-		end
-		return "<a href=\"{path}\">{html_title}</a>"
+		if path.is_empty then return "#"
+		return path
 	end
 end
 
@@ -140,12 +142,10 @@ redef class MdPage
 		v.write_to_file(html, out_path)
 	end
 
-	redef fun html_link(context) do
-		var path = context.path_to(self)
-		if path.is_empty then
-			return "<a href=\"#\">{html_title}</a>"
-		end
-		return "<a href=\"{path}.html\">{html_title}</a>"
+	redef fun href_to(context) do
+		var href = super
+		if href == "#" then return href
+		return "{href}.html"
 	end
 
 	fun html_body(v: Wiki2Html): String do
@@ -158,7 +158,6 @@ redef class MdPage
 	fun html(v: Wiki2Html): String do
 		var page_template = v.current_template
 		if page_template == null then return html_body(v)
-		# TODO move to base?
 		return page_template.compile(new TemplateVars(
 			# TODO other vars
 			body = html_body(v)
@@ -194,21 +193,33 @@ redef class MdWikilink
 			return
 		end
 		var target = self.target
-		# var anchor = self.anchor
+		var anchor = self.anchor
+		var title = self.title
 
-		v.add_raw "<a "
-		if target == null then
-			v.add_raw "<a class=\"broken\">broken</a>"
-		else
-			v.add_raw target.html_link(v.context)
-			# TODO anchor
-			# if anchor != null then append_value(v, "#{anchor}")
-			# TODO link title
-			# v.add " title=\""
-			# append_value(v, comment)
-			# v.add "\""
-			# TODO link text
-			# v.emit_text(name)
+		if target == null and anchor == null then
+			v.add_raw "<a class=\"broken\">{title or else "broken"}</a>"
+			return
 		end
+
+		v.add_raw "<a href=\""
+		if target != null then
+			v.add_raw target.href_to(v.context)
+		end
+		if anchor != null then
+			v.add_raw "#{anchor}"
+		end
+		v.add_raw "\""
+		if target == null and anchor == null then
+			v.add_raw " class=\"broken\""
+		end
+		v.add_raw ">"
+		if target == null and anchor == null then
+			v.add_raw title or else "broken"
+		else if target == null then
+			v.add_raw title or else v.context.html_title
+		else
+			v.add_raw title or else target.html_title
+		end
+		v.add_raw "</a>"
 	end
 end
