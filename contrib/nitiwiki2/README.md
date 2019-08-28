@@ -1,11 +1,7 @@
 # TODO
 
 TODAY
-* builder
-	* log warn on same name at same path
 * wiki2html
-	* clean path handling
-	* code blocks highligh and tests
 	* render only if needed
 * nitiwiki CLI + tests
 	* commands lib
@@ -31,9 +27,10 @@ TODAY
 		* did you mean?
 
 * wiki2html
-	* render md
-		- commands and tests
+	* highlight option in wiki?
+	* move to `wiki_options`?
 	* templates vars
+		- move to `wiki_templates`?
 		- menu
 		- name
 		- title

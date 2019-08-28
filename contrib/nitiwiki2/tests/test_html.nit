@@ -19,12 +19,11 @@ import wiki_html
 
 class MockWiki2Html
 	super Wiki2Html
-	autoinit wiki, save_html
+	autoinit wiki, save_html, logger, highlighter, highlighter_default
 
 	init do
 		super
 		out_path = "out/" # We don't really use it as we mock the output
-		logger = new Logger(debug_level)
 	end
 
 	# Also save HTMl content of pages?
@@ -351,6 +350,116 @@ class TestMdPageToHtml
 		var v = new MockWiki2Html(wiki, false)
 		var page = new MdPage(wiki, "test", md = "# Test")
 		assert page.html(v) == "<div><h1 id=\"Test\">Test</h1>\n</div>"
+	end
+
+	fun md_code_blocs_are_not_highlighted_by_default is test do
+		var wiki = new Wiki
+		var v = new MockWiki2Html(wiki, false)
+		var page = new MdPage(wiki, "test", md = """
+A code example:
+
+	print \"Hello, World!\"
+
+Another example:
+
+~~~
+print \"Hello, World!\"
+~~~""")
+		assert page.html(v) == """
+<p>A code example:</p>
+<pre><code>print &quot;Hello, World!&quot;
+</code></pre>
+<p>Another example:</p>
+<pre><code>print &quot;Hello, World!&quot;
+</code></pre>
+"""
+	end
+
+	fun md_code_blocs_can_have_a_default_language is test do
+		var wiki = new Wiki
+		var v = new MockWiki2Html(wiki, false, highlighter_default = "nit")
+		var page = new MdPage(wiki, "test", md = """
+A code example:
+
+	print \"Hello, World!\"
+
+Another example:
+
+~~~
+print \"Hello, World!\"
+~~~""")
+		assert page.html(v) == """
+<p>A code example:</p>
+<pre><code class="language-nit">print &quot;Hello, World!&quot;
+</code></pre>
+<p>Another example:</p>
+<pre><code class="language-nit">print &quot;Hello, World!&quot;
+</code></pre>
+"""
+	end
+
+	fun md_code_blocs_can_be_highlighted is test do
+		var wiki = new Wiki
+		var stdout = new StringWriter
+		var logger = new Logger(info_level, stdout)
+		var v = new MockWiki2Html(wiki, false, logger = logger,
+			highlighter = "tests/highlighters/simple", highlighter_default = "nit")
+		var page = new MdPage(wiki, "test", md = """
+A code example:
+
+	print \"Hello, World!\"
+
+Another example:
+
+~~~
+print \"Hello, World!\"
+~~~
+
+~~~js
+print \"Hello, World!\"
+~~~
+""")
+		assert page.html(v) == """
+<p>A code example:</p>
+<nit>
+print "Hello, World!"
+</nit>
+<p>Another example:</p>
+<nit>
+print "Hello, World!"
+</nit>
+<js>
+print "Hello, World!"
+</js>
+"""
+		assert stdout.to_s == """
+Executing `tests/highlighters/simple` `nit` (in /test:3,1--3,25)
+Executing `tests/highlighters/simple` `nit` (in /test:7,1--9,3)
+Executing `tests/highlighters/simple` `js` (in /test:11,1--13,3)
+"""
+	end
+
+	fun rendered_warn_if_problem_with_hilighter is test do
+		var wiki = new Wiki
+		var stdout = new StringWriter
+		var logger = new Logger(info_level, stdout)
+		var v = new MockWiki2Html(wiki, false, logger = logger,
+			highlighter = "tests/highlighters/broken")
+
+		var page = new MdPage(wiki, "test", md = """
+~~~nit
+print \"Hello, World!\"
+~~~""")
+		assert page.html(v) == """
+<pre><code class="language-nit">print &quot;Hello, World!&quot;
+</code></pre>
+"""
+
+		assert stdout.to_s == """
+Executing `tests/highlighters/broken` `nit` (in /test:1,1--3,3)
+/test:1,1--3,3: `tests/highlighters/broken` `nit` returned 42
+/test:1,1--3,3: `tests/highlighters/broken` `nit` produced nothing
+"""
 	end
 
 	# TODO test all variables

@@ -31,6 +31,43 @@ class Wiki2Html
 
 	var logger = new Logger(warn_level) is optional
 
+	# External highlighter command called to process block code.
+	#
+	# * key: `wiki.highlighter`
+	# * default: empty string, that means no external highlighter
+	# * example: `highlight --fragment -S "$1" --inline-css --enclose-pre`
+	#
+	# The external highlighter is a shell command invoked with `sh -c`.
+	# The meta information of the fence is passed as `$1`.
+	# *Important*: `$1` is given as is, thus is tainted. You SHOULD protect it with quotes in the command.
+	#
+	# By default, the highlighter is only called on fenced block code with a meta information.
+	# See `wiki.highlighter.default` to force the invocation of the highlighter on any code block.
+	#
+	# The output of the command will be inserted as is in the generated document.
+	# Therefore it is expected that the command returns a valid, complete and balanced HTML fragment.
+	# If the highlighter returns nothing (empty output), the internal rendering is used as a fall-back
+	# (as if the option was not set).
+	#
+	# Advanced usages can invoke a custom shell script instead of a standard command to
+	# check the argument, filter it, dispatch to various advanced commands, implement ad-hoc behaviors, etc.
+	var highlighter: nullable String = null is optional, writable
+
+	# Default meta (i.e. language) to use to call the external highlighter.
+	#
+	# * key: `wiki.highlighter.default`
+	# * default: empty string, that means no default meta information.
+	# * example: `nit`
+	#
+	# When set, this configuration forces the external highlighter (see `wiki.highlighter`)
+	# to be called also on basic code block (with the indentation) and plain fenced code
+	# blocks (without meta information).
+	#
+	# The value is used as the `$1` argument of the configured highlighter command.
+	#
+	# Note: has no effect if `wiki.highlighter` is not set.
+	var highlighter_default: nullable String = null is optional, writable
+
 	fun render do visit_wiki(wiki)
 
 	redef fun visit_wiki(wiki) do
@@ -180,10 +217,16 @@ end
 class WikiHtmlRenderer
 	super HtmlRenderer
 
-	var v: Wiki2Html
+	var wiki_renderer: Wiki2Html
 	var context: Resource
 
-	# TODO code highlight
+	private fun location(node: MdNode): String do
+		var context = self.context
+		if context isa MdPage then
+			return "{context.file or else context.path}:{node.location}"
+		end
+		return "{context.path}:{node.location}"
+	end
 end
 
 redef class MdWikilink
@@ -221,5 +264,54 @@ redef class MdWikilink
 			v.add_raw title or else target.html_title
 		end
 		v.add_raw "</a>"
+	end
+end
+
+redef class MdCodeBlock
+	redef fun render_html(v) do
+		if not v isa WikiHtmlRenderer then
+			super
+			return
+		end
+
+		self.info = self.info or else v.wiki_renderer.highlighter_default
+
+		var highlighter = v.wiki_renderer.highlighter
+		if highlighter == null then
+			super
+			return
+		end
+
+		var info = self.info
+		if info == null then
+			super
+			return
+		end
+
+		var literal = self.literal
+		if literal == null then
+			super
+			return
+		end
+
+		var logger = v.wiki_renderer.logger
+		var loc = v.location(self)
+
+		# Execute the command
+		logger.info("Executing `{highlighter}` `{info}` (in {loc})")
+		var proc = new ProcessDuplex("sh", highlighter, info)
+		var res = proc.write_and_read(literal)
+		if proc.status != 0 then
+			logger.warn("{loc}: `{highlighter}` `{info}` returned {proc.status}")
+		end
+
+		# Check the result
+		if res.is_empty then
+			# No result, then defaults
+			logger.warn("{loc}: `{highlighter}` `{info}` produced nothing")
+			super
+			return
+		end
+		v.add_raw(res)
 	end
 end
