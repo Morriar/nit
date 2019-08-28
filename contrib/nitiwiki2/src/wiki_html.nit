@@ -29,6 +29,8 @@ class Wiki2Html
 	# If it does not exist it will be created.
 	var out_path: String = "out/" is optional, writable
 
+	var force = false is optional, writable
+
 	var logger = new Logger(warn_level) is optional
 
 	# External highlighter command called to process block code.
@@ -71,14 +73,26 @@ class Wiki2Html
 	fun render do visit_wiki(wiki)
 
 	redef fun visit_wiki(wiki) do
+		if not wiki.root.need_render(self) then
+			logger.debug "Wiki already up-to-date"
+			return
+		end
+
 		super
 
 		var assets_dir = wiki.assets_dir
-		if assets_dir != null then
-			var src_path = wiki.root_dir
-			assert src_path != null
-			logger.debug "Copy assets from {src_path / assets_dir} to {out_path}"
-			copy(src_path / assets_dir / "*", out_path)
+		if assets_dir == null then return
+
+		var root_dir = wiki.root_dir
+		assert root_dir != null
+		var src_path = root_dir / assets_dir
+		var out_path = self.out_path / "assets/"
+
+		if mtime(src_path) < mtime(out_path) then
+			logger.debug "Assets from {src_path} already up-to-date at {out_path}"
+		else
+			logger.debug "Copy assets from {src_path} to {out_path}"
+			copy(src_path, out_path)
 		end
 
 		# TODO index
@@ -106,6 +120,10 @@ class Wiki2Html
 		sys.system "mkdir -p -- {path.escape_to_sh}"
 	end
 
+	fun touch(path: String) do
+		sys.system "touch -- {path.escape_to_sh}"
+	end
+
 	fun copy(from, to: String) do
 		sys.system "cp -R -- {from.escape_to_sh} {to.escape_to_sh}"
 	end
@@ -119,12 +137,71 @@ class Wiki2Html
 		return parser.parse_page(page)
 	end
 
-	# fun touch(path: String) do
-		# sys.system "touch -- {path.escape_to_sh}"
-	# end
+	fun ctime(path: String): Int do
+		var stat = path.file_stat
+		if stat == null then return -1
+		return stat.ctime
+	end
 
-	# TODO render only if needed
-	# TODO --force option
+	fun mtime(path: String): Int do
+		var stat = path.file_stat
+		if stat == null then return -1
+		return stat.mtime
+	end
+
+	fun is_new(resource: Resource): Bool do
+		return not (out_path / resource.out_path).file_exists
+	end
+
+	fun is_dirty(resource: Resource): Bool do
+		if is_new(resource) then return true
+		return last_modification_time(resource) > last_rendering_time(resource)
+	end
+
+	fun creation_time(resource: Resource): Int do
+		if resource isa MdPage then
+			var file = resource.file
+			if file == null then return -1
+			return ctime(file)
+		else if resource isa Asset then
+			return ctime(resource.src_path)
+		end
+		var root_dir = wiki.root_dir
+		assert root_dir != null
+		return ctime(root_dir / wiki.pages_dir / resource.out_path)
+	end
+
+	fun last_modification_time(resource: Resource): Int do
+		if resource isa MdPage then
+			var file = resource.file
+			if file == null then return -1
+			return mtime(file)
+		else if resource isa Asset then
+			return mtime(resource.src_path)
+		else if resource isa Section then
+			var max = -1
+			for child in resource.children do
+				var time = last_modification_time(child)
+				if time > max then max = time
+			end
+			return max
+		end
+		var root_dir = wiki.root_dir
+		assert root_dir != null
+		return mtime(root_dir / wiki.pages_dir / resource.out_path)
+	end
+
+	fun last_rendering_time(resource: Resource): Int do
+		if resource isa Section then
+			var max = -1
+			for child in resource.children do
+				var time = last_rendering_time(child)
+				if time > max then max = time
+			end
+			return max
+		end
+		return mtime(out_path / resource.out_path)
+	end
 
 	# TODO sitemap
 	# Build the wiki sitemap page.
@@ -149,11 +226,20 @@ redef class Resource
 		if path.is_empty then return "#"
 		return path
 	end
+
+	private fun out_path: String do return path.substring(1, path.length - 1)
+
+	private fun need_render(v: Wiki2Html): Bool do return v.is_dirty(self) or v.force
 end
 
 redef class Section
 	redef fun accept_html_visitor(v) do
-		var out_path = v.out_path / path.substring(1, path.length - 1)
+		if not need_render(v) then
+			v.logger.debug "Section {self} already up-to-date at {out_path}"
+			return
+		end
+
+		var out_path = v.out_path / self.out_path
 		v.logger.debug "Render section {self} to {out_path}"
 		v.sections_stack.push self
 		v.mkdir out_path
@@ -173,7 +259,12 @@ end
 
 redef class MdPage
 	redef fun accept_html_visitor(v) do
-		var out_path = "{(v.out_path / path.substring(1, path.length - 1))}.html"
+		if not need_render(v) then
+			v.logger.debug "Page {self} already up-to-date at {out_path}"
+			return
+		end
+
+		var out_path = v.out_path / self.out_path
 		v.logger.debug "Render page {self} to {out_path}"
 		var html = self.html(v)
 		v.write_to_file(html, out_path)
@@ -184,6 +275,8 @@ redef class MdPage
 		if href == "#" then return href
 		return "{href}.html"
 	end
+
+	redef fun out_path do return "{super}.html"
 
 	fun html_body(v: Wiki2Html): String do
 		# TODO check html links
@@ -204,9 +297,14 @@ end
 
 redef class Asset
 	redef fun accept_html_visitor(v) do
+		if not need_render(v) then
+			v.logger.debug "Asset {self} already up-to-date at {out_path}"
+			return
+		end
+
 		var root = wiki.root_dir
 		assert root != null
-		var out_path = v.out_path / path.substring(1, path.length - 1)
+		var out_path = v.out_path / self.out_path
 		v.logger.debug "Copy asset {self} to {out_path}"
 		v.copy(root / wiki.pages_dir / path.substring(1, path.length - 1), "{out_path}")
 	end

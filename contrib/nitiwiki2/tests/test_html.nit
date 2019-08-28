@@ -16,6 +16,7 @@ module test_html is test
 
 import wiki_builder
 import wiki_html
+import test_base
 
 class MockWiki2Html
 	super Wiki2Html
@@ -276,7 +277,178 @@ $ write to out/section1/index.html
 $ mkdir -p -- 'out/section1/section11'
 $ cp -R -- 'tests/wikis/assets/pages/section1/section11/asset' 'out/section1/section11/asset'
 $ write to out/section1/section11/index.html
-$ cp -R -- 'tests/wikis/assets/assets/*' 'out/'\n"""
+$ cp -R -- 'tests/wikis/assets/assets/' 'out/assets/'\n"""
+	end
+
+	fun render_wiki_for_real is test do
+		var wiki = builder.build_wiki(tests_wikis / "assets")
+		assert wiki != null
+
+		var out_path = "render_wiki_for_real"
+		sys.system "rm -rf {out_path}"
+
+		var wiki2html = new Wiki2Html(wiki, out_path = out_path)
+		wiki2html.render
+
+		var proc = new ProcessReader("find", out_path)
+		var out = proc.read_all
+		proc.wait
+		proc.close
+
+		assert out == """
+render_wiki_for_real
+render_wiki_for_real/index.html
+render_wiki_for_real/asset2
+render_wiki_for_real/assets
+render_wiki_for_real/assets/asset2
+render_wiki_for_real/assets/asset1
+render_wiki_for_real/assets/asset1/asset11
+render_wiki_for_real/section1
+render_wiki_for_real/section1/index.html
+render_wiki_for_real/section1/asset.1
+render_wiki_for_real/section1/section11
+render_wiki_for_real/section1/section11/index.html
+render_wiki_for_real/section1/section11/asset
+render_wiki_for_real/.asset
+render_wiki_for_real/page1.html
+render_wiki_for_real/asset1
+"""
+		sys.system "rm -rf {out_path}"
+	end
+
+	fun renderer_can_tell_creation_times is test do
+		var wiki = builder.build_wiki(tests_wikis / "assets")
+		assert wiki != null
+
+		var wiki2html = new MockWiki2Html(wiki, false)
+
+		var s1 = wiki.resource_by_path("/section1").as(not null)
+		assert wiki2html.creation_time(s1) > 0
+
+		var p1 = wiki.resource_by_path("/page1").as(not null)
+		assert wiki2html.creation_time(p1) > 0
+
+		var a1 = wiki.resource_by_path("/section1/asset.1").as(not null)
+		assert wiki2html.creation_time(a1) > 0
+	end
+
+	fun renderer_can_tell_last_modification_times is test do
+		var wiki = builder.build_wiki(tests_wikis / "assets")
+		assert wiki != null
+
+		var wiki2html = new MockWiki2Html(wiki, false)
+
+		var s1 = wiki.resource_by_path("/section1").as(not null)
+		assert wiki2html.last_modification_time(s1) > 0
+
+		var p1 = wiki.resource_by_path("/page1").as(not null)
+		assert wiki2html.last_modification_time(p1) > 0
+
+		var a1 = wiki.resource_by_path("/section1/asset.1").as(not null)
+		assert wiki2html.last_modification_time(a1) > 0
+	end
+
+	fun renderer_can_tell_last_rendering_times is test do
+		var wiki = builder.build_wiki(tests_wikis / "assets")
+		assert wiki != null
+
+		var out_path = "renderer_can_tell_last_rendering_times"
+		sys.system "rm -rf {out_path}"
+
+		var wiki2html = new Wiki2Html(wiki, out_path = out_path)
+		wiki2html.render
+
+		var s1 = wiki.resource_by_path("/section1").as(not null)
+		assert wiki2html.last_rendering_time(s1) > 0
+
+		var p1 = wiki.resource_by_path("/page1").as(not null)
+		assert wiki2html.last_rendering_time(p1) > 0
+
+		var a1 = wiki.resource_by_path("/section1/asset.1").as(not null)
+		assert wiki2html.last_rendering_time(a1) > 0
+
+		sys.system "rm -rf {out_path}"
+	end
+
+	fun renderer_can_tell_if_resource_is_new is test do
+		var wiki = builder.build_wiki(tests_wikis / "assets")
+		assert wiki != null
+
+		var out_path = "renderer_can_tell_if_resource_is_new"
+		sys.system "rm -rf {out_path}"
+
+		var wiki2html = new Wiki2Html(wiki, out_path = out_path)
+
+		for resource in wiki.resources do
+			assert wiki2html.is_new(resource)
+		end
+
+		wiki2html.render
+
+		for resource in wiki.resources do
+			assert not wiki2html.is_new(resource)
+		end
+
+		sys.system "rm -rf {out_path}"
+	end
+
+	fun renderer_can_tell_if_resource_is_dirty is test do
+		var wiki = builder.build_wiki(tests_wikis / "assets")
+		assert wiki != null
+
+		var out_path = "renderer_can_tell_if_resource_is_dirty"
+		sys.system "rm -rf {out_path}"
+
+		var wiki2html = new Wiki2Html(wiki,
+			out_path = out_path, force = true, logger = new Logger(debug_level))
+
+		for resource in wiki.resources do
+			assert wiki2html.is_dirty(resource)
+		end
+
+		wiki2html.render
+
+		for resource in wiki.resources do
+			assert not wiki2html.is_dirty(resource)
+		end
+
+		sys.system("rm -rf {out_path}")
+	end
+
+	fun renderer_doesnt_render_non_dirty_resources is test do
+		var wiki = builder.build_wiki(tests_wikis / "assets")
+		assert wiki != null
+
+		var out_path = "renderer_doesnt_render_non_dirty_resources"
+		sys.system "rm -rf {out_path}"
+
+		var stdout = new StringWriter
+		var wiki2html = new Wiki2Html(wiki,
+			out_path = out_path, logger = new Logger(debug_level, out = stdout))
+
+		wiki2html.render
+		wiki2html.logger.warn("-------")
+		wiki2html.render
+
+		assert stdout.to_s == """
+Render section <root> to renderer_doesnt_render_non_dirty_resources
+Copy asset .asset to renderer_doesnt_render_non_dirty_resources/.asset
+Copy asset asset1 to renderer_doesnt_render_non_dirty_resources/asset1
+Copy asset asset2 to renderer_doesnt_render_non_dirty_resources/asset2
+Render page index to renderer_doesnt_render_non_dirty_resources/index.html
+Render page page1 to renderer_doesnt_render_non_dirty_resources/page1.html
+Render section section1 to renderer_doesnt_render_non_dirty_resources/section1
+Copy asset asset.1 to renderer_doesnt_render_non_dirty_resources/section1/asset.1
+Render page index to renderer_doesnt_render_non_dirty_resources/section1/index.html
+Render section section11 to renderer_doesnt_render_non_dirty_resources/section1/section11
+Copy asset asset to renderer_doesnt_render_non_dirty_resources/section1/section11/asset
+Render page index to renderer_doesnt_render_non_dirty_resources/section1/section11/index.html
+Copy assets from tests/wikis/assets/assets/ to renderer_doesnt_render_non_dirty_resources/assets/
+-------
+Wiki already up-to-date
+"""
+
+		sys.system "rm -rf {out_path}"
 	end
 
 	private fun render_wiki(name: String, with_html: Bool): String do

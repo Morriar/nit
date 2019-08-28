@@ -1,15 +1,6 @@
 # TODO
 
-TODAY
-* wiki2html
-	* render only if needed
-* nitiwiki CLI + tests
-	* commands lib
-	* status
-	* render
-	* clean
-
-
+* clean out/path/dir etc
 
 * bug simplify path
 
@@ -41,6 +32,10 @@ TODAY
 
 * nitiwiki CLI + tests
 	* check links (both internal and external)
+	* commands lib
+	* status
+	* render
+	* clean
 	* sync
 	* fetch
 	* options
