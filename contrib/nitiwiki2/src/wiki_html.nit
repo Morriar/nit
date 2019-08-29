@@ -37,19 +37,12 @@ redef class Wiki
 
 	var default_template_file: nullable String = null is writable
 
-	# Wiki's default template
-	#
-	# A wiki may have a default template to render the pages.
-	# The format of this template and how it is used if left to clients.
-	var default_template: nullable PageTemplate is lazy, writable do
-		var template_path = default_template_file
-		if template_path == null then return null
-		return load_template(root_dir / template_path)
-	end
-
-	private fun load_template(path: String): nullable PageTemplate do
-		if not path.file_exists then return null
-		return new PageTemplate(path.to_path.read_all)
+	var default_template_string: nullable String is lazy, writable do
+		var file = self.default_template_file
+		if file == null then return null
+		file = root_dir / file
+		if not file.file_exists then return null
+		return file.to_path.read_all
 	end
 
 	# External highlighter command called to process block code.
@@ -211,25 +204,19 @@ redef class Section
 
 	var default_template_file: nullable String = null is writable
 
-	# Section default template
-	#
-	# A section may have a default template to render the pages it containts.
-	# The format of this template and how it is used if left to clients.
-	# TODO merge with template?
-	var default_template: nullable PageTemplate is lazy, writable do
-		var template_path = default_template_file
-		if template_path == null then return null
-		return wiki.load_template(wiki.root_dir / template_path)
+	var default_template_string: nullable String is lazy, writable do
+		var file = self.default_template_file
+		if file == null then return null
+		file = wiki.root_dir / file
+		if not file.file_exists then return null
+		return file.to_path.read_all
 	end
 
-	# Template to apply to this section content (recursive)
-	#
-	# The template can be `default_template` or the parent `template` is any.
-	fun template: nullable PageTemplate do
-		if default_template != null then return default_template
+	fun template_string: nullable String do
+		if default_template_string != null then return default_template_string
 		var parent = self.section
-		if parent == null then return wiki.default_template
-		return parent.template
+		if parent == null then return wiki.default_template_string
+		return parent.template_string
 	end
 
 	# html
@@ -285,10 +272,10 @@ redef class MdPage
 
 	# template
 
-	fun template: nullable PageTemplate do
+	fun template_string: nullable String do
 		var parent = self.section
-		if parent == null then return wiki.default_template
-		return parent.template
+		if parent == null then return wiki.default_template_string
+		return parent.template_string
 	end
 
 	# html
@@ -310,18 +297,41 @@ redef class MdPage
 		return "{href}.html"
 	end
 
+	fun html(v: Wiki2Html): String do
+		# TODO should use the same syntax than commands?
+		var string = self.template_string or else "%BODY%"
+		var template = new TemplateString(string)
+		template.insert("BODY", html_body(v))
+		template.insert("ROOT", wiki.root.href_to(self)) # TODO check
+		template.insert("ROOT_URL", wiki.root.href_to(self)) # TODO check
+		# template.insert("ASSETS", wiki.assets_dir) # TODO
+		template.insert("TITLE", title) # TODO should be html
+
+		# Dates
+		var tm = new Tm.gmtime
+		template.insert("DATE", tm.to_s)
+		template.insert("YEAR", (tm.year + 1900).to_s)
+		template.insert("GEN_TIME", tm.to_s)
+		template.insert("SRC_PATH", file)
+		template.insert("OUT_PATH", out_path)
+		# template.insert("LAST_CHANGES", wiki.last_changes_url / trim_path) # TODO last changes
+		# template.insert("EDIT", wiki.edit_url / trim_path) # TODO edit
+		# template.insert("TOP_MENU", menu) # TODO top_menu
+		# template.insert("HEADER", menu) # TODO header?
+		# template.insert("FOOTER", menu) # TODO footer?
+		# template.insert("MENUS", menu) # TODO menus?
+		# template.insert("TRAIL", TRAIL) # TODO trail
+		# TODO section summary / map
+		# TODO site summary / map
+		# TODO summary
+		return template.write_to_string
+	end
+
 	fun html_body(v: Wiki2Html): String do
 		# TODO check html links
 		var ast = v.parse_md_page(self)
 		var renderer = new WikiHtmlRenderer(true, v, self)
 		return renderer.render(ast)
-	end
-
-	fun html(v: Wiki2Html): String do
-		# TODO move
-		var template = self.template
-		if template == null then return html_body(v)
-		return template.compile_to_html(v, self)
 	end
 
 	# status
@@ -363,96 +373,10 @@ redef class Asset
 	redef fun last_modification_time do return src_path.mtime
 end
 
-class PageTemplate
-	# Template string
-	var string: String
-
-	fun compile_to_html(v: Wiki2Html, page: MdPage): String do
-		var tpl = new TemplateString(string)
-		tpl.insert("BODY", page.html_body(v))
-		return tpl.write_to_string
-	end
-end
-
 redef class TemplateString
-	private fun insert(macro, string: String) do
-		if has_macro("BODY") then replace("BODY", string)
+	private fun insert(macro: String, string: nullable String) do
+		if has_macro(macro) then replace(macro, string or else "")
 	end
-end
-
-
-# A Page template
-#
-# Page content can be wrapped with a template.
-# Page templates can use macros (see `PageVars`) to display generated
-# variables from the Wiki such as dates, versions, strings etc.
-# class PageTemplate
-
-
-	# fun template_string(page: MdPage): TemplateString do
-		# var tpl = new TemplateString(string)
-
-		# tpl.insert("BODY", page.html_body(v))
-		# return tpl.write_to_string
-	# end
-# end
-
-# redef class PageTemplate
-#	fun compile_to_html(v: Wiki2Html, page: MdPage): String do
-#		var tpl = new TemplateString(string)
-#		tpl.insert("BODY", page.html_body(v))
-#		return tpl.write_to_string
-#	end
-# end
-
-# redef class TemplateString
-	# private fun insert(macro, string: String) do
-		# if has_macro("BODY") then replace("BODY", string)
-	# end
-# end
-
-# class TemplateVars
-#	var root_path: String
-#	var assets_path: String
-#
-#	var title: String
-#	var date: String
-#	var creation_date: String
-#	var last_modification_date: String
-#	var last_
-#
-#	var section_title: String
-#	var section_path: String
-#
-#	# TODO trail
-#	# TODO menu
-#	# TODO summary
-#	# TODO year
-#	# TODO date
-#	# TODO gen_time
-#
-# end
-
-# PageTemplate Vars
-class PageTemplateVars
-
-	# Page title
-	var title: nullable String = null is optional, writable
-
-	# Page content
-	var body: nullable String = null is optional, writable
-
-	# TODO root path
-	# TODO assets path
-	# TODO section_title
-	# TODO section_link
-
-	# TODO trail
-	# TODO menu
-	# TODO summary
-	# TODO year
-	# TODO date
-	# TODO gen_time
 end
 
 class WikiHtmlRenderer
@@ -515,9 +439,9 @@ redef class MdCodeBlock
 			return
 		end
 
-		self.info = self.info or else v.wiki_renderer.wiki.highlighter_default
+		self.info = self.info or else v.context.wiki.highlighter_default
 
-		var highlighter = v.wiki_renderer.wiki.highlighter
+		var highlighter = v.context.wiki.highlighter
 		if highlighter == null then
 			super
 			return

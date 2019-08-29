@@ -4,16 +4,11 @@
 
 * wiki2html
 	* simplify [[links]]: name, title or path (no relative, partial etc.)?
+	* template vars use [[ ]] syntax
 	* templates vars
-		- menu
-		- name
-		- title
-		- summary
-		- trail
-		* check at least has body
+	* check template at least has body
 
 * nitiwiki CLI + tests
-	* commands lib
 	* status
 	* render
 	* clean

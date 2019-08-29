@@ -64,7 +64,7 @@ $ write to out/test.html
 
 	fun render_page_with_default_template is test do
 		var wiki = new Wiki
-		wiki.default_template = new PageTemplate("<html>%BODY%</html>\n")
+		wiki.default_template_string = "<html>%BODY%</html>\n"
 		var page = new MdPage(wiki, "test", md = "# Test")
 
 		var v = new MockWiki2Html(wiki)
@@ -109,7 +109,7 @@ $ write to out/s1/p2.html
 
 	fun render_section_with_default_template is test do
 		var wiki = new Wiki
-		wiki.default_template = new PageTemplate("<html>%BODY%</html>\n")
+		wiki.default_template_string = "<html>%BODY%</html>\n"
 		var section = new Section(wiki, "s1")
 		section.add new MdPage(wiki, "p1", md = "# P1")
 		section.add new MdPage(wiki, "p2", md = "# P2")
@@ -128,9 +128,9 @@ $ write to out/s1/p2.html
 
 	fun render_section_with_section_template is test do
 		var wiki = new Wiki
-		wiki.default_template = new PageTemplate("<html>%BODY%</html>\n")
+		wiki.default_template_string = "<html>%BODY%</html>\n"
 		var section = new Section(wiki, "s1")
-		section.default_template = new PageTemplate("<s1>%BODY%</s1>\n")
+		section.default_template_string = "<s1>%BODY%</s1>\n"
 		section.add new MdPage(wiki, "p1", md = "# P1")
 		section.add new MdPage(wiki, "p2", md = "# P2")
 
@@ -148,14 +148,14 @@ $ write to out/s1/p2.html
 
 	fun render_section_with_section_template_nested is test do
 		var wiki = new Wiki
-		wiki.default_template = new PageTemplate("<html>%BODY%</html>\n")
+		wiki.default_template_string = "<html>%BODY%</html>\n"
 		var section = new Section(wiki, "s1")
-		section.default_template = new PageTemplate("<s1>%BODY%</s1>\n")
+		section.default_template_string = "<s1>%BODY%</s1>\n"
 		section.add new MdPage(wiki, "p1", md = "# P1")
 		section.add new MdPage(wiki, "p2", md = "# P2")
 
 		var s11 = new Section(wiki, "s11")
-		s11.default_template = new PageTemplate("<s11>%BODY%</s11>\n")
+		s11.default_template_string = "<s11>%BODY%</s11>\n"
 		s11.add new MdPage(wiki, "p11", md = "# P11")
 		section.add s11
 
@@ -520,7 +520,7 @@ class TestMdPageToHtml
 
 	fun simple_md_to_html_with_default_template_empty is test do
 		var wiki = new Wiki
-		wiki.default_template = new PageTemplate("")
+		wiki.default_template_string = ""
 		var v = new MockWiki2Html(wiki, false)
 		var page = new MdPage(wiki, "test", md = "# Test")
 		assert page.html(v) == ""
@@ -528,7 +528,7 @@ class TestMdPageToHtml
 
 	fun simple_md_to_html_with_default_template_simple is test do
 		var wiki = new Wiki
-		wiki.default_template = new PageTemplate("<div>%BODY%</div>")
+		wiki.default_template_string = "<div>%BODY%</div>"
 		var v = new MockWiki2Html(wiki, false)
 		var page = new MdPage(wiki, "test", md = "# Test")
 		assert page.html(v) == "<div><h1 id=\"Test\">Test</h1>\n</div>"
