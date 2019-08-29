@@ -15,35 +15,23 @@
 module wiki_builder
 
 import wiki_markdown
-import ini
 import logger
-
-redef class Wiki
-	var root_dir: nullable String = null is writable
-	var pages_dir = "pages/" is writable
-
-	# Wiki's assets directory
-	# TODO
-	#
-	# A Wiki may have a directory containing assets used to render its content
-	# like images, scripts, stylesheets...
-	# How this directory will be used depends on the renderer used.
-	# For example, a HTML renderer could simply copy the content of this directory
-	# to the `public/` one. Or a server renderer could serve the files in place.
-	var assets_dir: nullable String = null is writable
-end
 
 class WikiBuilder
 
 	var logger = new Logger(warn_level) is optional
+
+	# TODO move to config
 	var section_config = "section.ini" is optional
+
+	# TODO move to config
 	var allowed_md_exts = ["md"] is optional, writable
 
 	fun build_wiki(root_dir: String): nullable Wiki do
 		if not root_dir.file_exists then return null
 
 		var wiki = new Wiki
-		wiki.root_dir = root_dir
+		wiki.config.root_dir = root_dir
 
 		# Load wiki config
 		var ini_path = root_dir / "nitiwiki.ini"
@@ -51,15 +39,14 @@ class WikiBuilder
 		if ini != null then
 			logger.debug "Found wiki config at {ini_path}"
 			# TODO wiki name?
-			wiki.pages_dir = ini["wiki.pages"] or else wiki.pages_dir
-			wiki.assets_dir = ini["wiki.assets"]
+			wiki.config.load_from_ini(ini)
 
 			var tpl = ini["wiki.template"]
-			if tpl != null then wiki.root.default_template = load_template(root_dir / tpl)
+			if tpl != null then wiki.default_template = load_template(root_dir / tpl)
 		end
 
 		# Build sections recursively starting from `root_path`
-		build_section(wiki, wiki.root, root_dir / wiki.pages_dir)
+		build_section(wiki, wiki.root, root_dir / wiki.config.pages_dir)
 
 		return wiki
 	end

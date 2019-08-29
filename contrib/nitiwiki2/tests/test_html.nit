@@ -20,13 +20,6 @@ import test_base
 
 class MockWiki2Html
 	super Wiki2Html
-	autoinit wiki, save_html, logger, highlighter, highlighter_default
-
-	init do
-		super
-		out_path = "out/" # We don't really use it as we mock the output
-	end
-
 	# Also save HTMl content of pages?
 	var save_html = true is optional, writable
 
@@ -62,7 +55,7 @@ class TestWiki2Html
 		var wiki = new Wiki
 		var page = new MdPage(wiki, "test", md = "# Test")
 
-		var v = new MockWiki2Html(wiki, true)
+		var v = new MockWiki2Html(wiki)
 		v.visit(page)
 		assert v.test_output == """
 $ write to out/test.html
@@ -73,7 +66,7 @@ $ write to out/test.html
 		var wiki = new Wiki(default_template = new PageTemplate("<html>%BODY%</html>\n"))
 		var page = new MdPage(wiki, "test", md = "# Test")
 
-		var v = new MockWiki2Html(wiki, true)
+		var v = new MockWiki2Html(wiki)
 		v.visit(page)
 		assert v.test_output == """
 $ write to out/test.html
@@ -87,7 +80,7 @@ $ write to out/test.html
 		section.add new MdPage(wiki, "p1", md = "# P1")
 		section.add new MdPage(wiki, "p2", md = "# P2")
 
-		var v = new MockWiki2Html(new Wiki, true)
+		var v = new MockWiki2Html(new Wiki)
 		v.visit(section)
 		assert v.test_output == """
 $ mkdir -p -- 'out/s1'
@@ -103,7 +96,7 @@ $ write to out/s1/p2.html
 		section.add new MdPage(wiki, "p1", md = "# P1")
 		section.add new MdPage(wiki, "p2", md = "# P2")
 
-		var v = new MockWiki2Html(new Wiki, true)
+		var v = new MockWiki2Html(new Wiki)
 		v.visit(section)
 		assert v.test_output == """
 $ mkdir -p -- 'out/s1'
@@ -119,7 +112,7 @@ $ write to out/s1/p2.html
 		section.add new MdPage(wiki, "p1", md = "# P1")
 		section.add new MdPage(wiki, "p2", md = "# P2")
 
-		var v = new MockWiki2Html(wiki, true)
+		var v = new MockWiki2Html(wiki)
 		v.visit(section)
 		assert v.test_output == """
 $ mkdir -p -- 'out/s1'
@@ -138,7 +131,7 @@ $ write to out/s1/p2.html
 		section.add new MdPage(wiki, "p1", md = "# P1")
 		section.add new MdPage(wiki, "p2", md = "# P2")
 
-		var v = new MockWiki2Html(wiki, true)
+		var v = new MockWiki2Html(wiki)
 		v.visit(section)
 		assert v.test_output == """
 $ mkdir -p -- 'out/s1'
@@ -166,7 +159,7 @@ $ write to out/s1/p2.html
 		s12.add new MdPage(wiki, "p12", md = "# P12")
 		section.add s12
 
-		var v = new MockWiki2Html(wiki, true)
+		var v = new MockWiki2Html(wiki)
 		v.visit(section)
 		assert v.test_output == """
 $ mkdir -p -- 'out/s1'
@@ -284,13 +277,14 @@ $ cp -R -- 'tests/wikis/assets/assets/' 'out/assets/'\n"""
 		var wiki = builder.build_wiki(tests_wikis / "assets")
 		assert wiki != null
 
-		var out_path = "render_wiki_for_real"
-		sys.system "rm -rf {out_path}"
+		var out_dir = "render_wiki_for_real"
+		wiki.config.out_dir = out_dir
+		sys.system "rm -rf {out_dir}"
 
-		var wiki2html = new Wiki2Html(wiki, out_path = out_path)
+		var wiki2html = new Wiki2Html(wiki)
 		wiki2html.render
 
-		var proc = new ProcessReader("find", out_path)
+		var proc = new ProcessReader("find", out_dir)
 		var out = proc.read_all
 		proc.wait
 		proc.close
@@ -313,118 +307,19 @@ render_wiki_for_real/.asset
 render_wiki_for_real/page1.html
 render_wiki_for_real/asset1
 """
-		sys.system "rm -rf {out_path}"
-	end
-
-	fun renderer_can_tell_creation_times is test do
-		var wiki = builder.build_wiki(tests_wikis / "assets")
-		assert wiki != null
-
-		var wiki2html = new MockWiki2Html(wiki, false)
-
-		var s1 = wiki.resource_by_path("/section1").as(not null)
-		assert wiki2html.creation_time(s1) > 0
-
-		var p1 = wiki.resource_by_path("/page1").as(not null)
-		assert wiki2html.creation_time(p1) > 0
-
-		var a1 = wiki.resource_by_path("/section1/asset.1").as(not null)
-		assert wiki2html.creation_time(a1) > 0
-	end
-
-	fun renderer_can_tell_last_modification_times is test do
-		var wiki = builder.build_wiki(tests_wikis / "assets")
-		assert wiki != null
-
-		var wiki2html = new MockWiki2Html(wiki, false)
-
-		var s1 = wiki.resource_by_path("/section1").as(not null)
-		assert wiki2html.last_modification_time(s1) > 0
-
-		var p1 = wiki.resource_by_path("/page1").as(not null)
-		assert wiki2html.last_modification_time(p1) > 0
-
-		var a1 = wiki.resource_by_path("/section1/asset.1").as(not null)
-		assert wiki2html.last_modification_time(a1) > 0
-	end
-
-	fun renderer_can_tell_last_rendering_times is test do
-		var wiki = builder.build_wiki(tests_wikis / "assets")
-		assert wiki != null
-
-		var out_path = "renderer_can_tell_last_rendering_times"
-		sys.system "rm -rf {out_path}"
-
-		var wiki2html = new Wiki2Html(wiki, out_path = out_path)
-		wiki2html.render
-
-		var s1 = wiki.resource_by_path("/section1").as(not null)
-		assert wiki2html.last_rendering_time(s1) > 0
-
-		var p1 = wiki.resource_by_path("/page1").as(not null)
-		assert wiki2html.last_rendering_time(p1) > 0
-
-		var a1 = wiki.resource_by_path("/section1/asset.1").as(not null)
-		assert wiki2html.last_rendering_time(a1) > 0
-
-		sys.system "rm -rf {out_path}"
-	end
-
-	fun renderer_can_tell_if_resource_is_new is test do
-		var wiki = builder.build_wiki(tests_wikis / "assets")
-		assert wiki != null
-
-		var out_path = "renderer_can_tell_if_resource_is_new"
-		sys.system "rm -rf {out_path}"
-
-		var wiki2html = new Wiki2Html(wiki, out_path = out_path)
-
-		for resource in wiki.resources do
-			assert wiki2html.is_new(resource)
-		end
-
-		wiki2html.render
-
-		for resource in wiki.resources do
-			assert not wiki2html.is_new(resource)
-		end
-
-		sys.system "rm -rf {out_path}"
-	end
-
-	fun renderer_can_tell_if_resource_is_dirty is test do
-		var wiki = builder.build_wiki(tests_wikis / "assets")
-		assert wiki != null
-
-		var out_path = "renderer_can_tell_if_resource_is_dirty"
-		sys.system "rm -rf {out_path}"
-
-		var wiki2html = new Wiki2Html(wiki,
-			out_path = out_path, force = true, logger = new Logger(debug_level))
-
-		for resource in wiki.resources do
-			assert wiki2html.is_dirty(resource)
-		end
-
-		wiki2html.render
-
-		for resource in wiki.resources do
-			assert not wiki2html.is_dirty(resource)
-		end
-
-		sys.system("rm -rf {out_path}")
+		sys.system "rm -rf {out_dir}"
 	end
 
 	fun renderer_doesnt_render_non_dirty_resources is test do
 		var wiki = builder.build_wiki(tests_wikis / "assets")
 		assert wiki != null
 
-		var out_path = "renderer_doesnt_render_non_dirty_resources"
-		sys.system "rm -rf {out_path}"
+		var out_dir = "renderer_doesnt_render_non_dirty_resources"
+		wiki.config.out_dir = out_dir
+		sys.system "rm -rf {out_dir}"
 
 		var stdout = new StringWriter
-		var wiki2html = new Wiki2Html(wiki,
-			out_path = out_path, logger = new Logger(debug_level, out = stdout))
+		var wiki2html = new Wiki2Html(wiki, logger = new Logger(debug_level, out = stdout))
 
 		wiki2html.render
 		wiki2html.logger.warn("-------")
@@ -448,16 +343,120 @@ Copy assets from tests/wikis/assets/assets/ to renderer_doesnt_render_non_dirty_
 Wiki already up-to-date
 """
 
-		sys.system "rm -rf {out_path}"
+		sys.system "rm -rf {out_dir}"
 	end
 
-	private fun render_wiki(name: String, with_html: Bool): String do
+	private fun render_wiki(name: String, save_html: Bool): String do
 		var wiki = builder.build_wiki(tests_wikis / name)
 		assert wiki != null
 
-		var wiki2html = new MockWiki2Html(wiki, with_html)
+		var wiki2html = new MockWiki2Html(wiki, save_html = save_html)
 		wiki2html.render
 		return wiki2html.test_output.to_s
+	end
+end
+
+class TestResourceToHtml
+	super TestWiki2Html # TODO move to test_base
+	test
+
+	# status
+
+	fun resource_has_creation_times is test do
+		var wiki = builder.build_wiki(tests_wikis / "assets")
+		assert wiki != null
+
+		var s1 = wiki.resource_by_path("/section1").as(not null)
+		assert s1.creation_time > 0
+
+		var p1 = wiki.resource_by_path("/page1").as(not null)
+		assert p1.creation_time > 0
+
+		var a1 = wiki.resource_by_path("/section1/asset.1").as(not null)
+		assert a1.creation_time > 0
+	end
+
+	fun resource_has_last_modification_times is test do
+		var wiki = builder.build_wiki(tests_wikis / "assets")
+		assert wiki != null
+
+		var s1 = wiki.resource_by_path("/section1").as(not null)
+		assert s1.last_modification_time > 0
+
+		var p1 = wiki.resource_by_path("/page1").as(not null)
+		assert p1.last_modification_time > 0
+
+		var a1 = wiki.resource_by_path("/section1/asset.1").as(not null)
+		assert a1.last_modification_time > 0
+	end
+
+	fun resource_has_last_rendering_times is test do
+		var wiki = builder.build_wiki(tests_wikis / "assets")
+		assert wiki != null
+
+		var out_dir = "renderer_can_tell_last_rendering_times"
+		wiki.config.out_dir = out_dir
+		sys.system "rm -rf {out_dir}"
+
+		var wiki2html = new Wiki2Html(wiki)
+		wiki2html.render
+
+		var s1 = wiki.resource_by_path("/section1").as(not null)
+		assert s1.last_rendering_time > 0
+
+		var p1 = wiki.resource_by_path("/page1").as(not null)
+		assert p1.last_rendering_time > 0
+
+		var a1 = wiki.resource_by_path("/section1/asset.1").as(not null)
+		assert a1.last_rendering_time > 0
+
+		sys.system "rm -rf {out_dir}"
+	end
+
+	fun resources_can_tell_if_new is test do
+		var wiki = builder.build_wiki(tests_wikis / "assets")
+		assert wiki != null
+
+		var out_dir = "renderer_can_tell_if_resource_is_new"
+		wiki.config.out_dir = out_dir
+		sys.system "rm -rf {out_dir}"
+
+		var wiki2html = new Wiki2Html(wiki)
+
+		for resource in wiki.resources do
+			assert resource.is_new
+		end
+
+		wiki2html.render
+
+		for resource in wiki.resources do
+			assert not resource.is_new
+		end
+
+		sys.system "rm -rf {out_dir}"
+	end
+
+	fun resource_can_tell_if_dirty is test do
+		var wiki = builder.build_wiki(tests_wikis / "assets")
+		assert wiki != null
+
+		var out_dir = "renderer_can_tell_if_resource_is_dirty"
+		wiki.config.out_dir = out_dir
+		sys.system "rm -rf {out_dir}"
+
+		var wiki2html = new Wiki2Html(wiki, force = true, logger = new Logger(debug_level))
+
+		for resource in wiki.resources do
+			assert resource.is_dirty
+		end
+
+		wiki2html.render
+
+		for resource in wiki.resources do
+			assert not resource.is_dirty
+		end
+
+		sys.system("rm -rf {out_dir}")
 	end
 end
 
@@ -549,7 +548,8 @@ print \"Hello, World!\"
 
 	fun md_code_blocs_can_have_a_default_language is test do
 		var wiki = new Wiki
-		var v = new MockWiki2Html(wiki, false, highlighter_default = "nit")
+		wiki.config.highlighter_default = "nit"
+		var v = new MockWiki2Html(wiki, false)
 		var page = new MdPage(wiki, "test", md = """
 A code example:
 
@@ -572,10 +572,11 @@ print \"Hello, World!\"
 
 	fun md_code_blocs_can_be_highlighted is test do
 		var wiki = new Wiki
+		wiki.config.highlighter = "tests/highlighters/simple"
+		wiki.config.highlighter_default = "nit"
 		var stdout = new StringWriter
 		var logger = new Logger(info_level, stdout)
-		var v = new MockWiki2Html(wiki, false, logger = logger,
-			highlighter = "tests/highlighters/simple", highlighter_default = "nit")
+		var v = new MockWiki2Html(wiki, false, logger = logger)
 		var page = new MdPage(wiki, "test", md = """
 A code example:
 
@@ -613,10 +614,10 @@ Executing `tests/highlighters/simple` `js` (in /test:11,1--13,3)
 
 	fun rendered_warn_if_problem_with_hilighter is test do
 		var wiki = new Wiki
+		wiki.config.highlighter = "tests/highlighters/broken"
 		var stdout = new StringWriter
 		var logger = new Logger(info_level, stdout)
-		var v = new MockWiki2Html(wiki, false, logger = logger,
-			highlighter = "tests/highlighters/broken")
+		var v = new MockWiki2Html(wiki, false, logger = logger)
 
 		var page = new MdPage(wiki, "test", md = """
 ~~~nit

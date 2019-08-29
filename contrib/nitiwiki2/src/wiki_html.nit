@@ -23,72 +23,27 @@ class Wiki2Html
 	# Wiki to render
 	var wiki: Wiki
 
-	# Output path
-	#
-	# Directory where the wiki will be rendered.
-	# If it does not exist it will be created.
-	var out_path: String = "out/" is optional, writable
-
 	var force = false is optional, writable
 
 	var logger = new Logger(warn_level) is optional
 
-	# External highlighter command called to process block code.
-	#
-	# * key: `wiki.highlighter`
-	# * default: empty string, that means no external highlighter
-	# * example: `highlight --fragment -S "$1" --inline-css --enclose-pre`
-	#
-	# The external highlighter is a shell command invoked with `sh -c`.
-	# The meta information of the fence is passed as `$1`.
-	# *Important*: `$1` is given as is, thus is tainted. You SHOULD protect it with quotes in the command.
-	#
-	# By default, the highlighter is only called on fenced block code with a meta information.
-	# See `wiki.highlighter.default` to force the invocation of the highlighter on any code block.
-	#
-	# The output of the command will be inserted as is in the generated document.
-	# Therefore it is expected that the command returns a valid, complete and balanced HTML fragment.
-	# If the highlighter returns nothing (empty output), the internal rendering is used as a fall-back
-	# (as if the option was not set).
-	#
-	# Advanced usages can invoke a custom shell script instead of a standard command to
-	# check the argument, filter it, dispatch to various advanced commands, implement ad-hoc behaviors, etc.
-	var highlighter: nullable String = null is optional, writable
-
-	# Default meta (i.e. language) to use to call the external highlighter.
-	#
-	# * key: `wiki.highlighter.default`
-	# * default: empty string, that means no default meta information.
-	# * example: `nit`
-	#
-	# When set, this configuration forces the external highlighter (see `wiki.highlighter`)
-	# to be called also on basic code block (with the indentation) and plain fenced code
-	# blocks (without meta information).
-	#
-	# The value is used as the `$1` argument of the configured highlighter command.
-	#
-	# Note: has no effect if `wiki.highlighter` is not set.
-	var highlighter_default: nullable String = null is optional, writable
-
 	fun render do visit_wiki(wiki)
 
 	redef fun visit_wiki(wiki) do
-		if not wiki.root.need_render(self) then
+		if not need_render(wiki.root) then
 			logger.debug "Wiki already up-to-date"
 			return
 		end
 
 		super
 
-		var assets_dir = wiki.assets_dir
+		var assets_dir = wiki.config.assets_dir
 		if assets_dir == null then return
 
-		var root_dir = wiki.root_dir
-		assert root_dir != null
-		var src_path = root_dir / assets_dir
-		var out_path = self.out_path / "assets/"
+		var src_path = wiki.config.root_dir / assets_dir
+		var out_path = wiki.config.out_dir / "assets/"
 
-		if mtime(src_path) < mtime(out_path) then
+		if src_path.mtime < out_path.mtime then
 			logger.debug "Assets from {src_path} already up-to-date at {out_path}"
 		else
 			logger.debug "Copy assets from {src_path} to {out_path}"
@@ -101,13 +56,16 @@ class Wiki2Html
 
 	redef fun visit(resource) do resource.accept_html_visitor(self)
 
+	# TODO remove
 	private var sections_stack = new Array[Section]
 
+	# TODO remove
 	private fun current_section: nullable Section do
 		if sections_stack.is_empty then return null
 		return sections_stack.last
 	end
 
+	# TODO move
 	private fun current_template: nullable PageTemplate do
 		var section = current_section
 		if section == null then return wiki.default_template
@@ -137,71 +95,7 @@ class Wiki2Html
 		return parser.parse_page(page)
 	end
 
-	fun ctime(path: String): Int do
-		var stat = path.file_stat
-		if stat == null then return -1
-		return stat.ctime
-	end
-
-	fun mtime(path: String): Int do
-		var stat = path.file_stat
-		if stat == null then return -1
-		return stat.mtime
-	end
-
-	fun is_new(resource: Resource): Bool do
-		return not (out_path / resource.out_path).file_exists
-	end
-
-	fun is_dirty(resource: Resource): Bool do
-		if is_new(resource) then return true
-		return last_modification_time(resource) > last_rendering_time(resource)
-	end
-
-	fun creation_time(resource: Resource): Int do
-		if resource isa MdPage then
-			var file = resource.file
-			if file == null then return -1
-			return ctime(file)
-		else if resource isa Asset then
-			return ctime(resource.src_path)
-		end
-		var root_dir = wiki.root_dir
-		assert root_dir != null
-		return ctime(root_dir / wiki.pages_dir / resource.out_path)
-	end
-
-	fun last_modification_time(resource: Resource): Int do
-		if resource isa MdPage then
-			var file = resource.file
-			if file == null then return -1
-			return mtime(file)
-		else if resource isa Asset then
-			return mtime(resource.src_path)
-		else if resource isa Section then
-			var max = -1
-			for child in resource.children do
-				var time = last_modification_time(child)
-				if time > max then max = time
-			end
-			return max
-		end
-		var root_dir = wiki.root_dir
-		assert root_dir != null
-		return mtime(root_dir / wiki.pages_dir / resource.out_path)
-	end
-
-	fun last_rendering_time(resource: Resource): Int do
-		if resource isa Section then
-			var max = -1
-			for child in resource.children do
-				var time = last_rendering_time(child)
-				if time > max then max = time
-			end
-			return max
-		end
-		return mtime(out_path / resource.out_path)
-	end
+	private fun need_render(resource: Resource): Bool do return force or resource.is_dirty
 
 	# TODO sitemap
 	# Build the wiki sitemap page.
@@ -213,6 +107,15 @@ class Wiki2Html
 end
 
 redef class Resource
+
+	fun out_path: String do return wiki.config.out_dir / trim_path
+
+	# Strip the `/` prefix so it can be used with the `/` operator.
+	# FIXME: should the `/` method handle that?
+	private fun trim_path: String do return path.substring(1, path.length - 1)
+
+	# html
+
 	fun accept_html_visitor(v: Wiki2Html) is abstract
 
 	fun html_title: String do return pretty_name
@@ -227,19 +130,33 @@ redef class Resource
 		return path
 	end
 
-	private fun out_path: String do return path.substring(1, path.length - 1)
+	# status
 
-	private fun need_render(v: Wiki2Html): Bool do return v.is_dirty(self) or v.force
+	fun creation_time: Int do
+		return (wiki.config.root_dir / wiki.config.pages_dir / trim_path).ctime
+	end
+
+	fun last_modification_time: Int do
+		return (wiki.config.root_dir / wiki.config.pages_dir / trim_path).mtime
+	end
+
+	fun last_rendering_time: Int do return out_path.mtime
+
+	fun is_new: Bool do return not out_path.file_exists
+
+	fun is_dirty: Bool do return is_new or last_modification_time > last_rendering_time
 end
 
 redef class Section
+
+	# html
+
 	redef fun accept_html_visitor(v) do
-		if not need_render(v) then
+		if not v.need_render(self) then
 			v.logger.debug "Section {self} already up-to-date at {out_path}"
 			return
 		end
 
-		var out_path = v.out_path / self.out_path
 		v.logger.debug "Render section {self} to {out_path}"
 		v.sections_stack.push self
 		v.mkdir out_path
@@ -255,16 +172,39 @@ redef class Section
 		end
 		return super
 	end
+
+	# status
+
+	redef fun last_modification_time do
+		var max = -1
+		for child in children do
+			var time = child.last_modification_time
+			if time > max then max = time
+		end
+		return max
+	end
+
+	redef fun last_rendering_time do
+		var max = -1
+		for child in children do
+			var time = child.last_rendering_time
+			if time > max then max = time
+		end
+		return max
+	end
 end
 
 redef class MdPage
+	redef fun out_path do return "{super}.html"
+
+	# html
+
 	redef fun accept_html_visitor(v) do
-		if not need_render(v) then
+		if not v.need_render(self) then
 			v.logger.debug "Page {self} already up-to-date at {out_path}"
 			return
 		end
 
-		var out_path = v.out_path / self.out_path
 		v.logger.debug "Render page {self} to {out_path}"
 		var html = self.html(v)
 		v.write_to_file(html, out_path)
@@ -276,8 +216,6 @@ redef class MdPage
 		return "{href}.html"
 	end
 
-	redef fun out_path do return "{super}.html"
-
 	fun html_body(v: Wiki2Html): String do
 		# TODO check html links
 		var ast = v.parse_md_page(self)
@@ -286,6 +224,7 @@ redef class MdPage
 	end
 
 	fun html(v: Wiki2Html): String do
+		# TODO move
 		var page_template = v.current_template
 		if page_template == null then return html_body(v)
 		return page_template.compile(new TemplateVars(
@@ -293,23 +232,44 @@ redef class MdPage
 			body = html_body(v)
 		)).write_to_string
 	end
+
+	# status
+
+	redef fun creation_time do
+		var file = self.file
+		if file == null then return -1
+		return file.ctime
+	end
+
+	redef fun last_modification_time do
+		var file = self.file
+		if file == null then return -1
+		return file.mtime
+	end
 end
 
 redef class Asset
+
+	# html
+
 	redef fun accept_html_visitor(v) do
-		if not need_render(v) then
+		if not v.need_render(self) then
 			v.logger.debug "Asset {self} already up-to-date at {out_path}"
 			return
 		end
 
-		var root = wiki.root_dir
-		assert root != null
-		var out_path = v.out_path / self.out_path
 		v.logger.debug "Copy asset {self} to {out_path}"
-		v.copy(root / wiki.pages_dir / path.substring(1, path.length - 1), "{out_path}")
+		var from = wiki.config.root_dir / wiki.config.pages_dir / path.substring(1, path.length - 1)
+		v.copy(from, "{out_path}")
 	end
 
 	redef fun html_title do return name
+
+	# status
+
+	redef fun creation_time do return src_path.ctime
+
+	redef fun last_modification_time do return src_path.mtime
 end
 
 class WikiHtmlRenderer
@@ -372,9 +332,9 @@ redef class MdCodeBlock
 			return
 		end
 
-		self.info = self.info or else v.wiki_renderer.highlighter_default
+		self.info = self.info or else v.wiki_renderer.wiki.config.highlighter_default
 
-		var highlighter = v.wiki_renderer.highlighter
+		var highlighter = v.wiki_renderer.wiki.config.highlighter
 		if highlighter == null then
 			super
 			return
@@ -411,5 +371,19 @@ redef class MdCodeBlock
 			return
 		end
 		v.add_raw(res)
+	end
+end
+
+redef class String
+	private fun ctime: Int do
+		var stat = self.file_stat
+		if stat == null then return -1
+		return stat.ctime
+	end
+
+	private fun mtime: Int do
+		var stat = self.file_stat
+		if stat == null then return -1
+		return stat.mtime
 	end
 end

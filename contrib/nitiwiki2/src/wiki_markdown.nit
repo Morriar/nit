@@ -14,7 +14,7 @@
 
 module wiki_markdown
 
-import wiki_base
+import wiki_config
 
 import markdown2
 import logger

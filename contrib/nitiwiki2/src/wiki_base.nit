@@ -37,6 +37,7 @@ class Wiki
 	#
 	# A wiki may have a default template to render the pages.
 	# The format of this template and how it is used if left to clients.
+	# TODO move to config
 	var default_template: nullable PageTemplate = null is optional, writable
 
 	# List all resources in this wiki
@@ -261,11 +262,13 @@ class Section
 	#
 	# A section may have a default template to render the pages it containts.
 	# The format of this template and how it is used if left to clients.
+	# TODO move to config?
 	var default_template: nullable PageTemplate = null is optional, writable
 
 	# Template to apply to this section content (recursive)
 	#
 	# The template can be `default_template` or the parent `template` is any.
+	# TODO move to config?
 	fun template: nullable PageTemplate do
 		if default_template != null then return default_template
 		var parent = self.section
