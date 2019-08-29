@@ -20,7 +20,8 @@
 # An Resource can be a Page, a Section or an Asset.
 module wiki_base
 
-import template::macro
+import ini
+import template
 
 # Wiki
 #
@@ -32,13 +33,6 @@ class Wiki
 	# Every wiki as a Root, it represents the `pages/` directory where the wiki
 	# source files are located.
 	var root = new Root(self, "<root>") is lazy
-
-	# Wiki's default template
-	#
-	# A wiki may have a default template to render the pages.
-	# The format of this template and how it is used if left to clients.
-	# TODO move to config
-	var default_template: nullable PageTemplate = null is optional, writable
 
 	# List all resources in this wiki
 	#
@@ -116,6 +110,9 @@ class Wiki
 		v.visit_wiki(self)
 		return v.ansi.write_to_string
 	end
+
+	# Configure the wiki from a `config` file.
+	fun configure_from_ini(ini: IniFile) do end
 end
 
 # A Wiki resource
@@ -258,24 +255,6 @@ class Section
 		resource.section = self
 	end
 
-	# Section default template
-	#
-	# A section may have a default template to render the pages it containts.
-	# The format of this template and how it is used if left to clients.
-	# TODO move to config?
-	var default_template: nullable PageTemplate = null is optional, writable
-
-	# Template to apply to this section content (recursive)
-	#
-	# The template can be `default_template` or the parent `template` is any.
-	# TODO move to config?
-	fun template: nullable PageTemplate do
-		if default_template != null then return default_template
-		var parent = self.section
-		if parent == null then return null
-		return parent.template
-	end
-
 	# Landing page of this section
 	fun index: nullable Page do
 		for child in children do
@@ -292,6 +271,13 @@ class Section
 	redef fun pretty_name do
 		if is_hidden then return "-{super}"
 		return super
+	end
+
+	# Configure the section from a INI file
+	fun configure_from_ini(ini: IniFile) do
+		var hidden = ini["section.hidden"]
+		if hidden != null then is_hidden = hidden == "true"
+		title = ini["section.title"] or else title
 	end
 end
 
@@ -322,53 +308,6 @@ class Asset
 
 	# Use the file name as resource name
 	redef var name = src_path.to_path.filename is lazy
-end
-
-# A Page template
-#
-# Page content can be wrapped with a template.
-# Page templates can use macros (see `PageVars`) to display generated
-# variables from the Wiki such as dates, versions, strings etc.
-class PageTemplate
-
-	# Template string
-	var string: String
-
-	# Compile `string` as a Template string
-	#
-	# All the macros from the template `string` are replaced by `vars`.
-	fun compile(vars: TemplateVars): Template do
-		var tpl = new TemplateString(string)
-		if tpl.has_macro("BODY") then
-			tpl.replace("BODY", vars.body or else "")
-		end
-		return tpl
-	end
-end
-
-# PageTemplate Vars
-class TemplateVars
-	# Page title
-	var title: nullable String = null is optional, writable
-
-	# Page content
-	var body: nullable String = null is optional, writable
-
-	# TODO wiki title
-	# TODO subtitle?
-	# TODO logo?
-
-	# TODO root path
-	# TODO assets path
-	# TODO section_title
-	# TODO section_link
-
-	# TODO trail
-	# TODO menu
-	# TODO summary
-	# TODO year
-	# TODO date
-	# TODO gen_time
 end
 
 # Utils

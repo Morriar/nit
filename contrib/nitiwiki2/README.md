@@ -1,17 +1,9 @@
 # TODO
 
-* clean out/path/dir etc
-* move options to `wiki_options`?
-* highlight option in wiki?
-* simplify [[links]]: name, title or path (no relative, partial etc.)?
-
 * bug simplify path
 
-* wiki_config
-	* templates
-	* section config
-
 * wiki2html
+	* simplify [[links]]: name, title or path (no relative, partial etc.)?
 	* templates vars
 		- move to `wiki_templates`?
 		- menu
@@ -66,4 +58,5 @@
 		asset.file
 	""") for examples
 
+* clean tests
 * grep for todos

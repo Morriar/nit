@@ -63,7 +63,8 @@ $ write to out/test.html
 	end
 
 	fun render_page_with_default_template is test do
-		var wiki = new Wiki(default_template = new PageTemplate("<html>%BODY%</html>\n"))
+		var wiki = new Wiki
+		wiki.default_template = new PageTemplate("<html>%BODY%</html>\n")
 		var page = new MdPage(wiki, "test", md = "# Test")
 
 		var v = new MockWiki2Html(wiki)
@@ -107,7 +108,8 @@ $ write to out/s1/p2.html
 	end
 
 	fun render_section_with_default_template is test do
-		var wiki = new Wiki(default_template = new PageTemplate("<html>%BODY%</html>\n"))
+		var wiki = new Wiki
+		wiki.default_template = new PageTemplate("<html>%BODY%</html>\n")
 		var section = new Section(wiki, "s1")
 		section.add new MdPage(wiki, "p1", md = "# P1")
 		section.add new MdPage(wiki, "p2", md = "# P2")
@@ -125,7 +127,8 @@ $ write to out/s1/p2.html
 	end
 
 	fun render_section_with_section_template is test do
-		var wiki = new Wiki(default_template = new PageTemplate("<html>%BODY%</html>\n"))
+		var wiki = new Wiki
+		wiki.default_template = new PageTemplate("<html>%BODY%</html>\n")
 		var section = new Section(wiki, "s1")
 		section.default_template = new PageTemplate("<s1>%BODY%</s1>\n")
 		section.add new MdPage(wiki, "p1", md = "# P1")
@@ -144,7 +147,8 @@ $ write to out/s1/p2.html
 	end
 
 	fun render_section_with_section_template_nested is test do
-		var wiki = new Wiki(default_template = new PageTemplate("<html>%BODY%</html>\n"))
+		var wiki = new Wiki
+		wiki.default_template = new PageTemplate("<html>%BODY%</html>\n")
 		var section = new Section(wiki, "s1")
 		section.default_template = new PageTemplate("<s1>%BODY%</s1>\n")
 		section.add new MdPage(wiki, "p1", md = "# P1")
@@ -237,23 +241,28 @@ $ write to out/foo.html\n"""
 		assert render_wiki("templates", true) == """
 $ mkdir -p -- 'out/'
 $ write to out/index.html
-<ROOT>%BODY</ROOT>\n"""
+<ROOT><h1 id="Root">Root</h1>
+</ROOT>\n"""
 	end
 
 	fun render_wiki_with_template_from_sections is test do
 		assert render_wiki("templates_section", true) == """
 $ mkdir -p -- 'out/'
 $ write to out/index.html
-<ROOT>%BODY</ROOT>
+<ROOT><h1 id="Root">Root</h1>
+</ROOT>
 $ mkdir -p -- 'out/s1'
 $ write to out/s1/index.html
-<S1>%BODY</S1>
+<S1><h1 id="Section_1">Section 1</h1>
+</S1>
 $ mkdir -p -- 'out/s1/section11'
 $ write to out/s1/section11/index.html
-<S11>%BODY</S11>
+<S11><h1 id="Section_1.1">Section 1.1</h1>
+</S11>
 $ mkdir -p -- 'out/s1/section12'
 $ write to out/s1/section12/index.html
-<S1>%BODY</S1>\n"""
+<S1><h1 id="Section_1.2">Section 1.2</h1>
+</S1>\n"""
 	end
 
 	fun render_wiki_with_assets is test do
@@ -278,7 +287,7 @@ $ cp -R -- 'tests/wikis/assets/assets/' 'out/assets/'\n"""
 		assert wiki != null
 
 		var out_dir = "render_wiki_for_real"
-		wiki.config.out_dir = out_dir
+		wiki.out_dir = out_dir
 		sys.system "rm -rf {out_dir}"
 
 		var wiki2html = new Wiki2Html(wiki)
@@ -315,7 +324,7 @@ render_wiki_for_real/asset1
 		assert wiki != null
 
 		var out_dir = "renderer_doesnt_render_non_dirty_resources"
-		wiki.config.out_dir = out_dir
+		wiki.out_dir = out_dir
 		sys.system "rm -rf {out_dir}"
 
 		var stdout = new StringWriter
@@ -395,7 +404,7 @@ class TestResourceToHtml
 		assert wiki != null
 
 		var out_dir = "renderer_can_tell_last_rendering_times"
-		wiki.config.out_dir = out_dir
+		wiki.out_dir = out_dir
 		sys.system "rm -rf {out_dir}"
 
 		var wiki2html = new Wiki2Html(wiki)
@@ -418,7 +427,7 @@ class TestResourceToHtml
 		assert wiki != null
 
 		var out_dir = "renderer_can_tell_if_resource_is_new"
-		wiki.config.out_dir = out_dir
+		wiki.out_dir = out_dir
 		sys.system "rm -rf {out_dir}"
 
 		var wiki2html = new Wiki2Html(wiki)
@@ -441,7 +450,7 @@ class TestResourceToHtml
 		assert wiki != null
 
 		var out_dir = "renderer_can_tell_if_resource_is_dirty"
-		wiki.config.out_dir = out_dir
+		wiki.out_dir = out_dir
 		sys.system "rm -rf {out_dir}"
 
 		var wiki2html = new Wiki2Html(wiki, force = true, logger = new Logger(debug_level))
@@ -510,14 +519,16 @@ class TestMdPageToHtml
 	end
 
 	fun simple_md_to_html_with_default_template_empty is test do
-		var wiki = new Wiki(default_template = new PageTemplate(""))
+		var wiki = new Wiki
+		wiki.default_template = new PageTemplate("")
 		var v = new MockWiki2Html(wiki, false)
 		var page = new MdPage(wiki, "test", md = "# Test")
 		assert page.html(v) == ""
 	end
 
 	fun simple_md_to_html_with_default_template_simple is test do
-		var wiki = new Wiki(default_template = new PageTemplate("<div>%BODY%</div>"))
+		var wiki = new Wiki
+		wiki.default_template = new PageTemplate("<div>%BODY%</div>")
 		var v = new MockWiki2Html(wiki, false)
 		var page = new MdPage(wiki, "test", md = "# Test")
 		assert page.html(v) == "<div><h1 id=\"Test\">Test</h1>\n</div>"
@@ -548,7 +559,7 @@ print \"Hello, World!\"
 
 	fun md_code_blocs_can_have_a_default_language is test do
 		var wiki = new Wiki
-		wiki.config.highlighter_default = "nit"
+		wiki.highlighter_default = "nit"
 		var v = new MockWiki2Html(wiki, false)
 		var page = new MdPage(wiki, "test", md = """
 A code example:
@@ -572,8 +583,8 @@ print \"Hello, World!\"
 
 	fun md_code_blocs_can_be_highlighted is test do
 		var wiki = new Wiki
-		wiki.config.highlighter = "tests/highlighters/simple"
-		wiki.config.highlighter_default = "nit"
+		wiki.highlighter = "tests/highlighters/simple"
+		wiki.highlighter_default = "nit"
 		var stdout = new StringWriter
 		var logger = new Logger(info_level, stdout)
 		var v = new MockWiki2Html(wiki, false, logger = logger)
@@ -614,7 +625,7 @@ Executing `tests/highlighters/simple` `js` (in /test:11,1--13,3)
 
 	fun rendered_warn_if_problem_with_hilighter is test do
 		var wiki = new Wiki
-		wiki.config.highlighter = "tests/highlighters/broken"
+		wiki.highlighter = "tests/highlighters/broken"
 		var stdout = new StringWriter
 		var logger = new Logger(info_level, stdout)
 		var v = new MockWiki2Html(wiki, false, logger = logger)

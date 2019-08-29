@@ -14,8 +14,71 @@
 
 module wiki_html
 
-import wiki_builder
+import wiki_templates
 import markdown2
+
+redef class Wiki
+	# Wiki's assets directory
+	# TODO
+	#
+	# A Wiki may have a directory containing assets used to render its content
+	# like images, scripts, stylesheets...
+	# How this directory will be used depends on the renderer used.
+	# For example, a HTML renderer could simply copy the content of this directory
+	# to the `public/` one. Or a server renderer could serve the files in place.
+	var assets_dir: nullable String = null is writable
+
+	# Output path
+	#
+	# Directory where the wiki will be rendered.
+	# If it does not exist it will be created.
+	var out_dir: String = "out/" is writable
+
+	# External highlighter command called to process block code.
+	#
+	# * key: `wiki.highlighter`
+	# * default: empty string, that means no external highlighter
+	# * example: `highlight --fragment -S "$1" --inline-css --enclose-pre`
+	#
+	# The external highlighter is a shell command invoked with `sh -c`.
+	# The meta information of the fence is passed as `$1`.
+	# *Important*: `$1` is given as is, thus is tainted. You SHOULD protect it with quotes in the command.
+	#
+	# By default, the highlighter is only called on fenced block code with a meta information.
+	# See `wiki.highlighter.default` to force the invocation of the highlighter on any code block.
+	#
+	# The output of the command will be inserted as is in the generated document.
+	# Therefore it is expected that the command returns a valid, complete and balanced HTML fragment.
+	# If the highlighter returns nothing (empty output), the internal rendering is used as a fall-back
+	# (as if the option was not set).
+	#
+	# Advanced usages can invoke a custom shell script instead of a standard command to
+	# check the argument, filter it, dispatch to various advanced commands, implement ad-hoc behaviors, etc.
+	var highlighter: nullable String = null is writable
+
+	# Default meta (i.e. language) to use to call the external highlighter.
+	#
+	# * key: `wiki.highlighter.default`
+	# * default: empty string, that means no default meta information.
+	# * example: `nit`
+	#
+	# When set, this configuration forces the external highlighter (see `wiki.highlighter`)
+	# to be called also on basic code block (with the indentation) and plain fenced code
+	# blocks (without meta information).
+	#
+	# The value is used as the `$1` argument of the configured highlighter command.
+	#
+	# Note: has no effect if `wiki.highlighter` is not set.
+	var highlighter_default: nullable String = null is writable
+
+	redef fun configure_from_ini(ini) do
+		super
+		out_dir = ini["wiki.out"] or else out_dir
+		assets_dir = ini["wiki.assets"] or else assets_dir
+		highlighter = ini["wiki.highlighter"] or else highlighter
+		highlighter_default = ini["wiki.highlighter.default"] or else highlighter_default
+	end
+end
 
 class Wiki2Html
 	super WikiVisitor
@@ -37,11 +100,11 @@ class Wiki2Html
 
 		super
 
-		var assets_dir = wiki.config.assets_dir
+		var assets_dir = wiki.assets_dir
 		if assets_dir == null then return
 
-		var src_path = wiki.config.root_dir / assets_dir
-		var out_path = wiki.config.out_dir / "assets/"
+		var src_path = wiki.root_dir / assets_dir
+		var out_path = wiki.out_dir / "assets/"
 
 		if src_path.mtime < out_path.mtime then
 			logger.debug "Assets from {src_path} already up-to-date at {out_path}"
@@ -51,26 +114,10 @@ class Wiki2Html
 		end
 
 		# TODO index
-		# TODO add sitemap
+		# TODO sitemap
 	end
 
 	redef fun visit(resource) do resource.accept_html_visitor(self)
-
-	# TODO remove
-	private var sections_stack = new Array[Section]
-
-	# TODO remove
-	private fun current_section: nullable Section do
-		if sections_stack.is_empty then return null
-		return sections_stack.last
-	end
-
-	# TODO move
-	private fun current_template: nullable PageTemplate do
-		var section = current_section
-		if section == null then return wiki.default_template
-		return section.template or else wiki.default_template
-	end
 
 	# utils
 
@@ -96,19 +143,11 @@ class Wiki2Html
 	end
 
 	private fun need_render(resource: Resource): Bool do return force or resource.is_dirty
-
-	# TODO sitemap
-	# Build the wiki sitemap page.
-	# private fun make_sitemap: WikiSitemap do
-	#	var sitemap = new WikiSitemap(self, "sitemap")
-	#	sitemap.is_dirty = true
-	#	return sitemap
-	# end
 end
 
 redef class Resource
 
-	fun out_path: String do return wiki.config.out_dir / trim_path
+	fun out_path: String do return wiki.out_dir / trim_path
 
 	# Strip the `/` prefix so it can be used with the `/` operator.
 	# FIXME: should the `/` method handle that?
@@ -133,11 +172,11 @@ redef class Resource
 	# status
 
 	fun creation_time: Int do
-		return (wiki.config.root_dir / wiki.config.pages_dir / trim_path).ctime
+		return (wiki.root_dir / wiki.pages_dir / trim_path).ctime
 	end
 
 	fun last_modification_time: Int do
-		return (wiki.config.root_dir / wiki.config.pages_dir / trim_path).mtime
+		return (wiki.root_dir / wiki.pages_dir / trim_path).mtime
 	end
 
 	fun last_rendering_time: Int do return out_path.mtime
@@ -158,11 +197,9 @@ redef class Section
 		end
 
 		v.logger.debug "Render section {self} to {out_path}"
-		v.sections_stack.push self
 		v.mkdir out_path
-		# TODO add index
 		visit_all(v)
-		v.sections_stack.pop
+		# TODO add index
 	end
 
 	redef fun html_link(context) do
@@ -225,9 +262,9 @@ redef class MdPage
 
 	fun html(v: Wiki2Html): String do
 		# TODO move
-		var page_template = v.current_template
-		if page_template == null then return html_body(v)
-		return page_template.compile(new TemplateVars(
+		var template = self.template
+		if template == null then return html_body(v)
+		return template.compile(new TemplateVars(
 			# TODO other vars
 			body = html_body(v)
 		)).write_to_string
@@ -259,7 +296,7 @@ redef class Asset
 		end
 
 		v.logger.debug "Copy asset {self} to {out_path}"
-		var from = wiki.config.root_dir / wiki.config.pages_dir / path.substring(1, path.length - 1)
+		var from = wiki.root_dir / wiki.pages_dir / path.substring(1, path.length - 1)
 		v.copy(from, "{out_path}")
 	end
 
@@ -332,9 +369,9 @@ redef class MdCodeBlock
 			return
 		end
 
-		self.info = self.info or else v.wiki_renderer.wiki.config.highlighter_default
+		self.info = self.info or else v.wiki_renderer.wiki.highlighter_default
 
-		var highlighter = v.wiki_renderer.wiki.config.highlighter
+		var highlighter = v.wiki_renderer.wiki.highlighter
 		if highlighter == null then
 			super
 			return

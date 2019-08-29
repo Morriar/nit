@@ -14,10 +14,22 @@
 
 module wiki_markdown
 
-import wiki_config
+import wiki_base
 
 import markdown2
 import logger
+
+redef class Wiki
+	var root_dir = "." is writable
+
+	var pages_dir = "pages/" is writable
+
+	redef fun configure_from_ini(ini) do
+		super
+		root_dir = ini["wiki.root"] or else root_dir
+		pages_dir = ini["wiki.pages"] or else pages_dir
+	end
+end
 
 # A page from a Markdown source
 class MdPage

@@ -15,6 +15,7 @@
 module wiki_builder
 
 import wiki_markdown
+import wiki_templates
 import logger
 
 class WikiBuilder
@@ -31,22 +32,18 @@ class WikiBuilder
 		if not root_dir.file_exists then return null
 
 		var wiki = new Wiki
-		wiki.config.root_dir = root_dir
+		wiki.root_dir = root_dir
 
 		# Load wiki config
 		var ini_path = root_dir / "nitiwiki.ini"
 		var ini = load_ini(ini_path)
 		if ini != null then
 			logger.debug "Found wiki config at {ini_path}"
-			# TODO wiki name?
-			wiki.config.load_from_ini(ini)
-
-			var tpl = ini["wiki.template"]
-			if tpl != null then wiki.default_template = load_template(root_dir / tpl)
+			wiki.configure_from_ini(ini)
 		end
 
 		# Build sections recursively starting from `root_path`
-		build_section(wiki, wiki.root, root_dir / wiki.config.pages_dir)
+		build_section(wiki, wiki.root, root_dir / wiki.pages_dir)
 
 		return wiki
 	end
@@ -57,11 +54,7 @@ class WikiBuilder
 		var ini = load_ini(ini_path)
 		if ini != null then
 			logger.debug "Found section config at {ini_path}"
-
-			section.is_hidden = ini["section.hidden"] == "true"
-			section.title = ini["section.title"]
-			var ini_tpl = ini["section.template"]
-			if ini_tpl != null then section.default_template = load_template(dir / ini_tpl)
+			section.configure_from_ini(ini)
 		end
 
 		# Build children
