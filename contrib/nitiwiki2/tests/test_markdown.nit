@@ -142,7 +142,7 @@ class TestWikiMarkdown
 		s2.add page
 
 		var out = new StringWriter
-		var parser = new MdPageParser(wiki, new Logger(warn_level, out))
+		var parser = new MdPageParser(new Logger(warn_level, out))
 		parser.parse_page(page)
 
 		assert out.to_s == """
@@ -419,7 +419,7 @@ Another broken link [[/foo#bar]].
 		wiki.add page
 
 		var out = new StringWriter
-		var parser = new MdPageParser(wiki, new Logger(warn_level, out))
+		var parser = new MdPageParser(new Logger(warn_level, out))
 		parser.parse_page(page)
 
 		assert out.to_s == """
@@ -439,7 +439,7 @@ Another broken link [[/foo#bar]].
 		wiki.add page
 
 		var out = new StringWriter
-		var parser = new MdPageParser(wiki, new Logger(warn_level, out))
+		var parser = new MdPageParser(new Logger(warn_level, out))
 		parser.parse_page(page)
 
 		assert out.to_s == """
@@ -457,7 +457,7 @@ Another broken link [[/foo#bar]].
 		wiki.add page
 
 		var out = new StringWriter
-		var parser = new MdPageParser(wiki, new Logger(warn_level, out))
+		var parser = new MdPageParser(new Logger(warn_level, out))
 		parser.parse_page(page)
 
 		assert out.to_s == "/test:1,1--1,7: Link to unknown resource `boo`. Did you mean `/foo`?\n"
@@ -467,7 +467,7 @@ Another broken link [[/foo#bar]].
 	# TODO test other commands
 
 	private fun links(page: MdPage): Array[String] do
-		var parser = new MdPageParser(page.wiki)
+		var parser = new MdPageParser
 		var ast = parser.parse_page(page)
 		var v = new MdWikilinkCollector
 		v.enter_visit(ast)

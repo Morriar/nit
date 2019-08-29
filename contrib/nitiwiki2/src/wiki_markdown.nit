@@ -51,8 +51,6 @@ end
 
 class MdPageParser
 
-	var wiki: Wiki
-
 	var logger: Logger = new Logger(warn_level) is optional
 
 	fun parse_page(page: MdPage): MdDocument do
@@ -119,7 +117,7 @@ class MdProcessCommands
 
 		# Lookup by absolute path (no conflict)
 		if link.has_prefix("/") then
-			node.target = parser.wiki.resource_by_path(link)
+			node.target = context.wiki.resource_by_path(link)
 			if node.target == null then
 				warn(node, "Link to unknown resource `{link}`")
 			end
@@ -144,7 +142,7 @@ class MdProcessCommands
 
 		if targets.is_empty then
 			var v = new DidYouMeanVisitor(link, context)
-			v.visit_wiki(parser.wiki)
+			v.visit_wiki(context.wiki)
 			var suggestions = v.similarities.keys.to_a
 			if suggestions.not_empty then
 				var comparator = new DidYouMeanComparator(v.similarities)
@@ -177,7 +175,7 @@ class MdProcessCommands
 			section = section.section
 		end
 		# Then we look from root
-		child_visitor.visit(parser.wiki.root)
+		child_visitor.visit(context.wiki.root)
 		return child_visitor.resources.to_a
 	end
 

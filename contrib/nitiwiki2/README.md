@@ -5,12 +5,12 @@
 * wiki2html
 	* simplify [[links]]: name, title or path (no relative, partial etc.)?
 	* templates vars
-		- move to `wiki_templates`?
 		- menu
 		- name
 		- title
 		- summary
 		- trail
+		* check at least has body
 
 * nitiwiki CLI + tests
 	* commands lib

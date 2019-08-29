@@ -14,10 +14,17 @@
 
 module wiki_html
 
-import wiki_templates
+import wiki_markdown
+import template::macro
 import markdown2
 
 redef class Wiki
+	# Output path
+	#
+	# Directory where the wiki will be rendered.
+	# If it does not exist it will be created.
+	var out_dir: String = "out/" is writable
+
 	# Wiki's assets directory
 	# TODO
 	#
@@ -28,11 +35,22 @@ redef class Wiki
 	# to the `public/` one. Or a server renderer could serve the files in place.
 	var assets_dir: nullable String = null is writable
 
-	# Output path
+	var default_template_file: nullable String = null is writable
+
+	# Wiki's default template
 	#
-	# Directory where the wiki will be rendered.
-	# If it does not exist it will be created.
-	var out_dir: String = "out/" is writable
+	# A wiki may have a default template to render the pages.
+	# The format of this template and how it is used if left to clients.
+	var default_template: nullable PageTemplate is lazy, writable do
+		var template_path = default_template_file
+		if template_path == null then return null
+		return load_template(root_dir / template_path)
+	end
+
+	private fun load_template(path: String): nullable PageTemplate do
+		if not path.file_exists then return null
+		return new PageTemplate(path.to_path.read_all)
+	end
 
 	# External highlighter command called to process block code.
 	#
@@ -77,6 +95,7 @@ redef class Wiki
 		assets_dir = ini["wiki.assets"] or else assets_dir
 		highlighter = ini["wiki.highlighter"] or else highlighter
 		highlighter_default = ini["wiki.highlighter.default"] or else highlighter_default
+		default_template_file = ini["wiki.template"] or else default_template_file
 	end
 end
 
@@ -138,7 +157,7 @@ class Wiki2Html
 	end
 
 	fun parse_md_page(page: MdPage): MdDocument do
-		var parser = new MdPageParser(wiki)
+		var parser = new MdPageParser(logger)
 		return parser.parse_page(page)
 	end
 
@@ -188,6 +207,31 @@ end
 
 redef class Section
 
+	# template
+
+	var default_template_file: nullable String = null is writable
+
+	# Section default template
+	#
+	# A section may have a default template to render the pages it containts.
+	# The format of this template and how it is used if left to clients.
+	# TODO merge with template?
+	var default_template: nullable PageTemplate is lazy, writable do
+		var template_path = default_template_file
+		if template_path == null then return null
+		return wiki.load_template(wiki.root_dir / template_path)
+	end
+
+	# Template to apply to this section content (recursive)
+	#
+	# The template can be `default_template` or the parent `template` is any.
+	fun template: nullable PageTemplate do
+		if default_template != null then return default_template
+		var parent = self.section
+		if parent == null then return wiki.default_template
+		return parent.template
+	end
+
 	# html
 
 	redef fun accept_html_visitor(v) do
@@ -229,10 +273,23 @@ redef class Section
 		end
 		return max
 	end
+
+	redef fun configure_from_ini(ini) do
+		super
+		default_template_file = ini["section.template"] or else default_template_file
+	end
 end
 
 redef class MdPage
 	redef fun out_path do return "{super}.html"
+
+	# template
+
+	fun template: nullable PageTemplate do
+		var parent = self.section
+		if parent == null then return wiki.default_template
+		return parent.template
+	end
 
 	# html
 
@@ -264,10 +321,7 @@ redef class MdPage
 		# TODO move
 		var template = self.template
 		if template == null then return html_body(v)
-		return template.compile(new TemplateVars(
-			# TODO other vars
-			body = html_body(v)
-		)).write_to_string
+		return template.compile_to_html(v, self)
 	end
 
 	# status
@@ -307,6 +361,98 @@ redef class Asset
 	redef fun creation_time do return src_path.ctime
 
 	redef fun last_modification_time do return src_path.mtime
+end
+
+class PageTemplate
+	# Template string
+	var string: String
+
+	fun compile_to_html(v: Wiki2Html, page: MdPage): String do
+		var tpl = new TemplateString(string)
+		tpl.insert("BODY", page.html_body(v))
+		return tpl.write_to_string
+	end
+end
+
+redef class TemplateString
+	private fun insert(macro, string: String) do
+		if has_macro("BODY") then replace("BODY", string)
+	end
+end
+
+
+# A Page template
+#
+# Page content can be wrapped with a template.
+# Page templates can use macros (see `PageVars`) to display generated
+# variables from the Wiki such as dates, versions, strings etc.
+# class PageTemplate
+
+
+	# fun template_string(page: MdPage): TemplateString do
+		# var tpl = new TemplateString(string)
+
+		# tpl.insert("BODY", page.html_body(v))
+		# return tpl.write_to_string
+	# end
+# end
+
+# redef class PageTemplate
+#	fun compile_to_html(v: Wiki2Html, page: MdPage): String do
+#		var tpl = new TemplateString(string)
+#		tpl.insert("BODY", page.html_body(v))
+#		return tpl.write_to_string
+#	end
+# end
+
+# redef class TemplateString
+	# private fun insert(macro, string: String) do
+		# if has_macro("BODY") then replace("BODY", string)
+	# end
+# end
+
+# class TemplateVars
+#	var root_path: String
+#	var assets_path: String
+#
+#	var title: String
+#	var date: String
+#	var creation_date: String
+#	var last_modification_date: String
+#	var last_
+#
+#	var section_title: String
+#	var section_path: String
+#
+#	# TODO trail
+#	# TODO menu
+#	# TODO summary
+#	# TODO year
+#	# TODO date
+#	# TODO gen_time
+#
+# end
+
+# PageTemplate Vars
+class PageTemplateVars
+
+	# Page title
+	var title: nullable String = null is optional, writable
+
+	# Page content
+	var body: nullable String = null is optional, writable
+
+	# TODO root path
+	# TODO assets path
+	# TODO section_title
+	# TODO section_link
+
+	# TODO trail
+	# TODO menu
+	# TODO summary
+	# TODO year
+	# TODO date
+	# TODO gen_time
 end
 
 class WikiHtmlRenderer

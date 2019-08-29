@@ -15,7 +15,6 @@
 module wiki_builder
 
 import wiki_markdown
-import wiki_templates
 import logger
 
 class WikiBuilder
@@ -95,12 +94,6 @@ class WikiBuilder
 		if path == null then return null
 		if not path.file_exists then return null
 		return new IniFile.from_file(path)
-	end
-
-	private fun load_template(path: nullable String): nullable PageTemplate do
-		if path == null then return null
-		if not path.file_exists then return null
-		return new PageTemplate(path.to_path.read_all)
 	end
 
 	private var files_comparator = new DefaultComparator
