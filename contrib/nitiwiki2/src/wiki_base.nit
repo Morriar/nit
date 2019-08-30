@@ -102,8 +102,8 @@ class Wiki
 	# Get an ANSI tree representation of this wiki resources
 	#
 	# Useful for testing and debugging.
-	fun to_ansi(show_assets, use_pretty_names: nullable Bool): String do
-		var v = new AnsiMapVisitor(
+	fun ansi_toc(show_assets, use_pretty_names: nullable Bool): String do
+		var v = new WikiTocVisitor(
 			show_assets or else false,
 			use_pretty_names or else false
 		)
@@ -340,7 +340,7 @@ private class ResourcesVisitor
 end
 
 # Create an ANSI tree from a Wiki resources
-private class AnsiMapVisitor
+class WikiTocVisitor
 	super WikiVisitor
 
 	# Show assets in the output tree?

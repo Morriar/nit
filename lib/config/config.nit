@@ -265,6 +265,8 @@ class Config
 		end
 		exit 0
 	end
+
+	private fun print(s: String) do sys.print(s)
 end
 
 # Configuration class based on a INI file.

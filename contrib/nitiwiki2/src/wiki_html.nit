@@ -82,6 +82,10 @@ redef class Wiki
 	# Note: has no effect if `wiki.highlighter` is not set.
 	var highlighter_default: nullable String = null is writable
 
+	var edit_url: nullable String = null is writable
+
+	var last_changes_url: nullable String = null is writable
+
 	redef fun configure_from_ini(ini) do
 		super
 		out_dir = ini["wiki.out"] or else out_dir
@@ -89,6 +93,16 @@ redef class Wiki
 		highlighter = ini["wiki.highlighter"] or else highlighter
 		highlighter_default = ini["wiki.highlighter.default"] or else highlighter_default
 		default_template_file = ini["wiki.template"] or else default_template_file
+		edit_url = ini["wiki.edit"] or else edit_url
+		last_changes_url = ini["wiki.last_changes"] or else last_changes_url
+	end
+
+	# html
+
+	fun html_toc(context: nullable Resource): String do
+		var v = new WikiHtmlToc(context)
+		v.visit_wiki(self)
+		return v.html.write_to_string
 	end
 end
 
@@ -155,6 +169,10 @@ class Wiki2Html
 	end
 
 	private fun need_render(resource: Resource): Bool do return force or resource.is_dirty
+
+	fun timestamp_to_date(timestamp: Int): String do
+		return (new Tm.localtime_from_timet(new TimeT.from_i(timestamp))).to_s
+	end
 end
 
 redef class Resource
@@ -196,6 +214,11 @@ redef class Resource
 	fun is_new: Bool do return not out_path.file_exists
 
 	fun is_dirty: Bool do return is_new or last_modification_time > last_rendering_time
+
+	private fun accept_html_toc_visitor(v: WikiHtmlToc) do
+		var attrs = if v.context == self then " class=\"active\"" else ""
+		v.html.add "{v.indent}<li{attrs}>{name}</li>\n" # TODO html name
+	end
 end
 
 redef class Section
@@ -265,6 +288,19 @@ redef class Section
 		super
 		default_template_file = ini["section.template"] or else default_template_file
 	end
+
+	redef fun accept_html_toc_visitor(v) do
+		if is_hidden then return
+		v.html.add "{v.indent}<li>{name}\n" # TODO html_name
+		v.indent_level += 1
+		v.html.add "{v.indent}<ul>\n"
+		v.indent_level += 1
+		visit_all(v)
+		v.indent_level -= 1
+		v.html.add "{v.indent}</ul>\n"
+		v.indent_level -= 1
+		v.html.add "{v.indent}</li>\n"
+	end
 end
 
 redef class MdPage
@@ -299,31 +335,34 @@ redef class MdPage
 
 	fun html(v: Wiki2Html): String do
 		# TODO should use the same syntax than commands?
+		var section = self.section
 		var string = self.template_string or else "%BODY%"
 		var template = new TemplateString(string)
-		template.insert("BODY", html_body(v))
-		template.insert("ROOT", wiki.root.href_to(self)) # TODO check
-		template.insert("ROOT_URL", wiki.root.href_to(self)) # TODO check
-		# template.insert("ASSETS", wiki.assets_dir) # TODO
-		template.insert("TITLE", title) # TODO should be html
 
-		# Dates
-		var tm = new Tm.gmtime
+		var wiki_toc = "<ul>\n{wiki.html_toc(self)}</ul>"
+
+		template.insert("BODY", html_body(v))
+		template.insert("WIKI_ROOT", wiki.root.href_to(self))
+		# TODO template.insert("WIKI_ASSETS", wiki.assets_dir)?
+		template.insert("WIKI_TOC", wiki_toc) # TODO active, classes
+
+		template.insert("PAGE_TITLE", pretty_name) # TODO should be html title
+		template.insert("PAGE_CREATED_AT", v.timestamp_to_date(creation_time).to_s)
+		template.insert("PAGE_UPDATED_AT", v.timestamp_to_date(last_modification_time))
+		template.insert("PAGE_SRC", file)
+		template.insert("PAGE_URL", trim_path)
+		# template.insert("PAGE_TOC", menu) # TODO
+		# template.insert("PAGE_TRAIL", TRAIL) # TODO trail
+
+		if section != null then
+			# template.insert("PAGE_TOC", section.html_toc) # TODO
+		end
+
+		var tm = new Tm.localtime
 		template.insert("DATE", tm.to_s)
 		template.insert("YEAR", (tm.year + 1900).to_s)
-		template.insert("GEN_TIME", tm.to_s)
-		template.insert("SRC_PATH", file)
-		template.insert("OUT_PATH", out_path)
-		# template.insert("LAST_CHANGES", wiki.last_changes_url / trim_path) # TODO last changes
-		# template.insert("EDIT", wiki.edit_url / trim_path) # TODO edit
-		# template.insert("TOP_MENU", menu) # TODO top_menu
-		# template.insert("HEADER", menu) # TODO header?
-		# template.insert("FOOTER", menu) # TODO footer?
-		# template.insert("MENUS", menu) # TODO menus?
-		# template.insert("TRAIL", TRAIL) # TODO trail
+
 		# TODO section summary / map
-		# TODO site summary / map
-		# TODO summary
 		return template.write_to_string
 	end
 
@@ -371,6 +410,11 @@ redef class Asset
 	redef fun creation_time do return src_path.ctime
 
 	redef fun last_modification_time do return src_path.mtime
+
+	redef fun accept_html_toc_visitor(v) do
+		if not v.show_assets then return
+		super
+	end
 end
 
 redef class TemplateString
@@ -493,4 +537,20 @@ redef class String
 		if stat == null then return -1
 		return stat.mtime
 	end
+end
+
+class WikiHtmlToc
+	super WikiVisitor
+
+	var context: nullable Resource = null is optional, writable
+
+	var show_assets: Bool = false is optional, writable
+
+	var html = new Template
+
+	var indent_level = 0
+
+	fun indent: String do return "\t" * indent_level
+
+	redef fun visit(resource) do resource.accept_html_toc_visitor(self)
 end

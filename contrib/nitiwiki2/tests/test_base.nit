@@ -56,12 +56,12 @@ class TestWiki
 		var wiki = new Wiki
 		assert wiki.root.name == "<root>"
 		assert wiki.resources.length == 0
-		assert wiki.to_ansi == "<root>\n"
+		assert wiki.ansi_toc == "<root>\n"
 	end
 
 	fun wiki_contains_resources is test do
 		var wiki = wiki_simple
-		assert wiki.to_ansi == """<root>
+		assert wiki.ansi_toc == """<root>
   s1
   s2
   p1
@@ -71,7 +71,7 @@ class TestWiki
 	fun resources_can_be_nested is test do
 		var wiki = wiki_nested
 		assert wiki.resources.length == 10
-		assert wiki.to_ansi == """<root>
+		assert wiki.ansi_toc == """<root>
   p1
   s1
     p2

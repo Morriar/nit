@@ -3,7 +3,6 @@
 * bug simplify path
 
 * wiki2html
-	* simplify [[links]]: name, title or path (no relative, partial etc.)?
 	* template vars use [[ ]] syntax
 	* templates vars
 	* check template at least has body
@@ -30,6 +29,7 @@
 	* moz-code
 
 * next
+	* one page mode
 	* check links (both internal and external)
 	* check anchors
 		* did you mean?
@@ -41,6 +41,7 @@
 		trail
 		code, file content?
 		name, title, date
+	* latex mode
 
 * server mode
 	see jekyll features
@@ -54,4 +55,5 @@
 	""") for examples
 
 * clean tests
+* simplify [[links]]: name, title or path (no relative, partial etc.)?
 * grep for todos

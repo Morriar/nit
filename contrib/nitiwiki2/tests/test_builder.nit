@@ -40,7 +40,7 @@ class TestWikiBuilder
 	fun build_wiki_simple is test do
 		var wiki = builder.build_wiki(tests_wikis / "simple")
 		assert wiki != null
-		assert wiki.to_ansi(false, true) == """<Root>
+		assert wiki.ansi_toc(false, true) == """<Root>
   Index
   Page1
   Page2
@@ -63,7 +63,7 @@ class TestWikiBuilder
 	fun build_wiki_assets is test do
 		var wiki = builder.build_wiki(tests_wikis / "assets")
 		assert wiki != null
-		assert wiki.to_ansi(true, true) == """<Root>
+		assert wiki.ansi_toc(true, true) == """<Root>
   .Asset
   Asset1
   Asset2
@@ -82,7 +82,7 @@ class TestWikiBuilder
 		builder.allowed_md_exts = ["md", "mdown"]
 		var wiki = builder.build_wiki(tests_wikis / "md_exts")
 		assert wiki != null
-		assert wiki.to_ansi(false, true) == """<Root>
+		assert wiki.ansi_toc(false, true) == """<Root>
   Index
   Page1
   Section1

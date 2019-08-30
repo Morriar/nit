@@ -403,4 +403,6 @@ class OptionContext
 		end
 		return errors
 	end
+
+	private fun print(s: String) do sys.print(s)
 end

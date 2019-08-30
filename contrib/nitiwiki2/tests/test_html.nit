@@ -75,6 +75,42 @@ $ write to out/test.html
 </html>\n"""
 	end
 
+	fun render_page_with_template_macros is test do
+		var wiki = new Wiki
+		wiki.last_changes_url = "http://changes/"
+		wiki.edit_url = "http://edit/"
+		wiki.default_template_string = """
+%WIKI_ROOT%
+%WIKI_TOC%
+%PAGE_TITLE%
+%PAGE_CREATED_AT%
+%PAGE_UPDATED_AT%
+%PAGE_SRC%
+%PAGE_URL%
+%PAGE_TOC%
+%PAGE_TRAIL%\n"""
+		var p1 = new MdPage(wiki, "p1", md = "# *P1*", file = "./foo.md")
+		var p2 = new MdPage(wiki, "p2", md = "# *P2*", file = "./bar.md")
+		var p3 = new MdPage(wiki, "p3", md = "# *P3*", file = "./baz.md")
+		var s1 = new Section(wiki, "s1")
+		var s2 = new Section(wiki, "s2")
+		var s3 = new Section(wiki, "s3")
+
+		wiki.add p1
+		wiki.add s1
+		s1.add p2
+		s1.add s2
+		s2.add p3
+		wiki.add s3
+
+		var v = new MockWiki2Html(wiki, save_html = true)
+		v.visit_wiki(wiki)
+
+		# Since files don't exist, dates will always be Wed Dec 31 18:59:59 1969 (timestamp -1)
+		assert v.test_output == """
+"""
+	end
+
 	fun render_section is test do
 		var wiki = new Wiki
 		var section = new Section(wiki, "s1")

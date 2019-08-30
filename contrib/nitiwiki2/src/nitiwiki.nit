@@ -24,22 +24,31 @@ class Nitiwiki
 #
 	# var config = new WikiConfig
 
-	fun run(args: Array[String]) do
+	fun run(args: Sequence[String]) do
+		# TODO parse options
 		# config.parse_options(args)
 		# if config.help then
 		#	config.usage
 		#	exit 1
 		# end
 		# # TODO init
-		# if not config.file_exists then
-		#	print "Not in a nitiwiki directory."
-		#	print "\nYou can create a new nitiwiki by typing:"
-		#	print "\n\tnitiwiki --init"
-		#	exit 1
-		# end
+		var config_file = "./nitiwiki" # TODO option --root
+		if not config_file.file_exists then
+			print "Not in a nitiwiki directory."
+			print "\nYou can create a new nitiwiki with"
+			print "\n\tnitiwiki --init"
+			exit 1
+		end
+
+		# TODO parse command
+
+		# TODO load config from nitiwiki.ini
+
+		# TODO display help
 		# TODO sync, render, fetch
 		# TODO clean
 		# TODO status
+		exit 0
 	end
 
 	fun parse_wiki(root_path: String): Wiki do
@@ -55,6 +64,23 @@ class Nitiwiki
 		# target dir
 		# accepted input format
 		# render only if needed
+end
+
+abstract class WikiCommand
+	super Config
+
+	var name: String
+
+	var description: String
+
+	redef fun tool_description do
+		var desc = new Buffer
+		desc.append "Usage: {name} [OPTION]... [ARG]...\n"
+		desc.append description
+		return desc.to_s
+	end
+
+	fun run(args: Collection[String]) is abstract
 end
 
 # class WikiConfig
@@ -116,9 +142,9 @@ end
 #	fun file_exists: Bool do return (root / default_config_file).file_exists
 # end
 
-class WikiCommand
-	var config = new Config
-end
+# class WikiCommand
+	# var config = new Config
+# end
 
 class CmdHello
 	# var config: WikiConfig
@@ -136,16 +162,57 @@ class CmdHello
 	end
 end
 
-class CmdInit
+class WikiInit
+	super WikiCommand
+
+	# TODO options
+	# path
+	# colors
+	# verbose
+	# log
+
+	redef fun run(args) do
+		# var path = "."
+		# create nitiwiki.ini
+		#
+		# create pages/
+		# create base template
+		# create assets/
+		# create style.css
+
+		# explain next
+		# edit pages
+		# nitiwiki status
+	end
 end
 
 class CmdStatus
-end
 
-class CmdClean
+	# TODO options
+	# path
+	# colors
+	# verbose
+	# log
+
+	fun run do
+		# TODO visit and print wiki
+
+		# explain next
+		# nitiwiki render
+	end
 end
 
 class CmdRender
+end
+
+class CmdClean
+	fun run do
+		# wiki.clean_html
+		# TODO visit and print wiki
+
+		# explain next
+		# nitiwiki render
+	end
 end
 
 class CmdSync
@@ -154,5 +221,5 @@ end
 class CmdFetch
 end
 
-print "NOT YET IMPLEMENTED"
-exit 1
+var nitiwiki = new Nitiwiki
+nitiwiki.run(args)
