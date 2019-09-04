@@ -14,49 +14,37 @@
 
 module nitiwiki
 
-import wiki_base
-import config
-import logger
-
-# TODO ignore hidden files?
+import wiki_builder
+import wiki_html
+intrude import config
 
 class Nitiwiki
-#
-	# var config = new WikiConfig
-
 	fun run(args: Sequence[String]) do
-		# TODO parse options
-		# config.parse_options(args)
-		# if config.help then
-		#	config.usage
-		#	exit 1
-		# end
-		# # TODO init
-		var config_file = "./nitiwiki" # TODO option --root
-		if not config_file.file_exists then
-			print "Not in a nitiwiki directory."
-			print "\nYou can create a new nitiwiki with"
-			print "\n\tnitiwiki --init"
-			exit 1
-		end
-
+		# TODO ignore hidden files?
 		# TODO parse command
-
-		# TODO load config from nitiwiki.ini
-
 		# TODO display help
-		# TODO sync, render, fetch
-		# TODO clean
-		# TODO status
-		exit 0
 	end
+end
 
-	fun parse_wiki(root_path: String): Wiki do
-		var wiki = new Wiki
-		return wiki
-	end
+abstract class CLICommand
+	super Config
+#	var opt_verbose = new OptionCount("Verbosity level", "--verbose", "-v")
+#	fun verbose: Int do
+#		if opt_verbose.value == 1 then
+#			return info_level
+#		else if opt_verbose.value > 1 then
+#			return debug_level
+#		end
+#		return warn_level
+#	end
+#
+#	var logger = new Logger(verbose) is lazy
 
 	# TODO options
+	# colors
+	# verbose
+	# log
+
 		# auto titles
 		# breadcrumbs
 		# summaries
@@ -64,14 +52,12 @@ class Nitiwiki
 		# target dir
 		# accepted input format
 		# render only if needed
-end
-
-abstract class WikiCommand
-	super Config
 
 	var name: String
 
 	var description: String
+
+	var logger = new Logger(warn_level)
 
 	redef fun tool_description do
 		var desc = new Buffer
@@ -80,22 +66,46 @@ abstract class WikiCommand
 		return desc.to_s
 	end
 
-	fun run(args: Collection[String]) is abstract
+	fun run(args: Collection[String]) do parse_options(args)
+
+	# Useful for testing
+	private fun exit(status: Int) do sys.exit status
 end
 
-# class WikiConfig
-#	super IniConfig
-#
+class CmdInit
+	super WikiCommand
+
+	redef fun run(args) do
+		# TODO check only one arg
+		var path = "."
+		if args.not_empty then path = args.first
+
+		# TODO init
+		print path
+		# create nitiwiki.ini
+		#
+		# create pages/
+		# create base template
+		# create assets/
+		# create style.css
+
+		# explain next
+		# edit pages
+		# nitiwiki status
+	end
+end
+
+abstract class WikiCommand
+	super CLICommand
+
+	init do
+		add_option opt_root
+	end
+
 #	redef var default_config_file = "nitiwiki.ini"
-#
-#	var opt_root = new OptionString("Root directory of the wiki (default: .)", "--root")
-#	fun root: String do return opt_root.value or else "."
 #
 #	var opt_src = new OptionString("Source directory (default: pages/)", "--src", "-s")
 #	fun src: String do return opt_src.value or else ini["wiki.src"] or else "pages/"
-#
-#	var opt_out = new OptionString("Output directory (default: out/)", "--out", "-o")
-#	fun out: String do return opt_out.value or else ini["wiki.out"] or else "out/"
 #
 #	var opt_md_exts = new OptionArray("Accepted markdown extensions (default: md)", "--md-exts")
 #	fun md_exts: Array[String] do
@@ -110,115 +120,99 @@ end
 #		end
 #		return ["md"]
 #	end
-#
-#	var opt_force = new OptionBool("Force rendering.", "--force", "-f")
-#	fun force: Bool do return opt_force.value or ini["wiki.force"] == "true"
-#
-#	var opt_verbose = new OptionCount("Verbosity level", "--verbose", "-v")
-#	fun verbose: Int do
-#		if opt_verbose.value == 1 then
-#			return info_level
-#		else if opt_verbose.value > 1 then
-#			return debug_level
-#		end
-#		return warn_level
-#	end
-#
-#	var logger = new Logger(verbose) is lazy
-#
-#	# TODO include file
-#	# TODO template
-#	# TODO section_template
-#	# TODO page_template
-#
-#	# TODO sync // ssh
-#	# TODO fetch // git
-#
-#	init do
-#		super
-#		opts.add_option(opt_src, opt_out, opt_md_exts, opt_force, opt_verbose)
-#	end
-#
-#	fun file_exists: Bool do return (root / default_config_file).file_exists
-# end
 
-# class WikiCommand
-	# var config = new Config
-# end
+	var opt_root = new OptionString("Root directory of the wiki (default: .)", "--root")
 
-class CmdHello
-	# var config: WikiConfig
+	fun root_dir: String do return opt_root.value or else "."
 
-	fun is_nitiwiki: Bool do return false
-
-	fun run do
-		if is_nitiwiki then
-			print "Some status"
-		else
-			print "Not in a nitiwiki directory."
-			print "\nYou can create a new nitiwiki by typing:"
-			print "\n\tnitiwiki --init"
-		end
+	fun is_nitiwiki(root_dir: String): Bool do
+		return (root_dir / "nitiwiki.ini").file_exists
 	end
-end
 
-class WikiInit
-	super WikiCommand
-
-	# TODO options
-	# path
-	# colors
-	# verbose
-	# log
-
-	redef fun run(args) do
-		# var path = "."
-		# create nitiwiki.ini
-		#
-		# create pages/
-		# create base template
-		# create assets/
-		# create style.css
-
-		# explain next
-		# edit pages
-		# nitiwiki status
+	fun load_wiki(root_dir: String): nullable Wiki do
+		if not is_nitiwiki(root_dir) then
+			if root_dir == "." then
+				print "Not in a nitiwiki directory."
+			else
+				print "`{root_dir}` is not a nitiwiki directory."
+			end
+			print "\nYou can create a new nitiwiki here by typing:"
+			print "\n\tnitiwiki --init"
+			exit 1
+			return null # FIXME control flow should understand exit
+		end
+		var builder = new WikiBuilder # TODO options
+		var wiki = builder.build_wiki(root_dir)
+		if wiki == null then
+			logger.error "Error: Can't load the nitiwiki at `{root_dir}`."
+			exit 1
+			return null # FIXME control flow should understand exit
+		end
+		return wiki
 	end
 end
 
 class CmdStatus
+	super WikiCommand
+	noautoinit
 
-	# TODO options
-	# path
-	# colors
-	# verbose
-	# log
+	redef var name = "status"
+	redef var description = "Show the wiki status"
 
-	fun run do
-		# TODO visit and print wiki
+	redef fun run(args) do
+		super
+		var wiki = load_wiki(root_dir).as(not null)
+		for resource in wiki.resources do
+			# TODO visit and print wiki status
+			print " * {resource.pretty_name}"
+		end
 
-		# explain next
-		# nitiwiki render
+		# TODO explain next: nitiwiki render
 	end
 end
 
 class CmdRender
+	super WikiCommand
+	noautoinit
+#	var opt_out = new OptionString("Output directory (default: out/)", "--out", "-o")
+#	fun out: String do return opt_out.value or else ini["wiki.out"] or else "out/"
+#	var opt_force = new OptionBool("Force rendering.", "--force", "-f")
+#	fun force: Bool do return opt_force.value or ini["wiki.force"] == "true"
+
+	redef var name = "render"
+	redef var description = "Render the wiki as HTML"
+
+	redef fun run(args) do
+		super
+		var wiki = load_wiki(root_dir).as(not null)
+		var wiki2html = new Wiki2Html(wiki) # TODO options
+		wiki2html.render
+
+		# TODO explain next: nitiwiki sync
+	end
 end
 
 class CmdClean
-	fun run do
-		# wiki.clean_html
-		# TODO visit and print wiki
+	super WikiCommand
+	noautoinit
 
-		# explain next
-		# nitiwiki render
+	redef var name = "clean"
+	redef var description = "Remove all output files"
+
+	redef fun run(args) do
+		super
+		# var wiki = load_wiki(root_dir).as(not null)
+		# var wiki2html = new Wiki2Html(wiki) # TODO options
+		# TODO wiki2html.clean
 	end
 end
 
 class CmdSync
+	# TODO sync // ssh
 end
 
 class CmdFetch
+	# TODO fetch // git?
 end
 
 var nitiwiki = new Nitiwiki

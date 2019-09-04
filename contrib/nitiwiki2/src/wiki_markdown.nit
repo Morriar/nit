@@ -79,6 +79,7 @@ class MdProcessCommands
 		end
 	end
 
+	# TODO other commands (include file...)
 	fun parse_command(node: MdWikilink) do
 		var link = node.link.trim
 

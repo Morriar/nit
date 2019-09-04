@@ -18,27 +18,26 @@ import wiki_builder
 import test_base
 
 class TestWikiBuilder
+	super TestBase
 	test
 
-	private var tests_wikis: String = "tests/wikis" is lazy
-
-	private fun builder: WikiBuilder do return new WikiBuilder(
+	fun builder: WikiBuilder do return new WikiBuilder(
 		logger = new Logger(debug_level)
 	)
 
 	fun build_wiki_empty is test do
-		var wiki = builder.build_wiki(tests_wikis / "empty")
+		var wiki = builder.build_wiki(wikis_dir / "empty")
 		assert wiki != null
 		assert wiki.root.children.is_empty
 	end
 
 	fun build_wiki_not_found is test do
-		var wiki = builder.build_wiki(tests_wikis / "not_found")
+		var wiki = builder.build_wiki(wikis_dir / "not_found")
 		assert wiki == null
 	end
 
 	fun build_wiki_simple is test do
-		var wiki = builder.build_wiki(tests_wikis / "simple")
+		var wiki = builder.build_wiki(wikis_dir / "simple")
 		assert wiki != null
 		assert wiki.ansi_toc(false, true) == """<Root>
   Index
@@ -61,7 +60,7 @@ class TestWikiBuilder
 	end
 
 	fun build_wiki_assets is test do
-		var wiki = builder.build_wiki(tests_wikis / "assets")
+		var wiki = builder.build_wiki(wikis_dir / "assets")
 		assert wiki != null
 		assert wiki.ansi_toc(true, true) == """<Root>
   .Asset
@@ -80,7 +79,7 @@ class TestWikiBuilder
 	fun build_wiki_allowed_md_exts is test do
 		var builder = self.builder
 		builder.allowed_md_exts = ["md", "mdown"]
-		var wiki = builder.build_wiki(tests_wikis / "md_exts")
+		var wiki = builder.build_wiki(wikis_dir / "md_exts")
 		assert wiki != null
 		assert wiki.ansi_toc(false, true) == """<Root>
   Index
@@ -92,7 +91,7 @@ class TestWikiBuilder
 	fun build_log_what_it_does is test do
 		var stdout = new StringWriter
 		var builder = new WikiBuilder(logger = new Logger(debug_level, out = stdout))
-		builder.build_wiki(tests_wikis / "assets")
+		builder.build_wiki(wikis_dir / "assets")
 		assert stdout.to_s == """
 Found wiki config at tests/wikis/assets/nitiwiki.ini
 Found asset at tests/wikis/assets/pages/.asset
@@ -112,7 +111,7 @@ Found page at tests/wikis/assets/pages/section1/section11/index.md
 	fun build_warn_if_name_conflicts is test do
 		var stdout = new StringWriter
 		var builder = new WikiBuilder(logger = new Logger(debug_level, out = stdout))
-		builder.build_wiki(tests_wikis / "conflicts")
+		builder.build_wiki(wikis_dir / "conflicts")
 		assert stdout.to_s == """
 Found section at tests/wikis/conflicts/pages/bar
 Found section at tests/wikis/conflicts/pages/bar/bar

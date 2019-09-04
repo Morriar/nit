@@ -17,6 +17,13 @@ module test_base is test
 import wiki_base
 
 abstract class TestBase
+
+	# FIXME nitunit should provide a way to access it
+	var tests_dir: String = "tests/" is lazy
+
+	# Where the test wikis sources are located
+	var wikis_dir: String = tests_dir / "wikis/" is lazy
+
 	fun wiki_simple: Wiki do
 		var wiki = new Wiki
 		wiki.add new Section(wiki, "s1")
@@ -186,6 +193,7 @@ class TestResources
 end
 
 class TestSection
+	super TestBase
 	test
 
 	fun section_has_no_title_by_default is test do
