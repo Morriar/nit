@@ -19,6 +19,11 @@ import wiki_html
 intrude import config
 
 class Nitiwiki
+	# TODO options
+	# colors
+	# verbose
+	# log
+
 	fun run(args: Sequence[String]) do
 		# TODO ignore hidden files?
 		# TODO parse command
@@ -87,7 +92,7 @@ class CmdInit
 		# create pages/
 		# create base template
 		# create assets/
-		# create style.css
+		# create assets/style.css
 
 		# explain next
 		# edit pages
@@ -139,14 +144,14 @@ abstract class WikiCommand
 			print "\nYou can create a new nitiwiki here by typing:"
 			print "\n\tnitiwiki --init"
 			exit 1
-			return null # FIXME control flow should understand exit
+			return null # FIXME control flow should understand exit?
 		end
 		var builder = new WikiBuilder # TODO options
 		var wiki = builder.build_wiki(root_dir)
 		if wiki == null then
 			logger.error "Error: Can't load the nitiwiki at `{root_dir}`."
 			exit 1
-			return null # FIXME control flow should understand exit
+			return null # FIXME control flow should understand exit?
 		end
 		return wiki
 	end
@@ -161,10 +166,23 @@ class CmdStatus
 
 	redef fun run(args) do
 		super
-		var wiki = load_wiki(root_dir).as(not null)
-		for resource in wiki.resources do
+
+		var wiki = load_wiki(root_dir)
+		if wiki == null then return
+
+		var resources = wiki.resources
+		if resources.is_empty then
+			print "This wiki is empty."
+			return
+		end
+
+		# TODO Move to wiki html
+		for resource in resources do
 			# TODO visit and print wiki status
-			print " * {resource.pretty_name}"
+				# use status from generated html
+				# show + new, - deleted, * modified, up-to-date
+				# use colors
+			print " * {resource.title or else resource.name}"
 		end
 
 		# TODO explain next: nitiwiki render

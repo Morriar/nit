@@ -96,11 +96,48 @@ class TestCmdStatus
 	super TestBase
 	test
 
-	fun nitiwiki_status_shows_wiki_status is test do
+	fun nitiwiki_status_shows_wiki_bad_wiki is test do
 		var cmd = new CmdStatus
-		cmd.run(["--root", wikis_dir / "one"])
+		cmd.run(["--root", wikis_dir / "not_found"])
+		assert cmd.status == 1
+		assert cmd.out.to_s == """
+`tests/wikis/not_found` is not a nitiwiki directory.
+
+You can create a new nitiwiki here by typing:
+
+	nitiwiki --init
+"""
+	end
+
+	fun nitiwiki_status_shows_wiki_status_empty is test do
+		var cmd = new CmdStatus
+		cmd.run(["--root", wikis_dir / "empty"])
 		assert cmd.status == 0
-		assert cmd.out.to_s == " * Index\n"
-		# TODO more complex test
+		assert cmd.out.to_s == "This wiki is empty.\n"
+	end
+
+	fun nitiwiki_status_shows_wiki_status_simple is test do
+		var cmd = new CmdStatus
+		cmd.run(["--root", wikis_dir / "simple"])
+		assert cmd.status == 0
+		assert cmd.out.to_s == """
+ * index
+ * page1
+ * page2
+ * section1
+ * index
+ * section11
+ * index
+ * section12
+ * index
+ * section2
+ * index
+ * Section 2.1
+ * index
+ * Section 2.1.1
+ * index
+ * section22
+ * index
+"""
 	end
 end

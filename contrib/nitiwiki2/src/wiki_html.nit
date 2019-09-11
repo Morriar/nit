@@ -130,6 +130,7 @@ class Wiki2Html
 		if assets_dir == null then return
 
 		var src_path = wiki.root_dir / assets_dir
+		# TODO should we copy them to root?
 		var out_path = wiki.out_dir / "assets/"
 
 		if src_path.mtime < out_path.mtime then

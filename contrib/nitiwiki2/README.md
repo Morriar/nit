@@ -38,7 +38,6 @@
 	helper for indented text
 	helper for ls
 
-* simplify [[links]]: name, title or path (no relative, partial etc.)?
 * grep for todos
 * next
 	* one page mode
