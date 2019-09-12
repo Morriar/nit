@@ -2,20 +2,23 @@
 
 * bug simplify path
 
-* nitiwiki CLI + tests
-	* sync command
+* clean api
+* CLI tests
+* sync command
 
 * wiki2html
 	* template vars use [[ ]] syntax
 	* templates vars
 	* check template at least has BODY
+	* add sitemap?
+	* add index?
 
 * markdown
 	* links index
 
-* wiki2html
-	* add sitemap?
-	* add index?
+* clean tests
+	helper for indented text
+	helper for ls
 
 * black box testing
 	* from nitiwiki
@@ -23,18 +26,10 @@
 	* nitlang
 	* moz-code
 
+* grep for todos
+
 * add README, examples and test them
 
-	add a ExampleWiki("""
-		config.ini
-		asset.file
-	""") for examples
-
-* clean tests
-	helper for indented text
-	helper for ls
-
-* grep for todos
 * next
 	* one page mode
 	* check links (both internal and external)

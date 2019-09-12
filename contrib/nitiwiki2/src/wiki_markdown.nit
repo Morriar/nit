@@ -20,8 +20,10 @@ import markdown2
 import logger
 
 redef class Wiki
+	# TODO move to base?
 	var root_dir = "." is writable
 
+	# TODO move to base?
 	var pages_dir = "pages/" is writable
 
 	redef fun configure_from_ini(ini) do

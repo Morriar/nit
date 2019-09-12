@@ -274,6 +274,7 @@ class TestSection
 	end
 end
 
+# TODO is example
 class DummyPage
 	super Page
 end
