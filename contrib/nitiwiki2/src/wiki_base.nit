@@ -56,16 +56,7 @@ class Wiki
 	# ~~~
 	var root = new Root(self, "<root>") is lazy
 
-	# List all resources in this wiki
-	#
-	# ~~~
-	# var wiki = new Wiki
-	# var s = new Section(wiki, "my_section", "My Section")
-	# var a = new Asset(wiki, "my_asset", "My Asset", "path/to/asset")
-	# wiki.add s
-	# wiki.add a
-	# assert wiki.resources == [s, a: Resource]
-	# ~~~
+	# TODO remove
 	fun resources: Array[Resource] do
 		var v = new ResourcesVisitor
 		v.visit_wiki(self)
@@ -81,6 +72,7 @@ class Wiki
 	# wiki.add new Section(wiki, "my_section", "My Section")
 	# assert wiki.resources.length == 1
 	# ~~~
+	# TODO remove
 	fun add(resource: Resource) do root.add resource
 
 	# Get all resources with `name`
@@ -99,14 +91,9 @@ class Wiki
 	# ~~~
 	#
 	# See `resource_by_path` to get a single resource from its unique path.
-	#
-	# TODO Caching?
+	# TODO remove
 	fun resources_by_name(name: String): Array[Resource] do
-		var res = new Array[Resource]
-		for resource in resources do
-			if resource.name == name then res.add resource
-		end
-		return res
+		return root.resources_by_name(name)
 	end
 
 	# Get all resources with `title`
@@ -125,16 +112,8 @@ class Wiki
 	# ~~~
 	#
 	# See `resource_by_path` to get a single resource from its unique path.
-	#
-	# TODO Caching?
-	fun resources_by_title(title: String): Array[Resource] do
-		var res = new Array[Resource]
-		for resource in resources do
-			if resource.title != title then continue
-			res.add resource
-		end
-		return res
-	end
+	# TODO remove
+	fun resources_by_title(title: String): Array[Resource] do return root.resources_by_title(title)
 
 	# Get an resource by its `path`
 	#
@@ -153,8 +132,7 @@ class Wiki
 	# ~~~
 	#
 	# See `Resource::path`.
-	#
-	# TODO Caching?
+	# TODO remove
 	fun resource_by_path(path: String): nullable Resource do
 		if path == root.path then return root
 		for resource in resources do
@@ -164,9 +142,11 @@ class Wiki
 	end
 
 	# Landing or home page of this wiki
+	# TODO remove
 	fun index: nullable Page do return root.index
 
 	# Does `self` have a `index` page?
+	# TODO remove
 	fun has_index: Bool do return root.has_index
 
 	# Configure the wiki from a `config` file.
@@ -322,6 +302,15 @@ class Section
 	# All resources contained in this section
 	#
 	# This means the section children and their children recursively.
+	#
+	# ~~~
+	# var wiki = new Wiki
+	# var s = new Section(wiki, "my_section", "My Section")
+	# var a = new Asset(wiki, "my_asset", "My Asset", "path/to/asset")
+	# wiki.add s
+	# wiki.add a
+	# assert wiki.root.resources == [s, a: Resource]
+	# ~~~
 	fun resources: Array[Resource] do
 		var v = new ResourcesVisitor
 		v.visit(self)
@@ -334,6 +323,16 @@ class Section
 		var res = new Array[Resource]
 		for resource in resources do
 			if resource.name == name then res.add resource
+		end
+		return res
+	end
+
+	# TODO
+	fun resources_by_title(title: String): Array[Resource] do
+		var res = new Array[Resource]
+		for resource in resources do
+			if resource.title != title then continue
+			res.add resource
 		end
 		return res
 	end
@@ -362,6 +361,7 @@ class Section
 		var hidden = ini["section.hidden"]
 		if hidden != null then is_hidden = hidden == "true"
 		title = ini["section.title"] or else title
+		# TODO index
 	end
 end
 
