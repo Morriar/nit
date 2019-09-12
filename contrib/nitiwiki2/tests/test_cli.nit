@@ -86,7 +86,7 @@ Options:
 
 You can create a new nitiwiki here by typing:
 
-	nitiwiki --init
+	nitiwiki init
 """
 		assert wiki == null
 	end
@@ -105,7 +105,7 @@ class TestCmdStatus
 
 You can create a new nitiwiki here by typing:
 
-	nitiwiki --init
+	nitiwiki init
 """
 	end
 
@@ -121,23 +121,23 @@ You can create a new nitiwiki here by typing:
 		cmd.run(["--root", wikis_dir / "simple"])
 		assert cmd.status == 0
 		assert cmd.out.to_s == """
- * index
- * page1
- * page2
- * section1
- * index
- * section11
- * index
- * section12
- * index
- * section2
- * index
- * Section 2.1
- * index
- * Section 2.1.1
- * index
- * section22
- * index
+ + /index
+ + /page1
+ + /page2
+ + /section1
+ + /section1/index
+ + /section1/section11
+ + /section1/section11/index
+ + /section1/section12
+ + /section1/section12/index
+ + /section2
+ + /section2/index
+ + /section2/section21
+ + /section2/section21/index
+ + /section2/section21/section211
+ + /section2/section21/section211/index
+ + /section2/section22
+ + /section2/section22/index
 """
 	end
 end

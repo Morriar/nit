@@ -26,6 +26,7 @@ class WikiBuilder
 
 	# TODO move to config
 	var allowed_md_exts = ["md"] is optional, writable
+	# TODO ignore hidden files?
 
 	fun build_wiki(root_dir: String): nullable Wiki do
 		if not root_dir.file_exists then return null
@@ -81,7 +82,7 @@ class WikiBuilder
 					section.add new MdPage.from_file(wiki, sub_path)
 				else
 					logger.debug "Found asset at {sub_path}"
-					section.add new Asset(wiki, null, sub_path)
+					section.add new Asset(wiki, sub_path.basename, null, sub_path)
 				end
 			end
 			if has_conflict then

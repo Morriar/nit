@@ -118,6 +118,10 @@ class Wiki2Html
 
 	fun render do visit_wiki(wiki)
 
+	fun clean do
+		sys.system "rm -rf {wiki.out_dir}"
+	end
+
 	redef fun visit_wiki(wiki) do
 		if not need_render(wiki.root) then
 			logger.debug "Wiki already up-to-date"

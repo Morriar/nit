@@ -725,20 +725,20 @@ class TestAssetToHtml
 
 	fun html_link_from_root is test do
 		var wiki = new Wiki
-		var asset = new Asset(wiki, null, "/foo/bar/baz/test.jpg")
+		var asset = new Asset(wiki, "test.jpg", null, "/foo/bar/baz/test.jpg")
 		assert asset.html_link(wiki.root) == "<a href=\"test.jpg\">test.jpg</a>"
 	end
 
 	fun html_link_from_self is test do
 		var wiki = new Wiki
-		var asset = new Asset(wiki, null, "/foo/bar/baz/test.jpg")
+		var asset = new Asset(wiki, "test.jpg", null, "/foo/bar/baz/test.jpg")
 		assert asset.html_link(asset) == "<a href=\"#\">test.jpg</a>"
 	end
 
 	fun html_link_from_unrelated is test do
 		var wiki = new Wiki
-		var asset = new Asset(wiki, null, "/foo/bar/baz/test.jpg")
-		var other = new Asset(wiki, null, "/baz/bar/foo/test2")
+		var asset = new Asset(wiki, "test.jpg", null, "/foo/bar/baz/test.jpg")
+		var other = new Asset(wiki, "test2", null, "/baz/bar/foo/test2")
 		assert asset.html_link(other) == "<a href=\"../test.jpg\">test.jpg</a>"
 	end
 end

@@ -19,15 +19,33 @@ import wiki_html
 intrude import config
 
 class Nitiwiki
-	# TODO options
-	# colors
-	# verbose
-	# log
+	var commands: Map[String, CLICommand] is lazy do
+		var commands = new Map[String, CLICommand]
+		commands["init"] = new CmdInit
+		commands["status"] = new CmdStatus
+		commands["render"] = new CmdRender
+		commands["clean"] = new CmdClean
+		commands["synch"] = new CmdSynch
+		return commands
+	end
 
 	fun run(args: Sequence[String]) do
-		# TODO ignore hidden files?
-		# TODO parse command
-		# TODO display help
+		if args.is_empty then
+			print "TODO help"
+			# TODO display command lists
+			return
+		end
+
+
+		var command = args.shift
+		if not commands.has_key(command) then
+			print "Error: Unknown command `{command}`"
+			# TODO did you mean?
+			# TODO display help
+			return
+		end
+
+		commands[command].run(args)
 	end
 end
 
@@ -79,24 +97,71 @@ end
 
 class CmdInit
 	super WikiCommand
+	noautoinit
+
+	redef var name = "init"
+	redef var description = "Create a new nitiwiki"
 
 	redef fun run(args) do
+		super
+
 		# TODO check only one arg
-		var path = "."
-		if args.not_empty then path = args.first
+		var root = "."
+		if args.not_empty then root = args.first
 
-		# TODO init
-		print path
-		# create nitiwiki.ini
-		#
-		# create pages/
-		# create base template
-		# create assets/
-		# create assets/style.css
+		var files = new Map[String, String]
 
-		# explain next
-		# edit pages
-		# nitiwiki status
+		files["nitiwiki.ini"] = """
+[wiki]
+
+; Sources directory
+pages = pages/
+
+; Output directory
+out = out/
+
+; Assets directory (will be copied to the `out` directory at render time)
+assets = assets/
+
+; Default page template
+template = template.html"""
+
+		files["pages/index.md"] = """
+# My Nitiwiki
+
+Hello, World!"""
+
+		files["template.html"] = """
+<!doctype html>
+<head>
+  <title>My Nitiwiki</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+
+<body>
+%BODY%
+</body>
+</html>
+"""
+
+		files["assets/style.css"] = """
+"""
+
+		sys.system "mkdir -p {root}"
+		for path, content in files do
+			sys.system "mkdir -p {root / path.dirname}"
+			content.write_to_file(root / path)
+		end
+
+		if root == "." then
+			print "Initialized new wiki in current directory.\n"
+		else
+			print "Initialized new wiki in `{root}`.\n"
+		end
+
+		print "Configure your wiki by editing `{root / "nitiwiki.ini"}`."
+		print "Manage your wiki content in `{root / "pages"}`."
+		print "Customize your wiki by editing `{root / "template.html"}`."
 	end
 end
 
@@ -142,7 +207,7 @@ abstract class WikiCommand
 				print "`{root_dir}` is not a nitiwiki directory."
 			end
 			print "\nYou can create a new nitiwiki here by typing:"
-			print "\n\tnitiwiki --init"
+			print "\n\tnitiwiki init"
 			exit 1
 			return null # FIXME control flow should understand exit?
 		end
@@ -153,6 +218,9 @@ abstract class WikiCommand
 			exit 1
 			return null # FIXME control flow should understand exit?
 		end
+
+		# TODO this is ungly
+		wiki.out_dir = root_dir / wiki.out_dir
 		return wiki
 	end
 end
@@ -176,14 +244,20 @@ class CmdStatus
 			return
 		end
 
-		# TODO Move to wiki html
+		# TODO use colors?
+		# TODO group by category
 		for resource in resources do
-			# TODO visit and print wiki status
-				# use status from generated html
-				# show + new, - deleted, * modified, up-to-date
-				# use colors
-			print " * {resource.title or else resource.name}"
+			var bullet = "   "
+			if resource.is_new then
+				bullet = " + "
+			else if resource.is_dirty then
+				bullet = " * "
+			end
+			print "{bullet}{resource.path}"
 		end
+
+		# TODO show deleted resources
+		# TODO show assets and template status?
 
 		# TODO explain next: nitiwiki render
 	end
@@ -202,9 +276,12 @@ class CmdRender
 
 	redef fun run(args) do
 		super
+
 		var wiki = load_wiki(root_dir).as(not null)
 		var wiki2html = new Wiki2Html(wiki) # TODO options
 		wiki2html.render
+
+		print "Rendered wiki to `{wiki.out_dir}`."
 
 		# TODO explain next: nitiwiki sync
 	end
@@ -219,18 +296,22 @@ class CmdClean
 
 	redef fun run(args) do
 		super
-		# var wiki = load_wiki(root_dir).as(not null)
-		# var wiki2html = new Wiki2Html(wiki) # TODO options
-		# TODO wiki2html.clean
+		var wiki = load_wiki(root_dir).as(not null)
+		var wiki2html = new Wiki2Html(wiki) # TODO options
+		wiki2html.clean
+
+		print "Removed `{wiki.out_dir}`."
 	end
 end
 
-class CmdSync
-	# TODO sync // ssh
-end
+class CmdSynch
+	super WikiCommand
+	noautoinit
 
-class CmdFetch
-	# TODO fetch // git?
+	redef var name = "synch"
+	redef var description = "TODO"
+
+	# TODO sync // ssh
 end
 
 var nitiwiki = new Nitiwiki

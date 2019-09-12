@@ -3,16 +3,12 @@
 * bug simplify path
 
 * nitiwiki CLI + tests
-	* status
-	* render
-	* clean
-	* sync
-	* fetch
+	* sync command
 
 * wiki2html
 	* template vars use [[ ]] syntax
 	* templates vars
-	* check template at least has body
+	* check template at least has BODY
 
 * markdown
 	* links index

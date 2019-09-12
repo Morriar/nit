@@ -14,10 +14,12 @@
 
 # Basic Wiki model
 #
-# This module defines the base model representation of a Wiki.
-#
 # A Wiki is composed of resources.
-# An Resource can be a Page, a Section or an Asset.
+# A Resource can be a Page, a Section or an Asset.
+#
+# This module only defines the base model representation of a Wiki.
+# Other modules like `wiki_markdown` or `wiki_html` add more features based on
+# this model.
 module wiki_base
 
 import ini
@@ -25,21 +27,45 @@ import template
 
 # Wiki
 #
-# A Wiki contains pages that can be renderer to an output format.
+# A Wiki contains resources (see Resource):
+#
+# ~~~
+# class DummyPage
+#	super Page
+#
+#	var content: String
+# end
+#
+# var wiki = new Wiki
+# wiki.add new DummyPage(wiki, "my_page", "My Page", "Content")
+# wiki.add new Section(wiki, "my_section", "My Section")
+# wiki.add new Asset(wiki, "my_asset", "My Asset", "path/to/asset")
+# assert wiki.resources.length == 3
+# ~~~
 class Wiki
 
 	# Wiki's root section
 	#
-	# Every wiki as a Root, it represents the `pages/` directory where the wiki
-	# source files are located.
+	# Every wiki as a Root used to contain its resources:
+	#
+	# ~~~
+	# var wiki = new Wiki
+	# assert wiki.root isa Root
+	# wiki.add new Asset(wiki, "my_asset", "My Asset", "path/to/asset")
+	# assert wiki.resources.first == wiki.root.resources.first
+	# ~~~
 	var root = new Root(self, "<root>") is lazy
 
 	# List all resources in this wiki
 	#
-	# A wiki is composed of resources like sections, pages or assets.
-	#
-	# Even if some resources can be nested like sections this method collects all
-	# resources.
+	# ~~~
+	# var wiki = new Wiki
+	# var s = new Section(wiki, "my_section", "My Section")
+	# var a = new Asset(wiki, "my_asset", "My Asset", "path/to/asset")
+	# wiki.add s
+	# wiki.add a
+	# assert wiki.resources == [s, a: Resource]
+	# ~~~
 	fun resources: Array[Resource] do
 		var v = new ResourcesVisitor
 		v.visit_wiki(self)
@@ -48,31 +74,31 @@ class Wiki
 	end
 
 	# Add an resource to the root section of this wiki
+	#
+	# ~~~
+	# var wiki = new Wiki
+	# assert wiki.resources.length == 0
+	# wiki.add new Section(wiki, "my_section", "My Section")
+	# assert wiki.resources.length == 1
+	# ~~~
 	fun add(resource: Resource) do root.add resource
-
-	# Get an resource by its `path`
-	#
-	# Since path are unique for a wiki, this returns a single resource.
-	# Returns `null` if no resource can be found for this `path`.
-	#
-	# See `Resource::path`.
-	#
-	# TODO Caching?
-	fun resource_by_path(path: String): nullable Resource do
-		if path == root.path then return root
-		for resource in resources do
-			if resource.path == path then return resource
-		end
-		return null
-	end
 
 	# Get all resources with `name`
 	#
 	# Since a name is not unique in a wiki this method can return more than
 	# one resource.
 	#
+	# ~~~
+	# var wiki = new Wiki
+	# var s = new Section(wiki, "my_section", "My Section")
+	# var a = new Asset(wiki, "my_asset", "My Asset", "path/to/asset")
+	# wiki.add s
+	# wiki.add a
+	# assert wiki.resources_by_name("my_asset") == [a]
+	# assert wiki.resources_by_name("not_found").is_empty
+	# ~~~
+	#
 	# See `resource_by_path` to get a single resource from its unique path.
-	# See `Resource::name` for more details about `name`.
 	#
 	# TODO Caching?
 	fun resources_by_name(name: String): Array[Resource] do
@@ -83,7 +109,24 @@ class Wiki
 		return res
 	end
 
-	# TODO
+	# Get all resources with `title`
+	#
+	# Since a title is not unique in a wiki this method can return more than
+	# one resource.
+	#
+	# ~~~
+	# var wiki = new Wiki
+	# var s = new Section(wiki, "my_section", "My Section")
+	# var a = new Asset(wiki, "my_asset", "My Asset", "path/to/asset")
+	# wiki.add s
+	# wiki.add a
+	# assert wiki.resources_by_title("My Asset") == [a]
+	# assert wiki.resources_by_title("not_found").is_empty
+	# ~~~
+	#
+	# See `resource_by_path` to get a single resource from its unique path.
+	#
+	# TODO Caching?
 	fun resources_by_title(title: String): Array[Resource] do
 		var res = new Array[Resource]
 		for resource in resources do
@@ -91,6 +134,33 @@ class Wiki
 			res.add resource
 		end
 		return res
+	end
+
+	# Get an resource by its `path`
+	#
+	# Since path are unique for a wiki, this returns a single resource.
+	# Returns `null` if no resource can be found for this `path`.
+	#
+	# ~~~
+	# var wiki = new Wiki
+	# var s1 = new Section(wiki, "section1", "My Section")
+	# wiki.add s1
+	# var s2 = new Section(wiki, "section2", "My Sub Section")
+	# s1.add s2
+	# assert wiki.resource_by_path("/section1") == s1
+	# assert wiki.resource_by_path("/section1/section2") == s2
+	# assert wiki.resource_by_path("/not_found") == null
+	# ~~~
+	#
+	# See `Resource::path`.
+	#
+	# TODO Caching?
+	fun resource_by_path(path: String): nullable Resource do
+		if path == root.path then return root
+		for resource in resources do
+			if resource.path == path then return resource
+		end
+		return null
 	end
 
 	# Landing or home page of this wiki
@@ -112,12 +182,14 @@ class Wiki
 	end
 
 	# Configure the wiki from a `config` file.
+	#
+	# Sub modules refine this method to load wiki options from a INI file.
 	fun configure_from_ini(ini: IniFile) do end
 end
 
 # A Wiki resource
 #
-# Like a section, a page or an asset.
+# Like (but not limited to) a section, a page or an asset.
 abstract class Resource
 
 	# Every resource belongs to a wiki
@@ -148,6 +220,12 @@ abstract class Resource
 	# Displayable pretty version of `name`
 	#
 	# This function replaces `_` by spaces in `name` then apply capitalization.
+	#
+	# ~~~
+	# var wiki = new Wiki
+	# var section = new Section(wiki, "my_section")
+	# assert section.pretty_name == "My Section"
+	# ~~~
 	fun pretty_name: String do
 		var title = self.title
 		if title != null then return title
@@ -159,12 +237,37 @@ abstract class Resource
 
 	# Resource's section
 	#
-	# Should never be set directly, see `Wiki::add` and `Section.add`.
+	# Should never be set directly, see `Wiki::add` and `Section::add`.
+	#
+	# ~~~
+	# var wiki = new Wiki
+	# var s1 = new Section(wiki, "section1", "My Section")
+	# assert s1.section == null
+	# wiki.add s1
+	# assert s1.section == wiki.root
+	#
+	# var s2 = new Section(wiki, "section2", "My Sub Section")
+	# s1.add s2
+	# assert s2.section == s1
+	# ~~~
 	var section: nullable Section = null
 
 	# All resources from `self` to the root of the wiki
 	#
 	# Can be used to compose breadcrumbs for example.
+	#
+	# ~~~
+	# var wiki = new Wiki
+	# assert wiki.root.scopes.is_empty
+	#
+	# var s1 = new Section(wiki, "section1", "My Section")
+	# wiki.add s1
+	# assert s1.scopes == [s1]
+	#
+	# var s2 = new Section(wiki, "section2", "My Sub Section")
+	# s1.add s2
+	# assert s2.scopes == [s1, s2]
+	# ~~~
 	fun scopes: Array[Resource] do
 		var section = self.section
 		if section == null then return new Array[Resource]
@@ -214,7 +317,8 @@ class Section
 
 	# Is this section hidden in sitemap and trees and menus?
 	#
-	# See `hidden` is you want to take the section visit_all into account.
+	# See `hidden` is you want to take the section into account.
+	# TODO move to resource?
 	var is_hidden = false is optional, writable
 
 	# Is this section or is section hidden (recursive).
@@ -301,7 +405,6 @@ end
 # We don't really care about their content as we will just copy or serve them.
 class Asset
 	super Resource
-	autoinit(wiki, title, src_path)
 
 	# Source path of this asset
 	var src_path: String
