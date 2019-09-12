@@ -39,53 +39,55 @@ class TestWikiBuilder
 	fun build_wiki_simple is test do
 		var wiki = builder.build_wiki(wikis_dir / "simple")
 		assert wiki != null
-		assert wiki.ansi_toc(false, true) == """<Root>
-  Index
-  Page1
-  Page2
-  Section1
-    Index
-    Section11
-      Index
-    Section12
-      Index
-  Section2
-    Index
-    Section 2.1
-      Index
-      Section 2.1.1
-        Index
-    -Section22
-      Index\n"""
+		assert wiki.content(2) == """
+		 P /index
+		 P /page1
+		 P /page2
+		 S /section1
+		 P /section1/index
+		 S /section1/section11
+		 P /section1/section11/index
+		 S /section1/section12
+		 P /section1/section12/index
+		 S /section2
+		 P /section2/index
+		 S /section2/section21
+		 P /section2/section21/index
+		 S /section2/section21/section211
+		 P /section2/section21/section211/index
+		 -S- /section2/section22
+		 P /section2/section22/index\n"""
 	end
 
 	fun build_wiki_assets is test do
 		var wiki = builder.build_wiki(wikis_dir / "assets")
 		assert wiki != null
-		assert wiki.ansi_toc(true, true) == """<Root>
-  .Asset
-  Asset1
-  Asset2
-  Index
-  Page1
-  Section1
-    Asset.1
-    Index
-    Section11
-      Asset
-      Index\n"""
-	end
+		assert wiki.content(2) == """
+		 A /.asset
+		 A /asset1
+		 A /asset2
+		 P /index
+		 P /page1
+		 S /section1
+		 A /section1/asset.1
+		 P /section1/index
+		 S /section1/section11
+		 A /section1/section11/asset
+		 P /section1/section11/index\n"""
+		end
 
-	fun build_wiki_allowed_md_exts is test do
+	fun build_wiki_allowed_md_exts_for_pages is test do
 		var builder = self.builder
 		builder.allowed_md_exts = ["md", "mdown"]
 		var wiki = builder.build_wiki(wikis_dir / "md_exts")
 		assert wiki != null
-		assert wiki.ansi_toc(false, true) == """<Root>
-  Index
-  Page1
-  Section1
-    Page1\n"""
+		assert wiki.content(2) == """
+		 P /index
+		 P /page1
+		 A /page2.markdown
+		 S /section1
+		 A /section1/index.markdown
+		 P /section1/page1\n"""
 	end
 
 	fun build_log_what_it_does is test do

@@ -130,7 +130,7 @@ class Wiki
 	fun resources_by_title(title: String): Array[Resource] do
 		var res = new Array[Resource]
 		for resource in resources do
-			if resource.title != title and resource.pretty_name != title then continue
+			if resource.title != title then continue
 			res.add resource
 		end
 		return res
@@ -169,18 +169,6 @@ class Wiki
 	# Does `self` have a `index` page?
 	fun has_index: Bool do return root.has_index
 
-	# Get an ANSI tree representation of this wiki resources
-	#
-	# Useful for testing and debugging.
-	fun ansi_toc(show_assets, use_pretty_names: nullable Bool): String do
-		var v = new WikiTocVisitor(
-			show_assets or else false,
-			use_pretty_names or else false
-		)
-		v.visit_wiki(self)
-		return v.ansi.write_to_string
-	end
-
 	# Configure the wiki from a `config` file.
 	#
 	# Sub modules refine this method to load wiki options from a INI file.
@@ -201,39 +189,18 @@ abstract class Resource
 	# It's generally based on files name and we try to never show it as it is to
 	# the end wiki user.
 	#
-	# Names are not supposed to be unique accross a wiki. See `path` if you're looking
-	# for some kind of unique key.
+	# Names are not supposed to be unique accross a wiki. See `title` for this.
 	#
-	# See `title` and `pretty_name`.
+	# See `path` if you're looking for some kind of unique key.
 	var name: String
 
 	# Resource's title
 	#
-	# An resource can have a custom title which will be presented to the end user.
+	# A resource can have a custom title which will be presented to the end user.
 	#
 	# For some resources, the title comes from configuration files like Section for
 	# other it comes from the content of the file like MdPage.
-	# For some there is no obvious title like assets so we generally fallback on
-	# `pretty_name`.
 	var title: nullable String = null is optional, writable
-
-	# Displayable pretty version of `name`
-	#
-	# This function replaces `_` by spaces in `name` then apply capitalization.
-	#
-	# ~~~
-	# var wiki = new Wiki
-	# var section = new Section(wiki, "my_section")
-	# assert section.pretty_name == "My Section"
-	# ~~~
-	fun pretty_name: String do
-		var title = self.title
-		if title != null then return title
-		var name = self.name
-		name = name.replace("_", " ")
-		name = name.capitalized(keep_upper = true)
-		return name
-	end
 
 	# Resource's section
 	#
@@ -305,8 +272,26 @@ abstract class Resource
 	# Visit self with `visitor`
 	fun visit_all(visitor: WikiVisitor) do end
 
+	# Displayable pretty version of `name`
+	#
+	# This function replaces `_` by spaces in `name` then apply capitalization.
+	#
+	# ~~~
+	# var wiki = new Wiki
+	# var section = new Section(wiki, "my_section")
+	# assert section.pretty_name == "My Section"
+	# ~~~
+	fun pretty_name: String do
+		var title = self.title
+		if title != null then return title
+		var name = self.name
+		name = name.replace("_", " ")
+		name = name.capitalized(keep_upper = true)
+		return name
+	end
+
 	# Return the resource `name`.
-	redef fun to_s do return name
+	redef fun to_s do return pretty_name
 end
 
 # A group of resources
@@ -372,11 +357,6 @@ class Section
 
 	redef fun visit_all(v) do for child in children do v.visit(child)
 
-	redef fun pretty_name do
-		if is_hidden then return "-{super}"
-		return super
-	end
-
 	# Configure the section from a INI file
 	fun configure_from_ini(ini: IniFile) do
 		var hidden = ini["section.hidden"]
@@ -439,45 +419,5 @@ private class ResourcesVisitor
 	redef fun visit(resource) do
 		resources.add resource
 		resource.visit_all(self)
-	end
-end
-
-# Create an ANSI tree from a Wiki resources
-class WikiTocVisitor
-	super WikiVisitor
-
-	# Show assets in the output tree?
-	var show_assets = false is optional
-
-	# Use pretty names instead of names
-	var use_pretty_names = false is optional
-
-	# Current indentation level
-	#
-	# An indentation level is two spaces (`  `).
-	var indent_level = 0
-
-	# Get indentation string
-	#
-	# See `indent_level`.
-	fun indent: String do return "  " * indent_level
-
-	# ANSI tree under construction
-	var ansi = new Template
-
-	redef fun visit(resource) do
-		if not show_assets and resource isa Asset then return
-
-		if use_pretty_names then
-			ansi.addn "{indent}{resource.pretty_name}"
-		else
-			ansi.addn "{indent}{resource.name}"
-		end
-
-		if resource isa Section then
-			indent_level += 1
-			resource.visit_all(self)
-			indent_level -= 1
-		end
 	end
 end

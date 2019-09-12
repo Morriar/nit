@@ -16,6 +16,25 @@ module test_base is test
 
 import wiki_base
 
+redef class Wiki
+	fun content(indent: nullable Int): String do
+		var tpl = new Template
+		for resource in resources do
+			var bullet = "P"
+			if resource isa Section then
+				if resource.is_hidden then
+					bullet = "-S-"
+				else
+					bullet = "S"
+				end
+			end
+			if resource isa Asset then bullet = "A"
+			tpl.addn "{"\t" * (indent or else 0)} {bullet} {resource.path}"
+		end
+		return tpl.write_to_string
+	end
+end
+
 abstract class TestBase
 
 	# FIXME nitunit should provide a way to access it
@@ -63,32 +82,32 @@ class TestWiki
 		var wiki = new Wiki
 		assert wiki.root.name == "<root>"
 		assert wiki.resources.length == 0
-		assert wiki.ansi_toc == "<root>\n"
+		assert wiki.content == ""
 	end
 
 	fun wiki_contains_resources is test do
 		var wiki = wiki_simple
-		assert wiki.ansi_toc == """<root>
-  s1
-  s2
-  p1
-  p2\n"""
+		assert wiki.content(2) == """
+		 S /s1
+		 S /s2
+		 P /p1
+		 P /p2\n"""
 	end
 
 	fun resources_can_be_nested is test do
 		var wiki = wiki_nested
 		assert wiki.resources.length == 10
-		assert wiki.ansi_toc == """<root>
-  p1
-  s1
-    p2
-    s11
-      p3
-    s12
-  s2
-    s21
-      s211
-        p4\n"""
+		assert wiki.content(2) == """
+		 P /p1
+		 S /s1
+		 P /s1/p2
+		 S /s1/s11
+		 P /s1/s11/p3
+		 S /s1/s12
+		 S /s2
+		 S /s2/s21
+		 S /s2/s21/s211
+		 P /s2/s21/s211/p4\n"""
 	end
 end
 

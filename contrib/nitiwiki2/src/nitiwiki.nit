@@ -269,6 +269,13 @@ class CmdStatus
 			end
 		end
 
+		# TODO colors
+
+		if added.is_empty and edited.is_empty then
+			print "Wiki up-to-date."
+			return 0
+		end
+
 		if added.not_empty then
 			print "New resources:\n"
 			for resource in added do print " + {resource.path}"
@@ -281,17 +288,11 @@ class CmdStatus
 			print ""
 		end
 
-		# TODO should we display that?
-		# if unchanged.not_empty then
-		#	print "Unchanged:\n"
-		#	for resource in unchanged do print " > {resource.path}"
-		#	print ""
-		# end
-
 		# TODO show deleted resources
 		# TODO show assets and template status?
 
-		# TODO explain next: nitiwiki render
+		print "Render them to HTML by typing:"
+		print "\n\tnitiwiki render"
 
 		return 0
 	end
@@ -300,6 +301,8 @@ end
 class CmdRender
 	super WikiCommand
 	noautoinit
+
+	# TODO
 #	var opt_out = new OptionString("Output directory (default: out/)", "--out", "-o")
 #	fun out: String do return opt_out.value or else ini["wiki.out"] or else "out/"
 #	var opt_force = new OptionBool("Force rendering.", "--force", "-f")
@@ -318,12 +321,13 @@ class CmdRender
 		super
 
 		var wiki = load_wiki(root_dir).as(not null)
-		var wiki2html = new Wiki2Html(wiki) # TODO options
+		var wiki2html = new Wiki2Html(wiki) # TODO options, logger
 		wiki2html.render
 
-		print "Rendered wiki to `{wiki.out_dir}`."
+		print "Rendered wiki as HTML to `{wiki.out_dir}`."
 
 		# TODO explain next: nitiwiki sync
+
 		return 0
 	end
 end
@@ -338,7 +342,7 @@ class CmdClean
 	redef fun run(args) do
 		super
 		var wiki = load_wiki(root_dir).as(not null)
-		var wiki2html = new Wiki2Html(wiki) # TODO options
+		var wiki2html = new Wiki2Html(wiki) # TODO options, logger
 		wiki2html.clean
 
 		print "Removed `{wiki.out_dir}`."

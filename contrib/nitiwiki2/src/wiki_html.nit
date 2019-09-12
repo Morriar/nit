@@ -251,11 +251,11 @@ redef class Section
 
 	redef fun accept_html_visitor(v) do
 		if not v.need_render(self) then
-			v.logger.debug "Section {self} already up-to-date at {out_path}"
+			v.logger.debug "Section {name} already up-to-date at {out_path}"
 			return
 		end
 
-		v.logger.debug "Render section {self} to {out_path}"
+		v.logger.debug "Render section {name} to {out_path}"
 		v.mkdir out_path
 		visit_all(v)
 		# TODO add index
@@ -323,11 +323,11 @@ redef class MdPage
 
 	redef fun accept_html_visitor(v) do
 		if not v.need_render(self) then
-			v.logger.debug "Page {self} already up-to-date at {out_path}"
+			v.logger.debug "Page {name} already up-to-date at {out_path}"
 			return
 		end
 
-		v.logger.debug "Render page {self} to {out_path}"
+		v.logger.debug "Render page {name} to {out_path}"
 		var html = self.html(v)
 		v.write_to_file(html, out_path)
 	end
@@ -399,11 +399,11 @@ redef class Asset
 
 	redef fun accept_html_visitor(v) do
 		if not v.need_render(self) then
-			v.logger.debug "Asset {self} already up-to-date at {out_path}"
+			v.logger.debug "Asset {name} already up-to-date at {out_path}"
 			return
 		end
 
-		v.logger.debug "Copy asset {self} to {out_path}"
+		v.logger.debug "Copy asset {name} to {out_path}"
 		var from = wiki.root_dir / wiki.pages_dir / path.substring(1, path.length - 1)
 		v.copy(from, "{out_path}")
 	end

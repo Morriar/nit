@@ -22,31 +22,17 @@ intrude import opts
 redef class CLICommand
 	var out: Writer = new StringWriter
 
-	var status = 0
-
 	redef var logger = new Logger(debug_level, out)
 
 	init do opts.out = out
 
 	redef fun print(s) do out.write "{s}\n"
-
-	redef fun exit(status) do self.status = status
 end
 
 redef class OptionContext
 	var out: Writer = new StringWriter
 
 	redef fun print(s) do out.write "{s}\n"
-end
-
-class TestCmd
-	super CLICommand
-
-	redef fun run(args) do
-		var topts = ""
-		var targs = if args.is_empty then "" else " {args.join(" ")}"
-		print "{name}{topts}{targs}\n"
-	end
 end
 
 class TestWikiCmd
@@ -57,30 +43,17 @@ class TestCLICommands
 	super TestBase
 	test
 
-	fun every_command_has_help_by_default is test do
-		var cmd = new TestCmd("test", "Test description")
-		cmd.usage
-		assert cmd.out.to_s == """
-Usage: test [OPTION]... [ARG]...
-Test description
-
-Options:
-  -h, -?, --help   Show this help message\n"""
-	end
-
 	# TODO test logger
 
 	fun wiki_command_can_load_wiki is test do
 		var cmd = new TestWikiCmd("test", "Test description")
 		var wiki = cmd.load_wiki(wikis_dir / "simple")
-		assert cmd.status == 0
 		assert wiki != null
 	end
 
-	fun wiki_command_exit_if_cant_build_wiki is test do
+	fun wiki_command_print_error_if_cant_build_wiki is test do
 		var cmd = new TestWikiCmd("test", "Test description")
 		var wiki = cmd.load_wiki(wikis_dir / "not_found")
-		assert cmd.status == 1
 		assert cmd.out.to_s == """
 `tests/wikis/not_found` is not a nitiwiki directory.
 
@@ -98,8 +71,7 @@ class TestCmdStatus
 
 	fun nitiwiki_status_shows_wiki_bad_wiki is test do
 		var cmd = new CmdStatus
-		cmd.run(["--root", wikis_dir / "not_found"])
-		assert cmd.status == 1
+		assert cmd.run(["--root", wikis_dir / "not_found"]) == 1
 		assert cmd.out.to_s == """
 `tests/wikis/not_found` is not a nitiwiki directory.
 
@@ -111,16 +83,40 @@ You can create a new nitiwiki here by typing:
 
 	fun nitiwiki_status_shows_wiki_status_empty is test do
 		var cmd = new CmdStatus
-		cmd.run(["--root", wikis_dir / "empty"])
-		assert cmd.status == 0
-		assert cmd.out.to_s == "This wiki is empty.\n"
+		assert cmd.run(["--root", wikis_dir / "empty"]) == 0
+		assert cmd.out.to_s == """
+Found wiki config at tests/wikis/empty/nitiwiki.ini
+This wiki is empty.\n"""
 	end
 
 	fun nitiwiki_status_shows_wiki_status_simple is test do
 		var cmd = new CmdStatus
-		cmd.run(["--root", wikis_dir / "simple"])
-		assert cmd.status == 0
+		assert cmd.run(["--root", wikis_dir / "simple"]) == 0
 		assert cmd.out.to_s == """
+Found wiki config at tests/wikis/simple/nitiwiki.ini
+Found page at tests/wikis/simple/pages/index.md
+Found page at tests/wikis/simple/pages/page1.md
+Found page at tests/wikis/simple/pages/page2.md
+Found section at tests/wikis/simple/pages/section1
+Found page at tests/wikis/simple/pages/section1/index.md
+Found section at tests/wikis/simple/pages/section1/section11
+Found page at tests/wikis/simple/pages/section1/section11/index.md
+Found section at tests/wikis/simple/pages/section1/section12
+Found section config at tests/wikis/simple/pages/section1/section12/section.ini
+Found page at tests/wikis/simple/pages/section1/section12/index.md
+Found section at tests/wikis/simple/pages/section2
+Found page at tests/wikis/simple/pages/section2/index.md
+Found section at tests/wikis/simple/pages/section2/section21
+Found section config at tests/wikis/simple/pages/section2/section21/section.ini
+Found page at tests/wikis/simple/pages/section2/section21/index.md
+Found section at tests/wikis/simple/pages/section2/section21/section211
+Found section config at tests/wikis/simple/pages/section2/section21/section211/section.ini
+Found page at tests/wikis/simple/pages/section2/section21/section211/index.md
+Found section at tests/wikis/simple/pages/section2/section22
+Found section config at tests/wikis/simple/pages/section2/section22/section.ini
+Found page at tests/wikis/simple/pages/section2/section22/index.md
+New resources:
+
  + /index
  + /page1
  + /page2
@@ -138,6 +134,9 @@ You can create a new nitiwiki here by typing:
  + /section2/section21/section211/index
  + /section2/section22
  + /section2/section22/index
-"""
+
+Render them to HTML by typing:
+
+	nitiwiki render\n"""
 	end
 end

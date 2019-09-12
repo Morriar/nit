@@ -209,7 +209,7 @@ private class LinkLookupVisitor
 	redef fun visit(resource) do
 		if done.has(resource) then return
 		done.add resource
-		if resource.name == query or resource.title == query or resource.pretty_name == query then
+		if resource.name == query or resource.pretty_name == query then
 			resources.add resource
 		end
 		resource.visit_all(self)

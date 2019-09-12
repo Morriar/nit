@@ -497,6 +497,21 @@ class TestResourceToHtml
 
 		sys.system("rm -rf {out_dir}")
 	end
+
+	fun can_display_prettier_names is test do
+		var wiki = new Wiki
+		assert (new DummyPage(wiki, "")).pretty_name == ""
+		assert (new DummyPage(wiki, " ")).pretty_name == " "
+		assert (new DummyPage(wiki, "_")).pretty_name == " "
+		assert (new DummyPage(wiki, "f")).pretty_name == "F"
+		assert (new DummyPage(wiki, "foo")).pretty_name == "Foo"
+		assert (new DummyPage(wiki, "Foo")).pretty_name == "Foo"
+		assert (new DummyPage(wiki, "ééé")).pretty_name == "ééé" # FIXME?
+		assert (new DummyPage(wiki, "foo bar")).pretty_name == "Foo Bar"
+		assert (new DummyPage(wiki, "foo/bar")).pretty_name == "Foo/Bar"
+		assert (new DummyPage(wiki, "foo_bar")).pretty_name == "Foo Bar"
+		assert (new DummyPage(wiki, " foo ")).pretty_name == " Foo "
+	end
 end
 
 class TestSectionToHtml
