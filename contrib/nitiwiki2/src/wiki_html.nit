@@ -103,6 +103,7 @@ redef class Wiki
 		default_template_file = ini["wiki.template"] or else default_template_file
 		edit_url = ini["wiki.edit"] or else edit_url
 		last_changes_url = ini["wiki.last_changes"] or else last_changes_url
+		# TODO index
 	end
 
 	# html

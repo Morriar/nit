@@ -78,7 +78,6 @@ class TestWikiBuilder
 
 	fun build_wiki_allowed_md_exts_for_src is test do
 		var builder = self.builder
-		builder.allowed_md_exts = ["md", "mdown"]
 		var wiki = builder.build_wiki(wikis_dir / "md_exts")
 		assert wiki != null
 		assert wiki.content == strip_indent("""

@@ -204,7 +204,7 @@ class Wiki
 		src_dir = ini["wiki.src"] or else src_dir
 	end
 
-	# TODO document
+	# Default configuration filename
 	var config_file = "nitiwiki.ini"
 end
 
@@ -433,10 +433,9 @@ class Section
 		var hidden = ini["section.hidden"]
 		if hidden != null then is_hidden = hidden == "true"
 		title = ini["section.title"] or else title
-		# TODO index
 	end
 
-	# TODO document
+	# Default configuration filename
 	var config_file = "section.ini"
 end
 
@@ -458,7 +457,6 @@ end
 #
 # Assets are generally used for rendering like scripts, stylesheets or images.
 # We don't really care about their content as we will just copy or serve them.
-# TODO doc tests
 class Asset
 	super Resource
 end

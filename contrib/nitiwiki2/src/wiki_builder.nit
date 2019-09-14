@@ -17,13 +17,31 @@ module wiki_builder
 import wiki_markdown
 import logger
 
+redef class Wiki
+	# Allowed extensions for Markdown pages
+	#
+	# Default if `md`.
+	var allowed_md_exts = ["md"] is writable
+
+	# TODO ignore hidden files?
+
+	redef fun configure_from_ini(ini) do
+		super
+
+		var array = ini["wiki.markdown-exts"]
+		if array == null then return
+
+		allowed_md_exts.clear
+		var exts = array.split(",")
+		for ext in exts do
+			allowed_md_exts.add ext.trim
+		end
+	end
+end
+
 class WikiBuilder
 
 	var logger = new Logger(warn_level) is optional
-
-	# TODO move to markdown
-	var allowed_md_exts = ["md"] is optional, writable
-	# TODO ignore hidden files?
 
 	fun build_wiki(root_dir: String): nullable Wiki do
 		if not root_dir.file_exists then return null
@@ -74,7 +92,7 @@ class WikiBuilder
 			else
 				# Create a new page
 				var ext = if file.has(".") then file.split(".").last else null
-				if allowed_md_exts.has(ext) then
+				if wiki.allowed_md_exts.has(ext) then
 					logger.debug "Found page at {sub_path}"
 					section.add new MdPage.from_file(wiki, sub_path)
 				else
