@@ -115,23 +115,23 @@ class TestCmdStatus
 		Found page at tests/wikis/simple/src/section2/section22/index.md
 		New resources:
 
-		 + /index
-		 + /page1
-		 + /page2
+		 + /index.md
+		 + /page1.md
+		 + /page2.md
 		 + /section1
-		 + /section1/index
+		 + /section1/index.md
 		 + /section1/section11
-		 + /section1/section11/index
+		 + /section1/section11/index.md
 		 + /section1/section12
-		 + /section1/section12/index
+		 + /section1/section12/index.md
 		 + /section2
-		 + /section2/index
+		 + /section2/index.md
 		 + /section2/section21
-		 + /section2/section21/index
+		 + /section2/section21/index.md
 		 + /section2/section21/section211
-		 + /section2/section21/section211/index
+		 + /section2/section21/section211/index.md
 		 + /section2/section22
-		 + /section2/section22/index
+		 + /section2/section22/index.md
 
 		Render them to HTML by typing:
 

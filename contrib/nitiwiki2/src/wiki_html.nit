@@ -219,6 +219,7 @@ redef class Resource
 	end
 
 	fun last_modification_time: Int do
+		print (wiki.root_dir / wiki.src_dir / trim_path)
 		return (wiki.root_dir / wiki.src_dir / trim_path).mtime
 	end
 
@@ -330,7 +331,7 @@ redef class Section
 end
 
 redef class MdPage
-	redef fun out_path do return "{super}.html"
+	redef fun out_path do return "{super.strip_extension}.html"
 
 	# template
 
@@ -375,7 +376,7 @@ redef class MdPage
 		template.insert("PAGE_TITLE", pretty_name) # TODO should be html title
 		template.insert("PAGE_CREATED_AT", v.timestamp_to_date(creation_time).to_s)
 		template.insert("PAGE_UPDATED_AT", v.timestamp_to_date(last_modification_time))
-		template.insert("PAGE_SRC", file)
+		template.insert("PAGE_SRC", wiki.root_dir / path)
 		template.insert("PAGE_URL", trim_path)
 		# template.insert("PAGE_TOC", menu) # TODO
 		# template.insert("PAGE_TRAIL", TRAIL) # TODO trail
@@ -397,20 +398,6 @@ redef class MdPage
 		var ast = v.parse_md_page(self)
 		var renderer = new WikiHtmlRenderer(true, v, self)
 		return renderer.render(ast)
-	end
-
-	# status
-
-	redef fun creation_time do
-		var file = self.file
-		if file == null then return -1
-		return file.ctime
-	end
-
-	redef fun last_modification_time do
-		var file = self.file
-		if file == null then return -1
-		return file.mtime
 	end
 end
 
@@ -456,10 +443,6 @@ class WikiHtmlRenderer
 	var context: Resource
 
 	private fun location(node: MdNode): String do
-		var context = self.context
-		if context isa MdPage then
-			return "{context.file or else context.path}:{node.location}"
-		end
 		return "{context.path}:{node.location}"
 	end
 end

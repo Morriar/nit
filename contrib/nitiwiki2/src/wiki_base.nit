@@ -57,7 +57,6 @@ class Wiki
 	#
 	# The directory where the page source (Markdown or other format) are located.
 	# This doesn't include the `root_dir` prefix.
-	# TODO rename src_dir
 	var src_dir = "src/" is writable
 
 	# Wiki's root section

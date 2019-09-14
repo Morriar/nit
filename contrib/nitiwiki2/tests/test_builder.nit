@@ -40,23 +40,23 @@ class TestWikiBuilder
 		var wiki = builder.build_wiki(wikis_dir / "simple")
 		assert wiki != null
 		assert wiki.content == strip_indent("""
-		 P /index
-		 P /page1
-		 P /page2
+		 P /index.md
+		 P /page1.md
+		 P /page2.md
 		 S /section1
-		 P /section1/index
+		 P /section1/index.md
 		 S /section1/section11
-		 P /section1/section11/index
+		 P /section1/section11/index.md
 		 S /section1/section12
-		 P /section1/section12/index
+		 P /section1/section12/index.md
 		 S /section2
-		 P /section2/index
+		 P /section2/index.md
 		 S /section2/section21
-		 P /section2/section21/index
+		 P /section2/section21/index.md
 		 S /section2/section21/section211
-		 P /section2/section21/section211/index
+		 P /section2/section21/section211/index.md
 		 -S- /section2/section22
-		 P /section2/section22/index""")
+		 P /section2/section22/index.md""")
 	end
 
 	fun build_wiki_assets is test do
@@ -66,14 +66,14 @@ class TestWikiBuilder
 		 A /.asset
 		 A /asset1
 		 A /asset2
-		 P /index
-		 P /page1
+		 P /index.md
+		 P /page1.md
 		 S /section1
 		 A /section1/asset.1
-		 P /section1/index
+		 P /section1/index.md
 		 S /section1/section11
 		 A /section1/section11/asset
-		 P /section1/section11/index""")
+		 P /section1/section11/index.md""")
 		end
 
 	fun build_wiki_allowed_md_exts_for_src is test do
@@ -82,12 +82,12 @@ class TestWikiBuilder
 		var wiki = builder.build_wiki(wikis_dir / "md_exts")
 		assert wiki != null
 		assert wiki.content == strip_indent("""
-		 P /index
-		 P /page1
+		 P /index.md
+		 P /page1.mdown
 		 A /page2.markdown
 		 S /section1
 		 A /section1/index.markdown
-		 P /section1/page1""")
+		 P /section1/page1.mdown""")
 	end
 
 	fun build_log_what_it_does is test do

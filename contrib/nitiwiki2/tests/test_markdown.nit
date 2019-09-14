@@ -409,7 +409,7 @@ class TestWikiMarkdown
 		]
 	end
 
-	fun parser_can_log_warnings_without_file_location is test do
+	fun parser_can_log_warnings_with_locations is test do
 		var wiki = new Wiki
 		var page = new MdPage(wiki, "test", md = strip_indent("""
 		[[foo]] is broken.
@@ -425,25 +425,6 @@ class TestWikiMarkdown
 		assert out.to_s == strip_indent("""
 		/test:1,1--1,7: Link to unknown resource `foo`
 		/test:3,21--3,32: Link to unknown resource `/foo`""")
-	end
-
-	fun parser_can_log_warnings_with_file_location is test do
-		var wiki = new Wiki
-		var page = new MdPage(wiki, "test", file = "./page.md", md = strip_indent("""
-		[[foo]] is broken.
-
-		Another broken link [[/foo#bar]].
-		"""))
-
-		wiki.add page
-
-		var out = new StringWriter
-		var parser = new MdPageParser(new Logger(warn_level, out))
-		parser.parse_page(page)
-
-		assert out.to_s == strip_indent("""
-		./page.md:1,1--1,7: Link to unknown resource `foo`
-		./page.md:3,21--3,32: Link to unknown resource `/foo`""")
 	end
 
 	fun parser_can_suggest_good_links is test do

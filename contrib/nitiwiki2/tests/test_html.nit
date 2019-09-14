@@ -83,9 +83,9 @@ class TestWiki2Html
 		%PAGE_URL%
 		%PAGE_TOC%
 		%PAGE_TRAIL%""")
-		var p1 = new MdPage(wiki, "p1", md = "# *P1*", file = "./foo.md")
-		var p2 = new MdPage(wiki, "p2", md = "# *P2*", file = "./bar.md")
-		var p3 = new MdPage(wiki, "p3", md = "# *P3*", file = "./baz.md")
+		var p1 = new MdPage(wiki, "foo.md", md = "# *P1*")
+		var p2 = new MdPage(wiki, "bar.md", md = "# *P2*")
+		var p3 = new MdPage(wiki, "baz.md", md = "# *P3*")
 		var s1 = new Section(wiki, "s1")
 		var s2 = new Section(wiki, "s2")
 		var s3 = new Section(wiki, "s3")
@@ -368,14 +368,14 @@ class TestWiki2Html
 		Copy asset .asset to renderer_doesnt_render_non_dirty_resources/.asset
 		Copy asset asset1 to renderer_doesnt_render_non_dirty_resources/asset1
 		Copy asset asset2 to renderer_doesnt_render_non_dirty_resources/asset2
-		Render page index to renderer_doesnt_render_non_dirty_resources/index.html
-		Render page page1 to renderer_doesnt_render_non_dirty_resources/page1.html
+		Render page index.md to renderer_doesnt_render_non_dirty_resources/index.html
+		Render page page1.md to renderer_doesnt_render_non_dirty_resources/page1.html
 		Render section section1 to renderer_doesnt_render_non_dirty_resources/section1
 		Copy asset asset.1 to renderer_doesnt_render_non_dirty_resources/section1/asset.1
-		Render page index to renderer_doesnt_render_non_dirty_resources/section1/index.html
+		Render page index.md to renderer_doesnt_render_non_dirty_resources/section1/index.html
 		Render section section11 to renderer_doesnt_render_non_dirty_resources/section1/section11
 		Copy asset asset to renderer_doesnt_render_non_dirty_resources/section1/section11/asset
-		Render page index to renderer_doesnt_render_non_dirty_resources/section1/section11/index.html
+		Render page index.md to renderer_doesnt_render_non_dirty_resources/section1/section11/index.html
 		Copy assets from tests/wikis/assets/assets/ to renderer_doesnt_render_non_dirty_resources/assets/
 		-------
 		Wiki already up-to-date""")
@@ -406,7 +406,7 @@ class TestResourceToHtml
 		var s1 = wiki.resource_by_path("/section1").as(not null)
 		assert s1.creation_time > 0
 
-		var p1 = wiki.resource_by_path("/page1").as(not null)
+		var p1 = wiki.resource_by_path("/page1.md").as(not null)
 		assert p1.creation_time > 0
 
 		var a1 = wiki.resource_by_path("/section1/asset.1").as(not null)
@@ -420,7 +420,7 @@ class TestResourceToHtml
 		var s1 = wiki.resource_by_path("/section1").as(not null)
 		assert s1.last_modification_time > 0
 
-		var p1 = wiki.resource_by_path("/page1").as(not null)
+		var p1 = wiki.resource_by_path("/page1.md").as(not null)
 		assert p1.last_modification_time > 0
 
 		var a1 = wiki.resource_by_path("/section1/asset.1").as(not null)
@@ -441,7 +441,7 @@ class TestResourceToHtml
 		var s1 = wiki.resource_by_path("/section1").as(not null)
 		assert s1.last_rendering_time > 0
 
-		var p1 = wiki.resource_by_path("/page1").as(not null)
+		var p1 = wiki.resource_by_path("/page1.md").as(not null)
 		assert p1.last_rendering_time > 0
 
 		var a1 = wiki.resource_by_path("/section1/asset.1").as(not null)

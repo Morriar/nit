@@ -23,20 +23,15 @@ import logger
 class MdPage
 	super Page
 
-	# TODO use title from first h1
-
 	# Markdown string source
 	var md: String is writable
 
-	# Source file if any
-	# TODO remove, use path
-	var file: nullable String = null is optional, writable
-
 	# Init `self` from a file
-	init from_file(wiki: Wiki, file: String, name, title: nullable String) do
-		name = name or else file.to_path.filename.strip_extension
+	init from_file(wiki: Wiki, file: String, title: nullable String) do
+		var name = file.to_path.filename
 		var md = file.to_path.read_all
-		init(wiki, name, title, md, file)
+		# TODO use title from first h1
+		init(wiki, name, title, md)
 	end
 end
 
@@ -179,7 +174,7 @@ class MdProcessCommands
 	#
 	# If `context` does not point to a file, use the page path as a location.
 	private fun location(node: MdNode): String do
-		return "{context.file or else context.path}:{node.location}"
+		return "{context.path}:{node.location}"
 	end
 end
 
