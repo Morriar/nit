@@ -66,8 +66,11 @@ class TestWikiBuilder
 		 A /.asset
 		 A /asset1
 		 A /asset2
+		 S /css
+		 A /css/style.css
 		 P /index.md
 		 P /page1.md
+		 A /script.js
 		 S /section1
 		 A /section1/asset.1
 		 P /section1/index.md
@@ -98,8 +101,11 @@ class TestWikiBuilder
 		Found asset at tests/wikis/assets/src/.asset
 		Found asset at tests/wikis/assets/src/asset1
 		Found asset at tests/wikis/assets/src/asset2
+		Found section at tests/wikis/assets/src/css
+		Found asset at tests/wikis/assets/src/css/style.css
 		Found page at tests/wikis/assets/src/index.md
 		Found page at tests/wikis/assets/src/page1.md
+		Found asset at tests/wikis/assets/src/script.js
 		Found section at tests/wikis/assets/src/section1
 		Found asset at tests/wikis/assets/src/section1/asset.1
 		Found page at tests/wikis/assets/src/section1/index.md

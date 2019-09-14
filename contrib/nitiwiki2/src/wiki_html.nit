@@ -33,16 +33,6 @@ redef class Wiki
 	# TODO remove?
 	fun has_index: Bool do return root.has_index
 
-	# Wiki's assets directory
-	#
-	# A Wiki may have a directory containing assets used to render its content
-	# like images, scripts, stylesheets...
-	# How this directory will be used depends on the renderer used.
-	# For example, a HTML renderer could simply copy the content of this directory
-	# to the `public/` one. Or a server renderer could serve the files in place.
-	# TODO remove?
-	var assets_dir: nullable String = null is writable
-
 	var default_template_file: nullable String = null is writable
 
 	var default_template_string: nullable String is lazy, writable do
@@ -97,7 +87,6 @@ redef class Wiki
 	redef fun configure_from_ini(ini) do
 		super
 		out_dir = ini["wiki.out"] or else out_dir
-		assets_dir = ini["wiki.assets"] or else assets_dir
 		highlighter = ini["wiki.highlighter"] or else highlighter
 		highlighter_default = ini["wiki.highlighter.default"] or else highlighter_default
 		default_template_file = ini["wiki.template"] or else default_template_file
@@ -138,21 +127,6 @@ class Wiki2Html
 		end
 
 		super
-
-		var assets_dir = wiki.assets_dir
-		if assets_dir == null then return
-
-		var src_path = wiki.root_dir / assets_dir
-		# TODO should we copy them to root?
-		var out_path = wiki.out_dir / "assets/"
-
-		if src_path.mtime < out_path.mtime then
-			logger.debug "Assets from {src_path} already up-to-date at {out_path}"
-		else
-			logger.debug "Copy assets from {src_path} to {out_path}"
-			copy(src_path, out_path)
-		end
-
 		# TODO index
 		# TODO sitemap
 	end

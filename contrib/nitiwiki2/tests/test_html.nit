@@ -301,15 +301,17 @@ class TestWiki2Html
 		$ cp -R -- 'tests/wikis/assets/src/.asset' 'out/.asset'
 		$ cp -R -- 'tests/wikis/assets/src/asset1' 'out/asset1'
 		$ cp -R -- 'tests/wikis/assets/src/asset2' 'out/asset2'
+		$ mkdir -p -- 'out/css'
+		$ cp -R -- 'tests/wikis/assets/src/css/style.css' 'out/css/style.css'
 		$ write to out/index.html
 		$ write to out/page1.html
+		$ cp -R -- 'tests/wikis/assets/src/script.js' 'out/script.js'
 		$ mkdir -p -- 'out/section1'
 		$ cp -R -- 'tests/wikis/assets/src/section1/asset.1' 'out/section1/asset.1'
 		$ write to out/section1/index.html
 		$ mkdir -p -- 'out/section1/section11'
 		$ cp -R -- 'tests/wikis/assets/src/section1/section11/asset' 'out/section1/section11/asset'
-		$ write to out/section1/section11/index.html
-		$ cp -R -- 'tests/wikis/assets/assets/' 'out/assets/'""")
+		$ write to out/section1/section11/index.html""")
 	end
 
 	fun render_wiki_for_real is test do
@@ -332,19 +334,18 @@ class TestWiki2Html
 		render_wiki_for_real
 		render_wiki_for_real/index.html
 		render_wiki_for_real/asset2
-		render_wiki_for_real/assets
-		render_wiki_for_real/assets/asset2
-		render_wiki_for_real/assets/asset1
-		render_wiki_for_real/assets/asset1/asset11
 		render_wiki_for_real/section1
 		render_wiki_for_real/section1/index.html
 		render_wiki_for_real/section1/asset.1
 		render_wiki_for_real/section1/section11
 		render_wiki_for_real/section1/section11/index.html
 		render_wiki_for_real/section1/section11/asset
+		render_wiki_for_real/css
+		render_wiki_for_real/css/style.css
 		render_wiki_for_real/.asset
 		render_wiki_for_real/page1.html
-		render_wiki_for_real/asset1""")
+		render_wiki_for_real/asset1
+		render_wiki_for_real/script.js""")
 		sys.system "rm -rf {out_dir}"
 	end
 
@@ -368,15 +369,17 @@ class TestWiki2Html
 		Copy asset .asset to renderer_doesnt_render_non_dirty_resources/.asset
 		Copy asset asset1 to renderer_doesnt_render_non_dirty_resources/asset1
 		Copy asset asset2 to renderer_doesnt_render_non_dirty_resources/asset2
+		Render section css to renderer_doesnt_render_non_dirty_resources/css
+		Copy asset style.css to renderer_doesnt_render_non_dirty_resources/css/style.css
 		Render page index.md to renderer_doesnt_render_non_dirty_resources/index.html
 		Render page page1.md to renderer_doesnt_render_non_dirty_resources/page1.html
+		Copy asset script.js to renderer_doesnt_render_non_dirty_resources/script.js
 		Render section section1 to renderer_doesnt_render_non_dirty_resources/section1
 		Copy asset asset.1 to renderer_doesnt_render_non_dirty_resources/section1/asset.1
 		Render page index.md to renderer_doesnt_render_non_dirty_resources/section1/index.html
 		Render section section11 to renderer_doesnt_render_non_dirty_resources/section1/section11
 		Copy asset asset to renderer_doesnt_render_non_dirty_resources/section1/section11/asset
 		Render page index.md to renderer_doesnt_render_non_dirty_resources/section1/section11/index.html
-		Copy assets from tests/wikis/assets/assets/ to renderer_doesnt_render_non_dirty_resources/assets/
 		-------
 		Wiki already up-to-date""")
 
