@@ -27,6 +27,7 @@
 
 * grep for todos
 
+* document and doc tests
 * add README, examples and test them
 
 * next

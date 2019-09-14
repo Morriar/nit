@@ -248,23 +248,6 @@ class TestSection
 		assert s.is_hidden
 	end
 
-	fun section_can_have_an_index is test do
-		var wiki = new Wiki
-		var s = new Section(wiki, "foo")
-		assert s.index == null
-		assert not s.has_index
-		s.add new Section(wiki, "foo")
-		assert not s.has_index
-		s.add new Section(wiki, "index")
-		assert not s.has_index
-		s.add new DummyPage(wiki, "foo")
-		assert not s.has_index
-		var index = new DummyPage(wiki, "index")
-		s.add index
-		assert s.has_index
-		assert s.index == index
-	end
-
 	fun section_can_have_children is test do
 		var wiki = new Wiki
 		var r1 = new Section(wiki, "foo")

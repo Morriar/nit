@@ -21,9 +21,6 @@ class WikiBuilder
 
 	var logger = new Logger(warn_level) is optional
 
-	# TODO move to base
-	var section_config = "section.ini" is optional
-
 	# TODO move to markdown
 	var allowed_md_exts = ["md"] is optional, writable
 	# TODO ignore hidden files?
@@ -35,7 +32,7 @@ class WikiBuilder
 		wiki.root_dir = root_dir
 
 		# Load wiki config
-		var ini_path = root_dir / "nitiwiki.ini" # TODO use filename from config
+		var ini_path = root_dir / wiki.config_file
 		var ini = load_ini(ini_path)
 		if ini != null then
 			logger.debug "Found wiki config at {ini_path}"
@@ -50,7 +47,7 @@ class WikiBuilder
 
 	private fun build_section(wiki: Wiki, section: Section, dir: String) do
 		# Build config
-		var ini_path = dir / section_config
+		var ini_path = dir / section.config_file
 		var ini = load_ini(ini_path)
 		if ini != null then
 			logger.debug "Found section config at {ini_path}"
@@ -62,7 +59,7 @@ class WikiBuilder
 		files_comparator.sort(files)
 
 		for file in files do
-			if file == section_config then continue
+			if file == section.config_file then continue
 
 			var sub_path = (dir / file)
 			var sub_name = file.strip_extension

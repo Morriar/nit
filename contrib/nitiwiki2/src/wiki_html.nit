@@ -25,6 +25,14 @@ redef class Wiki
 	# If it does not exist it will be created.
 	var out_dir: String = "out/" is writable
 
+	# Landing or home page of this wiki
+	# TODO remove?
+	fun index: nullable Page do return root.index
+
+	# Does `self` have a `index` page?
+	# TODO remove?
+	fun has_index: Bool do return root.has_index
+
 	# Wiki's assets directory
 	# TODO
 	#
@@ -307,6 +315,19 @@ redef class Section
 		v.indent_level -= 1
 		v.html.add "{v.indent}</li>\n"
 	end
+
+	# Landing page of this section
+	# TODO move to html
+	fun index: nullable Page do
+		for child in children do
+			if child isa Page and child.name == "index" then return child
+		end
+		return null
+	end
+
+	# Does this section have an `index` page?
+	# TODO move to html
+	fun has_index: Bool do return index != null
 end
 
 redef class MdPage

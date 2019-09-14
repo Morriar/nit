@@ -19,28 +19,17 @@ import wiki_base
 import markdown2
 import logger
 
-redef class Wiki
-	# TODO move to base?
-	var root_dir = "." is writable
-
-	# TODO move to base?
-	var pages_dir = "pages/" is writable
-
-	redef fun configure_from_ini(ini) do
-		super
-		root_dir = ini["wiki.root"] or else root_dir
-		pages_dir = ini["wiki.pages"] or else pages_dir
-	end
-end
-
 # A page from a Markdown source
 class MdPage
 	super Page
+
+	# TODO use title from first h1
 
 	# Markdown string source
 	var md: String is writable
 
 	# Source file if any
+	# TODO remove, use path
 	var file: nullable String = null is optional, writable
 
 	# Init `self` from a file

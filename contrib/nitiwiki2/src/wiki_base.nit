@@ -27,36 +27,63 @@ import template
 
 # Wiki
 #
-# A Wiki contains resources (see Resource):
+# A Wiki contains nested resources (see Resource):
 #
 # ~~~
-# class DummyPage
-#	super Page
-#
-#	var content: String
-# end
-#
 # var wiki = new Wiki
-# wiki.add new DummyPage(wiki, "my_page", "My Page", "Content")
-# wiki.add new Section(wiki, "my_section", "My Section")
-# wiki.add new Asset(wiki, "my_asset", "My Asset", "path/to/asset")
-# assert wiki.resources.length == 3
+#
+# var r1 = new Section(wiki, "foo", "Foo")
+# wiki.add r1
+#
+# var r2 = new Asset(wiki, "bar", "Bar", "path/to/bar1")
+# r1.add r2
+#
+# var r3 = new Asset(wiki, "bar", "Bar", "path/to/bar2")
+# wiki.add r3
+#
+# assert wiki.resources == [r1, r2, r3: Resource]
 # ~~~
 class Wiki
+
+	# Wiki's root directory
+	#
+	# Basically the directory where the `nitiwiki.ini` configuration file for
+	# this wiki is located.
+	#
+	# Default: `.`
+	var root_dir = "." is optional, writable
+
+	# Wiki's sources directory
+	#
+	# The directory where the page source (Markdown or other format) are located.
+	# This doesn't include the `root_dir` prefix.
+	# TODO rename src_dir
+	var pages_dir = "pages/" is writable
 
 	# Wiki's root section
 	#
 	# Every wiki as a Root used to contain its resources:
-	#
 	# ~~~
-	# var wiki = new Wiki
-	# assert wiki.root isa Root
-	# wiki.add new Asset(wiki, "my_asset", "My Asset", "path/to/asset")
-	# assert wiki.resources.first == wiki.root.resources.first
+	# var empty_wiki = new Wiki
+	# assert empty_wiki.root isa Root
 	# ~~~
 	var root = new Root(self, "<root>") is lazy
 
-	# TODO comment
+	# All resources in this wiki
+	#
+	# Collect all resources from `root` recursively:
+	# ~~~
+	# var wiki = new Wiki
+	# assert wiki.resources.is_empty
+	#
+	# var r1 = new Section(wiki, "foo", "Foo")
+	# wiki.add r1
+	# assert wiki.resources == [r1]
+	#
+	# var r2 = new Section(wiki, "bar", "Bar")
+	# r1.add r2
+	# assert wiki.resources == [r1, r2]
+	# ~~~
 	fun resources: Array[Resource] do return root.resources
 
 	# Add an resource to the root section of this wiki
@@ -64,23 +91,33 @@ class Wiki
 	# ~~~
 	# var wiki = new Wiki
 	# assert wiki.resources.length == 0
-	# wiki.add new Section(wiki, "my_section", "My Section")
+	#
+	# wiki.add new Section(wiki, "foo", "Foo")
 	# assert wiki.resources.length == 1
 	# ~~~
+	#
+	# See `Section::add` to nest resources.
 	fun add(resource: Resource) do root.add resource
 
 	# Get all resources with `name`
 	#
-	# Since a name is not unique in a wiki this method can return more than
-	# one resource.
+	# Since a `name` isn't unique in a wiki this method may return more than one
+	# resource:
 	#
 	# ~~~
 	# var wiki = new Wiki
-	# var s = new Section(wiki, "my_section", "My Section")
-	# var a = new Asset(wiki, "my_asset", "My Asset", "path/to/asset")
-	# wiki.add s
-	# wiki.add a
-	# assert wiki.resources_by_name("my_asset") == [a]
+	#
+	# var r1 = new Section(wiki, "foo", "Foo")
+	# wiki.add r1
+	#
+	# var r2 = new Asset(wiki, "bar", "Bar", "path/to/bar1")
+	# r1.add r2
+	#
+	# var r3 = new Asset(wiki, "bar", "Bar", "path/to/bar2")
+	# wiki.add r3
+	#
+	# assert wiki.resources_by_name("foo") == [r1]
+	# assert wiki.resources_by_name("bar") == [r2, r3]
 	# assert wiki.resources_by_name("not_found").is_empty
 	# ~~~
 	#
@@ -89,17 +126,24 @@ class Wiki
 
 	# Get all resources with `title`
 	#
-	# Since a title is not unique in a wiki this method can return more than
-	# one resource.
+	# Since a `title` isn't unique in a wiki this method may return more than one
+	# resource:
 	#
 	# ~~~
 	# var wiki = new Wiki
-	# var s = new Section(wiki, "my_section", "My Section")
-	# var a = new Asset(wiki, "my_asset", "My Asset", "path/to/asset")
-	# wiki.add s
-	# wiki.add a
-	# assert wiki.resources_by_title("My Asset") == [a]
-	# assert wiki.resources_by_title("not_found").is_empty
+	#
+	# var r1 = new Section(wiki, "foo", "Foo")
+	# wiki.add r1
+	#
+	# var r2 = new Asset(wiki, "bar", "Bar", "path/to/bar1")
+	# r1.add r2
+	#
+	# var r3 = new Asset(wiki, "bar", "Bar", "path/to/bar2")
+	# wiki.add r3
+	#
+	# assert wiki.resources_by_title("Foo") == [r1]
+	# assert wiki.resources_by_title("Bar") == [r2, r3]
+	# assert wiki.resources_by_title("Not Found").is_empty
 	# ~~~
 	#
 	# See `resource_by_path` to get a single resource from its unique path.
@@ -107,18 +151,25 @@ class Wiki
 
 	# Get an resource by its `path`
 	#
-	# Since path are unique for a wiki, this returns a single resource.
+	# A `path` points to a unique resource in a wiki.
 	# Returns `null` if no resource can be found for this `path`.
 	#
 	# ~~~
 	# var wiki = new Wiki
-	# var s1 = new Section(wiki, "section1", "My Section")
-	# wiki.add s1
-	# var s2 = new Section(wiki, "section2", "My Sub Section")
-	# s1.add s2
-	# assert wiki.resource_by_path("/section1") == s1
-	# assert wiki.resource_by_path("/section1/section2") == s2
-	# assert wiki.resource_by_path("/not_found") == null
+	#
+	# var r1 = new Section(wiki, "foo", "Foo")
+	# wiki.add r1
+	#
+	# var r2 = new Asset(wiki, "bar", "Bar", "path/to/bar1")
+	# r1.add r2
+	#
+	# var r3 = new Asset(wiki, "bar", "Bar", "path/to/bar2")
+	# wiki.add r3
+	#
+	# assert wiki.resource_by_path("/foo") == r1
+	# assert wiki.resource_by_path("/foo/bar") == r2
+	# assert wiki.resource_by_path("/bar") == r3
+	# assert wiki.resource_by_path("/not/Found") == null
 	# ~~~
 	#
 	# See `Resource::path`.
@@ -130,23 +181,39 @@ class Wiki
 		return null
 	end
 
-	# Landing or home page of this wiki
-	# TODO remove
-	fun index: nullable Page do return root.index
-
-	# Does `self` have a `index` page?
-	# TODO remove
-	fun has_index: Bool do return root.has_index
-
 	# Configure the wiki from a `config` file.
 	#
-	# Sub modules refine this method to load wiki options from a INI file.
-	fun configure_from_ini(ini: IniFile) do end
+	# Wiki options can be loaded from a INI configuration file called `nitiwiki.ini`.
+	#
+	# ~~~
+	# var wiki = new Wiki
+	# assert wiki.root_dir == "."
+	# assert wiki.pages_dir == "pages/"
+	#
+	# var ini = new IniFile
+	# ini["wiki.root"] = "root/"
+	# ini["wiki.pages"] = "dir/"
+	#
+	# wiki.configure_from_ini(ini)
+	# assert wiki.root_dir == "root/"
+	# assert wiki.pages_dir == "dir/"
+	# ~~~
+	#
+	# Sub modules can refine this method to add new wiki options.
+	fun configure_from_ini(ini: IniFile) do
+		root_dir = ini["wiki.root"] or else root_dir
+		pages_dir = ini["wiki.pages"] or else pages_dir
+	end
+
+	# TODO document
+	var config_file = "nitiwiki.ini"
 end
 
 # A Wiki resource
 #
-# Like (but not limited to) a section, a page or an asset.
+# Like (but not limited to) a Section, a Page or an Asset.
+#
+# Resources can be referred to by `name`, `title` or `path`.
 abstract class Resource
 
 	# Every resource belongs to a wiki
@@ -158,17 +225,17 @@ abstract class Resource
 	# It's generally based on files name and we try to never show it as it is to
 	# the end wiki user.
 	#
-	# Names are not supposed to be unique accross a wiki. See `title` for this.
-	#
-	# See `path` if you're looking for some kind of unique key.
+	# Names may not be unique. See `path` for uniquely identify a resource.
 	var name: String
 
 	# Resource's title
 	#
-	# A resource can have a custom title which will be presented to the end user.
+	# A resource may have a custom title which can be presented to the end user.
+	# Titles may not be unique. See `path` for uniquely identify a resource.
 	#
-	# For some resources, the title comes from configuration files like Section for
-	# other it comes from the content of the file like MdPage.
+	# For some resources, the title may come from a configuration file like with
+	# sections. For other it may come from the content of the resource itself like
+	# with Markdown pages.
 	var title: nullable String = null is optional, writable
 
 	# Resource's section
@@ -177,32 +244,38 @@ abstract class Resource
 	#
 	# ~~~
 	# var wiki = new Wiki
-	# var s1 = new Section(wiki, "section1", "My Section")
-	# assert s1.section == null
-	# wiki.add s1
-	# assert s1.section == wiki.root
 	#
-	# var s2 = new Section(wiki, "section2", "My Sub Section")
-	# s1.add s2
-	# assert s2.section == s1
+	# # By default a resource as no parent:
+	# var r1 = new Section(wiki, "foo", "Foo")
+	# assert r1.section == null
+	#
+	# # If added to the root of a wiki the parent is `wiki.root`:
+	# wiki.add r1
+	# assert r1.section == wiki.root
+	#
+	# # If added to a resource the parent is the resource:
+	# var r2 = new Section(wiki, "bar", "bar")
+	# r1.add r2
+	# assert r2.section == r1
 	# ~~~
 	var section: nullable Section = null
 
-	# All resources from `self` to the root of the wiki
+	# Get all resources between `self` and the root of the wiki
 	#
 	# Can be used to compose breadcrumbs for example.
 	#
+	# Includes `self` but never the wiki root:
 	# ~~~
 	# var wiki = new Wiki
 	# assert wiki.root.scopes.is_empty
 	#
-	# var s1 = new Section(wiki, "section1", "My Section")
-	# wiki.add s1
-	# assert s1.scopes == [s1]
+	# var r1 = new Section(wiki, "foo", "Foo")
+	# wiki.add r1
+	# assert r1.scopes == [r1]
 	#
-	# var s2 = new Section(wiki, "section2", "My Sub Section")
-	# s1.add s2
-	# assert s2.scopes == [s1, s2]
+	# var r2 = new Section(wiki, "bar", "Bar")
+	# r1.add r2
+	# assert r2.scopes == [r1, r2]
 	# ~~~
 	fun scopes: Array[Resource] do
 		var section = self.section
@@ -215,8 +288,21 @@ abstract class Resource
 
 	# Unique identifier of an resource in a wiki
 	#
-	# Should be unique accross the wiki.
 	# Based on resources nesting from `Wiki::root`.
+	#
+	# Should be unique accross the wiki:
+	# ~~~
+	# var wiki = new Wiki
+	# assert wiki.resource_by_path("/foo") == null
+	#
+	# var r1 = new Section(wiki, "foo", "Foo")
+	# wiki.add r1
+	# assert wiki.resource_by_path("/foo") == r1
+	#
+	# var r2 = new Section(wiki, "foo", "Foo")
+	# wiki.add r2
+	# assert wiki.resource_by_path("/foo") == r1 # TODO use caching to ensure unicity?
+	# ~~~
 	fun path: String do
 		var section = self.section
 		if section == null then return "/{name}"
@@ -226,6 +312,7 @@ abstract class Resource
 	# Path from `self` to `resource`
 	#
 	# Can be used to compose relative links for example.
+	# TODO doc test
 	fun path_to(resource: Resource): String do
 		return path.relpath(resource.path)
 	end
@@ -233,13 +320,14 @@ abstract class Resource
 	# Get a resource by its relative path from `self`
 	#
 	# Returns `null` if no entry is found.
+	# TODO doc test
 	fun resource_by_path(relative_path: String): nullable Resource do
 		var path = (self.path / relative_path).simplify_path
 		return wiki.resource_by_path(path)
 	end
 
 	# Visit self with `visitor`
-	fun visit_all(visitor: WikiVisitor) do end
+	fun visit_all(visitor: WikiVisitor) do end # Does nothing by default
 
 	# Displayable pretty version of `name`
 	#
@@ -269,24 +357,26 @@ end
 class Section
 	super Resource
 
+	# Resources contained in this section
+	# TODO doc tests
+	var children = new Array[Resource]
+
 	# Is this section hidden in sitemap and trees and menus?
 	#
 	# See `hidden` is you want to take the section into account.
-	# TODO move to resource?
+	# TODO doc test
 	var is_hidden = false is optional, writable
 
 	# Is this section or is section hidden (recursive).
 	#
 	# Returns `true` if `is_hidden and section.is_hidden`.
+	# TODO simplity with is_hidden
 	fun hidden: Bool do
 		if hidden then return true
 		var section = self.section
 		if section != null then return section.is_hidden
 		return false
 	end
-
-	# Resources contained in this section
-	var children = new Array[Resource]
 
 	# All resources contained in this section
 	#
@@ -300,6 +390,7 @@ class Section
 	# wiki.add a
 	# assert wiki.root.resources == [s, a: Resource]
 	# ~~~
+	# TODO doc tests
 	fun resources: Array[Resource] do
 		var v = new ResourcesVisitor
 		v.visit(self)
@@ -308,6 +399,7 @@ class Section
 	end
 
 	# Get all resources with `name` inside `self` (direct and indirect)
+	# TODO doc tests
 	fun resources_by_name(name: String): Array[Resource] do
 		var res = new Array[Resource]
 		for resource in resources do
@@ -317,6 +409,7 @@ class Section
 	end
 
 	# TODO comment
+	# TODO doc tests
 	fun resources_by_title(title: String): Array[Resource] do
 		var res = new Array[Resource]
 		for resource in resources do
@@ -327,31 +420,25 @@ class Section
 	end
 
 	# Add a resource to this section
+	# TODO doc tests
 	fun add(resource: Resource) do
 		children.add resource
 		resource.section = self
 	end
 
-	# Landing page of this section
-	fun index: nullable Page do
-		for child in children do
-			if child isa Page and child.name == "index" then return child
-		end
-		return null
-	end
-
-	# Does this section have an `index` page?
-	fun has_index: Bool do return index != null
-
 	redef fun visit_all(v) do for child in children do v.visit(child)
 
 	# Configure the section from a INI file
+	# TODO doc tests
 	fun configure_from_ini(ini: IniFile) do
 		var hidden = ini["section.hidden"]
 		if hidden != null then is_hidden = hidden == "true"
 		title = ini["section.title"] or else title
 		# TODO index
 	end
+
+	# TODO document
+	var config_file = "section.ini"
 end
 
 # Root section of each wiki
@@ -372,10 +459,12 @@ end
 #
 # Assets are generally used for rendering like scripts, stylesheets or images.
 # We don't really care about their content as we will just copy or serve them.
+# TODO doc tests
 class Asset
 	super Resource
 
 	# Source path of this asset
+	# TODO remove
 	var src_path: String
 
 	# Use the file name as resource name
@@ -385,6 +474,29 @@ end
 # Utils
 
 # A visitor that can visit Wiki resources
+#
+# ~~~
+# class ExampleSectionCollector
+#	super WikiVisitor
+#
+#	var sections = new Array[Section]
+#
+#	redef fun visit(resource) do
+#		if resource isa Section and not resource isa Root then
+#			sections.add resource
+#		end
+#		resource.visit_all(self)
+#	end
+# end
+#
+# var wiki = new Wiki
+# wiki.add new Section(wiki, "foo", "Foo")
+# wiki.add new Section(wiki, "bar", "bar")
+#
+# var v = new ExampleSectionCollector
+# v.visit_wiki(wiki)
+# assert v.sections.length == 2
+# ~~~
 abstract class WikiVisitor
 
 	# Visit all resources in `wiki`
