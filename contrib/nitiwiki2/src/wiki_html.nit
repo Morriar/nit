@@ -418,12 +418,6 @@ redef class Asset
 
 	redef fun html_title do return name
 
-	# status
-
-	redef fun creation_time do return src_path.ctime
-
-	redef fun last_modification_time do return src_path.mtime
-
 	redef fun accept_html_toc_visitor(v) do
 		if not v.show_assets then return
 		super

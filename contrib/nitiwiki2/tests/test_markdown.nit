@@ -344,7 +344,7 @@ class TestWikiMarkdown
 		wiki.add new Section(wiki, "s1", "S1")
 		wiki.add new Section(wiki, "s2")
 		wiki.add new MdPage(wiki, "p1", md = "# P1")
-		wiki.add new Asset(wiki, "bar.baz", null, "/foo/bar.baz")
+		wiki.add new Asset(wiki, "bar.baz", null)
 
 		var page = new MdPage(wiki, "test1", md = strip_indent("""
 		[[/s1]]

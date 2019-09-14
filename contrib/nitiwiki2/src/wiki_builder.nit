@@ -79,7 +79,7 @@ class WikiBuilder
 					section.add new MdPage.from_file(wiki, sub_path)
 				else
 					logger.debug "Found asset at {sub_path}"
-					section.add new Asset(wiki, sub_path.basename, null, sub_path)
+					section.add new Asset(wiki, sub_path.basename, null)
 				end
 			end
 			if has_conflict then

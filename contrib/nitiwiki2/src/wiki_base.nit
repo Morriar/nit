@@ -35,10 +35,10 @@ import template
 # var r1 = new Section(wiki, "foo", "Foo")
 # wiki.add r1
 #
-# var r2 = new Asset(wiki, "bar", "Bar", "path/to/bar1")
+# var r2 = new Asset(wiki, "bar", "Bar")
 # r1.add r2
 #
-# var r3 = new Asset(wiki, "bar", "Bar", "path/to/bar2")
+# var r3 = new Asset(wiki, "bar", "Bar")
 # wiki.add r3
 #
 # assert wiki.resources == [r1, r2, r3: Resource]
@@ -109,10 +109,10 @@ class Wiki
 	# var r1 = new Section(wiki, "foo", "Foo")
 	# wiki.add r1
 	#
-	# var r2 = new Asset(wiki, "bar", "Bar", "path/to/bar1")
+	# var r2 = new Asset(wiki, "bar", "Bar")
 	# r1.add r2
 	#
-	# var r3 = new Asset(wiki, "bar", "Bar", "path/to/bar2")
+	# var r3 = new Asset(wiki, "bar", "Bar")
 	# wiki.add r3
 	#
 	# assert wiki.resources_by_name("foo") == [r1]
@@ -134,10 +134,10 @@ class Wiki
 	# var r1 = new Section(wiki, "foo", "Foo")
 	# wiki.add r1
 	#
-	# var r2 = new Asset(wiki, "bar", "Bar", "path/to/bar1")
+	# var r2 = new Asset(wiki, "bar", "Bar")
 	# r1.add r2
 	#
-	# var r3 = new Asset(wiki, "bar", "Bar", "path/to/bar2")
+	# var r3 = new Asset(wiki, "bar", "Bar")
 	# wiki.add r3
 	#
 	# assert wiki.resources_by_title("Foo") == [r1]
@@ -159,10 +159,10 @@ class Wiki
 	# var r1 = new Section(wiki, "foo", "Foo")
 	# wiki.add r1
 	#
-	# var r2 = new Asset(wiki, "bar", "Bar", "path/to/bar1")
+	# var r2 = new Asset(wiki, "bar", "Bar")
 	# r1.add r2
 	#
-	# var r3 = new Asset(wiki, "bar", "Bar", "path/to/bar2")
+	# var r3 = new Asset(wiki, "bar", "Bar")
 	# wiki.add r3
 	#
 	# assert wiki.resource_by_path("/foo") == r1
@@ -384,7 +384,7 @@ class Section
 	# ~~~
 	# var wiki = new Wiki
 	# var s = new Section(wiki, "my_section", "My Section")
-	# var a = new Asset(wiki, "my_asset", "My Asset", "path/to/asset")
+	# var a = new Asset(wiki, "my_asset", "My Asset")
 	# wiki.add s
 	# wiki.add a
 	# assert wiki.root.resources == [s, a: Resource]
@@ -461,13 +461,6 @@ end
 # TODO doc tests
 class Asset
 	super Resource
-
-	# Source path of this asset
-	# TODO remove
-	var src_path: String
-
-	# Use the file name as resource name
-	redef var name = src_path.to_path.filename is lazy
 end
 
 # Utils
