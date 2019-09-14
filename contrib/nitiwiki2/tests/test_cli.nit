@@ -92,27 +92,27 @@ class TestCmdStatus
 		assert cmd.run(["--root", wikis_dir / "simple"]) == 0
 		assert cmd.out.to_s == strip_indent("""
 		Found wiki config at tests/wikis/simple/nitiwiki.ini
-		Found page at tests/wikis/simple/pages/index.md
-		Found page at tests/wikis/simple/pages/page1.md
-		Found page at tests/wikis/simple/pages/page2.md
-		Found section at tests/wikis/simple/pages/section1
-		Found page at tests/wikis/simple/pages/section1/index.md
-		Found section at tests/wikis/simple/pages/section1/section11
-		Found page at tests/wikis/simple/pages/section1/section11/index.md
-		Found section at tests/wikis/simple/pages/section1/section12
-		Found section config at tests/wikis/simple/pages/section1/section12/section.ini
-		Found page at tests/wikis/simple/pages/section1/section12/index.md
-		Found section at tests/wikis/simple/pages/section2
-		Found page at tests/wikis/simple/pages/section2/index.md
-		Found section at tests/wikis/simple/pages/section2/section21
-		Found section config at tests/wikis/simple/pages/section2/section21/section.ini
-		Found page at tests/wikis/simple/pages/section2/section21/index.md
-		Found section at tests/wikis/simple/pages/section2/section21/section211
-		Found section config at tests/wikis/simple/pages/section2/section21/section211/section.ini
-		Found page at tests/wikis/simple/pages/section2/section21/section211/index.md
-		Found section at tests/wikis/simple/pages/section2/section22
-		Found section config at tests/wikis/simple/pages/section2/section22/section.ini
-		Found page at tests/wikis/simple/pages/section2/section22/index.md
+		Found page at tests/wikis/simple/src/index.md
+		Found page at tests/wikis/simple/src/page1.md
+		Found page at tests/wikis/simple/src/page2.md
+		Found section at tests/wikis/simple/src/section1
+		Found page at tests/wikis/simple/src/section1/index.md
+		Found section at tests/wikis/simple/src/section1/section11
+		Found page at tests/wikis/simple/src/section1/section11/index.md
+		Found section at tests/wikis/simple/src/section1/section12
+		Found section config at tests/wikis/simple/src/section1/section12/section.ini
+		Found page at tests/wikis/simple/src/section1/section12/index.md
+		Found section at tests/wikis/simple/src/section2
+		Found page at tests/wikis/simple/src/section2/index.md
+		Found section at tests/wikis/simple/src/section2/section21
+		Found section config at tests/wikis/simple/src/section2/section21/section.ini
+		Found page at tests/wikis/simple/src/section2/section21/index.md
+		Found section at tests/wikis/simple/src/section2/section21/section211
+		Found section config at tests/wikis/simple/src/section2/section21/section211/section.ini
+		Found page at tests/wikis/simple/src/section2/section21/section211/index.md
+		Found section at tests/wikis/simple/src/section2/section22
+		Found section config at tests/wikis/simple/src/section2/section22/section.ini
+		Found page at tests/wikis/simple/src/section2/section22/index.md
 		New resources:
 
 		 + /index

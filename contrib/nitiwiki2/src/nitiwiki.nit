@@ -123,7 +123,7 @@ class CmdInit
 		var ini = new Template
 		ini.addn "[wiki]\n"
 		ini.addn "; Sources directory"
-		ini.addn "pages = pages/\n"
+		ini.addn "src = src/\n"
 		ini.addn "; Output directory"
 		ini.addn "out = out/\n"
 		ini.addn "; Default page template"
@@ -131,16 +131,16 @@ class CmdInit
 		ini.write_to_file(ini_path)
 		logger.debug "Created configuration file `{ini_path}`"
 
-		# Create `pages/`
-		var pages_dir = root / "pages"
-		sys.system "mkdir -p {pages_dir}"
-		logger.debug "Created pages directory `{pages_dir}`"
+		# Create `src/`
+		var src_dir = root / "src"
+		sys.system "mkdir -p {src_dir}"
+		logger.debug "Created src directory `{src_dir}`"
 
-		# Create `pages/index.md`
+		# Create `src/index.md`
 		var index = new Template
 		index.addn "# My Nitiwiki\n"
 		index.addn "Hello, World!"
-		var index_path = pages_dir / "index.md"
+		var index_path = src_dir / "index.md"
 		index.write_to_file(index_path)
 		logger.debug "Created index page `{index_path}`"
 
@@ -166,8 +166,8 @@ class CmdInit
 		end
 		print "You can customize its content by editing:\n"
 		print " * `{ini_path}` for the configuration"
-		print " * `{pages_dir}` for the source pages in Markdown format"
-		print " * `{tpl_path}` for the pages template"
+		print " * `{src_dir}` for the source src in Markdown format"
+		print " * `{tpl_path}` for the src template"
 		print "\nThen render your wiki to HTML by typing:"
 		print "\n\tnitiwiki init"
 
@@ -187,8 +187,8 @@ abstract class WikiCommand
 	redef var usage_line = "{super} [--root=<root>]" is lazy
 
 	# TODO
-#	var opt_src = new OptionString("Source directory (default: pages/)", "--src", "-s")
-#	fun src: String do return opt_src.value or else ini["wiki.src"] or else "pages/"
+#	var opt_src = new OptionString("Source directory (default: src/)", "--src", "-s")
+#	fun src: String do return opt_src.value or else ini["wiki.src"] or else "src/"
 #
 #	var opt_md_exts = new OptionArray("Accepted markdown extensions (default: md)", "--md-exts")
 #	fun md_exts: Array[String] do

@@ -34,14 +34,13 @@ redef class Wiki
 	fun has_index: Bool do return root.has_index
 
 	# Wiki's assets directory
-	# TODO
 	#
 	# A Wiki may have a directory containing assets used to render its content
 	# like images, scripts, stylesheets...
 	# How this directory will be used depends on the renderer used.
 	# For example, a HTML renderer could simply copy the content of this directory
 	# to the `public/` one. Or a server renderer could serve the files in place.
-	# TODO move to base?
+	# TODO remove?
 	var assets_dir: nullable String = null is writable
 
 	var default_template_file: nullable String = null is writable
@@ -216,11 +215,11 @@ redef class Resource
 	# status
 
 	fun creation_time: Int do
-		return (wiki.root_dir / wiki.pages_dir / trim_path).ctime
+		return (wiki.root_dir / wiki.src_dir / trim_path).ctime
 	end
 
 	fun last_modification_time: Int do
-		return (wiki.root_dir / wiki.pages_dir / trim_path).mtime
+		return (wiki.root_dir / wiki.src_dir / trim_path).mtime
 	end
 
 	fun last_rendering_time: Int do return out_path.mtime
@@ -426,7 +425,7 @@ redef class Asset
 		end
 
 		v.logger.debug "Copy asset {name} to {out_path}"
-		var from = wiki.root_dir / wiki.pages_dir / path.substring(1, path.length - 1)
+		var from = wiki.root_dir / wiki.src_dir / path.substring(1, path.length - 1)
 		v.copy(from, "{out_path}")
 	end
 

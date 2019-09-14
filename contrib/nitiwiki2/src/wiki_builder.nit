@@ -40,7 +40,7 @@ class WikiBuilder
 		end
 
 		# Build sections recursively starting from `root_path`
-		build_section(wiki, wiki.root, root_dir / wiki.pages_dir)
+		build_section(wiki, wiki.root, root_dir / wiki.src_dir)
 
 		return wiki
 	end

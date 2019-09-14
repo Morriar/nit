@@ -19,7 +19,7 @@ import test_builder
 
 class MockWiki2Html
 	super Wiki2Html
-	# Also save HTMl content of pages?
+	# Also save HTMl content of src?
 	var save_html = true is optional, writable
 
 	# Output of the render
@@ -298,16 +298,16 @@ class TestWiki2Html
 	fun render_wiki_with_assets is test do
 		assert render_wiki("assets", false) == strip_indent("""
 		$ mkdir -p -- 'out/'
-		$ cp -R -- 'tests/wikis/assets/pages/.asset' 'out/.asset'
-		$ cp -R -- 'tests/wikis/assets/pages/asset1' 'out/asset1'
-		$ cp -R -- 'tests/wikis/assets/pages/asset2' 'out/asset2'
+		$ cp -R -- 'tests/wikis/assets/src/.asset' 'out/.asset'
+		$ cp -R -- 'tests/wikis/assets/src/asset1' 'out/asset1'
+		$ cp -R -- 'tests/wikis/assets/src/asset2' 'out/asset2'
 		$ write to out/index.html
 		$ write to out/page1.html
 		$ mkdir -p -- 'out/section1'
-		$ cp -R -- 'tests/wikis/assets/pages/section1/asset.1' 'out/section1/asset.1'
+		$ cp -R -- 'tests/wikis/assets/src/section1/asset.1' 'out/section1/asset.1'
 		$ write to out/section1/index.html
 		$ mkdir -p -- 'out/section1/section11'
-		$ cp -R -- 'tests/wikis/assets/pages/section1/section11/asset' 'out/section1/section11/asset'
+		$ cp -R -- 'tests/wikis/assets/src/section1/section11/asset' 'out/section1/section11/asset'
 		$ write to out/section1/section11/index.html
 		$ cp -R -- 'tests/wikis/assets/assets/' 'out/assets/'""")
 	end

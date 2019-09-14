@@ -58,7 +58,7 @@ class Wiki
 	# The directory where the page source (Markdown or other format) are located.
 	# This doesn't include the `root_dir` prefix.
 	# TODO rename src_dir
-	var pages_dir = "pages/" is writable
+	var src_dir = "src/" is writable
 
 	# Wiki's root section
 	#
@@ -188,21 +188,21 @@ class Wiki
 	# ~~~
 	# var wiki = new Wiki
 	# assert wiki.root_dir == "."
-	# assert wiki.pages_dir == "pages/"
+	# assert wiki.src_dir == "src/"
 	#
 	# var ini = new IniFile
 	# ini["wiki.root"] = "root/"
-	# ini["wiki.pages"] = "dir/"
+	# ini["wiki.src"] = "dir/"
 	#
 	# wiki.configure_from_ini(ini)
 	# assert wiki.root_dir == "root/"
-	# assert wiki.pages_dir == "dir/"
+	# assert wiki.src_dir == "dir/"
 	# ~~~
 	#
 	# Sub modules can refine this method to add new wiki options.
 	fun configure_from_ini(ini: IniFile) do
 		root_dir = ini["wiki.root"] or else root_dir
-		pages_dir = ini["wiki.pages"] or else pages_dir
+		src_dir = ini["wiki.src"] or else src_dir
 	end
 
 	# TODO document
@@ -235,7 +235,7 @@ abstract class Resource
 	#
 	# For some resources, the title may come from a configuration file like with
 	# sections. For other it may come from the content of the resource itself like
-	# with Markdown pages.
+	# with Markdown src.
 	var title: nullable String = null is optional, writable
 
 	# Resource's section

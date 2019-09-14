@@ -17,8 +17,7 @@ module test_base is test
 import wiki_base
 
 redef class Wiki
-	# TODO remove indent
-	fun content(indent: nullable Int): String do
+	fun content: String do
 		var tpl = new Template
 		for resource in resources do
 			var bullet = "P"
@@ -30,7 +29,7 @@ redef class Wiki
 				end
 			end
 			if resource isa Asset then bullet = "A"
-			tpl.addn "{"\t" * (indent or else 0)} {bullet} {resource.path}"
+			tpl.addn " {bullet} {resource.path}"
 		end
 		return tpl.write_to_string
 	end
@@ -268,7 +267,6 @@ class TestSection
 	end
 end
 
-# TODO is example
 class DummyPage
 	super Page
 end

@@ -76,7 +76,7 @@ class TestWikiBuilder
 		 P /section1/section11/index""")
 		end
 
-	fun build_wiki_allowed_md_exts_for_pages is test do
+	fun build_wiki_allowed_md_exts_for_src is test do
 		var builder = self.builder
 		builder.allowed_md_exts = ["md", "mdown"]
 		var wiki = builder.build_wiki(wikis_dir / "md_exts")
@@ -96,17 +96,17 @@ class TestWikiBuilder
 		builder.build_wiki(wikis_dir / "assets")
 		assert stdout.to_s == strip_indent("""
 		Found wiki config at tests/wikis/assets/nitiwiki.ini
-		Found asset at tests/wikis/assets/pages/.asset
-		Found asset at tests/wikis/assets/pages/asset1
-		Found asset at tests/wikis/assets/pages/asset2
-		Found page at tests/wikis/assets/pages/index.md
-		Found page at tests/wikis/assets/pages/page1.md
-		Found section at tests/wikis/assets/pages/section1
-		Found asset at tests/wikis/assets/pages/section1/asset.1
-		Found page at tests/wikis/assets/pages/section1/index.md
-		Found section at tests/wikis/assets/pages/section1/section11
-		Found asset at tests/wikis/assets/pages/section1/section11/asset
-		Found page at tests/wikis/assets/pages/section1/section11/index.md""")
+		Found asset at tests/wikis/assets/src/.asset
+		Found asset at tests/wikis/assets/src/asset1
+		Found asset at tests/wikis/assets/src/asset2
+		Found page at tests/wikis/assets/src/index.md
+		Found page at tests/wikis/assets/src/page1.md
+		Found section at tests/wikis/assets/src/section1
+		Found asset at tests/wikis/assets/src/section1/asset.1
+		Found page at tests/wikis/assets/src/section1/index.md
+		Found section at tests/wikis/assets/src/section1/section11
+		Found asset at tests/wikis/assets/src/section1/section11/asset
+		Found page at tests/wikis/assets/src/section1/section11/index.md""")
 	end
 
 	fun build_warn_if_name_conflicts is test do
@@ -114,27 +114,27 @@ class TestWikiBuilder
 		var builder = new WikiBuilder(logger = new Logger(debug_level, out = stdout))
 		builder.build_wiki(wikis_dir / "conflicts")
 		assert stdout.to_s == strip_indent("""
-		Found section at tests/wikis/conflicts/pages/bar
-		Found section at tests/wikis/conflicts/pages/bar/bar
-		Found page at tests/wikis/conflicts/pages/bar/bar/bar.md
-		Found section at tests/wikis/conflicts/pages/bar/foo
-		Found section at tests/wikis/conflicts/pages/bar/foo/foo
-		Found page at tests/wikis/conflicts/pages/bar/foo/foo/foo.md
-		Found page at tests/wikis/conflicts/pages/bar/foo/foo.md
+		Found section at tests/wikis/conflicts/src/bar
+		Found section at tests/wikis/conflicts/src/bar/bar
+		Found page at tests/wikis/conflicts/src/bar/bar/bar.md
+		Found section at tests/wikis/conflicts/src/bar/foo
+		Found section at tests/wikis/conflicts/src/bar/foo/foo
+		Found page at tests/wikis/conflicts/src/bar/foo/foo/foo.md
+		Found page at tests/wikis/conflicts/src/bar/foo/foo.md
 		Section `/bar/foo` already contains a resource named `foo`
-		Found page at tests/wikis/conflicts/pages/bar/foo.md
+		Found page at tests/wikis/conflicts/src/bar/foo.md
 		Section `/bar` already contains a resource named `foo`
-		Found page at tests/wikis/conflicts/pages/bar.md
+		Found page at tests/wikis/conflicts/src/bar.md
 		Section `/` already contains a resource named `bar`
-		Found section at tests/wikis/conflicts/pages/foo
-		Found section at tests/wikis/conflicts/pages/foo/bar
-		Found page at tests/wikis/conflicts/pages/foo/bar/bar.md
-		Found section at tests/wikis/conflicts/pages/foo/foo
-		Found page at tests/wikis/conflicts/pages/foo/foo/index.md
-		Found page at tests/wikis/conflicts/pages/foo/foo.md
+		Found section at tests/wikis/conflicts/src/foo
+		Found section at tests/wikis/conflicts/src/foo/bar
+		Found page at tests/wikis/conflicts/src/foo/bar/bar.md
+		Found section at tests/wikis/conflicts/src/foo/foo
+		Found page at tests/wikis/conflicts/src/foo/foo/index.md
+		Found page at tests/wikis/conflicts/src/foo/foo.md
 		Section `/foo` already contains a resource named `foo`
 		Section `/` already contains a resource named `foo`
-		Found page at tests/wikis/conflicts/pages/foo.md
+		Found page at tests/wikis/conflicts/src/foo.md
 		Section `/` already contains a resource named `foo`""")
 	end
 end
