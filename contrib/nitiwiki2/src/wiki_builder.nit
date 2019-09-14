@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Build wikis from the file system
+#
+# TODO ignore hidden files?
 module wiki_builder
 
 import wiki_markdown
@@ -20,11 +23,19 @@ import logger
 redef class Wiki
 	# Allowed extensions for Markdown pages
 	#
+	# Files with allowed extensions are considered as pages, other as assets.
+	#
 	# Default if `md`.
 	var allowed_md_exts = ["md"] is writable
 
-	# TODO ignore hidden files?
-
+	# ~~~
+	# var ini = new IniFile
+	# ini["wiki.markdown-exts"] = " a, b, c,d"
+	#
+	# var wiki = new Wiki
+	# wiki.configure_from_ini(ini)
+	# assert wiki.allowed_md_exts == ["a", "b", "c", "d"]
+	# ~~~
 	redef fun configure_from_ini(ini) do
 		super
 
@@ -39,15 +50,19 @@ redef class Wiki
 	end
 end
 
+# Build wikis from the file system
 class WikiBuilder
 
+	# Logger user to display errors and debug informations
 	var logger = new Logger(warn_level) is optional
 
+	# Build Wiki from `root_dir`
+	#
+	# Return null if the wiki cannot be built.
 	fun build_wiki(root_dir: String): nullable Wiki do
 		if not root_dir.file_exists then return null
 
-		var wiki = new Wiki
-		wiki.root_dir = root_dir
+		var wiki = new Wiki(root_dir)
 
 		# Load wiki config
 		var ini_path = root_dir / wiki.config_file
@@ -58,12 +73,15 @@ class WikiBuilder
 		end
 
 		# Build sections recursively starting from `root_path`
-		build_section(wiki, wiki.root, root_dir / wiki.src_dir)
+		build_section(wiki.root, root_dir / wiki.src_dir)
 
 		return wiki
 	end
 
-	private fun build_section(wiki: Wiki, section: Section, dir: String) do
+	# Build a `section` content
+	#
+	# Will build content and sub-sections recursively from `dir`.
+	private fun build_section(section: Section, dir: String) do
 		# Build config
 		var ini_path = dir / section.config_file
 		var ini = load_ini(ini_path)
@@ -86,18 +104,18 @@ class WikiBuilder
 			if sub_path.to_path.is_dir then
 				# Create a new section
 				logger.debug "Found section at {sub_path}"
-				var sub_section = new Section(wiki, sub_name)
+				var sub_section = new Section(section.wiki, sub_name)
 				section.add sub_section
-				build_section(wiki, sub_section, sub_path)
+				build_section(sub_section, sub_path)
 			else
 				# Create a new page
 				var ext = if file.has(".") then file.split(".").last else null
-				if wiki.allowed_md_exts.has(ext) then
+				if section.wiki.allowed_md_exts.has(ext) then
 					logger.debug "Found page at {sub_path}"
-					section.add new MdPage.from_file(wiki, sub_path)
+					section.add new MdPage.from_file(section.wiki, sub_path)
 				else
 					logger.debug "Found asset at {sub_path}"
-					section.add new Asset(wiki, sub_path.basename, null)
+					section.add new Asset(section.wiki, sub_path.basename, null)
 				end
 			end
 			if has_conflict then
@@ -106,11 +124,14 @@ class WikiBuilder
 		end
 	end
 
-	private fun load_ini(path: nullable String): nullable IniFile do
-		if path == null then return null
+	# Try to load a INI file from `path`
+	#
+	# Return null if the file doesn't exist.
+	private fun load_ini(path: String): nullable IniFile do
 		if not path.file_exists then return null
 		return new IniFile.from_file(path)
 	end
 
+	# Used to sort files by names
 	private var files_comparator = new DefaultComparator
 end

@@ -537,8 +537,6 @@ class TestSectionToHtml
 		assert section.html_link(other) == "<a href=\"../test\">Test</a>"
 	end
 
-	# TODO gen auto index
-
 	fun section_can_have_an_index is test do
 		var wiki = new Wiki
 		var s = new Section(wiki, "foo")
@@ -747,8 +745,6 @@ class TestMdPageToHtml
 		<a href="../p1.html">title</a>
 		<a href="../p1.html#foo">title</a></p>""")
 	end
-
-	# TODO check commands
 end
 
 class TestAssetToHtml

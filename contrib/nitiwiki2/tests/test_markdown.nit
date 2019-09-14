@@ -442,9 +442,6 @@ class TestWikiMarkdown
 		assert out.to_s == "/test:1,1--1,7: Link to unknown resource `boo`. Did you mean `/foo`?\n"
 	end
 
-	# TODO test index?
-	# TODO test other commands
-
 	private fun links(page: MdPage): Array[String] do
 		var parser = new MdPageParser
 		var ast = parser.parse_page(page)

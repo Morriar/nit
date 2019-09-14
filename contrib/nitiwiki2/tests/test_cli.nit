@@ -89,7 +89,7 @@ class TestCmdStatus
 
 	fun nitiwiki_status_shows_wiki_status_simple is test do
 		var cmd = new CmdStatus
-		assert cmd.run(["--root", wikis_dir / "simple"]) == 0
+		assert cmd.run(["--no-color", "--root", wikis_dir / "simple"]) == 0
 		assert cmd.out.to_s == strip_indent("""
 		Found wiki config at tests/wikis/simple/nitiwiki.ini
 		Found page at tests/wikis/simple/src/index.md
@@ -133,8 +133,12 @@ class TestCmdStatus
 		 + /section2/section22
 		 + /section2/section22/index.md
 
-		Render them to HTML by typing:
+		Render your wiki to HTML by typing:
 
 			nitiwiki render""")
 	end
+
+	# TODO test opt force
+	# TODO test delted resources
+	# TODO test did you mean
 end

@@ -26,11 +26,9 @@ redef class Wiki
 	var out_dir: String = "out/" is writable
 
 	# Landing or home page of this wiki
-	# TODO remove?
 	fun index: nullable Page do return root.index
 
 	# Does `self` have a `index` page?
-	# TODO remove?
 	fun has_index: Bool do return root.has_index
 
 	var default_template_file: nullable String = null is writable
@@ -117,7 +115,7 @@ class Wiki2Html
 	fun render do visit_wiki(wiki)
 
 	fun clean do
-		sys.system "rm -rf {wiki.out_dir}"
+		sys.system "rm -rf {wiki.root_dir / wiki.out_dir}"
 	end
 
 	redef fun visit_wiki(wiki) do
@@ -165,7 +163,7 @@ end
 
 redef class Resource
 
-	fun out_path: String do return wiki.out_dir / trim_path
+	private fun out_path: String do return wiki.root_dir / wiki.out_dir / trim_path
 
 	# Strip the `/` prefix so it can be used with the `/` operator.
 	# FIXME: should the `/` method handle that?
@@ -194,7 +192,6 @@ redef class Resource
 	end
 
 	fun last_modification_time: Int do
-		print (wiki.root_dir / wiki.src_dir / trim_path)
 		return (wiki.root_dir / wiki.src_dir / trim_path).mtime
 	end
 
@@ -202,6 +199,7 @@ redef class Resource
 
 	fun is_new: Bool do return not out_path.file_exists
 
+	# TODO check template status
 	fun is_dirty: Bool do return is_new or last_modification_time > last_rendering_time
 
 	private fun accept_html_toc_visitor(v: WikiHtmlToc) do
@@ -292,16 +290,14 @@ redef class Section
 	end
 
 	# Landing page of this section
-	# TODO move to html
 	fun index: nullable Page do
 		for child in children do
-			if child isa Page and child.name == "index" then return child
+			if child isa Page and child.name.strip_extension == "index" then return child
 		end
 		return null
 	end
 
 	# Does this section have an `index` page?
-	# TODO move to html
 	fun has_index: Bool do return index != null
 end
 
@@ -345,7 +341,6 @@ redef class MdPage
 
 		template.insert("BODY", html_body(v))
 		template.insert("WIKI_ROOT", wiki.root.href_to(self))
-		# TODO template.insert("WIKI_ASSETS", wiki.assets_dir)?
 		template.insert("WIKI_TOC", wiki_toc) # TODO active, classes
 
 		template.insert("PAGE_TITLE", pretty_name) # TODO should be html title

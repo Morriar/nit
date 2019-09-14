@@ -171,7 +171,8 @@ class Wiki
 	# assert wiki.resource_by_path("/not/Found") == null
 	# ~~~
 	#
-	# See `Resource::path`.
+	# This lookup is based on absolute paths. See `Resource::resource_by_path`
+	# for a lookup by relative paths.
 	fun resource_by_path(path: String): nullable Resource do
 		if path == root.path then return root
 		for resource in resources do
@@ -311,7 +312,7 @@ abstract class Resource
 	# Path from `self` to `resource`
 	#
 	# Can be used to compose relative links for example.
-	# TODO doc test
+	# TODO doc tests
 	fun path_to(resource: Resource): String do
 		return path.relpath(resource.path)
 	end
@@ -319,7 +320,7 @@ abstract class Resource
 	# Get a resource by its relative path from `self`
 	#
 	# Returns `null` if no entry is found.
-	# TODO doc test
+	# TODO doc tests
 	fun resource_by_path(relative_path: String): nullable Resource do
 		var path = (self.path / relative_path).simplify_path
 		return wiki.resource_by_path(path)
@@ -357,39 +358,16 @@ class Section
 	super Resource
 
 	# Resources contained in this section
-	# TODO doc tests
+	#
+	# Can be all kind of resources (page, asset, sub-section).
 	var children = new Array[Resource]
 
-	# Is this section hidden in sitemap and trees and menus?
-	#
-	# See `hidden` is you want to take the section into account.
-	# TODO doc test
+	# Is this section hidden in table of contents and other resources lists?
 	var is_hidden = false is optional, writable
-
-	# Is this section or is section hidden (recursive).
-	#
-	# Returns `true` if `is_hidden and section.is_hidden`.
-	# TODO simplity with is_hidden
-	fun hidden: Bool do
-		if hidden then return true
-		var section = self.section
-		if section != null then return section.is_hidden
-		return false
-	end
 
 	# All resources contained in this section
 	#
 	# This means the section children and their children recursively.
-	#
-	# ~~~
-	# var wiki = new Wiki
-	# var s = new Section(wiki, "my_section", "My Section")
-	# var a = new Asset(wiki, "my_asset", "My Asset")
-	# wiki.add s
-	# wiki.add a
-	# assert wiki.root.resources == [s, a: Resource]
-	# ~~~
-	# TODO doc tests
 	fun resources: Array[Resource] do
 		var v = new ResourcesVisitor
 		v.visit(self)
@@ -407,7 +385,7 @@ class Section
 		return res
 	end
 
-	# TODO comment
+	# Get all resources with `title` inside `self` (direct and indirect)
 	# TODO doc tests
 	fun resources_by_title(title: String): Array[Resource] do
 		var res = new Array[Resource]
@@ -418,8 +396,20 @@ class Section
 		return res
 	end
 
-	# Add a resource to this section
-	# TODO doc tests
+	# Add a resource to self and set self as parent of the resource
+	#
+	# ~~~
+	# var wiki = new Wiki
+	#
+	# var asset = new Asset(wiki, "bar")
+	# assert asset.section == null
+	#
+	# var section = new Section(wiki, "foo")
+	# section.add asset
+	#
+	# assert section.children == [asset]
+	# assert asset.section == section
+	# ~~~
 	fun add(resource: Resource) do
 		children.add resource
 		resource.section = self
@@ -428,7 +418,26 @@ class Section
 	redef fun visit_all(v) do for child in children do v.visit(child)
 
 	# Configure the section from a INI file
-	# TODO doc tests
+	#
+	# Section options can be loaded from a INI configuration file called `section.ini`.
+	#
+	# ~~~
+	# var wiki = new Wiki
+	# var section = new Section(wiki, "section")
+	#
+	# assert not section.is_hidden
+	# assert section.title == null
+	#
+	# var ini = new IniFile
+	# ini["section.hidden"] = "true"
+	# ini["section.title"] = "Title"
+	#
+	# section.configure_from_ini(ini)
+	# assert section.is_hidden
+	# assert section.title == "Title"
+	# ~~~
+	#
+	# Sub modules can refine this method to add new section options.
 	fun configure_from_ini(ini: IniFile) do
 		var hidden = ini["section.hidden"]
 		if hidden != null then is_hidden = hidden == "true"

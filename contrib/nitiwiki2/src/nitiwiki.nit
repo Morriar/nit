@@ -51,12 +51,30 @@ class Nitiwiki
 		var command = args.shift
 		if not commands.has_key(command) then
 			print "Error: Unknown command `{command}`\n"
+			var hint = did_you_mean(command)
+			if hint != null then
+				print "Did you mean `{hint.name}`?\n"
+			end
 			print_commands
-			# TODO did you mean?
 			return 1
 		end
 
 		return commands[command].run(args)
+	end
+
+	fun did_you_mean(name: String): nullable CLICommand do
+		var min_lev = null
+		var min_cmd = null
+
+		for command_name, command in commands do
+			var lev = name.levenshtein_distance(command_name)
+			if min_lev == null or lev < min_lev then
+				min_lev = lev
+				min_cmd = command
+			end
+		end
+
+		return min_cmd
 	end
 end
 
@@ -180,29 +198,9 @@ abstract class WikiCommand
 
 	var opt_root = new OptionString("Root directory of the wiki (default: .)", "--root")
 
-	init do
-		add_option opt_root
-	end
+	init do add_option opt_root
 
 	redef var usage_line = "{super} [--root=<root>]" is lazy
-
-	# TODO
-#	var opt_src = new OptionString("Source directory (default: src/)", "--src", "-s")
-#	fun src: String do return opt_src.value or else ini["wiki.src"] or else "src/"
-#
-#	var opt_md_exts = new OptionArray("Accepted markdown extensions (default: md)", "--md-exts")
-#	fun md_exts: Array[String] do
-#		var res = opt_md_exts.value
-#		if res.not_empty then return res
-#		var str = ini["md-exts"]
-#		if str != null then
-#			for ext in str.split(";") do
-#				res.add ext.trim
-#			end
-#			return res
-#		end
-#		return ["md"]
-#	end
 
 	fun root_dir: String do return opt_root.value or else "."
 
@@ -217,15 +215,12 @@ abstract class WikiCommand
 			print "\n\tnitiwiki init"
 			return null
 		end
-		var builder = new WikiBuilder(logger) # TODO options
+		var builder = new WikiBuilder(logger)
 		var wiki = builder.build_wiki(root_dir)
 		if wiki == null then
 			logger.error "Error: Can't load the nitiwiki at `{root_dir}`."
 			return null
 		end
-
-		# TODO this is ungly
-		wiki.out_dir = root_dir / wiki.out_dir
 
 		return wiki
 	end
@@ -237,6 +232,10 @@ class CmdStatus
 
 	redef var name = "status"
 	redef var description = "Show the wiki status"
+
+	var opt_no_color = new OptionBool("Do not colorize output (default: false)", "--no-color")
+
+	init do add_option opt_no_color
 
 	redef fun run(args) do
 		super
@@ -257,19 +256,14 @@ class CmdStatus
 
 		var added = new Array[Resource]
 		var edited = new Array[Resource]
-		var unchanged = new Array[Resource]
 
 		for resource in resources do
 			if resource.is_new then
 				added.add resource
 			else if resource.is_dirty then
 				edited.add resource
-			else
-				unchanged.add resource
 			end
 		end
-
-		# TODO colors
 
 		if added.is_empty and edited.is_empty then
 			print "Wiki up-to-date."
@@ -278,23 +272,78 @@ class CmdStatus
 
 		if added.not_empty then
 			print "New resources:\n"
-			for resource in added do print " + {resource.path}"
+			for resource in added do
+				if opt_no_color.value then
+					print " + {resource.path}"
+				else
+					print " + {resource.path}".green
+				end
+			end
 			print ""
 		end
 
 		if edited.not_empty then
 			print "Modified resources:\n"
-			for resource in edited do print " * {resource.path}"
+			for resource in edited do
+				if opt_no_color.value then
+					print " * {resource.path}"
+				else
+					print " * {resource.path}".yellow
+				end
+			end
 			print ""
 		end
 
-		# TODO show deleted resources
-		# TODO show assets and template status?
+		var deleted = deleted_files(wiki)
+		if deleted.not_empty then
+			print "Deleted resources:\n"
+			for resource in deleted do
+				if opt_no_color.value then
+					print " - {resource}"
+				else
+					print " - {resource}".red
+				end
+			end
+			print ""
+		end
 
-		print "Render them to HTML by typing:"
+		print "Render your wiki to HTML by typing:"
 		print "\n\tnitiwiki render"
 
 		return 0
+	end
+
+	fun deleted_files(wiki: Wiki): Array[String] do
+		var deleted = new Array[String]
+		for file in read_files(wiki.out_dir) do
+			file = file.replace_first(wiki.out_dir, "")
+			var path = "/{file}".simplify_path
+			if wiki.resource_by_path(path) != null then continue
+			for ext in wiki.allowed_md_exts do
+				var md_path = "{path.strip_extension}.{ext}"
+				if wiki.resource_by_path(md_path) != null then continue label file
+			end
+			deleted.add path
+		end label file
+		return deleted
+	end
+
+	fun read_files(path: String): Array[String] do
+		var files = new Array[String]
+		if not path.file_exists then return files
+
+		var pipe = new ProcessReader("find", path)
+		while not pipe.eof do
+			var file = pipe.read_line
+			if file == "" then break # last line
+			files.add file.trim
+		end
+		pipe.close
+		pipe.wait
+
+		var s = new DefaultComparator
+		s.sort(files)
+		return files
 	end
 end
 
@@ -302,17 +351,9 @@ class CmdRender
 	super WikiCommand
 	noautoinit
 
-	# TODO
-#	var opt_out = new OptionString("Output directory (default: out/)", "--out", "-o")
-#	fun out: String do return opt_out.value or else ini["wiki.out"] or else "out/"
-#	var opt_force = new OptionBool("Force rendering.", "--force", "-f")
-#	fun force: Bool do return opt_force.value or ini["wiki.force"] == "true"
-		# auto titles
-		# breadcrumbs
-		# summaries
-		# target dir
-		# accepted input format
-		# render only if needed
+	var opt_force = new OptionBool("Force rendering.", "--force", "-f")
+
+	redef init do add_option opt_force
 
 	redef var name = "render"
 	redef var description = "Render the wiki as HTML"
@@ -321,12 +362,14 @@ class CmdRender
 		super
 
 		var wiki = load_wiki(root_dir).as(not null)
-		var wiki2html = new Wiki2Html(wiki) # TODO options, logger
+
+		var wiki2html = new Wiki2Html(wiki, opt_force.value, logger)
 		wiki2html.render
 
-		print "Rendered wiki as HTML to `{wiki.out_dir}`."
+		print "Rendered wiki as HTML to `{wiki.out_dir}`.\n"
 
-		# TODO explain next: nitiwiki sync
+		print "Push your rendered wiki to your server by typing:"
+		print "\n\tnitiwiki sync"
 
 		return 0
 	end
@@ -342,10 +385,10 @@ class CmdClean
 	redef fun run(args) do
 		super
 		var wiki = load_wiki(root_dir).as(not null)
-		var wiki2html = new Wiki2Html(wiki) # TODO options, logger
+		var wiki2html = new Wiki2Html(wiki, false, logger)
 		wiki2html.clean
 
-		print "Removed `{wiki.out_dir}`."
+		print "Removed `{wiki.root_dir / wiki.out_dir}`."
 
 		return 0
 	end
@@ -355,12 +398,11 @@ class CmdSynch
 	super WikiCommand
 	noautoinit
 
-	redef var name = "synch"
-	redef var description = "TODO"
+	redef var name = "sync"
+	redef var description = "Synchronize the local out directory with a distant location with rsync"
 
 	redef fun run(args) do
-		# TODO sync // ssh
-		print "NOT YET IMPL"
+		# TODO sync
 		abort
 	end
 end
