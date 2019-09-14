@@ -17,6 +17,7 @@ module test_base is test
 import wiki_base
 
 redef class Wiki
+	# TODO remove indent
 	fun content(indent: nullable Int): String do
 		var tpl = new Template
 		for resource in resources do
@@ -72,6 +73,16 @@ abstract class TestBase
 		s211.add new DummyPage(wiki, "p4")
 		return wiki
 	end
+
+	fun strip_indent(string: String, level: nullable Int): String do
+		var res = new Buffer
+		var re = "^{"\t" * (level or else 2)}".to_re
+		for line in string.split("\n") do
+			res.append line.replace(re, "")
+			res.append "\n"
+		end
+		return res.to_s
+	end
 end
 
 class TestWiki
@@ -87,17 +98,17 @@ class TestWiki
 
 	fun wiki_contains_resources is test do
 		var wiki = wiki_simple
-		assert wiki.content(2) == """
+		assert wiki.content == strip_indent("""
 		 S /s1
 		 S /s2
 		 P /p1
-		 P /p2\n"""
+		 P /p2""")
 	end
 
 	fun resources_can_be_nested is test do
 		var wiki = wiki_nested
 		assert wiki.resources.length == 10
-		assert wiki.content(2) == """
+		assert wiki.content == strip_indent("""
 		 P /p1
 		 S /s1
 		 P /s1/p2
@@ -107,7 +118,7 @@ class TestWiki
 		 S /s2
 		 S /s2/s21
 		 S /s2/s21/s211
-		 P /s2/s21/s211/p4\n"""
+		 P /s2/s21/s211/p4""")
 	end
 end
 

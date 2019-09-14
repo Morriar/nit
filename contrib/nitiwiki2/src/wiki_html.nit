@@ -33,6 +33,7 @@ redef class Wiki
 	# How this directory will be used depends on the renderer used.
 	# For example, a HTML renderer could simply copy the content of this directory
 	# to the `public/` one. Or a server renderer could serve the files in place.
+	# TODO move to base?
 	var assets_dir: nullable String = null is writable
 
 	var default_template_file: nullable String = null is writable

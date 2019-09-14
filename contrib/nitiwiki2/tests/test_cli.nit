@@ -54,13 +54,12 @@ class TestCLICommands
 	fun wiki_command_print_error_if_cant_build_wiki is test do
 		var cmd = new TestWikiCmd("test", "Test description")
 		var wiki = cmd.load_wiki(wikis_dir / "not_found")
-		assert cmd.out.to_s == """
-`tests/wikis/not_found` is not a nitiwiki directory.
+		assert cmd.out.to_s == strip_indent("""
+		`tests/wikis/not_found` is not a nitiwiki directory.
 
-You can create a new nitiwiki here by typing:
+		You can create a new nitiwiki here by typing:
 
-	nitiwiki init
-"""
+			nitiwiki init""")
 		assert wiki == null
 	end
 end
@@ -72,71 +71,70 @@ class TestCmdStatus
 	fun nitiwiki_status_shows_wiki_bad_wiki is test do
 		var cmd = new CmdStatus
 		assert cmd.run(["--root", wikis_dir / "not_found"]) == 1
-		assert cmd.out.to_s == """
-`tests/wikis/not_found` is not a nitiwiki directory.
+		assert cmd.out.to_s == strip_indent("""
+		`tests/wikis/not_found` is not a nitiwiki directory.
 
-You can create a new nitiwiki here by typing:
+		You can create a new nitiwiki here by typing:
 
-	nitiwiki init
-"""
+			nitiwiki init""")
 	end
 
 	fun nitiwiki_status_shows_wiki_status_empty is test do
 		var cmd = new CmdStatus
 		assert cmd.run(["--root", wikis_dir / "empty"]) == 0
-		assert cmd.out.to_s == """
-Found wiki config at tests/wikis/empty/nitiwiki.ini
-This wiki is empty.\n"""
+		assert cmd.out.to_s == strip_indent("""
+		Found wiki config at tests/wikis/empty/nitiwiki.ini
+		This wiki is empty.""")
 	end
 
 	fun nitiwiki_status_shows_wiki_status_simple is test do
 		var cmd = new CmdStatus
 		assert cmd.run(["--root", wikis_dir / "simple"]) == 0
-		assert cmd.out.to_s == """
-Found wiki config at tests/wikis/simple/nitiwiki.ini
-Found page at tests/wikis/simple/pages/index.md
-Found page at tests/wikis/simple/pages/page1.md
-Found page at tests/wikis/simple/pages/page2.md
-Found section at tests/wikis/simple/pages/section1
-Found page at tests/wikis/simple/pages/section1/index.md
-Found section at tests/wikis/simple/pages/section1/section11
-Found page at tests/wikis/simple/pages/section1/section11/index.md
-Found section at tests/wikis/simple/pages/section1/section12
-Found section config at tests/wikis/simple/pages/section1/section12/section.ini
-Found page at tests/wikis/simple/pages/section1/section12/index.md
-Found section at tests/wikis/simple/pages/section2
-Found page at tests/wikis/simple/pages/section2/index.md
-Found section at tests/wikis/simple/pages/section2/section21
-Found section config at tests/wikis/simple/pages/section2/section21/section.ini
-Found page at tests/wikis/simple/pages/section2/section21/index.md
-Found section at tests/wikis/simple/pages/section2/section21/section211
-Found section config at tests/wikis/simple/pages/section2/section21/section211/section.ini
-Found page at tests/wikis/simple/pages/section2/section21/section211/index.md
-Found section at tests/wikis/simple/pages/section2/section22
-Found section config at tests/wikis/simple/pages/section2/section22/section.ini
-Found page at tests/wikis/simple/pages/section2/section22/index.md
-New resources:
+		assert cmd.out.to_s == strip_indent("""
+		Found wiki config at tests/wikis/simple/nitiwiki.ini
+		Found page at tests/wikis/simple/pages/index.md
+		Found page at tests/wikis/simple/pages/page1.md
+		Found page at tests/wikis/simple/pages/page2.md
+		Found section at tests/wikis/simple/pages/section1
+		Found page at tests/wikis/simple/pages/section1/index.md
+		Found section at tests/wikis/simple/pages/section1/section11
+		Found page at tests/wikis/simple/pages/section1/section11/index.md
+		Found section at tests/wikis/simple/pages/section1/section12
+		Found section config at tests/wikis/simple/pages/section1/section12/section.ini
+		Found page at tests/wikis/simple/pages/section1/section12/index.md
+		Found section at tests/wikis/simple/pages/section2
+		Found page at tests/wikis/simple/pages/section2/index.md
+		Found section at tests/wikis/simple/pages/section2/section21
+		Found section config at tests/wikis/simple/pages/section2/section21/section.ini
+		Found page at tests/wikis/simple/pages/section2/section21/index.md
+		Found section at tests/wikis/simple/pages/section2/section21/section211
+		Found section config at tests/wikis/simple/pages/section2/section21/section211/section.ini
+		Found page at tests/wikis/simple/pages/section2/section21/section211/index.md
+		Found section at tests/wikis/simple/pages/section2/section22
+		Found section config at tests/wikis/simple/pages/section2/section22/section.ini
+		Found page at tests/wikis/simple/pages/section2/section22/index.md
+		New resources:
 
- + /index
- + /page1
- + /page2
- + /section1
- + /section1/index
- + /section1/section11
- + /section1/section11/index
- + /section1/section12
- + /section1/section12/index
- + /section2
- + /section2/index
- + /section2/section21
- + /section2/section21/index
- + /section2/section21/section211
- + /section2/section21/section211/index
- + /section2/section22
- + /section2/section22/index
+		 + /index
+		 + /page1
+		 + /page2
+		 + /section1
+		 + /section1/index
+		 + /section1/section11
+		 + /section1/section11/index
+		 + /section1/section12
+		 + /section1/section12/index
+		 + /section2
+		 + /section2/index
+		 + /section2/section21
+		 + /section2/section21/index
+		 + /section2/section21/section211
+		 + /section2/section21/section211/index
+		 + /section2/section22
+		 + /section2/section22/index
 
-Render them to HTML by typing:
+		Render them to HTML by typing:
 
-	nitiwiki render\n"""
+			nitiwiki render""")
 	end
 end

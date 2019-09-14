@@ -39,7 +39,7 @@ class TestWikiBuilder
 	fun build_wiki_simple is test do
 		var wiki = builder.build_wiki(wikis_dir / "simple")
 		assert wiki != null
-		assert wiki.content(2) == """
+		assert wiki.content == strip_indent("""
 		 P /index
 		 P /page1
 		 P /page2
@@ -56,13 +56,13 @@ class TestWikiBuilder
 		 S /section2/section21/section211
 		 P /section2/section21/section211/index
 		 -S- /section2/section22
-		 P /section2/section22/index\n"""
+		 P /section2/section22/index""")
 	end
 
 	fun build_wiki_assets is test do
 		var wiki = builder.build_wiki(wikis_dir / "assets")
 		assert wiki != null
-		assert wiki.content(2) == """
+		assert wiki.content == strip_indent("""
 		 A /.asset
 		 A /asset1
 		 A /asset2
@@ -73,7 +73,7 @@ class TestWikiBuilder
 		 P /section1/index
 		 S /section1/section11
 		 A /section1/section11/asset
-		 P /section1/section11/index\n"""
+		 P /section1/section11/index""")
 		end
 
 	fun build_wiki_allowed_md_exts_for_pages is test do
@@ -81,62 +81,60 @@ class TestWikiBuilder
 		builder.allowed_md_exts = ["md", "mdown"]
 		var wiki = builder.build_wiki(wikis_dir / "md_exts")
 		assert wiki != null
-		assert wiki.content(2) == """
+		assert wiki.content == strip_indent("""
 		 P /index
 		 P /page1
 		 A /page2.markdown
 		 S /section1
 		 A /section1/index.markdown
-		 P /section1/page1\n"""
+		 P /section1/page1""")
 	end
 
 	fun build_log_what_it_does is test do
 		var stdout = new StringWriter
 		var builder = new WikiBuilder(logger = new Logger(debug_level, out = stdout))
 		builder.build_wiki(wikis_dir / "assets")
-		assert stdout.to_s == """
-Found wiki config at tests/wikis/assets/nitiwiki.ini
-Found asset at tests/wikis/assets/pages/.asset
-Found asset at tests/wikis/assets/pages/asset1
-Found asset at tests/wikis/assets/pages/asset2
-Found page at tests/wikis/assets/pages/index.md
-Found page at tests/wikis/assets/pages/page1.md
-Found section at tests/wikis/assets/pages/section1
-Found asset at tests/wikis/assets/pages/section1/asset.1
-Found page at tests/wikis/assets/pages/section1/index.md
-Found section at tests/wikis/assets/pages/section1/section11
-Found asset at tests/wikis/assets/pages/section1/section11/asset
-Found page at tests/wikis/assets/pages/section1/section11/index.md
-"""
+		assert stdout.to_s == strip_indent("""
+		Found wiki config at tests/wikis/assets/nitiwiki.ini
+		Found asset at tests/wikis/assets/pages/.asset
+		Found asset at tests/wikis/assets/pages/asset1
+		Found asset at tests/wikis/assets/pages/asset2
+		Found page at tests/wikis/assets/pages/index.md
+		Found page at tests/wikis/assets/pages/page1.md
+		Found section at tests/wikis/assets/pages/section1
+		Found asset at tests/wikis/assets/pages/section1/asset.1
+		Found page at tests/wikis/assets/pages/section1/index.md
+		Found section at tests/wikis/assets/pages/section1/section11
+		Found asset at tests/wikis/assets/pages/section1/section11/asset
+		Found page at tests/wikis/assets/pages/section1/section11/index.md""")
 	end
 
 	fun build_warn_if_name_conflicts is test do
 		var stdout = new StringWriter
 		var builder = new WikiBuilder(logger = new Logger(debug_level, out = stdout))
 		builder.build_wiki(wikis_dir / "conflicts")
-		assert stdout.to_s == """
-Found section at tests/wikis/conflicts/pages/bar
-Found section at tests/wikis/conflicts/pages/bar/bar
-Found page at tests/wikis/conflicts/pages/bar/bar/bar.md
-Found section at tests/wikis/conflicts/pages/bar/foo
-Found section at tests/wikis/conflicts/pages/bar/foo/foo
-Found page at tests/wikis/conflicts/pages/bar/foo/foo/foo.md
-Found page at tests/wikis/conflicts/pages/bar/foo/foo.md
-Section `/bar/foo` already contains a resource named `foo`
-Found page at tests/wikis/conflicts/pages/bar/foo.md
-Section `/bar` already contains a resource named `foo`
-Found page at tests/wikis/conflicts/pages/bar.md
-Section `/` already contains a resource named `bar`
-Found section at tests/wikis/conflicts/pages/foo
-Found section at tests/wikis/conflicts/pages/foo/bar
-Found page at tests/wikis/conflicts/pages/foo/bar/bar.md
-Found section at tests/wikis/conflicts/pages/foo/foo
-Found page at tests/wikis/conflicts/pages/foo/foo/index.md
-Found page at tests/wikis/conflicts/pages/foo/foo.md
-Section `/foo` already contains a resource named `foo`
-Section `/` already contains a resource named `foo`
-Found page at tests/wikis/conflicts/pages/foo.md
-Section `/` already contains a resource named `foo`
-"""
+		assert stdout.to_s == strip_indent("""
+		Found section at tests/wikis/conflicts/pages/bar
+		Found section at tests/wikis/conflicts/pages/bar/bar
+		Found page at tests/wikis/conflicts/pages/bar/bar/bar.md
+		Found section at tests/wikis/conflicts/pages/bar/foo
+		Found section at tests/wikis/conflicts/pages/bar/foo/foo
+		Found page at tests/wikis/conflicts/pages/bar/foo/foo/foo.md
+		Found page at tests/wikis/conflicts/pages/bar/foo/foo.md
+		Section `/bar/foo` already contains a resource named `foo`
+		Found page at tests/wikis/conflicts/pages/bar/foo.md
+		Section `/bar` already contains a resource named `foo`
+		Found page at tests/wikis/conflicts/pages/bar.md
+		Section `/` already contains a resource named `bar`
+		Found section at tests/wikis/conflicts/pages/foo
+		Found section at tests/wikis/conflicts/pages/foo/bar
+		Found page at tests/wikis/conflicts/pages/foo/bar/bar.md
+		Found section at tests/wikis/conflicts/pages/foo/foo
+		Found page at tests/wikis/conflicts/pages/foo/foo/index.md
+		Found page at tests/wikis/conflicts/pages/foo/foo.md
+		Section `/foo` already contains a resource named `foo`
+		Section `/` already contains a resource named `foo`
+		Found page at tests/wikis/conflicts/pages/foo.md
+		Section `/` already contains a resource named `foo`""")
 	end
 end

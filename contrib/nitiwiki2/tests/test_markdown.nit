@@ -23,19 +23,19 @@ class TestWikiMarkdown
 
 	fun links_can_be_names is test do
 		var wiki = wiki_nested
-		var page = new MdPage(wiki, "test", md = """
-[[p1]]
-[[s1]]
-[[p2]]
-[[s11]]
-[[p3]]
-[[s12]]
-[[s2]]
-[[s21]]
-[[s211]]
-[[p4]]
-[[foo]]
-""")
+		var page = new MdPage(wiki, "test", md = strip_indent("""
+		[[p1]]
+		[[s1]]
+		[[p2]]
+		[[s11]]
+		[[p3]]
+		[[s12]]
+		[[s2]]
+		[[s21]]
+		[[s211]]
+		[[p4]]
+		[[foo]]
+		"""))
 
 		var links = links(page)
 		assert links == [
@@ -55,13 +55,13 @@ class TestWikiMarkdown
 
 	fun links_can_be_name_with_anchors is test do
 		var wiki = wiki_nested
-		var page = new MdPage(wiki, "test1", md = """
-[[p1#foo]]
-[[s1#foo]]
-[[p2#foo]]
-[[s11#foo]]
-[[p3#foo]]
-[[foo#foo]]""")
+		var page = new MdPage(wiki, "test1", md = strip_indent("""
+		[[p1#foo]]
+		[[s1#foo]]
+		[[p2#foo]]
+		[[s11#foo]]
+		[[p3#foo]]
+		[[foo#foo]]"""))
 		wiki.add page
 
 		var links = links(page)
@@ -77,19 +77,19 @@ class TestWikiMarkdown
 
 	fun links_can_be_titles is test do
 		var wiki = wiki_nested
-		var page = new MdPage(wiki, "test", md = """
-[[P1]]
-[[S1]]
-[[P2]]
-[[S11]]
-[[P3]]
-[[S12]]
-[[S2]]
-[[S21]]
-[[S211]]
-[[P4]]
-[[Foo]]
-""")
+		var page = new MdPage(wiki, "test", md = strip_indent("""
+		[[P1]]
+		[[S1]]
+		[[P2]]
+		[[S11]]
+		[[P3]]
+		[[S12]]
+		[[S2]]
+		[[S21]]
+		[[S211]]
+		[[P4]]
+		[[Foo]]
+		"""))
 
 		var links = links(page)
 		assert links == [
@@ -109,14 +109,14 @@ class TestWikiMarkdown
 
 	fun links_can_be_titles_with_anchors is test do
 		var wiki = wiki_nested
-		var page = new MdPage(wiki, "test", md = """
-[[P1#foo]]
-[[S1#foo]]
-[[P2#foo]]
-[[S11#foo]]
-[[P3#foo]]
-[[Foo#foo]]
-""")
+		var page = new MdPage(wiki, "test", md = strip_indent("""
+		[[P1#foo]]
+		[[S1#foo]]
+		[[P2#foo]]
+		[[S11#foo]]
+		[[P3#foo]]
+		[[Foo#foo]]
+		"""))
 
 		var links = links(page)
 		assert links == [
@@ -145,10 +145,10 @@ class TestWikiMarkdown
 		var parser = new MdPageParser(new Logger(warn_level, out))
 		parser.parse_page(page)
 
-		assert out.to_s == """
-/foo/foo/page:1,1--1,7: Link to conflicting resources: `/foo/foo`, `/foo/foo/foo`, `/foo`
-/foo/foo/page:1,9--1,15: Link to conflicting resources: `/foo/foo`, `/foo/foo/foo`, `/foo`
-"""
+		assert out.to_s == strip_indent("""
+		/foo/foo/page:1,1--1,7: Link to conflicting resources: `/foo/foo`, `/foo/foo/foo`, `/foo`
+		/foo/foo/page:1,9--1,15: Link to conflicting resources: `/foo/foo`, `/foo/foo/foo`, `/foo`"""
+		)
 	end
 
 	fun conflicts_always_select_closest_parent is test do
@@ -229,19 +229,19 @@ class TestWikiMarkdown
 
 	fun links_can_be_absolute_path is test do
 		var wiki = wiki_nested
-		var page = new MdPage(wiki, "test1", md = """
-[[/]]
-[[/p1]]
-[[/s1]]
-[[/s1/p2]]
-[[/s1/s11]]
-[[/s1/s11/p3]]
-[[/s1/s12]]
-[[/s2]]
-[[/s2/s21]]
-[[/s2/s21/s211]]
-[[/s2/s21/s211/p4]]
-[[/foo]]""")
+		var page = new MdPage(wiki, "test1", md = strip_indent("""
+		[[/]]
+		[[/p1]]
+		[[/s1]]
+		[[/s1/p2]]
+		[[/s1/s11]]
+		[[/s1/s11/p3]]
+		[[/s1/s12]]
+		[[/s2]]
+		[[/s2/s21]]
+		[[/s2/s21/s211]]
+		[[/s2/s21/s211/p4]]
+		[[/foo]]"""))
 		wiki.add page
 
 		var links = links(page)
@@ -263,14 +263,14 @@ class TestWikiMarkdown
 
 	fun absolute_links_can_have_anchors is test do
 		var wiki = wiki_nested
-		var page = new MdPage(wiki, "test1", md = """
-[[/#foo]]
-[[/p1#foo]]
-[[/s1#foo]]
-[[/s1/p2#foo]]
-[[/s1/s11#foo]]
-[[/s1/s11/p3#foo]]
-[[/foo#foo]]""")
+		var page = new MdPage(wiki, "test1", md = strip_indent("""
+		[[/#foo]]
+		[[/p1#foo]]
+		[[/s1#foo]]
+		[[/s1/p2#foo]]
+		[[/s1/s11#foo]]
+		[[/s1/s11/p3#foo]]
+		[[/foo#foo]]"""))
 		wiki.add page
 
 		var links = links(page)
@@ -287,12 +287,12 @@ class TestWikiMarkdown
 
 	fun links_can_point_to_self is test do
 		var wiki = new Wiki
-		var page = new MdPage(wiki, "test1", md = """
-[[./]]
-[[.]]
-[[#foo]]
-[[./#foo]]
-[[.#foo]]""")
+		var page = new MdPage(wiki, "test1", md = strip_indent("""
+		[[./]]
+		[[.]]
+		[[#foo]]
+		[[./#foo]]
+		[[.#foo]]"""))
 		wiki.add page
 
 		var links = links(page)
@@ -307,18 +307,18 @@ class TestWikiMarkdown
 
 	fun links_can_be_relative_paths is test do
 		var wiki = wiki_nested
-		var page = new MdPage(wiki, "test1", md = """
-[[../]]
-[[../../p1]]
-[[../../s1]]
-[[../../s1/p2]]
-[[../s12]]
-[[p2]]
-[[./p2]]
-[[./s11]]
-[[s11]]
-[[s11/p3]]
-""")
+		var page = new MdPage(wiki, "test1", md = strip_indent("""
+		[[../]]
+		[[../../p1]]
+		[[../../s1]]
+		[[../../s1/p2]]
+		[[../s12]]
+		[[p2]]
+		[[./p2]]
+		[[./s11]]
+		[[s11]]
+		[[s11/p3]]
+		"""))
 
 		var s1 = wiki.resource_by_path("/s1")
 		assert s1 isa Section
@@ -346,24 +346,24 @@ class TestWikiMarkdown
 		wiki.add new MdPage(wiki, "p1", md = "# P1")
 		wiki.add new Asset(wiki, "bar.baz", null, "/foo/bar.baz")
 
-		var page = new MdPage(wiki, "test1", md = """
-[[/s1]]
-[[s1]]
-[[S1]]
-[[/s1#foo]]
-[[s1#foo]]
-[[S1#foo]]
-[[/p1]]
-[[p1]]
-[[P1]]
-[[/p1#foo]]
-[[p1#foo]]
-[[P1#foo]]
-[[/bar.baz]]
-[[bar.baz]]
-[[/bar.baz#foo]]
-[[bar.baz#foo]]
-""")
+		var page = new MdPage(wiki, "test1", md = strip_indent("""
+		[[/s1]]
+		[[s1]]
+		[[S1]]
+		[[/s1#foo]]
+		[[s1#foo]]
+		[[S1#foo]]
+		[[/p1]]
+		[[p1]]
+		[[P1]]
+		[[/p1#foo]]
+		[[p1#foo]]
+		[[P1#foo]]
+		[[/bar.baz]]
+		[[bar.baz]]
+		[[/bar.baz#foo]]
+		[[bar.baz#foo]]
+		"""))
 		wiki.add page
 
 		var links = links(page)
@@ -390,13 +390,13 @@ class TestWikiMarkdown
 	fun links_can_have_a_title is test do
 		var wiki = new Wiki
 		wiki.add new Section(wiki, "s1")
-		var page = new MdPage(wiki, "test1", md = """
-[[title|/s1]]
-[[ title | s1 ]]
-[[title | S1]]
-[[title|/s1#foo]]
-[[title | /s1#foo]]
-""")
+		var page = new MdPage(wiki, "test1", md = strip_indent("""
+		[[title|/s1]]
+		[[ title | s1 ]]
+		[[title | S1]]
+		[[title|/s1#foo]]
+		[[title | /s1#foo]]
+		"""))
 		wiki.add page
 
 		var links = links(page)
@@ -411,30 +411,29 @@ class TestWikiMarkdown
 
 	fun parser_can_log_warnings_without_file_location is test do
 		var wiki = new Wiki
-		var page = new MdPage(wiki, "test", md = """
-[[foo]] is broken.
+		var page = new MdPage(wiki, "test", md = strip_indent("""
+		[[foo]] is broken.
 
-Another broken link [[/foo#bar]].
-""")
+		Another broken link [[/foo#bar]].
+		"""))
 		wiki.add page
 
 		var out = new StringWriter
 		var parser = new MdPageParser(new Logger(warn_level, out))
 		parser.parse_page(page)
 
-		assert out.to_s == """
-/test:1,1--1,7: Link to unknown resource `foo`
-/test:3,21--3,32: Link to unknown resource `/foo`
-"""
+		assert out.to_s == strip_indent("""
+		/test:1,1--1,7: Link to unknown resource `foo`
+		/test:3,21--3,32: Link to unknown resource `/foo`""")
 	end
 
 	fun parser_can_log_warnings_with_file_location is test do
 		var wiki = new Wiki
-		var page = new MdPage(wiki, "test", file = "./page.md", md = """
-[[foo]] is broken.
+		var page = new MdPage(wiki, "test", file = "./page.md", md = strip_indent("""
+		[[foo]] is broken.
 
-Another broken link [[/foo#bar]].
-""")
+		Another broken link [[/foo#bar]].
+		"""))
 
 		wiki.add page
 
@@ -442,10 +441,9 @@ Another broken link [[/foo#bar]].
 		var parser = new MdPageParser(new Logger(warn_level, out))
 		parser.parse_page(page)
 
-		assert out.to_s == """
-./page.md:1,1--1,7: Link to unknown resource `foo`
-./page.md:3,21--3,32: Link to unknown resource `/foo`
-"""
+		assert out.to_s == strip_indent("""
+		./page.md:1,1--1,7: Link to unknown resource `foo`
+		./page.md:3,21--3,32: Link to unknown resource `/foo`""")
 	end
 
 	fun parser_can_suggest_good_links is test do

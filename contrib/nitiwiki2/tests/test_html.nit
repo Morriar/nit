@@ -51,9 +51,9 @@ class TestWiki2Html
 
 		var v = new MockWiki2Html(wiki)
 		v.visit(page)
-		assert v.test_output == """
-$ write to out/test.html
-<h1 id="Test">Test</h1>\n"""
+		assert v.test_output == strip_indent("""
+		$ write to out/test.html
+		<h1 id="Test">Test</h1>""")
 	end
 
 	fun render_page_with_default_template is test do
@@ -63,26 +63,26 @@ $ write to out/test.html
 
 		var v = new MockWiki2Html(wiki)
 		v.visit(page)
-		assert v.test_output == """
-$ write to out/test.html
-<html><h1 id="Test">Test</h1>
-</html>\n"""
+		assert v.test_output == strip_indent("""
+		$ write to out/test.html
+		<html><h1 id="Test">Test</h1>
+		</html>""")
 	end
 
 	fun render_page_with_template_macros do # TODO is test do
 		var wiki = new Wiki
 		wiki.last_changes_url = "http://changes/"
 		wiki.edit_url = "http://edit/"
-		wiki.default_template_string = """
-%WIKI_ROOT%
-%WIKI_TOC%
-%PAGE_TITLE%
-%PAGE_CREATED_AT%
-%PAGE_UPDATED_AT%
-%PAGE_SRC%
-%PAGE_URL%
-%PAGE_TOC%
-%PAGE_TRAIL%\n"""
+		wiki.default_template_string = strip_indent("""
+		%WIKI_ROOT%
+		%WIKI_TOC%
+		%PAGE_TITLE%
+		%PAGE_CREATED_AT%
+		%PAGE_UPDATED_AT%
+		%PAGE_SRC%
+		%PAGE_URL%
+		%PAGE_TOC%
+		%PAGE_TRAIL%""")
 		var p1 = new MdPage(wiki, "p1", md = "# *P1*", file = "./foo.md")
 		var p2 = new MdPage(wiki, "p2", md = "# *P2*", file = "./bar.md")
 		var p3 = new MdPage(wiki, "p3", md = "# *P3*", file = "./baz.md")
@@ -113,12 +113,12 @@ $ write to out/test.html
 
 		var v = new MockWiki2Html(new Wiki)
 		v.visit(section)
-		assert v.test_output == """
-$ mkdir -p -- 'out/s1'
-$ write to out/s1/p1.html
-<h1 id="P1">P1</h1>
-$ write to out/s1/p2.html
-<h1 id="P2">P2</h1>\n"""
+		assert v.test_output == strip_indent("""
+		$ mkdir -p -- 'out/s1'
+		$ write to out/s1/p1.html
+		<h1 id="P1">P1</h1>
+		$ write to out/s1/p2.html
+		<h1 id="P2">P2</h1>""")
 	end
 
 	fun render_section_hidden_is_also_rendered is test do
@@ -129,12 +129,12 @@ $ write to out/s1/p2.html
 
 		var v = new MockWiki2Html(new Wiki)
 		v.visit(section)
-		assert v.test_output == """
-$ mkdir -p -- 'out/s1'
-$ write to out/s1/p1.html
-<h1 id="P1">P1</h1>
-$ write to out/s1/p2.html
-<h1 id="P2">P2</h1>\n"""
+		assert v.test_output == strip_indent("""
+		$ mkdir -p -- 'out/s1'
+		$ write to out/s1/p1.html
+		<h1 id="P1">P1</h1>
+		$ write to out/s1/p2.html
+		<h1 id="P2">P2</h1>""")
 	end
 
 	fun render_section_with_default_template is test do
@@ -146,14 +146,14 @@ $ write to out/s1/p2.html
 
 		var v = new MockWiki2Html(wiki)
 		v.visit(section)
-		assert v.test_output == """
-$ mkdir -p -- 'out/s1'
-$ write to out/s1/p1.html
-<html><h1 id="P1">P1</h1>
-</html>
-$ write to out/s1/p2.html
-<html><h1 id="P2">P2</h1>
-</html>\n"""
+		assert v.test_output == strip_indent("""
+		$ mkdir -p -- 'out/s1'
+		$ write to out/s1/p1.html
+		<html><h1 id="P1">P1</h1>
+		</html>
+		$ write to out/s1/p2.html
+		<html><h1 id="P2">P2</h1>
+		</html>""")
 	end
 
 	fun render_section_with_section_template is test do
@@ -166,14 +166,14 @@ $ write to out/s1/p2.html
 
 		var v = new MockWiki2Html(wiki)
 		v.visit(section)
-		assert v.test_output == """
-$ mkdir -p -- 'out/s1'
-$ write to out/s1/p1.html
-<s1><h1 id="P1">P1</h1>
-</s1>
-$ write to out/s1/p2.html
-<s1><h1 id="P2">P2</h1>
-</s1>\n"""
+		assert v.test_output == strip_indent("""
+		$ mkdir -p -- 'out/s1'
+		$ write to out/s1/p1.html
+		<s1><h1 id="P1">P1</h1>
+		</s1>
+		$ write to out/s1/p2.html
+		<s1><h1 id="P2">P2</h1>
+		</s1>""")
 	end
 
 	fun render_section_with_section_template_nested is test do
@@ -195,22 +195,22 @@ $ write to out/s1/p2.html
 
 		var v = new MockWiki2Html(wiki)
 		v.visit(section)
-		assert v.test_output == """
-$ mkdir -p -- 'out/s1'
-$ write to out/s1/p1.html
-<s1><h1 id="P1">P1</h1>
-</s1>
-$ write to out/s1/p2.html
-<s1><h1 id="P2">P2</h1>
-</s1>
-$ mkdir -p -- 'out/s1/s11'
-$ write to out/s1/s11/p11.html
-<s11><h1 id="P11">P11</h1>
-</s11>
-$ mkdir -p -- 'out/s1/s12'
-$ write to out/s1/s12/p12.html
-<s1><h1 id="P12">P12</h1>
-</s1>\n"""
+		assert v.test_output == strip_indent("""
+		$ mkdir -p -- 'out/s1'
+		$ write to out/s1/p1.html
+		<s1><h1 id="P1">P1</h1>
+		</s1>
+		$ write to out/s1/p2.html
+		<s1><h1 id="P2">P2</h1>
+		</s1>
+		$ mkdir -p -- 'out/s1/s11'
+		$ write to out/s1/s11/p11.html
+		<s11><h1 id="P11">P11</h1>
+		</s11>
+		$ mkdir -p -- 'out/s1/s12'
+		$ write to out/s1/s12/p12.html
+		<s1><h1 id="P12">P12</h1>
+		</s1>""")
 	end
 
 	fun render_wiki_empty is test do
@@ -218,98 +218,98 @@ $ write to out/s1/s12/p12.html
 	end
 
 	fun render_wiki_one is test do
-		assert render_wiki("one", true) == """
-$ mkdir -p -- 'out/'
-$ write to out/index.html
-<h1 id="Root_One">Root One</h1>\n"""
+		assert render_wiki("one", true) == strip_indent("""
+		$ mkdir -p -- 'out/'
+		$ write to out/index.html
+		<h1 id="Root_One">Root One</h1>""")
 	end
 
 	fun render_wiki_simple is test do
-		assert render_wiki("simple", false) == """
-$ mkdir -p -- 'out/'
-$ write to out/index.html
-$ write to out/page1.html
-$ write to out/page2.html
-$ mkdir -p -- 'out/section1'
-$ write to out/section1/index.html
-$ mkdir -p -- 'out/section1/section11'
-$ write to out/section1/section11/index.html
-$ mkdir -p -- 'out/section1/section12'
-$ write to out/section1/section12/index.html
-$ mkdir -p -- 'out/section2'
-$ write to out/section2/index.html
-$ mkdir -p -- 'out/section2/section21'
-$ write to out/section2/section21/index.html
-$ mkdir -p -- 'out/section2/section21/section211'
-$ write to out/section2/section21/section211/index.html
-$ mkdir -p -- 'out/section2/section22'
-$ write to out/section2/section22/index.html\n"""
-end
+		assert render_wiki("simple", false) == strip_indent("""
+		$ mkdir -p -- 'out/'
+		$ write to out/index.html
+		$ write to out/page1.html
+		$ write to out/page2.html
+		$ mkdir -p -- 'out/section1'
+		$ write to out/section1/index.html
+		$ mkdir -p -- 'out/section1/section11'
+		$ write to out/section1/section11/index.html
+		$ mkdir -p -- 'out/section1/section12'
+		$ write to out/section1/section12/index.html
+		$ mkdir -p -- 'out/section2'
+		$ write to out/section2/index.html
+		$ mkdir -p -- 'out/section2/section21'
+		$ write to out/section2/section21/index.html
+		$ mkdir -p -- 'out/section2/section21/section211'
+		$ write to out/section2/section21/section211/index.html
+		$ mkdir -p -- 'out/section2/section22'
+		$ write to out/section2/section22/index.html""")
+	end
 
 	fun render_wiki_conflicts is test do
-		assert render_wiki("conflicts", false) == """
-$ mkdir -p -- 'out/'
-$ mkdir -p -- 'out/bar'
-$ mkdir -p -- 'out/bar/bar'
-$ write to out/bar/bar/bar.html
-$ mkdir -p -- 'out/bar/foo'
-$ mkdir -p -- 'out/bar/foo/foo'
-$ write to out/bar/foo/foo/foo.html
-$ write to out/bar/foo/foo.html
-$ write to out/bar/foo.html
-$ write to out/bar.html
-$ mkdir -p -- 'out/foo'
-$ mkdir -p -- 'out/foo/bar'
-$ write to out/foo/bar/bar.html
-$ mkdir -p -- 'out/foo/foo'
-$ write to out/foo/foo/index.html
-$ write to out/foo/foo.html
-$ write to out/foo.html\n"""
+		assert render_wiki("conflicts", false) == strip_indent("""
+		$ mkdir -p -- 'out/'
+		$ mkdir -p -- 'out/bar'
+		$ mkdir -p -- 'out/bar/bar'
+		$ write to out/bar/bar/bar.html
+		$ mkdir -p -- 'out/bar/foo'
+		$ mkdir -p -- 'out/bar/foo/foo'
+		$ write to out/bar/foo/foo/foo.html
+		$ write to out/bar/foo/foo.html
+		$ write to out/bar/foo.html
+		$ write to out/bar.html
+		$ mkdir -p -- 'out/foo'
+		$ mkdir -p -- 'out/foo/bar'
+		$ write to out/foo/bar/bar.html
+		$ mkdir -p -- 'out/foo/foo'
+		$ write to out/foo/foo/index.html
+		$ write to out/foo/foo.html
+		$ write to out/foo.html""")
 	end
 
 	fun render_wiki_with_template_from_config is test do
-		assert render_wiki("templates", true) == """
-$ mkdir -p -- 'out/'
-$ write to out/index.html
-<ROOT><h1 id="Root">Root</h1>
-</ROOT>\n"""
+		assert render_wiki("templates", true) == strip_indent("""
+		$ mkdir -p -- 'out/'
+		$ write to out/index.html
+		<ROOT><h1 id="Root">Root</h1>
+		</ROOT>""")
 	end
 
 	fun render_wiki_with_template_from_sections is test do
-		assert render_wiki("templates_section", true) == """
-$ mkdir -p -- 'out/'
-$ write to out/index.html
-<ROOT><h1 id="Root">Root</h1>
-</ROOT>
-$ mkdir -p -- 'out/s1'
-$ write to out/s1/index.html
-<S1><h1 id="Section_1">Section 1</h1>
-</S1>
-$ mkdir -p -- 'out/s1/section11'
-$ write to out/s1/section11/index.html
-<S11><h1 id="Section_1.1">Section 1.1</h1>
-</S11>
-$ mkdir -p -- 'out/s1/section12'
-$ write to out/s1/section12/index.html
-<S1><h1 id="Section_1.2">Section 1.2</h1>
-</S1>\n"""
+		assert render_wiki("templates_section", true) == strip_indent("""
+		$ mkdir -p -- 'out/'
+		$ write to out/index.html
+		<ROOT><h1 id="Root">Root</h1>
+		</ROOT>
+		$ mkdir -p -- 'out/s1'
+		$ write to out/s1/index.html
+		<S1><h1 id="Section_1">Section 1</h1>
+		</S1>
+		$ mkdir -p -- 'out/s1/section11'
+		$ write to out/s1/section11/index.html
+		<S11><h1 id="Section_1.1">Section 1.1</h1>
+		</S11>
+		$ mkdir -p -- 'out/s1/section12'
+		$ write to out/s1/section12/index.html
+		<S1><h1 id="Section_1.2">Section 1.2</h1>
+		</S1>""")
 	end
 
 	fun render_wiki_with_assets is test do
-		assert render_wiki("assets", false) == """
-$ mkdir -p -- 'out/'
-$ cp -R -- 'tests/wikis/assets/pages/.asset' 'out/.asset'
-$ cp -R -- 'tests/wikis/assets/pages/asset1' 'out/asset1'
-$ cp -R -- 'tests/wikis/assets/pages/asset2' 'out/asset2'
-$ write to out/index.html
-$ write to out/page1.html
-$ mkdir -p -- 'out/section1'
-$ cp -R -- 'tests/wikis/assets/pages/section1/asset.1' 'out/section1/asset.1'
-$ write to out/section1/index.html
-$ mkdir -p -- 'out/section1/section11'
-$ cp -R -- 'tests/wikis/assets/pages/section1/section11/asset' 'out/section1/section11/asset'
-$ write to out/section1/section11/index.html
-$ cp -R -- 'tests/wikis/assets/assets/' 'out/assets/'\n"""
+		assert render_wiki("assets", false) == strip_indent("""
+		$ mkdir -p -- 'out/'
+		$ cp -R -- 'tests/wikis/assets/pages/.asset' 'out/.asset'
+		$ cp -R -- 'tests/wikis/assets/pages/asset1' 'out/asset1'
+		$ cp -R -- 'tests/wikis/assets/pages/asset2' 'out/asset2'
+		$ write to out/index.html
+		$ write to out/page1.html
+		$ mkdir -p -- 'out/section1'
+		$ cp -R -- 'tests/wikis/assets/pages/section1/asset.1' 'out/section1/asset.1'
+		$ write to out/section1/index.html
+		$ mkdir -p -- 'out/section1/section11'
+		$ cp -R -- 'tests/wikis/assets/pages/section1/section11/asset' 'out/section1/section11/asset'
+		$ write to out/section1/section11/index.html
+		$ cp -R -- 'tests/wikis/assets/assets/' 'out/assets/'""")
 	end
 
 	fun render_wiki_for_real is test do
@@ -328,24 +328,23 @@ $ cp -R -- 'tests/wikis/assets/assets/' 'out/assets/'\n"""
 		proc.wait
 		proc.close
 
-		assert out == """
-render_wiki_for_real
-render_wiki_for_real/index.html
-render_wiki_for_real/asset2
-render_wiki_for_real/assets
-render_wiki_for_real/assets/asset2
-render_wiki_for_real/assets/asset1
-render_wiki_for_real/assets/asset1/asset11
-render_wiki_for_real/section1
-render_wiki_for_real/section1/index.html
-render_wiki_for_real/section1/asset.1
-render_wiki_for_real/section1/section11
-render_wiki_for_real/section1/section11/index.html
-render_wiki_for_real/section1/section11/asset
-render_wiki_for_real/.asset
-render_wiki_for_real/page1.html
-render_wiki_for_real/asset1
-"""
+		assert out == strip_indent("""
+		render_wiki_for_real
+		render_wiki_for_real/index.html
+		render_wiki_for_real/asset2
+		render_wiki_for_real/assets
+		render_wiki_for_real/assets/asset2
+		render_wiki_for_real/assets/asset1
+		render_wiki_for_real/assets/asset1/asset11
+		render_wiki_for_real/section1
+		render_wiki_for_real/section1/index.html
+		render_wiki_for_real/section1/asset.1
+		render_wiki_for_real/section1/section11
+		render_wiki_for_real/section1/section11/index.html
+		render_wiki_for_real/section1/section11/asset
+		render_wiki_for_real/.asset
+		render_wiki_for_real/page1.html
+		render_wiki_for_real/asset1""")
 		sys.system "rm -rf {out_dir}"
 	end
 
@@ -364,23 +363,22 @@ render_wiki_for_real/asset1
 		wiki2html.logger.warn("-------")
 		wiki2html.render
 
-		assert stdout.to_s == """
-Render section <root> to renderer_doesnt_render_non_dirty_resources
-Copy asset .asset to renderer_doesnt_render_non_dirty_resources/.asset
-Copy asset asset1 to renderer_doesnt_render_non_dirty_resources/asset1
-Copy asset asset2 to renderer_doesnt_render_non_dirty_resources/asset2
-Render page index to renderer_doesnt_render_non_dirty_resources/index.html
-Render page page1 to renderer_doesnt_render_non_dirty_resources/page1.html
-Render section section1 to renderer_doesnt_render_non_dirty_resources/section1
-Copy asset asset.1 to renderer_doesnt_render_non_dirty_resources/section1/asset.1
-Render page index to renderer_doesnt_render_non_dirty_resources/section1/index.html
-Render section section11 to renderer_doesnt_render_non_dirty_resources/section1/section11
-Copy asset asset to renderer_doesnt_render_non_dirty_resources/section1/section11/asset
-Render page index to renderer_doesnt_render_non_dirty_resources/section1/section11/index.html
-Copy assets from tests/wikis/assets/assets/ to renderer_doesnt_render_non_dirty_resources/assets/
--------
-Wiki already up-to-date
-"""
+		assert stdout.to_s == strip_indent("""
+		Render section <root> to renderer_doesnt_render_non_dirty_resources
+		Copy asset .asset to renderer_doesnt_render_non_dirty_resources/.asset
+		Copy asset asset1 to renderer_doesnt_render_non_dirty_resources/asset1
+		Copy asset asset2 to renderer_doesnt_render_non_dirty_resources/asset2
+		Render page index to renderer_doesnt_render_non_dirty_resources/index.html
+		Render page page1 to renderer_doesnt_render_non_dirty_resources/page1.html
+		Render section section1 to renderer_doesnt_render_non_dirty_resources/section1
+		Copy asset asset.1 to renderer_doesnt_render_non_dirty_resources/section1/asset.1
+		Render page index to renderer_doesnt_render_non_dirty_resources/section1/index.html
+		Render section section11 to renderer_doesnt_render_non_dirty_resources/section1/section11
+		Copy asset asset to renderer_doesnt_render_non_dirty_resources/section1/section11/asset
+		Render page index to renderer_doesnt_render_non_dirty_resources/section1/section11/index.html
+		Copy assets from tests/wikis/assets/assets/ to renderer_doesnt_render_non_dirty_resources/assets/
+		-------
+		Wiki already up-to-date""")
 
 		sys.system "rm -rf {out_dir}"
 	end
@@ -540,6 +538,7 @@ class TestSectionToHtml
 end
 
 class TestMdPageToHtml
+	super TestBase
 	test
 
 	fun empty_md_to_html is test do
@@ -582,48 +581,48 @@ class TestMdPageToHtml
 	fun md_code_blocs_are_not_highlighted_by_default is test do
 		var wiki = new Wiki
 		var v = new MockWiki2Html(wiki, false)
-		var page = new MdPage(wiki, "test", md = """
-A code example:
+		var page = new MdPage(wiki, "test", md = strip_indent("""
+		A code example:
 
-	print \"Hello, World!\"
+			print \"Hello, World!\"
 
-Another example:
+		Another example:
 
-~~~
-print \"Hello, World!\"
-~~~""")
-		assert page.html(v) == """
-<p>A code example:</p>
-<pre><code>print &quot;Hello, World!&quot;
-</code></pre>
-<p>Another example:</p>
-<pre><code>print &quot;Hello, World!&quot;
-</code></pre>
-"""
+		~~~
+		print \"Hello, World!\"
+		~~~"""))
+
+		assert page.html(v) == strip_indent("""
+		<p>A code example:</p>
+		<pre><code>print &quot;Hello, World!&quot;
+		</code></pre>
+		<p>Another example:</p>
+		<pre><code>print &quot;Hello, World!&quot;
+		</code></pre>""")
 	end
 
 	fun md_code_blocs_can_have_a_default_language is test do
 		var wiki = new Wiki
 		wiki.highlighter_default = "nit"
 		var v = new MockWiki2Html(wiki, false)
-		var page = new MdPage(wiki, "test", md = """
-A code example:
+		var page = new MdPage(wiki, "test", md = strip_indent("""
+		A code example:
 
-	print \"Hello, World!\"
+			print \"Hello, World!\"
 
-Another example:
+		Another example:
 
-~~~
-print \"Hello, World!\"
-~~~""")
-		assert page.html(v) == """
-<p>A code example:</p>
-<pre><code class="language-nit">print &quot;Hello, World!&quot;
-</code></pre>
-<p>Another example:</p>
-<pre><code class="language-nit">print &quot;Hello, World!&quot;
-</code></pre>
-"""
+		~~~
+		print \"Hello, World!\"
+		~~~"""))
+
+		assert page.html(v) == strip_indent("""
+		<p>A code example:</p>
+		<pre><code class="language-nit">print &quot;Hello, World!&quot;
+		</code></pre>
+		<p>Another example:</p>
+		<pre><code class="language-nit">print &quot;Hello, World!&quot;
+		</code></pre>""")
 	end
 
 	fun md_code_blocs_can_be_highlighted is test do
@@ -633,39 +632,38 @@ print \"Hello, World!\"
 		var stdout = new StringWriter
 		var logger = new Logger(info_level, stdout)
 		var v = new MockWiki2Html(wiki, false, logger = logger)
-		var page = new MdPage(wiki, "test", md = """
-A code example:
+		var page = new MdPage(wiki, "test", md = strip_indent("""
+		A code example:
 
-	print \"Hello, World!\"
+			print \"Hello, World!\"
 
-Another example:
+		Another example:
 
-~~~
-print \"Hello, World!\"
-~~~
+		~~~
+		print \"Hello, World!\"
+		~~~
 
-~~~js
-print \"Hello, World!\"
-~~~
-""")
-		assert page.html(v) == """
-<p>A code example:</p>
-<nit>
-print "Hello, World!"
-</nit>
-<p>Another example:</p>
-<nit>
-print "Hello, World!"
-</nit>
-<js>
-print "Hello, World!"
-</js>
-"""
-		assert stdout.to_s == """
-Executing `tests/highlighters/simple` `nit` (in /test:3,1--3,25)
-Executing `tests/highlighters/simple` `nit` (in /test:7,1--9,3)
-Executing `tests/highlighters/simple` `js` (in /test:11,1--13,3)
-"""
+		~~~js
+		print \"Hello, World!\"
+		~~~"""))
+
+		assert page.html(v) == strip_indent("""
+		<p>A code example:</p>
+		<nit>
+		print "Hello, World!"
+		</nit>
+		<p>Another example:</p>
+		<nit>
+		print "Hello, World!"
+		</nit>
+		<js>
+		print "Hello, World!"
+		</js>""")
+
+		assert stdout.to_s == strip_indent("""
+		Executing `tests/highlighters/simple` `nit` (in /test:3,1--3,25)
+		Executing `tests/highlighters/simple` `nit` (in /test:7,1--9,3)
+		Executing `tests/highlighters/simple` `js` (in /test:11,1--13,3)""")
 	end
 
 	fun rendered_warn_if_problem_with_hilighter is test do
@@ -675,20 +673,19 @@ Executing `tests/highlighters/simple` `js` (in /test:11,1--13,3)
 		var logger = new Logger(info_level, stdout)
 		var v = new MockWiki2Html(wiki, false, logger = logger)
 
-		var page = new MdPage(wiki, "test", md = """
-~~~nit
-print \"Hello, World!\"
-~~~""")
-		assert page.html(v) == """
-<pre><code class="language-nit">print &quot;Hello, World!&quot;
-</code></pre>
-"""
+		var page = new MdPage(wiki, "test", md = strip_indent("""
+		~~~nit
+		print \"Hello, World!\"
+		~~~"""))
 
-		assert stdout.to_s == """
-Executing `tests/highlighters/broken` `nit` (in /test:1,1--3,3)
-/test:1,1--3,3: `tests/highlighters/broken` `nit` returned 42
-/test:1,1--3,3: `tests/highlighters/broken` `nit` produced nothing
-"""
+		assert page.html(v) == strip_indent("""
+		<pre><code class="language-nit">print &quot;Hello, World!&quot;
+		</code></pre>""")
+
+		assert stdout.to_s == strip_indent("""
+		Executing `tests/highlighters/broken` `nit` (in /test:1,1--3,3)
+		/test:1,1--3,3: `tests/highlighters/broken` `nit` returned 42
+		/test:1,1--3,3: `tests/highlighters/broken` `nit` produced nothing""")
 	end
 
 	# TODO test all variables
@@ -716,20 +713,19 @@ Executing `tests/highlighters/broken` `nit` (in /test:1,1--3,3)
 		var wiki = new Wiki
 		var p1 = new MdPage(wiki, "p1", md = "")
 		wiki.add p1
-		var p2 = new MdPage(wiki, "p2", md = """
-[[p1]]
-[[p1#foo]]
-[[title | p1]]
-[[title | p1#foo]]""")
+		var p2 = new MdPage(wiki, "p2", md = strip_indent("""
+		[[p1]]
+		[[p1#foo]]
+		[[title | p1]]
+		[[title | p1#foo]]"""))
 		wiki.add p2
 
 		var v = new MockWiki2Html(wiki, false)
-		assert p2.html(v) == """
-<p><a href="../p1.html">P1</a>
-<a href="../p1.html#foo">P1</a>
-<a href="../p1.html">title</a>
-<a href="../p1.html#foo">title</a></p>
-"""
+		assert p2.html(v) == strip_indent("""
+		<p><a href="../p1.html">P1</a>
+		<a href="../p1.html#foo">P1</a>
+		<a href="../p1.html">title</a>
+		<a href="../p1.html#foo">title</a></p>""")
 	end
 
 	# TODO check commands

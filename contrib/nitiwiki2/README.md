@@ -3,8 +3,11 @@
 * bug simplify path
 
 * clean api
-* CLI tests
 * sync command
+
+* tests
+	* helper for ls
+	* CLI tests
 
 * wiki2html
 	* template vars use [[ ]] syntax
@@ -15,10 +18,6 @@
 
 * markdown
 	* links index
-
-* clean tests
-	helper for indented text
-	helper for ls
 
 * black box testing
 	* from nitiwiki

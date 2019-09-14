@@ -21,10 +21,10 @@ class WikiBuilder
 
 	var logger = new Logger(warn_level) is optional
 
-	# TODO move to config
+	# TODO move to base
 	var section_config = "section.ini" is optional
 
-	# TODO move to config
+	# TODO move to markdown
 	var allowed_md_exts = ["md"] is optional, writable
 	# TODO ignore hidden files?
 
@@ -35,7 +35,7 @@ class WikiBuilder
 		wiki.root_dir = root_dir
 
 		# Load wiki config
-		var ini_path = root_dir / "nitiwiki.ini"
+		var ini_path = root_dir / "nitiwiki.ini" # TODO use filename from config
 		var ini = load_ini(ini_path)
 		if ini != null then
 			logger.debug "Found wiki config at {ini_path}"

@@ -56,13 +56,8 @@ class Wiki
 	# ~~~
 	var root = new Root(self, "<root>") is lazy
 
-	# TODO remove
-	fun resources: Array[Resource] do
-		var v = new ResourcesVisitor
-		v.visit_wiki(self)
-		v.resources.shift # remove the root
-		return v.resources
-	end
+	# TODO comment
+	fun resources: Array[Resource] do return root.resources
 
 	# Add an resource to the root section of this wiki
 	#
@@ -72,7 +67,6 @@ class Wiki
 	# wiki.add new Section(wiki, "my_section", "My Section")
 	# assert wiki.resources.length == 1
 	# ~~~
-	# TODO remove
 	fun add(resource: Resource) do root.add resource
 
 	# Get all resources with `name`
@@ -91,10 +85,7 @@ class Wiki
 	# ~~~
 	#
 	# See `resource_by_path` to get a single resource from its unique path.
-	# TODO remove
-	fun resources_by_name(name: String): Array[Resource] do
-		return root.resources_by_name(name)
-	end
+	fun resources_by_name(name: String): Array[Resource] do return root.resources_by_name(name)
 
 	# Get all resources with `title`
 	#
@@ -112,7 +103,6 @@ class Wiki
 	# ~~~
 	#
 	# See `resource_by_path` to get a single resource from its unique path.
-	# TODO remove
 	fun resources_by_title(title: String): Array[Resource] do return root.resources_by_title(title)
 
 	# Get an resource by its `path`
@@ -132,7 +122,6 @@ class Wiki
 	# ~~~
 	#
 	# See `Resource::path`.
-	# TODO remove
 	fun resource_by_path(path: String): nullable Resource do
 		if path == root.path then return root
 		for resource in resources do
@@ -327,7 +316,7 @@ class Section
 		return res
 	end
 
-	# TODO
+	# TODO comment
 	fun resources_by_title(title: String): Array[Resource] do
 		var res = new Array[Resource]
 		for resource in resources do
