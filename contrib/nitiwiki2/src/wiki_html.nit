@@ -115,7 +115,8 @@ class Wiki2Html
 	fun render do visit_wiki(wiki)
 
 	fun clean do
-		sys.system "rm -rf {wiki.root_dir / wiki.out_dir}"
+		print "rm -rf {wiki.out_dir}"
+		# sys.system "rm -rf {wiki.out_dir}"
 	end
 
 	redef fun visit_wiki(wiki) do
@@ -163,7 +164,7 @@ end
 
 redef class Resource
 
-	private fun out_path: String do return wiki.root_dir / wiki.out_dir / trim_path
+	private fun out_path: String do return wiki.out_dir / trim_path
 
 	# Strip the `/` prefix so it can be used with the `/` operator.
 	# FIXME: should the `/` method handle that?

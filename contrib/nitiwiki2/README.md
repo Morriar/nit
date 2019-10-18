@@ -1,5 +1,11 @@
 # TODO
 
+Where am I?
+	try to generate nitlang site with no diff
+	redo the template / blocks
+	links are broken
+	<pre> diff
+
 * bug simplify path
 
 * CLI tests
@@ -20,6 +26,8 @@
 	* moz-code
 
 * sync command
+* init from template
+* redo title, desc in config? how to handle the site head? --> var PAGE_TITLE or HEAD_TITLE
 
 * document and doc tests
 * add README, examples and test them
