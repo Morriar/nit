@@ -2,6 +2,14 @@
 
 Where am I?
 	try to generate nitlang site with no diff
+
+		Add test for link parsing
+			name
+			filename
+			filename + ext
+			title
+			title md
+
 	redo the template / blocks
 	links are broken
 	<pre> diff

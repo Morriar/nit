@@ -16,7 +16,7 @@ module wiki_html
 
 import wiki_markdown
 import template::macro
-import markdown2
+import markdown2 # TODO switch to markdown once nitiwiki is merged
 
 redef class Wiki
 	# Output path
@@ -481,7 +481,7 @@ redef class MdCodeBlock
 		var loc = v.location(self)
 
 		# Execute the command
-		logger.info("Executing `{highlighter}` `{info}` (in {loc})")
+		logger.debug("Executing `{highlighter}` `{info}` (in {loc})")
 		var proc = new ProcessDuplex("sh", highlighter, info)
 		var res = proc.write_and_read(literal)
 		if proc.status != 0 then

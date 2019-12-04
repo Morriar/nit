@@ -177,6 +177,8 @@ class Wiki
 		if path == root.path then return root
 		for resource in resources do
 			if resource.path == path then return resource
+			# TODO should use config to strip extension???
+			if resource.path.strip_extension == path then return resource
 		end
 		return null
 	end
@@ -341,7 +343,7 @@ abstract class Resource
 	fun pretty_name: String do
 		var title = self.title
 		if title != null then return title
-		var name = self.name
+		var name = self.name.strip_extension
 		name = name.replace("_", " ")
 		name = name.capitalized(keep_upper = true)
 		return name

@@ -77,6 +77,12 @@ abstract class MdNode
 		end
 	end
 
+	# Replace `self` by `node` in the AST
+	fun replace(node: MdNode) do
+		self.insert_after(node)
+		self.unlink
+	end
+
 	# Unlink `self` from its `parent`
 	fun unlink do
 		if prev != null then

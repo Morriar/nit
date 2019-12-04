@@ -19,19 +19,70 @@ import wiki_base
 import markdown2
 import logger
 
+redef class Wiki
+	# Allowed extensions for Markdown pages
+	#
+	# Files with allowed extensions are considered as pages, other as assets.
+	#
+	# Default if `md`.
+	#
+	# `wiki_builder` uses this list to create the wiki from the file system.
+	var allowed_md_exts = ["md"] is writable
+end
+
 # A page from a Markdown source
 class MdPage
 	super Page
+
+	redef fun pretty_name do
+		var title = self.title
+		if title != null then return title
+		var name = self.name
+		for ext in wiki.allowed_md_exts do
+			name = name.strip_extension(ext)
+		end
+		name = name.replace("_", " ")
+		name = name.capitalized(keep_upper = true)
+		return name
+	end
+	# File where the `md` content was loaded
+	# var file: nullable String = null is optional
 
 	# Markdown string source
 	var md: String is writable
 
 	# Init `self` from a file
-	init from_file(wiki: Wiki, file: String, title: nullable String) do
-		var name = file.to_path.filename
+	init from_file(wiki: Wiki, file: String, name, title: nullable String) do
+		# Make name from filename without extension
+		if name == null then
+			name = file.to_path.filename
+		end
+		for ext in wiki.allowed_md_exts do
+			# name = name.strip_extension(ext)
+		end
+
 		var md = file.to_path.read_all
+
 		# TODO use title from first h1
+		# print title or else "NO TITLE"
+		if title == null then
+			var parser = new MdParser
+			# parser.github_mode = true
+			# parser.wikilinks_mode = true
+			# parser.post_processors.add new MdProcessCommands(self, page)
+
+			var ast = parser.parse(md)
+
+			title = parse_title(ast)
+		end
+		# print "{title or else "<NULL>"} - {file}"
+
 		init(wiki, name, title, md)
+	end
+
+	fun parse_title(doc: MdDocument): nullable String do
+		var v = new MdExtractTitle
+		return v.get_title(doc)
 	end
 end
 
@@ -51,6 +102,28 @@ class MdPageParser
 	end
 end
 
+class MdExtractTitle
+	super MdVisitor
+
+	var title: nullable String = null
+
+	fun get_title(node: MdNode): nullable String do
+		title = null
+		visit(node)
+		return title
+	end
+
+	redef fun visit(node) do
+		if title != null then return
+
+		if node isa MdHeading then
+			title = node.raw_text
+			return
+		end
+		node.visit_all(self)
+	end
+end
+
 class MdProcessCommands
 	super MdPostProcessor
 
@@ -60,9 +133,9 @@ class MdProcessCommands
 	redef fun visit(node) do
 		if node isa MdWikilink then
 			parse_command(node)
-		else
-			super
+			return
 		end
+		super
 	end
 
 	# TODO other commands (include file...)
@@ -72,6 +145,14 @@ class MdProcessCommands
 		# We don't know what to do with empty commands `[[]]`
 		if link.is_empty then
 			warn(node, "Empty command `[[]]`")
+			return
+		end
+
+		if link.has("^[a-zA-Z][a-zA-Z0-9+-]*://".to_re) then
+			# We have a Wikilink as a http link, let's replace it
+			var md_link = new MdLink(node.location, link, node.title or else link)
+			md_link.first_child = new MdText(node.location, node.title or else link)
+			node.replace(md_link)
 			return
 		end
 
@@ -88,7 +169,7 @@ class MdProcessCommands
 
 		if link.is_empty then
 			if node.anchor == null then
-				# We have no link nor anchor, this is an error
+				# We have no link nor anchor, there is a problem
 				warn(node, "Empty link `{node.link}`")
 			else
 				# We only have an anchor, the link is internal to the page
@@ -115,9 +196,14 @@ class MdProcessCommands
 		if link.has("/") then
 			node.target = context.resource_by_path(link)
 			if node.target == null then
-				# Also try from parent section
+				# Try from parent section
 				node.target = context.resource_by_path("../{link}")
 				if node.target == null then
+					# Also try by prefixing a `/`
+					node.target = context.wiki.resource_by_path("/{link}")
+				end
+				if node.target == null then
+					# Bail out
 					warn(node, "Link to unknown resource `{link}`")
 				end
 			end
@@ -195,8 +281,22 @@ private class LinkLookupVisitor
 	redef fun visit(resource) do
 		if done.has(resource) then return
 		done.add resource
-		if resource.name == query or resource.pretty_name == query then
+
+		# TODO should strip extension from config
+		# if resource isa MdPage and resource.title == null then
+			# print resource.path
+		# end
+		if resource.name == query or
+		   resource.name.strip_extension == query or
+		   resource.pretty_name == query or
+		   resource.title == query then
 			resources.add resource
+		else if resource isa MdPage then
+			for ext in resource.wiki.allowed_md_exts do
+				if resource.name.strip_extension(ext) == query then
+					resources.add resource
+				end
+			end
 		end
 		resource.visit_all(self)
 	end

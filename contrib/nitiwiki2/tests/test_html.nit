@@ -25,6 +25,8 @@ class MockWiki2Html
 	# Output of the render
 	var test_output = new Buffer
 
+	# redef var logger = new Logger(debug_level) is optional
+
 	redef fun mkdir(path) do
 		test_output.append "$ mkdir -p -- {path.escape_to_sh}\n"
 	end
@@ -648,7 +650,7 @@ class TestMdPageToHtml
 		wiki.highlighter = "tests/highlighters/simple"
 		wiki.highlighter_default = "nit"
 		var stdout = new StringWriter
-		var logger = new Logger(info_level, stdout)
+		var logger = new Logger(debug_level, stdout)
 		var v = new MockWiki2Html(wiki, false, logger = logger)
 		var page = new MdPage(wiki, "test", md = strip_indent("""
 		A code example:
@@ -688,7 +690,7 @@ class TestMdPageToHtml
 		var wiki = new Wiki
 		wiki.highlighter = "tests/highlighters/broken"
 		var stdout = new StringWriter
-		var logger = new Logger(info_level, stdout)
+		var logger = new Logger(debug_level, stdout)
 		var v = new MockWiki2Html(wiki, false, logger = logger)
 
 		var page = new MdPage(wiki, "test", md = strip_indent("""
@@ -735,7 +737,9 @@ class TestMdPageToHtml
 		[[p1]]
 		[[p1#foo]]
 		[[title | p1]]
-		[[title | p1#foo]]"""))
+		[[title | p1#foo]]
+		[[http://foo]]
+		[[title | http://foo]]"""))
 		wiki.add p2
 
 		var v = new MockWiki2Html(wiki, false)
@@ -743,7 +747,10 @@ class TestMdPageToHtml
 		<p><a href="../p1.html">P1</a>
 		<a href="../p1.html#foo">P1</a>
 		<a href="../p1.html">title</a>
-		<a href="../p1.html#foo">title</a></p>""")
+		<a href="../p1.html#foo">title</a>
+		<a href="http://foo" title="http://foo">http://foo</a>
+		<a href="http://foo" title="title">title</a></p>""")
+		# TODO links should have a title
 	end
 end
 

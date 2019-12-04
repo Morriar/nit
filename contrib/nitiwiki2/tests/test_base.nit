@@ -204,6 +204,8 @@ class TestResources
 		assert (new DummyPage(wiki, "foo/bar")).pretty_name == "Foo/Bar"
 		assert (new DummyPage(wiki, "foo_bar")).pretty_name == "Foo Bar"
 		assert (new DummyPage(wiki, " foo ")).pretty_name == " Foo "
+		assert (new DummyPage(wiki, "foo.md")).pretty_name == "Foo"
+		assert (new DummyPage(wiki, "Foo.bar.nit")).pretty_name == "Foo.Bar"
 	end
 
 	private fun test_path(wiki: Wiki, path: String): Resource do

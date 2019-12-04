@@ -21,13 +21,6 @@ import wiki_markdown
 import logger
 
 redef class Wiki
-	# Allowed extensions for Markdown pages
-	#
-	# Files with allowed extensions are considered as pages, other as assets.
-	#
-	# Default if `md`.
-	var allowed_md_exts = ["md"] is writable
-
 	# ~~~
 	# var ini = new IniFile
 	# ini["wiki.markdown-exts"] = " a, b, c,d"

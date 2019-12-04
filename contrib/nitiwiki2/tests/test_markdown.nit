@@ -53,6 +53,36 @@ class TestWikiMarkdown
 		]
 	end
 
+	fun links_can_be_names_without_extensions is test do
+		var wiki = new Wiki
+		wiki.allowed_md_exts = [".md", ".m.d"]
+
+		var s1 = new Section(wiki, "s1")
+		s1.add new DummyPage(wiki, "p1.foo")
+		s1.add new MdPage(wiki, "p2.md", null, "")
+		s1.add new MdPage(wiki, "p3.m.d", null, "")
+		s1.add new MdPage.from_file(wiki, "p4.md", null, null)
+		s1.add new Asset(wiki, "p5.bar")
+
+		var page = new MdPage(wiki, "test", md = strip_indent("""
+		[[p1]]
+		[[p2]]
+		[[p3]]
+		[[p4]]
+		[[p5]]
+		"""))
+		s1.add page
+
+		var links = links(page)
+		assert links == [
+			"/s1/p1.foo (DummyPage)",
+			"/s1/p2.md (MdPage)",
+			"/s1/p3.m.d (MdPage)",
+			"/s1/p4.md (MdPage)",
+			"/s1/p5.bar (Asset)"
+		]
+	end
+
 	fun links_can_be_name_with_anchors is test do
 		var wiki = wiki_nested
 		var page = new MdPage(wiki, "test1", md = strip_indent("""
@@ -75,8 +105,12 @@ class TestWikiMarkdown
 		]
 	end
 
-	fun links_can_be_titles is test do
+	fun links_can_be_pretty_names is test do
 		var wiki = wiki_nested
+		wiki.allowed_md_exts = [".md", ".m.d"]
+		wiki.add new MdPage(wiki, "p_1.md", null, "some markdown")
+		wiki.add new MdPage(wiki, "p_2.m.d", null, "some markdown")
+		wiki.add new MdPage.from_file(wiki, "p_3.md")
 		var page = new MdPage(wiki, "test", md = strip_indent("""
 		[[P1]]
 		[[S1]]
@@ -88,6 +122,9 @@ class TestWikiMarkdown
 		[[S21]]
 		[[S211]]
 		[[P4]]
+		[[P 1]]
+		[[P 2]]
+		[[P 3]]
 		[[Foo]]
 		"""))
 
@@ -103,11 +140,14 @@ class TestWikiMarkdown
 			"/s2/s21 (Section)",
 			"/s2/s21/s211 (Section)",
 			"/s2/s21/s211/p4 (DummyPage)",
+			"/p_1.md (MdPage)",
+			"/p_2.m.d (MdPage)",
+			"/p_3.md (MdPage)",
 			"broken"
 		]
 	end
 
-	fun links_can_be_titles_with_anchors is test do
+	fun links_can_be_pretty_with_anchors is test do
 		var wiki = wiki_nested
 		var page = new MdPage(wiki, "test", md = strip_indent("""
 		[[P1#foo]]
@@ -126,6 +166,30 @@ class TestWikiMarkdown
 			"/s1/s11#foo (Section)",
 			"/s1/s11/p3#foo (DummyPage)",
 			"broken#foo"
+		]
+	end
+
+	fun links_can_be_titles is test do
+		var wiki = wiki_nested
+		var s1 = new Section(wiki, "s1", "Section 1")
+		s1.add new Asset(wiki, "a1", "Asset 1")
+		s1.add new MdPage(wiki, "p1", "Page 1", "md")
+		s1.add new MdPage.from_file(wiki, wikis_dir / "mock.md", "p2", "Page 2")
+		wiki.add s1
+
+		var page = new MdPage(wiki, "test", md = strip_indent("""
+		[[Section 1]]
+		[[Asset 1]]
+		[[Page 1]]
+		[[Page 2]]
+		"""))
+
+		var links = links(page)
+		assert links == [
+			"/s1 (Section)",
+			"/s1/a1 (Asset)",
+			"/s1/p1 (MdPage)",
+			"/s1/p2 (MdPage)"
 		]
 	end
 
@@ -227,6 +291,10 @@ class TestWikiMarkdown
 		assert links(page) == ["/baz/foo (Section)", "/baz/foo (Section)"]
 	end
 
+	# TODO test with markdown title
+	# TODO test with pretty name + ext
+	# TODO test with path + ext
+
 	fun links_can_be_absolute_path is test do
 		var wiki = wiki_nested
 		var page = new MdPage(wiki, "test1", md = strip_indent("""
@@ -258,6 +326,68 @@ class TestWikiMarkdown
 			"/s2/s21/s211 (Section)",
 			"/s2/s21/s211/p4 (DummyPage)",
 			"broken"
+		]
+	end
+
+	fun links_can_be_absolute_path_without_root_prefix is test do
+		var wiki = wiki_nested
+		var page = new MdPage(wiki, "test1", md = strip_indent("""
+		[[p1]]
+		[[s1]]
+		[[s1/p2]]
+		[[s1/s11]]
+		[[s1/s11/p3]]
+		[[s1/s12]]
+		[[s2]]
+		[[s2/s21]]
+		[[s2/s21/s211]]
+		[[s2/s21/s211/p4]]
+		[[foo]]"""))
+		wiki.add page
+
+		var links = links(page)
+		assert links == [
+			"/p1 (DummyPage)",
+			"/s1 (Section)",
+			"/s1/p2 (DummyPage)",
+			"/s1/s11 (Section)",
+			"/s1/s11/p3 (DummyPage)",
+			"/s1/s12 (Section)",
+			"/s2 (Section)",
+			"/s2/s21 (Section)",
+			"/s2/s21/s211 (Section)",
+			"/s2/s21/s211/p4 (DummyPage)",
+			"broken"
+		]
+	end
+
+	fun links_can_be_absolute_path_without_extension is test do
+		var wiki = new Wiki
+		wiki.allowed_md_exts = [".md", ".m.d"]
+
+		var s1 = new Section(wiki, "s1", "Section 1")
+		s1.add new Asset(wiki, "a1.foo")
+		s1.add new MdPage(wiki, "p1.md", null, "md")
+		s1.add new MdPage(wiki, "p2.m.d", null, "md")
+		s1.add new MdPage(wiki, "p3.m.d", "Page 3", "md")
+		s1.add new MdPage.from_file(wiki, "p4.md")
+		wiki.add s1
+
+		var page = new MdPage(wiki, "test", md = strip_indent("""
+		[[/s1/a1]]
+		[[/s1/p1]]
+		[[/s1/p2]]
+		[[/s1/p3]]
+		[[/s1/p4]]
+		"""))
+
+		var links = links(page)
+		assert links == [
+			"/s1/a1 (Asset)",
+			"/s1/p1 (MdPage)",
+			"/s1/p2 (MdPage)",
+			"/s1/p3 (MdPage)",
+			"/s1/p4 (MdPage)"
 		]
 	end
 
@@ -396,6 +526,7 @@ class TestWikiMarkdown
 		[[title | S1]]
 		[[title|/s1#foo]]
 		[[title | /s1#foo]]
+		[[title|broken]]
 		"""))
 		wiki.add page
 
@@ -405,8 +536,26 @@ class TestWikiMarkdown
 			"/s1 (Section) - title",
 			"/s1 (Section) - title",
 			"/s1#foo (Section) - title",
-			"/s1#foo (Section) - title"
+			"/s1#foo (Section) - title",
+			"broken - title"
 		]
+	end
+
+	fun links_with_scheme_ignored is test do
+		var wiki = wiki_nested
+		var page = new MdPage(wiki, "test1", md = strip_indent("""
+		[[http://foo]]
+		[[https://foo.html]]
+		[[file://root]]
+		[[ftp://192.168.0.1]]
+		[[Foo|http://foo]]
+		[[Foo|https://foo.html]]
+		[[Foo|file://root]]
+		[[Foo|ftp://192.168.0.1]]"""))
+		wiki.add page
+
+		var links = links(page)
+		assert links.is_empty
 	end
 
 	fun parser_can_log_warnings_with_locations is test do
