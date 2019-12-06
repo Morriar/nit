@@ -3,15 +3,18 @@
 Where am I?
 	try to generate nitlang site with no diff
 
+		# TODO never show name
+		# TODO extract did_you_mean? ?
+		# TODO phases (check, render, etc...)
+
 		Add test for link parsing
-			name
-			filename
-			filename + ext
-			title
-			title md
+			# TODO test with markdown title
+			# TODO test with path + ext
+			# TODO test with path + md title
+
+	trail
 
 	redo the template / blocks
-	links are broken
 	<pre> diff
 
 * bug simplify path

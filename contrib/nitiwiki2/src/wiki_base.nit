@@ -219,6 +219,9 @@ end
 abstract class Resource
 
 	# Every resource belongs to a wiki
+	#
+	# The wiki instance will be used to compose and resolve links, access
+	# configuration, etc.
 	var wiki: Wiki
 
 	# Resource's name

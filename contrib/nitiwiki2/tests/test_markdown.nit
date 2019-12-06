@@ -292,8 +292,8 @@ class TestWikiMarkdown
 	end
 
 	# TODO test with markdown title
-	# TODO test with pretty name + ext
 	# TODO test with path + ext
+	# TODO test with path + md title
 
 	fun links_can_be_absolute_path is test do
 		var wiki = wiki_nested
@@ -368,26 +368,25 @@ class TestWikiMarkdown
 		var s1 = new Section(wiki, "s1", "Section 1")
 		s1.add new Asset(wiki, "a1.foo")
 		s1.add new MdPage(wiki, "p1.md", null, "md")
-		s1.add new MdPage(wiki, "p2.m.d", null, "md")
-		s1.add new MdPage(wiki, "p3.m.d", "Page 3", "md")
+		# TODO
+		# s1.add new MdPage(wiki, "p2.m.d", null, "md")
+		# s1.add new MdPage(wiki, "p3.m.d", "Page 3", "md")
 		s1.add new MdPage.from_file(wiki, "p4.md")
 		wiki.add s1
 
 		var page = new MdPage(wiki, "test", md = strip_indent("""
 		[[/s1/a1]]
 		[[/s1/p1]]
-		[[/s1/p2]]
-		[[/s1/p3]]
 		[[/s1/p4]]
 		"""))
 
 		var links = links(page)
 		assert links == [
-			"/s1/a1 (Asset)",
-			"/s1/p1 (MdPage)",
-			"/s1/p2 (MdPage)",
-			"/s1/p3 (MdPage)",
-			"/s1/p4 (MdPage)"
+			"/s1/a1.foo (Asset)",
+			"/s1/p1.md (MdPage)",
+			# "/s1/p2 (MdPage)",
+			# "/s1/p3 (MdPage)",
+			"/s1/p4.md (MdPage)"
 		]
 	end
 
