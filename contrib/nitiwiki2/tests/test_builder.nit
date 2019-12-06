@@ -26,76 +26,77 @@ class TestWikiBuilder
 	)
 
 	fun build_wiki_empty is test do
-		var wiki = builder.build_wiki(wikis_dir / "empty")
-		assert wiki != null
+		var wiki = new Wiki(wikis_dir / "empty")
+		assert builder.build_wiki(wiki)
 		assert wiki.root.children.is_empty
 	end
 
 	fun build_wiki_not_found is test do
-		var wiki = builder.build_wiki(wikis_dir / "not_found")
-		assert wiki == null
+		var wiki = new Wiki(wikis_dir / "not_found")
+		assert not builder.build_wiki(wiki)
 	end
 
 	fun build_wiki_simple is test do
-		var wiki = builder.build_wiki(wikis_dir / "simple")
-		assert wiki != null
+		var wiki = new Wiki(wikis_dir / "simple")
+		assert builder.build_wiki(wiki)
 		assert wiki.content == strip_indent("""
-		 P /index.md
-		 P /page1.md
-		 P /page2.md
-		 S /section1
-		 P /section1/index.md
-		 S /section1/section11
-		 P /section1/section11/index.md
-		 S /section1/section12
-		 P /section1/section12/index.md
-		 S /section2
-		 P /section2/index.md
-		 S /section2/section21
-		 P /section2/section21/index.md
-		 S /section2/section21/section211
-		 P /section2/section21/section211/index.md
-		 -S- /section2/section22
-		 P /section2/section22/index.md""")
+		 * /index.md (MdPage)
+		 * /page1.md (MdPage)
+		 * /page2.md (MdPage)
+		 * /section1 (Section)
+		 * /section1/index.md (MdPage)
+		 * /section1/section11 (Section)
+		 * /section1/section11/index.md (MdPage)
+		 * /section1/section12 (Section)
+		 * /section1/section12/index.md (MdPage)
+		 * /section2 (Section)
+		 * /section2/index.md (MdPage)
+		 * /section2/section21 (Section)
+		 * /section2/section21/index.md (MdPage)
+		 * /section2/section21/section211 (Section)
+		 * /section2/section21/section211/index.md (MdPage)
+		 * /section2/section22 (Section) -- hidden
+		 * /section2/section22/index.md (MdPage)""")
 	end
 
 	fun build_wiki_assets is test do
-		var wiki = builder.build_wiki(wikis_dir / "assets")
-		assert wiki != null
+		var wiki = new Wiki(wikis_dir / "assets")
+		assert builder.build_wiki(wiki)
 		assert wiki.content == strip_indent("""
-		 A /.asset
-		 A /asset1
-		 A /asset2
-		 S /css
-		 A /css/style.css
-		 P /index.md
-		 P /page1.md
-		 A /script.js
-		 S /section1
-		 A /section1/asset.1
-		 P /section1/index.md
-		 S /section1/section11
-		 A /section1/section11/asset
-		 P /section1/section11/index.md""")
+		 * /.asset (Asset)
+		 * /asset1 (Asset)
+		 * /asset2 (Asset)
+		 * /css (Section)
+		 * /css/style.css (Asset)
+		 * /index.md (MdPage)
+		 * /page1.md (MdPage)
+		 * /script.js (Asset)
+		 * /section1 (Section)
+		 * /section1/asset.1 (Asset)
+		 * /section1/index.md (MdPage)
+		 * /section1/section11 (Section)
+		 * /section1/section11/asset (Asset)
+		 * /section1/section11/index.md (MdPage)""")
 		end
 
 	fun build_wiki_allowed_md_exts_for_src is test do
 		var builder = self.builder
-		var wiki = builder.build_wiki(wikis_dir / "md_exts")
-		assert wiki != null
+		var wiki = new Wiki(wikis_dir / "md_exts")
+		assert builder.build_wiki(wiki)
 		assert wiki.content == strip_indent("""
-		 P /index.md
-		 P /page1.mdown
-		 A /page2.markdown
-		 S /section1
-		 A /section1/index.markdown
-		 P /section1/page1.mdown""")
+		 * /index.md (MdPage)
+		 * /page1.mdown (MdPage)
+		 * /page2.markdown (Asset)
+		 * /section1 (Section)
+		 * /section1/index.markdown (Asset)
+		 * /section1/page1.mdown (MdPage)""")
 	end
 
 	fun build_log_what_it_does is test do
 		var stdout = new StringWriter
 		var builder = new WikiBuilder(logger = new Logger(debug_level, out = stdout))
-		builder.build_wiki(wikis_dir / "assets")
+		var wiki = new Wiki(wikis_dir / "assets")
+		assert builder.build_wiki(wiki)
 		assert stdout.to_s == strip_indent("""
 		Found wiki config at tests/wikis/assets/nitiwiki.ini
 		Found asset at tests/wikis/assets/src/.asset
@@ -112,34 +113,5 @@ class TestWikiBuilder
 		Found section at tests/wikis/assets/src/section1/section11
 		Found asset at tests/wikis/assets/src/section1/section11/asset
 		Found page at tests/wikis/assets/src/section1/section11/index.md""")
-	end
-
-	fun build_warn_if_name_conflicts is test do
-		var stdout = new StringWriter
-		var builder = new WikiBuilder(logger = new Logger(debug_level, out = stdout))
-		builder.build_wiki(wikis_dir / "conflicts")
-		assert stdout.to_s == strip_indent("""
-		Found section at tests/wikis/conflicts/src/bar
-		Found section at tests/wikis/conflicts/src/bar/bar
-		Found page at tests/wikis/conflicts/src/bar/bar/bar.md
-		Found section at tests/wikis/conflicts/src/bar/foo
-		Found section at tests/wikis/conflicts/src/bar/foo/foo
-		Found page at tests/wikis/conflicts/src/bar/foo/foo/foo.md
-		Found page at tests/wikis/conflicts/src/bar/foo/foo.md
-		Section `/bar/foo` already contains a resource named `foo`
-		Found page at tests/wikis/conflicts/src/bar/foo.md
-		Section `/bar` already contains a resource named `foo`
-		Found page at tests/wikis/conflicts/src/bar.md
-		Section `/` already contains a resource named `bar`
-		Found section at tests/wikis/conflicts/src/foo
-		Found section at tests/wikis/conflicts/src/foo/bar
-		Found page at tests/wikis/conflicts/src/foo/bar/bar.md
-		Found section at tests/wikis/conflicts/src/foo/foo
-		Found page at tests/wikis/conflicts/src/foo/foo/index.md
-		Found page at tests/wikis/conflicts/src/foo/foo.md
-		Section `/foo` already contains a resource named `foo`
-		Section `/` already contains a resource named `foo`
-		Found page at tests/wikis/conflicts/src/foo.md
-		Section `/` already contains a resource named `foo`""")
 	end
 end

@@ -52,29 +52,43 @@ class WikiBuilder
 	# Build Wiki from `root_dir`
 	#
 	# Return null if the wiki cannot be built.
-	fun build_wiki(root_dir: String): nullable Wiki do
-		if not root_dir.file_exists then return null
+	fun build_wiki(wiki: Wiki): Bool do
+		if not build_config(wiki) then return false
+		if not build_sections(wiki) then return false
+		return true
+	end
 
-		var wiki = new Wiki(root_dir)
-
-		# Load wiki config
-		var ini_path = root_dir / wiki.config_file
-		var ini = load_ini(ini_path)
-		if ini != null then
-			logger.debug "Found wiki config at {ini_path}"
-			wiki.configure_from_ini(ini)
+	# Set wiki values from INI config file
+	fun build_config(wiki: Wiki): Bool do
+		var ini_path = wiki.root_dir / wiki.config_file
+		if not ini_path.file_exists then
+			logger.warn "Config file `{ini_path}` not found"
+			return false
 		end
+		var ini = load_ini(ini_path)
+		if ini == null then
+			logger.warn "Can't load INI config at {ini_path}"
+			return false
+		end
+		logger.debug "Found wiki config at {ini_path}"
+		wiki.configure_from_ini(ini)
+		return true
+	end
 
-		# Build sections recursively starting from `root_path`
-		build_section(wiki.root, root_dir / wiki.src_dir)
-
-		return wiki
+	# Set wiki content by looking at the files from `root_dir`
+	fun build_sections(wiki: Wiki): Bool do
+		return build_section(wiki.root, wiki.root_dir / wiki.src_dir)
 	end
 
 	# Build a `section` content
 	#
 	# Will build content and sub-sections recursively from `dir`.
-	private fun build_section(section: Section, dir: String) do
+	private fun build_section(section: Section, dir: String): Bool do
+		if not dir.file_exists then
+			logger.warn "Directory `{dir}` not found"
+			return false
+		end
+
 		# Build config
 		var ini_path = dir / section.config_file
 		var ini = load_ini(ini_path)
@@ -82,6 +96,9 @@ class WikiBuilder
 			logger.debug "Found section config at {ini_path}"
 			section.configure_from_ini(ini)
 		end
+
+		# Remember the names seen to warn in case of conflicts
+		var seen = new Set[String]
 
 		# Build children
 		var files = dir.files
@@ -92,14 +109,19 @@ class WikiBuilder
 
 			var sub_path = (dir / file)
 			var sub_name = file.strip_extension
-			var has_conflict = section.resources_by_name(sub_name).not_empty
+			if seen.has(file) then
+				logger.warn "Section `{section.path}` already contains a resource named `{file}`"
+			end
+			seen.add file
 
 			if sub_path.to_path.is_dir then
 				# Create a new section
 				logger.debug "Found section at {sub_path}"
 				var sub_section = new Section(section.wiki, sub_name)
 				section.add sub_section
-				build_section(sub_section, sub_path)
+				if not build_section(sub_section, sub_path) then
+					return false
+				end
 			else
 				# Create a new page
 				var ext = if file.has(".") then file.split(".").last else null
@@ -111,10 +133,8 @@ class WikiBuilder
 					section.add new Asset(section.wiki, sub_path.basename, null)
 				end
 			end
-			if has_conflict then
-				logger.warn "Section `{section.path}` already contains a resource named `{sub_name}`"
-			end
 		end
+		return true
 	end
 
 	# Try to load a INI file from `path`

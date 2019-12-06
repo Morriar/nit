@@ -317,8 +317,8 @@ class TestWiki2Html
 	end
 
 	fun render_wiki_for_real is test do
-		var wiki = builder.build_wiki(wikis_dir / "assets")
-		assert wiki != null
+		var wiki = new Wiki(wikis_dir / "assets")
+		assert builder.build_wiki(wiki)
 
 		var out_dir = "render_wiki_for_real"
 		wiki.out_dir = out_dir
@@ -352,8 +352,8 @@ class TestWiki2Html
 	end
 
 	fun renderer_doesnt_render_non_dirty_resources is test do
-		var wiki = builder.build_wiki(wikis_dir / "assets")
-		assert wiki != null
+		var wiki = new Wiki(wikis_dir / "assets")
+		assert builder.build_wiki(wiki)
 
 		var out_dir = "renderer_doesnt_render_non_dirty_resources"
 		wiki.out_dir = out_dir
@@ -389,8 +389,9 @@ class TestWiki2Html
 	end
 
 	private fun render_wiki(name: String, save_html: Bool): String do
-		var wiki = builder.build_wiki(wikis_dir / name)
-		assert wiki != null
+		var wiki = new Wiki(wikis_dir / name)
+		builder.build_config(wiki)
+		assert builder.build_sections(wiki)
 
 		var wiki2html = new MockWiki2Html(wiki, save_html = save_html)
 		wiki2html.render
@@ -405,8 +406,8 @@ class TestResourceToHtml
 	# status
 
 	fun resource_has_creation_times is test do
-		var wiki = builder.build_wiki(wikis_dir / "assets")
-		assert wiki != null
+		var wiki = new Wiki(wikis_dir / "assets")
+		assert builder.build_wiki(wiki)
 
 		var s1 = wiki.resource_by_path("/section1").as(not null)
 		assert s1.creation_time > 0
@@ -419,8 +420,8 @@ class TestResourceToHtml
 	end
 
 	fun resource_has_last_modification_times is test do
-		var wiki = builder.build_wiki(wikis_dir / "assets")
-		assert wiki != null
+		var wiki = new Wiki(wikis_dir / "assets")
+		assert builder.build_wiki(wiki)
 
 		var s1 = wiki.resource_by_path("/section1").as(not null)
 		assert s1.last_modification_time > 0
@@ -433,8 +434,8 @@ class TestResourceToHtml
 	end
 
 	fun resource_has_last_rendering_times is test do
-		var wiki = builder.build_wiki(wikis_dir / "assets")
-		assert wiki != null
+		var wiki = new Wiki(wikis_dir / "assets")
+		assert builder.build_wiki(wiki)
 
 		var out_dir = "renderer_can_tell_last_rendering_times"
 		wiki.out_dir = out_dir
@@ -456,8 +457,8 @@ class TestResourceToHtml
 	end
 
 	fun resources_can_tell_if_new is test do
-		var wiki = builder.build_wiki(wikis_dir / "assets")
-		assert wiki != null
+		var wiki = new Wiki(wikis_dir / "assets")
+		assert builder.build_wiki(wiki)
 
 		var out_dir = "renderer_can_tell_if_resource_is_new"
 		wiki.out_dir = out_dir
@@ -479,8 +480,8 @@ class TestResourceToHtml
 	end
 
 	fun resource_can_tell_if_dirty is test do
-		var wiki = builder.build_wiki(wikis_dir / "assets")
-		assert wiki != null
+		var wiki = new Wiki(wikis_dir / "assets")
+		assert builder.build_wiki(wiki)
 
 		var out_dir = "renderer_can_tell_if_resource_is_dirty"
 		wiki.out_dir = out_dir

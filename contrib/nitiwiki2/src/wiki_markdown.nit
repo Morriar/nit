@@ -28,6 +28,91 @@ redef class Wiki
 	#
 	# `wiki_builder` uses this list to create the wiki from the file system.
 	var allowed_md_exts = ["md"] is writable
+
+	# Get an resource by its `path`
+	#
+	# A `path` points to a unique resource in a wiki.
+	# Returns `null` if no resource can be found for this `path`.
+	#
+	# ~~~
+	# var wiki = new Wiki
+	#
+	# var r1 = new Section(wiki, "foo", "Foo")
+	# wiki.add r1
+	#
+	# var r2 = new Asset(wiki, "bar", "Bar")
+	# r1.add r2
+	#
+	# var r3 = new Asset(wiki, "bar", "Bar")
+	# wiki.add r3
+	#
+	# assert wiki.resource_by_path("/foo") == r1
+	# assert wiki.resource_by_path("/foo/bar") == r2
+	# assert wiki.resource_by_path("/bar") == r3
+	# assert wiki.resource_by_path("/not/Found") == null
+	# ~~~
+	#
+	# This lookup is based on absolute paths. See `Resource::resource_by_path`
+	# for a lookup by relative paths.
+	fun resource_by_path(path: String): nullable Resource do
+		# TODO optimize
+		if path == root.path then return root
+		for resource in resources do
+			if resource.path == path then return resource
+			# TODO should use config to strip extension???
+			if resource.path.strip_extension == path then return resource
+		end
+		return null
+	end
+
+	# Get all resources with `title`
+	#
+	# Since a `title` isn't unique in a wiki this method may return more than one
+	# resource:
+	#
+	# ~~~
+	# var wiki = new Wiki
+	#
+	# var r1 = new Section(wiki, "foo", "Foo")
+	# wiki.add r1
+	#
+	# var r2 = new Asset(wiki, "bar", "Bar")
+	# r1.add r2
+	#
+	# var r3 = new Asset(wiki, "bar", "Bar")
+	# wiki.add r3
+	#
+	# assert wiki.resources_by_title("Foo") == [r1]
+	# assert wiki.resources_by_title("Bar") == [r2, r3]
+	# assert wiki.resources_by_title("Not Found").is_empty
+	# ~~~
+	#
+	# See `resource_by_path` to get a single resource from its unique path.
+	fun resources_by_title(title: String): Array[Resource] do return root.resources_by_title(title)
+end
+
+redef class Resource
+	# Get a resource by its relative path from `self`
+	#
+	# Returns `null` if no entry is found.
+	# TODO doc tests
+	fun resource_by_path(relative_path: String): nullable Resource do
+		var path = (self.path / relative_path).simplify_path
+		return wiki.resource_by_path(path)
+	end
+end
+
+redef class Section
+	# Get all resources with `title` inside `self` (direct and indirect)
+	# TODO doc tests
+	fun resources_by_title(title: String): Array[Resource] do
+		var res = new Array[Resource]
+		for resource in resources do
+			if resource.title != title then continue
+			res.add resource
+		end
+		return res
+	end
 end
 
 # A page from a Markdown source

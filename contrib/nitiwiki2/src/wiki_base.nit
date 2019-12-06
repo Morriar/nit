@@ -98,92 +98,6 @@ class Wiki
 	# See `Section::add` to nest resources.
 	fun add(resource: Resource) do root.add resource
 
-	# Get all resources with `name`
-	#
-	# Since a `name` isn't unique in a wiki this method may return more than one
-	# resource:
-	#
-	# ~~~
-	# var wiki = new Wiki
-	#
-	# var r1 = new Section(wiki, "foo", "Foo")
-	# wiki.add r1
-	#
-	# var r2 = new Asset(wiki, "bar", "Bar")
-	# r1.add r2
-	#
-	# var r3 = new Asset(wiki, "bar", "Bar")
-	# wiki.add r3
-	#
-	# assert wiki.resources_by_name("foo") == [r1]
-	# assert wiki.resources_by_name("bar") == [r2, r3]
-	# assert wiki.resources_by_name("not_found").is_empty
-	# ~~~
-	#
-	# See `resource_by_path` to get a single resource from its unique path.
-	fun resources_by_name(name: String): Array[Resource] do return root.resources_by_name(name)
-
-	# Get all resources with `title`
-	#
-	# Since a `title` isn't unique in a wiki this method may return more than one
-	# resource:
-	#
-	# ~~~
-	# var wiki = new Wiki
-	#
-	# var r1 = new Section(wiki, "foo", "Foo")
-	# wiki.add r1
-	#
-	# var r2 = new Asset(wiki, "bar", "Bar")
-	# r1.add r2
-	#
-	# var r3 = new Asset(wiki, "bar", "Bar")
-	# wiki.add r3
-	#
-	# assert wiki.resources_by_title("Foo") == [r1]
-	# assert wiki.resources_by_title("Bar") == [r2, r3]
-	# assert wiki.resources_by_title("Not Found").is_empty
-	# ~~~
-	#
-	# See `resource_by_path` to get a single resource from its unique path.
-	fun resources_by_title(title: String): Array[Resource] do return root.resources_by_title(title)
-
-	# Get an resource by its `path`
-	#
-	# A `path` points to a unique resource in a wiki.
-	# Returns `null` if no resource can be found for this `path`.
-	#
-	# ~~~
-	# var wiki = new Wiki
-	#
-	# var r1 = new Section(wiki, "foo", "Foo")
-	# wiki.add r1
-	#
-	# var r2 = new Asset(wiki, "bar", "Bar")
-	# r1.add r2
-	#
-	# var r3 = new Asset(wiki, "bar", "Bar")
-	# wiki.add r3
-	#
-	# assert wiki.resource_by_path("/foo") == r1
-	# assert wiki.resource_by_path("/foo/bar") == r2
-	# assert wiki.resource_by_path("/bar") == r3
-	# assert wiki.resource_by_path("/not/Found") == null
-	# ~~~
-	#
-	# This lookup is based on absolute paths. See `Resource::resource_by_path`
-	# for a lookup by relative paths.
-	fun resource_by_path(path: String): nullable Resource do
-		# TODO optimize
-		if path == root.path then return root
-		for resource in resources do
-			if resource.path == path then return resource
-			# TODO should use config to strip extension???
-			if resource.path.strip_extension == path then return resource
-		end
-		return null
-	end
-
 	# Configure the wiki from a `config` file.
 	#
 	# Wiki options can be loaded from a INI configuration file called `nitiwiki.ini`.
@@ -278,42 +192,32 @@ abstract class Resource
 	# Includes `self` but never the wiki root:
 	# ~~~
 	# var wiki = new Wiki
-	# assert wiki.root.scopes.is_empty
+	# assert wiki.root.parents.is_empty
 	#
 	# var r1 = new Section(wiki, "foo", "Foo")
 	# wiki.add r1
-	# assert r1.scopes == [r1]
+	# assert r1.parents == [r1]
 	#
 	# var r2 = new Section(wiki, "bar", "Bar")
 	# r1.add r2
-	# assert r2.scopes == [r1, r2]
+	# assert r2.parents == [r1, r2]
 	# ~~~
-	fun scopes: Array[Resource] do
+	fun parents: Array[Resource] do
 		var section = self.section
 		if section == null then return new Array[Resource]
 
-		var path = new Array[Resource].from(section.scopes)
+		var path = new Array[Resource].from(section.parents)
 		path.add self
 		return path
 	end
 
 	# Unique identifier of a resource in a wiki
 	#
-	# Composed from the `name` of all parent scopes until `root`.
+	# Composed from the `name` of all parent parents until `root`.
 	# Since the path indentifies a resource, it must be unique accross
 	# the wiki.
 	#
 	# ~~~
-	# var wiki = new Wiki
-	# assert wiki.resource_by_path("/foo") == null
-	#
-	# var r1 = new Section(wiki, "foo", "Foo")
-	# wiki.add r1
-	# assert wiki.resource_by_path("/foo") == r1
-	#
-	# var r2 = new Section(wiki, "foo", "Foo")
-	# wiki.add r2
-	# assert wiki.resource_by_path("/foo") == r1 # TODO use caching to ensure unicity?
 	# ~~~
 	fun path: String do
 		var section = self.section
@@ -327,15 +231,6 @@ abstract class Resource
 	# TODO doc tests
 	fun path_to(resource: Resource): String do
 		return path.relpath(resource.path)
-	end
-
-	# Get a resource by its relative path from `self`
-	#
-	# Returns `null` if no entry is found.
-	# TODO doc tests
-	fun resource_by_path(relative_path: String): nullable Resource do
-		var path = (self.path / relative_path).simplify_path
-		return wiki.resource_by_path(path)
 	end
 
 	# Visit self with `visitor`
@@ -385,27 +280,6 @@ class Section
 		v.visit(self)
 		v.resources.shift # remove the resource itself
 		return v.resources
-	end
-
-	# Get all resources with `name` inside `self` (direct and indirect)
-	# TODO doc tests
-	fun resources_by_name(name: String): Array[Resource] do
-		var res = new Array[Resource]
-		for resource in resources do
-			if resource.name == name then res.add resource
-		end
-		return res
-	end
-
-	# Get all resources with `title` inside `self` (direct and indirect)
-	# TODO doc tests
-	fun resources_by_title(title: String): Array[Resource] do
-		var res = new Array[Resource]
-		for resource in resources do
-			if resource.title != title then continue
-			res.add resource
-		end
-		return res
 	end
 
 	# Add a resource to self and set self as parent of the resource

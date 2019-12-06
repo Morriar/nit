@@ -127,72 +127,6 @@ class TestResources
 	super TestBase
 	test
 
-	fun resources_can_be_searched_by_name is test do
-		var wiki = new Wiki
-		wiki.add new Section(wiki, "foo")
-		wiki.add new Section(wiki, "foo")
-		wiki.add new DummyPage(wiki, "foo")
-		wiki.add new DummyPage(wiki, "foo")
-		wiki.add new DummyPage(wiki, "bar")
-
-		assert wiki.resources_by_name("foo").length == 4
-		assert wiki.resources_by_name("bar").length == 1
-		assert wiki.resources_by_name("not_found").length == 0
-	end
-
-	fun resources_can_be_searched_by_absolute_path is test do
-		var wiki = wiki_nested
-		assert wiki.resource_by_path("/s1") isa Section
-		assert wiki.resource_by_path("/s2") isa Section
-		assert wiki.resource_by_path("/s1/s11") isa Section
-		assert wiki.resource_by_path("/s1/s12") isa Section
-		assert wiki.resource_by_path("/s2/s21") isa Section
-		assert wiki.resource_by_path("/s2/s21/s211") isa Section
-		assert wiki.resource_by_path("/p1") isa Page
-		assert wiki.resource_by_path("/s1/p2") isa Page
-		assert wiki.resource_by_path("/s1/s11/p3") isa Page
-		assert wiki.resource_by_path("/s2/s21/s211/p4") isa Page
-	end
-
-	fun resources_can_be_searched_by_relative_path is test do
-		var wiki = wiki_nested
-		var s1 = wiki.resource_by_path("/s1")
-		assert s1 != null
-		var p2 = wiki.resource_by_path("/s1/p2")
-		assert p2 != null
-
-		assert wiki.root.resource_by_path("") == wiki.root
-		assert wiki.root.resource_by_path("./") == wiki.root
-		assert wiki.root.resource_by_path("s1") == s1
-		assert wiki.root.resource_by_path("../") == wiki.root
-		assert wiki.root.resource_by_path("../../../../") == null # TODO should be wiki.root
-
-		assert wiki.root.resource_by_path("s1/p2") == p2
-		assert p2.resource_by_path(".") == p2
-		assert p2.resource_by_path("..") == s1
-		assert p2.resource_by_path("../.") == s1
-		assert p2.resource_by_path("../p2") == p2
-		assert p2.resource_by_path("../..") == wiki.root
-		assert p2.resource_by_path("../../s1") == s1
-		assert p2.resource_by_path("../../s1/p2") == p2
-
-		assert wiki.root.resource_by_path("./broken") == null
-	end
-
-	fun resource_have_relative_path_to_another is test do
-		var wiki = wiki_nested
-		assert test_path_to(wiki, "/s1", "/s1") == ""
-		assert test_path_to(wiki, "/s1", "/s2") == "../s2"
-		assert test_path_to(wiki, "/s1", "/s1/s11") == "s11"
-		assert test_path_to(wiki, "/s1", "/s1/s12") == "s12"
-		assert test_path_to(wiki, "/s1", "/s2/s21") == "../s2/s21"
-		assert test_path_to(wiki, "/s1", "/s2/s21/s211") == "../s2/s21/s211"
-		assert test_path_to(wiki, "/s1", "/p1") == "../p1"
-		assert test_path_to(wiki, "/s1", "/s1/p2") == "p2"
-		assert test_path_to(wiki, "/s1", "/s1/s11/p3") == "s11/p3"
-		assert test_path_to(wiki, "/s1", "/s2/s21/s211/p4") == "../s2/s21/s211/p4"
-	end
-
 	fun can_display_prettier_names is test do
 		var wiki = new Wiki
 		assert (new DummyPage(wiki, "")).pretty_name == ""
@@ -208,20 +142,6 @@ class TestResources
 		assert (new DummyPage(wiki, " foo ")).pretty_name == " Foo "
 		assert (new DummyPage(wiki, "foo.md")).pretty_name == "Foo"
 		assert (new DummyPage(wiki, "Foo.bar.nit")).pretty_name == "Foo.Bar"
-	end
-
-	private fun test_path(wiki: Wiki, path: String): Resource do
-		var e = wiki.resource_by_path(path)
-		assert e != null
-		return e
-	end
-
-	private fun test_path_to(wiki: Wiki, from, to: String): String do
-		var f = wiki.resource_by_path(from)
-		assert f != null
-		var t = wiki.resource_by_path(to)
-		assert t != null
-		return f.path_to(t)
 	end
 end
 

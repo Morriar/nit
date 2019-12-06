@@ -216,11 +216,8 @@ abstract class WikiCommand
 			return null
 		end
 		var builder = new WikiBuilder(logger)
-		var wiki = builder.build_wiki(root_dir)
-		if wiki == null then
-			logger.error "Error: Can't load the nitiwiki at `{root_dir}`."
-			return null
-		end
+		var wiki = new Wiki(root_dir)
+		builder.build_wiki(wiki)
 
 		return wiki
 	end
