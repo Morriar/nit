@@ -1,6 +1,7 @@
 # TODO
 
 Where am I?
+	error location should include `pages/` and consider pwd
 	try to generate nitlang site with no diff
 
 		# TODO never show name

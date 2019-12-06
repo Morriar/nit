@@ -20,18 +20,20 @@ redef class Wiki
 	fun content: String do
 		var tpl = new Template
 		for resource in resources do
-			var bullet = "P"
-			if resource isa Section then
-				if resource.is_hidden then
-					bullet = "-S-"
-				else
-					bullet = "S"
-				end
-			end
-			if resource isa Asset then bullet = "A"
-			tpl.addn " {bullet} {resource.path}"
+			tpl.addn " * {resource.debug_string}"
 		end
 		return tpl.write_to_string
+	end
+end
+
+redef class Resource
+	fun debug_string: String do return "{path} ({class_name})"
+end
+
+redef class Section
+	redef fun debug_string do
+		if is_hidden then return "{super} -- hidden"
+		return super
 	end
 end
 
@@ -98,26 +100,26 @@ class TestWiki
 	fun wiki_contains_resources is test do
 		var wiki = wiki_simple
 		assert wiki.content == strip_indent("""
-		 S /s1
-		 S /s2
-		 P /p1
-		 P /p2""")
+		 * /s1 (Section)
+		 * /s2 (Section)
+		 * /p1 (DummyPage)
+		 * /p2 (DummyPage)""")
 	end
 
 	fun resources_can_be_nested is test do
 		var wiki = wiki_nested
 		assert wiki.resources.length == 10
 		assert wiki.content == strip_indent("""
-		 P /p1
-		 S /s1
-		 P /s1/p2
-		 S /s1/s11
-		 P /s1/s11/p3
-		 S /s1/s12
-		 S /s2
-		 S /s2/s21
-		 S /s2/s21/s211
-		 P /s2/s21/s211/p4""")
+		 * /p1 (DummyPage)
+		 * /s1 (Section)
+		 * /s1/p2 (DummyPage)
+		 * /s1/s11 (Section)
+		 * /s1/s11/p3 (DummyPage)
+		 * /s1/s12 (Section)
+		 * /s2 (Section)
+		 * /s2/s21 (Section)
+		 * /s2/s21/s211 (Section)
+		 * /s2/s21/s211/p4 (DummyPage)""")
 	end
 end
 

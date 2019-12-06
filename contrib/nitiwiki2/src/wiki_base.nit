@@ -174,6 +174,7 @@ class Wiki
 	# This lookup is based on absolute paths. See `Resource::resource_by_path`
 	# for a lookup by relative paths.
 	fun resource_by_path(path: String): nullable Resource do
+		# TODO optimize
 		if path == root.path then return root
 		for resource in resources do
 			if resource.path == path then return resource
@@ -227,23 +228,28 @@ abstract class Resource
 	# Resource's name
 	#
 	# The resource name is used internally to designate resources in logs and tests.
-	# It's generally based on files name and we try to never show it as it is to
-	# the end wiki user.
+	# It's generally based on files names (including extensions) and we try to
+	# never show it as it is to the end wiki user (outside of location in error
+	# messages).
 	#
-	# Names may not be unique. See `path` for uniquely identify a resource.
+	# Names may not be unique. See `path` to uniquely designate a resource or
+	# `title` to present the resource to the user.
 	var name: String
 
 	# Resource's title
 	#
 	# A resource may have a custom title which can be presented to the end user.
-	# Titles may not be unique. See `path` for uniquely identify a resource.
+	# Titles may not be unique. See `path` to uniquely identify a resource.
 	#
-	# For some resources, the title may come from a configuration file like with
-	# sections. For other it may come from the content of the resource itself like
-	# with Markdown src.
+	# For some resources, the title may come from a configuration file like for
+	# sections. For other, it may come from the content of the resource itself like
+	# the Markdown source, etc.
 	var title: nullable String = null is optional, writable
 
 	# Resource's section
+	#
+	# The section this resource is stored into. Can be `null` if the resource
+	# is root.
 	#
 	# Should never be set directly, see `Wiki::add` and `Section::add`.
 	#
@@ -265,7 +271,7 @@ abstract class Resource
 	# ~~~
 	var section: nullable Section = null
 
-	# Get all resources between `self` and the root of the wiki
+	# Get all parent resources between `self` and the root of the wiki
 	#
 	# Can be used to compose breadcrumbs for example.
 	#
@@ -291,11 +297,12 @@ abstract class Resource
 		return path
 	end
 
-	# Unique identifier of an resource in a wiki
+	# Unique identifier of a resource in a wiki
 	#
-	# Based on resources nesting from `Wiki::root`.
+	# Composed from the `name` of all parent scopes until `root`.
+	# Since the path indentifies a resource, it must be unique accross
+	# the wiki.
 	#
-	# Should be unique accross the wiki:
 	# ~~~
 	# var wiki = new Wiki
 	# assert wiki.resource_by_path("/foo") == null
