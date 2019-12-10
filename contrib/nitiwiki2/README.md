@@ -1,8 +1,23 @@
 # TODO
 
 Where am I?
-	error location should include `pages/` and consider pwd
+
+	extract error messages and logging
+		fix error line delta
+		colors
+
+	extract lookup
+		auto-resolve conflicts? or suggest path correction
+		lookup siblings first
+
+		api from markdown
+		tests
+
+	try to generate ens/
+		fix hiligth error
+
 	try to generate nitlang site with no diff
+		trail
 
 		# TODO never show name
 		# TODO extract did_you_mean? ?
@@ -14,6 +29,7 @@ Where am I?
 			# TODO test with path + md title
 
 	trail
+	error location should include `pages/` and consider pwd
 
 	redo the template / blocks
 	<pre> diff

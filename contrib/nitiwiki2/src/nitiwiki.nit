@@ -358,7 +358,8 @@ class CmdRender
 	redef fun run(args) do
 		super
 
-		var wiki = load_wiki(root_dir).as(not null)
+		var wiki = load_wiki(root_dir)
+		if wiki == null then return 1
 
 		var wiki2html = new Wiki2Html(wiki, opt_force.value, logger)
 		wiki2html.render
@@ -381,7 +382,9 @@ class CmdClean
 
 	redef fun run(args) do
 		super
-		var wiki = load_wiki(root_dir).as(not null)
+		var wiki = load_wiki(root_dir)
+		if wiki == null then return 1
+
 		var wiki2html = new Wiki2Html(wiki, false, logger)
 		wiki2html.clean
 

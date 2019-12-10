@@ -44,6 +44,17 @@ redef class Wiki
 	end
 end
 
+class Lookup
+	var query: String
+	var results = new Array[Resource] is optional
+	var did_you_mean = new Array[Resource] is optional
+	var limit = 10 is optional
+	var did_you_mean_limit = 3 is optional
+	# TODO parameters (strict etc...)
+	# TODO caching?
+	# TODO ranking?
+end
+
 private class LookupVisitor
 	super WikiVisitor
 
@@ -52,8 +63,6 @@ private class LookupVisitor
 	var query: String
 
 	# Use a breadth first visit so direct children may appear before descandants in conflicts
-	# TODO caching?
-	# TODO ranking?
 	redef fun visit(resource) do
 		if done.has(resource) then return
 		done.add resource

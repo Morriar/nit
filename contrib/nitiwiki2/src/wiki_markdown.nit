@@ -29,42 +29,6 @@ redef class Wiki
 	# `wiki_builder` uses this list to create the wiki from the file system.
 	var allowed_md_exts = ["md"] is writable
 
-	# Get an resource by its `path`
-	#
-	# A `path` points to a unique resource in a wiki.
-	# Returns `null` if no resource can be found for this `path`.
-	#
-	# ~~~
-	# var wiki = new Wiki
-	#
-	# var r1 = new Section(wiki, "foo", "Foo")
-	# wiki.add r1
-	#
-	# var r2 = new Asset(wiki, "bar", "Bar")
-	# r1.add r2
-	#
-	# var r3 = new Asset(wiki, "bar", "Bar")
-	# wiki.add r3
-	#
-	# assert wiki.resource_by_path("/foo") == r1
-	# assert wiki.resource_by_path("/foo/bar") == r2
-	# assert wiki.resource_by_path("/bar") == r3
-	# assert wiki.resource_by_path("/not/Found") == null
-	# ~~~
-	#
-	# This lookup is based on absolute paths. See `Resource::resource_by_path`
-	# for a lookup by relative paths.
-	fun resource_by_path(path: String): nullable Resource do
-		# TODO optimize
-		if path == root.path then return root
-		for resource in resources do
-			if resource.path == path then return resource
-			# TODO should use config to strip extension???
-			if resource.path.strip_extension == path then return resource
-		end
-		return null
-	end
-
 	# Get all resources with `title`
 	#
 	# Since a `title` isn't unique in a wiki this method may return more than one
@@ -89,17 +53,6 @@ redef class Wiki
 	#
 	# See `resource_by_path` to get a single resource from its unique path.
 	fun resources_by_title(title: String): Array[Resource] do return root.resources_by_title(title)
-end
-
-redef class Resource
-	# Get a resource by its relative path from `self`
-	#
-	# Returns `null` if no entry is found.
-	# TODO doc tests
-	fun resource_by_path(relative_path: String): nullable Resource do
-		var path = (self.path / relative_path).simplify_path
-		return wiki.resource_by_path(path)
-	end
 end
 
 redef class Section
@@ -130,14 +83,17 @@ class MdPage
 		name = name.capitalized(keep_upper = true)
 		return name
 	end
+
 	# File where the `md` content was loaded
-	# var file: nullable String = null is optional
+	var source_path: nullable String = null is writable
 
 	# Markdown string source
 	var md: String is writable
 
 	# Init `self` from a file
 	init from_file(wiki: Wiki, file: String, name, title: nullable String) do
+		self.source_path = file
+
 		# Make name from filename without extension
 		if name == null then
 			name = file.to_path.filename
@@ -233,6 +189,9 @@ class MdProcessCommands
 			return
 		end
 
+		# TODO parse command: trail
+		# TODO extract following in lookup so it can be used by both link and trail?
+
 		if link.has("^[a-zA-Z][a-zA-Z0-9+-]*://".to_re) then
 			# We have a Wikilink as a http link, let's replace it
 			var md_link = new MdLink(node.location, link, node.title or else link)
@@ -326,7 +285,8 @@ class MdProcessCommands
 
 	fun lookup_link(node: MdWikilink, link: String): Array[Resource] do
 		var child_visitor = new LinkLookupVisitor(link)
-		# We look into siblings, then into cousins recursively
+		# TODO We look into siblings
+		# Then into cousins recursively
 		var section = context.section
 		while section != null do
 			child_visitor.visit(section)
@@ -361,9 +321,13 @@ private class LinkLookupVisitor
 	var resources = new Set[Resource]
 	var done = new Set[Resource]
 	var query: String
+	# var stop_depth: nullable Int = null is optional
+	# var current_depth = 0
 
 	# Use a breadth first visit so direct children may appear before descandants in conflicts
 	redef fun visit(resource) do
+		# if stop_depth == current_depth then return
+
 		if done.has(resource) then return
 		done.add resource
 
@@ -371,19 +335,51 @@ private class LinkLookupVisitor
 		# if resource isa MdPage and resource.title == null then
 			# print resource.path
 		# end
+
 		if resource.name == query or
+		   resource.name.to_lower == query.to_lower or
 		   resource.name.strip_extension == query or
 		   resource.pretty_name == query or
-		   resource.title == query then
-			resources.add resource
+		   resource.pretty_name.to_lower == query or
+		   resource.title == query or
+		   resource.path == query then
+			select resource
 		else if resource isa MdPage then
-			for ext in resource.wiki.allowed_md_exts do
-				if resource.name.strip_extension(ext) == query then
-					resources.add resource
+			var path = resource.source_path
+			if path != null then
+				if path.prettify(resource.wiki.allowed_md_exts) == query or
+				   path.prettify == query or
+				   path.prettify(new Array[String]) == query then
+					select resource
+				end
+				var filename = path.to_path.filename
+				if filename.prettify(resource.wiki.allowed_md_exts) == query or
+				   filename.prettify == query or
+				   filename.prettify(new Array[String]) == query then
+					select resource
+				end
+				if filename.prettify(resource.wiki.allowed_md_exts).to_lower == query.to_lower or
+				   filename.prettify.to_lower == query.to_lower or
+				   filename.prettify(new Array[String]).to_lower == query.to_lower then
+					select resource
 				end
 			end
 		end
+		# current_depth += 1
 		resource.visit_all(self)
+		# current_depth -= 1
+	end
+
+	fun select(resource: Resource) do
+		var parent = resource.section
+		if parent != null and (
+			parent.name == resource.name or
+			parent.name == resource.name.strip_extension or
+			resource.name.strip_extension == "index") then
+			resources.add parent
+		else
+			resources.add resource
+		end
 	end
 end
 
@@ -419,4 +415,20 @@ private class DidYouMeanComparator
 	redef type COMPARED: Resource
 
 	redef fun compare(a, b) do return similarities[a] <=> similarities[b]
+end
+
+redef class String
+	fun prettify(strip_extensions: nullable Array[String]): String do
+		var string = self
+		if strip_extensions != null then
+			for ext in strip_extensions do
+				string = string.strip_extension(ext)
+			end
+		else
+			string = string.strip_extension
+		end
+		string = string.replace("_", " ")
+		string = string.capitalized(keep_upper = true)
+		return string
+	end
 end

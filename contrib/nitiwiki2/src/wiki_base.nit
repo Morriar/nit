@@ -61,10 +61,12 @@ class Wiki
 
 	# Wiki's root section
 	#
-	# Every wiki as a Root used to contain its resources:
+	# Every wiki as a Root used to contain its resources but we generally try to
+	# hide it as it as not semantic value:
 	# ~~~
 	# var empty_wiki = new Wiki
 	# assert empty_wiki.root isa Root
+	# assert empty_wiki.resources.is_empty
 	# ~~~
 	var root = new Root(self, "<root>") is lazy
 
@@ -84,6 +86,43 @@ class Wiki
 	# assert wiki.resources == [r1, r2]
 	# ~~~
 	fun resources: Array[Resource] do return root.resources
+
+	# Get an resource by its `path`
+	#
+	# A `path` points to a unique resource in a wiki.
+	# Returns `null` if no resource can be found for this `path`.
+	#
+	# ~~~
+	# var wiki = new Wiki
+	#
+	# var r1 = new Section(wiki, "foo", "Foo")
+	# wiki.add r1
+	#
+	# var r2 = new Asset(wiki, "bar", "Bar")
+	# r1.add r2
+	#
+	# var r3 = new Asset(wiki, "bar", "Bar")
+	# wiki.add r3
+	#
+	# assert wiki.resource_by_path("/foo") == r1
+	# assert wiki.resource_by_path("/foo/bar") == r2
+	# assert wiki.resource_by_path("/bar") == r3
+	# assert wiki.resource_by_path("/not/Found") == null
+	# ~~~
+	#
+	# This lookup is based on absolute paths. See `Resource::resource_by_path`
+	# for a lookup by relative paths.
+	# TODO be less stupid about it
+	fun resource_by_path(path: String): nullable Resource do
+		# TODO optimize
+		if path == root.path then return root
+		for resource in resources do
+			if resource.path == path then return resource
+			# TODO should use config to strip extension???
+			if resource.path.strip_extension == path then return resource
+		end
+		return null
+	end
 
 	# Add an resource to the root section of this wiki
 	#
@@ -218,6 +257,7 @@ abstract class Resource
 	# the wiki.
 	#
 	# ~~~
+	# # TODO
 	# ~~~
 	fun path: String do
 		var section = self.section
@@ -231,6 +271,14 @@ abstract class Resource
 	# TODO doc tests
 	fun path_to(resource: Resource): String do
 		return path.relpath(resource.path)
+	end
+
+	# Get a resource by its relative path from `self`
+	#
+	# Returns `null` if no entry is found.
+	# TODO doc tests
+	fun resource_by_path(relative_path: String): nullable Resource do
+		return wiki.resource_by_path((self.path / relative_path).simplify_path)
 	end
 
 	# Visit self with `visitor`
