@@ -5,6 +5,7 @@ Where am I?
 	extract error messages and logging
 		fix error line delta
 		colors
+		counters
 
 	extract lookup
 		auto-resolve conflicts? or suggest path correction
@@ -78,3 +79,10 @@ Where am I?
 		trail
 		code, file content?
 		name, title, date
+
+* nitdoc
+	* use sections / pages
+	* use markdown & location
+	* use did you know?
+
+	* use server stub?
