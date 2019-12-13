@@ -222,9 +222,12 @@ class Logger
 	# assert stderr.to_s.trim.split("\n").last == "This is a warning."
 	# ~~~
 	fun add_raw(level: Int, message: Writable): Bool do
+		return append_raw(level, "{message}\n")
+	end
+
+	fun append_raw(level: Int, message: Writable): Bool do
 		if level < self.level then return false
 		out.write(message.write_to_string)
-		out.write("\n")
 		return true
 	end
 

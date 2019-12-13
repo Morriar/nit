@@ -22,52 +22,154 @@ redef class Wiki
 	var no_color = false
 	private var logger = new Logger
 
-	var counters = new Counter[String]
+	var errors = 0
+	var warnings = 0
 
-	fun print(level: Int, message: String, location: nullable Location) do
+	fun print(level: Int, message: String, location: nullable WikiLocation) do
 		if location != null then
 			if no_color then
-				logger.add_raw(level, location.location_string)
+				logger.append_raw(level, location.location_string)
 			else
-				logger.add_raw(level, location.location_string.yellow)
+				var str = location.location_string
+				if level == error_level then str = str.red
+				if level == warn_level then str = str.yellow
+				logger.append_raw(level, str)
 			end
-			logger.add_raw(level, ": ")
+			logger.append_raw(level, ": ")
 		end
 		logger.add_raw(level, message)
-		logger.add_raw(level, "\n")
-		if location != null then
-			# TODO show code
-			logger.add_raw(level, message)
+
+		if location != null and location.source != null then
+			logger.add_raw(level, "\n{location.show_source(no_color)}")
 		end
 	end
 
-	fun error(message: String, location: nullable Location) do
+	fun error(message: String, location: nullable WikiLocation) do
+		errors += 1
 		print(error_level, message, location)
 	end
 
-	fun warn(message: String, location: nullable Location) do
+	fun warn(message: String, location: nullable WikiLocation) do
+		warnings += 1
 		print(warn_level, message, location)
 	end
 
-	fun info(message: String, location: nullable Location) do
+	fun info(message: String, location: nullable WikiLocation) do
 		print(info_level, message, location)
 	end
 
-	fun debug(message: String, location: nullable Location) do
+	fun debug(message: String, location: nullable WikiLocation) do
 		print(debug_level, message, location)
+	end
+
+	fun print_counters do
+		if errors == 0 and warnings != 0 then
+			logger.out.write "{warnings} warnings.\n\n"
+		else if errors != 0 and warnings == 0 then
+			logger.out.write "{errors} errors.\n\n"
+		else if errors != 0 and warnings != 0 then
+			logger.out.write "{errors} errors, {warnings} warnings.\n\n"
+		end
 	end
 end
 
-class Location
-	var path: nullable String = null is optional
+class WikiLocation
+	var path: String
 	var source: nullable String = null is optional
-	var line_start: nullable String = null is optional
-	var line_end: nullable String = null is optional
-	var column_start: nullable String = null is optional
-	var column_end: nullable String = null is optional
+	var line_start: nullable Int = null is optional
+	var line_end: nullable Int = null is optional
+	var column_start: nullable Int = null is optional
+	var column_end: nullable Int = null is optional
 
 	fun location_string: String do
-		return "TODO"
+		var s = new Buffer
+		var p = self.path
+		var ls = self.line_start
+		var le = self.line_end
+		var cs = self.column_start
+		var ce = self.column_end
+
+		s.append "{p}:"
+		if ls != null then
+			s.append ls.to_s
+		end
+		if cs != null then
+			if ls != null then s.append ","
+			s.append cs.to_s
+		end
+		if le != null then
+			if ls != null or cs != null then s.append "-"
+			s.append le.to_s
+		end
+		if ce != null then
+			if le != null then s.append ","
+			s.append ce.to_s
+		end
+
+		return s.write_to_string
 	end
-	fun show_source do end
+
+	fun show_source(no_color: Bool): String do
+		var src = self.source
+		if src == null then return ""
+
+		var s = new Buffer
+		var ls = self.line_start
+		var le = self.line_end
+		var cs = self.column_start
+		var ce = self.column_end
+
+		var chars = src.chars
+		var i = 0
+		var l = 1
+		var p = 1
+
+		s.append "\t"
+
+		while i < chars.length do
+			var c = chars[i]
+
+			if c == '\n' then
+				i += 1
+				l += 1
+				p = 1
+				continue
+			end
+
+			if ls != null and l < ls then
+				i += 1
+				continue
+			end
+
+			if le != null and l > le then
+				break
+			end
+
+			if no_color then
+				s.add c
+			else
+				if cs != null and ce != null then
+					if p >= cs and p <= ce then
+						s.append c.to_s.red.bold
+					else
+						s.add c
+					end
+				else
+					s.add c
+				end
+			end
+
+			i += 1
+			p += 1
+		end
+
+		s.add '\n'
+
+		if cs != null then
+			s.add '\t'
+			s.append "{" " * (cs - 1)}^\n"
+		end
+
+		return s.write_to_string
+	end
 end

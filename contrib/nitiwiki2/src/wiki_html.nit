@@ -128,6 +128,7 @@ class Wiki2Html
 		super
 		# TODO index
 		# TODO sitemap
+		wiki.print_counters
 	end
 
 	redef fun visit(resource) do resource.accept_html_visitor(self)

@@ -14,7 +14,7 @@
 
 module wiki_markdown
 
-import wiki_base
+import wiki_logger
 
 import markdown2
 import logger
@@ -298,15 +298,15 @@ class MdProcessCommands
 	end
 
 	fun warn(node: MdWikilink, message: String) do
-		parser.logger.warn("{location(node)}: {message}")
+		context.wiki.warn(message, node.location.to_wiki_location(context.path, context.md))
 	end
 
 	# Get the location for a node using `context`
 	#
 	# If `context` does not point to a file, use the page path as a location.
-	private fun location(node: MdNode): String do
-		return "{context.path}:{node.location}"
-	end
+	# private fun location(node: MdNode): String do
+		# return "{context.path}:{node.location}"
+	# end
 end
 
 redef class MdWikilink
@@ -415,6 +415,12 @@ private class DidYouMeanComparator
 	redef type COMPARED: Resource
 
 	redef fun compare(a, b) do return similarities[a] <=> similarities[b]
+end
+
+redef class MdLocation
+	fun to_wiki_location(path: String, source: nullable String): WikiLocation do
+		return new WikiLocation(path, source, line_start, line_end, column_start, column_end)
+	end
 end
 
 redef class String
