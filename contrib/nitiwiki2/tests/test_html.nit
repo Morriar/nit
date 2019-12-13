@@ -648,7 +648,7 @@ class TestMdPageToHtml
 
 	fun md_code_blocs_can_be_highlighted is test do
 		var wiki = new Wiki
-		wiki.highlighter = "tests/highlighters/simple"
+		wiki.highlighter = "tests/highlighters/simple \"$1\""
 		wiki.highlighter_default = "nit"
 		var stdout = new StringWriter
 		var logger = new Logger(debug_level, stdout)
@@ -682,14 +682,14 @@ class TestMdPageToHtml
 		</js>""")
 
 		assert stdout.to_s == strip_indent("""
-		Executing `tests/highlighters/simple` `nit` (in /test:3,1--3,25)
-		Executing `tests/highlighters/simple` `nit` (in /test:7,1--9,3)
-		Executing `tests/highlighters/simple` `js` (in /test:11,1--13,3)""")
+		Executing `tests/highlighters/simple "$1"` `nit` (in /test:3,1--3,25)
+		Executing `tests/highlighters/simple "$1"` `nit` (in /test:7,1--9,3)
+		Executing `tests/highlighters/simple "$1"` `js` (in /test:11,1--13,3)""")
 	end
 
 	fun rendered_warn_if_problem_with_hilighter is test do
 		var wiki = new Wiki
-		wiki.highlighter = "tests/highlighters/broken"
+		wiki.highlighter = "tests/highlighters/broken \"$1\""
 		var stdout = new StringWriter
 		var logger = new Logger(debug_level, stdout)
 		var v = new MockWiki2Html(wiki, false, logger = logger)
@@ -704,9 +704,8 @@ class TestMdPageToHtml
 		</code></pre>""")
 
 		assert stdout.to_s == strip_indent("""
-		Executing `tests/highlighters/broken` `nit` (in /test:1,1--3,3)
-		/test:1,1--3,3: `tests/highlighters/broken` `nit` returned 42
-		/test:1,1--3,3: `tests/highlighters/broken` `nit` produced nothing""")
+		Executing `tests/highlighters/broken "$1"` `nit` (in /test:1,1--3,3)
+		/test:1,1--3,3: `tests/highlighters/broken "$1"` `nit` returned 42""")
 	end
 
 	# TODO test all variables

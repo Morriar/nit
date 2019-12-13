@@ -482,15 +482,21 @@ redef class MdCodeBlock
 
 		# Execute the command
 		logger.debug("Executing `{highlighter}` `{info}` (in {loc})")
-		var proc = new ProcessDuplex("sh", highlighter, info)
+		var proc = new ProcessDuplex("sh", "-c", highlighter, "", info)
 		var res = proc.write_and_read(literal)
+		proc.close
+
+		# Check errors from highlighter
 		if proc.status != 0 then
+			# Highlighter produced an error, fallback on bare md codeblock
 			logger.warn("{loc}: `{highlighter}` `{info}` returned {proc.status}")
+			super
+			return
 		end
 
 		# Check the result
 		if res.is_empty then
-			# No result, then defaults
+			# No result, fallback on bare md codeblock
 			logger.warn("{loc}: `{highlighter}` `{info}` produced nothing")
 			super
 			return
